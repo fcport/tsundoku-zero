@@ -1,4 +1,7 @@
 import '../ui/theme.css';
+// Init i18n PRIMA del render (side-effect al load del modulo): l'istanza
+// singleton di i18next è pronta quando <App/> chiama useTranslation (AD-14).
+import '../i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from '../ui/App';
