@@ -4,7 +4,8 @@ import '../ui/theme.css';
 import '../i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from '../ui/App';
+import { createSupabaseAuthGateway } from '../data/authGateway';
+import { AuthRoot } from './AuthRoot';
 import { decideBoot } from './env';
 
 // src/app/ è l'unico livello che può dipendere da tutti gli altri (AD-1):
@@ -28,10 +29,13 @@ if (decision.kind === 'config-error') {
   throw decision.error;
 }
 
-// decision.config è il punto d'iniezione per il client Supabase (storia 1.5):
-// i consumatori riceveranno questa config tipizzata, non leggeranno import.meta.env.
+// decision.config è il punto d'iniezione degli adattatori (AD-1/AD-2): qui l'app
+// compone il gateway Supabase dalla config validata e lo inietta come PORTA in
+// AuthRoot. Le schermate (features) non conoscono @supabase/supabase-js: ricevono
+// solo l'interfaccia AuthGateway del dominio.
+const gateway = createSupabaseAuthGateway(decision.config);
 createRoot(container).render(
   <StrictMode>
-    <App />
+    <AuthRoot gateway={gateway} />
   </StrictMode>,
 );

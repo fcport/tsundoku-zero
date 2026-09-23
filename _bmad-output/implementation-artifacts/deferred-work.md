@@ -13,3 +13,27 @@ source_spec: `spec-1-5-lo-schema-nasce-versionato-e-isolato.md`
 severity: low
 reason: The dev session recorded deferred findings the orchestrator could not parse, so they were NOT filed as entries: item 1: not a mapping (got str); item 2: not a mapping (got str). Read `spec-1-5-lo-schema-nasce-versionato-e-isolato.md`'s frontmatter and re-file them by hand.
 status: open
+
+### DW-3: Verifica live/e2e del signup contro il Supabase reale (account creato + atterra autenticato) differita per architettura.
+origin: spec-deferred f78c505df789
+location: src/data/authGateway.ts + storia 1.10 (delete-account)
+source_spec: `spec-1-6-registrazione-con-email-e-password.md`
+severity: low
+reason: AD-13 fissa il teardown della suite alla stessa Edge Function delete-account (AD-11), costruita nella storia 1.10 e non ancora esistente; AD-12/13 vieta l'istanza locale. Creare utenti reali senza teardown inquinerebbe i dati dell'owner (metrica M1). Qui è verificata meccanicamente tutta la logica client (classificazione, traduttore unico, orchestrazione totale, commutazione di vista) con union chiuse e finti iniettati. Stesso schema del test RLS a runtime differito in 1.5.
+status: open
+
+### DW-4: Precisione della mappa code Supabase -> reason da confermare con la verifica live (validation_failed -> invalid-email potenzialmente ampio).
+origin: spec-deferred 9301bb639ee7
+location: src/data/authGateway.ts (classifySignUpError)
+source_spec: `spec-1-6-registrazione-con-email-e-password.md`
+severity: low
+reason: classifySignUpError mappa `validation_failed` a invalid-email (campo email). E' un codice generico che potrebbe scattare per ragioni diverse da un'email malformata, ancorando il messaggio al campo sbagliato. Il caso email-non-valida ha anche il codice specifico email_address_invalid (gia gestito). Nel peggiore dei casi l'utente vede un messaggio tradotto accanto all'email invece che a livello form: nessuna perdita di stringa grezza. Da confermare quando la e2e live (1.10) esercita i codici reali.
+status: open
+
+### DW-5: Il seam impuro dell'adattatore (createClient + client.auth.signUp) non ha un unit test diretto.
+origin: spec-deferred b8608bc87a0b
+location: src/data/authGateway.ts (createSupabaseAuthGateway)
+source_spec: `spec-1-6-registrazione-con-email-e-password.md`
+severity: low
+reason: createSupabaseAuthGateway costruisce il proprio client via createClient, quindi non e' iniettabile senza un client reale. La compatibilita' di forma fra AuthResponse di auth-js e le interfacce strutturali locali e' pero' verificata da tsc (assegnabilita' a compile-time), e i parametri email/password sono vincolati dal tipo di signUp; il resto e' coperto dalla e2e live differita (1.10). E' un deferral acknowledged, non una svista.
+status: open

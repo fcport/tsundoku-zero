@@ -6,4 +6,17 @@ export const it = {
   app: {
     tagline: 'Un generatore di esercizi di grammatica giapponese',
   },
+  auth: {
+    title: 'Registrazione',
+    emailLabel: 'Email',
+    passwordLabel: 'Password',
+    submit: 'Crea account',
+    error: {
+      emailAlreadyRegistered: 'Questa email è già registrata.',
+      invalidEmail: 'Inserisci un indirizzo email valido.',
+      weakPassword: 'Scegli una password più forte.',
+      wrongPassword: 'Password errata.',
+      unknown: 'Impossibile creare l\'account. Riprova.',
+    },
+  },
 } as const;

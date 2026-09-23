@@ -16,6 +16,7 @@
     "graph": "depcruise src --include-only \"^src\" --output-type dot --output-to docs/dependency-graph.dot && dot -T svg docs/dependency-graph.dot -o docs/dependency-graph.svg"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.1",
     "i18next": "^26.4.2",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
