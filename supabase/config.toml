@@ -1,0 +1,15 @@
+# Config minima della CLI Supabase. Esiste perché la CLI operi in MODALITÀ
+# PROGETTO (supabase link + supabase db push in .github/workflows/migrate.yml).
+#
+# Lo stack locale (supabase start) NON viene MAI avviato, né in dev né in CI:
+# AD-12/AD-13 impone UN SOLO progetto reale, condiviso. Un'istanza locale
+# sarebbe «l'approssimazione che diverge in silenzio» dallo schema reale, e non
+# esiste qui apposta. Perciò questo file resta al minimo: nessun blocco [db],
+# [api], [studio] o [auth] locale.
+#
+# Il ref del progetto reale NON vive qui: è fornito alla CI come configurazione
+# via il secret SUPABASE_PROJECT_REF (GitHub > Settings > Secrets and variables >
+# Actions). Non perché sia sensibile — il ref compare già nell'URL pubblico del
+# progetto (VITE_SUPABASE_URL, che finisce nel bundle del browser) — ma per
+# tenere la config del deploy fuori dal file versionato e iniettarla al merge.
+project_id = "tsundoku-zero"

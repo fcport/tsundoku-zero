@@ -1,0 +1,81 @@
+name: Migrate
+
+# Le migrazioni si applicano al progetto REALE SOLTANTO al merge su main, MAI da
+# un ramo di PR: i dati di studio dell'owner sono la metrica di accettazione M1,
+# e una migrazione rotta applicata da una PR li distruggerebbe (AD-12/AD-13).
+#
+# Nessun `pull_request`: una PR valida la migrazione solo SINTATTICAMENTE, offline,
+# in npm test (ci.yml) — non la applica.
+# Nessun `workflow_dispatch`: dalla UI si potrebbe scegliere un ramo di PR e
+# applicare uno schema non ancora revisionato. L'unico trigger è push su main.
+on:
+  push:
+    branches: [main]
+
+# Non cancellabile: interrompere un `db push` a metà lascerebbe lo schema reale
+# in uno stato parziale. A differenza di ci.yml (cancel-in-progress: true), qui
+# ogni run va lasciato terminare; i run successivi accodano.
+concurrency:
+  group: migrate-main
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    name: supabase db push (progetto reale)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Installa la CLI Supabase. Nessuna istanza locale viene avviata: si usa
+      # solo per collegarsi al progetto reale e spingere le migrazioni.
+      # Versione PINNATA (non `latest`): questo è l'unico workflow che muta il
+      # solo DB reale, e una CLI non pinnata può cambiare comportamento fra un
+      # merge e l'altro — incoerente con il determinismo del progetto (npm ci,
+      # TypeScript 5.9.3 pinnato, .nvmrc). Pinnata alla versione validata in locale.
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.98.2
+
+      # Pre-flight fail-fast che NOMINA la variabile mancante, come lo schema di
+      # config in src/app/env.ts (storia 1.2): se un secret è assente/vuoto,
+      # `link`/`db push` fallirebbero con un errore opaco della CLI. Qui invece
+      # fermiamo subito il job dicendo QUALE secret manca e dove impostarlo.
+      - name: Verifica i secret richiesti
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=()
+          [ -n "${SUPABASE_ACCESS_TOKEN:-}" ] || missing+=("SUPABASE_ACCESS_TOKEN")
+          [ -n "${SUPABASE_DB_PASSWORD:-}" ] || missing+=("SUPABASE_DB_PASSWORD")
+          [ -n "${SUPABASE_PROJECT_REF:-}" ] || missing+=("SUPABASE_PROJECT_REF")
+          if [ "${#missing[@]}" -ne 0 ]; then
+            echo "Secret mancanti: ${missing[*]}. Impostali in GitHub > Settings > Secrets and variables > Actions." >&2
+            exit 1
+          fi
+
+      # `link` associa la cartella supabase/ al progetto reale via il suo ref.
+      # L'access token autentica la CLI; la db password autorizza la connessione
+      # diretta usata da `db push`. I tre secret vivono nei GitHub Actions secrets
+      # (documentati in .env.example), mai nel repo. Passati come env allo step
+      # così da non comparire nel log dell'espansione del comando.
+      - name: Link al progetto reale
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: supabase link --project-ref "$SUPABASE_PROJECT_REF" -p "$SUPABASE_DB_PASSWORD"
+
+      # --yes: risponde sì a ogni prompt. Alcune versioni della CLI chiedono
+      # conferma prima di applicare; in un job non interattivo un prompt
+      # appenderebbe il job all'infinito.
+      - name: Applica le migrazioni (db push)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: supabase db push --yes -p "$SUPABASE_DB_PASSWORD"
