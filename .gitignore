@@ -62,3 +62,6 @@ transcripts/
 # non sono lavoro di questo progetto. Restano versionate la configurazione
 # (_bmad/, .bmad-loop/) e le personalizzazioni (_bmad/custom/).
 .claude/skills/
+
+# Output di rendering delle skill: rigenerato, non lavoro del progetto
+_bmad/render/
