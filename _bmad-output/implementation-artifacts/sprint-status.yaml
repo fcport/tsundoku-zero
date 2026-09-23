@@ -28,8 +28,8 @@
 # - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
-generated: 09-23-2026 10:35
-last_updated: 09-23-2026 10:35
+generated: 09-23-2026 21:00
+last_updated: 09-23-2026 21:00
 project: tsundoku-zero
 project_key: NOKEY
 tracking_system: file-system
@@ -49,16 +49,13 @@ development_status:
   epic-1-retrospective: optional
 
   epic-2: backlog
-  2-1-il-transcript-non-entra-nel-repository: backlog
-  2-2-uno-schema-minimo-per-autorare-la-prima-lezione: backlog
-  2-3-tre-lezioni-vere-e-i-tipi-che-ne-emergono: backlog
-  2-4-il-registro-dei-tipi-si-chiude: backlog
-  2-5-l-identità-di-un-esercizio-resiste-alla-riautorazione: backlog
-  2-6-lo-schema-definitivo-e-il-cancello-in-ci: backlog
-  2-7-una-lezione-può-non-avere-esercizi: backlog
-  2-8-spiegazioni-bilingui-con-ripiego-dichiarato: backlog
-  2-9-il-confronto-che-impedisce-la-contaminazione: backlog
-  2-10-il-flusso-che-regge-novanta-lezioni: backlog
+  2-1-lo-schema-di-una-lezione: backlog
+  2-2-i-tre-tipi-e-i-loro-validatori: backlog
+  2-3-l-identità-di-un-esercizio-resiste-alla-riautorazione: backlog
+  2-4-una-lezione-può-non-avere-esercizi: backlog
+  2-5-spiegazioni-bilingui-con-ripiego-dichiarato: backlog
+  2-6-la-validazione-blocca-il-merge: backlog
+  2-7-la-lezione-campione-che-è-anche-una-fixture: backlog
   epic-2-retrospective: optional
 
   epic-3: backlog
@@ -103,10 +100,17 @@ development_status:
   epic-5-retrospective: optional
 
   epic-6: backlog
-  6-1-dire-cosa-si-tiene-e-come-cancellarlo: backlog
-  6-2-riconoscere-la-fonte-del-metodo: backlog
-  6-3-due-licenze-perché-sono-due-cose-diverse: backlog
-  6-4-il-percorso-completo-verificato-da-una-macchina: backlog
-  6-5-la-cancellazione-verificata-tabella-per-tabella: backlog
-  6-6-provare-l-app-con-uno-screen-reader-vero: backlog
+  6-1-il-transcript-non-entra-nel-repository: backlog
+  6-2-il-flusso-di-autorazione-documentato-e-ripetibile: backlog
+  6-3-il-confronto-che-impedisce-la-contaminazione: backlog
+  6-4-il-flusso-regge-un-corso-senza-fine: backlog
   epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-dire-cosa-si-tiene-e-come-cancellarlo: backlog
+  7-2-riconoscere-la-fonte-del-metodo: backlog
+  7-3-due-licenze-perché-sono-due-cose-diverse: backlog
+  7-4-il-percorso-completo-verificato-da-una-macchina: backlog
+  7-5-la-cancellazione-verificata-tabella-per-tabella: backlog
+  7-6-provare-l-app-con-uno-screen-reader-vero: backlog
+  epic-7-retrospective: optional

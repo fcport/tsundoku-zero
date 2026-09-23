@@ -363,25 +363,32 @@ Ogni requisito funzionale è assegnato a esattamente un'epica. **67 su 67 copert
 | FR9.4 | Epic 4 | `sync-indicator` da `useMutationState` (`UX-DR17`) |
 | FR9.5 | Epic 4 | Recupero della coda, persister IndexedDB (`AD-8`) |
 | FR9.6 | Epic 4 · RPC in Epic 3 | Idempotenza — costruita in Epic 3, **verificata** qui |
-| FR10.1 | Epic 6 | Pagina privacy policy |
-| FR10.2 | Epic 6 | Pagina di riconoscimenti a Cure Dolly (`AD-16` allentato) |
-| FR10.3 | Epic 6 | `LICENSE` e `LICENSE-CONTENT` separati e dichiarati |
-| FR11.1 | Epic 2 | Flusso di autorazione documentato e ripetibile |
-| FR11.2 | Epic 2 | Revisione umana obbligatoria prima del commit |
+| FR10.1 | Epic 7 | Pagina privacy policy |
+| FR10.2 | Epic 7 | Pagina di riconoscimenti a Cure Dolly (`AD-16` allentato) |
+| FR10.3 | Epic 7 | `LICENSE` e `LICENSE-CONTENT` separati e dichiarati |
+| FR11.1 | Epic 6 | Flusso di autorazione documentato e ripetibile |
+| FR11.2 | Epic 6 | Revisione umana obbligatoria prima del commit |
 | FR11.3 | Epic 2 | Aggiungere una lezione non tocca il codice |
 | FR11.4 | Epic 2 | Schema unico, validazione in CI |
 | FR11.5 | Epic 2 | Identificatore derivato dal contenuto (`AD-23`) |
-| FR11.6 | Epic 2 | Registro dei tipi chiuso (`AD-22`) |
-| FR11.7 | Epic 2 | Transcript fuori dal repository, `.gitignore` |
-| FR11.8 | Epic 2 | Controllo anti-contaminazione in autorazione |
+| FR11.6 | Epic 2 | Registro chiuso a tre tipi (`AD-22`) |
+| FR11.7 | Epic 6 | Transcript fuori dal repository, `.gitignore` |
+| FR11.8 | Epic 6 | Controllo anti-contaminazione in autorazione |
 
 ## Epic List
 
-**Sei epiche.** Il piano precedente ne consolidava cinque, motivando la scelta con il fatto che *"Architecture Spine e contratto UX sono entrambi `status: final`"* — quando il disegno è validato si preferiscono poche epiche grandi.
+**Sette epiche.** La struttura è stata rivista il 23 settembre, dopo aver esaminato il contenuto reale delle lezioni 1 e 11, e la revisione ha corretto un difetto nella versione precedente.
 
-**Quella premessa oggi è falsa, ed è la ragione della struttura.** `OQ-7` del PRD e `UX-DR34` dichiarano aperte nove decisioni — quali tipi di esercizio esistono, la tipografia di frase, la forma delle opzioni di risposta, come si comunica l'esito, il contratto tastiera, quando mostrare la furigana. Tutte hanno la **stessa condizione di sblocco**: aver autorato tre lezioni vere.
+Il piano del 22 settembre metteva la pipeline di autorazione come Epic 2, prima della sessione, perché nove decisioni dipendevano dal vedere contenuto vero. Quella diagnosi era giusta ma la cura era sbagliata: **il blocco non era il contenuto, era sapere quali tipi di esercizio esistono.** Sono due cose molto diverse — la prima è una campagna, la seconda è un pomeriggio di lettura.
 
-Ne discende l'unica scelta strutturale non ovvia di questo piano: **la pipeline di autorazione è Epic 2, prima della sessione di esercizi.** Non per ordine tecnico, ma perché è l'epica che produce le informazioni senza le quali Epic 3 progetterebbe a indovinare. Costruire prima la schermata di esercizio significherebbe riscriverla.
+Ne discende la divisione corretta, che la versione precedente confondeva in una sola epica:
+
+- **Cos'è un esercizio** — registro dei tipi, validatori puri, schema, identità dal contenuto. È piccolo, è un contratto, e l'applicazione non può esistere senza. **Epic 2.**
+- **Come se ne producono a ciclo continuo** — flusso assistito da LLM, controllo anti-contaminazione, procedura documentata, `NFR9`. Serve quando si produce sul serio, non prima. **Epic 6.**
+
+Il vantaggio è concreto: quando si arriva a popolare il curriculum, la pipeline è testata e matura, e non si ri-autorano le prime lezioni perché nel frattempo lo schema si è assestato. Nella struttura precedente le prime tre lezioni nascevano su uno schema provvisorio ed erano le uniche scritte male.
+
+C'è anche un argomento che il contenuto ha confermato: **la pipeline si progetta meglio sapendo cosa l'applicazione consuma.** Costruire prima il consumatore rende il contratto del produttore ovvio invece che ipotizzato.
 
 ### Epic 1: Fondamenta, accesso e URL pubblico
 
@@ -389,19 +396,21 @@ Uno sconosciuto raggiunge un indirizzo pubblico, si registra, accede, resta aute
 
 **FRs covered:** FR1.1, FR1.2, FR1.3, FR1.4, FR1.5, FR1.6, FR8.1, FR8.2, FR8.3, FR8.4
 
-**Implementation notes:** **La prima storia è uno scaffold manuale** — né lo Spine né il Delta nominano uno starter template, e partire da `create-vite` produrrebbe una struttura che viola `AD-1` dalla prima riga. Il confine di `AD-1` va imposto meccanicamente (`eslint-plugin-boundaries`) **prima** che esista codice da vincolare. `AD-14` rende una chiave i18n mancante un errore di compilazione, quindi FR8.4 si autoimpone da qui in avanti invece di diventare un'epica di pulizia finale. La superficie *Impostazioni* nasce qui con la sola lingua e cancellazione account, ed è estesa da Epic 3 con il tetto di sblocco. Hosting Vercel con `vercel.json` per i deep link. I design token di `UX-DR1`–`UX-DR7` e `UX-DR9` nascono qui, **escluso** `UX-DR8` (tipografia di frase) che dipende da Epic 2.
+**Implementation notes:** **La prima storia è uno scaffold manuale** — né lo Spine né il Delta nominano uno starter template, e partire da `create-vite` produrrebbe una struttura che viola `AD-1` dalla prima riga. Il confine di `AD-1` va imposto meccanicamente (`eslint-plugin-boundaries`) **prima** che esista codice da vincolare. `AD-14` rende una chiave i18n mancante un errore di compilazione, quindi FR8.4 si autoimpone da qui in avanti invece di diventare un'epica di pulizia finale. La superficie *Impostazioni* nasce qui con la sola lingua e cancellazione account, ed è estesa da Epic 3 con il tetto di sblocco. Hosting Vercel con `vercel.json` per i deep link.
 
-### Epic 2: Dalla lezione vista al file committato
+I design token di `UX-DR1`–`UX-DR7` e `UX-DR9` nascono qui. `UX-DR8` — il ruolo tipografico per il giapponese di frase — è **fissato** a 32/26px con interlinea 1.9, ma la sua verifica sul rendering reale richiede una frase lunga vera, che arriva con la lezione campione di Epic 2 e si chiude nella storia 3.23.
 
-L'owner, nel ruolo di autore, trasforma una lezione appena studiata in esercizi validati e committati in meno di trenta minuti, senza toccare il codice.
+### Epic 2: Il contratto dell'esercizio
 
-**FRs covered:** FR2.1, FR2.1a, FR2.2, FR2.3, FR2.4, FR2.5, FR2.6, FR8.5, FR11.1, FR11.2, FR11.3, FR11.4, FR11.5, FR11.6, FR11.7, FR11.8
+Un esercizio esiste come dato validato e verificabile: il dominio sa dire se una risposta è giusta, e una lezione malformata non entra nel repository.
 
-**Implementation notes:** È l'epica che **chiude `OQ-7` e le cinque decisioni di `UX-DR34`**, e per farlo le sue storie hanno un ordine vincolante: si autorano prima tre lezioni vere con uno schema provvisorio, **poi** si congela il registro dei tipi (`AD-22`) sull'evidenza raccolta. Lo schema scritto prima di aver visto contenuto reale sarebbe sbagliato, e correggerlo dopo costa più che deciderlo tardi.
+**FRs covered:** FR2.1, FR2.1a, FR2.2, FR2.3, FR2.4, FR2.5, FR2.6, FR8.5, FR11.3, FR11.4, FR11.5, FR11.6
 
-L'epica consegna anche il **modello di dominio dell'esercizio**: la union discriminata e i validatori puri `check()` con i loro test. Epic 3 li userà, non li costruirà. La separazione è netta e utile — qui un esercizio *esiste ed è verificabile*, là viene *presentato e risolto*.
+**Implementation notes:** L'epica consegna il **modello di dominio dell'esercizio** — la union discriminata di `AD-22` e i validatori puri `check()` con i loro test. Epic 3 li userà, non li costruirà. La separazione è netta e utile: qui un esercizio *esiste ed è verificabile*, là viene *presentato e risolto*.
 
-`NFR9` è il vincolo di accettazione dell'epica, non una nota: nessun passaggio manuale il cui costo cresca con il numero di lezioni già autorate, perché ne restano 79.
+Il registro è chiuso a **tre tipi**, non sei: `single-select`, `select-span`, `assemble`. La proposta precedente confondeva la materia con l'interazione — riconoscere la forma di chiusura, scegliere una particella e dire quale frase è corretta insegnano cose diverse ma sono meccanicamente identiche, e cosa un esercizio insegna lo registra già `grammar_point`.
+
+**La storia 2.7 è una fixture prima che contenuto.** I test di componente della sessione e l'end-to-end di Epic 7 hanno bisogno di esercizi veri per ogni tipo: quella lezione serve a loro, e che sia anche la prima lezione reale del curriculum è un bonus, non lo scopo.
 
 ### Epic 3: La pila — dalla lezione sbloccata alla sessione a zero
 
@@ -409,7 +418,7 @@ L'utente sblocca una lezione, risolve i suoi esercizi uno per volta leggendo per
 
 **FRs covered:** FR3.1, FR3.2, FR3.3, FR3.4, FR3.5, FR3.6, FR4.1, FR4.2, FR4.3, FR4.4, FR4.5, FR4.6, FR4.7, FR4.8, FR5.1, FR5.2, FR5.3, FR5.4, FR5.5, FR5.6, FR5.7, FR6.1, FR6.2, FR6.3, FR6.4, FR6.5, FR6.6, FR7.4
 
-**Implementation notes:** L'epica è grande (28 FR) per la stessa ragione dirimente del piano precedente: un account appena creato non ha lezioni sbloccate, quindi pila a zero, quindi niente da fare. **Senza F6 nella stessa epica, questa consegnerebbe zero valore a chiunque parta da zero — cioè a tutti.** In più FR3.4 lega F3 a F6, e `UX-DR21` tratta le due quest come una sola macchina a stati della dashboard.
+**Implementation notes:** L'epica è grande (28 FR) per una ragione dirimente: un account appena creato non ha lezioni sbloccate, quindi pila a zero, quindi niente da fare. **Senza F6 nella stessa epica, questa consegnerebbe zero valore a chiunque parta da zero — cioè a tutti.** In più FR3.4 lega F3 a F6, e `UX-DR21` tratta le due quest come una sola macchina a stati della dashboard.
 
 Assorbe il motore di dominio — `schedule()`, `outcomeOf()`, `isDue()`, `sessionReducer()`, `streak()`, `alignFurigana()` — perché un livello tecnico non consegna niente da solo. Le storie sono ordinate: dominio puro e testato per primo, poi dati e RPC, poi schermate.
 
@@ -425,7 +434,7 @@ La risposta data senza rete non si perde, si sincronizza da sola al ritorno del 
 
 **Implementation notes:** **Epic 3 non dipende da questa.** Qui ci si costruisce sopra la coda durevole, senza toccare la RPC. I quattro vincoli di `AD-8` sono altrettanti punti di fallimento noti: in particolare `setMutationDefaults` registrata al bootstrap e mai in un componente, altrimenti la reidratazione fallisce con `No mutationFn found`.
 
-`AD-24` rende questa epica più economica di quanto fosse nel piano precedente: l'esito è calcolato sul client da una funzione pura, quindi una risposta data in galleria produce lo stesso esito e la stessa scadenza che avrebbe prodotto online. Il drenaggio non ricalcola nulla.
+`AD-24` rende questa epica più economica di quanto fosse nel piano pre-pivot: l'esito è calcolato sul client da una funzione pura, quindi una risposta data in galleria produce lo stesso esito e la stessa scadenza che avrebbe prodotto online. Il drenaggio non ricalcola nulla.
 
 ### Epic 5: Statistiche che dicono quale regola non ti è entrata
 
@@ -435,17 +444,29 @@ L'utente vede le proprie risposte nel tempo, la distribuzione dei propri eserciz
 
 **Implementation notes:** Tutto deriva **esclusivamente** da `review_log` (`AD-18`). L'asse della distribuzione per stadio deriva dalla costante unica di `AD-17`, non da un elenco parallelo.
 
-FR7.3 è il salto di qualità rispetto al prodotto precedente, e va difeso in implementazione: si aggrega per `grammar_point`, **non** per esercizio. "Sbagli questa frase" non è azionabile; "non hai capito に di destinazione" lo è. È la ragione per cui `grammar_point` è denormalizzato dentro `review_log` — una statistica non può dipendere da dati mutabili che una riautorazione riscriverebbe.
+FR7.3 è il salto di qualità rispetto al prodotto pre-pivot, e va difeso in implementazione: si aggrega per `grammar_point`, **non** per esercizio. "Sbagli questa frase" non è azionabile; "non hai capito に di destinazione" lo è. È la ragione per cui `grammar_point` è denormalizzato dentro `review_log` — una statistica non può dipendere da dati mutabili che una riautorazione riscriverebbe.
 
-### Epic 6: Lancio pubblico difendibile
+### Epic 6: La pipeline di autorazione
+
+L'owner, nel ruolo di autore, trasforma una lezione appena studiata in esercizi validati e committati in meno di trenta minuti, senza toccare il codice.
+
+**FRs covered:** FR11.1, FR11.2, FR11.7, FR11.8
+
+**Implementation notes:** Quattro FR soltanto, ma è l'epica che determina se il prodotto sopravvive. `NFR9` è il suo criterio di accettazione, non una nota: nessun passaggio manuale il cui costo cresca con il numero di lezioni già autorate, perché il corso supera le novanta lezioni e il totale non è noto.
+
+Arriva **dopo** che l'applicazione funziona, e per una ragione precisa: il contratto che la pipeline deve produrre è quello di Epic 2, e come si scrive un flusso che lo soddisfi si capisce meglio avendo visto l'applicazione consumarlo.
+
+La storia 6.3 contiene l'unico anello della catena di qualità che non si chiude in CI — il confronto anti-contaminazione non può essere un cancello automatico, perché FR11.7 tiene il transcript fuori dal repository. È dichiarato come tale invece che fatto sembrare più solido di quanto sia.
+
+### Epic 7: Lancio pubblico difendibile
 
 Il progetto è pubblicamente utilizzabile e pubblicamente ispezionabile: privacy policy, riconoscimenti corretti alla fonte del metodo, licenze separate, README che spiega le scelte, percorso completo verificato end-to-end.
 
 **FRs covered:** FR10.1, FR10.2, FR10.3
 
-**Implementation notes:** Tre FR, ma contiene la maggior parte della Definition of Done del PRD §11. Il test Playwright copre registrazione → sblocco lezione → esercizi → pila a zero (`NFR3`), e la cancellazione account è verificata su **tutte** le tabelle per-utente — incluse `lesson_progress` — non dedotta dalle chiavi esterne.
+**Implementation notes:** Tre FR, ma contiene la maggior parte della Definition of Done del PRD §11. Il test Playwright copre registrazione → sblocco lezione → esercizi → pila a zero (`NFR3`) usando la lezione campione di 2.7, e la cancellazione account è verificata su **tutte** le tabelle per-utente — incluse `lesson_progress` — non dedotta dalle chiavi esterne.
 
-`FR10.2` è più delicato di una pagina di crediti: deve attribuire l'origine del modello senza suggerire un'affiliazione, e dichiarare che il contenuto è originale del progetto. Il README risponde alle sette domande dell'addendum §6, inclusa l'ultima sul flusso assistito da AI — che qui vale più che nel piano precedente, perché la pipeline di Epic 2 **è** quella risposta.
+`FR10.2` è più delicato di una pagina di crediti: deve attribuire l'origine del modello senza suggerire un'affiliazione, e dichiarare che il contenuto è originale del progetto. Il README risponde alle sette domande dell'addendum §6, inclusa l'ultima sul flusso assistito da AI — che qui vale più che nel piano pre-pivot, perché la pipeline di Epic 6 **è** quella risposta.
 
 Contiene anche la sola verifica di accessibilità che nessun test automatico copre (`UX-DR28`): una storia percorre la sessione con NVDA o VoiceOver e registra l'esito dell'`aria-hidden` sul ruby.
 
@@ -732,110 +753,79 @@ So that la promessa di privacy sia verificabile e non dichiarata.
 
 ---
 
-## Epic 2: Dalla lezione vista al file committato
+## Epic 2: Il contratto dell'esercizio
 
-L'owner, nel ruolo di autore, trasforma una lezione appena studiata in esercizi validati e committati in meno di trenta minuti, senza toccare il codice.
+Un esercizio esiste come dato validato e verificabile: il dominio sa dire se una risposta è giusta, e una lezione malformata non entra nel repository. È il contratto che Epic 3 consuma e che Epic 6 produrrà su scala.
 
-### Story 2.1: Il transcript non entra nel repository
+### Story 2.1: Lo schema di una lezione
 
-As a autore che lavora da materiale protetto,
-I want che la fonte resti fuori dal progetto per costruzione,
-So that nessun commit distratto trasformi un problema evitato in un problema reale.
-
-**Acceptance Criteria:**
-
-**Given** il repository
-**When** `.gitignore` viene ispezionato
-**Then** esclude esplicitamente transcript, sottotitoli e trascrizioni, con un commento che ne dice la ragione
-
-**Given** una cartella di lavoro dell'autore contenente un transcript
-**When** `git status` viene eseguito
-**Then** il file non compare fra quelli tracciabili
-
-**Given** la documentazione della pipeline
-**When** viene letta
-**Then** dichiara che il transcript è input privato della sessione di autorazione e che da esso si estraggono **fatti**, mai formulazioni
-**And** dichiara che parafrasare con i sinonimi una spiegazione altrui resta opera derivata
-
-### Story 2.2: Uno schema minimo per autorare la prima lezione
-
-As a autore,
-I want una forma di file abbastanza definita da poterci scrivere dentro la prima lezione,
-So that si possa cominciare senza aver già deciso tutto.
+As a sviluppatore che costruirà la sessione,
+I want una forma dichiarata e tipizzata per lezioni ed esercizi,
+So that il contenuto e il codice si incontrino su un contratto invece che su un accordo verbale.
 
 **Acceptance Criteria:**
 
-**Given** nessun contenuto esistente
-**When** lo schema provvisorio viene definito
-**Then** copre lezione (ordine, titolo, punti grammaticali) ed esercizio (tipo, contenuto, risposta, distrattori, spiegazione)
-**And** è dichiarato **provvisorio** nel file stesso, con il riferimento a `OQ-7`
+**Given** lo schema
+**When** viene definito
+**Then** tipo TypeScript e validatore a runtime derivano dalla **stessa** definizione, non da due elenchi paralleli
 
-**Given** lo schema provvisorio
-**When** viene usato
-**Then** ammette **un solo** tipo di esercizio iniziale, scelto fra quelli proposti, perché il resto va scoperto e non ipotizzato
+**Given** una lezione
+**When** viene descritta
+**Then** porta numero d'ordine, titolo, punti grammaticali insegnati e zero o più esercizi
 
-**Given** questa storia
-**When** viene chiusa
-**Then** **non** introduce validazione in CI: il cancello arriva in 2.6, quando lo schema è definitivo
-**And** una lezione malformata a questo stadio è un problema dell'autore, non della pipeline
+**Given** un esercizio
+**When** viene descritto
+**Then** porta tipo, contenuto giapponese, risposta corretta, distrattori quando il tipo li prevede, e spiegazione
 
-### Story 2.3: Tre lezioni vere, e i tipi che ne emergono
+**Given** ogni frase giapponese di un esercizio
+**When** viene descritta
+**Then** espone `kanji` e `kana` come stringhe separate, perché `AD-21` ne derivi i segmenti
 
-As a autore che ha già visto undici lezioni,
-I want trasformarne tre in esercizi reali e annotare cosa serve davvero,
-So that il registro dei tipi nasca dall'evidenza invece che da un'ipotesi.
+**Given** l'identificatore e il titolo di una lezione
+**When** vengono definiti
+**Then** derivano dal **punto grammaticale** che insegna
+**And** non riproducono numerazione, titolo o ordine delle lezioni di una fonte esterna
 
-**Acceptance Criteria:**
+### Story 2.2: I tre tipi e i loro validatori
 
-**Given** tre transcript di lezioni già studiate
-**When** vengono autorati
-**Then** esistono tre file di lezione conformi allo schema provvisorio, ciascuno con almeno cinque esercizi
-**And** ogni esercizio è stato riletto e approvato da un umano prima del commit
-
-**Given** le tre lezioni autorate
-**When** vengono esaminate
-**Then** esiste un documento che elenca **i tipi di esercizio effettivamente serviti**, con quante volte ciascuno è comparso
-**And** elenca i tipi proposti che **non** sono serviti, perché eliminarli è informazione quanto aggiungerne
-
-**Given** le frasi prodotte
-**When** vengono misurate
-**Then** la loro lunghezza in caratteri è registrata, perché è l'input di `UX-DR8` e della storia 3.23
-
-**Given** il processo appena percorso
-**When** viene cronometrato
-**Then** il tempo per lezione è registrato, come prima misura di `M5`
-
-### Story 2.4: Il registro dei tipi si chiude
-
-As a sviluppatore che manterrà questo codice per novanta lezioni,
+As a sviluppatore che manterrà questo codice per un corso senza fine,
 I want che i tipi di esercizio siano un insieme chiuso e verificabile,
 So that il contenuto possa crescere senza che l'interfaccia diventi uno zoo.
 
 **Acceptance Criteria:**
 
-**Given** l'evidenza raccolta dalla storia 2.3
-**When** il registro viene definito in `src/domain/exercise.ts`
-**Then** è una union discriminata chiusa, e ogni tipo dichiara la forma dei propri dati
+**Given** `src/domain/exercise.ts`
+**When** viene definito
+**Then** dichiara una union discriminata chiusa di **tre** tipi: `single-select`, `select-span`, `assemble`
+**And** ciascuno dichiara la forma dei propri dati
 
-**Given** ciascun tipo del registro
+**Given** ciascun tipo
 **When** viene implementato
 **Then** porta una funzione pura `check(exercise, response): Outcome`
 **And** porta i propri test unitari, inclusi i casi limite
 
+**Given** un esercizio `single-select`
+**When** viene valutato
+**Then** la risposta è corretta se coincide con l'unica opzione giusta
+
+**Given** un esercizio `select-span`
+**When** viene valutato
+**Then** la risposta è una porzione della frase, e la correttezza si verifica sui confini dei segmenti di `alignFurigana()`, non su indici di carattere
+
+**Given** un esercizio `assemble`
+**When** viene valutato
+**Then** la risposta è una sequenza di tessere, e la correttezza dipende dall'ordine
+
 **Given** `src/domain/exercise.ts`
 **When** viene ispezionato
 **Then** non importa React, Supabase, rete o orologio
-**And** l'ordine dei distrattori è deterministico, senza `Math.random()`
+**And** l'ordine dei distrattori e delle tessere è deterministico, senza `Math.random()`
 
-**Given** un file di lezione che dichiara un `kind` non presente nel registro
-**When** viene elaborato
-**Then** è un errore, non un caso ignorato a runtime
+**Given** cosa un esercizio insegna
+**When** viene registrato
+**Then** vive in `grammar_point` e **non** nel tipo: il tipo dice come si risponde, il punto grammaticale dice cosa si esercita
 
-**Given** la decisione presa in questa storia
-**When** viene registrata
-**Then** chiude `OQ-7` del PRD e abilita le cinque decisioni di `UX-DR34`
-
-### Story 2.5: L'identità di un esercizio resiste alla riautorazione
+### Story 2.3: L'identità di un esercizio resiste alla riautorazione
 
 As a utente che ha studiato per settimane,
 I want che correggere un refuso in una spiegazione non cancelli i miei progressi,
@@ -861,7 +851,44 @@ So that migliorare il contenuto non costi la mia cronologia.
 **When** i suoi identificatori vengono confrontati con i precedenti
 **Then** coincidono tutti
 
-### Story 2.6: Lo schema definitivo e il cancello in CI
+### Story 2.4: Una lezione può non avere esercizi
+
+As a autore,
+I want registrare anche le lezioni che non si prestano a esercizi,
+So that la progressione racconti il percorso vero invece di saltare pezzi.
+
+**Acceptance Criteria:**
+
+**Given** una lezione che riorienta il modo di pensare senza avere una risposta giusta
+**When** viene descritta con zero esercizi
+**Then** lo schema la accetta e la validazione passa
+
+**Given** una lezione senza esercizi
+**When** viene ispezionata
+**Then** dichiara comunque i punti grammaticali che insegna, perché alimentano le statistiche di Epic 5 quando altre lezioni li riprendono
+
+### Story 2.5: Spiegazioni bilingui con ripiego dichiarato
+
+As a utente italiano,
+I want leggere la spiegazione nella mia lingua quando esiste,
+So that non debba tradurre mentalmente mentre imparo.
+
+**Acceptance Criteria:**
+
+**Given** un esercizio
+**When** viene descritto
+**Then** la spiegazione in inglese è **obbligatoria** e quella in italiano è facoltativa
+
+**Given** un esercizio con la sola spiegazione inglese
+**When** un utente con interfaccia italiana lo incontra
+**Then** vede la spiegazione inglese
+**And** l'interfaccia dichiara che non è ancora tradotta, invece di far sembrare che l'italiano sia quello
+
+**Given** le spiegazioni
+**When** vengono implementate
+**Then** **non** passano da i18n: sono contenuto del file di lezione, non chiavi di interfaccia
+
+### Story 2.6: La validazione blocca il merge
 
 As a chiunque apra una pull request di contenuto,
 I want che una lezione malformata venga fermata prima del merge,
@@ -869,18 +896,13 @@ So that nessun utente incontri un esercizio rotto in produzione.
 
 **Acceptance Criteria:**
 
-**Given** il registro chiuso della storia 2.4
-**When** lo schema definitivo viene scritto
-**Then** tipo TypeScript e validatore a runtime derivano dalla **stessa** definizione, non da due elenchi paralleli
-
 **Given** una lezione
 **When** viene validata
-**Then** il controllo verifica: conformità allo schema, `kind` presente nel registro, spiegazione inglese presente, unicità degli identificatori, e coerenza fra `kanji` e `kana` di ogni frase
+**Then** il controllo verifica: conformità allo schema, `kind` presente fra i tre del registro, spiegazione inglese presente, unicità degli identificatori, e coerenza fra `kanji` e `kana` di ogni frase
 
-**Given** l'identificatore e il titolo di una lezione
-**When** vengono definiti
-**Then** derivano dal **punto grammaticale** che insegna
-**And** non riproducono numerazione, titolo o ordine delle lezioni di una fonte esterna
+**Given** un file di lezione che dichiara un `kind` non presente nel registro
+**When** viene validato
+**Then** è un errore di validazione, non un caso ignorato a runtime
 
 **Given** una pull request che modifica `content/lessons/`
 **When** la CI viene eseguita
@@ -890,94 +912,35 @@ So that nessun utente incontri un esercizio rotto in produzione.
 **When** viene aggiunta
 **Then** non richiede alcuna modifica al codice
 
-### Story 2.7: Una lezione può non avere esercizi
+### Story 2.7: La lezione campione, che è anche una fixture
 
-As a autore,
-I want registrare anche le lezioni che non si prestano a esercizi,
-So that la progressione racconti il percorso vero invece di saltare pezzi.
-
-**Acceptance Criteria:**
-
-**Given** una lezione che riorienta il modo di pensare senza avere una risposta giusta
-**When** viene autorata con zero esercizi
-**Then** lo schema la accetta e la validazione passa
-
-**Given** una lezione senza esercizi
-**When** viene ispezionata
-**Then** dichiara comunque i punti grammaticali che insegna, perché alimentano le statistiche di Epic 5 quando altre lezioni li riprendono
-
-### Story 2.8: Spiegazioni bilingui con ripiego dichiarato
-
-As a utente italiano,
-I want leggere la spiegazione nella mia lingua quando esiste,
-So that non debba tradurre mentalmente mentre imparo.
+As a sviluppatore che deve testare la sessione,
+I want contenuto reale che copra tutti e tre i tipi,
+So that i test di componente e l'end-to-end abbiano su cosa girare.
 
 **Acceptance Criteria:**
 
-**Given** un esercizio
-**When** viene autorato
-**Then** la spiegazione in inglese è **obbligatoria** e quella in italiano è facoltativa
+**Given** il registro dei tre tipi
+**When** la lezione campione viene autorata a mano
+**Then** contiene almeno un esercizio per **ciascun** tipo
+**And** include di proposito i casi difficili: una frase lunga, una con jukujikun, una con okurigana
 
-**Given** un esercizio con la sola spiegazione inglese
-**When** un utente con interfaccia italiana lo incontra
-**Then** vede la spiegazione inglese
-**And** l'interfaccia dichiara che quella spiegazione non è ancora tradotta, invece di far sembrare che l'italiano sia quello
+**Given** la frase più lunga della lezione campione
+**When** viene renderizzata
+**Then** conferma i valori di `sentence-hero` fissati da `UX-DR8`, o li corregge prima che Epic 3 ci costruisca sopra
 
-**Given** le spiegazioni
-**When** vengono implementate
-**Then** **non** passano da i18n: sono contenuto del file di lezione, non chiavi di interfaccia
+**Given** la lezione campione
+**When** viene validata
+**Then** passa lo schema di 2.1 e i controlli di 2.6
 
-### Story 2.9: Il confronto che impedisce la contaminazione
+**Given** i test di componente della sessione e il test end-to-end di Epic 7
+**When** vengono scritti
+**Then** usano questa lezione come fixture, senza inventare contenuto sintetico
 
-As a autore che genera da un testo protetto,
-I want un controllo meccanico che intercetti le sovrapposizioni,
-So that la separazione fra fatto e formulazione non dipenda solo dalla mia attenzione.
-
-**Acceptance Criteria:**
-
-**Given** una sessione di autorazione conclusa
-**When** il controllo viene eseguito
-**Then** confronta ogni frase giapponese e ogni spiegazione prodotte con il testo del transcript di partenza
-**And** segnala ogni sovrapposizione non banale
-
-**Given** una sovrapposizione segnalata
-**When** viene esaminata
-**Then** il contenuto viene riscritto prima del commit, oppure la segnalazione è motivata per iscritto se si tratta di un esempio canonico pubblico
-
-**Given** il controllo
-**When** la sua collocazione viene documentata
-**Then** dichiara che **non può essere un cancello di CI**, perché il transcript non entra nel repository per la storia 2.1
-**And** dichiara che è l'unico anello della catena di qualità che non si chiude a valle
-
-**Given** le tre lezioni già autorate dalla storia 2.3, prodotte quando questo controllo non esisteva ancora
-**When** il controllo diventa disponibile
-**Then** viene applicato **retroattivamente** anche a quelle
-**And** l'esito è registrato, perché sono le uniche lezioni del progetto passate senza la verifica meccanica
-
-### Story 2.10: Il flusso che regge novanta lezioni
-
-As a autore con settantanove lezioni ancora da vedere,
-I want una procedura ripetibile che non peggiori con l'accumularsi del contenuto,
-So that il prodotto non muoia di fame di contenuto invece che di difetti.
-
-**Acceptance Criteria:**
-
-**Given** la procedura documentata
-**When** viene letta da qualcuno che non l'ha mai eseguita
-**Then** è sufficiente a produrre una lezione valida senza chiedere aiuto
-
-**Given** la procedura
-**When** viene esaminata per `NFR9`
-**Then** nessun passaggio manuale ha un costo che cresce con il numero di lezioni già autorate
-
-**Given** una lezione qualsiasi
-**When** viene autorata seguendo la procedura
-**Then** il tempo dalla visione all'esercizio giocabile è al massimo trenta minuti (`M5`)
-**And** il tempo misurato viene registrato, perché la soglia è una stima da tarare
-
-**Given** il repository
-**When** viene ispezionato
-**Then** contiene almeno cinque lezioni autorate e validate, come richiede la Definition of Done del PRD §11
+**Given** il contenuto della lezione campione
+**When** viene prodotto
+**Then** usa frasi originali, non riprodotte da alcuna fonte
+**And** è la prima applicazione concreta delle regole di §2 del PRD
 
 ---
 
@@ -1558,14 +1521,20 @@ So that non debba imparare due prodotti.
 
 **Acceptance Criteria:**
 
-**Given** il ruolo tipografico per il giapponese di frase lasciato aperto dalla storia 1.3
-**When** viene fissato
-**Then** il suo corpo è calibrato sulla lunghezza reale delle frasi misurata nella storia 2.3
-**And** una frase alla lunghezza massima osservata sta dentro `measure` senza andare a capo, su entrambe le larghezze estreme
+**Given** il ruolo `sentence-hero` fissato da `UX-DR8` a 32px desktop e 26px mobile, interlinea 1.9
+**When** viene verificato sul rendering reale con la frase più lunga della lezione campione di 2.7
+**Then** una frase di 28 caratteri occupa al massimo due righe a 1024px e tre righe sotto i 640px
+**And** se ne occupa di più si corregge il corpo qui, prima che la sessione ci costruisca sopra
 
-**Given** una frase che va comunque a capo
-**When** il comportamento viene definito
-**Then** l'interruzione non spezza mai una parola giapponese al suo interno
+**Given** una frase che va a capo
+**When** viene renderizzata
+**Then** l'interruzione cade **solo ai confini dei segmenti** prodotti da `alignFurigana()`
+**And** nessun segmento viene spezzato al suo interno: `読んでいて` non si divide fra 読 e んでいて
+
+**Given** una frase su più righe con la furigana attiva
+**When** viene renderizzata
+**Then** ogni riga ha lo spazio per il proprio ruby, non solo la prima
+**And** è la ragione per cui l'interlinea è 1.9 e non l'1.75 ereditato da `word-hero`
 
 **Given** la card di esercizio con la furigana attiva
 **When** viene renderizzata con okurigana (難しい), prefisso kana (お茶) e ruby di gruppo su nucleo lungo (日本語)
@@ -1791,11 +1760,109 @@ So that non pensi che l'applicazione sia rotta.
 
 ---
 
-## Epic 6: Lancio pubblico difendibile
+## Epic 6: La pipeline di autorazione
+
+L'owner, nel ruolo di autore, trasforma una lezione appena studiata in esercizi validati e committati in meno di trenta minuti, senza toccare il codice — e il costo non cresce con le lezioni già fatte.
+
+### Story 6.1: Il transcript non entra nel repository
+
+As a autore che lavora da materiale protetto,
+I want che la fonte resti fuori dal progetto per costruzione,
+So that nessun commit distratto trasformi un problema evitato in un problema reale.
+
+**Acceptance Criteria:**
+
+**Given** il repository
+**When** `.gitignore` viene ispezionato
+**Then** esclude esplicitamente transcript, sottotitoli e trascrizioni, con un commento che ne dice la ragione
+
+**Given** una cartella di lavoro dell'autore contenente un transcript
+**When** `git status` viene eseguito
+**Then** il file non compare fra quelli tracciabili
+
+**Given** la documentazione della pipeline
+**When** viene letta
+**Then** dichiara che dal transcript si estraggono **fatti**, mai formulazioni
+**And** dichiara che parafrasare con i sinonimi una spiegazione altrui resta opera derivata
+**And** dichiara che le **metafore didattiche** della fonte non si riusano, con l'esempio concreto del caso in cui il progetto stesso ci era caduto
+
+### Story 6.2: Il flusso di autorazione, documentato e ripetibile
+
+As a autore,
+I want una procedura che qualcuno possa eseguire leggendola,
+So that il contenuto non dipenda dal fatto che io mi ricordi come si fa.
+
+**Acceptance Criteria:**
+
+**Given** la procedura documentata
+**When** viene letta da qualcuno che non l'ha mai eseguita
+**Then** è sufficiente a produrre una lezione valida senza chiedere aiuto
+
+**Given** il flusso
+**When** viene eseguito
+**Then** è assistito da un LLM in fase di autorazione
+**And** prevede una **revisione umana obbligatoria** prima del commit: nessun esercizio raggiunge il repository senza essere stato riletto
+
+**Given** una lezione prodotta dal flusso
+**When** viene committata
+**Then** passa la validazione di Epic 2 senza interventi manuali sullo schema
+
+### Story 6.3: Il confronto che impedisce la contaminazione
+
+As a autore che genera da un testo protetto,
+I want un controllo meccanico che intercetti le sovrapposizioni,
+So that la separazione fra fatto e formulazione non dipenda solo dalla mia attenzione.
+
+**Acceptance Criteria:**
+
+**Given** una sessione di autorazione conclusa
+**When** il controllo viene eseguito
+**Then** confronta ogni frase giapponese e ogni spiegazione prodotte con il testo del transcript di partenza
+**And** segnala ogni sovrapposizione non banale
+
+**Given** una sovrapposizione segnalata
+**When** viene esaminata
+**Then** il contenuto viene riscritto prima del commit, oppure la segnalazione è motivata per iscritto se si tratta di un esempio canonico pubblico
+
+**Given** le lezioni già autorate prima che questo controllo esistesse
+**When** il controllo diventa disponibile
+**Then** viene applicato **retroattivamente** anche a quelle, inclusa la lezione campione di 2.7
+**And** l'esito è registrato
+
+**Given** il controllo
+**When** la sua collocazione viene documentata
+**Then** dichiara che **non può essere un cancello di CI**, perché il transcript non entra nel repository per la storia 6.1
+**And** dichiara che è l'unico anello della catena di qualità che non si chiude a valle
+
+### Story 6.4: Il flusso regge un corso senza fine
+
+As a autore con ottanta e più lezioni ancora da vedere,
+I want che il costo per lezione resti costante,
+So that il prodotto non muoia di fame di contenuto invece che di difetti.
+
+**Acceptance Criteria:**
+
+**Given** la procedura
+**When** viene esaminata per `NFR9`
+**Then** nessun passaggio manuale ha un costo che cresce con il numero di lezioni già autorate
+**And** il requisito è verificato contro un corso di lunghezza **non nota**, non contro un totale fissato
+
+**Given** una lezione qualsiasi
+**When** viene autorata seguendo la procedura
+**Then** il tempo dalla visione all'esercizio giocabile è al massimo trenta minuti (`M5`)
+**And** il tempo misurato viene registrato, perché la soglia è una stima da tarare
+
+**Given** il repository
+**When** viene ispezionato
+**Then** contiene almeno cinque lezioni autorate e validate, come richiede la Definition of Done del PRD §11
+
+---
+
+## Epic 7: Lancio pubblico difendibile
 
 Il progetto è pubblicamente utilizzabile e pubblicamente ispezionabile: privacy policy, riconoscimenti corretti alla fonte del metodo, licenze separate, README che spiega le scelte, percorso completo verificato end-to-end.
 
-### Story 6.1: Dire cosa si tiene e come cancellarlo
+### Story 7.1: Dire cosa si tiene e come cancellarlo
 
 As a sconosciuto che sta per consegnare la propria email,
 I want leggere cosa viene memorizzato prima di registrarmi,
@@ -1820,7 +1887,7 @@ So that possa decidere con cognizione.
 **When** viene renderizzata
 **Then** contiene anch'essa un collegamento alla privacy policy
 
-### Story 6.2: Riconoscere la fonte del metodo
+### Story 7.2: Riconoscere la fonte del metodo
 
 As a chiunque si chieda da dove venga questo modo di spiegare la grammatica,
 I want trovare dichiarata l'origine dell'approccio,
@@ -1846,7 +1913,7 @@ So that possa risalire alla fonte e giudicare da solo.
 **When** vengono ispezionati
 **Then** non contengono il nome della fonte
 
-### Story 6.3: Due licenze, perché sono due cose diverse
+### Story 7.3: Due licenze, perché sono due cose diverse
 
 As a chiunque ispezioni il repository,
 I want vedere dichiarata separatamente la licenza del codice e quella del contenuto,
@@ -1870,7 +1937,7 @@ So that possa riusare l'uno o l'altro sapendo a quali condizioni.
 **When** viene scritta
 **Then** descrive la pipeline di autorazione di Epic 2 come caso concreto, inclusi il controllo anti-contaminazione e il suo limite dichiarato
 
-### Story 6.4: Il percorso completo, verificato da una macchina
+### Story 7.4: Il percorso completo, verificato da una macchina
 
 As a proprietario del progetto,
 I want che il percorso principale sia coperto da un test end-to-end,
@@ -1896,7 +1963,7 @@ So that una regressione si scopra in CI e non dall'uso.
 **Then** esegue i test end-to-end contro il progetto Supabase reale, sullo schema corrente
 **And** le migrazioni vengono applicate solo dopo il merge, seguite da un e2e di collaudo
 
-### Story 6.5: La cancellazione, verificata tabella per tabella
+### Story 7.5: La cancellazione, verificata tabella per tabella
 
 As a utente che se ne va,
 I want la prova che non sia rimasto niente,
@@ -1916,7 +1983,7 @@ So that la promessa non poggi solo sulle chiavi esterne.
 **When** viene scritta
 **Then** controlla le tabelle esplicitamente, senza dedurre il risultato dalla presenza di un vincolo `on delete cascade`
 
-### Story 6.6: Provare l'app con uno screen reader vero
+### Story 7.6: Provare l'app con uno screen reader vero
 
 As a utente che non vede lo schermo,
 I want che la sessione di esercizio sia percorribile e comprensibile,
