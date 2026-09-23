@@ -71,3 +71,6 @@ transcripts/
 
 # Output di rendering delle skill: rigenerato, non lavoro del progetto
 _bmad/render/
+
+# Artefatti di esecuzione di bmad-loop: log, stato, heartbeat
+.bmad-loop/runs/

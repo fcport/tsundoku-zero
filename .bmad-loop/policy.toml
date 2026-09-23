@@ -25,7 +25,11 @@ session_budget_grace_s = 240 # enforce mode: seconds a tripped session gets to w
 
 [verify]
 # Deterministic gates run by the orchestrator after a clean review, before commit.
-commands = []                # e.g. ["pytest -q", "ruff check ."]
+commands = ["npm run lint", "npm run typecheck", "npm test"]
+# Attivati dopo la storia 1.1, che ha creato gli script. Da qui in poi il loop
+# non committa codice che non passa lint, typecheck e test. Vale in particolare
+# per AD-1: una violazione del confine di dominio e' un errore di lint, quindi
+# questo gate e' cio' che impedisce a una sessione automatica di aggirarlo.
 
 [notify]
 desktop = true               # notify-send (Linux) / osascript (macOS) / PowerShell toast (Windows), best-effort
