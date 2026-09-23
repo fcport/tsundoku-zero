@@ -111,13 +111,16 @@ Tre motivi, in ordine di peso:
 
   **Condizione che riapre la decisione:** se il prodotto decidesse di esporre i punti grammaticali come **pagine pubbliche indicizzabili** — acquisizione da ricerca invece che da link — allora la generazione statica di Next diventa la scelta corretta. È un cambio di prodotto che passa dal PRD, non una preferenza di infrastruttura.
 
-**Un solo progetto Supabase cloud, non due.** Decisione dell'owner del 23 settembre, che modifica `AD-12` e `AD-13`.
+**Un solo progetto Supabase, quello reale.** Decisione dell'owner del 23 settembre, che modifica `AD-12` e `AD-13`. Niente staging cloud e niente istanza locale: sviluppo, CI ed e2e girano tutti contro lo stesso database.
 
-Lo staging cloud esiste per provare una migrazione prima che tocchi i dati veri. Quella prova resta, ma su un'istanza **locale** effimera (`supabase start`, Docker) creata da zero a ogni run di CI: le migrazioni girano lì, i test e2e girano contro di essa, e la produzione le riceve solo dopo il merge.
+Il vantaggio è che ciò che i test esercitano è **la configurazione vera** — le policy RLS come sono realmente applicate, le impostazioni di Auth, i limiti del piano gratuito — invece di un'approssimazione che può divergere in silenzio. Un e2e che passa qui ha provato qualcosa su cui si può contare. In più la CI che gira su ogni pull request tiene sveglio il progetto da sola, e la pausa a 7 giorni del piano gratuito smette di essere un problema senza bisogno di un keep-alive.
 
-Su due punti è **migliore** dello staging condiviso, ed è giusto dirlo invece di presentarla come un ripiego. `AD-13` chiedeva email univoche per run per impedire che run paralleli collidessero su un database condiviso: con un'istanza per run il problema sparisce alla radice, e la regola resta valida contro la produzione. E un'istanza creata da zero non può accumulare stato residuo, che è il modo in cui uno staging di lunga vita smette silenziosamente di somigliare alla produzione.
+Il costo è che **i dati di studio dell'owner vivono nello stesso database dei test**, e quei dati non sono sostituibili: `M1` — quattordici giorni consecutivi di uso reale — è il criterio di accettazione dichiarato del progetto, e si misura esattamente su quelle righe. Perderle per una migrazione sbagliata non significa perdere dati di prova, significa perdere la metrica.
 
-Su un punto è **peggiore**, e va dichiarato nel README invece che scoperto: i test e2e non esercitano la configurazione cloud reale — impostazioni di Auth, limiti di frequenza, policy applicate dalla console. Una differenza fra locale e produzione si scopre in produzione. È il prezzo di non amministrare un secondo progetto, ed è un prezzo scelto.
+Da qui due conseguenze che non sono negoziabili:
+
+1. **Le migrazioni si applicano solo al merge su `main`**, mai da un ramo di pull request. Una PR che introduce un cambio di schema vede i propri e2e dopo il merge, non prima. È un limite reale e dichiarato, ed è il prezzo giusto da pagare: la sequenza inversa metterebbe uno schema non revisionato sui dati che `M1` misura.
+2. **`AD-13` passa da regola d'igiene a difesa portante.** Email univoca per run e rimozione via Edge Function erano nate per evitare collisioni fra run paralleli su uno staging condiviso; qui sono l'unica cosa che separa la suite di test dai dati veri. Un teardown che fallisce lascia righe in `review_log` che falsano le statistiche di `F7` in modo silenzioso e permanente. Va verificato che la pulizia sia avvenuta, non assunto che sia partita.
 
 **L'hosting passa da Netlify a Vercel.** Decisione a basso costo e reversibile: cambia la tabella dello Stack, il diagramma della catena di deploy e i criteri della storia dell'URL pubblico. Nessun `AD` ne è toccato.
 

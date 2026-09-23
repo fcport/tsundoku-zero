@@ -30,7 +30,6 @@ Nessuna storia copre la creazione degli account e dei progetti esterni, **ed è 
 | Repository git locale con `.gitignore` | ✅ `main`, transcript e skill BMad esclusi |
 | Repository GitHub pubblico | ✅ `github.com/fcport/tsundoku-zero` |
 | Progetto Supabase di produzione | ✅ `tsundoku-zero`, West EU (Ireland) |
-| Docker locale, per `supabase start` in CI ed e2e | ⬜ da verificare |
 | Progetto Vercel collegato al repository | ⬜ CLI non installata |
 | Secret in GitHub Actions | ⬜ `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, `SUPABASE_DB_PASSWORD`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
 | Variabili di ambiente locali | ⬜ `.env` da `.env.example`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
@@ -187,7 +186,7 @@ Dall'Architecture Spine e dallo Spine Delta. Ogni voce è un invariante citabile
 - `AD-5` — Una sola definizione di "dovuto". `isDue(state, now)` pura; dashboard, precarico di sessione e cancello di sblocco leggono la **stessa chiave** TanStack.
 - `AD-7` — *(modificato)* Una risposta è una sola chiamata, transazionale e idempotente. RPC `apply_review(review_id, exercise_id, outcome, stage, due_at, reviewed_at, used_explanation)` con `ON CONFLICT (review_id) DO NOTHING`; aggiorna `review_state` solo se l'insert ha prodotto una riga. Nessuna logica di scheduling in SQL.
 - `AD-10` — *(esteso)* RLS su `review_state`, `review_log`, `user_settings` e **`lesson_progress`**, policy `user_id = auth.uid()` su tutte le operazioni. Il contenuto ha RLS abilitata in sola lettura, nessuna policy di scrittura. Test di integrazione: A non legge le righe di B.
-- `AD-12` — *(modificato)* Migrazioni versionate in `supabase/migrations/`. Nessuna modifica dallo Studio. **Un solo progetto Supabase cloud, la produzione.** La prova di migrazione avviene su un'istanza Supabase **locale** (`supabase start`, Docker) creata da zero a ogni run di CI: le stesse migrazioni girano lì prima di toccare la produzione. Lo staging cloud è stato valutato e scartato — un secondo progetto da amministrare, tenere sveglio e pagare in attenzione, per una prova che un'istanza effimera fa meglio.
+- `AD-12` — *(modificato)* Migrazioni versionate in `supabase/migrations/`. Nessuna modifica dallo Studio. **Un solo progetto Supabase, quello reale**: niente staging e niente istanza locale. Le migrazioni vi sono applicate **al merge su `main`**, mai da un ramo di pull request — i dati di studio dell'owner sono ciò che `M1` misura, e una migrazione rotta da una PR li distruggerebbe insieme alla metrica di accettazione del progetto. Conseguenza dichiarata: una PR che introduce un cambio di schema vede i propri e2e solo dopo il merge.
 - `AD-18` — *(rafforzato)* Le statistiche derivano **solo** da `review_log`, che acquisisce `grammar_point` denormalizzato — perché FR7.3 deve restare interrogabile anche dopo che un esercizio è stato riautorato e ha cambiato identità. Lo streak è sempre derivato dal log, mai memorizzato.
 
 **Stato e resilienza**
@@ -198,7 +197,7 @@ Dall'Architecture Spine e dallo Spine Delta. Ogni voce è un invariante citabile
 **Sicurezza, ambienti, licenza**
 
 - `AD-11` — La cancellazione account passa da una Edge Function `delete-account` autenticata con `service_role`, mai in codice client né in variabili `VITE_*`. È l'**unico** codice server del progetto — invariante riconfermato dal divieto di LLM a runtime.
-- `AD-13` — I test e2e non condividono dati: email univoca per run, rimozione tramite la stessa Edge Function.
+- `AD-13` — *(promosso a portante)* I test e2e non condividono dati: email univoca per run, rimozione tramite la stessa Edge Function di `AD-11`. **Girando contro il database reale, questa regola smette di essere igiene e diventa l'unica difesa** fra la suite di test e i dati di studio dell'owner. Una pulizia che fallisce lascia righe di `review_log` che falsano le statistiche di `F7`: il teardown va verificato, non sperato.
 - `AD-16` — *(allentato)* Senza JMdict cade l'obbligo EDRDG di attribuzione per schermata. Diventa pagina di riconoscimenti (FR10.2). `LICENSE` e `LICENSE-CONTENT` restano file separati e dichiarati nel README.
 - `AD-14` — *(modificato)* Nessuna stringa visibile cablata; chiavi tipizzate via `CustomTypeOptions` di i18next, una chiave inesistente è errore di compilazione. Confine a tre: **interfaccia da `t()`, contenuto dal file di lezione, giapponese da nessuno dei due**.
 - `AD-15` — *(da riscrivere)* L'accessibilità della sessione è un contratto. Il contratto vecchio — spazio rivela, `1`–`4` valutano — non descrive più il prodotto; sopravvive solo Esc. Resta valida una sola live region `aria-live="polite"` per sessione e un test di componente che guida una sessione completa da sola tastiera.
@@ -211,10 +210,10 @@ Dall'Architecture Spine e dallo Spine Delta. Ogni voce è un invariante citabile
 - TypeScript resta su **5.9.3**, non 7.x: senza API programmatica stabile non esiste `typescript-eslint`, quindi non esiste la regola meccanica di `AD-1`.
 - `npm` con `package-lock.json` versionato. La CI usa `npm ci`, mai `npm install`.
 - Configurazione solo da `import.meta.env.VITE_*`, validata con uno schema all'avvio in `src/app/`.
-- **Un progetto Supabase cloud** (produzione), più un'istanza locale effimera in CI per migrazioni ed e2e. Nessun keep-alive contro la pausa a 7 giorni del piano gratuito: comportamento accettato e dichiarato.
-- **Limite accettato e da dichiarare nel README:** i test e2e non esercitano la configurazione cloud reale — impostazioni di Auth, limiti di frequenza, policy applicate dalla console. Una differenza fra locale e produzione si scopre in produzione. È il prezzo di non amministrare un secondo progetto, ed è un prezzo scelto, non subito.
+- **Un solo progetto Supabase**, quello reale, usato da sviluppo, CI ed e2e. Nessun keep-alive contro la pausa a 7 giorni del piano gratuito — non serve: la CI che gira su ogni PR lo tiene sveglio da sola.
+- **Limite accettato e da dichiarare nel README:** i test end-to-end girano contro il database che contiene i dati di studio veri. È la configurazione che si vuole esercitare davvero — Auth, RLS e limiti sono quelli di produzione, non un'approssimazione — e il prezzo è che la correttezza del teardown di `AD-13` diventa portante.
 - Nessun SDK di analitica o error tracking di terze parti (`NFR6`).
-- Catena di deploy: PR → lint/typecheck/unit/validazione lezioni → `supabase start` + migrazioni su istanza locale → Playwright e2e in locale → anteprima Vercel → merge → migrazioni produzione → Vercel produzione.
+- Catena di deploy: PR → lint/typecheck/unit/validazione lezioni → Playwright e2e contro Supabase reale, **schema corrente** → anteprima Vercel → merge → migrazioni applicate a Supabase → e2e di collaudo post-merge → Vercel produzione.
 
 **Dall'addendum del 19 agosto, ancora vincolante**
 
@@ -585,14 +584,15 @@ So that il repository possa essere pubblico senza che i dati lo diventino.
 
 **Acceptance Criteria:**
 
-**Given** il progetto Supabase di produzione e l'istanza locale della CI
+**Given** il progetto Supabase reale, unico ambiente del progetto
 **When** la pipeline applica le migrazioni
-**Then** entrambe ricevono le stesse migrazioni versionate da `supabase/migrations/`, e la locale le riceve **per prima**
+**Then** lo fa **soltanto al merge su `main`**, da `supabase/migrations/` versionate
 **And** nessuna modifica di schema avviene dallo Studio Supabase
 
-**Given** una migrazione che fallisce sull'istanza locale
+**Given** una pull request che contiene una migrazione
 **When** la CI viene eseguita
-**Then** la pipeline si ferma e la produzione non viene toccata
+**Then** la migrazione viene validata sintatticamente ma **non applicata**
+**And** i dati di studio dell'owner non sono esposti a uno schema non ancora revisionato
 
 **Given** la migrazione che crea `user_settings`
 **When** viene applicata
@@ -1869,7 +1869,7 @@ So that una regressione si scopra in CI e non dall'uso.
 **Acceptance Criteria:**
 
 **Given** la suite Playwright
-**When** viene eseguita contro l'istanza Supabase locale della CI, creata da zero per quel run
+**When** viene eseguita contro il progetto Supabase reale
 **Then** un test copre registrazione → sblocco della prima lezione → risoluzione degli esercizi → pila a zero
 
 **Given** un run di test end-to-end
@@ -1883,8 +1883,8 @@ So that una regressione si scopra in CI e non dall'uso.
 
 **Given** la pipeline su una pull request
 **When** viene eseguita
-**Then** avvia l'istanza Supabase locale, vi applica le migrazioni, e solo dopo esegue i test end-to-end contro di essa
-**And** la produzione riceve le migrazioni soltanto dopo il merge
+**Then** esegue i test end-to-end contro il progetto Supabase reale, sullo schema corrente
+**And** le migrazioni vengono applicate solo dopo il merge, seguite da un e2e di collaudo
 
 ### Story 6.5: La cancellazione, verificata tabella per tabella
 
