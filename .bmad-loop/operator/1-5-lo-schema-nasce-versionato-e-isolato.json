@@ -1,0 +1,11 @@
+{
+  "actions": [
+    "In GitHub > Settings > Secrets and variables > Actions, imposta i tre repository secret usati da .github/workflows/migrate.yml: SUPABASE_ACCESS_TOKEN (generalo dalla console Supabase, Account > Access Tokens), SUPABASE_DB_PASSWORD (la password del database del progetto reale) e SUPABASE_PROJECT_REF (ytgriszwsfumheagklqj). Senza questi il job di migrate fallisce l'autenticazione (AC1/AC2).",
+    "Fai il merge di questa storia su main: il push su main scatena .github/workflows/migrate.yml, che esegue supabase link + supabase db push e applica 20260923221517_create_user_settings.sql al progetto Supabase reale. L'apply avviene SOLO al merge, mai da un ramo di PR (AD-12/AD-13).",
+    "Dopo il merge, verifica nel run di migrate.yml che 'supabase db push' sia andato a buon fine, e nello Studio Supabase che la tabella public.user_settings esista con RLS abilitata e le 4 policy owner-scoped (select/insert/update/delete), a due sole colonne user_id/locale (AC3/AC4-schema)."
+  ],
+  "parked_at": "2026-09-24",
+  "run_id": "20260923-235935-2ae1",
+  "spec_file": "_bmad-output/implementation-artifacts/spec-1-5-lo-schema-nasce-versionato-e-isolato.md",
+  "story_key": "1-5-lo-schema-nasce-versionato-e-isolato"
+}
