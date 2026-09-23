@@ -109,6 +109,50 @@ export default tseslint.config(
     },
   },
   {
+    // Il sistema di design come token, non come valori sparsi (storia 1.3,
+    // UX-DR1). Nessun componente scrive un colore LETTERALE: solo così la
+    // modalità scura è uno scambio di variabili invece di una riscrittura per
+    // componente. La regola è ERROR (CI rossa, non avviso).
+    //
+    // Ambito: SOLO il codice dei componenti (src/ui/**, src/features/**). Lo
+    // script di contrasto e i file di token contengono hex legittimi e restano
+    // fuori. theme.css è CSS (non lintato da ESLint); questa regola difende il
+    // codice JS/TS/JSX dove un colore letterale sostituirebbe un token.
+    //
+    // Quattro selettori coprono sia gli arbitrary value di Tailwind
+    // (className="bg-[#..]", un Literal di stringa) sia gli style inline
+    // (style={{ color: '#fff' }}, altro Literal), oltre ai template literal.
+    files: ['src/ui/**/*.{ts,tsx}', 'src/features/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/#[0-9a-fA-F]{3,8}\\b/]',
+          message:
+            'Colore esadecimale letterale: usa un token del sistema (bg-*, text-*, border-*), non un valore sparso (UX-DR1).',
+        },
+        {
+          selector:
+            'Literal[value=/\\b(rgb|rgba|hsl|hsla|oklch|oklab)\\(/i]',
+          message:
+            'Funzione colore letterale: usa un token del sistema, non un valore sparso (UX-DR1).',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]',
+          message:
+            'Colore esadecimale letterale in template: usa un token del sistema (UX-DR1).',
+        },
+        {
+          selector:
+            'TemplateElement[value.raw=/\\b(rgb|rgba|hsl|hsla|oklch|oklab)\\(/i]',
+          message:
+            'Funzione colore letterale in template: usa un token del sistema (UX-DR1).',
+        },
+      ],
+    },
+  },
+  {
     // Il dominio è puro: niente accesso ai global di piattaforma (rete,
     // storage). Imposto come ERROR sul solo livello domain.
     files: ['src/domain/**/*.{ts,tsx}'],
@@ -125,6 +169,17 @@ export default tseslint.config(
   {
     // I file di configurazione girano in Node.
     files: ['*.config.{ts,js}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    // Gli script di manutenzione (es. check-contrast) girano in Node: process,
+    // console, i moduli node:*. Non fanno parte dell'albero dei componenti,
+    // quindi la regola colore di src/ui|features non li tocca.
+    files: ['scripts/**/*.{js,mjs,ts}'],
     languageOptions: {
       globals: {
         ...globals.node,

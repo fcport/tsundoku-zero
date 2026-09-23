@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "check-contrast": "node scripts/check-contrast.mjs",
     "graph": "depcruise src --include-only \"^src\" --output-type dot --output-to docs/dependency-graph.dot && dot -T svg docs/dependency-graph.dot -o docs/dependency-graph.svg"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.0.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -29,6 +31,7 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-boundaries": "5.4.0",
     "globals": "^17.12.0",
+    "tailwindcss": "^4.3.3",
     "typescript": "5.9.3",
     "typescript-eslint": "^8.70.1",
     "vite": "^8.3.0",

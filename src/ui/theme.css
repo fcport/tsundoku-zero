@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+/*
+ * Il sistema di design come token, non come valori sparsi (UX-DR1–UX-DR9, UX-DR38).
+ *
+ * Questo file è l'UNICA fonte dei valori: colori, tipografia, spaziatura e raggi
+ * sono i letterali di DESIGN.md, mai reinventati. Sia lo script di contrasto
+ * (scripts/check-contrast.mjs) sia src/design-tokens.test.ts leggono da qui.
+ *
+ * Tailwind v4 è CSS-first: nessun tailwind.config.js. Il blocco @theme genera
+ * le utility (bg-*, text-*, border-*, rounded-*, p-*, font-*). La modalità scura
+ * è uno SCAMBIO DI VARIABILI via le utility `dark:` — che in v4 seguono di
+ * default la media query scura di sistema. La generazione di quella media query
+ * è affidata a Tailwind: qui NON ne è scritta alcuna a mano, e non esiste alcuna
+ * strategia a classe né interruttore del tema. (Verificato da design-tokens.test.)
+ */
+@theme {
+  /* --------------------------------------------------------------------------
+   * Palette VINCOLATA: azzeriamo i default di Tailwind prima di definire i
+   * token, così esistono SOLO i colori e le famiglie del sistema — una tinta
+   * d'accento, una d'allarme, nessun'altra.
+   * ------------------------------------------------------------------------ */
+  --color-*: initial;
+  --font-*: initial;
+
+  /* Nessuna ombra nel sistema: la separazione è bordi + salto tonale
+   * surface-base / surface-raised. DESIGN.md §Elevation & Depth. */
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+
+  /* --------------------------------------------------------------------------
+   * Colori — 27 token (14 chiari + 13 scuri).
+   * focus-ring-dark NON è un token separato: il suo valore (#7FB0DC) è identico
+   * ad accent-dark, quindi in scuro l'anello di focus riusa accent-dark. Questa
+   * è l'unica riconciliazione del "27" contro le 28 righe di DESIGN.md.
+   * ------------------------------------------------------------------------ */
+
+  /* Chiari (14) */
+  --color-surface-base: #FAF7F0;
+  --color-surface-raised: #FFFFFF;
+  --color-surface-sunken: #F1ECE1;
+  --color-ink-primary: #1C1A17;
+  --color-ink-secondary: #6B6459;
+  --color-ink-muted: #797065;
+  --color-border-hairline: #E3DCCE;
+  --color-border-strong: #9B8D7B;
+  --color-accent: #1F4A7A;
+  --color-accent-hover: #173A61;
+  --color-accent-subtle: #E8EEF6;
+  --color-danger: #9B3A2F;
+  --color-danger-subtle: #F7E9E6;
+  --color-focus-ring: #2F6FB0;
+
+  /* Scuri (13) — nessun focus-ring-dark: in scuro il focus usa accent-dark. */
+  --color-surface-base-dark: #161513;
+  --color-surface-raised-dark: #1F1E1B;
+  --color-surface-sunken-dark: #100F0E;
+  --color-ink-primary-dark: #F2EEE6;
+  --color-ink-secondary-dark: #A8A196;
+  --color-ink-muted-dark: #8D8477;
+  --color-border-hairline-dark: #332F2A;
+  --color-border-strong-dark: #70675B;
+  --color-accent-dark: #7FB0DC;
+  --color-accent-hover-dark: #9CC4E6;
+  --color-accent-subtle-dark: #1B2A38;
+  --color-danger-dark: #E08476;
+  --color-danger-subtle-dark: #38211E;
+
+  /* --------------------------------------------------------------------------
+   * Tipografia — 13 ruoli (i 13 di DESIGN.md). Il ruolo di frase giapponese
+   * (UX-DR8) resta deliberatamente NON definito qui: lo fissa la storia 3.23.
+   * Ogni ruolo dichiara size + line-height (--text-<ruolo>--line-height) e,
+   * quando DESIGN.md lo prescrive, font-weight e letter-spacing.
+   * ------------------------------------------------------------------------ */
+
+  --text-word-hero: 64px;
+  --text-word-hero--line-height: 1.75;
+  --text-word-hero--font-weight: 500;
+
+  --text-word-hero-mobile: 44px;
+  --text-word-hero-mobile--line-height: 1.8;
+  --text-word-hero-mobile--font-weight: 500;
+
+  /* word-ruby: dimensione relativa (0.42em del corpo base), niente line-height
+   * in DESIGN.md; peso 400 e letter-spacing 0.04em. */
+  --text-word-ruby: 0.42em;
+  --text-word-ruby--font-weight: 400;
+  --text-word-ruby--letter-spacing: 0.04em;
+
+  --text-reading: 20px;
+  --text-reading--line-height: 1.5;
+  --text-reading--font-weight: 400;
+
+  --text-meaning: 22px;
+  --text-meaning--line-height: 1.45;
+  --text-meaning--font-weight: 400;
+
+  --text-count-hero: 72px;
+  --text-count-hero--line-height: 1;
+  --text-count-hero--font-weight: 600;
+  --text-count-hero--letter-spacing: -0.03em;
+
+  --text-count-hero-mobile: 56px;
+  --text-count-hero-mobile--line-height: 1;
+  --text-count-hero-mobile--font-weight: 600;
+  --text-count-hero-mobile--letter-spacing: -0.03em;
+
+  --text-display: 28px;
+  --text-display--line-height: 1.25;
+  --text-display--font-weight: 600;
+
+  --text-body: 16px;
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+
+  --text-label: 14px;
+  --text-label--line-height: 1.4;
+  --text-label--font-weight: 500;
+
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 1.4;
+  --text-label-caps--font-weight: 500;
+  --text-label-caps--letter-spacing: 0.08em;
+
+  --text-caption: 13px;
+  --text-caption--line-height: 1.5;
+  --text-caption--font-weight: 400;
+
+  --text-attribution: 11px;
+  --text-attribution--line-height: 1.4;
+  --text-attribution--font-weight: 400;
+
+  /* --------------------------------------------------------------------------
+   * Famiglie — due, con confine netto. Entrambe caricate da Google Fonts in
+   * index.html (nessun self-hosting del font giapponese, come da DESIGN.md).
+   * --font-jp = Noto Sans JP + stack di ripiego giapponese.
+   * --font-sans = Inter + stack di ripiego sans.
+   * ------------------------------------------------------------------------ */
+  --font-jp: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    "Yu Gothic", "Meiryo", sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* --------------------------------------------------------------------------
+   * Spaziatura — scala a 4px (1–8) più i valori derivati di DESIGN.md.
+   * ------------------------------------------------------------------------ */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 48px;
+  --spacing-8: 64px;
+  --spacing-gutter-mobile: 20px;
+  --spacing-gutter-desktop: 32px;
+  --spacing-measure: 34rem;
+  --spacing-thumb-zone: 120px;
+
+  /* --------------------------------------------------------------------------
+   * Raggi — quattro (sm / md / lg / full).
+   * ------------------------------------------------------------------------ */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+/*
+ * Base: applica i token al body e dimostra lo SCAMBIO DI VARIABILI in scuro
+ * tramite le varianti `dark:` di Tailwind (che compilano nella media query
+ * scura di sistema). Nessun colore ha qui la sua UNICA definizione dentro una
+ * media query: ogni token vive nel blocco @theme sopra.
+ */
+@layer base {
+  body {
+    @apply bg-surface-base text-ink-primary font-sans;
+    @apply dark:bg-surface-base-dark dark:text-ink-primary-dark;
+  }
+}

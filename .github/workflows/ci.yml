@@ -40,6 +40,21 @@ jobs:
       - name: Unit tests + sonde di confine
         run: npm test
 
+      # Verifica del contrasto (UX-DR7): ogni coppia colore/fondo su
+      # surface-base E surface-raised, chiaro E scuro. Exit non-zero sotto
+      # 4.5:1 (testo) o 3:1 (non-testo) => CI rossa. Nessun continue-on-error.
+      - name: Contrast check
+        run: npm run check-contrast
+
+      # Compila davvero il sistema di design: `vite build` fa passare
+      # src/ui/theme.css dal plugin Tailwind v4. Un @apply/@theme/@import rotto
+      # (o il plugin scollegato) fa fallire QUI la build => CI rossa. I test
+      # leggono i token come TESTO e non lo coglierebbero: senza questo step una
+      # compilazione rotta — e quindi la modalità scura non emessa — passerebbe
+      # verde. Nessun continue-on-error.
+      - name: Build (compila i token Tailwind)
+        run: npm run build
+
       # dependency-cruiser richiede graphviz `dot` per emettere l'SVG.
       - name: Install Graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz
