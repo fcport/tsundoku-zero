@@ -30,7 +30,8 @@ Nessuna storia copre la creazione degli account e dei progetti esterni, **ed è 
 | Repository git locale con `.gitignore` | ✅ `main`, transcript e skill BMad esclusi |
 | Repository GitHub pubblico | ✅ `github.com/fcport/tsundoku-zero` |
 | Progetto Supabase di produzione | ✅ `tsundoku-zero`, West EU (Ireland) |
-| Progetto Vercel collegato al repository | ✅ scope personale `fcdev's projects`, integrazione GitHub attiva |
+| Progetto Vercel collegato al repository | ✅ scope personale, integrazione GitHub attiva e verificata con un deploy reale |
+| URL di produzione | ✅ `tsundoku-zero-fcdevs-projects-fa56188a.vercel.app` — il nome corto `tsundoku-zero.vercel.app` è già occupato da un altro account; dominio personalizzato da valutare per `M4` |
 | Secret in GitHub Actions | 🟡 impostati `SUPABASE_PROJECT_REF`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` · mancano `SUPABASE_ACCESS_TOKEN` e `SUPABASE_DB_PASSWORD` |
 | ~~`VERCEL_TOKEN`~~ | ➖ non serve: con l'integrazione Git, Vercel pubblica da sé — Actions non fa deploy |
 | `.env.example` versionato | ✅ nomi documentati, nessun valore |
@@ -501,6 +502,13 @@ So that il progetto esista davvero invece che solo sulla macchina di chi lo scri
 **When** il server risponde
 **Then** `vercel.json` riscrive verso `index.html` e il routing lato client prende il controllo
 **And** l'URL non restituisce 404
+
+**Given** il progetto Vercel
+**When** la cartella di output viene configurata
+**Then** serve **soltanto** l'artefatto di build, mai la radice del repository
+**And** un percorso come `/_bmad-output/planning-artifacts/epics.md` non è raggiungibile in produzione
+
+  Prima che esista un `package.json`, Vercel pubblica la cartella così com'è e i documenti di pianificazione risultano navigabili sull'URL pubblico. Il repository è pubblico, quindi non è una fuga di dati — ma un URL di produzione che espone l'albero interno è un difetto, e questa storia è il punto in cui smette di esserlo.
 
 **Given** una configurazione incompleta — una variabile `VITE_*` mancante
 **When** l'applicazione si avvia
