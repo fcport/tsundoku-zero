@@ -30,9 +30,11 @@ Nessuna storia copre la creazione degli account e dei progetti esterni, **ed è 
 | Repository git locale con `.gitignore` | ✅ `main`, transcript e skill BMad esclusi |
 | Repository GitHub pubblico | ✅ `github.com/fcport/tsundoku-zero` |
 | Progetto Supabase di produzione | ✅ `tsundoku-zero`, West EU (Ireland) |
-| Progetto Vercel collegato al repository | ⬜ CLI non installata |
-| Secret in GitHub Actions | ⬜ `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, `SUPABASE_DB_PASSWORD`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
-| Variabili di ambiente locali | ⬜ `.env` da `.env.example`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
+| Progetto Vercel collegato al repository | ✅ scope personale `fcdev's projects`, integrazione GitHub attiva |
+| Secret in GitHub Actions | 🟡 impostati `SUPABASE_PROJECT_REF`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` · mancano `SUPABASE_ACCESS_TOKEN` e `SUPABASE_DB_PASSWORD` |
+| ~~`VERCEL_TOKEN`~~ | ➖ non serve: con l'integrazione Git, Vercel pubblica da sé — Actions non fa deploy |
+| `.env.example` versionato | ✅ nomi documentati, nessun valore |
+| `.env` locale | ⬜ da compilare con i valori del progetto Supabase |
 
 **Nessuna variabile di questo elenco contiene la `service_role`** lato client: `AD-11` la confina alla Edge Function, e la chiave vive solo nei secret del progetto Supabase.
 
