@@ -8,6 +8,7 @@ dist/
 dist-ssr/
 build/
 *.local
+*.tsbuildinfo
 
 # Ambiente — mai versionare valori, solo i nomi in .env.example
 .env
@@ -20,6 +21,11 @@ build/
 .idea/
 .DS_Store
 *.swp
+
+# Grafo delle dipendenze: rigenerato in CI (dependency-cruiser), non versionato.
+# La cartella resta grazie a docs/.gitkeep.
+docs/dependency-graph.dot
+docs/dependency-graph.svg
 
 # Test e copertura
 coverage/

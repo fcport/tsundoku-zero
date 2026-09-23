@@ -1,0 +1,60 @@
+name: CI
+
+# I confini di AD-1 sono imposti QUI: una violazione di lint/typecheck/test
+# fa fallire il job (exit non-zero), non emette un avviso. Nessuno step è
+# marcato continue-on-error.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Un solo run per ref: le nuove push annullano quello precedente.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: lint · typecheck · test · graph
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Install deterministico dal lockfile versionato — mai npm install.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (confini AD-1)
+        run: npm run lint
+
+      - name: Typecheck (tsc strict)
+        run: npm run typecheck
+
+      - name: Unit tests + sonde di confine
+        run: npm test
+
+      # dependency-cruiser richiede graphviz `dot` per emettere l'SVG.
+      - name: Install Graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
+      # pipefail: un fallimento di `depcruise` a monte della pipe non deve
+      # essere mascherato dall'exit di `dot`.
+      - name: Generate dependency graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run graph
+
+      - name: Upload dependency graph
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-graph
+          path: docs/dependency-graph.svg
+          if-no-files-found: error
