@@ -21,6 +21,22 @@ Questo documento fornisce la scomposizione completa in epiche e storie per **tsu
 
 **Documenti esclusi deliberatamente:** `product-brief-tsundoku-zero.md` (identico a `tsundoku-zero-brief.md` nella radice) descrive il prodotto pre-pivot ed è superato due volte. `addendum.md` del 19 agosto è escluso come modello dati — che il pivot ha sostituito — ma le sue sezioni §4 (alternative di scheduling scartate) e §6 (traccia del README) restano vincolanti e sono riportate fra i requisiti aggiuntivi.
 
+## Prerequisiti di provisioning
+
+Nessuna storia copre la creazione degli account e dei progetti esterni, **ed è deliberato**: richiedono OAuth interattivo e scelte sul profilo dell'owner, quindi una sessione automatica non può eseguirle. Restano qui perché il piano le dia per verificate invece che per assunte — la storia 1.1 presuppone un repository, la 1.2 un progetto Vercel collegato, la 1.5 un progetto Supabase.
+
+| Prerequisito | Stato al 2026-09-23 |
+|---|---|
+| Repository git locale con `.gitignore` | ✅ `main`, transcript e skill BMad esclusi |
+| Repository GitHub pubblico | ✅ `github.com/fcport/tsundoku-zero` |
+| Progetto Supabase di produzione | ✅ `tsundoku-zero`, West EU (Ireland) |
+| Docker locale, per `supabase start` in CI ed e2e | ⬜ da verificare |
+| Progetto Vercel collegato al repository | ⬜ CLI non installata |
+| Secret in GitHub Actions | ⬜ `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, `SUPABASE_DB_PASSWORD`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
+| Variabili di ambiente locali | ⬜ `.env` da `.env.example`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
+
+**Nessuna variabile di questo elenco contiene la `service_role`** lato client: `AD-11` la confina alla Edge Function, e la chiave vive solo nei secret del progetto Supabase.
+
 ## Requirements Inventory
 
 ### Functional Requirements
@@ -171,7 +187,7 @@ Dall'Architecture Spine e dallo Spine Delta. Ogni voce è un invariante citabile
 - `AD-5` — Una sola definizione di "dovuto". `isDue(state, now)` pura; dashboard, precarico di sessione e cancello di sblocco leggono la **stessa chiave** TanStack.
 - `AD-7` — *(modificato)* Una risposta è una sola chiamata, transazionale e idempotente. RPC `apply_review(review_id, exercise_id, outcome, stage, due_at, reviewed_at, used_explanation)` con `ON CONFLICT (review_id) DO NOTHING`; aggiorna `review_state` solo se l'insert ha prodotto una riga. Nessuna logica di scheduling in SQL.
 - `AD-10` — *(esteso)* RLS su `review_state`, `review_log`, `user_settings` e **`lesson_progress`**, policy `user_id = auth.uid()` su tutte le operazioni. Il contenuto ha RLS abilitata in sola lettura, nessuna policy di scrittura. Test di integrazione: A non legge le righe di B.
-- `AD-12` — Migrazioni versionate in `supabase/migrations/`. Nessuna modifica dallo Studio. Staging e produzione dalla stessa pipeline.
+- `AD-12` — *(modificato)* Migrazioni versionate in `supabase/migrations/`. Nessuna modifica dallo Studio. **Un solo progetto Supabase cloud, la produzione.** La prova di migrazione avviene su un'istanza Supabase **locale** (`supabase start`, Docker) creata da zero a ogni run di CI: le stesse migrazioni girano lì prima di toccare la produzione. Lo staging cloud è stato valutato e scartato — un secondo progetto da amministrare, tenere sveglio e pagare in attenzione, per una prova che un'istanza effimera fa meglio.
 - `AD-18` — *(rafforzato)* Le statistiche derivano **solo** da `review_log`, che acquisisce `grammar_point` denormalizzato — perché FR7.3 deve restare interrogabile anche dopo che un esercizio è stato riautorato e ha cambiato identità. Lo streak è sempre derivato dal log, mai memorizzato.
 
 **Stato e resilienza**
@@ -195,9 +211,10 @@ Dall'Architecture Spine e dallo Spine Delta. Ogni voce è un invariante citabile
 - TypeScript resta su **5.9.3**, non 7.x: senza API programmatica stabile non esiste `typescript-eslint`, quindi non esiste la regola meccanica di `AD-1`.
 - `npm` con `package-lock.json` versionato. La CI usa `npm ci`, mai `npm install`.
 - Configurazione solo da `import.meta.env.VITE_*`, validata con uno schema all'avvio in `src/app/`.
-- Due progetti Supabase (produzione e staging). Nessun keep-alive contro la pausa a 7 giorni del piano gratuito: comportamento accettato e dichiarato.
+- **Un progetto Supabase cloud** (produzione), più un'istanza locale effimera in CI per migrazioni ed e2e. Nessun keep-alive contro la pausa a 7 giorni del piano gratuito: comportamento accettato e dichiarato.
+- **Limite accettato e da dichiarare nel README:** i test e2e non esercitano la configurazione cloud reale — impostazioni di Auth, limiti di frequenza, policy applicate dalla console. Una differenza fra locale e produzione si scopre in produzione. È il prezzo di non amministrare un secondo progetto, ed è un prezzo scelto, non subito.
 - Nessun SDK di analitica o error tracking di terze parti (`NFR6`).
-- Catena di deploy: PR → lint/typecheck/unit/validazione lezioni → migrazioni su staging → Playwright e2e su staging → anteprima Vercel → merge → migrazioni produzione → Vercel produzione.
+- Catena di deploy: PR → lint/typecheck/unit/validazione lezioni → `supabase start` + migrazioni su istanza locale → Playwright e2e in locale → anteprima Vercel → merge → migrazioni produzione → Vercel produzione.
 
 **Dall'addendum del 19 agosto, ancora vincolante**
 
@@ -568,10 +585,14 @@ So that il repository possa essere pubblico senza che i dati lo diventino.
 
 **Acceptance Criteria:**
 
-**Given** due progetti Supabase, produzione e staging
+**Given** il progetto Supabase di produzione e l'istanza locale della CI
 **When** la pipeline applica le migrazioni
-**Then** entrambi ricevono le stesse migrazioni versionate da `supabase/migrations/`
+**Then** entrambe ricevono le stesse migrazioni versionate da `supabase/migrations/`, e la locale le riceve **per prima**
 **And** nessuna modifica di schema avviene dallo Studio Supabase
+
+**Given** una migrazione che fallisce sull'istanza locale
+**When** la CI viene eseguita
+**Then** la pipeline si ferma e la produzione non viene toccata
 
 **Given** la migrazione che crea `user_settings`
 **When** viene applicata
@@ -1848,7 +1869,7 @@ So that una regressione si scopra in CI e non dall'uso.
 **Acceptance Criteria:**
 
 **Given** la suite Playwright
-**When** viene eseguita contro staging
+**When** viene eseguita contro l'istanza Supabase locale della CI, creata da zero per quel run
 **Then** un test copre registrazione → sblocco della prima lezione → risoluzione degli esercizi → pila a zero
 
 **Given** un run di test end-to-end
@@ -1862,7 +1883,8 @@ So that una regressione si scopra in CI e non dall'uso.
 
 **Given** la pipeline su una pull request
 **When** viene eseguita
-**Then** applica le migrazioni a staging e poi esegue i test end-to-end contro staging
+**Then** avvia l'istanza Supabase locale, vi applica le migrazioni, e solo dopo esegue i test end-to-end contro di essa
+**And** la produzione riceve le migrazioni soltanto dopo il merge
 
 ### Story 6.5: La cancellazione, verificata tabella per tabella
 

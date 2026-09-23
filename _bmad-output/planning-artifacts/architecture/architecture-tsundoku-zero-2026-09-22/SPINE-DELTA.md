@@ -111,6 +111,14 @@ Tre motivi, in ordine di peso:
 
   **Condizione che riapre la decisione:** se il prodotto decidesse di esporre i punti grammaticali come **pagine pubbliche indicizzabili** — acquisizione da ricerca invece che da link — allora la generazione statica di Next diventa la scelta corretta. È un cambio di prodotto che passa dal PRD, non una preferenza di infrastruttura.
 
+**Un solo progetto Supabase cloud, non due.** Decisione dell'owner del 23 settembre, che modifica `AD-12` e `AD-13`.
+
+Lo staging cloud esiste per provare una migrazione prima che tocchi i dati veri. Quella prova resta, ma su un'istanza **locale** effimera (`supabase start`, Docker) creata da zero a ogni run di CI: le migrazioni girano lì, i test e2e girano contro di essa, e la produzione le riceve solo dopo il merge.
+
+Su due punti è **migliore** dello staging condiviso, ed è giusto dirlo invece di presentarla come un ripiego. `AD-13` chiedeva email univoche per run per impedire che run paralleli collidessero su un database condiviso: con un'istanza per run il problema sparisce alla radice, e la regola resta valida contro la produzione. E un'istanza creata da zero non può accumulare stato residuo, che è il modo in cui uno staging di lunga vita smette silenziosamente di somigliare alla produzione.
+
+Su un punto è **peggiore**, e va dichiarato nel README invece che scoperto: i test e2e non esercitano la configurazione cloud reale — impostazioni di Auth, limiti di frequenza, policy applicate dalla console. Una differenza fra locale e produzione si scopre in produzione. È il prezzo di non amministrare un secondo progetto, ed è un prezzo scelto.
+
 **L'hosting passa da Netlify a Vercel.** Decisione a basso costo e reversibile: cambia la tabella dello Stack, il diagramma della catena di deploy e i criteri della storia dell'URL pubblico. Nessun `AD` ne è toccato.
 
 Motivo dirimente: mantiene senza costo l'opzione della condizione qui sopra. Conseguenze operative: serve un `vercel.json` con rewrite verso `index.html` perché il routing lato client regga i deep link (equivalente di `_redirects`); le variabili d'ambiente passano dai secrets Netlify a quelli Vercel — la convenzione "nessun `.env` versionato, `.env.example` documenta i nomi e mai i valori" resta identica. Il piano Hobby vieta l'uso commerciale, il che è compatibile con un progetto da portfolio ed è un limite dichiarato, non scoperto dopo.
