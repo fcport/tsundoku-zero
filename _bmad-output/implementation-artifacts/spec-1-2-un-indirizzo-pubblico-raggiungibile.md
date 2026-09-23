@@ -2,7 +2,7 @@
 title: 'Story 1.2: Un indirizzo pubblico raggiungibile'
 type: 'feature'
 created: '2026-09-23'
-status: 'awaiting-operator'
+status: done
 baseline_revision: '8c42a86425901428e0a9a13a8bc2b1037e15c8b7'
 review_loop_iteration: 0
 followup_review_recommended: false
@@ -147,3 +147,18 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde):** `npm run lint` (0 errori), `npm run typecheck` (`tsc` strict, nessun `any`), `npm test` (20 test su 4 file: 11 `env` + 3 `deploy-config` + 5 sonde di confine di 1.1 senza regressioni + 1 scaffold), `npm run build` (`dist/` con solo `index.html` + `assets/`; scansione conferma nessun `_bmad-output`/`epics` nell'output).
 
 **Rischi residui / azioni operatore.** Il routing live (`AC3`/`AC4`), la pubblicazione in produzione al merge (`AC1`) e l'anteprima per PR (`AC2`) dipendono dalla console Vercel e non sono verificabili in una sessione non presidiata: sono enumerati in `operator_actions`. In particolare, senza le `VITE_*` impostate su Vercel il deploy costruisce ma l'app mostra la schermata di `ConfigError` (fail-fast che si comporta come previsto). La riscrittura SPA fa sì che `/_bmad-output/...` restituisca `index.html` (200) invece del file: l'albero interno non è esposto, ma un operatore che preferisca un 404 esplicito può aggiungere una regola dedicata in futuro.
+
+## Operator Confirmation
+
+Confirmed 2026-09-23: the external actions this story owed were carried out.
+
+- Nella dashboard Vercel, collega il progetto tsundoku-zero (projectId prj_nfCAcACW6JfxfJyaHp0MOEe7P8y0, orgId team_DfGhiLR5S9dORFwDobcPbhTw) al repository GitHub tramite la Git Integration, così i deploy partono automaticamente dagli eventi Git.
+- In Vercel > Settings > Git, imposta il Production Branch su main, così che il merge su main pubblichi in produzione (AC1).
+- In Vercel, verifica che le Preview Deployments siano abilitate per le pull request, così ogni PR ottenga un'anteprima dedicata (AC2).
+- In Vercel > Settings > Environment Variables, imposta VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY per gli ambienti Production e Preview con i valori del progetto Supabase reale, altrimenti l'app fallisce il boot con ConfigError (AC5).
+- Dopo il primo deploy di produzione, apri l'URL pubblico senza credenziali e conferma che l'app carichi (AC1).
+- Apri una pull request di prova e conferma che Vercel crei un'anteprima dedicata raggiungibile (AC2).
+- Sull'URL di produzione apri un deep link a una rotta interna (es. /una/rotta) e conferma che risponda 200 servendo l'app, non 404 (AC3).
+- Sull'URL di produzione richiedi /_bmad-output/planning-artifacts/epics.md e conferma che NON restituisca quel file (viene servito l'index.html della SPA): l'albero interno del repo non è esposto (AC4).
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
