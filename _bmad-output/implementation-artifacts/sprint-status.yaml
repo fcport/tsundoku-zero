@@ -1,0 +1,112 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 09-23-2026 10:35
+last_updated: 09-23-2026 10:35
+project: tsundoku-zero
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-scaffold-con-i-confini-imposti-in-ci: backlog
+  1-2-un-indirizzo-pubblico-raggiungibile: backlog
+  1-3-il-sistema-di-design-come-token-non-come-valori-sparsi: backlog
+  1-4-nessuna-stringa-cablata-imposto-dal-compilatore: backlog
+  1-5-lo-schema-nasce-versionato-e-isolato: backlog
+  1-6-registrazione-con-email-e-password: backlog
+  1-7-accesso-disconnessione-e-sessione-che-resiste: backlog
+  1-8-le-rotte-private-sono-private: backlog
+  1-9-cambiare-lingua-senza-ricaricare: backlog
+  1-10-cancellare-l-account-per-davvero: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-il-transcript-non-entra-nel-repository: backlog
+  2-2-uno-schema-minimo-per-autorare-la-prima-lezione: backlog
+  2-3-tre-lezioni-vere-e-i-tipi-che-ne-emergono: backlog
+  2-4-il-registro-dei-tipi-si-chiude: backlog
+  2-5-l-identità-di-un-esercizio-resiste-alla-riautorazione: backlog
+  2-6-lo-schema-definitivo-e-il-cancello-in-ci: backlog
+  2-7-una-lezione-può-non-avere-esercizi: backlog
+  2-8-spiegazioni-bilingui-con-ripiego-dichiarato: backlog
+  2-9-il-confronto-che-impedisce-la-contaminazione: backlog
+  2-10-il-flusso-che-regge-novanta-lezioni: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-il-motore-di-scheduling-puro-e-saturo: backlog
+  3-2-l-esito-si-calcola-non-si-dichiara: backlog
+  3-3-una-sola-definizione-di-dovuto: backlog
+  3-4-la-coda-di-sessione-decide-il-dominio-non-la-ui: backlog
+  3-5-lo-streak-si-calcola-non-si-memorizza: backlog
+  3-6-la-furigana-si-allinea-nel-dominio: backlog
+  3-7-il-contenuto-raggiunge-il-client-e-può-essere-aggiornato: backlog
+  3-8-il-progresso-è-per-utente-e-resta-per-utente: backlog
+  3-9-una-risposta-una-chiamata-nessun-doppione: backlog
+  3-10-gli-adattatori-dietro-le-porte: backlog
+  3-11-il-giapponese-si-presenta-bene: backlog
+  3-12-la-pila-con-un-numero-e-un-pulsante: backlog
+  3-13-sbloccare-la-lezione-successiva: backlog
+  3-14-una-lezione-senza-esercizi-si-sblocca-lo-stesso: backlog
+  3-15-la-prima-volta-non-somiglia-alla-fine: backlog
+  3-16-quando-non-c-è-più-niente-da-fare-dirlo: backlog
+  3-17-cambiare-il-ritmo: backlog
+  3-18-un-esercizio-per-volta-con-la-sua-consegna: backlog
+  3-19-rispondere-e-sapere-perché: backlog
+  3-20-vedere-quanto-manca-e-potersene-andare: backlog
+  3-21-arrivare-a-zero: backlog
+  3-22-l-intera-sessione-senza-mouse: backlog
+  3-23-le-stesse-schermate-su-telefono-e-portatile: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-la-sessione-si-carica-tutta-in-una-volta: backlog
+  4-2-la-coda-sopravvive-alla-chiusura-dell-app: backlog
+  4-3-il-ritorno-della-rete-non-chiede-il-permesso: backlog
+  4-4-un-indicatore-che-non-spaventa: backlog
+  4-5-riapplicare-la-coda-non-falsa-niente: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-quante-risposte-e-quando: backlog
+  5-2-a-che-punto-sono-i-miei-esercizi: backlog
+  5-3-quale-regola-non-mi-entra-in-testa: backlog
+  5-4-un-grafico-vuoto-non-è-una-risposta: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-dire-cosa-si-tiene-e-come-cancellarlo: backlog
+  6-2-riconoscere-la-fonte-del-metodo: backlog
+  6-3-due-licenze-perché-sono-due-cose-diverse: backlog
+  6-4-il-percorso-completo-verificato-da-una-macchina: backlog
+  6-5-la-cancellazione-verificata-tabella-per-tabella: backlog
+  6-6-provare-l-app-con-uno-screen-reader-vero: backlog
+  epic-6-retrospective: optional

@@ -1,0 +1,96 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 08-21-2026 11:52
+last_updated: 08-21-2026 11:52
+project: tsundoku-zero
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-scaffold-con-i-confini-imposti-in-ci: backlog
+  1-2-un-indirizzo-pubblico-raggiungibile: backlog
+  1-3-il-sistema-di-design-come-token-non-come-valori-sparsi: backlog
+  1-4-nessuna-stringa-cablata-imposto-dal-compilatore: backlog
+  1-5-lo-schema-nasce-versionato-e-isolato: backlog
+  1-6-registrazione-con-email-e-password: backlog
+  1-7-accesso-disconnessione-e-sessione-che-resiste: backlog
+  1-8-le-rotte-private-sono-private: backlog
+  1-9-cambiare-lingua-senza-ricaricare: backlog
+  1-10-cancellare-l-account-per-davvero: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-il-motore-di-scheduling-puro-e-saturo: backlog
+  2-2-una-sola-definizione-di-dovuto: backlog
+  2-3-la-coda-di-sessione-decide-il-dominio-non-la-ui: backlog
+  2-4-lo-streak-si-calcola-non-si-memorizza: backlog
+  2-5-la-furigana-si-allinea-nel-dominio: backlog
+  2-6-il-dataset-n5-entra-e-può-rientrare: backlog
+  2-7-il-progresso-è-per-utente-e-resta-per-utente: backlog
+  2-8-una-valutazione-una-chiamata-nessun-doppione: backlog
+  2-9-gli-adattatori-dietro-le-porte: backlog
+  2-10-il-giapponese-si-presenta-bene-e-si-attribuisce-sempre: backlog
+  2-11-la-prima-volta-non-somiglia-alla-fine: backlog
+  2-12-introdurre-vocabolario-mai-visto: backlog
+  2-13-la-pila-con-un-numero-e-un-pulsante: backlog
+  2-14-quando-non-c-è-più-niente-da-fare-dirlo: backlog
+  2-15-cambiare-il-ritmo: backlog
+  2-16-una-parola-per-volta-rivelata-da-un-gesto: backlog
+  2-17-valutare-e-vedere-il-conteggio-scendere-subito: backlog
+  2-18-vedere-quanto-manca-e-potersene-andare: backlog
+  2-19-arrivare-a-zero: backlog
+  2-20-l-intera-sessione-senza-mouse: backlog
+  2-21-le-stesse-schermate-su-telefono-e-portatile: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-la-sessione-si-carica-tutta-in-una-volta: backlog
+  3-2-la-coda-sopravvive-alla-chiusura-dell-app: backlog
+  3-3-il-ritorno-della-rete-non-chiede-il-permesso: backlog
+  3-4-un-indicatore-che-non-spaventa: backlog
+  3-5-riapplicare-la-coda-non-falsa-niente: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-quante-revisioni-e-quando: backlog
+  4-2-a-che-punto-sono-i-miei-item: backlog
+  4-3-quali-parole-non-mi-entrano-in-testa: backlog
+  4-4-un-grafico-vuoto-non-è-una-risposta: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-dire-cosa-si-tiene-e-come-cancellarlo: backlog
+  5-2-due-licenze-perché-sono-due-cose-diverse: backlog
+  5-3-il-percorso-completo-verificato-da-una-macchina: backlog
+  5-4-la-cancellazione-verificata-tabella-per-tabella: backlog
+  5-5-provare-l-app-con-uno-screen-reader-vero: backlog
+  epic-5-retrospective: optional

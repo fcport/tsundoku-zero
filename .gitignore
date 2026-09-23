@@ -1,0 +1,64 @@
+# Dipendenze
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+dist-ssr/
+build/
+*.local
+
+# Ambiente — mai versionare valori, solo i nomi in .env.example
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.swp
+
+# Test e copertura
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+
+# Vercel
+.vercel/
+
+# ============================================================
+# FR11.7 — Materiale della fonte: input privato, mai versionato
+# ============================================================
+# I transcript delle lezioni sono opera protetta. Servono come
+# input alla sessione di autorazione, da cui si estraggono FATTI
+# (quale punto grammaticale, qual è la regola, quale confusione
+# risolve) e da cui si riscrive da zero.
+#
+# Non entrano nel repository. Parafrasare con i sinonimi una
+# spiegazione altrui resta opera derivata: la strada corretta è
+# partire dal fatto, non dalla formulazione.
+#
+# Vedi: PRD §2 · storie 2.1 e 2.9
+.transcripts/
+transcripts/
+*.transcript
+*.transcript.txt
+*.vtt
+*.srt
+
+# Scratch di autorazione
+.authoring/
+
+# Skill BMad vendorizzate: si reinstallano dall'installer del framework,
+# non sono lavoro di questo progetto. Restano versionate la configurazione
+# (_bmad/, .bmad-loop/) e le personalizzazioni (_bmad/custom/).
+.claude/skills/
