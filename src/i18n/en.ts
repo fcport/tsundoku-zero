@@ -12,4 +12,17 @@ export const en = {
   app: {
     tagline: 'A Japanese grammar exercise generator',
   },
+  auth: {
+    title: 'Sign up',
+    emailLabel: 'Email',
+    passwordLabel: 'Password',
+    submit: 'Create account',
+    error: {
+      emailAlreadyRegistered: 'This email is already registered.',
+      invalidEmail: 'Enter a valid email address.',
+      weakPassword: 'Choose a stronger password.',
+      wrongPassword: 'Wrong password.',
+      unknown: 'The account could not be created. Try again.',
+    },
+  },
 } as const;

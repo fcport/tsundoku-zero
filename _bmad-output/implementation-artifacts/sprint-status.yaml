@@ -41,7 +41,7 @@ development_status:
   1-3-il-sistema-di-design-come-token-non-come-valori-sparsi: done
   1-4-nessuna-stringa-cablata-imposto-dal-compilatore: done
   1-5-lo-schema-nasce-versionato-e-isolato: awaiting-operator
-  1-6-registrazione-con-email-e-password: backlog
+  1-6-registrazione-con-email-e-password: awaiting-operator
   1-7-accesso-disconnessione-e-sessione-che-resiste: backlog
   1-8-le-rotte-private-sono-private: backlog
   1-9-cambiare-lingua-senza-ricaricare: backlog
