@@ -48,7 +48,27 @@ La premessa è appena caduta. Una card di esercizio contiene una **frase**: 日�
 
 Serve un **ruolo nuovo per il giapponese di frase**, distinto da quello di parola singola. Non è una rifinitura: senza, la prima schermata di esercizio o sfonda la colonna o manda a capo la frase in punti arbitrari, che su una lingua senza spazi fra le parole è attivamente dannoso — spezzare 日本語 fra 本 e 語 cambia quello che l'occhio legge.
 
-`[DA DECIDERE]` Corpo e interlinea del nuovo ruolo, e se `word-hero` sopravviva per gli esercizi che presentano una parola sola. Dipende da quanto sono lunghe le frasi reali, che è una cosa che si misura sulle prime tre lezioni, non si stima.
+**✅ Misurato e fissato il 23 settembre**, sulle lezioni 1 e 11 — deliberatamente i due estremi dell'intervallo, non due lezioni vicine.
+
+| Lezione | Frase | Caratteri |
+|---|---|---|
+| 1 | 犬が走る | 4 |
+| 11 | ある日アリスは川のそばにいた。 | 15 |
+| 11 | お姉ちゃんはつまらない本を読んでいて遊んでくれなかった。 | **28** |
+
+A `word-hero` 64px, ventotto caratteri occupano circa **1790px** contro i 544px di `measure`: quattro righe. Su mobile a 44px, circa 1230px contro ~335px di schermo utile: ancora quattro.
+
+Il ruolo nuovo:
+
+```
+sentence-hero          32px   ~17 caratteri per riga  → 28 char = 2 righe
+sentence-hero-mobile   26px   ~13 caratteri per riga  → 28 char = 3 righe
+line-height            1.9
+```
+
+**L'interlinea sale da 1.75 a 1.9**, e non per gusto: con il testo che va a capo la furigana serve sopra **ogni** riga, non solo la prima. L'1.75 di `word-hero` era calcolato per una parola sola su una riga sola, ed è un numero che non si trasferisce.
+
+`word-hero` **sopravvive** per gli esercizi che presentano una parola o un sintagma breve, dove resta l'eroe tipografico che era. Le due scale convivono, scelte dal tipo di esercizio.
 
 Ne discende che anche la verifica empirica dell'interlinea `1.75` — l'unico numero che `DESIGN.md` dichiarava deciso ma non misurato — va rifatta sul ruolo nuovo, non su `word-hero`.
 
@@ -154,10 +174,10 @@ Resta invariato tutto il resto della sezione: `<ruby>`/`<rt>`/`<rp>`, `lang="ja"
 
 Consegnato alla prossima sessione UX come agenda, e tutto rimandato **dopo tre lezioni autorate**:
 
-1. **Corpo e interlinea del ruolo tipografico di frase**, e se `word-hero` sopravviva per gli esercizi a parola singola (§2)
-2. **Forma e numero massimo di `answer-option`**, con il vincolo dei 56px dentro `thumb-zone` (§3)
-3. **Come si comunica l'esito**, senza verde per il giusto né rosso per lo sbagliato (§3)
-4. **Il contratto tastiera**, che è anche un aggiornamento di `AD-15` (§5)
-5. **Quando mostrare la furigana**, per tipo di esercizio, che ricade su `AD-22` e sullo schema di lezione (§5)
+1. ✅ **Chiusa.** Ruolo tipografico di frase fissato a 32/26px con interlinea 1.9, misurato sulle lezioni 1 e 11 (§2). `word-hero` sopravvive per gli esercizi a parola singola.
+2. ✅ **Chiusa nella forma.** Con `AD-22` a tre tipi, le opzioni di `single-select` sono poche e omogenee, e i 56px dentro `thumb-zone` reggono. Resta aperto il **numero massimo**, che è un vincolo da comunicare a chi autora invece che da subire in layout.
+3. ⬜ **Aperta.** Come si comunica l'esito, senza verde per il giusto né rosso per lo sbagliato (§3). È una decisione di postura, non dipendeva dai tipi.
+4. ⬜ **Aperta, ma vincolata.** `assemble` è un'interazione di **ordinamento**, non di selezione: il contratto tastiera non può essere solo "i tasti numerici scelgono", e serve un gesto per comporre una sequenza. Aggiorna `AD-15`, che nel delta era stato ipotizzato come "1-n selezionano, invio conferma" — insufficiente.
+5. ⬜ **Aperta.** Quando mostrare la furigana, per tipo di esercizio (§5). La direzione resta *visibile per default*.
 
-Le cinque hanno la stessa causa e la stessa condizione di sblocco. Nessuna è un dettaglio di rifinitura: la 1 e la 2 determinano se una schermata di esercizio sta fisicamente su un telefono, la 3 determina se il prodotto tradisce la propria postura, e la 5 determina se gli esercizi misurano la grammatica o la lettura dei kanji.
+Due chiuse su cinque. Le tre rimaste non dipendono più dal contenuto: la 3 è una scelta di postura, la 4 discende da `assemble`, la 5 è un campo dello schema. Si decidono progettando la schermata, non leggendo altre lezioni.

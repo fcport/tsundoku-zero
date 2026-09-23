@@ -29,13 +29,13 @@ Il vocabolario giapponese ha già dieci strumenti che lo risolvono bene. La **gr
 
 Il problema non è la mancanza di app: è che quasi tutte insegnano la grammatica giapponese attraverso categorie inglesi, e poi devono giustificare centinaia di "eccezioni" che eccezioni non sono. Il caso emblematico è は: i manuali lo presentano come marcatore del soggetto, e da lì nasce una confusione che lo studente si porta dietro per anni.
 
-Esiste un modello alternativo, coerente e insegnabile, divulgato dal canale **Organic Japanese with Cure Dolly**: il giapponese ha una struttura regolare in cui **が marca sempre il soggetto**, anche quando il soggetto non è scritto — il pronome zero, ゼロ代名詞. は non è un marcatore di soggetto: pone il tema e sta *sopra* la frase. Da lì discendono i tre motori (う, だ, い), il fatto che gli い-aggettivi contengano già la copula, e la regolarità di passivo, causativo e verbi di dare e ricevere.
+Esiste un modello alternativo, coerente e insegnabile, divulgato dal canale **Organic Japanese with Cure Dolly**: il giapponese ha una struttura regolare in cui **が marca sempre il soggetto**, anche quando il soggetto non è scritto — il pronome zero, ゼロ代名詞. は non è un marcatore di soggetto: pone il tema e sta *sopra* la frase. Da lì discendono le tre forme in cui una frase si chiude — predicato verbale, copula だ, aggettivo in い — il fatto che gli aggettivi in い contengano già la copula, e la regolarità di passivo, causativo e verbi di dare e ricevere.
 
 Il modello è **strutturale e regolare**, quindi codificabile. È la ragione tecnica per cui questo prodotto è possibile: un sistema con regole si trasforma in esercizi generabili e verificabili, un elenco di eccezioni no.
 
 Tsundoku Zero esiste per due ragioni, in quest'ordine di priorità:
 
-1. **Uno strumento che l'owner userà ogni giorno mentre studia.** Il prodotto è agganciato a un percorso di studio reale e in corso — 90 lezioni, di cui 11 già viste al 22 settembre 2026. Se l'owner smette di usarlo, il progetto è fallito a prescindere dalla qualità del codice.
+1. **Uno strumento che l'owner userà ogni giorno mentre studia.** Il prodotto è agganciato a un percorso di studio reale e in corso: un corso di **oltre novanta lezioni**, di cui 11 viste al 22 settembre 2026. Il totale esatto non è fissato e il piano non ci si appoggia — vedi `NFR9`. Se l'owner smette di usarlo, il progetto è fallito a prescindere dalla qualità del codice.
 2. **Una codebase React/TypeScript dimostrabile** — con forma da produzione, testata, deployata, difendibile riga per riga in un colloquio tecnico.
 
 **Non-obiettivo dichiarato:** non è un corso. Non spiega la grammatica da zero, non sostituisce le lezioni, non produce contenuto didattico originale nel senso di materiale d'insegnamento. È il *drill* che segue una lezione già vista altrove.
@@ -50,9 +50,11 @@ La v1 era una reimplementazione competente di un problema già risolto. Questa a
 
 Concern vincolante, affrontato prima del resto perché può chiudere il progetto.
 
-**Le idee grammaticali non sono proteggibili.** Il modello a pronome zero, la funzione di が e は, i tre motori: sono fatti linguistici e metodi didattici. Insegnarli è libero, e attribuirne la divulgazione a Cure Dolly è onestà intellettuale, non un obbligo di licenza.
+**Le idee grammaticali non sono proteggibili.** Il modello a pronome zero, la funzione di が e は, le tre forme di chiusura della frase: sono fatti linguistici e metodi didattici. Insegnarli è libero, e attribuirne la divulgazione a Cure Dolly è onestà intellettuale, non un obbligo di licenza.
 
 **L'espressione di quelle idee lo è.** I video, i transcript, le formulazioni specifiche e gli esempi originali sono opera protetta, oggi in capo a un'eredità — il che rende praticamente impossibile ottenere un permesso. La v1 di questo progetto aveva già un precedente utile nella separazione fra `LICENSE` e `LICENSE-DATA` per JMdict.
+
+**Le metafore però sono sue.** La distinzione è sottile e va tenuta ferma: il *fatto* che una frase giapponese si chiuda in tre modi — predicato verbale, copula だ, aggettivo in い — è grammatica. Chiamarli "motori" e disegnare la frase come un treno con un vagone e un gancio è **espressione creativa**, ed è il modo in cui lei insegna. Il progetto usa la terminologia linguistica standard: **verbo**, **copula**, **aggettivo in い**. Non è solo prudenza — in un esercizio è anche più chiaro, perché non richiede di conoscere la metafora per capire la domanda.
 
 **La sostanza insegnata è consenso accademico, non un'invenzione proprietaria.** È l'argomento più solido a disposizione di questo progetto e va scritto, non lasciato implicito. L'analisi di は come marcatore di tema, con が che marca il soggetto anche quando resta non espresso, è linguistica giapponese consolidata: il testo fondativo è di Mikami Akira, 1960, e si intitola letteralmente **象は鼻が長い**. Il pronome zero è il *pro-drop* della linguistica generale. Il contributo di Cure Dolly è **pedagogico e divulgativo** — averlo spiegato bene a studenti occidentali — non la scoperta dei fatti.
 
@@ -64,7 +66,8 @@ Regole operative, non negoziabili:
 |---|---|
 | Insegnare il modello strutturale, con parole proprie | Riprodurre transcript, spiegazioni o frasi d'esempio originali |
 | Riconoscere Cure Dolly come origine dell'approccio, con collegamento al canale | Usare il nome nel prodotto, nel dominio o nel branding |
-| Usare i termini tecnici del metodo — pronome zero, motori, ゼロ代名詞 | Incorporare o rimandare ai video come contenuto dell'app |
+| Usare i termini della **linguistica** — pronome zero, tema, soggetto, copula, ゼロ代名詞 | Riusare le sue **metafore didattiche** — il treno, il vagone, il motore, il gancio |
+| | Incorporare o rimandare ai video come contenuto dell'app |
 | Usare i transcript come **input privato** della sessione di autorazione | Versionare transcript, sottotitoli o trascrizioni nel repository |
 | Indicizzare il contenuto per punto grammaticale | Riprodurre titoli, numerazione o ordine delle lezioni della fonte |
 
@@ -92,7 +95,7 @@ Ne discende che l'attribuzione non è più un invariante di layout su ogni scher
 | M4 | Uno sconosciuto si registra e risolve il primo esercizio dal deploy pubblico | < 60 secondi |
 | M5 | Tempo per autorare una lezione completa, dalla visione all'esercizio giocabile | ≤ 30 minuti |
 
-M1 resta il criterio di accettazione reale. **M5 è nuova ed è la metrica di sostenibilità del progetto:** con 79 lezioni ancora da vedere, una pipeline che costa due ore a lezione non viene usata, e il prodotto muore per fame di contenuto invece che per difetti di codice.
+M1 resta il criterio di accettazione reale. **M5 è nuova ed è la metrica di sostenibilità del progetto:** con ottanta e più lezioni ancora da vedere e il contenuto che arriva al ritmo dello studio dell'owner, una pipeline che costa due ore a lezione non viene usata, e il prodotto muore per fame di contenuto invece che per difetti di codice.
 
 Come nella v1, M2 conta **sessioni** e non giornate, e M3 usa la mediana e non la media. Le ragioni sono identiche e restano valide: M2 misura l'attrito dentro la sessione, M1 la tenuta dell'abitudine. Ne discende lo stesso requisito di prodotto — riprendere più tardi nella stessa giornata deve essere possibile e non deve penalizzare (FR4.7, FR7.4).
 
@@ -298,7 +301,7 @@ Capacità nuova, e il pezzo più caratterizzante del progetto.
 - **NFR6 — Privacy.** Vengono memorizzati solo email, hash della password e dati di studio. Nessuna analitica sul singolo individuo.
 - **NFR7 — Prestazioni percepite.** La schermata di esercizio risponde senza attesa visibile. Aggiornamenti ottimistici, persistenza in background.
 - **NFR8 — Licenza e attribuzione.** Codice e contenuto hanno licenze dichiarate separatamente e rispettate entrambe.
-- **NFR9 — Costo di autorazione.** La pipeline di F11 regge 90 lezioni senza degradare: nessun passaggio manuale il cui costo cresca con il numero di lezioni già autorate. È un NFR perché è la condizione di sopravvivenza del prodotto (M5).
+- **NFR9 — Costo di autorazione.** La pipeline di F11 regge un corso di **durata indefinita** senza degradare: nessun passaggio manuale il cui costo cresca con il numero di lezioni già autorate. Il requisito è deliberatamente indipendente dal totale delle lezioni, che non è noto e continuerà a crescere. È un NFR perché è la condizione di sopravvivenza del prodotto (M5).
 
 ---
 
@@ -343,7 +346,7 @@ Un elemento è **più facile** che nella v1: l'esito è calcolato sul client da 
 
 ### Non bloccanti, da registrare
 
-- **OQ-7 — Quali tipi di esercizio esistono davvero.** Il registro iniziale proposto è: *identificare il soggetto*, *scelta della particella con motivazione*, *riconoscere il motore*, *trasformazione di frase*. **È una proposta, non una decisione.** Va confermata dopo aver autorato **tre lezioni vere**, non prima: uno schema scritto senza aver visto il contenuto reale sarà sbagliato, e correggerlo dopo costa più che deciderlo tardi.
+- **OQ-7 — Quali tipi di esercizio esistono davvero.** ✅ **Chiusa il 23 settembre**, dopo aver esaminato il contenuto reale delle lezioni 1 e 11. Il registro proposto a tavolino — *identificare il soggetto*, *scelta della particella*, *riconoscere il motore*, *trasformazione* — confondeva due piani: quelle sono **materie**, non **interazioni**. Meccanicamente sono la stessa cosa, e cosa insegnano lo dice già `grammar_point`. Il registro chiuso è di **tre forme di interazione**: `single-select`, `select-span`, `assemble`. Vedi `AD-22`.
 - **OQ-8 — Come viaggia il contenuto.** Se le lezioni arrivino al client come dati di migrazione in Postgres o come JSON incluso nel bundle è una scelta architetturale, non di prodotto. Impatta FR9.1 e il costo di un aggiornamento di contenuto.
 - **OQ-9 — Carico a regime.** Il tetto di sblocco predefinito di una lezione al giorno va verificato contro CM1 una volta noto il numero medio di esercizi per lezione.
 - **OQ-10 — Cambio di fuso orario.** Come nella v1: FR7.4 àncora la giornata al fuso locale del dispositivo, si accetta il comportamento ingenuo, resta un limite noto.

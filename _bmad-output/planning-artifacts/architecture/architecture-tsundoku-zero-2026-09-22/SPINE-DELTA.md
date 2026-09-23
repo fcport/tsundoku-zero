@@ -35,13 +35,13 @@ Non sostituisce una rigenerazione con `bmad-architecture`: la prepara. Le voci m
 | AD-12 — Migrazioni versionate | **Intatto** | |
 | AD-13 — Test e2e senza dati condivisi | **Intatto** | |
 | AD-14 — Nessuna stringa cablata | **Modificato** | Le spiegazioni degli esercizi (FR8.5) sono **contenuto bilingue nel file di lezione**, non chiavi i18n. Il confine va ridichiarato: interfaccia da `t()`, contenuto dal file, giapponese da nessuno dei due |
-| AD-15 — L'accessibilità della sessione è un contratto | **Modificato** | Il contratto tastiera cambia: non più "spazio rivela, 1-4 valutano", ma "1-n selezionano un'opzione, invio conferma". Da riscrivere, non da abbandonare |
+| AD-15 — L'accessibilità della sessione è un contratto | **Modificato** | Il contratto tastiera cambia: "spazio rivela, 1-4 valutano" non descrive più niente. E non basta sostituirlo con "1-n selezionano": `assemble` (AD-22) è un ordinamento, non una selezione. Da riscrivere sapendo che deve coprire tre interazioni diverse |
 | AD-16 — Attribuzione su ogni schermata | **Allentato** | Senza JMdict cade l'obbligo EDRDG. Diventa una pagina di riconoscimenti (FR10.2). `LICENSE` e `LICENSE-CONTENT` restano due file separati |
 | AD-17 — La scala degli stadi è una sola costante | **Intatto** | |
 | AD-18 — Le statistiche derivano solo dal log | **Intatto**, e più potente | `review_log` acquisisce il punto grammaticale (FR5.7), che è ciò che rende possibile FR7.3 |
 | AD-19 — Introdurre un item lo materializza subito | **Riscritto** come AD-26 | Stessa logica, unità diversa: si sblocca una lezione, non si introduce un item |
 | AD-20 — Vincolo di dimostrabilità | **Intatto** | |
-| AD-21 — Furigana segmentata nel dominio | **Intatto**, e più necessario | Gli esercizi usano frasi intere: più kanji, più okurigana, più occasioni di sbagliare il ruby |
+| AD-21 — Furigana segmentata nel dominio | **Esteso** | Gli esercizi usano frasi intere: più kanji, più okurigana, più occasioni di sbagliare il ruby. E i segmenti acquistano un secondo uso — vedi `AD-27` |
 
 **Riepilogo:** 12 intatti, 6 modificati, 1 sostituito, 1 riscritto, 1 allentato. Il confine architetturale e il motore sopravvivono interi — è la conferma che il pivot tocca il contenuto e non l'ossatura.
 
@@ -57,7 +57,23 @@ Non sostituisce una rigenerazione con `bmad-architecture`: la prepara. Le voci m
 
   Il file di una lezione **non può introdurre un tipo**: un `kind` sconosciuto è un errore di validazione dello schema, non un caso da ignorare a runtime. Aggiungere un tipo è una modifica di codice che passa da una pull request; aggiungere una lezione non tocca il codice.
 
-  `[DA DECIDERE]` L'insieme iniziale dei tipi resta aperto per scelta, e va chiuso **dopo aver autorato tre lezioni vere** (PRD OQ-7). La proposta corrente — `identify-subject`, `particle-choice`, `identify-engine`, `transform` — è un punto di partenza, non un impegno.
+  **✅ Registro chiuso il 23 settembre**, sull'evidenza delle lezioni 1 e 11.
+
+  La proposta a tavolino — `identify-subject`, `particle-choice`, `identify-engine`, `transform` — era sbagliata, e per una ragione che si vede solo guardando contenuto vero: **confondeva la materia con l'interazione.** Riconoscere come si chiude una frase, scegliere una particella e dire quale di due frasi è corretta insegnano cose diverse, ma meccanicamente sono la **stessa identica cosa** — una consegna, delle opzioni, una risposta giusta. Costruire sei validatori per un solo comportamento è il modo in cui un registro chiuso si gonfia senza accorgersene.
+
+  Cosa un esercizio *insegna* è già registrato da `grammar_point`, che esiste per `FR7.3` e non ha bisogno di un doppione nel tipo.
+
+  Il registro è quindi di **tre forme di interazione**, e nient'altro:
+
+  | `kind` | Interazione | Esercita |
+  |---|---|---|
+  | `single-select` | una consegna, *n* opzioni, una risposta | forma della chiusura, scelta della particella, quale frase è corretta, trasformazione |
+  | `select-span` | si indica **una porzione della frase** | il soggetto, specie quando が è invisibile — si punta il testo invece di sceglierlo da un elenco |
+  | `assemble` | tessere da ordinare | costruzione del nucleo, il compito assegnato dalla lezione 1 |
+
+  Verificato su due lezioni agli estremi dell'intervallo: la 1 esercita `single-select` e `assemble` ma non `particle-choice`, perché が è l'unica particella insegnata e non c'è scelta da fare; la 11 le esercita tutte, perché は, を, に e の entrano insieme e il soggetto diventa invisibile.
+
+  **`assemble` non è una selezione singola**, ed è la conseguenza che ricade su UX: serve un'interazione di ordinamento, e il contratto tastiera non può essere solo "i tasti numerici scelgono".
 
 ### AD-23 — Identità dell'esercizio derivata dal contenuto
 
@@ -94,6 +110,16 @@ Non sostituisce una rigenerazione con `bmad-architecture`: la prepara. Le voci m
 - **Rule:** sbloccare una lezione crea immediatamente una riga `review_state` per **ciascuno** dei suoi esercizi, con `stage = 0` e `due_at` = istante di sblocco, più una riga in `lesson_progress`. "Mai incontrato" significa **assenza di riga**.
 
   Ne discende, come in AD-19, che un esercizio sbloccato e non svolto resta dovuto il giorno dopo. Una lezione senza esercizi (FR2.4) produce la sola riga di `lesson_progress`: la progressione avanza, la pila non si muove, e la dashboard lo dichiara invece di sembrare rotta.
+
+### AD-27 — Si va a capo fra i segmenti, mai dentro
+
+- **Binds:** F4, NFR4, UX-DR8, AD-21
+- **Prevents:** una frase d'esercizio che il browser spezza in un punto arbitrario, perché il giapponese non ha spazi e il ritorno a capo predefinito cade ovunque. Su un'app di vocabolario è brutto; su un'app di **grammatica** è un difetto didattico — si frammenta la struttura che si sta chiedendo di riconoscere, proprio mentre la si chiede
+- **Rule:** il testo giapponese di un esercizio va a capo **solo ai confini dei segmenti** prodotti da `alignFurigana()`. Nessuna dipendenza nuova e nessun dizionario di sillabazione: i segmenti esistono già per il ruby e sono unità significative, quindi sono anche i soli punti di interruzione ammessi.
+
+  Misurato sul contenuto reale: `お姉ちゃんはつまらない本を読んでいて遊んでくれなかった。` sono 28 caratteri e va a capo su ogni superficie. Senza questa regola `読んでいて` può spezzarsi fra 読 e んでいて.
+
+  Ne discende che `AD-21` non è più solo una regola di resa del ruby: è la segmentazione da cui dipendono **due** comportamenti, e toglierla ne romperebbe due.
 
 ---
 
