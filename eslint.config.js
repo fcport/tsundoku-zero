@@ -90,13 +90,23 @@ export default tseslint.config(
       ],
       // Il dominio non importa NESSUN pacchetto esterno (react,
       // @supabase/supabase-js, qualsiasi altro). Gli altri livelli sì.
+      // Eccezione mirata: i pacchetti i18n (i18next/react-i18next) sono un
+      // FUNNEL — solo src/i18n/ li importa; ui/features/data/app passano dal
+      // re-export di ../i18n (AD-14). La regola è ERROR (CI rossa, non solo
+      // convenzione): un import diretto da un altro livello è una violazione.
       'boundaries/external': [
         'error',
         {
           default: 'allow',
           // `*` non attraversa lo `/` degli scope npm: servono entrambi i
           // glob per vietare sia `react` sia `@supabase/supabase-js`.
-          rules: [{ from: ['domain'], disallow: ['*', '@*/*'] }],
+          rules: [
+            { from: ['domain'], disallow: ['*', '@*/*'] },
+            {
+              from: ['ui', 'features', 'data', 'app'],
+              disallow: ['i18next', 'react-i18next'],
+            },
+          ],
         },
       ],
       // Regole informative del plugin: silenziate, non fanno parte del

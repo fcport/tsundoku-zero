@@ -68,6 +68,17 @@ describe('confini AD-1 imposti da ESLint', () => {
     expectRuleError(messages, 'boundaries/external');
   });
 
+  it('ui→react-i18next ⇒ boundaries/external (ERROR) [funnel i18n AD-14]', async () => {
+    // Solo src/i18n/ importa i pacchetti i18n; ui/features/data/app passano dal
+    // re-export di ../i18n. Un import diretto da un livello consumatore è una
+    // violazione meccanica (CI rossa), non una convenzione.
+    const messages = await lintFragment(
+      "import { useTranslation } from 'react-i18next';\nexport const x = useTranslation;\n",
+      'src/ui/__probe__.tsx',
+    );
+    expectRuleError(messages, 'boundaries/external');
+  });
+
   it('domain→fetch/storage ⇒ no-restricted-globals (ERROR)', async () => {
     const messages = await lintFragment(
       'export const ping = () => fetch("https://example.test");\n' +
