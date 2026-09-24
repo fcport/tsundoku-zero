@@ -21,9 +21,10 @@ export interface Credentials {
  * Union LETTERALE chiusa dei fallimenti di autenticazione. I quattro fallimenti
  * prevedibili di FR1.5 (email già registrata, password troppo debole, email in
  * formato non valido, password errata) più `unknown` per ogni esito non
- * classificato. `wrong-password` non è prodotto dal signup (lo produrrà
- * l'accesso, storia 1.7) ma il contratto lo dichiara qui perché tutti e quattro
- * i fallimenti passano dall'unico traduttore.
+ * classificato. `wrong-password` è prodotto dall'accesso (storia 1.7): password
+ * errata ed email inesistente collassano entrambe su `invalid_credentials`,
+ * quindi sullo stesso reason — l'esistenza dell'email non è rivelata. Tutti e
+ * quattro i fallimenti passano dall'unico traduttore.
  */
 export type AuthFailureReason =
   | 'email-already-registered'
@@ -33,18 +34,48 @@ export type AuthFailureReason =
   | 'unknown';
 
 /**
- * Esito di una registrazione. Union DISCRIMINATA sul campo `ok`: nel ramo di
- * fallimento porta esclusivamente un `reason` di dominio, mai un messaggio del
- * vendor.
+ * Forma CONDIVISA d'esito di un'operazione di autenticazione. Union DISCRIMINATA
+ * sul campo `ok`: nel ramo di fallimento porta esclusivamente un `reason` di
+ * dominio, mai un messaggio del vendor. Registrazione e accesso hanno la stessa
+ * forma d'esito e la stessa classificazione degli errori.
  */
-export type SignUpResult =
+export type AuthResult =
   | { readonly ok: true }
   | { readonly ok: false; readonly reason: AuthFailureReason };
+
+/** Esito di una registrazione (alias, invariato per 1.6). */
+export type SignUpResult = AuthResult;
+
+/** Esito di un accesso: identico per forma e classificazione al signup (1.7). */
+export type SignInResult = AuthResult;
+
+/**
+ * Funzione di disiscrizione restituita da `onAuthStateChange`: chiamarla ferma
+ * le notifiche. Tipo PURO (nessun oggetto sottoscrizione del vendor sopra data).
+ */
+export type Unsubscribe = () => void;
 
 /**
  * Porta di autenticazione dichiarata dal dominio (AD-2). L'adattatore concreto
  * vive in src/data/ ed è l'unico a conoscere Supabase.
+ *
+ * Il dominio non vede MAI una `Session` di Supabase: lo stato autenticato è
+ * esposto come `boolean`. L'id utente non serve ad alcun AC di 1.7 (lo
+ * introdurranno 1.8/1.9 quando lo useranno). Ogni metodo ha confine TOTALE: la
+ * porta non rifiuta mai.
  */
 export interface AuthGateway {
+  /** Registra un nuovo account (FR1.5, storia 1.6). */
   signUp(credentials: Credentials): Promise<SignUpResult>;
+  /** Accede con un account esistente (FR1.2, storia 1.7). */
+  signIn(credentials: Credentials): Promise<SignInResult>;
+  /** Disconnette la sessione corrente (FR1.2). Non rifiuta mai: `void`. */
+  signOut(): Promise<void>;
+  /** Vero se esiste una sessione valida (FR1.3, letta al boot). */
+  isAuthenticated(): Promise<boolean>;
+  /**
+   * Notifica ogni cambio dello stato di autenticazione come `boolean`; ritorna
+   * una `Unsubscribe` per fermare le notifiche.
+   */
+  onAuthStateChange(listener: (authenticated: boolean) => void): Unsubscribe;
 }

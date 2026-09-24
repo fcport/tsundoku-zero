@@ -1,31 +1,64 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { en } from '../../i18n/en';
-import { SignUpForm } from './SignUpForm';
+import {
+  AuthForm,
+  type AuthFormSubmitKey,
+  type AuthFormTitleKey,
+  type AuthFormToggleKey,
+} from './AuthForm';
 import type { AuthErrorMessage } from './authFailureMessage';
 
-// Righe della I/O Matrix per la presentazione (storia 1.6): ambiente node,
+// Righe della I/O Matrix per la presentazione (storie 1.6/1.7): ambiente node,
 // nessun jsdom, resa statica con renderToStaticMarkup per ciascuno stato.
 // L'ancoraggio del messaggio è verificato sulla POSIZIONE nel markup: il testo
-// d'errore deve seguire il campo responsabile e precedere il successivo.
+// d'errore deve seguire il campo responsabile e precedere il successivo. Il
+// form è ora PARAMETRIZZATO dal modo (registrazione / accesso).
 
 const VALUES = { email: '', password: '' };
 const NOOP = () => {};
-const NOOP_CHANGE = () => {};
 
-function render(error: AuthErrorMessage | null, pending = false): string {
+interface ModeKeys {
+  readonly titleKey: AuthFormTitleKey;
+  readonly submitKey: AuthFormSubmitKey;
+  readonly toggleKey: AuthFormToggleKey;
+}
+
+const SIGN_UP: ModeKeys = {
+  titleKey: 'auth.title',
+  submitKey: 'auth.submit',
+  toggleKey: 'auth.switchToSignIn',
+};
+
+const SIGN_IN: ModeKeys = {
+  titleKey: 'auth.signInTitle',
+  submitKey: 'auth.signInSubmit',
+  toggleKey: 'auth.switchToSignUp',
+};
+
+function render(
+  error: AuthErrorMessage | null,
+  pending = false,
+  keys: ModeKeys = SIGN_UP,
+): string {
   return renderToStaticMarkup(
-    <SignUpForm
+    <AuthForm
       values={VALUES}
       error={error}
       pending={pending}
       onSubmit={NOOP}
-      onChange={NOOP_CHANGE}
+      onChange={NOOP}
+      onToggle={NOOP}
+      titleKey={keys.titleKey}
+      submitKey={keys.submitKey}
+      toggleKey={keys.toggleKey}
     />,
   );
 }
 
-describe('SignUpForm — campi e label da t()', () => {
+// ---- Assertion di 1.6 preservate col modo sign-up (default) ----
+
+describe('AuthForm (sign-up) — campi e label da t()', () => {
   const markup = render(null);
 
   it('rende le label email/password, il titolo e il submit da t()', () => {
@@ -47,7 +80,7 @@ describe('SignUpForm — campi e label da t()', () => {
   });
 });
 
-describe('SignUpForm — ancoraggio del messaggio al campo responsabile', () => {
+describe('AuthForm — ancoraggio del messaggio al campo responsabile', () => {
   it('errore email: accanto al campo email, NON al password né in cima', () => {
     const markup = render({
       key: 'auth.error.emailAlreadyRegistered',
@@ -93,13 +126,13 @@ describe('SignUpForm — ancoraggio del messaggio al campo responsabile', () => 
     expect(markup).not.toContain(en.auth.error.weakPassword);
   });
 
-  it('errore form (unknown): a livello form in fondo, non in cima', () => {
+  it('errore form (unknown): a livello form dopo il submit, non in cima', () => {
     const markup = render({ key: 'auth.error.unknown', field: 'form' });
     const text = en.auth.error.unknown;
 
     expect(markup).toContain(text);
 
-    // In fondo: segue il submit, non precede il titolo.
+    // Dopo il submit: segue il submit, non precede il titolo.
     const submitAt = markup.indexOf(en.auth.submit);
     const titleAt = markup.indexOf(en.auth.title);
     const messageAt = markup.indexOf(text);
@@ -126,7 +159,7 @@ describe('SignUpForm — ancoraggio del messaggio al campo responsabile', () => 
   });
 });
 
-describe('SignUpForm — associazione errore↔input per l\'assistive tech', () => {
+describe('AuthForm — associazione errore↔input per l\'assistive tech', () => {
   it('errore email: input con aria-invalid e aria-describedby; <p> con id', () => {
     const markup = render({
       key: 'auth.error.emailAlreadyRegistered',
@@ -165,13 +198,57 @@ describe('SignUpForm — associazione errore↔input per l\'assistive tech', () 
   });
 });
 
-describe('SignUpForm — pending disabilita il submit', () => {
+describe('AuthForm — pending disabilita il submit', () => {
   it('pending={true} ⇒ il bottone di submit è disabled', () => {
     const markup = render(null, true);
+    // Il PRIMO <button> è il submit primario (il toggle è type="button" dopo).
     const buttonTag = markup.slice(
       markup.indexOf('<button'),
       markup.indexOf('>', markup.indexOf('<button')) + 1,
     );
+    expect(buttonTag).toContain('type="submit"');
     expect(buttonTag).toContain('disabled');
+  });
+});
+
+// ---- Nuove assertion 1.7: modo bimodale + toggle ----
+
+describe('AuthForm — modo della schermata (sign-up vs sign-in)', () => {
+  it('sign-up: titolo/submit/toggle di registrazione', () => {
+    const markup = render(null, false, SIGN_UP);
+    // Il titolo è reso nell'<h2> (il submit sign-in "Sign in" è sottostringa del
+    // toggle "…? Sign in", perciò asseriamo il titolo sulla sua posizione <h2>).
+    expect(markup).toContain(`>${en.auth.title}</h2>`);
+    expect(markup).toContain(en.auth.submit);
+    // Il toggle porta al modo accesso.
+    expect(markup).toContain('Already have an account');
+    // Non il titolo dell'accesso nell'<h2>.
+    expect(markup).not.toContain(`>${en.auth.signInTitle}</h2>`);
+  });
+
+  it('sign-in: titolo/submit/toggle di accesso', () => {
+    const markup = render(null, false, SIGN_IN);
+    expect(markup).toContain(`>${en.auth.signInTitle}</h2>`);
+    expect(markup).toContain(`>${en.auth.signInSubmit}</button>`);
+    // Il toggle porta al modo registrazione ("Don't have an account? Sign up",
+    // con l'apostrofo codificato come entità HTML nel markup).
+    expect(markup).toContain('have an account? Sign up');
+    // Non il toggle di registrazione.
+    expect(markup).not.toContain(en.auth.switchToSignIn);
+  });
+
+  it('un SOLO submit primario (type="submit"); il toggle è type="button"', () => {
+    const markup = render(null);
+    const submitCount = (markup.match(/type="submit"/g) ?? []).length;
+    expect(submitCount).toBe(1);
+    // Il toggle esiste come bottone secondario type="button".
+    expect(markup).toContain('type="button"');
+  });
+
+  it('il toggle segue lo slot d\'errore a livello form (in fondo)', () => {
+    const markup = render({ key: 'auth.error.unknown', field: 'form' });
+    const formErrorAt = markup.indexOf(en.auth.error.unknown);
+    const toggleAt = markup.indexOf(en.auth.switchToSignIn);
+    expect(toggleAt).toBeGreaterThan(formErrorAt);
   });
 });

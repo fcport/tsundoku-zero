@@ -8,15 +8,20 @@ export const it = {
   },
   auth: {
     title: 'Registrazione',
+    signInTitle: 'Accesso',
     emailLabel: 'Email',
     passwordLabel: 'Password',
     submit: 'Crea account',
+    signInSubmit: 'Accedi',
+    switchToSignIn: 'Hai già un account? Accedi',
+    switchToSignUp: 'Non hai un account? Registrati',
+    signOut: 'Disconnetti',
     error: {
       emailAlreadyRegistered: 'Questa email è già registrata.',
       invalidEmail: 'Inserisci un indirizzo email valido.',
       weakPassword: 'Scegli una password più forte.',
       wrongPassword: 'Password errata.',
-      unknown: 'Impossibile creare l\'account. Riprova.',
+      unknown: 'Qualcosa è andato storto. Riprova.',
     },
   },
 } as const;

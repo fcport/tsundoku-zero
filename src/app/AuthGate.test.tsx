@@ -2,24 +2,30 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
 import { AuthGate } from './AuthGate';
-import type { AuthGateway, SignUpResult } from '../domain/ports/authGateway';
+import type { AuthGateway } from '../domain/ports/authGateway';
 
-// Righe della I/O Matrix per la commutazione di vista (storia 1.6): "lands
-// authenticated" reso staticamente. Ambiente node, nessun jsdom.
+// Righe della I/O Matrix per la commutazione di vista (storie 1.6/1.7): resa
+// staticamente. Ambiente node, nessun jsdom.
 
 // Il gateway non è invocato in questi test (nessun submit): un finto inerte
-// soddisfa il tipo della porta.
+// COMPLETO soddisfa il tipo della porta (cresciuta con metodi richiesti in 1.7).
 const inertGateway: AuthGateway = {
-  signUp: (): Promise<SignUpResult> => Promise.resolve({ ok: true }),
+  signUp: async () => ({ ok: true }),
+  signIn: async () => ({ ok: true }),
+  signOut: async () => {},
+  isAuthenticated: async () => false,
+  onAuthStateChange: () => () => {},
 };
 const NOOP = () => {};
 
-describe('AuthGate — autenticato ⇒ radice protetta minima', () => {
+describe('AuthGate — autenticato ⇒ shell protetta (branding + Disconnetti)', () => {
   const markup = renderToStaticMarkup(
     <AuthGate
       authenticated={true}
       gateway={inertGateway}
       onAuthenticated={NOOP}
+      onSignOut={NOOP}
+      signOutPending={false}
     />,
   );
 
@@ -28,7 +34,11 @@ describe('AuthGate — autenticato ⇒ radice protetta minima', () => {
     expect(markup).toContain(en.app.tagline);
   });
 
-  it('NON rende il form di registrazione', () => {
+  it('rende il bottone Disconnetti', () => {
+    expect(markup).toContain(en.auth.signOut);
+  });
+
+  it('NON rende il form di autenticazione', () => {
     expect(markup).not.toContain('id="auth-email"');
     expect(markup).not.toContain('id="auth-password"');
     expect(markup).not.toContain(en.auth.submit);
@@ -41,6 +51,8 @@ describe('AuthGate — non autenticato ⇒ schermata di Accesso', () => {
       authenticated={false}
       gateway={inertGateway}
       onAuthenticated={NOOP}
+      onSignOut={NOOP}
+      signOutPending={false}
     />,
   );
 
@@ -51,8 +63,8 @@ describe('AuthGate — non autenticato ⇒ schermata di Accesso', () => {
   });
 
   it('ha un solo landmark <main> (nessun <main> annidato)', () => {
-    // SignUpScreen NON riusa più <App/> (che ha il proprio <main>): il branding
-    // vive solo sulla radice protetta autenticata. Qui esattamente un <main>.
+    // AuthScreen NON riusa <App/> (che ha il proprio <main>): il branding vive
+    // solo sulla radice protetta autenticata. Qui esattamente un <main>.
     const opens = markup.match(/<main/g) ?? [];
     expect(opens.length).toBe(1);
   });

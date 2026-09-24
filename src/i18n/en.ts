@@ -14,15 +14,20 @@ export const en = {
   },
   auth: {
     title: 'Sign up',
+    signInTitle: 'Sign in',
     emailLabel: 'Email',
     passwordLabel: 'Password',
     submit: 'Create account',
+    signInSubmit: 'Sign in',
+    switchToSignIn: 'Already have an account? Sign in',
+    switchToSignUp: "Don't have an account? Sign up",
+    signOut: 'Sign out',
     error: {
       emailAlreadyRegistered: 'This email is already registered.',
       invalidEmail: 'Enter a valid email address.',
       weakPassword: 'Choose a stronger password.',
       wrongPassword: 'Wrong password.',
-      unknown: 'The account could not be created. Try again.',
+      unknown: 'Something went wrong. Try again.',
     },
   },
 } as const;

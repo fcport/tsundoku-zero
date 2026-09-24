@@ -5,20 +5,11 @@
 //
 // È testabile con un finto gateway iniettato, senza rete né Supabase: la logica
 // di commutazione della vista e l'ancoraggio del messaggio si verificano
-// meccanicamente.
+// meccanicamente. La forma d'esito e il dispatch sono CONDIVISI con l'accesso
+// (./authOutcome).
 import type { AuthGateway, Credentials } from '../../domain/ports/authGateway';
-import {
-  authFailureMessage,
-  type AuthErrorMessage,
-} from './authFailureMessage';
-
-/**
- * Esito dell'orchestrazione del signup, pronto per la schermata: successo o
- * fallimento con il messaggio tradotto (chiave i18n + campo responsabile).
- */
-export type SubmitSignUpOutcome =
-  | { readonly ok: true }
-  | { readonly ok: false; readonly message: AuthErrorMessage };
+import { authFailureMessage } from './authFailureMessage';
+import type { AuthSubmitOutcome } from './authOutcome';
 
 /**
  * Invia le credenziali attraverso la porta e traduce l'esito. Su successo
@@ -34,7 +25,7 @@ export type SubmitSignUpOutcome =
 export async function submitSignUp(
   gateway: AuthGateway,
   credentials: Credentials,
-): Promise<SubmitSignUpOutcome> {
+): Promise<AuthSubmitOutcome> {
   let result;
   try {
     result = await gateway.signUp(credentials);
@@ -45,24 +36,4 @@ export async function submitSignUp(
     return { ok: true };
   }
   return { ok: false, message: authFailureMessage(result.reason) };
-}
-
-/**
- * Dispatch PURO dell'esito verso gli handler di presentazione: successo ⇒
- * `onAuthenticated()` (la vista commuta); fallimento ⇒ `onError(message)` (il
- * messaggio compare accanto al campo). Isolato dallo stato React di
- * `SignUpScreen` così il wiring dell'AC1 è verificabile in ambiente node.
- */
-export function applySignUpOutcome(
-  outcome: SubmitSignUpOutcome,
-  handlers: {
-    readonly onAuthenticated: () => void;
-    readonly onError: (message: AuthErrorMessage) => void;
-  },
-): void {
-  if (outcome.ok) {
-    handlers.onAuthenticated();
-  } else {
-    handlers.onError(outcome.message);
-  }
 }
