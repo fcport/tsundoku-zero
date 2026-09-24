@@ -32,4 +32,15 @@ export const it = {
       it: 'Italiano',
     },
   },
+  account: {
+    delete: {
+      title: 'Cancella account',
+      trigger: 'Cancella account',
+      consequence:
+        'Cancellare il tuo account distrugge tutti i tuoi dati di studio. Le tue statistiche non sopravvivono. Questa azione non si può annullare.',
+      confirm: 'Cancella definitivamente',
+      cancel: 'Mantieni account',
+      error: "L'account non è stato cancellato. Riprova.",
+    },
+  },
 } as const;

@@ -4,6 +4,7 @@ import { en } from '../i18n/en';
 import { AuthRoot } from './AuthRoot';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
+import type { AccountGateway } from '../domain/ports/accountGateway';
 
 // Riga della I/O Matrix per la resa INIZIALE (storia 1.7): finché lo stato di
 // sessione è indeterminato (`checking`), AuthRoot rende un PLACEHOLDER NEUTRO —
@@ -27,10 +28,18 @@ const inertSettings: SettingsRepository = {
   loadLocale: async () => null,
   saveLocale: async () => {},
 };
+// Porta finta inerte (nuova prop 1.10): deleteAccount non è invocata da SSR.
+const inertAccount: AccountGateway = {
+  deleteAccount: async () => ({ ok: true }),
+};
 
 describe('AuthRoot — resa iniziale `checking` (placeholder neutro)', () => {
   const markup = renderToStaticMarkup(
-    <AuthRoot gateway={inertGateway} settings={inertSettings} />,
+    <AuthRoot
+      gateway={inertGateway}
+      settings={inertSettings}
+      account={inertAccount}
+    />,
   );
 
   it('NON rende il form di autenticazione (niente flash)', () => {

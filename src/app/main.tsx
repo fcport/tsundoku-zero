@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router';
 import { createSupabaseClient } from '../data/supabaseClient';
 import { createSupabaseAuthGateway } from '../data/authGateway';
 import { createSupabaseSettingsRepository } from '../data/settingsRepository';
+import { createSupabaseAccountGateway } from '../data/accountGateway';
 import { AuthRoot } from './AuthRoot';
 import { decideBoot } from './env';
 
@@ -40,6 +41,7 @@ if (decision.kind === 'config-error') {
 const client = createSupabaseClient(decision.config);
 const gateway = createSupabaseAuthGateway(client);
 const settings = createSupabaseSettingsRepository(client);
+const account = createSupabaseAccountGateway(client);
 // <BrowserRouter> abilita il routing per URL e i deep link: il rewrite di
 // vercel.json (/(.*) → /index.html, fissato da deploy-config.test.ts) serve
 // ogni deep link a index.html, poi BrowserRouter prende il controllo lato client
@@ -47,7 +49,7 @@ const settings = createSupabaseSettingsRepository(client);
 createRoot(container).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthRoot gateway={gateway} settings={settings} />
+      <AuthRoot gateway={gateway} settings={settings} account={account} />
     </BrowserRouter>
   </StrictMode>,
 );

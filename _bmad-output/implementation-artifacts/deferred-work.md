@@ -77,3 +77,35 @@ source_spec: `spec-1-9-cambiare-lingua-senza-ricaricare.md`
 severity: low
 reason: I bottoni del selettore di lingua (come i bottoni di auth di 1.6/1.7 e il Disconnetti di 1.7) usano solo border-strong, senza un token/anello di focus visibile da tastiera. Non è introdotto da questa storia: è una lacuna trasversale a tutti gli interattivi dell'app. Di competenza dell'audit di accessibilità con screen reader reale della storia 7.6.
 status: open
+
+### DW-11: Verifica live end-to-end della cancellazione reale (AC1/AC2) e del riaccesso che fallisce (AC4), differita per architettura.
+origin: spec-deferred 23198f3a6b85
+location: src/features/account/DeleteAccountSection.tsx + supabase/functions/delete-account/index.ts + src/app/AuthRoot.tsx
+source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
+severity: low
+reason: Provare AC1/AC2 (click su conferma ⇒ l'Edge Function cancella l'utente reale; user_settings si svuota per cascata su auth.users) e AC4 (riaccesso con le stesse credenziali fallisce) richiede la funzione delete-account DEPLOYATA sul progetto reale, l'app deployata e un account reale con teardown. L'ambiente di test è node senza jsdom (renderToStaticMarkup non esegue eventi né effetti): il click→handler (onConfirm→submitDeleteAccount) è glue d'effetto. Coperto meccanicamente: l'adapter per FORMA della chiamata (functions.invoke('delete-account') con client finto, ok/errore/ throw), l'orchestrazione pura (inoltro dell'esito, confine totale), la resa statica per fase (idle/confirming, pending, slot errore) e la struttura della funzione (getUser + admin.deleteUser + CORS via testo). Nessuna infrastruttura Playwright nello stack; stesso schema del live differito in 1.2/1.7/1.8/1.9.
+status: open
+
+### DW-12: Ispezione del bundle compilato (dist/) per confermare l'assenza della service_role (AC3), conferma dell'operatore.
+origin: spec-deferred 73b66180bbe8
+location: dist/ (artefatto di build) + src/service-role-confinement.test.ts
+source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
+severity: low
+reason: Il gate meccanico (src/service-role-confinement.test.ts) prova che nessun file di codice in src/** contiene service_role/SERVICE_ROLE, che .env.example non dichiara alcuna VITE_* di service-role, e per anti-vacuità che la funzione server la usa davvero. La conferma finale dell'AC3 è l'ispezione dell'artefatto dist/ dopo `npm run build`: un controllo dell'operatore sull'output reale del build, fuori dal toolchain dei test (che non ispeziona dist/). Verificato in locale a supporto: la grep di dist/ dopo il build non trova occorrenze; resta la conferma formale dell'operatore sull'artefatto deployato.
+status: open
+
+### DW-13: Sblocco delle e2e live differite di 1.6/1.7/1.8/1.9 (DW-3/6/7/8/9): ora esiste il teardown via delete-account (AD-13).
+origin: spec-deferred e60399932eba
+location: supabase/functions/delete-account/index.ts + suite e2e (non ancora esistente)
+source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
+severity: low
+reason: Le verifiche live di 1.6 (registrazione reale), 1.7 (accesso/sessione), 1.8 (rotte private), 1.9 (persistenza/continuità cross-device) erano differite anche perché mancava un teardown sicuro fra la suite e i dati reali (AD-13). La funzione delete-account, ora costruita e deployata al merge, è quel teardown: email univoca per run + cancellazione via la stessa funzione. La costruzione dell'infrastruttura e2e (Playwright, account effimeri, teardown) non è nello scope di questa storia né nello stack attuale; resta lavoro di una storia/epica di QA dedicata (cfr. 7-x).
+status: open
+
+### DW-14: Wiring di accessibilità della conferma distruttiva (aria-expanded sul grilletto, gestione del focus alla transizione di fase, annuncio live del cambio di stato), differito all'audit screen-reader di E
+origin: spec-deferred 882da5df26da
+location: src/features/account/DeleteAccountConfirm.tsx + src/features/account/DeleteAccountSection.tsx
+source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
+severity: low
+reason: La conferma a due passi soddisfa AC1 col testo di conseguenza VISIBILE e lo slot d'errore in role="alert". Manca però il wiring a11y più fine: nessun aria-expanded sul grilletto, nessuno spostamento del focus verso la conseguenza/conferma quando si entra in `confirming` né ritorno al grilletto su annulla, e il cambio di fase non è annunciato via live region. È la stessa classe di lacuna a11y trasversale agli interattivi già differita app-wide in DW-10 (anello di focus visibile su auth/settings): di competenza dell'audit con screen reader reale della storia 7.6, non introdotta da questa storia in modo isolato. Il flusso interattivo è comunque glue d'effetto non eseguibile in node (nessun jsdom).
+status: open

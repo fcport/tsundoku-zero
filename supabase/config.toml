@@ -13,3 +13,13 @@
 # progetto (VITE_SUPABASE_URL, che finisce nel bundle del browser) — ma per
 # tenere la config del deploy fuori dal file versionato e iniettarla al merge.
 project_id = "tsundoku-zero"
+
+# Edge Function `delete-account` — l'unico codice server del progetto (AD-11).
+# verify_jwt = false: la funzione è chiamata dal browser via
+# supabase.functions.invoke, che innesca un preflight CORS OPTIONS SENZA JWT. Con
+# verify_jwt = true la piattaforma respingerebbe il preflight (401) prima del
+# nostro codice. Disattiviamo la verifica di piattaforma e verifichiamo il
+# chiamante NEL CORPO con auth.getUser(jwt) usando la service_role: nessun JWT
+# valido ⇒ 401, nessuna cancellazione.
+[functions.delete-account]
+verify_jwt = false

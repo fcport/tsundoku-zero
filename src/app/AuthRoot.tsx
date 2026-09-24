@@ -17,15 +17,17 @@ import { submitSignOut } from '../features/auth/signOut';
 import { i18n, resolveLocale } from '../i18n';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
+import type { AccountGateway } from '../domain/ports/accountGateway';
 
 export interface AuthRootProps {
   readonly gateway: AuthGateway;
   readonly settings: SettingsRepository;
+  readonly account: AccountGateway;
 }
 
 type SessionStatus = 'checking' | 'authenticated' | 'anonymous';
 
-export function AuthRoot({ gateway, settings }: AuthRootProps) {
+export function AuthRoot({ gateway, settings, account }: AuthRootProps) {
   const [status, setStatus] = useState<SessionStatus>('checking');
   const [signOutPending, setSignOutPending] = useState(false);
 
@@ -124,6 +126,7 @@ export function AuthRoot({ gateway, settings }: AuthRootProps) {
       authenticated={status === 'authenticated'}
       gateway={gateway}
       settings={settings}
+      account={account}
       onAuthenticated={() => setStatus('authenticated')}
       signOutPending={signOutPending}
       onSignOut={() => {
@@ -131,6 +134,13 @@ export function AuthRoot({ gateway, settings }: AuthRootProps) {
         void submitSignOut(gateway)
           .then(() => setStatus('anonymous'))
           .finally(() => setSignOutPending(false));
+      }}
+      onAccountDeleted={() => {
+        // Dopo una cancellazione riuscita la sessione remota è morta, ma il
+        // token locale sopravvive: riusiamo il percorso di sign-out per
+        // scaricarlo (submitSignOut, confine totale) e riportiamo lo stato ad
+        // `anonymous` — l'utente torna al login (AuthRoot possiede la vista).
+        void submitSignOut(gateway).finally(() => setStatus('anonymous'));
       }}
     />
   );

@@ -5,6 +5,7 @@ import { en } from '../i18n/en';
 import { AppRoutes } from './AppRoutes';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
+import type { AccountGateway } from '../domain/ports/accountGateway';
 
 // Righe di route-matching della I/O Matrix (storia 1.8). Il route-matching è
 // SINCRONO (nessun effetto): renderToStaticMarkup NON esegue useEffect, quindi
@@ -26,6 +27,10 @@ const inertSettings: SettingsRepository = {
   loadLocale: async () => null,
   saveLocale: async () => {},
 };
+// Porta finta inerte (nuova prop 1.10): deleteAccount non è invocata da SSR.
+const inertAccount: AccountGateway = {
+  deleteAccount: async () => ({ ok: true }),
+};
 const NOOP = () => {};
 
 function renderAt(path: string, authenticated: boolean): string {
@@ -35,9 +40,11 @@ function renderAt(path: string, authenticated: boolean): string {
         authenticated={authenticated}
         gateway={inertGateway}
         settings={inertSettings}
+        account={inertAccount}
         onAuthenticated={NOOP}
         onSignOut={NOOP}
         signOutPending={false}
+        onAccountDeleted={NOOP}
       />
     </MemoryRouter>,
   );

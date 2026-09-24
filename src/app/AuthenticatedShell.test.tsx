@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
+import type { AccountGateway } from '../domain/ports/accountGateway';
 
 // Righe della I/O Matrix per la radice protetta (storia 1.7): resa statica.
 // La shell autenticata è branding (<App/>: lang="ja" + tagline) + bottone
@@ -15,13 +16,19 @@ const inertSettings: SettingsRepository = {
   loadLocale: async () => null,
   saveLocale: async () => {},
 };
+// Porta finta inerte (nuova prop 1.10): deleteAccount non è invocata da SSR.
+const inertAccount: AccountGateway = {
+  deleteAccount: async () => ({ ok: true }),
+};
 
 describe('AuthenticatedShell — branding + bottone Disconnetti', () => {
   const markup = renderToStaticMarkup(
     <AuthenticatedShell
       settings={inertSettings}
+      account={inertAccount}
       onSignOut={NOOP}
       signOutPending={false}
+      onAccountDeleted={NOOP}
     />,
   );
 
@@ -52,8 +59,10 @@ describe('AuthenticatedShell — pending disabilita Disconnetti', () => {
     const markup = renderToStaticMarkup(
       <AuthenticatedShell
         settings={inertSettings}
+        account={inertAccount}
         onSignOut={NOOP}
         signOutPending={true}
+        onAccountDeleted={NOOP}
       />,
     );
     const buttonTag = markup.slice(
@@ -67,8 +76,10 @@ describe('AuthenticatedShell — pending disabilita Disconnetti', () => {
     const markup = renderToStaticMarkup(
       <AuthenticatedShell
         settings={inertSettings}
+        account={inertAccount}
         onSignOut={NOOP}
         signOutPending={false}
+        onAccountDeleted={NOOP}
       />,
     );
     const buttonTag = markup.slice(
