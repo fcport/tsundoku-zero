@@ -9,7 +9,7 @@
 // accesso (stessa forma, stessa classificazione: `invalid_credentials →
 // wrong-password`) e testabili senza client reale né rete: nessuna stringa
 // grezza del vendor esce da qui verso i livelli superiori.
-import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   AuthFailureReason,
   AuthGateway,
@@ -19,15 +19,6 @@ import type {
   SignUpResult,
   Unsubscribe,
 } from '../domain/ports/authGateway';
-
-// La config di cui l'adattatore ha bisogno: solo l'endpoint e l'anon key. È il
-// SOTTOINSIEME strutturale dell'AppConfig validato in src/app/env.ts; app passa
-// il suo AppConfig senza che questo livello importi `app` (arco data→app vietato
-// da AD-1). Il typing strutturale li riconcilia a compile-time.
-export interface SupabaseAuthConfig {
-  readonly supabaseUrl: string;
-  readonly supabaseAnonKey: string;
-}
 
 // Forma MINIMA dell'errore Supabase che ci interessa classificare: il solo
 // `code` stringa (ErrorCode di auth-js). Non dipendiamo dalla classe concreta
@@ -122,22 +113,17 @@ export function hasSession(session: unknown): boolean {
 }
 
 /**
- * Costruisce l'adattatore Supabase della porta AuthGateway. La config è quella
- * validata dal livello app (src/app/env.ts, `AppConfig`) e iniettata da lì:
- * questo modulo non legge mai `import.meta.env`. Nessuna `service_role` né alcun
- * secret non-`VITE_*` entra nel client (solo l'anon key pubblica).
+ * Costruisce l'adattatore Supabase della porta AuthGateway attorno a un
+ * `SupabaseClient` INIETTATO. Il client è creato UNA SOLA VOLTA nella
+ * composition root (src/data/supabaseClient.ts, invocato da main.tsx) e
+ * condiviso con SettingsRepository: una sola sessione / un solo GoTrueClient
+ * (storia 1.9). Questo modulo non crea più il client né legge `import.meta.env`.
  *
- * Le opzioni `persistSession`/`autoRefreshToken` sono ESPLICITE: la persistenza
- * fra riavvii (AC3/FR1.3) è una decisione dichiarata, non un default implicito
- * di supabase-js.
+ * Le funzioni PURE `classifyAuthError`/`authResultFromResponse`/`hasSession`
+ * restano invariate: non toccano il client, perciò il refactor da `config` a
+ * `client` non ne cambia il comportamento né i test.
  */
-export function createSupabaseAuthGateway(
-  config: SupabaseAuthConfig,
-): AuthGateway {
-  const client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
-    auth: { persistSession: true, autoRefreshToken: true },
-  });
-
+export function createSupabaseAuthGateway(client: SupabaseClient): AuthGateway {
   return {
     async signUp(credentials: Credentials): Promise<SignUpResult> {
       // La porta non RIFIUTA mai: auth-js rilancia i fallimenti non-AuthError

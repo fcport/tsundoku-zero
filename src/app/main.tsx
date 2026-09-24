@@ -5,7 +5,9 @@ import '../i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
+import { createSupabaseClient } from '../data/supabaseClient';
 import { createSupabaseAuthGateway } from '../data/authGateway';
+import { createSupabaseSettingsRepository } from '../data/settingsRepository';
 import { AuthRoot } from './AuthRoot';
 import { decideBoot } from './env';
 
@@ -30,11 +32,14 @@ if (decision.kind === 'config-error') {
   throw decision.error;
 }
 
-// decision.config è il punto d'iniezione degli adattatori (AD-1/AD-2): qui l'app
-// compone il gateway Supabase dalla config validata e lo inietta come PORTA in
-// AuthRoot. Le schermate (features) non conoscono @supabase/supabase-js: ricevono
-// solo l'interfaccia AuthGateway del dominio.
-const gateway = createSupabaseAuthGateway(decision.config);
+// decision.config è il punto d'iniezione degli adattatori (AD-1/AD-2). UN SOLO
+// client Supabase è creato qui e condiviso fra le due porte: una sola sessione /
+// un solo GoTrueClient (storia 1.9). Le schermate (features) non conoscono
+// @supabase/supabase-js: ricevono solo le interfacce del dominio (AuthGateway,
+// SettingsRepository).
+const client = createSupabaseClient(decision.config);
+const gateway = createSupabaseAuthGateway(client);
+const settings = createSupabaseSettingsRepository(client);
 // <BrowserRouter> abilita il routing per URL e i deep link: il rewrite di
 // vercel.json (/(.*) → /index.html, fissato da deploy-config.test.ts) serve
 // ogni deep link a index.html, poi BrowserRouter prende il controllo lato client
@@ -42,7 +47,7 @@ const gateway = createSupabaseAuthGateway(decision.config);
 createRoot(container).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthRoot gateway={gateway} />
+      <AuthRoot gateway={gateway} settings={settings} />
     </BrowserRouter>
   </StrictMode>,
 );

@@ -2,16 +2,27 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
 import { AuthenticatedShell } from './AuthenticatedShell';
+import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 // Righe della I/O Matrix per la radice protetta (storia 1.7): resa statica.
 // La shell autenticata è branding (<App/>: lang="ja" + tagline) + bottone
-// Disconnetti; il pending disabilita il bottone.
+// Disconnetti + la superficie Impostazioni (storia 1.9, un <section>, non un
+// secondo <main>); il pending disabilita il bottone.
 
 const NOOP = () => {};
+// Porta finta inerte (nuova prop 1.9): non invocata durante la resa server.
+const inertSettings: SettingsRepository = {
+  loadLocale: async () => null,
+  saveLocale: async () => {},
+};
 
 describe('AuthenticatedShell — branding + bottone Disconnetti', () => {
   const markup = renderToStaticMarkup(
-    <AuthenticatedShell onSignOut={NOOP} signOutPending={false} />,
+    <AuthenticatedShell
+      settings={inertSettings}
+      onSignOut={NOOP}
+      signOutPending={false}
+    />,
   );
 
   it('rende il branding con lang="ja" e la tagline', () => {
@@ -39,7 +50,11 @@ describe('AuthenticatedShell — branding + bottone Disconnetti', () => {
 describe('AuthenticatedShell — pending disabilita Disconnetti', () => {
   it('signOutPending={true} ⇒ il bottone è disabled', () => {
     const markup = renderToStaticMarkup(
-      <AuthenticatedShell onSignOut={NOOP} signOutPending={true} />,
+      <AuthenticatedShell
+        settings={inertSettings}
+        onSignOut={NOOP}
+        signOutPending={true}
+      />,
     );
     const buttonTag = markup.slice(
       markup.indexOf('<button'),
@@ -50,7 +65,11 @@ describe('AuthenticatedShell — pending disabilita Disconnetti', () => {
 
   it('signOutPending={false} ⇒ il bottone NON è disabled', () => {
     const markup = renderToStaticMarkup(
-      <AuthenticatedShell onSignOut={NOOP} signOutPending={false} />,
+      <AuthenticatedShell
+        settings={inertSettings}
+        onSignOut={NOOP}
+        signOutPending={false}
+      />,
     );
     const buttonTag = markup.slice(
       markup.indexOf('<button'),

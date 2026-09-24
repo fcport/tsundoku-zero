@@ -24,4 +24,12 @@ export const it = {
       unknown: 'Qualcosa è andato storto. Riprova.',
     },
   },
+  settings: {
+    title: 'Impostazioni',
+    language: {
+      label: 'Lingua',
+      en: 'Inglese',
+      it: 'Italiano',
+    },
+  },
 } as const;

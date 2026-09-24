@@ -18,10 +18,12 @@ import { AuthenticatedShell } from './AuthenticatedShell';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
 import { LOGIN_PATH } from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
+import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 export interface AppRoutesProps {
   readonly authenticated: boolean;
   readonly gateway: AuthGateway;
+  readonly settings: SettingsRepository;
   readonly onAuthenticated: () => void;
   readonly onSignOut: () => void;
   readonly signOutPending: boolean;
@@ -30,6 +32,7 @@ export interface AppRoutesProps {
 export function AppRoutes({
   authenticated,
   gateway,
+  settings,
   onAuthenticated,
   onSignOut,
   signOutPending,
@@ -49,6 +52,7 @@ export function AppRoutes({
           path="*"
           element={
             <AuthenticatedShell
+              settings={settings}
               onSignOut={onSignOut}
               signOutPending={signOutPending}
             />
