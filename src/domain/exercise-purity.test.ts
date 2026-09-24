@@ -57,6 +57,8 @@ describe('purezza del dominio: nessun Math.random (AC6, AD-22)', () => {
       'src/domain/schema.ts',
       'src/domain/exercise.ts',
       'src/domain/lesson.ts',
+      'src/domain/uuid.ts',
+      'src/domain/exercise-identity.ts',
       'src/domain/scaffold.ts',
     ]) {
       expect(
