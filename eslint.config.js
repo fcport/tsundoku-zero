@@ -94,6 +94,11 @@ export default tseslint.config(
       // FUNNEL — solo src/i18n/ li importa; ui/features/data/app passano dal
       // re-export di ../i18n (AD-14). La regola è ERROR (CI rossa, non solo
       // convenzione): un import diretto da un altro livello è una violazione.
+      // Simmetricamente, react-router è imbutato verso `app` (come
+      // @supabase/supabase-js verso `data`): solo la composition root monta
+      // routing e guard, quindi un import di react-router da ui/features/data è
+      // una violazione MECCANICA (impedisce di reintrodurre logica di
+      // routing/auth nelle schermate, AC2/AC5).
       'boundaries/external': [
         'error',
         {
@@ -106,6 +111,7 @@ export default tseslint.config(
               from: ['ui', 'features', 'data', 'app'],
               disallow: ['i18next', 'react-i18next'],
             },
+            { from: ['ui', 'features', 'data'], disallow: ['react-router'] },
           ],
         },
       ],
