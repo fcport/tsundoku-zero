@@ -6,8 +6,10 @@ import { deriveLessonId, lessonId, parseLesson, type Lesson } from './lesson';
 
 const validExercise = {
   kind: 'single-select',
+  grammarPoint: '〜を読む',
   sentence: { kanji: '本を読む', kana: 'ほんをよむ' },
   answer: '読む',
+  distractors: ['見る', '書く'],
   explanation: { en: 'The verb …' },
 };
 
