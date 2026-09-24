@@ -2,7 +2,7 @@
 title: 'Story 1.7: Accesso, disconnessione e sessione che resiste'
 type: 'feature'
 created: '2026-09-24'
-status: 'awaiting-operator'
+status: done
 baseline_revision: '963ac53cfe549d535a67420eeb7a87394ed85011'
 review_loop_iteration: 0
 followup_review_recommended: true
@@ -202,3 +202,11 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde, rieseguita dopo i patch):** `npm run typecheck` (`tsc` strict, nessun `any`), `npm run lint` (0 errori; `@supabase/supabase-js` solo in `src/data/`; nessun colore letterale; confini `AD-1` invariati), `npm test` (**171 test su 20 file**: ogni riga della I/O Matrix + i patch + le sonde di 1.1–1.6 senza regressioni, parità cataloghi inclusa), `npm run build` (`tsc --noEmit` + `vite build` producono `dist/`), `npm run check-contrast` (32/32 coppie conformi). Matrix Test Audit: tutte le 10 righe della I/O Matrix coperte da test che girano e passano.
 
 **Rischi residui / azioni operatore.** (1) La verifica **live** del ciclo di sessione (accesso, persistenza fra riavvii, disconnessione) contro Supabase reale è un'azione dell'operatore (prerequisito: le operator_actions di 1.6 completate + un account reale): `operator_actions`. (2) La e2e **automatica** dello stesso ciclo è differita a 1.10 (teardown via `delete-account`, `AD-13`): `deferred`. (3) La glue `useEffect` di `AuthRoot` (boot read + subscription) resta sottile e verificata solo nella resa iniziale `checking`, come la glue interattiva di 1.6, coperta dalla e2e live differita.
+
+## Operator Confirmation
+
+Confirmed 2026-09-24: the external actions this story owed were carried out.
+
+- Esegui una verifica manuale una tantum del ciclo di sessione contro il Supabase reale (prerequisito: aver già completato le operator_actions di 1.6 — conferma email disabilitata, VITE_SUPABASE_* impostate anche in produzione — e disporre di un account reale creato via registrazione): (1) accedi con le credenziali corrette e conferma di atterrare autenticato sulla radice protetta (AC1); (2) inserisci una password errata e conferma che compare "Password errata." accanto al campo password, senza rivelare se l'email esista (AC2); (3) con sessione attiva, chiudi e riapri il browser e conferma di essere ancora autenticato (AC3); (4) disconnettiti con il bottone Disconnetti e conferma che un riavvio del browser NON ripristina la sessione (AC4). La e2e automatica di questo ciclo è differita alla storia 1.10 (teardown via delete-account, AD-13), perché un agente non può crearla in sicurezza senza teardown.
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
