@@ -2,7 +2,7 @@
 title: 'Story 1.8: Le rotte private sono private'
 type: 'feature'
 created: '2026-09-24'
-status: 'awaiting-operator'
+status: done
 baseline_revision: '6790a66b4106cffdd45dace40a6a2ce6bf310eaf'
 review_loop_iteration: 0
 followup_review_recommended: false
@@ -192,3 +192,11 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde, rieseguita dopo i patch):** `npm run typecheck` (`tsc` strict, nessun `any`), `npm run lint` (0 errori; `react-router` confinato ad `app` in modo meccanico; funnel i18n e confini `AD-1` invariati), `npm test` (**180 test su 21 file**: ogni riga della I/O Matrix + i patch + le sonde di 1.1–1.7 senza regressioni, parità cataloghi inclusa), `npm run build` (`tsc --noEmit` + `vite build` producono `dist/`), `npm run check-contrast` (32/32 coppie conformi). Matrix Test Audit: tutte le 11 righe della I/O Matrix coperte da test che girano e passano (`routeGuards.test` 4 + `AppRoutes.test` 9 + `AuthRoot.test` 2 per la riga `checking`).
 
 **Rischi residui / azioni operatore.** (1) La verifica **live** del guard (anonimo su deep link → Accesso senza 404; autenticato → radice protetta) contro l'app deployata è un'azione dell'operatore (prerequisito: le operator_actions di 1.6/1.7 completate + un account reale per il caso autenticato): `operator_actions`. (2) La e2e **automatica** dello stesso ciclo è differita a 1.10 (teardown via `delete-account`, `AD-13`; nessuna infrastruttura Playwright): `deferred`. (3) La navigazione reale di `<Navigate>` (in `useEffect`) e la glue `useEffect` di `AuthRoot` restano verificate solo nella parte sincrona/pura (decisione del guard, route-matching, resa `checking`), come la glue delle storie precedenti coperta dalla verifica live differita. (4) Il pre-esistente avviso di Vite sul chunk >500 kB (ora include react-router) resta un avviso, non un errore, fuori scope.
+
+## Operator Confirmation
+
+Confirmed 2026-09-24: the external actions this story owed were carried out.
+
+- Esegui una verifica manuale una tantum del guard di rotta contro l'app deployata (preview o produzione): (1) da NON autenticato, apri direttamente un deep link a una rotta privata (la radice `/` e un percorso interno come `/dashboard` o `/impostazioni`) e conferma di essere reindirizzato alla schermata di Accesso senza 404 — il rewrite di vercel.json serve index.html e il guard lato client reindirizza (AC1 + deep link); (2) accedi con un account reale (prerequisito: operator_actions di 1.6/1.7 completate) e conferma che aprendo la radice del sito raggiungi la rotta protetta che risponde, con branding e bottone Disconnetti (AC3). La e2e automatica di questo ciclo è differita alla storia 1.10 (teardown via delete-account, AD-13): un agente non può crearla in sicurezza senza teardown e senza infrastruttura Playwright.
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
