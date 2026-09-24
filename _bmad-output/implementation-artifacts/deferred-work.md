@@ -20,7 +20,8 @@ location: src/data/authGateway.ts + storia 1.10 (delete-account)
 source_spec: `spec-1-6-registrazione-con-email-e-password.md`
 severity: low
 reason: AD-13 fissa il teardown della suite alla stessa Edge Function delete-account (AD-11), costruita nella storia 1.10 e non ancora esistente; AD-12/13 vieta l'istanza locale. Creare utenti reali senza teardown inquinerebbe i dati dell'owner (metrica M1). Qui è verificata meccanicamente tutta la logica client (classificazione, traduttore unico, orchestrazione totale, commutazione di vista) con union chiuse e finti iniettati. Stesso schema del test RLS a runtime differito in 1.5.
-status: open
+status: closed
+closed_note: Verificato dal vivo il 24-09-2026 sull'app deployata: registrazione con email nuova -> atterraggio autenticato sulla radice protetta (branding, tagline, Disconnetti), nessuna conferma via email ne' onboarding. Teardown eseguito con la Edge Function delete-account (AD-13): progetto lasciato a 0 utenti.
 
 ### DW-4: Precisione della mappa code Supabase -> reason da confermare con la verifica live (validation_failed -> invalid-email potenzialmente ampio).
 origin: spec-deferred 9301bb639ee7
@@ -36,7 +37,8 @@ location: src/data/authGateway.ts (createSupabaseAuthGateway)
 source_spec: `spec-1-6-registrazione-con-email-e-password.md`
 severity: low
 reason: createSupabaseAuthGateway costruisce il proprio client via createClient, quindi non e' iniettabile senza un client reale. La compatibilita' di forma fra AuthResponse di auth-js e le interfacce strutturali locali e' pero' verificata da tsc (assegnabilita' a compile-time), e i parametri email/password sono vincolati dal tipo di signUp; il resto e' coperto dalla e2e live differita (1.10). E' un deferral acknowledged, non una svista.
-status: open
+status: closed
+closed_note: Coperto dalla e2e live del 24-09-2026 come previsto: createSupabaseAuthGateway e' stato esercitato contro il Supabase reale in registrazione, accesso, accesso fallito e disconnessione, senza errori in console.
 
 ### DW-6: Verifica live/e2e di accesso, persistenza della sessione fra riavvii e disconnessione contro il Supabase reale, differita per architettura.
 origin: spec-deferred e7c653fbd606
@@ -44,7 +46,8 @@ location: src/data/authGateway.ts + src/app/AuthRoot.tsx + storia 1.10 (delete-a
 source_spec: `spec-1-7-accesso-disconnessione-e-sessione-che-resiste.md`
 severity: low
 reason: Provare davvero «accedo → atterro autenticato» (AC1), «chiudo e riapro il browser → sono ancora autenticato» (AC3) e «mi disconnetto → un riavvio non ripristina» (AC4) richiede un account reale contro Supabase reale e il suo teardown; AD-13 fissa il teardown alla stessa Edge Function delete-account (AD-11), costruita nella storia 1.10 e non ancora esistente, e AD-12/13 vieta l'istanza locale. Creare utenti reali senza teardown inquinerebbe i dati dell'owner (metrica M1). Qui è verificata meccanicamente tutta la logica (orchestrazioni totali signIn/signOut, classificazione condivisa, mappa session→boolean, selezione modo→submit, resa bimodale, shell autenticata) con union chiuse e finti iniettati. Stesso schema del signup live differito in 1.6 e del test RLS a runtime differito in 1.5.
-status: open
+status: closed
+closed_note: Verificato dal vivo il 24-09-2026. AC1 accesso -> radice protetta: confermato. AC2 password errata -> 'Wrong password.' ancorato al contenitore che ha l'input password e NON quello dell'email, identico anche per email inesistente (non rivela l'esistenza dell'account), nessuna stringa grezza di Supabase. AC4 disconnessione -> localStorage a 0 chiavi. AC3 persistenza: il token vive in localStorage (sessionStorage vuoto) e la reidratazione al boot e' confermata dal reload; il riavvio di processo NON e' stato eseguito perche' il demone del browser ricrea il profilo azzerando localStorage - limite dello strumento, non dell'app.
 
 ### DW-7: Verifica live/e2e del guard di rotta nel browser reale contro l'app deployata, differita per architettura.
 origin: spec-deferred feaa14872271
@@ -52,7 +55,8 @@ location: src/app/routeGuards.tsx + src/app/AppRoutes.tsx + vercel.json + storia
 source_spec: `spec-1-8-le-rotte-private-sono-private.md`
 severity: low
 reason: Provare AC1/AC3 end-to-end nel browser — un visitatore anonimo che apre un deep link a una rotta privata atterra sulla schermata di Accesso senza 404 (rewrite Vercel + <Navigate> in useEffect), e un utente autenticato che apre la radice raggiunge la rotta protetta — richiede l'app deployata e, per il caso autenticato, una sessione reale. renderToStaticMarkup (ambiente node) non esegue useEffect, quindi <Navigate> rende null in SSR: la DECISIONE del guard è coperta meccanicamente (routeGuards.test: type/to/replace) e il route-matching sincrono con MemoryRouter, ma la navigazione reale e il no-404 sui deep link no. Nessuna infrastruttura Playwright nello stack; il teardown e2e della sessione reale è AD-13/1.10 (delete-account), non ancora esistente. Stesso schema del deep-link live differito in 1.2 e della sessione live differita in 1.7.
-status: open
+status: closed
+closed_note: Verificato dal vivo il 24-09-2026: /impostazioni, /dashboard e /statistiche/qualcosa rispondono tutti HTTP 200 (rewrite di vercel.json, nessun 404) e da anonimo vengono reindirizzati a /login dal guard; da autenticato la radice serve la rotta protetta.
 
 ### DW-8: Verifica live/e2e del cambio lingua a runtime nel browser reale contro l'app deployata (AC1), differita per architettura.
 origin: spec-deferred 59aabf76be78
@@ -60,7 +64,8 @@ location: src/features/settings/SettingsScreen.tsx + src/features/settings/chang
 source_spec: `spec-1-9-cambiare-lingua-senza-ricaricare.md`
 severity: low
 reason: Provare AC1 end-to-end — un click su un'opzione di lingua in Impostazioni commuta OGNI testo visibile senza ricaricare la pagina — richiede l'app deployata e la sessione reale. L'ambiente di test è node senza jsdom (renderToStaticMarkup non esegue eventi né effetti): il click→handler (onSelect→changeLocale) è glue d'effetto. Coperto meccanicamente: la decisione pura (changeLocale: changeLanguage+saveLocale, ordine, confine totale) e l'integrazione del singleton (await i18n.changeLanguage('it') poi render ⇒ markup 'it', non 'en'), più il selettore (aria-pressed). Nessuna infrastruttura Playwright nello stack; stesso schema del deep-link live differito in 1.2/1.8 e della sessione live differita in 1.7.
-status: open
+status: closed
+closed_note: Verificato dal vivo il 24-09-2026 con prova diretta del 'senza ricaricare': piantato un marcatore su window prima del click, sopravvissuto dopo - la pagina non si e' ricaricata - e ogni testo visibile e' passato all'italiano.
 
 ### DW-9: Verifica live/e2e della persistenza (upsert reale su user_settings, RLS) e della continuità cross-device (AC2/AC3), differita per architettura.
 origin: spec-deferred 020a72dd229b
@@ -68,7 +73,8 @@ location: src/data/settingsRepository.ts + src/app/AuthRoot.tsx + storia 1.5 (mi
 source_spec: `spec-1-9-cambiare-lingua-senza-ricaricare.md`
 severity: low
 reason: Provare AC2 (upsert reale su user_settings.locale, onConflict sulla PK user_id, permesso da RLS) e AC3 (impostata la lingua su un dispositivo, accedendo da un altro la si ritrova) richiede l'app deployata, la migrazione user_settings APPLICATA (operator_actions della storia 1.5) e sessioni reali con teardown via l'Edge Function delete-account (AD-13/1.10, non ancora esistente). La glue di rehydrate al login (AuthRoot: loadLocale→resolveLocale→changeLanguage) è effetto, verificata live; coperto meccanicamente: l'adattatore per FORMA della chiamata (from('user_settings').upsert({user_id,locale}) con client finto) e la decisione pura resolveLocale. Non costruibile in sicurezza qui senza teardown né infrastruttura e2e.
-status: open
+status: closed
+closed_note: Verificato dal vivo il 24-09-2026 contro il database reale: dopo la scelta, user_settings conteneva 1 riga con locale='it' (upsert attraverso RLS). Continuita' provata end-to-end: disconnessione, boot pulito in inglese, riaccesso -> interfaccia di nuovo in italiano, letta dal database e non dal browser.
 
 ### DW-10: Anello di focus visibile (focus-visible) mancante sugli elementi interattivi, lacuna di accessibilità app-wide preesistente.
 origin: spec-deferred 65c548348d1c
@@ -84,7 +90,8 @@ location: src/features/account/DeleteAccountSection.tsx + supabase/functions/del
 source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
 severity: low
 reason: Provare AC1/AC2 (click su conferma ⇒ l'Edge Function cancella l'utente reale; user_settings si svuota per cascata su auth.users) e AC4 (riaccesso con le stesse credenziali fallisce) richiede la funzione delete-account DEPLOYATA sul progetto reale, l'app deployata e un account reale con teardown. L'ambiente di test è node senza jsdom (renderToStaticMarkup non esegue eventi né effetti): il click→handler (onConfirm→submitDeleteAccount) è glue d'effetto. Coperto meccanicamente: l'adapter per FORMA della chiamata (functions.invoke('delete-account') con client finto, ok/errore/ throw), l'orchestrazione pura (inoltro dell'esito, confine totale), la resa statica per fase (idle/confirming, pending, slot errore) e la struttura della funzione (getUser + admin.deleteUser + CORS via testo). Nessuna infrastruttura Playwright nello stack; stesso schema del live differito in 1.2/1.7/1.8/1.9.
-status: open
+status: closed
+closed_note: Verificato dal vivo il 24-09-2026: la conferma dichiara la conseguenza ('distrugge tutti i tuoi dati di studio / le statistiche non sopravvivono / non si puo' annullare') in italiano e in inglese; confermando, la Edge Function ha cancellato l'utente reale e user_settings si e' svuotata per cascata (0 utenti, 0 righe); il riaccesso con le stesse credenziali fallisce e resta su /login.
 
 ### DW-12: Ispezione del bundle compilato (dist/) per confermare l'assenza della service_role (AC3), conferma dell'operatore.
 origin: spec-deferred 73b66180bbe8
@@ -92,7 +99,8 @@ location: dist/ (artefatto di build) + src/service-role-confinement.test.ts
 source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
 severity: low
 reason: Il gate meccanico (src/service-role-confinement.test.ts) prova che nessun file di codice in src/** contiene service_role/SERVICE_ROLE, che .env.example non dichiara alcuna VITE_* di service-role, e per anti-vacuità che la funzione server la usa davvero. La conferma finale dell'AC3 è l'ispezione dell'artefatto dist/ dopo `npm run build`: un controllo dell'operatore sull'output reale del build, fuori dal toolchain dei test (che non ispeziona dist/). Verificato in locale a supporto: la grep di dist/ dopo il build non trova occorrenze; resta la conferma formale dell'operatore sull'artefatto deployato.
-status: open
+status: closed
+closed_note: Verificato il 24-09-2026 sull'artefatto DEPLOYATO, piu' forte di quanto chiedesse la voce: scaricato /assets/index-BSh92cvL.js dalla produzione (538 KB), 0 occorrenze di service_role / SERVICE_ROLE.
 
 ### DW-13: Sblocco delle e2e live differite di 1.6/1.7/1.8/1.9 (DW-3/6/7/8/9): ora esiste il teardown via delete-account (AD-13).
 origin: spec-deferred e60399932eba
