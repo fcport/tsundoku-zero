@@ -10,7 +10,19 @@
 // vuoto). 2.6 aggiunge SOLO i controlli che stanno OLTRE lo schema:
 //   (b) coerenza kanji/kana: il campo `kana` di ogni frase non contiene un
 //       ideogramma Han (una lettura con un kanji dentro non è una lettura);
-//   (c) unicità cross-file di `lessonId` e `deriveExerciseId` (AD-23).
+//   (c) unicità cross-file di `lessonId` e `deriveExerciseId` (AD-23);
+//   (d) unicità cross-file di `order`: la progressione del curriculum (F6, Epic 3)
+//       sblocca le lezioni IN ORDINE, quindi due lezioni che rivendicano la stessa
+//       posizione rendono indefinita la catena di sblocco. `lessonId` NON copre
+//       questo caso: deriva da `grammarPoints[0]`, quindi due lezioni su punti
+//       grammaticali diversi hanno id diversi e possono collidere su `order`;
+//   (e) coerenza del punto grammaticale: il `grammarPoint` di ogni esercizio deve
+//       essere fra i `grammarPoints` dichiarati dalla lezione. FR7.3 aggrega le
+//       statistiche PER PUNTO GRAMMATICALE per dire quale regola non è entrata: un
+//       esercizio che porta un punto che la sua lezione non dichiara sposta quella
+//       statistica fuori dal curriculum. Il contenimento è in UNA direzione sola —
+//       un punto dichiarato e non ancora esercitato NON è un errore, altrimenti una
+//       lezione senza esercizi (2.4) non potrebbe esistere.
 //
 // `JSON.parse` è un builtin PURO del linguaggio (come `String.prototype.normalize`
 // in `lesson.ts`): usato in `try/catch`, non è né I/O né un global vietato.
@@ -71,6 +83,9 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
   // esercizi) che lo producono. Un id con più di un occupante è un duplicato.
   const lessonIds = new Map<string, string[]>();
   const exerciseIds = new Map<string, string[]>();
+  // order → i file che lo rivendicano. Una posizione con più di un occupante rende
+  // indefinita la progressione del curriculum.
+  const orders = new Map<number, string[]>();
 
   for (const { path: file, source } of files) {
     let data: unknown;
@@ -107,9 +122,27 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
       }
     });
 
+    // (e) Coerenza del punto grammaticale: ogni esercizio porta un punto che la
+    // sua lezione dichiara. Contenimento in una direzione sola (vedi l'intestazione).
+    const declared = new Set<string>(lesson.grammarPoints);
+    lesson.exercises.forEach((exercise, i) => {
+      if (!declared.has(exercise.grammarPoint)) {
+        issues.push({
+          file,
+          path: ['exercises', i, 'grammarPoint'],
+          message:
+            `punto grammaticale "${exercise.grammarPoint}" non dichiarato dalla lezione ` +
+            `(grammarPoints: ${lesson.grammarPoints.map((p) => `"${p}"`).join(', ')})`,
+        });
+      }
+    });
+
     // (c) Raccolta degli id per l'unicità cross-file.
     const lid = lessonId(lesson);
     (lessonIds.get(lid) ?? lessonIds.set(lid, []).get(lid)!).push(file);
+
+    // (d) Raccolta di `order` per l'unicità cross-file.
+    (orders.get(lesson.order) ?? orders.set(lesson.order, []).get(lesson.order)!).push(file);
 
     lesson.exercises.forEach((exercise, i) => {
       const eid = deriveExerciseId(exercise);
@@ -137,6 +170,15 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
         file: locations.join(', '),
         path: [],
         message: `exerciseId duplicato "${id}" fra gli esercizi: ${locations.join(', ')}`,
+      });
+    }
+  }
+  for (const [order, locations] of orders) {
+    if (locations.length > 1) {
+      issues.push({
+        file: locations.join(', '),
+        path: ['order'],
+        message: `order duplicato ${order} fra le lezioni: ${locations.join(', ')}`,
       });
     }
   }
