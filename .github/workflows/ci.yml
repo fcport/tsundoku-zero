@@ -55,6 +55,16 @@ jobs:
       - name: Build (compila i token Tailwind)
         run: npm run build
 
+      # Validazione del contenuto (cancello FR2.6, AD-25): glob di
+      # content/lessons/**/*.json, ognuno validato via `parseLesson` (fonte
+      # unica) + coerenza kanji/kana + unicità degli identificatori. Un file
+      # malformato => exit non-zero => CI rossa => merge bloccato. Gira su OGNI
+      # PR (non solo quelli che toccano content/lessons/): un cambio di
+      # schema/validatore che invaliderebbe contenuto esistente deve fallire.
+      # A 0 lezioni è un no-op verde. Nessun continue-on-error.
+      - name: Validazione del contenuto (cancello FR2.6)
+        run: npm run validate-content
+
       # dependency-cruiser richiede graphviz `dot` per emettere l'SVG.
       - name: Install Graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz

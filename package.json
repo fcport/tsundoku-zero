@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check-contrast": "node scripts/check-contrast.mjs",
+    "validate-content": "vite-node scripts/validate-content.ts",
     "graph": "depcruise src --include-only \"^src\" --output-type dot --output-to docs/dependency-graph.dot && dot -T svg docs/dependency-graph.dot -o docs/dependency-graph.svg"
   },
   "dependencies": {

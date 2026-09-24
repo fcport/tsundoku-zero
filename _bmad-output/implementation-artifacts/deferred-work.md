@@ -117,3 +117,27 @@ source_spec: `spec-1-10-cancellare-l-account-per-davvero.md`
 severity: low
 reason: La conferma a due passi soddisfa AC1 col testo di conseguenza VISIBILE e lo slot d'errore in role="alert". Manca però il wiring a11y più fine: nessun aria-expanded sul grilletto, nessuno spostamento del focus verso la conseguenza/conferma quando si entra in `confirming` né ritorno al grilletto su annulla, e il cambio di fase non è annunciato via live region. È la stessa classe di lacuna a11y trasversale agli interattivi già differita app-wide in DW-10 (anello di focus visibile su auth/settings): di competenza dell'audit con screen reader reale della storia 7.6, non introdotta da questa storia in modo isolato. Il flusso interattivo è comunque glue d'effetto non eseguibile in node (nessun jsdom).
 status: open
+
+### DW-15: Il cancello non valida i confini dello span di select-span (answer.end ≤ numero di segmenti reali della frase).
+origin: spec-deferred 33aca6e55040
+location: src/domain/content-validation.ts / scripts/validate-content.ts
+source_spec: `spec-2-6-la-validazione-blocca-il-merge.md`
+severity: medium
+reason: exercise.ts flagga questo come «controllo di CONTENUTO in 2.6 (richiede la segmentazione)», ma la segmentazione è alignFurigana() in src/domain/furigana.ts, consegnata in Epic 3 (storia 3.6, AD-21): non esiste ancora. Oggi lo schema accetta solo end > start ≥ 0, quindi un answer.end che eccede i segmenti reali passa il cancello. Da agganciare a questo stesso cancello quando furigana.ts esisterà.
+status: open
+
+### DW-16: Il cancello verifica la coerenza kanji/kana solo a livello di carattere (nessun Han in kana), non la piena allineabilità.
+origin: spec-deferred 535368285cb7
+location: src/domain/content-validation.ts
+source_spec: `spec-2-6-la-validazione-blocca-il-merge.md`
+severity: medium
+reason: AD-25 lega «coerenza kanji/kana» ad AD-21 («richiede che siano allineabili»). La verifica che alignFurigana() produca segmenti validi per la coppia (kanji, kana) richiede quella funzione, che è Epic 3 (storia 3.6). Il controllo attuale (no Han in kana) è la condizione necessaria implementabile ora; l'allineabilità piena resta da agganciare al cancello quando furigana.ts esisterà.
+status: open
+
+### DW-17: Il cancello non verifica che la answer di single-select non compaia anche fra i distractors.
+origin: spec-deferred 96a981eea1bf
+location: src/domain/content-validation.ts
+source_spec: `spec-2-6-la-validazione-blocca-il-merge.md`
+severity: low
+reason: Un esercizio con answer presente anche nei distractors ha due opzioni corrette: è di fatto irrisolvibile. Lo schema non lo esprime e l'intento di 2.6 non lo elenca fra i controlli, ma è un difetto di contenuto che un cancello di validazione dovrebbe cogliere. Candidato controllo di integrità intra-esercizio futuro.
+status: open

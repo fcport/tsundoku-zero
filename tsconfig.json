@@ -27,5 +27,5 @@
        importano da 'node:*'; è innocuo per src, che non li usa. */
     "types": ["vite/client", "node"]
   },
-  "include": ["src", "vite.config.ts", "vitest.config.ts"]
+  "include": ["src", "scripts", "vite.config.ts", "vitest.config.ts"]
 }

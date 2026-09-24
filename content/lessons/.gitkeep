@@ -1,0 +1,6 @@
+# Le lezioni versionate vivono qui: content/lessons/NN-*.json (PRD §2), conformi
+# allo schema unico (2.1/2.2). La cartella è vuota fino alla storia 2.7 (la
+# lezione campione). Il CANCELLO di CI (`npm run validate-content`, FR2.6) le
+# scopre per GLOB — nessun elenco cablato — così aggiungere una lezione conforme
+# non richiede modifiche al codice (AC4). Cartella vuota ⇒ 0 lezioni ⇒ cancello
+# verde.
