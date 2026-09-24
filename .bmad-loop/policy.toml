@@ -1,7 +1,7 @@
 # bmad-loop orchestration policy. All keys optional; defaults shown.
 
 [gates]
-mode = "per-epic"            # none | per-epic | per-story-spec-approval
+mode = "none"                # none | per-epic | per-story-spec-approval
 retrospective = "notify"     # never | notify | auto (auto unsupported in v1)
 
 [limits]
