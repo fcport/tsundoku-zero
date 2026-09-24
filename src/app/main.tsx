@@ -4,6 +4,7 @@ import '../ui/theme.css';
 import '../i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router';
 import { createSupabaseAuthGateway } from '../data/authGateway';
 import { AuthRoot } from './AuthRoot';
 import { decideBoot } from './env';
@@ -34,8 +35,14 @@ if (decision.kind === 'config-error') {
 // AuthRoot. Le schermate (features) non conoscono @supabase/supabase-js: ricevono
 // solo l'interfaccia AuthGateway del dominio.
 const gateway = createSupabaseAuthGateway(decision.config);
+// <BrowserRouter> abilita il routing per URL e i deep link: il rewrite di
+// vercel.json (/(.*) → /index.html, fissato da deploy-config.test.ts) serve
+// ogni deep link a index.html, poi BrowserRouter prende il controllo lato client
+// e applica il guard (nessun 404).
 createRoot(container).render(
   <StrictMode>
-    <AuthRoot gateway={gateway} />
+    <BrowserRouter>
+      <AuthRoot gateway={gateway} />
+    </BrowserRouter>
   </StrictMode>,
 );

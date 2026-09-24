@@ -79,6 +79,19 @@ describe('confini AD-1 imposti da ESLint', () => {
     expectRuleError(messages, 'boundaries/external');
   });
 
+  it('features→react-router ⇒ boundaries/external (ERROR) [routing confinato ad app]', async () => {
+    // react-router è imbutato verso `app` (come supabase-js verso `data`): solo
+    // la composition root monta routing/guard. Un import di react-router da
+    // ui/features/data è una violazione MECCANICA (CI rossa), non una
+    // convenzione: impedisce di reintrodurre logica di routing/auth nelle
+    // schermate (AC2/AC5).
+    const messages = await lintFragment(
+      "import 'react-router';\n",
+      'src/features/__probe__.ts',
+    );
+    expectRuleError(messages, 'boundaries/external');
+  });
+
   it('domain→fetch/storage ⇒ no-restricted-globals (ERROR)', async () => {
     const messages = await lintFragment(
       'export const ping = () => fetch("https://example.test");\n' +

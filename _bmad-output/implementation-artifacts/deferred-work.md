@@ -45,3 +45,11 @@ source_spec: `spec-1-7-accesso-disconnessione-e-sessione-che-resiste.md`
 severity: low
 reason: Provare davvero «accedo → atterro autenticato» (AC1), «chiudo e riapro il browser → sono ancora autenticato» (AC3) e «mi disconnetto → un riavvio non ripristina» (AC4) richiede un account reale contro Supabase reale e il suo teardown; AD-13 fissa il teardown alla stessa Edge Function delete-account (AD-11), costruita nella storia 1.10 e non ancora esistente, e AD-12/13 vieta l'istanza locale. Creare utenti reali senza teardown inquinerebbe i dati dell'owner (metrica M1). Qui è verificata meccanicamente tutta la logica (orchestrazioni totali signIn/signOut, classificazione condivisa, mappa session→boolean, selezione modo→submit, resa bimodale, shell autenticata) con union chiuse e finti iniettati. Stesso schema del signup live differito in 1.6 e del test RLS a runtime differito in 1.5.
 status: open
+
+### DW-7: Verifica live/e2e del guard di rotta nel browser reale contro l'app deployata, differita per architettura.
+origin: spec-deferred feaa14872271
+location: src/app/routeGuards.tsx + src/app/AppRoutes.tsx + vercel.json + storia 1.10
+source_spec: `spec-1-8-le-rotte-private-sono-private.md`
+severity: low
+reason: Provare AC1/AC3 end-to-end nel browser — un visitatore anonimo che apre un deep link a una rotta privata atterra sulla schermata di Accesso senza 404 (rewrite Vercel + <Navigate> in useEffect), e un utente autenticato che apre la radice raggiunge la rotta protetta — richiede l'app deployata e, per il caso autenticato, una sessione reale. renderToStaticMarkup (ambiente node) non esegue useEffect, quindi <Navigate> rende null in SSR: la DECISIONE del guard è coperta meccanicamente (routeGuards.test: type/to/replace) e il route-matching sincrono con MemoryRouter, ma la navigazione reale e il no-404 sui deep link no. Nessuna infrastruttura Playwright nello stack; il teardown e2e della sessione reale è AD-13/1.10 (delete-account), non ancora esistente. Stesso schema del deep-link live differito in 1.2 e della sessione live differita in 1.7.
+status: open
