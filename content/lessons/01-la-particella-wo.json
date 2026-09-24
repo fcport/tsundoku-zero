@@ -1,11 +1,11 @@
 {
   "order": 1,
   "title": "毎日の動作を「を」で言い表す",
-  "grammarPoints": ["「を」で示す目的語", "他動詞と目的語"],
+  "grammarPoints": ["「を」で示す目的語", "熟字訓の読み"],
   "exercises": [
     {
       "kind": "single-select",
-      "grammarPoint": "「を」で示す目的語",
+      "grammarPoint": "熟字訓の読み",
       "sentence": {
         "kanji": "今日は日本語を勉強します",
         "kana": "きょうはにほんごをべんきょうします"

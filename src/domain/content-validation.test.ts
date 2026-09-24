@@ -186,16 +186,19 @@ describe('validateLessons — malformati con issue localizzato', () => {
       distractors: ['見る'],
       explanation: { en: 'A.' },
     };
+    // `grammarPoints[0]` differisce (lessonId diverso), ma entrambe DICHIARANO il
+    // punto portato dall'esercizio condiviso: il controllo (e) non deve sporcare
+    // un test che riguarda solo l'unicità degli id.
     const a = {
       order: 1,
       title: 'A',
-      grammarPoints: ['punto-a'],
+      grammarPoints: ['punto-a', '〜を読む'],
       exercises: [shared],
     };
     const b = {
       order: 2,
       title: 'B',
-      grammarPoints: ['punto-b'],
+      grammarPoints: ['punto-b', '〜を読む'],
       exercises: [{ ...shared, explanation: { en: 'B (refuso corretto).' } }],
     };
     const issues = validateLessons([file('a.json', a), file('b.json', b)]);
@@ -205,6 +208,62 @@ describe('validateLessons — malformati con issue localizzato', () => {
     expect(dup[0].message).toContain('b.json');
     // Nessun lessonId duplicato: i due punti grammaticali sono diversi.
     expect(issues.some((i) => i.message.includes('lessonId duplicato'))).toBe(false);
+  });
+});
+
+describe('validateLessons — unicità di order (d)', () => {
+  it('due lezioni con lo STESSO order ⇒ issue che NOMINA i due file', () => {
+    // `lessonId` non copre questo caso: deriva da `grammarPoints[0]`, qui diverso,
+    // quindi le due lezioni hanno id distinti e collidono SOLO sulla posizione.
+    const a = { ...validLesson, order: 1, title: 'A', grammarPoints: ['punto-a', '〜を読む'] };
+    const b = { ...validLesson, order: 1, title: 'B', grammarPoints: ['punto-b', '〜を読む'] };
+    const issues = validateLessons([file('a.json', a), file('b.json', b)]);
+    const dup = issues.filter((i) => i.message.includes('order duplicato'));
+    expect(dup).toHaveLength(1);
+    expect(dup[0].path.join('.')).toBe('order');
+    expect(dup[0].message).toContain('a.json');
+    expect(dup[0].message).toContain('b.json');
+    // La collisione è SOLO di posizione: gli id restano distinti.
+    expect(issues.some((i) => i.message.includes('lessonId duplicato'))).toBe(false);
+  });
+
+  it('due lezioni con order DIVERSI ⇒ nessun issue di order', () => {
+    const a = { ...validLesson, order: 1, grammarPoints: ['punto-a', '〜を読む'] };
+    const b = { ...validLesson, order: 2, grammarPoints: ['punto-b', '〜を読む'] };
+    const issues = validateLessons([file('a.json', a), file('b.json', b)]);
+    expect(issues.some((i) => i.message.includes('order duplicato'))).toBe(false);
+  });
+});
+
+describe('validateLessons — coerenza del punto grammaticale (e)', () => {
+  it('esercizio con un punto NON dichiarato ⇒ issue sul path exercises.<i>.grammarPoint', () => {
+    // FR7.3 aggrega le statistiche per punto grammaticale: un esercizio che porta
+    // un punto fuori dai `grammarPoints` della lezione sposta quella statistica
+    // fuori dal curriculum.
+    const bad = {
+      ...validLesson,
+      grammarPoints: ['〜を読む'],
+      exercises: [
+        { ...validLesson.exercises[0], grammarPoint: '可能形' },
+        validLesson.exercises[1],
+      ],
+    };
+    const issues = validateLessons([file('01.json', bad)]);
+    const hit = issues.filter((i) => i.path.join('.') === 'exercises.0.grammarPoint');
+    expect(hit).toHaveLength(1);
+    expect(hit[0].message).toContain('可能形');
+    // L'esercizio coerente non produce issue.
+    expect(issues.some((i) => i.path.join('.') === 'exercises.1.grammarPoint')).toBe(false);
+  });
+
+  it('punto DICHIARATO e non ancora esercitato ⇒ nessun issue (contenimento a senso unico)', () => {
+    const ok = { ...validLesson, grammarPoints: ['〜を読む', '可能形'] };
+    expect(validateLessons([file('01.json', ok)])).toEqual([]);
+  });
+
+  it('lezione SENZA esercizi che dichiara punti ⇒ nessun issue (il caso di 2.4)', () => {
+    const vuota = { ...validLesson, grammarPoints: ['〜を読む'], exercises: [] };
+    expect(validateLessons([file('01.json', vuota)])).toEqual([]);
   });
 });
 
