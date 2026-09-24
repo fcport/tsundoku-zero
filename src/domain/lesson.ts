@@ -22,6 +22,17 @@ import { exerciseSchema } from './exercise';
  * - `grammarPoints`: almeno uno, ciascuno non vuoto (i punti che insegna);
  * - `exercises`: ZERO o più — l'array vuoto è valido (AC2). Una lezione senza
  *   esercizi resta parte del curriculum e dichiara comunque i punti grammaticali.
+ *
+ * FR2.4 possiede questa coppia di scelte: `exercises` è `array(exerciseSchema)`
+ * — chiave OBBLIGATORIA con array possibilmente VUOTO (mai `optional`, che
+ * produrrebbe `exercises?: Exercise[] | undefined` e costringerebbe i consumatori
+ * di Epic 3 al `?? []`; mai `nonEmptyArray`, che vieterebbe la lezione
+ * concettuale) — mentre `grammarPoints` resta `nonEmptyArray(nonEmptyString())`,
+ * OBBLIGATORIO proprio nel caso senza esercizi: un esercizio porta un
+ * `grammarPoint` singolo, ma una lezione senza esercizi non ne ha da cui derivare
+ * i punti insegnati, quindi la loro unica sede è `lesson.grammarPoints` — ciò che
+ * alimenta le statistiche di Epic 5. Nessun cambio di comportamento in 2.4: la
+ * capacità c'è dal 2.1; 2.4 la ancora con la prova (vedi lesson.test.ts, FR2.4).
  */
 export const lessonSchema = object({
   order: refine(integer(), (value) => value >= 1, 'ordine intero ≥ 1 richiesto'),
