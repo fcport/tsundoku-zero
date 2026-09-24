@@ -2,7 +2,7 @@
 title: 'Story 1.10: Cancellare l''account per davvero'
 type: 'feature'
 created: '2026-09-24'
-status: 'awaiting-operator'
+status: done
 baseline_revision: 'f0ddc1c24410c52506f7cdc7e72eb9aa29c62c28'
 review_loop_iteration: 0
 followup_review_recommended: true
@@ -258,3 +258,15 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde, rieseguita dopo i patch):** `npm run lint` (0 errori: `@supabase/supabase-js` solo in `data`, funnel i18n/react-router intatti, `features` non importa `data`, nessun colore letterale, `supabase/**` ignorato), `npm run typecheck` (`tsc` strict, nessun `any`, union `AccountDeletionResult` esaustiva, chiavi `t()` tipizzate), `npm test` (**254 test su 31 file**: `accountGateway` 7, `deleteAccount` 5, `DeleteAccountConfirm` 11, `DeleteAccountSection` 3, `service-role-confinement` 5, `edge-functions` 13, più le sonde di 1.1–1.9 senza regressioni — single-main, guard/rotte, parità cataloghi, no-CJK, confini), `npm run build` (`tsc --noEmit` + `vite build` producono `dist/`; avviso chunk >500 kB preesistente e informativo). **Matrix Test Audit:** tutte le righe della I/O Matrix coperte da test eseguiti e passati (le due righe di runtime dell'Edge Function Deno sono coperte strutturalmente via ispezione-testo, coerente col pattern del progetto; il runtime è verifica live differita). **Bonus AC3:** `grep -ri service_role dist/` dopo il build non trova occorrenze.
 
 **Rischi residui / azioni operatore.** (1) Le prove live di AC1/AC2/AC4 e l'ispezione del bundle `dist/` (AC3) dipendono dalla funzione deployata, dai secret CI (dovuti da 1.5) e da sessioni reali con teardown: enumerate in `operator_actions`, con le e2e automatiche differite in `deferred`. (2) Il runtime dell'Edge Function (rami 401/500/200, cascata) è provato solo come testo qui: codice Deno fuori dal toolchain Node, verifica di comportamento differita al live. (3) Il wiring a11y più fine della conferma (aria-expanded, focus, annuncio live) è deferito all'audit screen-reader di Epic 7.6 (stessa classe di DW-10).
+
+## Operator Confirmation
+
+Confirmed 2026-09-24: the external actions this story owed were carried out.
+
+- Imposta i secret di CI in GitHub > Settings > Secrets and variables > Actions (dovuti dalla storia 1.5, prerequisito del deploy): SUPABASE_ACCESS_TOKEN, SUPABASE_DB_PASSWORD, SUPABASE_PROJECT_REF. Senza, lo step di verifica in migrate.yml fallisce nominando il secret mancante.
+- Dopo il merge su main, .github/workflows/migrate.yml applica le migrazioni (db push) E deploya l'Edge Function (supabase functions deploy delete-account) al progetto reale. Conferma nel log del workflow che entrambi gli step siano verdi; verifica nello Studio Supabase che la funzione delete-account risulti deployata.
+- Verifica AC1/AC2 (cancellazione reale + cascata): con l'app deployata, accedi con un account di prova reale, apri l'area autenticata (sezione Cancella account), avvia la conferma esplicita a due passi e conferma. Verifica che l'utente sia cancellato (auth.users) e che la sua riga in user_settings sia sparita per cascata.
+- Verifica AC4 (riaccesso che fallisce): dopo la cancellazione, tenta di riaccedere con le stesse credenziali e conferma che l'accesso fallisce (l'utente non esiste più).
+- Verifica AC3 (bundle compilato): esegui `npm run build` e ispeziona dist/ (es. grep -ri service_role dist/) confermando che la service_role non compare nell'artefatto servito al browser.
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
