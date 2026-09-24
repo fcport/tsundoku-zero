@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   array,
+  discriminatedUnion,
   integer,
+  literal,
   nonEmptyArray,
   nonEmptyString,
   number,
@@ -150,6 +152,81 @@ describe('object', () => {
     expect(bad.ok).toBe(false);
     if (!bad.ok) {
       expect(bad.issues[0].path).toEqual(['outer', 'inner', 1, 'leaf']);
+    }
+  });
+});
+
+describe('literal', () => {
+  it('accetta SOLO il valore esatto e inferisce il letterale', () => {
+    const schema = literal('single-select');
+    const result = schema.parse('single-select');
+    expect(result).toEqual({ ok: true, value: 'single-select' });
+    if (result.ok) {
+      // Il tipo prodotto è il letterale, non `string`.
+      const narrowed: 'single-select' = result.value;
+      expect(narrowed).toBe('single-select');
+    }
+  });
+
+  it('rifiuta un valore diverso col path corrente', () => {
+    const bad = literal('single-select').parse('assemble', ['kind']);
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues[0].path).toEqual(['kind']);
+    }
+  });
+});
+
+describe('discriminatedUnion', () => {
+  const union = discriminatedUnion('kind', {
+    a: object({ kind: literal('a'), x: nonEmptyString() }),
+    b: object({ kind: literal('b'), y: integer() }),
+  });
+
+  it('delega alla variante giusta secondo il discriminante', () => {
+    const ra = union.parse({ kind: 'a', x: 'ciao' });
+    expect(ra.ok).toBe(true);
+    if (ra.ok && ra.value.kind === 'a') {
+      expect(ra.value.x).toBe('ciao');
+    }
+    const rb = union.parse({ kind: 'b', y: 3 });
+    expect(rb.ok).toBe(true);
+    if (rb.ok && rb.value.kind === 'b') {
+      expect(rb.value.y).toBe(3);
+    }
+  });
+
+  it('discriminante sconosciuto ⇒ issue sul path del discriminante', () => {
+    const bad = union.parse({ kind: 'c', z: 1 }, ['root']);
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues[0].path).toEqual(['root', 'kind']);
+    }
+  });
+
+  it('discriminante NON stringa ⇒ issue sul path del discriminante', () => {
+    const bad = union.parse({ kind: 42 });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues[0].path).toEqual(['kind']);
+    }
+  });
+
+  it('input non-object ⇒ issue sul path corrente', () => {
+    const bad = union.parse('nope', ['root']);
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues[0].path).toEqual(['root']);
+    }
+  });
+
+  it('propaga il path ANNIDATO della variante scelta fino al campo malformato', () => {
+    // Discriminante noto (delega alla variante), ma un campo interno è malformato:
+    // l'issue localizza il campo, non il discriminante.
+    const bad = union.parse({ kind: 'a', x: '' }, ['exercises', 1]);
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues[0].path).toEqual(['exercises', 1, 'x']);
     }
   });
 });

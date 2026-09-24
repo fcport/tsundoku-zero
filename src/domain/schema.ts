@@ -178,6 +178,62 @@ export function nonEmptyArray<T>(element: Schema<T>): Schema<T[]> {
   return refine(array(element), (value) => value.length > 0, 'almeno un elemento richiesto');
 }
 
+/**
+ * Schema per un letterale: accetta SOLO il valore esatto `value`, altrimenti
+ * fallisce sul path corrente. Il tipo prodotto è il letterale stesso (`Schema<L>`),
+ * non il tipo largo — così `literal('single-select')` inferisce
+ * `'single-select'`, non `string`. È il mattone del DISCRIMINANTE di una union:
+ * ogni variante porta `kind: literal('…')` e `discriminatedUnion` sceglie la
+ * variante dal valore letto.
+ */
+export function literal<const L extends string | number | boolean>(value: L): Schema<L> {
+  return {
+    parse(input, path = []) {
+      if (input !== value) {
+        return fail(path, `atteso il letterale ${JSON.stringify(value)}, ricevuto ${typeName(input)}`);
+      }
+      return ok(value);
+    },
+  };
+}
+
+/** Mappa di varianti indicizzate dal valore letterale del discriminante. */
+export type VariantMap = Record<string, Schema<unknown>>;
+
+/**
+ * Union discriminata su una chiave `discriminant`. Legge `input[discriminant]`:
+ * se non è una stringa fra le chiavi di `variants` ⇒ issue localizzato SUL
+ * discriminante (`[...path, discriminant]`), non un caso ignorato a runtime
+ * (AD-22); altrimenti DELEGA alla variante corrispondente, che valida l'intero
+ * oggetto (incluso il proprio `kind: literal(...)`). Il tipo prodotto è
+ * `Infer<V[keyof V]>`: la UNION distribuita sulle varianti, discriminata sulla
+ * chiave. Una sola definizione ⇒ tipo e validatore non si disallineano (AC1).
+ */
+export function discriminatedUnion<D extends string, V extends VariantMap>(
+  discriminant: D,
+  variants: V,
+): Schema<Infer<V[keyof V]>> {
+  const known = Object.keys(variants);
+  return {
+    parse(input, path = []) {
+      if (typeof input !== 'object' || input === null || Array.isArray(input)) {
+        return fail(path, `atteso object, ricevuto ${typeName(input)}`);
+      }
+      const tag = (input as Record<string, unknown>)[discriminant];
+      if (typeof tag !== 'string' || !Object.prototype.hasOwnProperty.call(variants, tag)) {
+        return fail(
+          [...path, discriminant],
+          `${discriminant} sconosciuto: atteso uno fra ${known.map((k) => JSON.stringify(k)).join(', ')}, ricevuto ${typeName(tag)}`,
+        );
+      }
+      // La variante valida l'intero oggetto (incluso il proprio discriminante).
+      // Cast d'uscita nello stile di `object()`: il valore prodotto dalla
+      // variante scelta È un membro della union.
+      return variants[tag].parse(input, path) as ParseResult<Infer<V[keyof V]>>;
+    },
+  };
+}
+
 /** Mappa di schemi per le proprietà di un oggetto. */
 export type ObjectShape = Record<string, Schema<unknown>>;
 
