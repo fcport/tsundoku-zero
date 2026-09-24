@@ -2,7 +2,7 @@
 title: 'Story 1.6: Registrazione con email e password'
 type: 'feature'
 created: '2026-09-24'
-status: 'awaiting-operator'
+status: done
 baseline_revision: '41b1ac1841c0a9b987ba37789b365f55072a9b32'
 review_loop_iteration: 0
 followup_review_recommended: true
@@ -227,3 +227,13 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde, rieseguita dopo i patch):** `npm run lint` (0 errori sull'albero reale; `@supabase/supabase-js` solo in `src/data/`; nessun colore letterale; confini `AD-1` invariati), `npm run typecheck` (`tsc` strict, nessun `any`; chiavi `auth.error.*` type-safe), `npm test` (**141 test su 14 file**: i nuovi test della I/O Matrix + i patch + le sonde di 1.1–1.5 senza regressioni), `npm run build` (`tsc --noEmit` + `vite build` producono `dist/`), `npm run check-contrast` (32/32 coppie conformi). Matrix Test Audit: tutte e 7 le righe della I/O Matrix coperte da test che girano e passano.
 
 **Rischi residui / azioni operatore.** (1) La conferma email va disabilitata nella console Supabase, altrimenti `signUp` ritorna `session:null` e l'utente non atterra autenticato (l'app mostra l'errore generico, mai uno stato silente rotto): `operator_actions`. (2) Le `VITE_SUPABASE_*` vanno impostate anche in produzione (Vercel): `operator_actions`. (3) La e2e live del signup è differita a 1.10 (teardown via `delete-account`, `AD-13`): `deferred`. (4) La precisione della mappa `code→reason` e il seam impuro dell'adattatore sono coperti da `tsc` + e2e live differita: `deferred`.
+
+## Operator Confirmation
+
+Confirmed 2026-09-24: the external actions this story owed were carried out.
+
+- Nella console Supabase, in Authentication > Sign In / Providers > Email, disabilita 'Confirm email' (conferma email OFF): senza questo `auth.signUp` ritorna una sessione nulla, l'utente NON atterra autenticato e l'app mostra l'errore generico invece di completare la registrazione (AC1: nessuna conferma via email). E' una modifica di configurazione da console vendor, non applicabile via migrazione o codice.
+- Verifica che VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY siano impostate nell'ambiente di produzione (Vercel > Project Settings > Environment Variables), cosi' il client di autenticazione le legge a runtime anche in produzione (in locale sono gia' in .env).
+- Dopo aver disabilitato la conferma email, esegui una verifica manuale una tantum: registra con un'email nuova e conferma che l'account viene creato e si atterra autenticati; poi ritenta con la stessa email e conferma che compare il messaggio tradotto accanto al campo email. La e2e automatica del signup e' differita alla storia 1.10 (teardown via delete-account, AD-13).
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
