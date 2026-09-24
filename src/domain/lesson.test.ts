@@ -101,6 +101,77 @@ describe('parseLesson — malformati con path localizzato (AC2)', () => {
   });
 });
 
+describe('FR2.4 — una lezione può non avere esercizi', () => {
+  // Una lezione che riorienta il pensiero, senza risposta giusta: zero esercizi,
+  // ma dichiara comunque il punto grammaticale che insegna (AC1 + AC2). Contenuto
+  // giapponese realistico: «il giapponese non ha un tempo futuro» — la non-forma
+  // futura è un riorientamento concettuale, non un esercizio con una risposta.
+  const conceptualLesson = {
+    order: 5,
+    title: '日本語に未来形はない',
+    grammarPoints: ['非過去形は現在と未来をともに表す'],
+    exercises: [],
+  };
+
+  it('accetta la lezione concettuale con exercises: [] e la tipizza come Lesson (AC1)', () => {
+    const result = parseLesson(conceptualLesson);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      // L'assegnazione prova a compile-time la CONFORMITÀ del valore prodotto a
+      // `Lesson` nel caso zero-esercizi. NON coglie però una regressione di
+      // `exercises` a `optional` (se `Lesson.exercises` diventasse opzionale,
+      // questa riga compilerebbe comunque): la garanzia RUNTIME che `exercises`
+      // è chiave OBBLIGATORIA — mai optional/undefined — è ancorata dal test più
+      // sotto «rifiuta la lezione con la chiave exercises ASSENTE».
+      const lesson: Lesson = result.value;
+      expect(lesson.exercises).toEqual([]);
+    }
+  });
+
+  it('preserva i grammarPoints dichiarati proprio senza esercizi (AC2, dip. Epic 5)', () => {
+    const result = parseLesson(conceptualLesson);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.grammarPoints.length).toBeGreaterThan(0);
+      expect(result.value.grammarPoints).toEqual(conceptualLesson.grammarPoints);
+    }
+  });
+
+  it('rifiuta la lezione senza esercizi con grammarPoints VUOTO, sul path grammarPoints (AC2)', () => {
+    const bad = parseLesson({ ...conceptualLesson, grammarPoints: [] });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      // Solo grammarPoints è malformato (order/title/exercises validi): l'UNICO
+      // issue atteso è quello — asserzione forte sul SET esatto dei path.
+      expect(bad.issues.map((i) => i.path.join('.'))).toEqual(['grammarPoints']);
+    }
+  });
+
+  it('rifiuta la lezione senza esercizi con grammarPoints ASSENTE, sul path grammarPoints (AC2)', () => {
+    const bad = parseLesson({ order: 5, title: '日本語に未来形はない', exercises: [] });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.map((i) => i.path.join('.'))).toEqual(['grammarPoints']);
+    }
+  });
+
+  it('rifiuta la lezione con la chiave exercises ASSENTE, sul path exercises (AC1 — chiave OBBLIGATORIA)', () => {
+    // Simmetrico al caso «grammarPoints ASSENTE»: omettere del tutto `exercises`
+    // è RIFIUTATO, perché la chiave è obbligatoria (mai `optional`). È la prova
+    // RUNTIME che àncora la decisione «exercises: array(...) obbligatorio, vuoto
+    // ammesso» di FR2.4 contro una regressione a `optional`.
+    const bad = parseLesson({
+      order: 5,
+      title: '日本語に未来形はない',
+      grammarPoints: ['非過去形は現在と未来をともに表す'],
+    });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.map((i) => i.path.join('.'))).toEqual(['exercises']);
+    }
+  });
+});
+
 describe('deriveLessonId / lessonId (AC5, FR2.1a)', () => {
   it('id IDENTICO per stesso grammarPoints[0] con order/title diversi', () => {
     const a: Lesson = { order: 1, title: 'Alfa', grammarPoints: ['〜てform'], exercises: [] };
