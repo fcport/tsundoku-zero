@@ -1,9 +1,0 @@
-{
-  "actions": [
-    "Esegui una verifica manuale una tantum del guard di rotta contro l'app deployata (preview o produzione): (1) da NON autenticato, apri direttamente un deep link a una rotta privata (la radice `/` e un percorso interno come `/dashboard` o `/impostazioni`) e conferma di essere reindirizzato alla schermata di Accesso senza 404 \u2014 il rewrite di vercel.json serve index.html e il guard lato client reindirizza (AC1 + deep link); (2) accedi con un account reale (prerequisito: operator_actions di 1.6/1.7 completate) e conferma che aprendo la radice del sito raggiungi la rotta protetta che risponde, con branding e bottone Disconnetti (AC3). La e2e automatica di questo ciclo \u00e8 differita alla storia 1.10 (teardown via delete-account, AD-13): un agente non pu\u00f2 crearla in sicurezza senza teardown e senza infrastruttura Playwright."
-  ],
-  "parked_at": "2026-09-24",
-  "run_id": "20260923-235935-2ae1",
-  "spec_file": "_bmad-output/implementation-artifacts/spec-1-8-le-rotte-private-sono-private.md",
-  "story_key": "1-8-le-rotte-private-sono-private"
-}
