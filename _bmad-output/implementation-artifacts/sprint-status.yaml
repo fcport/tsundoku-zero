@@ -61,7 +61,7 @@ development_status:
   epic-3: backlog
   3-1-il-motore-di-scheduling-puro-e-saturo: done
   3-2-l-esito-si-calcola-non-si-dichiara: done
-  3-3-una-sola-definizione-di-dovuto: backlog
+  3-3-una-sola-definizione-di-dovuto: done
   3-4-la-coda-di-sessione-decide-il-dominio-non-la-ui: backlog
   3-5-lo-streak-si-calcola-non-si-memorizza: backlog
   3-6-la-furigana-si-allinea-nel-dominio: backlog
