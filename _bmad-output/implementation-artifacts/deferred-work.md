@@ -141,3 +141,19 @@ source_spec: `spec-2-6-la-validazione-blocca-il-merge.md`
 severity: low
 reason: Un esercizio con answer presente anche nei distractors ha due opzioni corrette: è di fatto irrisolvibile. Lo schema non lo esprime e l'intento di 2.6 non lo elenca fra i controlli, ma è un difetto di contenuto che un cancello di validazione dovrebbe cogliere. Candidato controllo di integrità intra-esercizio futuro.
 status: open
+
+### DW-18: Lo span di select-span {start:0,end:1} della lezione campione va verificato/aggiustato contro alignFurigana() quando esisterà (Epic 3, storia 3.6).
+origin: spec-deferred da13c0765981
+location: content/lessons/01-la-particella-wo.json (exercises.2.answer)
+source_spec: `spec-2-7-la-lezione-campione-che-è-anche-una-fixture.md`
+severity: medium
+reason: Lo span indicizza i SEGMENTI di alignFurigana(), che non esiste ancora (solo commenti in exercise.ts/content-validation.ts). Il cancello di 2.6 accetta solo end>start≥0 (segmentSpan, exercise.ts:113-120), quindi non può confermare che il segmento 0 sia davvero 果物. Lo span è autorato assumendo che il jukujikun 果物 (letto くだもの come unità) sia il primo segmento; da riconfermare in 3.6. Si aggancia al deferred già registrato in 2.6 sui confini dello span.
+status: open
+
+### DW-19: La conferma sul rendering reale dei valori di sentence-hero (UX-DR8: 32/26px, interlinea 1.9) sulla frase più lunga di questa lezione è dovuta alla storia 3.23.
+origin: spec-deferred f02418f1e776
+location: src/ui/theme.css (token --text-sentence-hero, da definire in 3.23)
+source_spec: `spec-2-7-la-lezione-campione-che-è-anche-una-fixture.md`
+severity: medium
+reason: UX-DR8 fissa i valori ma epics.md e la storia 3.23 dicono che la verifica sul rendering «si chiude nella storia 3.23»; 1.3 àncora con design-tokens.test.ts l'ASSENZA del token --text-sentence-hero oggi (definirlo ora romperebbe quel test). 2.7 fornisce SOLO la frase più lunga (l'assemble, 25 caratteri) come input di stress; il rendering richiede la UI di presentazione dell'esercizio (Epic 3).
+status: open

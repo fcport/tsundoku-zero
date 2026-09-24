@@ -1,0 +1,46 @@
+{
+  "order": 1,
+  "title": "毎日の動作を「を」で言い表す",
+  "grammarPoints": ["「を」で示す目的語", "他動詞と目的語"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "「を」で示す目的語",
+      "sentence": {
+        "kanji": "今日は日本語を勉強します",
+        "kana": "きょうはにほんごをべんきょうします"
+      },
+      "answer": "きょう",
+      "distractors": ["こんにち", "いまび", "きょうび"],
+      "explanation": {
+        "en": "The word 今日 is a jukujikun: the reading きょう is assigned to the whole compound, not to each kanji, so it cannot be spelled out character by character. Here を marks 日本語 as the object being studied.",
+        "it": "La parola 今日 è un jukujikun: la lettura きょう è assegnata all'intero composto, non ai singoli kanji, quindi non si può ricostruire carattere per carattere. Qui を marca 日本語 come oggetto studiato."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「を」で示す目的語",
+      "sentence": {
+        "kanji": "私は図書館で新しい本を借りて、毎晩少しずつ読みます",
+        "kana": "わたしはとしょかんであたらしいほんをかりて、まいばんすこしずつよみます"
+      },
+      "answer": ["私は", "図書館で", "新しい", "本を", "借りて、", "毎晩", "少しずつ", "読みます"],
+      "explanation": {
+        "en": "を marks 本 (the book) as the object of the verbs 借りる and 読む. Note the okurigana that carry the inflection outside the kanji: 新しい (adjective ending), 借りて (te-form), and 読みます (polite ending)."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「を」で示す目的語",
+      "sentence": {
+        "kanji": "果物を買います",
+        "kana": "くだものをかいます"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the object marked by を. 果物 (fruit) is a jukujikun read くだもの as a single unit — 果 and 物 are not read separately — so it forms one furigana segment: the object at segment index 0.",
+        "it": "Seleziona l'oggetto marcato da を. 果物 (frutta) è un jukujikun letto くだもの come unità — 果 e 物 non si leggono separatamente — quindi forma un solo segmento di furigana: l'oggetto all'indice di segmento 0."
+      }
+    }
+  ]
+}
