@@ -2,7 +2,7 @@
 title: 'Story 1.9: Cambiare lingua senza ricaricare'
 type: 'feature'
 created: '2026-09-24'
-status: 'awaiting-operator'
+status: done
 baseline_revision: 'e9755bafa115c7456c4007e081524094f492d99c'
 review_loop_iteration: 0
 followup_review_recommended: false
@@ -227,3 +227,12 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde, rieseguita dopo i patch):** `npm run typecheck` (`tsc` strict, nessun `any`; `satisfies Record<Locale,string>` completo; chiavi `t()` tipizzate), `npm run lint` (0 errori: funnel i18n/react-router intatti, `features` non importa `data`, nessun colore letterale, sonde di confine verdi), `npm test` (**210 test su 25 file**: `resolveLocale` 10, `changeLocale` 5, `SettingsScreen` 6, `settingsRepository` 9, più le sonde di 1.1–1.8 senza regressioni — single-main, guard/rotte, parità cataloghi, no-CJK), `npm run build` (`tsc --noEmit` + `vite build` producono `dist/`; l'avviso sul chunk >500 kB è preesistente e informativo). **Matrix Test Audit:** tutte e 7 le righe della I/O Matrix coperte da test eseguiti e passati.
 
 **Rischi residui / azioni operatore.** (1) Le prove live di AC1/AC2/AC3 dipendono dall'app deployata, dalla migrazione `user_settings` applicata (operator_actions di 1.5) e da sessioni reali con teardown (1.10): enumerate in `operator_actions`, con la e2e automatica differita in `deferred`. (2) La persistenza è **best-effort** (confine totale): un fallimento di scrittura non blocca lo switch a runtime già avvenuto — coerente con il pattern dell'authGateway. (3) L'anello di focus visibile sugli interattivi è una lacuna a11y app-wide preesistente, deferita all'audit screen-reader di Epic 7.6.
+
+## Operator Confirmation
+
+Confirmed 2026-09-24: the external actions this story owed were carried out.
+
+- Dopo il merge su main (che, tramite .github/workflows/migrate.yml, applica la migrazione user_settings della storia 1.5 — prerequisito: operator_actions di 1.5 completate) e con l'app deployata: accedi con un account reale, apri l'area autenticata (sezione Impostazioni) e verifica AC1 — scegliendo l'altra lingua nel selettore OGNI testo visibile dell'interfaccia cambia immediatamente SENZA ricaricare la pagina.
+- Verifica AC2/AC3 (persistenza e continuità cross-device): dopo aver scelto una lingua, ricarica la pagina (o accedi da un secondo dispositivo/browser con lo stesso account) e conferma che la lingua scelta viene ritrovata — è persistita in user_settings.locale via upsert diretto e ri-applicata all'accesso. La e2e automatica di questo ciclo è differita alla storia 1.10 (teardown via delete-account, AD-13): un agente non può crearla in sicurezza senza teardown e senza infrastruttura Playwright.
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
