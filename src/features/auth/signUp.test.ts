@@ -4,15 +4,25 @@ import type {
   AuthGateway,
   SignUpResult,
 } from '../../domain/ports/authGateway';
-import type { AuthErrorKey, AuthErrorMessage } from './authFailureMessage';
-import { applySignUpOutcome, submitSignUp } from './signUp';
+import type { AuthErrorKey } from './authFailureMessage';
+import { submitSignUp } from './signUp';
 
 // Righe della I/O Matrix per l'orchestrazione (storia 1.6): un finto gateway
 // iniettato restituisce un SignUpResult fissato; submitSignUp lo traduce.
+// Il dispatch puro dell'esito è stato SPOSTATO in authOutcome.test.ts.
+
+// La porta cresce con metodi RICHIESTI (1.7): ogni finto è reso COMPLETO con
+// stub inerti dei metodi non esercitati, oltre a quello sotto test.
+const INERT: Omit<AuthGateway, 'signUp'> = {
+  signIn: async () => ({ ok: true }),
+  signOut: async () => {},
+  isAuthenticated: async () => false,
+  onAuthStateChange: () => () => {},
+};
 
 /** Finto gateway: ritorna sempre il `result` dato, ignora le credenziali. */
 function fakeGateway(result: SignUpResult): AuthGateway {
-  return { signUp: () => Promise.resolve(result) };
+  return { ...INERT, signUp: () => Promise.resolve(result) };
 }
 
 const CREDS = { email: 'a@b.co', password: 'hunter2hunter2' };
@@ -97,6 +107,7 @@ describe('submitSignUp — gateway iniettato ⇒ esito tradotto', () => {
     // Rete caduta / errore imprevisto rilanciato da auth-js: il confine è
     // totale, submitSignUp non deve mai propagare un reject.
     const throwing: AuthGateway = {
+      ...INERT,
       signUp: () => Promise.reject(new Error('network')),
     };
     const outcome = await submitSignUp(throwing, CREDS);
@@ -108,6 +119,7 @@ describe('submitSignUp — gateway iniettato ⇒ esito tradotto', () => {
 
   it('gateway che lancia in modo sincrono ⇒ risolve a unknown, non rifiuta', async () => {
     const throwing: AuthGateway = {
+      ...INERT,
       signUp: () => {
         throw new Error('boom');
       },
@@ -117,47 +129,5 @@ describe('submitSignUp — gateway iniettato ⇒ esito tradotto', () => {
       ok: false,
       message: { key: 'auth.error.unknown', field: 'form' },
     });
-  });
-});
-
-// Il DISPATCH puro dell'esito (AC1 wiring): successo ⇒ solo onAuthenticated;
-// fallimento ⇒ solo onError con quel messaggio esatto. Spie a chiusura, no dep.
-describe('applySignUpOutcome — dispatch dell\'esito verso gli handler', () => {
-  it('{ ok:true } ⇒ chiama SOLO onAuthenticated', () => {
-    let authenticatedCalls = 0;
-    let errorCalls = 0;
-    applySignUpOutcome(
-      { ok: true },
-      {
-        onAuthenticated: () => {
-          authenticatedCalls += 1;
-        },
-        onError: () => {
-          errorCalls += 1;
-        },
-      },
-    );
-    expect(authenticatedCalls).toBe(1);
-    expect(errorCalls).toBe(0);
-  });
-
-  it('{ ok:false, message } ⇒ chiama SOLO onError con quel messaggio', () => {
-    const message: AuthErrorMessage = {
-      key: 'auth.error.weakPassword',
-      field: 'password',
-    };
-    let authenticatedCalls = 0;
-    const received: AuthErrorMessage[] = [];
-    applySignUpOutcome(
-      { ok: false, message },
-      {
-        onAuthenticated: () => {
-          authenticatedCalls += 1;
-        },
-        onError: (m) => received.push(m),
-      },
-    );
-    expect(authenticatedCalls).toBe(0);
-    expect(received).toEqual([message]);
   });
 });

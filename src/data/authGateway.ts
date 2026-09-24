@@ -4,15 +4,20 @@
 // e mappa gli errori Supabase nella union chiusa `AuthFailureReason`.
 //
 // Il cuore della garanzia di FR1.5 è STRUTTURALE: due funzioni PURE ed esportate
-// (`classifySignUpError`, `signUpResultFromResponse`) traducono la risposta di
-// Supabase in un `SignUpResult` di dominio. Sono testabili senza client reale né
-// rete: nessuna stringa grezza del vendor esce da qui verso i livelli superiori.
+// (`classifyAuthError`, `authResultFromResponse`) traducono la risposta di
+// Supabase in un `AuthResult` di dominio. Sono CONDIVISE fra registrazione e
+// accesso (stessa forma, stessa classificazione: `invalid_credentials →
+// wrong-password`) e testabili senza client reale né rete: nessuna stringa
+// grezza del vendor esce da qui verso i livelli superiori.
 import { createClient } from '@supabase/supabase-js';
 import type {
   AuthFailureReason,
   AuthGateway,
+  AuthResult,
   Credentials,
+  SignInResult,
   SignUpResult,
+  Unsubscribe,
 } from '../domain/ports/authGateway';
 
 // La config di cui l'adattatore ha bisogno: solo l'endpoint e l'anon key. È il
@@ -32,9 +37,11 @@ interface ClassifiableError {
   readonly code?: string | undefined;
 }
 
-// Forma MINIMA della risposta di auth.signUp che ci interessa: la sessione (per
-// distinguere "autenticato" da "nessun errore ma sessione assente") e l'errore.
-interface SignUpLikeResponse {
+// Forma MINIMA della risposta di auth.signUp / auth.signInWithPassword che ci
+// interessa: la sessione (per distinguere "autenticato" da "nessun errore ma
+// sessione assente") e l'errore. La stessa forma vale per registrazione e
+// accesso.
+interface AuthLikeResponse {
   readonly data: { readonly session: unknown } | null;
   readonly error: ClassifiableError | null;
 }
@@ -50,16 +57,18 @@ function hasStringCode(value: unknown): value is ClassifiableError {
 }
 
 /**
- * Mappa PURA `error → AuthFailureReason`. I code Supabase noti diventano i
- * `reason` di dominio; ogni code o forma sconosciuta ⇒ `'unknown'` (mai una
- * stringa grezza del vendor).
+ * Mappa PURA `error → AuthFailureReason`, CONDIVISA fra registrazione e accesso.
+ * I code Supabase noti diventano i `reason` di dominio; ogni code o forma
+ * sconosciuta ⇒ `'unknown'` (mai una stringa grezza del vendor).
  *
  * - `user_already_exists` / `email_exists` ⇒ email già registrata
  * - `weak_password`                        ⇒ password troppo debole
  * - `validation_failed` / `email_address_invalid` ⇒ email in formato non valido
- * - `invalid_credentials`                  ⇒ password errata (prodotto dall'accesso, 1.7)
+ * - `invalid_credentials`                  ⇒ password errata (accesso, 1.7):
+ *   password errata ed email inesistente collassano entrambe qui, quindi sullo
+ *   stesso reason — l'esistenza dell'email non è rivelata (AC2 strutturale).
  */
-export function classifySignUpError(error: unknown): AuthFailureReason {
+export function classifyAuthError(error: unknown): AuthFailureReason {
   if (!hasStringCode(error)) return 'unknown';
 
   switch (error.code) {
@@ -79,7 +88,9 @@ export function classifySignUpError(error: unknown): AuthFailureReason {
 }
 
 /**
- * Mappa PURA della risposta di `auth.signUp` in un `SignUpResult` di dominio.
+ * Mappa PURA della risposta di `auth.signUp` / `auth.signInWithPassword` in un
+ * `AuthResult` di dominio. Condivisa fra registrazione e accesso: entrambi
+ * ritornano la stessa forma `{ data:{ session }, error }`.
  *
  * - errore presente        ⇒ `{ ok:false, reason: classify(error) }`
  * - nessun errore, sessione ⇒ `{ ok:true }` (l'utente atterra autenticato)
@@ -91,11 +102,9 @@ export function classifySignUpError(error: unknown): AuthFailureReason {
  * non disabilita la conferma nella console Supabase, questo è un errore generico
  * (`unknown`) — mai uno stato silente rotto.
  */
-export function signUpResultFromResponse(
-  response: SignUpLikeResponse,
-): SignUpResult {
+export function authResultFromResponse(response: AuthLikeResponse): AuthResult {
   if (response.error) {
-    return { ok: false, reason: classifySignUpError(response.error) };
+    return { ok: false, reason: classifyAuthError(response.error) };
   }
   if (response.data?.session) {
     return { ok: true };
@@ -104,29 +113,98 @@ export function signUpResultFromResponse(
 }
 
 /**
+ * Mappa PURA `session → boolean`: vero se una sessione è presente (AD-1: il
+ * dominio non vede mai la `Session` del vendor, solo il booleano). `null` /
+ * `undefined` ⇒ nessuna sessione. Rende testabile la subscription come mappa.
+ */
+export function hasSession(session: unknown): boolean {
+  return session != null;
+}
+
+/**
  * Costruisce l'adattatore Supabase della porta AuthGateway. La config è quella
  * validata dal livello app (src/app/env.ts, `AppConfig`) e iniettata da lì:
  * questo modulo non legge mai `import.meta.env`. Nessuna `service_role` né alcun
  * secret non-`VITE_*` entra nel client (solo l'anon key pubblica).
+ *
+ * Le opzioni `persistSession`/`autoRefreshToken` sono ESPLICITE: la persistenza
+ * fra riavvii (AC3/FR1.3) è una decisione dichiarata, non un default implicito
+ * di supabase-js.
  */
 export function createSupabaseAuthGateway(
   config: SupabaseAuthConfig,
 ): AuthGateway {
-  const client = createClient(config.supabaseUrl, config.supabaseAnonKey);
+  const client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
+    auth: { persistSession: true, autoRefreshToken: true },
+  });
 
   return {
     async signUp(credentials: Credentials): Promise<SignUpResult> {
       // La porta non RIFIUTA mai: auth-js rilancia i fallimenti non-AuthError
       // (es. rete caduta). Un throw diventa `unknown`, così i livelli superiori
-      // ricevono sempre un SignUpResult di dominio, mai una promise rifiutata.
+      // ricevono sempre un AuthResult di dominio, mai una promise rifiutata.
       try {
         const response = await client.auth.signUp({
           email: credentials.email,
           password: credentials.password,
         });
-        return signUpResultFromResponse(response);
+        return authResultFromResponse(response);
       } catch {
         return { ok: false, reason: 'unknown' };
+      }
+    },
+
+    async signIn(credentials: Credentials): Promise<SignInResult> {
+      // Gemello di signUp sulla porta: stessa forma d'esito, stessa mappa pura.
+      // Confine totale: un throw dell'SDK diventa `unknown`.
+      try {
+        const response = await client.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password,
+        });
+        return authResultFromResponse(response);
+      } catch {
+        return { ok: false, reason: 'unknown' };
+      }
+    },
+
+    async signOut(): Promise<void> {
+      // Confine totale: qualunque throw dell'SDK viene ingoiato, la porta
+      // risolve comunque `void` (mai reject). Lo stato torna `anonymous` a cura
+      // del chiamante.
+      try {
+        await client.auth.signOut();
+      } catch {
+        // Confine totale: nessuna propagazione.
+      }
+    },
+
+    async isAuthenticated(): Promise<boolean> {
+      // Confine totale: un throw dell'SDK diventa `false`.
+      try {
+        const { data } = await client.auth.getSession();
+        return hasSession(data.session);
+      } catch {
+        return false;
+      }
+    },
+
+    onAuthStateChange(
+      listener: (authenticated: boolean) => void,
+    ): Unsubscribe {
+      // Confine TOTALE anche sul setup della subscription: se l'SDK lancia in
+      // modo sincrono, non lasciamo sfuggire l'eccezione (crash al boot in
+      // AuthRoot). Su throw degradiamo a un Unsubscribe no-op: nessun
+      // aggiornamento live, ma la lettura di boot (isAuthenticated) resta valida.
+      try {
+        // La `Session` del vendor è mappata a `boolean` da hasSession: il
+        // dominio non la vede mai. Ritorniamo l'Unsubscribe che disiscrive.
+        const { data } = client.auth.onAuthStateChange((_event, session) => {
+          listener(hasSession(session));
+        });
+        return () => data.subscription.unsubscribe();
+      } catch {
+        return () => {};
       }
     },
   };
