@@ -2,7 +2,7 @@
 title: 'Story 1.5: Lo schema nasce versionato e isolato'
 type: 'feature'
 created: '2026-09-24'
-status: 'awaiting-operator'
+status: done
 baseline_revision: 'b5ebcc79faa0a3119817a4fa2c37bc39c2ee6c14'
 review_loop_iteration: 0
 followup_review_recommended: true
@@ -155,3 +155,13 @@ Status: awaiting-operator
 **Verifica eseguita (tutta verde, rieseguita dopo i patch):** `npm run lint` (0 errori sull'albero reale; `supabase/**` e i `*.test.ts` fuori dalle regole di confine), `npm run typecheck` (`tsc` strict, nessun `any`), `npm test` (**92 test su 9 file**: 17 in `migrations.test.ts` + le sonde di 1.1–1.4 senza regressioni), `npm run build` (`tsc --noEmit` + `vite build` producono `dist/`). Matrix Test Audit: tutte e 6 le righe della I/O Matrix coperte da test che girano e passano.
 
 **Rischi residui / azioni operatore.** (1) L'apply al DB reale e la verifica live dello schema/RLS dipendono dai tre secret Supabase in GitHub Actions e dal merge su `main`: enumerati in `operator_actions`. (2) Il **test di integrazione RLS a runtime** (AC4, seconda clausola) è **differito** per architettura a quando esistono signup (1.6) e teardown via l'Edge Function `delete-account` (1.10): registrato in `deferred`. Questa storia verifica meccanicamente RLS abilitata + le 4 policy owner-scoped. (3) La validazione su PR prova che l'SQL è ben formato, non che applica pulito: l'apply pulito è colto dal `db push` al merge reale (che fallisce il job se la migrazione non applica). (4) La robustezza sul drift dello schema è deferita (low).
+
+## Operator Confirmation
+
+Confirmed 2026-09-24: the external actions this story owed were carried out.
+
+- In GitHub > Settings > Secrets and variables > Actions, imposta i tre repository secret usati da .github/workflows/migrate.yml: SUPABASE_ACCESS_TOKEN (generalo dalla console Supabase, Account > Access Tokens), SUPABASE_DB_PASSWORD (la password del database del progetto reale) e SUPABASE_PROJECT_REF (ytgriszwsfumheagklqj). Senza questi il job di migrate fallisce l'autenticazione (AC1/AC2).
+- Fai il merge di questa storia su main: il push su main scatena .github/workflows/migrate.yml, che esegue supabase link + supabase db push e applica 20260923221517_create_user_settings.sql al progetto Supabase reale. L'apply avviene SOLO al merge, mai da un ramo di PR (AD-12/AD-13).
+- Dopo il merge, verifica nel run di migrate.yml che 'supabase db push' sia andato a buon fine, e nello Studio Supabase che la tabella public.user_settings esista con RLS abilitata e le 4 policy owner-scoped (select/insert/update/delete), a due sole colonne user_id/locale (AC3/AC4-schema).
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
