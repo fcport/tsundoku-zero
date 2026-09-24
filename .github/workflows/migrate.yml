@@ -1,11 +1,14 @@
-name: Migrate
+name: Migrate & deploy functions
 
-# Le migrazioni si applicano al progetto REALE SOLTANTO al merge su main, MAI da
-# un ramo di PR: i dati di studio dell'owner sono la metrica di accettazione M1,
-# e una migrazione rotta applicata da una PR li distruggerebbe (AD-12/AD-13).
+# Applica al progetto REALE lo schema (migrazioni) E le Edge Functions SOLTANTO
+# al merge su main, MAI da un ramo di PR: i dati di studio dell'owner sono la
+# metrica di accettazione M1, e una migrazione rotta applicata da una PR li
+# distruggerebbe (AD-12/AD-13). La funzione `delete-account` (AD-11) segue la
+# stessa disciplina delle migrazioni: versionata, deployata dal workflow (mai
+# dallo Studio), solo su push:main.
 #
 # Nessun `pull_request`: una PR valida la migrazione solo SINTATTICAMENTE, offline,
-# in npm test (ci.yml) — non la applica.
+# in npm test (ci.yml) — non la applica, e non deploya la funzione.
 # Nessun `workflow_dispatch`: dalla UI si potrebbe scegliere un ramo di PR e
 # applicare uno schema non ancora revisionato. L'unico trigger è push su main.
 on:
@@ -21,7 +24,7 @@ concurrency:
 
 jobs:
   apply:
-    name: supabase db push (progetto reale)
+    name: supabase db push + functions deploy (progetto reale)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -79,3 +82,16 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: supabase db push --yes -p "$SUPABASE_DB_PASSWORD"
+
+      # Deploya l'unica Edge Function del progetto (delete-account, AD-11) al
+      # progetto reale già collegato dallo step `link`. Stessa disciplina delle
+      # migrazioni: solo su push:main, mai su PR. Non passa `--no-verify-jwt`: la
+      # verifica di piattaforma è governata da supabase/config.toml
+      # ([functions.delete-account] verify_jwt = false), versionato con la
+      # funzione. La service_role NON è un secret di CI: vive nei secret del
+      # progetto Supabase, iniettata nel runtime della funzione (mai qui).
+      - name: Deploya le Edge Functions (functions deploy)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: supabase functions deploy delete-account --project-ref "$SUPABASE_PROJECT_REF"

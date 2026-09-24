@@ -38,4 +38,15 @@ export const en = {
       it: 'Italian',
     },
   },
+  account: {
+    delete: {
+      title: 'Delete account',
+      trigger: 'Delete account',
+      consequence:
+        'Deleting your account destroys all of your study data. Your statistics do not survive it. This cannot be undone.',
+      confirm: 'Delete permanently',
+      cancel: 'Keep account',
+      error: 'The account could not be deleted. Try again.',
+    },
+  },
 } as const;
