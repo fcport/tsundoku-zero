@@ -45,7 +45,7 @@ development_status:
   1-7-accesso-disconnessione-e-sessione-che-resiste: done
   1-8-le-rotte-private-sono-private: done
   1-9-cambiare-lingua-senza-ricaricare: done
-  1-10-cancellare-l-account-per-davvero: awaiting-operator
+  1-10-cancellare-l-account-per-davvero: done
   epic-1-retrospective: optional
 
   epic-2: backlog
