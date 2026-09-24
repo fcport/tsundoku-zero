@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
 import { AuthRoot } from './AuthRoot';
 import type { AuthGateway } from '../domain/ports/authGateway';
+import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 // Riga della I/O Matrix per la resa INIZIALE (storia 1.7): finché lo stato di
 // sessione è indeterminato (`checking`), AuthRoot rende un PLACEHOLDER NEUTRO —
@@ -20,8 +21,17 @@ const inertGateway: AuthGateway = {
   onAuthStateChange: () => () => {},
 };
 
+// Porta finta inerte (nuova prop 1.9): non invocata durante la resa server
+// (loadLocale/saveLocale vivono nella glue useEffect, non eseguita da SSR).
+const inertSettings: SettingsRepository = {
+  loadLocale: async () => null,
+  saveLocale: async () => {},
+};
+
 describe('AuthRoot — resa iniziale `checking` (placeholder neutro)', () => {
-  const markup = renderToStaticMarkup(<AuthRoot gateway={inertGateway} />);
+  const markup = renderToStaticMarkup(
+    <AuthRoot gateway={inertGateway} settings={inertSettings} />,
+  );
 
   it('NON rende il form di autenticazione (niente flash)', () => {
     expect(markup).not.toContain('id="auth-email"');

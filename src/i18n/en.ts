@@ -30,4 +30,12 @@ export const en = {
       unknown: 'Something went wrong. Try again.',
     },
   },
+  settings: {
+    title: 'Settings',
+    language: {
+      label: 'Language',
+      en: 'English',
+      it: 'Italian',
+    },
+  },
 } as const;

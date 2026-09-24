@@ -15,6 +15,11 @@ import './config';
 // vivono nel modulo foglia ./locales (grafo aciclico) ma restano parte
 // dell'API pubblica di questo funnel: i consumatori li importano da '../i18n'.
 export { supportedLocales, type Locale } from './locales';
+export {
+  resolveLocale,
+  isSupportedLocale,
+  FALLBACK_LOCALE,
+} from './resolveLocale';
 export { default as i18n } from './config';
 export { useTranslation } from 'react-i18next';
 export { resources, defaultNS } from './resources';

@@ -53,3 +53,27 @@ source_spec: `spec-1-8-le-rotte-private-sono-private.md`
 severity: low
 reason: Provare AC1/AC3 end-to-end nel browser — un visitatore anonimo che apre un deep link a una rotta privata atterra sulla schermata di Accesso senza 404 (rewrite Vercel + <Navigate> in useEffect), e un utente autenticato che apre la radice raggiunge la rotta protetta — richiede l'app deployata e, per il caso autenticato, una sessione reale. renderToStaticMarkup (ambiente node) non esegue useEffect, quindi <Navigate> rende null in SSR: la DECISIONE del guard è coperta meccanicamente (routeGuards.test: type/to/replace) e il route-matching sincrono con MemoryRouter, ma la navigazione reale e il no-404 sui deep link no. Nessuna infrastruttura Playwright nello stack; il teardown e2e della sessione reale è AD-13/1.10 (delete-account), non ancora esistente. Stesso schema del deep-link live differito in 1.2 e della sessione live differita in 1.7.
 status: open
+
+### DW-8: Verifica live/e2e del cambio lingua a runtime nel browser reale contro l'app deployata (AC1), differita per architettura.
+origin: spec-deferred 59aabf76be78
+location: src/features/settings/SettingsScreen.tsx + src/features/settings/changeLocale.ts
+source_spec: `spec-1-9-cambiare-lingua-senza-ricaricare.md`
+severity: low
+reason: Provare AC1 end-to-end — un click su un'opzione di lingua in Impostazioni commuta OGNI testo visibile senza ricaricare la pagina — richiede l'app deployata e la sessione reale. L'ambiente di test è node senza jsdom (renderToStaticMarkup non esegue eventi né effetti): il click→handler (onSelect→changeLocale) è glue d'effetto. Coperto meccanicamente: la decisione pura (changeLocale: changeLanguage+saveLocale, ordine, confine totale) e l'integrazione del singleton (await i18n.changeLanguage('it') poi render ⇒ markup 'it', non 'en'), più il selettore (aria-pressed). Nessuna infrastruttura Playwright nello stack; stesso schema del deep-link live differito in 1.2/1.8 e della sessione live differita in 1.7.
+status: open
+
+### DW-9: Verifica live/e2e della persistenza (upsert reale su user_settings, RLS) e della continuità cross-device (AC2/AC3), differita per architettura.
+origin: spec-deferred 020a72dd229b
+location: src/data/settingsRepository.ts + src/app/AuthRoot.tsx + storia 1.5 (migrazione) + storia 1.10 (teardown)
+source_spec: `spec-1-9-cambiare-lingua-senza-ricaricare.md`
+severity: low
+reason: Provare AC2 (upsert reale su user_settings.locale, onConflict sulla PK user_id, permesso da RLS) e AC3 (impostata la lingua su un dispositivo, accedendo da un altro la si ritrova) richiede l'app deployata, la migrazione user_settings APPLICATA (operator_actions della storia 1.5) e sessioni reali con teardown via l'Edge Function delete-account (AD-13/1.10, non ancora esistente). La glue di rehydrate al login (AuthRoot: loadLocale→resolveLocale→changeLanguage) è effetto, verificata live; coperto meccanicamente: l'adattatore per FORMA della chiamata (from('user_settings').upsert({user_id,locale}) con client finto) e la decisione pura resolveLocale. Non costruibile in sicurezza qui senza teardown né infrastruttura e2e.
+status: open
+
+### DW-10: Anello di focus visibile (focus-visible) mancante sugli elementi interattivi, lacuna di accessibilità app-wide preesistente.
+origin: spec-deferred 65c548348d1c
+location: src/features/settings/LanguageOptions.tsx + src/features/auth/AuthForm.tsx + src/app/AuthenticatedShell.tsx
+source_spec: `spec-1-9-cambiare-lingua-senza-ricaricare.md`
+severity: low
+reason: I bottoni del selettore di lingua (come i bottoni di auth di 1.6/1.7 e il Disconnetti di 1.7) usano solo border-strong, senza un token/anello di focus visibile da tastiera. Non è introdotto da questa storia: è una lacuna trasversale a tutti gli interattivi dell'app. Di competenza dell'audit di accessibilità con screen reader reale della storia 7.6.
+status: open

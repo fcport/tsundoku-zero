@@ -9,14 +9,19 @@
 // verde di successo.
 import { useTranslation } from '../i18n';
 import { App } from '../ui/App';
+import { SettingsScreen } from '../features/settings/SettingsScreen';
+import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 export interface AuthenticatedShellProps {
+  /** La porta delle impostazioni, inoltrata alla feature Impostazioni. */
+  readonly settings: SettingsRepository;
   readonly onSignOut: () => void;
   /** Vero durante la disconnessione: disabilita il bottone. */
   readonly signOutPending: boolean;
 }
 
 export function AuthenticatedShell({
+  settings,
   onSignOut,
   signOutPending,
 }: AuthenticatedShellProps) {
@@ -35,6 +40,7 @@ export function AuthenticatedShell({
         </button>
       </header>
       <App />
+      <SettingsScreen settings={settings} />
     </>
   );
 }
