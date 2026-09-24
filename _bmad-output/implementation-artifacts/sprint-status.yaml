@@ -44,7 +44,7 @@ development_status:
   1-6-registrazione-con-email-e-password: done
   1-7-accesso-disconnessione-e-sessione-che-resiste: done
   1-8-le-rotte-private-sono-private: done
-  1-9-cambiare-lingua-senza-ricaricare: awaiting-operator
+  1-9-cambiare-lingua-senza-ricaricare: done
   1-10-cancellare-l-account-per-davvero: awaiting-operator
   epic-1-retrospective: optional
 
