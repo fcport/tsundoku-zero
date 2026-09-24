@@ -4,8 +4,10 @@ import {
   exerciseSchema,
   explanation,
   japaneseSentence,
+  resolveExplanation,
   type Exercise,
   type ExerciseResponse,
+  type Explanation,
 } from './exercise';
 
 // Test dei value object, della union discriminata dell'esercizio e di `check`
@@ -69,6 +71,57 @@ describe('explanation (AC3)', () => {
 
   it('rifiuta it presente ma vuoto', () => {
     expect(explanation.parse({ en: 'x', it: '' }).ok).toBe(false);
+  });
+});
+
+describe('FR8.5 — spiegazioni bilingui con ripiego dichiarato (2.5)', () => {
+  // Lo schema `explanation (AC3)` sopra ancora già AC1 (en obbligatorio, it
+  // opzionale, rifiuti): qui NON si riduplica, si prova solo la DECISIONE di
+  // ripiego di `resolveExplanation`. I quattro casi della I/O matrix + un
+  // test-ancora per AC3 (text è contenuto letterale, non una chiave i18n).
+  const bilingue: Explanation = { en: 'Because the verb …', it: 'Perché il verbo …' };
+  const soloInglese: Explanation = { en: 'Because the verb …' };
+
+  it('inglese richiesto ⇒ { text: en, language: en, isFallback: false }', () => {
+    expect(resolveExplanation(soloInglese, 'en')).toEqual({
+      text: 'Because the verb …',
+      language: 'en',
+      isFallback: false,
+    });
+  });
+
+  it('italiano presente ⇒ { text: it, language: it, isFallback: false }', () => {
+    expect(resolveExplanation(bilingue, 'it')).toEqual({
+      text: 'Perché il verbo …',
+      language: 'it',
+      isFallback: false,
+    });
+  });
+
+  it('italiano assente ⇒ ripiego DICHIARATO su en (AC2): isFallback true', () => {
+    expect(resolveExplanation(soloInglese, 'it')).toEqual({
+      text: 'Because the verb …',
+      language: 'en',
+      isFallback: true,
+    });
+  });
+
+  it('inglese richiesto con it presente NON è ripiego: isFallback false', () => {
+    // `language` nomina la lingua EFFETTIVAMENTE mostrata: en richiesto resta en.
+    expect(resolveExplanation(bilingue, 'en')).toEqual({
+      text: 'Because the verb …',
+      language: 'en',
+      isFallback: false,
+    });
+  });
+
+  it('AC3 — text è il contenuto LETTERALE della spiegazione, non una chiave t()', () => {
+    // Il testo reso è esattamente la stringa di contenuto passata in input, non
+    // una chiave i18n da risolvere altrove.
+    const contenuto: Explanation = { en: 'This is the literal English content.' };
+    const resolved = resolveExplanation(contenuto, 'it');
+    expect(resolved.text).toBe('This is the literal English content.');
+    expect(resolved.text).toBe(contenuto.en);
   });
 });
 
