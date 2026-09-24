@@ -51,7 +51,7 @@ development_status:
   epic-2: backlog
   2-1-lo-schema-di-una-lezione: done
   2-2-i-tre-tipi-e-i-loro-validatori: done
-  2-3-l-identità-di-un-esercizio-resiste-alla-riautorazione: backlog
+  2-3-l-identità-di-un-esercizio-resiste-alla-riautorazione: done
   2-4-una-lezione-può-non-avere-esercizi: backlog
   2-5-spiegazioni-bilingui-con-ripiego-dichiarato: backlog
   2-6-la-validazione-blocca-il-merge: backlog
