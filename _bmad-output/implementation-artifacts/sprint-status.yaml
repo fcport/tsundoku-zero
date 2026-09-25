@@ -85,7 +85,7 @@ development_status:
   epic-3-retrospective: optional
 
   epic-4: backlog
-  4-1-la-sessione-si-carica-tutta-in-una-volta: backlog
+  4-1-la-sessione-si-carica-tutta-in-una-volta: done
   4-2-la-coda-sopravvive-alla-chiusura-dell-app: backlog
   4-3-il-ritorno-della-rete-non-chiede-il-permesso: backlog
   4-4-un-indicatore-che-non-spaventa: backlog

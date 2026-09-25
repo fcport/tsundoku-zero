@@ -56,6 +56,7 @@ import { streak } from '../../domain/streak';
 import type { ApplyReviewInput } from '../../domain/ports/reviewRepository';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { usePorts } from '../ports/PortsContext';
+import { exercisesQueryKey } from './exercisesQueryKey';
 import { useSessionStore } from './sessionStore';
 import { ExerciseCard } from './ExerciseCard';
 import { ProgressMeter } from './ProgressMeter';
@@ -193,7 +194,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   // così la pila che si accorcia in modo ottimistico non provoca refetch/scheletri a
   // ogni risposta. La coda di sessione è sempre un sottoinsieme di questi id.
   const exercisesQ = useQuery({
-    queryKey: ['exercises', initialIds],
+    queryKey: exercisesQueryKey(initialIds),
     enabled: initialIds.length > 0,
     queryFn: () => content.listExercisesByIds(initialIds),
   });
