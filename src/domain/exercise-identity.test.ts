@@ -96,6 +96,17 @@ describe('invarianza dell’identità: la SOSTANZA non cambia (AC2, AD-23)', () 
     };
     expect(deriveExerciseId(otherGrammarPoint)).toBe(deriveExerciseId(singleSelect));
   });
+
+  it('showFurigana diverso (true vs false vs assente) ⇒ id IDENTICO (3.11, AC6)', () => {
+    // La furigana NON entra nell'identità (AD-23: la chiave enumera solo
+    // [kind, kanji, kana, answerRepr]): cambiarla o dichiararla non sposta l'id.
+    const visible: Exercise = { ...singleSelect, showFurigana: true };
+    const hidden: Exercise = { ...singleSelect, showFurigana: false };
+    // `singleSelect` è la variante SENZA showFurigana (assente).
+    expect(deriveExerciseId(visible)).toBe(deriveExerciseId(singleSelect));
+    expect(deriveExerciseId(hidden)).toBe(deriveExerciseId(singleSelect));
+    expect(deriveExerciseId(visible)).toBe(deriveExerciseId(hidden));
+  });
 });
 
 describe('mutamento dell’identità: la SOSTANZA cambia (AC3)', () => {

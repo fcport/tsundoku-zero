@@ -3,6 +3,7 @@ import {
   check,
   exerciseSchema,
   explanation,
+  furiganaVisible,
   japaneseSentence,
   resolveExplanation,
   type Exercise,
@@ -261,6 +262,60 @@ describe('exerciseSchema — registro chiuso (AC1, AD-22)', () => {
     if (!bad.ok) {
       expect(bad.issues[0].path).toEqual(['answer', 1]);
     }
+  });
+});
+
+describe('showFurigana — campo opzionale del tipo (3.11, AC5)', () => {
+  it('assente ⇒ parse ok e la chiave è OMESSA (non materializzata)', () => {
+    const result = exerciseSchema.parse(validSingleSelect);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect('showFurigana' in result.value).toBe(false);
+    }
+  });
+
+  it('false ⇒ parse ok, valore false', () => {
+    const result = exerciseSchema.parse({ ...validSingleSelect, showFurigana: false });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.showFurigana).toBe(false);
+    }
+  });
+
+  it('true ⇒ parse ok, valore true', () => {
+    const result = exerciseSchema.parse({ ...validSelectSpan, showFurigana: true });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.showFurigana).toBe(true);
+    }
+  });
+
+  it("malformato ('yes') ⇒ issue di schema sul path showFurigana (reject, non degrada)", () => {
+    const bad = exerciseSchema.parse({ ...validAssemble, showFurigana: 'yes' });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.some((i) => i.path.join('.') === 'showFurigana')).toBe(true);
+    }
+  });
+});
+
+describe('furiganaVisible — UNICA sede del predefinito visibile (3.11, AC5)', () => {
+  it('showFurigana assente ⇒ true (predefinito VISIBILE)', () => {
+    expect(furiganaVisible({})).toBe(true);
+  });
+
+  it('showFurigana false ⇒ false', () => {
+    expect(furiganaVisible({ showFurigana: false })).toBe(false);
+  });
+
+  it('showFurigana true ⇒ true', () => {
+    expect(furiganaVisible({ showFurigana: true })).toBe(true);
+  });
+
+  it('accetta un Exercise di qualsiasi variante (tipo strutturale)', () => {
+    const parsed = exerciseSchema.parse({ ...validSingleSelect, showFurigana: false });
+    if (!parsed.ok) throw new Error('fixture non valida');
+    expect(furiganaVisible(parsed.value)).toBe(false);
   });
 });
 

@@ -13,12 +13,14 @@
 // Il `kind` dice COME si risponde; ciò che l'esercizio insegna vive in
 // `grammarPoint` (campo comune non vuoto), non nel `kind` (AC7).
 import {
+  boolean,
   discriminatedUnion,
   integer,
   literal,
   nonEmptyArray,
   nonEmptyString,
   object,
+  optional,
   refine,
   type Infer,
 } from './schema';
@@ -81,6 +83,11 @@ export type SegmentSpan = Infer<typeof segmentSpan>;
  * opzione corretta (stringa non vuota); `distractors` è un array NON VUOTO di
  * opzioni sbagliate (una consegna, *n* opzioni, una risposta). `check` è
  * corretto sse `response.choice === answer`.
+ *
+ * `showFurigana` (opzionale, 3.11) DICHIARA se la superficie di lettura deve
+ * mostrare la furigana; è un campo del TIPO, non una regola globale, e il suo
+ * predefinito VISIBILE è risolto UNA sola volta da `furiganaVisible` (assente ⇒
+ * `true`). NON entra nell'identità dell'esercizio (AD-23) né nel payload jsonb.
  */
 const singleSelect = object({
   kind: literal('single-select'),
@@ -89,6 +96,7 @@ const singleSelect = object({
   answer: nonEmptyString(),
   distractors: nonEmptyArray(nonEmptyString()),
   explanation: bilingualText,
+  showFurigana: optional(boolean()),
 });
 
 /**
@@ -103,6 +111,7 @@ const selectSpan = object({
   sentence: japaneseSentence,
   answer: segmentSpan,
   explanation: bilingualText,
+  showFurigana: optional(boolean()),
 });
 
 /**
@@ -117,6 +126,7 @@ const assemble = object({
   sentence: japaneseSentence,
   answer: nonEmptyArray(nonEmptyString()),
   explanation: bilingualText,
+  showFurigana: optional(boolean()),
 });
 
 /**
@@ -138,6 +148,21 @@ export const exerciseSchema = discriminatedUnion('kind', {
  * `exercise.kind` funziona nei consumatori.
  */
 export type Exercise = Infer<typeof exerciseSchema>;
+
+/**
+ * L'UNICA sede del predefinito VISIBILE della furigana (3.11, AC5). Dato un
+ * esercizio (o qualunque forma che porti il campo opzionale `showFurigana`),
+ * risolve se la superficie di lettura deve mostrare la furigana: il campo se
+ * presente, altrimenti `true`. Nasconderla di default testerebbe i kanji invece
+ * della grammatica, perciò l'assenza significa VISIBILE — e questa decisione
+ * vive qui in una sola funzione, non sparsa come `?? true` nei consumatori.
+ *
+ * PURA e TOTALE. Il tipo del parametro è strutturale (`{ showFurigana?: boolean }`)
+ * così accetta un `Exercise` di qualsiasi variante senza dipendere dalla union.
+ */
+export function furiganaVisible(exercise: { readonly showFurigana?: boolean }): boolean {
+  return exercise.showFurigana ?? true;
+}
 
 /**
  * Esito di `check`: SOLO la correttezza della risposta (`AD-22` la chiama
