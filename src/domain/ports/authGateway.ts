@@ -60,9 +60,8 @@ export type Unsubscribe = () => void;
  * vive in src/data/ ed è l'unico a conoscere Supabase.
  *
  * Il dominio non vede MAI una `Session` di Supabase: lo stato autenticato è
- * esposto come `boolean`. L'id utente non serve ad alcun AC di 1.7 (lo
- * introdurranno 1.8/1.9 quando lo useranno). Ogni metodo ha confine TOTALE: la
- * porta non rifiuta mai.
+ * esposto come `boolean`, e l'identità dell'utente come `string | null`. Ogni
+ * metodo ha confine TOTALE: la porta non rifiuta mai.
  */
 export interface AuthGateway {
   /** Registra un nuovo account (FR1.5, storia 1.6). */
@@ -73,6 +72,15 @@ export interface AuthGateway {
   signOut(): Promise<void>;
   /** Vero se esiste una sessione valida (FR1.3, letta al boot). */
   isAuthenticated(): Promise<boolean>;
+  /**
+   * L'id dell'utente corrente, o `null` se non c'è sessione (storia 3.12).
+   * Alimenta la chiave di dominio `dueQueryKey(userId)` (la pila TanStack è
+   * per-utente): l'app lo risolve e lo consegna come prop alle schermate del
+   * ciclo. Mirror di `isAuthenticated`: il dominio non vede MAI la `Session`,
+   * solo l'`id` stringa. Confine TOTALE: su throw o assenza di sessione ritorna
+   * `null`, non rifiuta mai.
+   */
+  currentUserId(): Promise<string | null>;
   /**
    * Notifica ogni cambio dello stato di autenticazione come `boolean`; ritorna
    * una `Unsubscribe` per fermare le notifiche.

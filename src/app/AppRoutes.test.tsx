@@ -1,25 +1,32 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
 import { AppRoutes } from './AppRoutes';
+import { dueQueryKey } from '../domain/due';
+import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
 
-// Righe di route-matching della I/O Matrix (storia 1.8). Il route-matching è
-// SINCRONO (nessun effetto): renderToStaticMarkup NON esegue useEffect, quindi
-// <Navigate> rende null in SSR. Perciò l'asserzione è per ASSENZA/PRESENZA del
-// contenuto raggiunto, che cattura esattamente la decisione del guard senza
-// jsdom. Ambiente node. La navigazione reale del browser è verifica live differita.
+// Righe di route-matching della I/O Matrix (storia 1.8, aggiornata in 3.12). Il
+// route-matching è SINCRONO (nessun effetto): renderToStaticMarkup NON esegue
+// useEffect, quindi <Navigate> rende null in SSR. La radice protetta ora rende la
+// dashboard (3.12) invece del branding placeholder: con la cache SEMINATA le
+// query risolvono in modo sincrono al primo render (stato caricato), così la
+// shell mostra il conteggio + l'azione primaria. Le asserzioni restano per
+// PRESENZA/ASSENZA del contenuto raggiunto (decisione del guard) e per l'unico
+// <main>. Ambiente node. La navigazione reale del browser è verifica live differita.
 
 // Il gateway è passato solo ad AuthScreen e non è invocato senza submit: un
-// finto inerte COMPLETO (schema di 1.7) soddisfa il tipo della porta.
+// finto inerte COMPLETO (schema di 1.7, esteso con currentUserId in 3.12).
 const inertGateway: AuthGateway = {
   signUp: async () => ({ ok: true }),
   signIn: async () => ({ ok: true }),
   signOut: async () => {},
   isAuthenticated: async () => false,
+  currentUserId: async () => null,
   onAuthStateChange: () => () => {},
 };
 // Porta finta inerte (nuova prop 1.9): non invocata durante la resa server.
@@ -31,31 +38,64 @@ const inertSettings: SettingsRepository = {
 const inertAccount: AccountGateway = {
   deleteAccount: async () => ({ ok: true }),
 };
-const NOOP = () => {};
 
-function renderAt(path: string, authenticated: boolean): string {
+// Porte del ciclo iniettate alla dashboard (3.12). Con la cache seminata le
+// queryFn non vengono invocate al primo render sincrono; restano inerti.
+const inertPorts: Ports = {
+  clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
+  review: { listDue: async () => [], listReviewLog: async () => [] },
+  progress: { listUnlockedLessonIds: async () => [] },
+  content: { listLessons: async () => [] },
+};
+
+const NOOP = () => {};
+const UID = 'user-1';
+
+// Cache seminata sulle quattro chiavi per l'utente `UID`: fa risolvere le query
+// in modo SINCRONO (stato caricato), così la shell protetta rende la dashboard
+// popolata invece dello scheletro.
+function seededClient(): QueryClient {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  qc.setQueryData(dueQueryKey(UID), [
+    { exerciseId: 'a', stage: 0, dueAt: new Date(0), reviewCount: 0, lapseCount: 0, lastReviewedAt: null },
+  ]);
+  qc.setQueryData(['streak', UID], []);
+  qc.setQueryData(['unlocked', UID], []);
+  qc.setQueryData(['lessons'], []);
+  return qc;
+}
+
+function renderAt(
+  path: string,
+  authenticated: boolean,
+  userId: string | null = UID,
+): string {
   return renderToStaticMarkup(
-    <MemoryRouter initialEntries={[path]}>
-      <AppRoutes
-        authenticated={authenticated}
-        gateway={inertGateway}
-        settings={inertSettings}
-        account={inertAccount}
-        onAuthenticated={NOOP}
-        onSignOut={NOOP}
-        signOutPending={false}
-        onAccountDeleted={NOOP}
-      />
-    </MemoryRouter>,
+    <QueryClientProvider client={seededClient()}>
+      <PortsProvider value={inertPorts}>
+        <MemoryRouter initialEntries={[path]}>
+          <AppRoutes
+            authenticated={authenticated}
+            gateway={inertGateway}
+            settings={inertSettings}
+            account={inertAccount}
+            userId={userId}
+            onAuthenticated={NOOP}
+            onSignOut={NOOP}
+            signOutPending={false}
+            onAccountDeleted={NOOP}
+          />
+        </MemoryRouter>
+      </PortsProvider>
+    </QueryClientProvider>,
   );
 }
 
 describe('AppRoutes — radice protetta, autenticato', () => {
   const markup = renderAt('/', true);
 
-  it('rende AuthenticatedShell: branding lang="ja" 積ん読ゼロ + tagline + Disconnetti', () => {
-    expect(markup).toMatch(/lang="ja"[^>]*>積ん読ゼロ/);
-    expect(markup).toContain(en.app.tagline);
+  it('rende AuthenticatedShell: dashboard (azione primaria) + Disconnetti', () => {
+    expect(markup).toContain(en.dashboard.primaryAction);
     expect(markup).toContain(en.auth.signOut);
   });
 
@@ -65,9 +105,8 @@ describe('AppRoutes — radice protetta, autenticato', () => {
   });
 
   it('ha un solo landmark <main> (nessun <main> annidato)', () => {
-    // Il <App/> dentro AuthenticatedShell fornisce l'UNICO <main>; l'<header>
-    // con Disconnetti non deve aggiungerne un secondo. Invariante ripristinata
-    // dall'AuthGate.test eliminato.
+    // La dashboard dentro AuthenticatedShell fornisce l'UNICO <main>; l'<header>
+    // con Disconnetti e le <section> Impostazioni/Account non ne aggiungono altri.
     const opens = markup.match(/<main/g) ?? [];
     expect(opens.length).toBe(1);
   });
@@ -76,8 +115,8 @@ describe('AppRoutes — radice protetta, autenticato', () => {
 describe('AppRoutes — deep link protetto, autenticato', () => {
   const markup = renderAt('/dashboard', true);
 
-  it('rende la radice protetta minima (branding)', () => {
-    expect(markup).toMatch(/lang="ja"[^>]*>積ん読ゼロ/);
+  it('rende la radice protetta minima (azione primaria + Disconnetti)', () => {
+    expect(markup).toContain(en.dashboard.primaryAction);
     expect(markup).toContain(en.auth.signOut);
   });
 });
@@ -85,9 +124,8 @@ describe('AppRoutes — deep link protetto, autenticato', () => {
 describe('AppRoutes — radice protetta, anonimo', () => {
   const markup = renderAt('/', false);
 
-  it('il guard blocca: né branding né Disconnetti (Navigate→null in SSR)', () => {
-    expect(markup).not.toContain('積ん読ゼロ');
-    expect(markup).not.toContain(en.app.tagline);
+  it('il guard blocca: né dashboard né Disconnetti (Navigate→null in SSR)', () => {
+    expect(markup).not.toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.auth.signOut);
   });
 });
@@ -95,8 +133,8 @@ describe('AppRoutes — radice protetta, anonimo', () => {
 describe('AppRoutes — deep link protetto, anonimo', () => {
   const markup = renderAt('/statistiche', false);
 
-  it('il guard blocca: nessun branding', () => {
-    expect(markup).not.toContain('積ん読ゼロ');
+  it('il guard blocca: nessuna dashboard', () => {
+    expect(markup).not.toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.auth.signOut);
   });
 });
@@ -111,8 +149,7 @@ describe('AppRoutes — rotta di Accesso, anonimo', () => {
   });
 
   it('ha un solo landmark <main> (nessun <main> annidato)', () => {
-    // AuthScreen fornisce l'UNICO <main> (non riusa <App/>): esattamente uno.
-    // Invariante ripristinata dall'AuthGate.test eliminato.
+    // AuthScreen fornisce l'UNICO <main> (non riusa la dashboard): esattamente uno.
     const opens = markup.match(/<main/g) ?? [];
     expect(opens.length).toBe(1);
   });

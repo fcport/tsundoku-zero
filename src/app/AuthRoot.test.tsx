@@ -5,6 +5,7 @@ import { AuthRoot } from './AuthRoot';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
+import type { Ports } from '../features/ports/PortsContext';
 
 // Riga della I/O Matrix per la resa INIZIALE (storia 1.7): finché lo stato di
 // sessione è indeterminato (`checking`), AuthRoot rende un PLACEHOLDER NEUTRO —
@@ -19,6 +20,7 @@ const inertGateway: AuthGateway = {
   signIn: async () => ({ ok: true }),
   signOut: async () => {},
   isAuthenticated: async () => false,
+  currentUserId: async () => null,
   onAuthStateChange: () => () => {},
 };
 
@@ -33,12 +35,22 @@ const inertAccount: AccountGateway = {
   deleteAccount: async () => ({ ok: true }),
 };
 
+// Porte del ciclo inerti (nuova prop 3.12): non consumate durante la resa server
+// (lo stato `checking` rende un placeholder, mai il PortsProvider/la dashboard).
+const inertPorts: Ports = {
+  clock: { now: () => new Date(), timeZone: () => 'UTC' },
+  review: { listDue: async () => [], listReviewLog: async () => [] },
+  progress: { listUnlockedLessonIds: async () => [] },
+  content: { listLessons: async () => [] },
+};
+
 describe('AuthRoot — resa iniziale `checking` (placeholder neutro)', () => {
   const markup = renderToStaticMarkup(
     <AuthRoot
       gateway={inertGateway}
       settings={inertSettings}
       account={inertAccount}
+      ports={inertPorts}
     />,
   );
 

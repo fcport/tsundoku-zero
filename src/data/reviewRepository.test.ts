@@ -200,3 +200,68 @@ describe('listDue — fallimenti lanciano DataError (reject)', () => {
     await expect(repo.listDue(NOW)).rejects.toBeInstanceOf(DataError);
   });
 });
+
+// Righe della I/O Matrix per `listReviewLog` (storia 3.12): il canale UNICO dello
+// streak (AD-18). Legge TUTTO il log — nessun filtro `isDue`, `now` non serve — e
+// mappa `reviewed_at` (stringa ISO) in `reviewedAt: Date`. Lo stesso client finto
+// (from→select) serve la tabella `review_log`.
+describe('listReviewLog — mappa review_log in ReviewLogEntry (streak, AD-18)', () => {
+  it('righe valide ⇒ entries con reviewedAt: Date, dalla tabella review_log', async () => {
+    const { client, calls } = makeFakeClient({
+      rows: [
+        { reviewed_at: '2026-09-24T08:00:00.000Z' },
+        { reviewed_at: '2026-09-25T09:30:00.000Z' },
+      ],
+    });
+    const repo = createSupabaseReviewRepository(client);
+
+    const log = await repo.listReviewLog();
+
+    expect(calls.table).toBe('review_log');
+    expect(calls.columns).toContain('reviewed_at');
+    expect(log).toEqual([
+      { reviewedAt: new Date('2026-09-24T08:00:00.000Z') },
+      { reviewedAt: new Date('2026-09-25T09:30:00.000Z') },
+    ]);
+  });
+
+  it('data null (nessuna riga) ⇒ array vuoto', async () => {
+    const { client } = makeFakeClient({});
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).resolves.toEqual([]);
+  });
+
+  it("errore Supabase ⇒ DataError('listReviewLog') con causa preservata", async () => {
+    const supabaseError = { message: 'rls denied', code: '42501' };
+    const { client } = makeFakeClient({ error: supabaseError });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+    await expect(repo.listReviewLog()).rejects.toMatchObject({
+      operation: 'listReviewLog',
+      cause: supabaseError,
+    });
+  });
+
+  it('riga malformata (reviewed_at non stringa) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({ rows: [{ reviewed_at: 12345 }] });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('reviewed_at stringa NON parsabile ⇒ DataError (timestamp non valido)', async () => {
+    const { client } = makeFakeClient({ rows: [{ reviewed_at: 'not-a-date' }] });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga null (elemento non-oggetto) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({ rows: [null] });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+});

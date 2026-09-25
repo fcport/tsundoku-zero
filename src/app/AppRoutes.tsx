@@ -26,6 +26,11 @@ export interface AppRoutesProps {
   readonly gateway: AuthGateway;
   readonly settings: SettingsRepository;
   readonly account: AccountGateway;
+  /**
+   * L'id dell'utente corrente (o `null` finché non risolto), inoltrato alla shell
+   * protetta e da lì alla dashboard (chiave per-utente della pila, 3.12).
+   */
+  readonly userId: string | null;
   readonly onAuthenticated: () => void;
   readonly onSignOut: () => void;
   readonly signOutPending: boolean;
@@ -37,6 +42,7 @@ export function AppRoutes({
   gateway,
   settings,
   account,
+  userId,
   onAuthenticated,
   onSignOut,
   signOutPending,
@@ -59,6 +65,7 @@ export function AppRoutes({
             <AuthenticatedShell
               settings={settings}
               account={account}
+              userId={userId}
               onSignOut={onSignOut}
               signOutPending={signOutPending}
               onAccountDeleted={onAccountDeleted}

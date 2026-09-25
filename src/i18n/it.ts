@@ -24,6 +24,20 @@ export const it = {
       unknown: 'Qualcosa è andato storto. Riprova.',
     },
   },
+  dashboard: {
+    // Etichetta resa SOTTO il conteggio: il numero PRECEDE il verbo
+    // ("23 da rivedere"), mai "hai 23". Nessun `!`, nessuna emoji, nessun
+    // avverbio di lode (nessuna grammatica della celebrazione).
+    dueLabel: 'da rivedere',
+    // Streak: i giorni PRECEDONO il sostantivo ("7 giorni di fila"), neutro. La
+    // variabile è `days` (non `count`), per non innescare il pluralizzatore di
+    // i18next che richiederebbe chiavi `_one`/`_other` fuori dalla parità.
+    streakLabel: '{{days}} giorni di fila',
+    // Progresso del curriculum: sbloccate su totale.
+    curriculumLabel: '{{unlocked}} di {{total}} lezioni',
+    // L'UNICA azione primaria: verbale e concreta, mai "Continua".
+    primaryAction: 'Svuota la pila',
+  },
   settings: {
     title: 'Impostazioni',
     language: {

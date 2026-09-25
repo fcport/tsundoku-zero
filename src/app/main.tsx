@@ -5,10 +5,16 @@ import '../i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createSupabaseClient } from '../data/supabaseClient';
 import { createSupabaseAuthGateway } from '../data/authGateway';
 import { createSupabaseSettingsRepository } from '../data/settingsRepository';
 import { createSupabaseAccountGateway } from '../data/accountGateway';
+import { createSupabaseReviewRepository } from '../data/reviewRepository';
+import { createSupabaseProgressRepository } from '../data/progressRepository';
+import { createSupabaseContentRepository } from '../data/contentRepository';
+import { systemClock } from '../data/clock';
+import type { Ports } from '../features/ports/PortsContext';
 import { AuthRoot } from './AuthRoot';
 import { decideBoot } from './env';
 
@@ -42,14 +48,39 @@ const client = createSupabaseClient(decision.config);
 const gateway = createSupabaseAuthGateway(client);
 const settings = createSupabaseSettingsRepository(client);
 const account = createSupabaseAccountGateway(client);
+
+// Le porte del ciclo di ripasso (dashboard 3.12+), raccolte in un solo oggetto
+// iniettato: gli stessi adattatori Supabase (client condiviso) più l'orologio di
+// sistema. `features` le riceve via PortsProvider senza conoscere data (AD-1).
+const ports: Ports = {
+  clock: systemClock,
+  review: createSupabaseReviewRepository(client),
+  progress: createSupabaseProgressRepository(client),
+  content: createSupabaseContentRepository(client),
+};
+
+// UN solo QueryClient per l'app (il read-model di AD-5). `retry: false`: nessun
+// refetch fantasma, test deterministici — un errore di porta risale subito allo
+// stato di errore invece di ritentare in silenzio.
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
 // <BrowserRouter> abilita il routing per URL e i deep link: il rewrite di
 // vercel.json (/(.*) → /index.html, fissato da deploy-config.test.ts) serve
 // ogni deep link a index.html, poi BrowserRouter prende il controllo lato client
 // e applica il guard (nessun 404).
 createRoot(container).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthRoot gateway={gateway} settings={settings} account={account} />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthRoot
+          gateway={gateway}
+          settings={settings}
+          account={account}
+          ports={ports}
+        />
+      </BrowserRouter>
+    </QueryClientProvider>
   </StrictMode>,
 );

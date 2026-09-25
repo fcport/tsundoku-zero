@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { AppRoutes } from './AppRoutes';
 import { submitSignOut } from '../features/auth/signOut';
 import { i18n, resolveLocale } from '../i18n';
+import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -23,13 +24,25 @@ export interface AuthRootProps {
   readonly gateway: AuthGateway;
   readonly settings: SettingsRepository;
   readonly account: AccountGateway;
+  /**
+   * Le porte del ciclo di ripasso, fornite al sottoalbero via PortsProvider (il
+   * cablaggio predisposto in 3.10, acceso qui dal primo consumatore, la
+   * dashboard). `app` le compone con gli adattatori Supabase; un test inietta
+   * porte in memoria.
+   */
+  readonly ports: Ports;
 }
 
 type SessionStatus = 'checking' | 'authenticated' | 'anonymous';
 
-export function AuthRoot({ gateway, settings, account }: AuthRootProps) {
+export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
   const [status, setStatus] = useState<SessionStatus>('checking');
   const [signOutPending, setSignOutPending] = useState(false);
+  // L'id dell'utente corrente, risolto da `gateway.currentUserId()` alla PRIMA
+  // transizione verso autenticato; `null` finché non è risolto o quando anonimo.
+  // Alimenta la chiave per-utente della dashboard (`dueQueryKey(userId)`); con
+  // `null` la dashboard mostra lo scheletro, nessun ramo speciale.
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -62,6 +75,22 @@ export function AuthRoot({ gateway, settings, account }: AuthRootProps) {
         .catch(() => {});
     };
 
+    // Risolve l'id dell'utente alla transizione verso autenticato (storia 3.12):
+    // `currentUserId` ha confine totale (mai reject; `null` su throw/assenza),
+    // così la dashboard riceve un id o resta sullo scheletro. Guardato da
+    // `active` come le altre letture asincrone; corre insieme a `rehydrateLocale`
+    // sull'edge-trigger. Un sign-out riporta `userId` a `null` (rami anonimi).
+    const resolveUserId = () => {
+      void gateway
+        .currentUserId()
+        .then((id) => {
+          if (active) setUserId(id);
+        })
+        .catch(() => {
+          if (active) setUserId(null);
+        });
+    };
+
     // Sessione riflessa al boot: la prima lettura decide checking → auth/anon,
     // ma SOLO finché lo stato è ancora `checking`. Se un evento di subscription
     // è arrivato prima che questa lettura (lenta) risolva, non lo sovrascriviamo
@@ -77,14 +106,17 @@ export function AuthRoot({ gateway, settings, account }: AuthRootProps) {
             : prev,
         );
         // Edge-trigger fuori dall'updater di setState (StrictMode-safe):
-        // rehydrata solo alla PRIMA transizione verso autenticato.
+        // rehydrata la lingua e risolve l'id solo alla PRIMA transizione verso
+        // autenticato.
         if (authenticated) {
           if (!authApplied) {
             authApplied = true;
             rehydrateLocale();
+            resolveUserId();
           }
         } else {
           authApplied = false;
+          setUserId(null);
         }
       }
     });
@@ -95,16 +127,18 @@ export function AuthRoot({ gateway, settings, account }: AuthRootProps) {
     const unsubscribe = gateway.onAuthStateChange((authenticated) => {
       if (active) {
         setStatus(authenticated ? 'authenticated' : 'anonymous');
-        // Edge-trigger: rehydrata solo alla transizione VERSO autenticato (login
-        // fresco), non sui TOKEN_REFRESHED successivi; un segnale non autenticato
-        // riarma il flag per il prossimo login.
+        // Edge-trigger: rehydrata la lingua e risolve l'id solo alla transizione
+        // VERSO autenticato (login fresco), non sui TOKEN_REFRESHED successivi;
+        // un segnale non autenticato riarma il flag e azzera l'id.
         if (authenticated) {
           if (!authApplied) {
             authApplied = true;
             rehydrateLocale();
+            resolveUserId();
           }
         } else {
           authApplied = false;
+          setUserId(null);
         }
       }
     });
@@ -122,26 +156,29 @@ export function AuthRoot({ gateway, settings, account }: AuthRootProps) {
   }
 
   return (
-    <AppRoutes
-      authenticated={status === 'authenticated'}
-      gateway={gateway}
-      settings={settings}
-      account={account}
-      onAuthenticated={() => setStatus('authenticated')}
-      signOutPending={signOutPending}
-      onSignOut={() => {
-        setSignOutPending(true);
-        void submitSignOut(gateway)
-          .then(() => setStatus('anonymous'))
-          .finally(() => setSignOutPending(false));
-      }}
-      onAccountDeleted={() => {
-        // Dopo una cancellazione riuscita la sessione remota è morta, ma il
-        // token locale sopravvive: riusiamo il percorso di sign-out per
-        // scaricarlo (submitSignOut, confine totale) e riportiamo lo stato ad
-        // `anonymous` — l'utente torna al login (AuthRoot possiede la vista).
-        void submitSignOut(gateway).finally(() => setStatus('anonymous'));
-      }}
-    />
+    <PortsProvider value={ports}>
+      <AppRoutes
+        authenticated={status === 'authenticated'}
+        gateway={gateway}
+        settings={settings}
+        account={account}
+        userId={userId}
+        onAuthenticated={() => setStatus('authenticated')}
+        signOutPending={signOutPending}
+        onSignOut={() => {
+          setSignOutPending(true);
+          void submitSignOut(gateway)
+            .then(() => setStatus('anonymous'))
+            .finally(() => setSignOutPending(false));
+        }}
+        onAccountDeleted={() => {
+          // Dopo una cancellazione riuscita la sessione remota è morta, ma il
+          // token locale sopravvive: riusiamo il percorso di sign-out per
+          // scaricarlo (submitSignOut, confine totale) e riportiamo lo stato ad
+          // `anonymous` — l'utente torna al login (AuthRoot possiede la vista).
+          void submitSignOut(gateway).finally(() => setStatus('anonymous'));
+        }}
+      />
+    </PortsProvider>
   );
 }

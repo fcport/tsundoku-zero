@@ -20,7 +20,8 @@ import { PortsProvider, usePorts, type Ports } from './PortsContext';
 // Istante FISSO: il markup deve mostrarlo, prova che il Probe legge il clock
 // iniettato e non l'orologio di piattaforma.
 const FIXED_NOW = new Date('2026-09-25T08:30:00.000Z');
-const fixedClock: Clock = { now: () => FIXED_NOW };
+const FIXED_TZ = 'Europe/Rome';
+const fixedClock: Clock = { now: () => FIXED_NOW, timeZone: () => FIXED_TZ };
 
 const sampleLessons: readonly LessonSummary[] = [
   { id: 'te-form', ordinal: 1, title: { en: 'The te-form' }, grammarPoints: ['te-form'] },
@@ -42,8 +43,10 @@ const sampleUnlocked: readonly string[] = ['te-form'];
 const inMemoryContent: ContentRepository = {
   listLessons: async () => sampleLessons,
 };
+const sampleLog = [{ reviewedAt: FIXED_NOW }] as const;
 const inMemoryReview: ReviewRepository = {
   listDue: async () => sampleDue,
+  listReviewLog: async () => sampleLog,
 };
 const inMemoryProgress: ProgressRepository = {
   listUnlockedLessonIds: async () => sampleUnlocked,

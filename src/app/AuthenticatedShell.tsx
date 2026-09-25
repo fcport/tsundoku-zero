@@ -1,19 +1,20 @@
 // Livello app (AD-1): la radice protetta minima resa quando l'utente è
 // autenticato. PRESENTAZIONALE — nessuno stato, nessuna chiamata alla porta:
-// riceve `onSignOut` e `signOutPending` per props ed è reso staticamente.
+// riceve `onSignOut`/`signOutPending`/`userId` per props ed è reso staticamente.
 //
 // Compone un <header> con il bottone Disconnetti (`auth.signOut`, da t()) SOPRA
-// il branding <App/>. Non modifica App. La dashboard reale arriva in Epic 3;
-// nessuna storia di Epic 1 la presuppone. Solo classi token del sistema di
-// design (1.3): ogni interattivo con `border-strong`, nessuna ombra, nessun
-// verde di successo.
+// la dashboard (<DashboardScreen>, il primo consumatore del read-model, 3.12) che
+// sostituisce il branding placeholder. Solo classi token del sistema di design
+// (1.3): ogni interattivo con `border-strong`, nessuna ombra, nessun verde di
+// successo.
 //
-// La shell compone DUE feature come sibling — Impostazioni (<SettingsScreen>) e
-// Account (<DeleteAccountSection>) — così l'app resta l'unico livello che le
-// mette insieme, evitando un arco features→features vietato da AD-1. Entrambe
-// sono <section>: l'unico <main> resta quello di <App/> (single-main di 1.7/1.8).
+// La shell compone TRE feature come sibling — la dashboard (l'unico <main>),
+// Impostazioni (<SettingsScreen>) e Account (<DeleteAccountSection>) — così l'app
+// resta l'unico livello che le mette insieme, evitando un arco features→features
+// vietato da AD-1. Impostazioni e Account sono <section>: l'unico <main> è quello
+// della dashboard (single-main di 1.7/1.8).
 import { useTranslation } from '../i18n';
-import { App } from '../ui/App';
+import { DashboardScreen } from '../features/dashboard/DashboardScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { DeleteAccountSection } from '../features/account/DeleteAccountSection';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
@@ -24,6 +25,8 @@ export interface AuthenticatedShellProps {
   readonly settings: SettingsRepository;
   /** La porta di cancellazione account, inoltrata alla feature Account. */
   readonly account: AccountGateway;
+  /** L'id dell'utente corrente (o `null` finché non risolto), passato alla dashboard. */
+  readonly userId: string | null;
   readonly onSignOut: () => void;
   /** Vero durante la disconnessione: disabilita il bottone. */
   readonly signOutPending: boolean;
@@ -34,6 +37,7 @@ export interface AuthenticatedShellProps {
 export function AuthenticatedShell({
   settings,
   account,
+  userId,
   onSignOut,
   signOutPending,
   onAccountDeleted,
@@ -52,7 +56,7 @@ export function AuthenticatedShell({
           {t('auth.signOut')}
         </button>
       </header>
-      <App />
+      <DashboardScreen userId={userId} />
       <SettingsScreen settings={settings} />
       <DeleteAccountSection
         account={account}

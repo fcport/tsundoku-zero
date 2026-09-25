@@ -181,3 +181,11 @@ source_spec: `spec-3-9-una-risposta-una-chiamata-nessun-doppione.md`
 severity: low
 reason: pg-query-emscripten PARSA soltanto il SQL: non esegue la funzione, quindi non può osservare l'effetto di una seconda chiamata. Questa storia verifica OFFLINE la condizione STRUTTURALE necessaria — firma esatta, INSERT con ON CONFLICT (id) DO NOTHING su review_log, UPDATE di review_state guardato dal risultato dell'INSERT (from logged), assenza di logica di scheduling — non l'effetto a query-time. La prova a runtime è GIÀ POSSEDUTA da Epic 4, storia 4.5 ("Riapplicare la coda non falsa niente"), i cui AC dichiarano esplicitamente «drenata due volte ⇒ review_log senza duplicati» e «stesso review_id due volte ⇒ lo stadio non avanza una seconda volta». Nessun orfano: non serve aggiungere l'obbligazione altrove. Stesso schema del differimento a runtime di 3.8.
 status: open
+
+### DW-23: La dashboard non ha uno stato d'errore: se una lettura del read-model (listDue/listReviewLog/listUnlockedLessonIds/listLessons) fallisce, la query resta senza `data` e la dashboard mostra lo scheletro
+origin: spec-deferred 4cc8926dc39b
+location: src/features/dashboard/DashboardScreen.tsx
+source_spec: `spec-3-12-la-pila-con-un-numero-e-un-pulsante.md`
+severity: medium
+reason: `DashboardScreen` decide lo scheletro solo su `data === undefined` e non legge mai `isError`/`error`; con `retry: false` un `DataError` da porta non ripiega. L'intento di 3.12 (AC1-4: dashboard popolata + caricamento + microcopy) non copre il percorso d'errore, e l'epica sequenzia gli stati non-felici della dashboard a 3.15/3.16 — quindi è un vuoto reale ma non di questa storia. Va affrontato in modo trasversale (con gli stati vuoti o una storia dedicata allo stato d'errore del read-model).
+status: open

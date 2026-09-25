@@ -30,6 +30,20 @@ export const en = {
       unknown: 'Something went wrong. Try again.',
     },
   },
+  dashboard: {
+    // Etichetta resa SOTTO il conteggio: il numero PRECEDE il verbo
+    // ("23 to review"), mai "you have 23". Nessun `!`, nessuna emoji, nessun
+    // avverbio di lode (nessuna grammatica della celebrazione).
+    dueLabel: 'to review',
+    // Streak: i giorni PRECEDONO il sostantivo ("7 day streak"), neutro. La
+    // variabile è `days` (non `count`), per non innescare il pluralizzatore di
+    // i18next che richiederebbe chiavi `_one`/`_other` fuori dalla parità.
+    streakLabel: '{{days}} day streak',
+    // Progresso del curriculum: sbloccate su totale.
+    curriculumLabel: '{{unlocked}} of {{total}} lessons',
+    // L'UNICA azione primaria: verbale e concreta, mai "Continue".
+    primaryAction: 'Empty the pile',
+  },
   settings: {
     title: 'Settings',
     language: {

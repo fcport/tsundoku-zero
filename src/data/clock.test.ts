@@ -26,4 +26,13 @@ describe('systemClock — adattatore di produzione della porta Clock', () => {
     const second = systemClock.now().getTime();
     expect(second).toBeGreaterThanOrEqual(first);
   });
+
+  it('timeZone() ritorna una stringa IANA non vuota (per lo streak, 3.12)', () => {
+    // L'adattatore legge il fuso locale via Intl…resolvedOptions() (ammesso qui,
+    // vietato nel dominio). Non fissiamo un valore preciso (dipende dall'host):
+    // basta che sia una stringa non vuota, che `streak()` accetta come timeZone.
+    const tz = systemClock.timeZone();
+    expect(typeof tz).toBe('string');
+    expect(tz.length).toBeGreaterThan(0);
+  });
 });
