@@ -14,11 +14,13 @@ import {
   type ParseResult,
 } from './schema';
 import { exerciseSchema } from './exercise';
+import { bilingualText } from './bilingual';
 
 /**
  * Schema della lezione (AC2). Una lezione porta:
  * - `order`: intero ≥ 1 (numero d'ordine nel curriculum);
- * - `title`: non vuoto;
+ * - `title`: bilingue (`en` obbligatorio, `it` facoltativo), stessa forma e
+ *   stesso ripiego dichiarato della spiegazione (`./bilingual`);
  * - `grammarPoints`: almeno uno, ciascuno non vuoto (i punti che insegna);
  * - `exercises`: ZERO o più — l'array vuoto è valido (AC2). Una lezione senza
  *   esercizi resta parte del curriculum e dichiara comunque i punti grammaticali.
@@ -36,17 +38,21 @@ import { exerciseSchema } from './exercise';
  */
 export const lessonSchema = object({
   order: refine(integer(), (value) => value >= 1, 'ordine intero ≥ 1 richiesto'),
-  // AC5 — clausola del TITOLO. Il `title` è prosa AUTORATA: qui lo schema esige
-  // solo che sia non vuoto. La sua proprietà — «deriva dal punto grammaticale,
-  // mai dalla numerazione/titolo di una fonte esterna» — NON è imponibile dalla
-  // forma dello schema (un titolo in prosa non è derivabile meccanicamente da un
-  // tag grammaticale): è garantita dalla REVISIONE UMANA OBBLIGATORIA prima del
-  // commit (FR11.2, Epic 6). La superficie d'identità MECCANICA è invece
-  // l'IDENTIFICATORE (`deriveLessonId`/`lessonId`), che deriva dal punto
-  // grammaticale primario e ignora dimostrabilmente il titolo (vedi il test
-  // «id IDENTICO per stesso grammarPoints[0] con order/title diversi»). Così la
-  // scelta di AC5 è documentata, non silenziosa.
-  title: nonEmptyString(),
+  // AC5 — clausola del TITOLO. Il `title` è prosa AUTORATA, ed è BILINGUE con la
+  // stessa forma e lo stesso ripiego dichiarato della spiegazione (`./bilingual`,
+  // FR8.5): `en` obbligatorio, `it` facoltativo. La ragione è FR2.1a — ciò che
+  // l'app espone dev'essere «comprensibile a chi la fonte non l'ha mai vista», e
+  // un titolo nella sola lingua studiata non lo è per chi la sta imparando.
+  // La sua proprietà — «deriva dal punto grammaticale, mai dalla numerazione o dal
+  // titolo di una fonte esterna» — NON è imponibile dalla forma dello schema (un
+  // titolo in prosa non è derivabile meccanicamente da un tag grammaticale): è
+  // garantita dalla REVISIONE UMANA OBBLIGATORIA prima del commit (FR11.2, Epic 6).
+  // La superficie d'identità MECCANICA è invece l'IDENTIFICATORE
+  // (`deriveLessonId`/`lessonId`), che deriva dal punto grammaticale primario e
+  // ignora dimostrabilmente il titolo (vedi il test «id IDENTICO per stesso
+  // grammarPoints[0] con order/title diversi»). Così la scelta di AC5 è
+  // documentata, non silenziosa.
+  title: bilingualText,
   grammarPoints: nonEmptyArray(nonEmptyString()),
   exercises: array(exerciseSchema),
 });

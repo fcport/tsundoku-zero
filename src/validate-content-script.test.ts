@@ -28,7 +28,7 @@ const viteNodeBin = resolve(repoRoot, 'node_modules', 'vite-node', 'vite-node.mj
 
 const validLesson = {
   order: 1,
-  title: 'Il verbo 読む',
+  title: { en: 'Il verbo 読む' },
   grammarPoints: ['〜を読む'],
   exercises: [
     {

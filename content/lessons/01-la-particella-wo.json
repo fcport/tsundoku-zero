@@ -1,6 +1,9 @@
 {
   "order": 1,
-  "title": "毎日の動作を「を」で言い表す",
+  "title": {
+    "en": "Marking the object with を",
+    "it": "Marcare l'oggetto con を"
+  },
   "grammarPoints": ["「を」で示す目的語", "熟字訓の読み"],
   "exercises": [
     {
