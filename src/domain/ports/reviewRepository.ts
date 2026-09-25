@@ -5,8 +5,27 @@
 // importa data). Qui si FISSA il canale unico di lettura prima che i consumatori
 // nascano, con il contratto ancorato a `isDue` di `../due`.
 
-import type { ReviewState } from '../schedule';
+import type { ReviewOutcome, ReviewState } from '../schedule';
 import type { ReviewLogEntry } from '../streak';
+
+/**
+ * L'input di `applyReview` (3.19): i valori GIÀ CALCOLATI sul client per una
+ * risposta. `reviewId` è generato dal client (`crypto.randomUUID()` in feature) e
+ * rende la chiamata IDEMPOTENTE (`on conflict do nothing` a DB); `exerciseId` è
+ * l'id di RIGA DB = chiave della pila (`AD-5`); `outcome`/`stage`/`dueAt` vengono
+ * da `outcomeOf`/`schedule` (mai ricalcolati a DB); `reviewedAt` è l'istante della
+ * risposta; `usedExplanation` se la spiegazione è stata consultata prima. La porta
+ * TRASPORTA questi valori, non li deriva.
+ */
+export interface ApplyReviewInput {
+  readonly reviewId: string;
+  readonly exerciseId: string;
+  readonly outcome: ReviewOutcome;
+  readonly stage: number;
+  readonly dueAt: Date;
+  readonly reviewedAt: Date;
+  readonly usedExplanation: boolean;
+}
 
 /**
  * Porta della lettura della pila dei dovuti dichiarata dal dominio (AD-2/AD-5).
@@ -31,4 +50,16 @@ export interface ReviewRepository {
    * Opera sull'utente corrente (RLS isola la riga), senza parametro `userId`.
    */
   listReviewLog(): Promise<readonly ReviewLogEntry[]>;
+  /**
+   * L'UNICA via di persistenza di una risposta (AD-7, AC4): UNA chiamata
+   * IDEMPOTENTE che trasporta i valori GIÀ CALCOLATI dal client (`ApplyReviewInput`)
+   * alla RPC `apply_review` (a DB dalla 3.9). Non ricalcola esito/scheduling né in
+   * JS né in SQL: la RPC inserisce in `review_log` con `on conflict (review_id) do
+   * nothing` e aggiorna `review_state` solo se l'insert ha prodotto una riga —
+   * quindi un retry con lo STESSO `reviewId` è un no-op. `void`: il chiamante
+   * (mutation TanStack) usa l'esito già in mano, non la risposta della RPC. Opera
+   * sull'utente corrente (RLS isola la riga). Su errore Supabase LANCIA
+   * `DataError('applyReview')` (reject, alimenta TanStack).
+   */
+  applyReview(input: ApplyReviewInput): Promise<void>;
 }

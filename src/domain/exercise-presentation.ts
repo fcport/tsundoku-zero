@@ -16,7 +16,7 @@
 // piattaforma, nessun `Math.random()`. Usa l'UNICO hash condiviso (`./hash`, la
 // stessa `fnv1a` della dispersione delle scadenze) e l'identità di dominio
 // (`./exercise-identity`), così l'ordine non può nascere divergente.
-import type { Exercise } from './exercise';
+import type { Exercise, ExerciseResponse } from './exercise';
 import { deriveExerciseId } from './exercise-identity';
 import { alignFurigana } from './furigana';
 import { fnv1a } from './hash';
@@ -68,6 +68,73 @@ export function answerOptions(exercise: Exercise): readonly string[] {
       const _exhaustive: never = exercise;
       void _exhaustive;
       return [];
+    }
+  }
+}
+
+/**
+ * L'immagine SPECULARE di `answerOptions` (3.19): raccolti i tocchi dell'utente
+ * come INDICI nelle `answerOptions(exercise)`, li traduce nella `ExerciseResponse`
+ * che `check()` sa valutare. PURA, sincrona, TOTALE (switch chiuso con guardia
+ * `never`) e senza mutazione — `selected` vuoto o incompleto NON lancia (produce
+ * una risposta parziale). La UI raccoglie posizioni, il dominio compone il
+ * significato: l'ordine e il numero delle opzioni vivono già qui (`answerOptions`),
+ * così la risposta non può nascere divergente dalle opzioni rese.
+ *
+ * - `single-select`: `{ kind, choice: options[selected[0]] }` — l'opzione toccata.
+ * - `assemble`: `{ kind, order: selected.map((i) => options[i]) }` — le tessere
+ *   NELL'ORDINE dei tocchi (append-only fino al completamento, nessun undo).
+ * - `select-span`: `{ kind, span: { start: selected[0], end: selected[0] + 1 } }` —
+ *   l'INDICE di opzione È l'indice di segmento (ordine naturale, mono-segmento).
+ */
+export function composeResponse(
+  exercise: Exercise,
+  selected: readonly number[],
+): ExerciseResponse {
+  const options = answerOptions(exercise);
+  switch (exercise.kind) {
+    case 'single-select':
+      return { kind: 'single-select', choice: options[selected[0]] };
+    case 'assemble':
+      return { kind: 'assemble', order: selected.map((i) => options[i]) };
+    case 'select-span': {
+      const start = selected[0];
+      return { kind: 'select-span', span: { start, end: start + 1 } };
+    }
+    default: {
+      // Registro chiuso (AD-22): un kind non gestito è errore di COMPILAZIONE.
+      const _exhaustive: never = exercise;
+      void _exhaustive;
+      throw new Error('exercise kind non gestito');
+    }
+  }
+}
+
+/**
+ * Decide se i tocchi raccolti COMPLETANO la risposta per il tipo (3.19). PURA,
+ * sincrona, TOTALE ed esaustiva su `kind`: la UI la interroga per sapere QUANDO
+ * la risposta è pronta da valutare, senza codificare il conteggio per tipo.
+ *
+ * - `single-select`: completa a `length === 1` (una sola scelta).
+ * - `assemble`: completa a `length === |opzioni|` (tutte le tessere piazzate).
+ * - `select-span`: completa a `length === 1` (un solo segmento, mono-segmento).
+ */
+export function selectionComplete(
+  exercise: Exercise,
+  selected: readonly number[],
+): boolean {
+  switch (exercise.kind) {
+    case 'single-select':
+      return selected.length === 1;
+    case 'assemble':
+      return selected.length === answerOptions(exercise).length;
+    case 'select-span':
+      return selected.length === 1;
+    default: {
+      // Registro chiuso (AD-22): un kind non gestito è errore di COMPILAZIONE.
+      const _exhaustive: never = exercise;
+      void _exhaustive;
+      return false;
     }
   }
 }

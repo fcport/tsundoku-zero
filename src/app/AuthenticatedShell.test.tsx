@@ -33,7 +33,7 @@ const inertAccount: AccountGateway = {
 // Porte del ciclo iniettate alla dashboard (3.12): inerti con cache seminata.
 const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
-  review: { listDue: async () => [], listReviewLog: async () => [] },
+  review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [], listExercisesByIds: async () => [] },
 };

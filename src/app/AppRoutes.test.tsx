@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
 import { AppRoutes } from './AppRoutes';
 import { dueQueryKey } from '../domain/due';
+import { useSessionStore } from '../features/study/sessionStore';
 import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
@@ -46,7 +47,7 @@ const inertAccount: AccountGateway = {
 // queryFn non vengono invocate al primo render sincrono; restano inerti.
 const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
-  review: { listDue: async () => [], listReviewLog: async () => [] },
+  review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [], listExercisesByIds: async () => [] },
 };
@@ -197,7 +198,11 @@ describe('AppRoutes — rotta di Accesso, autenticato', () => {
   });
 });
 
-describe('AppRoutes — rotta /studia, autenticato (3.18)', () => {
+describe('AppRoutes — rotta /studia, autenticato (3.18/3.19)', () => {
+  // La SessionScreen (3.19) legge la corrente dallo store SEMINATO (l `start` di
+  // produzione è un effetto, non eseguito da renderToStaticMarkup): lo semino con
+  // l unico id dovuto ('a'), coerente con la pila e gli esercizi seminati in cache.
+  useSessionStore.getState().start(['a']);
   const markup = renderAt('/studia', true);
 
   it('rende la SessionScreen: la consegna dell esercizio corrente', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { dueQueryKey, isDue } from './due';
-import type { ReviewState } from './schedule';
+import { applyResultToDue, dueQueryKey, isDue } from './due';
+import { schedule, type ReviewOutcome, type ReviewState } from './schedule';
 
 // I/O Matrix di `due.ts` (Story 3.3, AD-5): l'UNICO predicato di dovutezza e
 // l'UNICA identità della pila. `isDue` è pura, sincrona, totale, non muta lo
@@ -79,6 +79,100 @@ describe('isDue: predicato di dovutezza inclusivo (AC1, AC2)', () => {
   it('è deterministica: stessa coppia (state, now) ⇒ stesso booleano', () => {
     const state = stateWithDueAt(new Date(now.getTime() - 10));
     expect(isDue(state, now)).toBe(isDue(state, now));
+  });
+});
+
+// applyResultToDue (3.19): l'aggiornamento OTTIMISTICO del conteggio della pila.
+// I `result` NON sono costruiti a mano: li produce `schedule()` REALE, così la
+// direzione del filtro («esce» a intervallo > 0, «resta» a intervallo 0) è quella
+// vera del motore, provata contro la scala Leitner.
+describe('applyResultToDue: rimpiazza e rifiltra con isDue (3.19)', () => {
+  const NOW = new Date('2026-09-24T12:00:00.000Z');
+
+  /** Stato di ripasso FRESCO a stadio 0 per l'id dato (come session.test.ts). */
+  function stage0(exerciseId: string): ReviewState {
+    return {
+      exerciseId,
+      stage: 0,
+      dueAt: new Date('2026-09-01T00:00:00.000Z'),
+      reviewCount: 0,
+      lapseCount: 0,
+      lastReviewedAt: null,
+    };
+  }
+
+  /** Il `result` prodotto da `schedule()` reale per (id, outcome). */
+  function resultOf(exerciseId: string, outcome: ReviewOutcome): ReviewState {
+    return schedule(stage0(exerciseId), outcome, NOW);
+  }
+
+  it('good (dueAt > now) FA USCIRE l esercizio dalla pila', () => {
+    const pile = [stage0('a'), stage0('b')];
+    const result = resultOf('a', 'good');
+    // schedule good a stadio 0 ⇒ stadio 1, intervallo > 0 ⇒ dueAt > now.
+    expect(isDue(result, NOW)).toBe(false);
+    const next = applyResultToDue(pile, result, NOW);
+    expect(next.map((s) => s.exerciseId)).toEqual(['b']);
+  });
+
+  it('easy (dueAt > now) FA USCIRE l esercizio dalla pila', () => {
+    const pile = [stage0('a'), stage0('b')];
+    const result = resultOf('a', 'easy');
+    expect(isDue(result, NOW)).toBe(false);
+    const next = applyResultToDue(pile, result, NOW);
+    expect(next.map((s) => s.exerciseId)).toEqual(['b']);
+  });
+
+  it('again (dueAt === now, stadio 0) MANTIENE l esercizio (conteggio invariato)', () => {
+    const pile = [stage0('a'), stage0('b')];
+    const result = resultOf('a', 'again');
+    // schedule again ⇒ stadio 0, intervallo 0 ⇒ dueAt === now ⇒ ancora dovuto.
+    expect(isDue(result, NOW)).toBe(true);
+    const next = applyResultToDue(pile, result, NOW);
+    expect(next.map((s) => s.exerciseId)).toEqual(['a', 'b']);
+    // Lo stato è stato RIMPIAZZATO con result (stadio/dueat aggiornati).
+    expect(next.find((s) => s.exerciseId === 'a')).toEqual(result);
+  });
+
+  it('hard a stadio 0 (dueAt === now) MANTIENE l esercizio', () => {
+    const pile = [stage0('a')];
+    const result = resultOf('a', 'hard');
+    // hard a stadio 0: nextStage 0, intervallo 0 ⇒ dueAt === now.
+    expect(isDue(result, NOW)).toBe(true);
+    const next = applyResultToDue(pile, result, NOW);
+    expect(next.map((s) => s.exerciseId)).toEqual(['a']);
+  });
+
+  it('gli altri stati restano INVARIATI (solo l esercizio del result è toccato)', () => {
+    const other = stage0('b');
+    const pile = [stage0('a'), other];
+    const result = resultOf('a', 'again'); // 'a' resta dovuto
+    const next = applyResultToDue(pile, result, NOW);
+    // 'b' è lo STESSO riferimento (non rimpiazzato).
+    expect(next.find((s) => s.exerciseId === 'b')).toBe(other);
+  });
+
+  it('esercizio non presente ⇒ pila invariata (per valore)', () => {
+    const pile = [stage0('a'), stage0('b')];
+    const result = resultOf('z', 'again'); // 'z' non è in pila
+    const next = applyResultToDue(pile, result, NOW);
+    expect(next.map((s) => s.exerciseId)).toEqual(['a', 'b']);
+  });
+
+  it('non muta l array né gli stati passati', () => {
+    const pile = [stage0('a'), stage0('b')];
+    const snapshot = pile.map((s) => s.exerciseId);
+    applyResultToDue(pile, resultOf('a', 'good'), NOW);
+    expect(pile.map((s) => s.exerciseId)).toEqual(snapshot);
+    expect(pile.length).toBe(2);
+  });
+
+  // Anti-vacuità: verde su ENTRAMBI i lati (esce / resta), così un filtro costante
+  // fallirebbe qui.
+  it('anti-vacuità: good esce, again resta', () => {
+    const pile = [stage0('a')];
+    expect(applyResultToDue(pile, resultOf('a', 'good'), NOW)).toEqual([]);
+    expect(applyResultToDue(pile, resultOf('a', 'again'), NOW).map((s) => s.exerciseId)).toEqual(['a']);
   });
 });
 

@@ -34,7 +34,7 @@ function reviewed(exerciseId: string, outcome: ReviewOutcome): SessionEvent {
 // una sessione fresca (coda vuota) prima di ogni caso, così nessuno stato residuo
 // di un test precedente influenza il successivo.
 beforeEach(() => {
-  useSessionStore.setState({ session: createSession([]) });
+  useSessionStore.setState({ session: createSession([]), total: 0, initialIds: [] });
 });
 
 describe('useSessionStore: delega al dominio (AC5)', () => {
@@ -45,6 +45,28 @@ describe('useSessionStore: delega al dominio (AC5)', () => {
   it('start costruisce la coda via createSession', () => {
     useSessionStore.getState().start(['a', 'b', 'c']);
     expect(useSessionStore.getState().session).toEqual(createSession(['a', 'b', 'c']));
+  });
+
+  it('start popola total e initialIds dagli id iniziali (3.19)', () => {
+    useSessionStore.getState().start(['a', 'b', 'c']);
+    expect(useSessionStore.getState().total).toBe(3);
+    expect(useSessionStore.getState().initialIds).toEqual(['a', 'b', 'c']);
+  });
+
+  it('total/initialIds restano FISSI mentre la coda si accorcia (3.19)', () => {
+    useSessionStore.getState().start(['a', 'b', 'c']);
+    useSessionStore.getState().dispatch(reviewed('a', 'good'));
+    // La coda cala, ma total/initialIds no.
+    expect(useSessionStore.getState().session.queue).toEqual(['b', 'c']);
+    expect(useSessionStore.getState().total).toBe(3);
+    expect(useSessionStore.getState().initialIds).toEqual(['a', 'b', 'c']);
+  });
+
+  it('start copia gli id: non trattiene il riferimento all array del chiamante', () => {
+    const ids = ['a', 'b'];
+    useSessionStore.getState().start(ids);
+    ids.push('c');
+    expect(useSessionStore.getState().initialIds).toEqual(['a', 'b']);
   });
 
   it('dispatch produce ESATTAMENTE sessionReducer(before, event) (delega per valore)', () => {

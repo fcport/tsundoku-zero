@@ -95,6 +95,31 @@ export const en = {
       selectSpan: 'Select the part of the sentence that answers the question.',
       assemble: 'Put the tiles in order to build the sentence.',
     },
+    // L'esito DICHIARATO in testo (3.19), da `check().correct`: nessun verde/rosso,
+    // l'informazione la porta il contenuto della spiegazione. Nessun `!`, nessuna
+    // emoji, nessun avverbio di lode; ASCII.
+    outcome: {
+      correct: 'That answer is correct.',
+      incorrect: 'That answer is not correct.',
+    },
+    // La spiegazione bilingue (3.19, FR8.5): `reveal` è l'azione di consulto
+    // pre-risposta (verbale e concreta, mai "Continue"); `heading` la etichetta il
+    // blocco; `fallbackNotice` dichiara che l'italiano non c'è ancora e mostra
+    // l'inglese. Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
+    explanation: {
+      reveal: 'Show the explanation',
+      heading: 'Explanation',
+      fallbackNotice: 'This explanation has not been translated yet.',
+    },
+    // L'azione di avanzamento al prossimo esercizio (3.19): verbale e concreta,
+    // mai "Continue". Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
+    next: 'Next exercise',
+    // La barra di avanzamento (3.19): l'`aria-label` che l'AT legge. Rappresenta il
+    // completato; nessun conteggio interpolato (`{{count}}` innescherebbe il
+    // pluralizzatore). Nessun `!`, nessuna emoji; ASCII.
+    progress: {
+      label: 'Session progress',
+    },
   },
   settings: {
     title: 'Settings',
