@@ -5,8 +5,12 @@
 // LETTURA del ciclo: LANCIA un `DataError('listUnlockedLessonIds')` su errore
 // Supabase o riga malformata (alimenta TanStack Query — reject, non valore
 // degradato). Legge `lesson_progress` (3.8): l'insieme delle lezioni sbloccate,
-// isolato per riga da RLS. Sola lettura in questa storia: lo sblocco (scrittura)
-// è differito (3.13).
+// isolato per riga da RLS.
+//
+// SCRITTURA del ciclo (3.13): `unlockLesson` invoca la RPC ATOMICA e IDEMPOTENTE
+// `unlock_lesson` (materializza progresso + stato di ripasso in una transazione).
+// Su errore LANCIA `DataError('unlockLesson')`, mirror del contratto d'errore
+// delle letture (reject, non valore degradato).
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ProgressRepository } from '../domain/ports/progressRepository';
 import { DataError } from './dataError';
@@ -15,6 +19,11 @@ import { DataError } from './dataError';
 // non serve nella select: RLS isola già la riga all'utente corrente.
 const LESSON_PROGRESS_TABLE = 'lesson_progress';
 const LESSON_PROGRESS_COLUMNS = 'lesson_id';
+
+// Il nome della RPC di sblocco vive qui una sola volta (AD-2), accanto ai nomi di
+// tabella. La materializzazione atomica è tutta lato SQL (vedi la migrazione
+// `20260925150000_create_unlock_lesson.sql`).
+const UNLOCK_LESSON_RPC = 'unlock_lesson';
 
 // Forma GREZZA di una riga `lesson_progress`: solo `lesson_id` (text) ci serve.
 interface LessonProgressRow {
@@ -54,6 +63,22 @@ export function createSupabaseProgressRepository(
         }
         return row.lesson_id;
       });
+    },
+
+    async unlockLesson(lessonId: string, now: Date): Promise<void> {
+      // SCRITTURA via la sola RPC atomica/idempotente `unlock_lesson`. La materia-
+      // lizzazione (progresso + review_state per esercizio, lettura server-side
+      // degli esercizi) è tutta in SQL: qui si passano solo `lesson_id` e l'istante
+      // di sblocco. `now` arriva dal Clock (AD-1); lo serializziamo in ISO 8601
+      // (timestamptz). Su errore LANCIA (reject), mirror del contratto delle letture.
+      const { error } = await client.rpc(UNLOCK_LESSON_RPC, {
+        lesson_id: lessonId,
+        unlocked_at: now.toISOString(),
+      });
+
+      if (error) {
+        throw new DataError('unlockLesson', error);
+      }
     },
   };
 }

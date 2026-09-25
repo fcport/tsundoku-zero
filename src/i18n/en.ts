@@ -43,6 +43,9 @@ export const en = {
     curriculumLabel: '{{unlocked}} of {{total}} lessons',
     // L'UNICA azione primaria: verbale e concreta, mai "Continue".
     primaryAction: 'Empty the pile',
+    // L'azione di SBLOCCO (3.13): resa SOLO a pila vuota (il cancello). Verbale e
+    // concreta, mai "Continue"; nessun `!`, nessuna emoji, nessun avverbio di lode.
+    unlockAction: 'Unlock the next lesson',
   },
   settings: {
     title: 'Settings',

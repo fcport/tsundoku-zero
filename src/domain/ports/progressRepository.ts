@@ -22,4 +22,19 @@ export interface ProgressRepository {
    * sull'utente corrente, senza parametro `userId`.
    */
   listUnlockedLessonIds(): Promise<readonly string[]>;
+
+  /**
+   * SBLOCCA una lezione per l'utente corrente: scrittura ATOMICA e IDEMPOTENTE
+   * via la RPC `unlock_lesson` (storia 3.13). Materializza in un colpo solo la
+   * riga `lesson_progress` e una riga `review_state` per ciascun esercizio della
+   * lezione (`stage = 0`, `due_at` = istante di sblocco), tutte lette server-side.
+   * Ri-invocarla NON duplica righe (`on conflict do nothing`).
+   *
+   * `now` è INIETTATO dal Clock (AD-1): il dominio non legge l'orologio, e
+   * l'istante diventa `unlocked_at`/`due_at`. Su fallimento RIFIUTA con un
+   * `DataError` (mirror del contratto d'errore delle letture: reject, non valore
+   * degradato). La SCELTA di quale lezione sbloccare è del dominio
+   * (`nextLessonToUnlock`): questa porta materializza solo l'`id` ricevuto.
+   */
+  unlockLesson(lessonId: string, now: Date): Promise<void>;
 }

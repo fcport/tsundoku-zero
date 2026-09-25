@@ -11,13 +11,23 @@ import { DataError } from './dataError';
 interface FakeProgressOptions {
   readonly rows?: readonly unknown[] | null;
   readonly error?: unknown;
+  /** Errore ritornato dalla RPC `unlock_lesson` (assente ⇒ successo). */
+  readonly rpcError?: unknown;
+}
+
+/** Registra la chiamata a `.rpc` per l'ispezione (mirror del fake invoke di accountGateway.test). */
+interface RpcCall {
+  readonly name: string;
+  readonly params: unknown;
 }
 
 function makeFakeClient(options: FakeProgressOptions = {}): {
   client: SupabaseClient;
   calls: { table: string; columns: string };
+  rpcs: RpcCall[];
 } {
   const calls = { table: '', columns: '' };
+  const rpcs: RpcCall[] = [];
 
   const fake = {
     from(table: string) {
@@ -32,9 +42,13 @@ function makeFakeClient(options: FakeProgressOptions = {}): {
         },
       };
     },
+    rpc: async (name: string, params: unknown) => {
+      rpcs.push({ name, params });
+      return { data: null, error: options.rpcError ?? null };
+    },
   };
 
-  return { client: fake as unknown as SupabaseClient, calls };
+  return { client: fake as unknown as SupabaseClient, calls, rpcs };
 }
 
 describe('listUnlockedLessonIds — happy path: ritorna gli id lezione', () => {
@@ -91,5 +105,37 @@ describe('listUnlockedLessonIds — fallimenti lanciano DataError (reject)', () 
     const repo = createSupabaseProgressRepository(client);
 
     await expect(repo.listUnlockedLessonIds()).rejects.toBeInstanceOf(DataError);
+  });
+});
+
+describe('unlockLesson — SCRITTURA via RPC atomica/idempotente unlock_lesson (3.13)', () => {
+  it('happy: invoca `unlock_lesson` con lesson_id e unlocked_at ISO; risolve void', async () => {
+    const { client, rpcs } = makeFakeClient({});
+    const repo = createSupabaseProgressRepository(client);
+    const now = new Date('2026-09-25T12:34:56.000Z');
+
+    await expect(repo.unlockLesson('te-form', now)).resolves.toBeUndefined();
+
+    expect(rpcs).toHaveLength(1);
+    expect(rpcs[0]?.name).toBe('unlock_lesson');
+    expect(rpcs[0]?.params).toEqual({
+      lesson_id: 'te-form',
+      unlocked_at: '2026-09-25T12:34:56.000Z',
+    });
+  });
+
+  it("errore RPC ⇒ DataError('unlockLesson') con causa preservata (reject, non degrada)", async () => {
+    const rpcError = { message: 'rls denied', code: '42501' };
+    const { client } = makeFakeClient({ rpcError });
+    const repo = createSupabaseProgressRepository(client);
+    const now = new Date('2026-09-25T12:00:00.000Z');
+
+    await expect(repo.unlockLesson('te-form', now)).rejects.toBeInstanceOf(
+      DataError,
+    );
+    await expect(repo.unlockLesson('te-form', now)).rejects.toMatchObject({
+      operation: 'unlockLesson',
+      cause: rpcError,
+    });
   });
 });

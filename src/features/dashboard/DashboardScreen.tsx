@@ -6,16 +6,20 @@
 // `Session`, e la pila usa la chiave di dominio `dueQueryKey(userId)` VERBATIM
 // (nessuna schermata ricalcola la pila).
 //
-// Questa storia (3.12) rende la dashboard POPOLATA (dovuti esistenti) + lo
-// scheletro di caricamento. Gli stati vuoti/primo-avvio e il cablaggio
-// dell'azione (avvio sessione) arrivano nelle storie successive: qui l'azione
-// primaria è PRESENTE con la sua copy, ma senza `onClick`/rotta.
+// Questa storia (3.13) aggiunge il CANCELLO delle quest sequenziali: pila NON
+// vuota ⇒ SOLO l'azione svuota-pila (inerte, come in 3.12); pila vuota con una
+// lezione successiva ⇒ SOLO l'azione di SBLOCCO, cablata a un `useMutation` che
+// chiama `progress.unlockLesson` e invalida pila+sblocco in `onSuccess`; pila
+// vuota a curriculum esaurito ⇒ NESSUNA azione (la schermata senza-azione è 3.16).
+// Le due quest non compaiono MAI insieme. L'`onClick` di avvio sessione resta 3.18
+// (l'azione svuota-pila è ancora sola-copy).
 //
 // Nessuna grammatica della celebrazione (nessun verde, nessun `!`, nessuna
 // emoji): solo token del sistema di design (la regola colore vale anche qui). I
 // primitivi ui (pile-counter, streak-badge, curriculum-progress, button-primary)
 // sono composti INLINE: l'estrazione nasce col secondo consumatore.
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { nextLessonToUnlock } from '../../domain/curriculum';
 import { dueQueryKey } from '../../domain/due';
 import { streak } from '../../domain/streak';
 import { usePorts } from '../ports/PortsContext';
@@ -38,6 +42,7 @@ const CONTAINER_HEIGHT = 'min-h-[24rem]';
 export function DashboardScreen({ userId }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   // Le quattro letture del read-model. La pila usa la chiave di DOMINIO verbatim
   // (AD-5); le altre chiavi sono per-utente (`['streak'|'unlocked', userId]`) o
@@ -61,6 +66,22 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
   const lessonsQ = useQuery({
     queryKey: ['lessons'],
     queryFn: () => content.listLessons(),
+  });
+
+  // L'azione di SBLOCCO (3.13): materializza la lezione via porta
+  // (`progress.unlockLesson`, scrittura atomica/idempotente), MAI da `data`
+  // diretto (AD-1: features→domain/ports, non data). L'istante entra dal Clock. In
+  // `onSuccess` invalida la pila (`dueQueryKey`) e lo sblocco (`['unlocked']`), così
+  // il read-model è RI-DERIVATO, mai memorizzato (AC7/AD-5). Definito PRIMA del
+  // ramo scheletro (i hook non sono condizionali); l'`id` da sbloccare è passato a
+  // `mutate` dal cancello, il dominio ha già scelto la successiva.
+  const unlockMutation = useMutation({
+    mutationFn: (lessonId: string) =>
+      progress.unlockLesson(lessonId, clock.now()),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: dueQueryKey(userId ?? '') });
+      void queryClient.invalidateQueries({ queryKey: ['unlocked', userId] });
+    },
   });
 
   // Scheletro finché l'id non è risolto o una qualunque query è `pending`
@@ -89,13 +110,16 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
     );
   }
 
-  // Read-model PURO: pila e streak DERIVATI a ogni lettura, mai memorizzati
-  // (AD-5/AD-18). `isDue`/`streak` restano l'autorità di dominio; orologio e
-  // fuso ENTRANO dal Clock (mai letti qui).
+  // Read-model PURO: pila, streak e la SUCCESSIVA lezione DERIVATI a ogni lettura,
+  // mai memorizzati (AD-5/AD-18). `isDue`/`streak`/`nextLessonToUnlock` restano
+  // l'autorità di dominio; orologio e fuso ENTRANO dal Clock (mai letti qui).
   const count = dueQ.data.length;
   const days = streak(logQ.data, clock.now(), clock.timeZone());
   const unlocked = unlockedQ.data.length;
   const total = lessonsQ.data.length;
+  // La SUCCESSIVA lezione da sbloccare (autorità sequenziale, puro): `null` a
+  // curriculum esaurito. La UI passa alla RPC solo il suo `id`.
+  const next = nextLessonToUnlock(lessonsQ.data, unlockedQ.data);
 
   return (
     <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
@@ -114,14 +138,34 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
         {t('dashboard.curriculumLabel', { unlocked, total })}
       </p>
 
-      {/* button-primary: l'UNICA azione primaria (verbale e concreta). Il suo
-          onClick/rotta (avvio sessione) arriva in 3.18: qui è solo la copy. */}
-      <button
-        type="button"
-        className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
-      >
-        {t('dashboard.primaryAction')}
-      </button>
+      {/* Il CANCELLO delle quest sequenziali (AC4): al più UNA sola azione, mai
+          entrambe insieme.
+          - Pila NON vuota (count > 0) ⇒ SOLO svuota-pila (sola-copy, inerte come
+            in 3.12; l'azione di sblocco NON è presente, nemmeno disabilitata).
+          - Pila vuota (count === 0) con una lezione successiva ⇒ SOLO sblocco,
+            cablato a `unlockMutation.mutate(next.id)`.
+          - Pila vuota a curriculum esaurito (next === null) ⇒ NESSUNA azione (la
+            schermata senza-azione è 3.16): non si rende alcun pulsante. */}
+      {count > 0 ? (
+        // button-primary svuota-pila: verbale e concreto. onClick/rotta (avvio
+        // sessione) resta 3.18: qui è solo la copy.
+        <button
+          type="button"
+          className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+        >
+          {t('dashboard.primaryAction')}
+        </button>
+      ) : next !== null ? (
+        // button-primary sblocco: materializza la lezione successiva via porta.
+        <button
+          type="button"
+          onClick={() => unlockMutation.mutate(next.id)}
+          disabled={unlockMutation.isPending}
+          className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+        >
+          {t('dashboard.unlockAction')}
+        </button>
+      ) : null}
     </main>
   );
 }

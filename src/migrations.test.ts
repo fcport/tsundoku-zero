@@ -1348,3 +1348,335 @@ describe('migrazione apply_review — una risposta, una chiamata, nessun doppion
     expect(strippedParse.parse_tree.stmts.length).toBe(rawParse.parse_tree.stmts.length);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Story 3.13 — Sbloccare la lezione successiva.
+//
+// La RPC `unlock_lesson` è il MATERIALIZZATORE atomico del progresso: una CTE
+// modificante che inserisce in `lesson_progress` + un `insert` in `review_state`
+// che legge gli esercizi SERVER-SIDE da `exercise`, ENTRAMBE `on conflict do
+// nothing` (idempotenza). Modellata VERBATIM su `apply_review`: `language sql` con
+// UNA sola istruzione (transazione implicita, atomicità di AD-7), `security
+// invoker`, `set search_path = ''`, tabelle schema-qualificate. NESSUNA logica di
+// sequenza (nessun confronto di `ordinal`) né di scheduling (`stage` letterale 0,
+// `due_at` passthrough): la sequenza è del dominio (`nextLessonToUnlock`). Come
+// per `apply_review`, pg-query-emscripten PARSA soltanto: l'effetto DB dal vivo è
+// e2e-differito (AD-12/AD-13).
+// ---------------------------------------------------------------------------
+
+const unlockLesson = migrations.find((m) => m.name.endsWith('_create_unlock_lesson.sql'));
+
+describe('migrazione unlock_lesson — sbloccare la lezione successiva (Story 3.13)', () => {
+  // Guardia anti-vacuità: la migrazione esiste e il timestamp è > dell'ultima
+  // esistente (20260925140000, apply_review). Senza, ogni asserzione su
+  // `unlockLesson?.sql ?? ''` girerebbe su stringa vuota e passerebbe vuota.
+  it('la migrazione esiste e il timestamp è > 20260925140000', () => {
+    expect(unlockLesson, 'atteso un file *_create_unlock_lesson.sql').toBeDefined();
+    const version = unlockLesson?.name.slice(0, 14) ?? '';
+    expect(version).toMatch(/^\d{14}$/);
+    expect(
+      version > '20260925140000',
+      `timestamp ${version} non è > 20260925140000`,
+    ).toBe(true);
+  });
+
+  // Firma canonica: via AST, la CreateFunctionStmt è `public.unlock_lesson`, con i
+  // 2 parametri nei nomi/tipi/ordine esatti e `returns void`.
+  it('la firma: unlock_lesson, 2 parametri esatti (lesson_id text, unlocked_at timestamptz), returns void', () => {
+    const res = parseSql(unlockLesson?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    const fn = createFunctionOf(res);
+    expect(fn, 'nessuna create function nella migrazione').toBeDefined();
+
+    // funcname: ultimo segmento `unlock_lesson`, primo `public`.
+    expect(lastSegment(fn?.funcname)).toBe('unlock_lesson');
+    expect(fn?.funcname?.[0]?.String?.sval).toBe('public');
+
+    // returns void.
+    expect(lastSegment(fn?.returnType?.names)).toBe('void');
+
+    const TYPE_ALIASES: Record<string, readonly string[]> = {
+      text: ['text'],
+      timestamptz: ['timestamptz'],
+    };
+    const expectedParams: readonly [string, keyof typeof TYPE_ALIASES][] = [
+      ['lesson_id', 'text'],
+      ['unlocked_at', 'timestamptz'],
+    ];
+
+    const params = (fn?.parameters ?? [])
+      .map((p) => p.FunctionParameter)
+      .filter((p): p is NonNullable<typeof p> => p !== undefined);
+
+    // Esattamente 2 parametri (nessuno in più).
+    expect(params.length).toBe(expectedParams.length);
+    params.forEach((param, i) => {
+      const [expectedName, expectedType] = expectedParams[i];
+      expect(param.name, `parametro #${i}: atteso ${expectedName}`).toBe(expectedName);
+      const actualType = lastSegment(param.argType?.names);
+      expect(
+        TYPE_ALIASES[expectedType],
+        `tipo di ${expectedName}: atteso ${expectedType}, trovato ${actualType}`,
+      ).toContain(actualType);
+    });
+  });
+
+  // Posture di sicurezza (mirror di apply_review): `language sql` (load-bearing per
+  // l'atomicità — una funzione `language sql` con una sola istruzione È già una
+  // transazione), `security invoker` (NON definer: le insert sono owner-scoped e le
+  // policy RLS insert di 3.8 le impongono) e `set search_path = ''`.
+  it('la funzione è language sql, security invoker e set search_path = \'\' (via AST)', () => {
+    const fn = createFunctionOf(parseSql(unlockLesson?.sql ?? ''));
+    const options = fn?.options ?? [];
+    const optByName = (name: string) =>
+      options.find((o) => o.DefElem?.defname === name)?.DefElem;
+
+    expect(optByName('language')?.arg?.String?.sval, 'la funzione non è `language sql`').toBe('sql');
+
+    const security = optByName('security');
+    expect(security, 'manca la clausola `security` (posture non dichiarata)').toBeDefined();
+    expect(security?.arg?.Boolean?.boolval, 'la funzione non è `security invoker`').toBe(false);
+
+    const setOpt = optByName('set')?.arg?.VariableSetStmt;
+    expect(setOpt?.name, 'manca `set search_path`').toBe('search_path');
+    const searchPathValues = (setOpt?.args ?? []).map((a) => a.A_Const?.sval?.sval);
+    expect(searchPathValues, "`search_path` non è impostato alla stringa vuota").toEqual(['']);
+  });
+
+  // Il corpo è UNA SOLA istruzione: un `insert` in `review_state` (che legge da
+  // `exercise` filtrando `lesson_id`, `stage` letterale 0, `due_at` passthrough da
+  // `unlock_lesson.unlocked_at`), con una CTE `unlocked` che inserisce in
+  // `lesson_progress`; ENTRAMBE le insert `on conflict … do nothing`.
+  it('il corpo è una sola istruzione: insert review_state guardato da una CTE su lesson_progress (via AST)', () => {
+    const res = parseSql(unlockLesson?.sql ?? '');
+    const fn = createFunctionOf(res);
+    const body = functionBodyOf(fn);
+    expect(body, 'corpo della funzione non estratto dall\'opzione `as`').toBeDefined();
+
+    const bodyRes = parseSql(body ?? '');
+    expect(
+      bodyRes.error,
+      `il corpo della funzione non parsa: ${bodyRes.error?.message ?? ''}`,
+    ).toBeNull();
+
+    // ESATTAMENTE 1 statement: una sola istruzione ⇒ una sola transazione (AC5).
+    expect(bodyRes.parse_tree.stmts.length).toBe(1);
+
+    type OnConflictClause = {
+      readonly action?: string;
+      readonly infer?: {
+        readonly indexElems?: readonly { readonly IndexElem?: { readonly name?: string } }[];
+      };
+    };
+    // Un valore del targetList è un ColumnRef (parametro/colonna), un A_Const
+    // (letterale, es. `stage = 0`) o un FuncCall (`auth.uid()`).
+    type SelectTarget = {
+      readonly ResTarget?: {
+        readonly val?: {
+          readonly ColumnRef?: { readonly fields?: readonly PgString[] };
+          readonly A_Const?: { readonly ival?: { readonly ival?: number } };
+          readonly FuncCall?: { readonly funcname?: readonly PgString[] };
+        };
+      };
+    };
+    // Un valore di un VALUES (`insert … values (…)`) è un ColumnRef (passthrough
+    // dal parametro) o un FuncCall (`auth.uid()`) — stesse forme dei target del SELECT.
+    type ValueItem = {
+      readonly ColumnRef?: { readonly fields?: readonly PgString[] };
+      readonly FuncCall?: { readonly funcname?: readonly PgString[] };
+    };
+    type SelectStmt = {
+      readonly fromClause?: readonly { readonly RangeVar?: { readonly relname?: string } }[];
+      readonly targetList?: readonly SelectTarget[];
+      readonly whereClause?: unknown;
+      // `insert … values (…)` è un SelectStmt senza targetList: la riga di valori
+      // vive in `valuesLists[0].List.items` (una List di espressioni).
+      readonly valuesLists?: readonly {
+        readonly List?: { readonly items?: readonly ValueItem[] };
+      }[];
+    };
+    type InsertStmt = {
+      readonly relation?: { readonly relname?: string };
+      readonly cols?: readonly { readonly ResTarget?: { readonly name?: string } }[];
+      readonly selectStmt?: { readonly SelectStmt?: SelectStmt };
+      readonly onConflictClause?: OnConflictClause;
+    };
+    type Cte = {
+      readonly CommonTableExpr?: {
+        readonly ctename?: string;
+        readonly ctequery?: { readonly InsertStmt?: InsertStmt };
+      };
+    };
+    type OuterInsertStmt = InsertStmt & {
+      readonly withClause?: { readonly ctes?: readonly Cte[] };
+    };
+
+    // L'unica istruzione è un INSERT su review_state.
+    const insert = (bodyRes.parse_tree.stmts[0].stmt as { InsertStmt?: OuterInsertStmt }).InsertStmt;
+    expect(insert, 'l\'unica istruzione non è un INSERT').toBeDefined();
+    expect(insert?.relation?.relname).toBe('review_state');
+
+    // La lista colonne dell'INSERT review_state è ESATTA e in ordine.
+    const insertCols = (insert?.cols ?? [])
+      .map((c) => c.ResTarget?.name)
+      .filter((n): n is string => typeof n === 'string');
+    expect(insertCols).toEqual(['user_id', 'exercise_id', 'stage', 'due_at']);
+
+    // AC5 — on conflict (user_id, exercise_id) do nothing: l'idempotenza su
+    // review_state (un ri-tentativo non ricrea le righe materializzate).
+    expect(insert?.onConflictClause?.action).toBe('ONCONFLICT_NOTHING');
+    const rsInferCols = (insert?.onConflictClause?.infer?.indexElems ?? [])
+      .map((e) => e.IndexElem?.name)
+      .filter((n): n is string => typeof n === 'string');
+    expect(rsInferCols).toEqual(['user_id', 'exercise_id']);
+
+    // Il SELECT che alimenta l'INSERT legge SERVER-SIDE da `exercise` (gli esercizi
+    // NON arrivano dal client): è la materializzazione di AC1.
+    const select = insert?.selectStmt?.SelectStmt;
+    const selectFromRels = (select?.fromClause ?? [])
+      .map((f) => f.RangeVar?.relname)
+      .filter((n): n is string => typeof n === 'string');
+    expect(selectFromRels, 'il SELECT non legge da `exercise`').toContain('exercise');
+
+    // C'è un WHERE (il filtro `e.lesson_id = unlock_lesson.lesson_id`): materializza
+    // SOLO gli esercizi di QUELLA lezione (AC1/AC2 — mai incontrato = assenza di riga).
+    expect(select?.whereClause, 'manca il filtro WHERE su lesson_id').toBeDefined();
+
+    const selectTargets = select?.targetList ?? [];
+    // user_id (indice 0) è `auth.uid()`: l'ANCORA di ownership su cui poggia la RLS
+    // insert di 3.8 (unlock_lesson NON prende un user_id nella firma).
+    const userIdFn = selectTargets[0]?.ResTarget?.val?.FuncCall?.funcname;
+    expect(lastSegment(userIdFn), 'user_id non è alimentato da auth.uid()').toBe('uid');
+    expect(userIdFn?.[0]?.String?.sval, 'la funzione di user_id non è nello schema auth').toBe('auth');
+
+    // stage (indice 2) è il LETTERALE 0 (A_Const), NON un'espressione calcolata:
+    // niente scheduling in SQL (AC5).
+    const stageConst = selectTargets[2]?.ResTarget?.val?.A_Const?.ival?.ival;
+    // pg-query-emscripten omette `ival` quando il letterale è 0; lo trattiamo come 0.
+    expect(stageConst ?? 0, 'stage non è il letterale 0 (A_Const)').toBe(0);
+    // Prova NEGATIVA: stage non è un ColumnRef verso un parametro (non passthrough).
+    expect(
+      selectTargets[2]?.ResTarget?.val?.ColumnRef,
+      'stage è un ColumnRef (dovrebbe essere il letterale 0)',
+    ).toBeUndefined();
+
+    // due_at (indice 3) è PASSTHROUGH da `unlock_lesson.unlocked_at` (ColumnRef):
+    // con stage 0 la scadenza è l'istante di sblocco, non ricalcolata.
+    const dueFields = (selectTargets[3]?.ResTarget?.val?.ColumnRef?.fields ?? [])
+      .map((f) => f.String?.sval)
+      .filter((s): s is string => typeof s === 'string');
+    expect(dueFields[0], 'due_at non è qualificato con unlock_lesson').toBe('unlock_lesson');
+    expect(dueFields[dueFields.length - 1], 'due_at non punta a unlock_lesson.unlocked_at').toBe(
+      'unlocked_at',
+    );
+
+    // withClause con ESATTAMENTE 1 CTE, chiamato `unlocked`, la cui query è un
+    // INSERT su lesson_progress con `on conflict (user_id, lesson_id) do nothing`.
+    const ctes = insert?.withClause?.ctes ?? [];
+    expect(ctes.length).toBe(1);
+    const cte = ctes[0]?.CommonTableExpr;
+    expect(cte?.ctename).toBe('unlocked');
+
+    const progressInsert = cte?.ctequery?.InsertStmt;
+    expect(progressInsert, 'la query del CTE `unlocked` non è un INSERT').toBeDefined();
+    expect(progressInsert?.relation?.relname).toBe('lesson_progress');
+    expect(progressInsert?.onConflictClause?.action).toBe('ONCONFLICT_NOTHING');
+    const lpInferCols = (progressInsert?.onConflictClause?.infer?.indexElems ?? [])
+      .map((e) => e.IndexElem?.name)
+      .filter((n): n is string => typeof n === 'string');
+    expect(lpInferCols).toEqual(['user_id', 'lesson_id']);
+
+    // Copertura SIMMETRICA all'INSERT review_state: anche il CTE `unlocked` è
+    // verificato colonna-per-colonna (colonne esatte + valori), così una migrazione
+    // che inserisse colonne sbagliate o un valore cablato in `lesson_progress` non
+    // passerebbe in silenzio.
+    // (a) La lista colonne del CTE insert è ESATTA e in ordine.
+    const lpCols = (progressInsert?.cols ?? [])
+      .map((c) => c.ResTarget?.name)
+      .filter((n): n is string => typeof n === 'string');
+    expect(lpCols).toEqual(['user_id', 'lesson_id', 'unlocked_at']);
+
+    // (b) I VALUES sono corretti: `insert … values (…)` è un SelectStmt con la riga
+    // in `valuesLists[0].List.items`, tre item nell'ordine delle colonne.
+    const lpValues = progressInsert?.selectStmt?.SelectStmt?.valuesLists?.[0]?.List?.items ?? [];
+    expect(lpValues.length, 'il VALUES del CTE non ha 3 item').toBe(3);
+
+    // item[0] = auth.uid(): l'ANCORA di ownership (come per review_state; user_id
+    // NON è nella firma). Ultimo segmento `uid`, primo `auth` (schema, non spoofabile).
+    const lpUserIdFn = lpValues[0]?.FuncCall?.funcname;
+    expect(lastSegment(lpUserIdFn), 'user_id del CTE non è auth.uid()').toBe('uid');
+    expect(lpUserIdFn?.[0]?.String?.sval, 'la funzione di user_id del CTE non è nello schema auth').toBe(
+      'auth',
+    );
+
+    // item[1] = unlock_lesson.lesson_id: PASSTHROUGH dal parametro (ColumnRef),
+    // non un valore cablato. Primo campo `unlock_lesson`, ultimo `lesson_id`.
+    const lpLessonFields = (lpValues[1]?.ColumnRef?.fields ?? [])
+      .map((f) => f.String?.sval)
+      .filter((s): s is string => typeof s === 'string');
+    expect(lpLessonFields[0], 'lesson_id non è qualificato con unlock_lesson').toBe('unlock_lesson');
+    expect(lpLessonFields[lpLessonFields.length - 1], 'lesson_id non punta a unlock_lesson.lesson_id').toBe(
+      'lesson_id',
+    );
+
+    // item[2] = unlock_lesson.unlocked_at: PASSTHROUGH dal parametro (ColumnRef).
+    const lpUnlockedFields = (lpValues[2]?.ColumnRef?.fields ?? [])
+      .map((f) => f.String?.sval)
+      .filter((s): s is string => typeof s === 'string');
+    expect(lpUnlockedFields[0], 'unlocked_at non è qualificato con unlock_lesson').toBe('unlock_lesson');
+    expect(
+      lpUnlockedFields[lpUnlockedFields.length - 1],
+      'unlocked_at non punta a unlock_lesson.unlocked_at',
+    ).toBe('unlocked_at');
+  });
+
+  // AC5 (ridondanza testuale): il corpo (senza commenti) NON contiene logica di
+  // sequenza (nessun confronto di `ordinal`) né aritmetica di scheduling (nessun
+  // `interval`, nessuno dei gradini della scala Leitner > 1): la sequenza è del
+  // dominio, la RPC è un materializzatore muto.
+  it('il corpo non contiene logica di sequenza (ordinal) né aritmetica di scheduling', () => {
+    const body = functionBodyOf(createFunctionOf(parseSql(unlockLesson?.sql ?? '')));
+    const stripped = stripSqlComments(body ?? '').toLowerCase();
+
+    // Nessun confronto di `ordinal`: la sequenza NON è in SQL.
+    expect(stripped, 'il corpo confronta `ordinal` (sequenza in SQL?)').not.toMatch(/\bordinal\b/);
+    // Nessun `interval`: la funzione non calcola scadenze.
+    expect(stripped).not.toMatch(/\binterval\b/);
+    // Nessun gradino DISTINTIVO della scala Leitner (> 1): la loro presenza
+    // tradirebbe un ricalcolo dell'intervallo in SQL.
+    for (const days of LEITNER_INTERVALS_DAYS.filter((d) => d > 1)) {
+      expect(
+        stripped,
+        `il corpo contiene il valore della scala Leitner ${days} (scheduling?)`,
+      ).not.toMatch(new RegExp(`\\b${days}\\b`));
+    }
+  });
+
+  // Il file DOCUMENTA idempotenza (on conflict), materializzazione e l'assenza di
+  // logica di sequenza — nello stile dei file esistenti. Si ispeziona il SQL GREZZO.
+  it('documenta idempotenza, materializzazione e assenza di sequenza (commenti)', () => {
+    const raw = (unlockLesson?.sql ?? '').toLowerCase();
+    expect(raw).toContain('idempoten');
+    expect(raw).toContain('on conflict');
+    expect(raw).toContain('materializz');
+    expect(raw).toContain('sequenza');
+  });
+
+  // Guardia sull'assunzione di stripSqlComments: il SQL strippato deve parsare
+  // ancora e produrre lo STESSO numero di statement.
+  it('stripSqlComments non corrompe il SQL (stesso parse, stesso conteggio)', () => {
+    const rawSql = unlockLesson?.sql ?? '';
+    const stripped = stripSqlComments(rawSql);
+
+    const rawParse = parseSql(rawSql);
+    const strippedParse = parseSql(stripped);
+
+    expect(rawParse.error, 'il SQL grezzo non parsa').toBeNull();
+    expect(
+      strippedParse.error,
+      `lo strip ha reso il SQL non parsabile: ${strippedParse.error?.message ?? ''}`,
+    ).toBeNull();
+    expect(strippedParse.parse_tree.stmts.length).toBe(rawParse.parse_tree.stmts.length);
+  });
+});
