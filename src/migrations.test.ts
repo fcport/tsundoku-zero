@@ -892,3 +892,459 @@ describe('migrazione review/progress — progresso per-utente e isolato (Story 3
     expect(strippedParse.parse_tree.stmts.length).toBe(rawParse.parse_tree.stmts.length);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Story 3.9 — Asserzioni strutturali sulla RPC apply_review (AC1–AC4).
+//
+// La funzione è la SOLA via per persistere una risposta, e nasce IDEMPOTENTE. Si
+// verifica OFFLINE la condizione STRUTTURALE necessaria (AD-12/AD-13, come ogni
+// migrazione): (AC1) la firma canonica di AD-7 — 7 parametri con nomi/tipi/ordine
+// esatti, `returns void`; (AC2) il corpo è UNA sola istruzione, un `update` di
+// review_state guardato da un CTE `logged` il cui `insert` su review_log ha
+// `on conflict (id) do nothing` (idempotenza) e `from logged` (la guardia); (AC4)
+// `stage`/`due_at` sono PASSTHROUGH dai parametri (ColumnRef, non un'espressione
+// calcolata) e il corpo non contiene aritmetica di scheduling (`interval`, valori
+// della scala Leitner). La prova a RUNTIME dell'idempotenza (riapplicare due volte
+// NON produce un secondo log né un secondo avanzamento) è di Epic 4 / storia 4.5 —
+// vedi frontmatter `deferred`: pg-query-emscripten PARSA soltanto, non esegue.
+// ---------------------------------------------------------------------------
+
+const applyReview = migrations.find((m) => m.name.endsWith('_create_apply_review.sql'));
+
+/**
+ * Porzioni dell'AST della `create function` non modellate dalla d.ts del
+ * pacchetto, lette con tipi locali (come i test 3.8 fanno per il `typeName` di
+ * colonna): la d.ts resta invariata, tocchiamo solo questo file di test.
+ */
+type PgString = { readonly String?: { readonly sval?: string } };
+type FunctionParameterElt = {
+  readonly FunctionParameter?: {
+    readonly name?: string;
+    readonly mode?: string;
+    readonly argType?: { readonly names?: readonly PgString[] };
+  };
+};
+type CreateFunctionStmt = {
+  readonly funcname?: readonly PgString[];
+  readonly parameters?: readonly FunctionParameterElt[];
+  readonly returnType?: { readonly names?: readonly PgString[] };
+  readonly options?: readonly {
+    readonly DefElem?: {
+      readonly defname?: string;
+      // `as` porta il corpo (List di String); `language` una String; `security`
+      // un Boolean (false = invoker, true = definer); `set` un VariableSetStmt.
+      readonly arg?: {
+        readonly List?: { readonly items?: readonly PgString[] };
+        readonly String?: { readonly sval?: string };
+        readonly Boolean?: { readonly boolval?: boolean };
+        readonly VariableSetStmt?: {
+          readonly name?: string;
+          readonly args?: readonly {
+            readonly A_Const?: { readonly sval?: { readonly sval?: string } };
+          }[];
+        };
+      };
+    };
+  }[];
+};
+
+/** Ultimo segmento di una lista di nomi qualificati (`public.apply_review` → `apply_review`; `pg_catalog.int4` → `int4`). */
+function lastSegment(names: readonly PgString[] | undefined): string | undefined {
+  const segs = (names ?? [])
+    .map((n) => n.String?.sval)
+    .filter((s): s is string => typeof s === 'string');
+  return segs[segs.length - 1];
+}
+
+/** Estrae la CreateFunctionStmt dall'AST di una migrazione (o undefined). */
+function createFunctionOf(parse: PgParseResult): CreateFunctionStmt | undefined {
+  return parse.parse_tree.stmts
+    .map((s) => (s.stmt as { CreateFunctionStmt?: CreateFunctionStmt }).CreateFunctionStmt)
+    .find((c): c is CreateFunctionStmt => c !== undefined);
+}
+
+/**
+ * Estrae il TESTO del corpo della funzione dall'opzione `as`
+ * (`options[].DefElem` con `defname === 'as'`, poi `arg.List.items[0].String.sval`).
+ */
+function functionBodyOf(fn: CreateFunctionStmt | undefined): string | undefined {
+  const asOpt = (fn?.options ?? []).find((o) => o.DefElem?.defname === 'as');
+  return asOpt?.DefElem?.arg?.List?.items?.[0]?.String?.sval;
+}
+
+describe('migrazione apply_review — una risposta, una chiamata, nessun doppione (Story 3.9)', () => {
+  // Guardia anti-vacuità: la migrazione esiste e il timestamp è > dell'ultima
+  // esistente (20260925101500, review_and_progress). Senza, ogni asserzione qui
+  // sotto su `applyReview?.sql ?? ''` girerebbe su stringa vuota e passerebbe vuota.
+  it('la migrazione esiste e il timestamp è > 20260925101500', () => {
+    expect(applyReview, 'atteso un file *_create_apply_review.sql').toBeDefined();
+    const version = applyReview?.name.slice(0, 14) ?? '';
+    expect(version).toMatch(/^\d{14}$/);
+    expect(
+      version > '20260925101500',
+      `timestamp ${version} non è > 20260925101500`,
+    ).toBe(true);
+  });
+
+  // AC1 (righe "Funzione ben formata" + "Firma canonica"): via AST, la
+  // CreateFunctionStmt è `public.apply_review`, con i 7 parametri nei nomi/tipi/
+  // ordine esatti (`int`↔`int4`, `boolean`↔`bool` via TYPE_ALIASES) e `returns void`.
+  it('la firma canonica di AD-7: apply_review, 7 parametri esatti, returns void (via AST)', () => {
+    const res = parseSql(applyReview?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    const fn = createFunctionOf(res);
+    expect(fn, 'nessuna create function nella migrazione').toBeDefined();
+
+    // funcname: ultimo segmento `apply_review`, primo `public`.
+    expect(lastSegment(fn?.funcname)).toBe('apply_review');
+    expect(fn?.funcname?.[0]?.String?.sval).toBe('public');
+
+    // returns void.
+    expect(lastSegment(fn?.returnType?.names)).toBe('void');
+
+    // Forme di tipo equivalenti accettate (l'AST normalizza int→int4, boolean→bool).
+    const TYPE_ALIASES: Record<string, readonly string[]> = {
+      uuid: ['uuid'],
+      text: ['text'],
+      int: ['int', 'int4'],
+      timestamptz: ['timestamptz'],
+      boolean: ['boolean', 'bool'],
+    };
+
+    // I 7 parametri, nell'ORDINE esatto della firma AD-7.
+    const expectedParams: readonly [string, keyof typeof TYPE_ALIASES][] = [
+      ['review_id', 'uuid'],
+      ['exercise_id', 'uuid'],
+      ['outcome', 'text'],
+      ['stage', 'int'],
+      ['due_at', 'timestamptz'],
+      ['reviewed_at', 'timestamptz'],
+      ['used_explanation', 'boolean'],
+    ];
+
+    const params = (fn?.parameters ?? [])
+      .map((p) => p.FunctionParameter)
+      .filter((p): p is NonNullable<typeof p> => p !== undefined);
+
+    // Esattamente 7 parametri (nessuno in più: es. un `grammar_point` estraneo).
+    expect(params.length).toBe(expectedParams.length);
+
+    params.forEach((param, i) => {
+      const [expectedName, expectedType] = expectedParams[i];
+      // Nome e ORDINE.
+      expect(param.name, `parametro #${i}: atteso ${expectedName}`).toBe(expectedName);
+      // Tipo (ultimo segmento di argType.names).
+      const actualType = lastSegment(param.argType?.names);
+      expect(
+        TYPE_ALIASES[expectedType],
+        `tipo di ${expectedName}: atteso ${expectedType} (${TYPE_ALIASES[expectedType].join('|')}), trovato ${actualType}`,
+      ).toContain(actualType);
+    });
+  });
+
+  // AC1/AC2 (boundary "Always" — posture di sicurezza): la firma da sola non basta.
+  // `language sql` è LOAD-BEARING per l'atomicità di AC2 (una funzione `language sql`
+  // con una sola istruzione È già una transazione: senza, il ragionamento sulla
+  // guardia cade). `security invoker` + `set search_path = ''` sono l'isolamento
+  // dichiarativo: le scritture sono owner-scoped e le policy RLS di 3.8 le impongono
+  // (insert `with check auth.uid() = user_id`), quindi l'invoker non serve elevato.
+  // Nessuna asserzione le copriva: un refactor a `security definer` (che BYPASSA la
+  // RLS) o un `search_path` caduto passerebbe ogni altro test in silenzio.
+  it('la funzione è language sql, security invoker e set search_path = \'\' (via AST)', () => {
+    const fn = createFunctionOf(parseSql(applyReview?.sql ?? ''));
+    const options = fn?.options ?? [];
+    const optByName = (name: string) =>
+      options.find((o) => o.DefElem?.defname === name)?.DefElem;
+
+    // language sql: l'atomicità di AC2 poggia su questo.
+    expect(optByName('language')?.arg?.String?.sval, 'la funzione non è `language sql`').toBe('sql');
+
+    // security invoker: `boolval` false = INVOKER, true = DEFINER. La clausola deve
+    // essere PRESENTE ed essere invoker — `security definer` bypasserebbe la RLS.
+    const security = optByName('security');
+    expect(security, 'manca la clausola `security` (posture non dichiarata)').toBeDefined();
+    expect(security?.arg?.Boolean?.boolval, 'la funzione non è `security invoker`').toBe(false);
+
+    // set search_path = '': con la schema-qualificazione (`public.*`), blocca
+    // l'iniezione di search_path.
+    const setOpt = optByName('set')?.arg?.VariableSetStmt;
+    expect(setOpt?.name, 'manca `set search_path`').toBe('search_path');
+    const searchPathValues = (setOpt?.args ?? []).map((a) => a.A_Const?.sval?.sval);
+    expect(searchPathValues, "`search_path` non è impostato alla stringa vuota").toEqual(['']);
+  });
+
+  // AC2 (righe "Prima applicazione" + "Ritentativo"): il corpo è UNA SOLA
+  // istruzione — un `update` di review_state — con un CTE `logged` la cui query è
+  // un `insert` su review_log con `on conflict (id) do nothing`, e un `from logged`
+  // (la guardia). Si estrae il corpo dall'opzione `as`, lo si ri-parsa e lo si
+  // ispeziona via AST.
+  it('il corpo è una sola istruzione: update guardato da un insert idempotente (via AST)', () => {
+    const res = parseSql(applyReview?.sql ?? '');
+    const fn = createFunctionOf(res);
+    const body = functionBodyOf(fn);
+    expect(body, 'corpo della funzione non estratto dall\'opzione `as`').toBeDefined();
+
+    const bodyRes = parseSql(body ?? '');
+    expect(
+      bodyRes.error,
+      `il corpo della funzione non parsa: ${bodyRes.error?.message ?? ''}`,
+    ).toBeNull();
+
+    // ESATTAMENTE 1 statement: una sola istruzione ⇒ una sola transazione (AC2).
+    expect(bodyRes.parse_tree.stmts.length).toBe(1);
+
+    type OnConflictClause = {
+      readonly action?: string;
+      readonly infer?: {
+        readonly indexElems?: readonly { readonly IndexElem?: { readonly name?: string } }[];
+      };
+    };
+    // SelectStmt che alimenta l'INSERT: `fromClause` (le tabelle lette, per lo
+    // SNAPSHOT) e `targetList` (i valori inseriti, per posizione).
+    type SelectStmt = {
+      readonly fromClause?: readonly { readonly RangeVar?: { readonly relname?: string } }[];
+      readonly targetList?: readonly {
+        readonly ResTarget?: {
+          // Un valore è un ColumnRef (parametro/colonna joinata) o un FuncCall
+          // (`auth.uid()` per user_id).
+          readonly val?: {
+            readonly ColumnRef?: { readonly fields?: readonly PgString[] };
+            readonly FuncCall?: { readonly funcname?: readonly PgString[] };
+          };
+        };
+      }[];
+    };
+    type InsertStmt = {
+      readonly relation?: { readonly relname?: string };
+      readonly cols?: readonly { readonly ResTarget?: { readonly name?: string } }[];
+      readonly selectStmt?: { readonly SelectStmt?: SelectStmt };
+      readonly onConflictClause?: OnConflictClause;
+      // Il `returning` della CTE data-modifying: le righe che alimentano la guardia.
+      readonly returningList?: readonly unknown[];
+    };
+    type Cte = {
+      readonly CommonTableExpr?: {
+        readonly ctename?: string;
+        readonly ctequery?: { readonly InsertStmt?: InsertStmt };
+      };
+    };
+    type UpdateStmt = {
+      readonly relation?: { readonly relname?: string };
+      readonly withClause?: { readonly ctes?: readonly Cte[] };
+      readonly fromClause?: readonly { readonly RangeVar?: { readonly relname?: string } }[];
+    };
+
+    const update = (bodyRes.parse_tree.stmts[0].stmt as { UpdateStmt?: UpdateStmt }).UpdateStmt;
+    expect(update, 'l\'unica istruzione non è un UPDATE').toBeDefined();
+    // L'UPDATE è su review_state.
+    expect(update?.relation?.relname).toBe('review_state');
+
+    // withClause con ESATTAMENTE 1 CTE, chiamato `logged`.
+    const ctes = update?.withClause?.ctes ?? [];
+    expect(ctes.length).toBe(1);
+    const cte = ctes[0]?.CommonTableExpr;
+    expect(cte?.ctename).toBe('logged');
+
+    // La query del CTE è un INSERT su review_log.
+    const insert = cte?.ctequery?.InsertStmt;
+    expect(insert, 'la query del CTE `logged` non è un INSERT').toBeDefined();
+    expect(insert?.relation?.relname).toBe('review_log');
+
+    // AC3 (struttura): `on conflict (id) do nothing` — l'idempotenza. L'azione è
+    // NOTHING e l'inferenza è sulla colonna `id` (il review_id del client).
+    expect(insert?.onConflictClause?.action).toBe('ONCONFLICT_NOTHING');
+    const inferCols = (insert?.onConflictClause?.infer?.indexElems ?? [])
+      .map((e) => e.IndexElem?.name)
+      .filter((n): n is string => typeof n === 'string');
+    expect(inferCols).toEqual(['id']);
+
+    // AC2/AC3 (la guardia): `from logged`. Con `on conflict do nothing`, un
+    // ritentativo non produce righe ⇒ il prodotto con `logged` è vuoto ⇒ 0 update.
+    const fromRels = (update?.fromClause ?? [])
+      .map((f) => f.RangeVar?.relname)
+      .filter((n): n is string => typeof n === 'string');
+    expect(fromRels).toContain('logged');
+
+    // AC2/AC3 (PATCH 1 — la guardia regge SOLO con un `returning` non vuoto): senza
+    // `returning`, la CTE `logged` non produrrebbe righe MAI e il `from logged`
+    // renderebbe l'UPDATE morto anche alla PRIMA applicazione — la guardia si
+    // invertirebbe in silenzio (il SQL parsa comunque). Pretendere ≥1 elemento nel
+    // `returningList` blocca quella regressione.
+    expect(
+      (insert?.returningList ?? []).length,
+      'l\'INSERT della CTE `logged` non ha un `returning` (la guardia si invertirebbe)',
+    ).toBeGreaterThan(0);
+
+    // AC (PATCH 2 — snapshot di grammar_point, prova STRUTTURALE, non più solo il
+    // commento). (a) La lista colonne dell'INSERT è ESATTA e in ordine.
+    const insertCols = (insert?.cols ?? [])
+      .map((c) => c.ResTarget?.name)
+      .filter((n): n is string => typeof n === 'string');
+    expect(insertCols).toEqual([
+      'id',
+      'user_id',
+      'exercise_id',
+      'grammar_point',
+      'outcome',
+      'used_explanation',
+      'reviewed_at',
+    ]);
+
+    // (b) Il SELECT che alimenta l'INSERT legge da `exercise`: è la FONTE dello
+    // snapshot server-side di grammar_point (non arriva dalla firma).
+    const select = insert?.selectStmt?.SelectStmt;
+    const selectFromRels = (select?.fromClause ?? [])
+      .map((f) => f.RangeVar?.relname)
+      .filter((n): n is string => typeof n === 'string');
+    expect(selectFromRels).toContain('exercise');
+
+    // Helper: i campi (qualificatori) del ColumnRef nella posizione `i` del
+    // targetList del SELECT. La posizione è vincolata all'ordine di `insertCols`.
+    const selectTargets = select?.targetList ?? [];
+    const fieldsAt = (i: number): string[] =>
+      (selectTargets[i]?.ResTarget?.val?.ColumnRef?.fields ?? [])
+        .map((f) => f.String?.sval)
+        .filter((s): s is string => typeof s === 'string');
+
+    // (c) grammar_point (indice 3) viene dalla TABELLA joinata (alias `e`), NON da
+    // un parametro: ultimo campo `grammar_point`, primo campo diverso da
+    // `apply_review`. È lo snapshot: cattura il valore CORRENTE su `exercise`.
+    const grammarFields = fieldsAt(3);
+    expect(grammarFields[grammarFields.length - 1], 'la colonna 3 non alimenta grammar_point').toBe(
+      'grammar_point',
+    );
+    expect(
+      grammarFields[0],
+      'grammar_point è preso da un parametro invece che dallo snapshot su exercise',
+    ).not.toBe('apply_review');
+
+    // AC4 (PATCH 3 — outcome è PASSTHROUGH, non derivato): outcome (indice 4) è un
+    // ColumnRef verso `apply_review.outcome`. Prova che l'esito è RICEVUTO dal
+    // client (AD-24), non derivato in SQL da `used_explanation` — simmetrico al
+    // passthrough di stage/due_at nell'UPDATE.
+    const outcomeFields = fieldsAt(4);
+    expect(outcomeFields[0], 'outcome non è qualificato con apply_review (derivato?)').toBe(
+      'apply_review',
+    );
+    expect(outcomeFields[outcomeFields.length - 1], 'la colonna 4 non è outcome').toBe('outcome');
+
+    // (d) user_id (indice 1) è alimentato da `auth.uid()`: è l'ANCORA di ownership
+    // su cui poggia l'intera isolazione RLS (insert `with check auth.uid() = user_id`
+    // di 3.8). user_id NON è nella firma (7 parametri, nessun user_id): asserire la
+    // fonte impedisce che un refactor lo sostituisca con un valore spoofabile.
+    // Simmetrico allo snapshot di grammar_point e al passthrough di outcome.
+    const userIdFn = selectTargets[1]?.ResTarget?.val?.FuncCall?.funcname;
+    expect(lastSegment(userIdFn), 'user_id non è alimentato da auth.uid()').toBe('uid');
+    expect(
+      userIdFn?.[0]?.String?.sval,
+      'la funzione di user_id non è nello schema auth (spoofabile?)',
+    ).toBe('auth');
+  });
+
+  // AC4 (riga "Nessun ricalcolo"): `stage`, `due_at` e `last_reviewed_at` nel
+  // targetList dell'UPDATE sono ColumnRef verso `apply_review.*` (PASSTHROUGH dai
+  // parametri), NON un'espressione calcolata (A_Expr). Un ricalcolo Leitner
+  // renderebbe questi `A_Expr` — rosso.
+  it('stage, due_at e last_reviewed_at sono passthrough dai parametri, non ricalcolati (via AST)', () => {
+    const res = parseSql(applyReview?.sql ?? '');
+    const fn = createFunctionOf(res);
+    const bodyRes = parseSql(functionBodyOf(fn) ?? '');
+
+    type ColumnRef = { readonly fields?: readonly PgString[] };
+    type ResTarget = {
+      readonly name?: string;
+      readonly val?: { readonly ColumnRef?: ColumnRef };
+    };
+    type UpdateStmt = {
+      readonly targetList?: readonly { readonly ResTarget?: ResTarget }[];
+    };
+
+    const update = (bodyRes.parse_tree.stmts[0].stmt as { UpdateStmt?: UpdateStmt }).UpdateStmt;
+    const targets = (update?.targetList ?? [])
+      .map((t) => t.ResTarget)
+      .filter((t): t is NonNullable<typeof t> => t !== undefined);
+
+    // Per ogni target passthrough: `set <col> = apply_review.<param>` è un ColumnRef
+    // il cui ultimo campo è il parametro atteso (e primo campo `apply_review`).
+    // PATCH 4 — anche `last_reviewed_at = apply_review.reviewed_at`: completa la
+    // copertura del passthrough del `set` (nessun campo dell'UPDATE è ricalcolato).
+    for (const [col, param] of [
+      ['stage', 'stage'],
+      ['due_at', 'due_at'],
+      ['last_reviewed_at', 'reviewed_at'],
+    ] as const) {
+      const target = targets.find((t) => t.name === col);
+      expect(target, `target ${col} assente nell'UPDATE`).toBeDefined();
+
+      const columnRef = target?.val?.ColumnRef;
+      // È un ColumnRef, non un'espressione calcolata (A_Expr): passthrough puro.
+      expect(
+        columnRef,
+        `${col} non è assegnato da un ColumnRef (ricalcolo?)`,
+      ).toBeDefined();
+
+      const fields = (columnRef?.fields ?? [])
+        .map((f) => f.String?.sval)
+        .filter((s): s is string => typeof s === 'string');
+      expect(fields[0], `${col} non è qualificato con apply_review`).toBe('apply_review');
+      expect(fields[fields.length - 1], `${col} non punta a apply_review.${param}`).toBe(param);
+    }
+  });
+
+  // AC4 (riga "Nessun ricalcolo", ridondanza testuale): il corpo (senza commenti)
+  // NON contiene aritmetica di scheduling — nessun `interval` e nessuno dei valori
+  // della scala Leitner (1,3,7,16,35 giorni). Il `+ 1` dei contatori è bookkeeping
+  // sull'esito ricevuto, non scheduling; i valori della scala Leitner sono ciò che
+  // tradirebbe un ricalcolo dello stadio/scadenza in SQL.
+  it('il corpo non contiene aritmetica di scheduling (interval / scala Leitner)', () => {
+    const body = functionBodyOf(createFunctionOf(parseSql(applyReview?.sql ?? '')));
+    const stripped = stripSqlComments(body ?? '').toLowerCase();
+
+    // Nessun `interval`: la funzione non calcola scadenze.
+    expect(stripped).not.toMatch(/\binterval\b/);
+
+    // Nessun valore DISTINTIVO della scala Leitner (LEITNER_INTERVALS_DAYS): la
+    // loro presenza tradirebbe un ricalcolo dell'intervallo in SQL. Si saltano 0 e
+    // 1 perché NON sono distintivi dello scheduling: `1` è l'incremento legittimo
+    // dei contatori (`review_count + 1`, `+ (case … then 1 …)`), bookkeeping
+    // sull'esito ricevuto, non aritmetica di scadenza. I gradini > 1 (3,7,16,35) NON
+    // hanno alcuna ragione di comparire in una funzione che riceve `due_at` già
+    // calcolato — la loro assenza è il testimone dell'assenza di ricalcolo.
+    for (const days of LEITNER_INTERVALS_DAYS.filter((d) => d > 1)) {
+      expect(
+        stripped,
+        `il corpo contiene il valore della scala Leitner ${days} (ricalcolo?)`,
+      ).not.toMatch(new RegExp(`\\b${days}\\b`));
+    }
+  });
+
+  // AC2/AC4 (commenti): il file DOCUMENTA idempotenza (review_id / on conflict),
+  // la guardia (from logged), lo snapshot di grammar_point e l'assenza di
+  // scheduling — nello stile dei file esistenti. Si ispeziona il SQL GREZZO.
+  it('documenta idempotenza, guardia, snapshot e assenza di scheduling (commenti)', () => {
+    const raw = (applyReview?.sql ?? '').toLowerCase();
+    expect(raw).toContain('idempotent');
+    expect(raw).toContain('on conflict');
+    expect(raw).toContain('snapshot');
+    expect(raw).toContain('scheduling');
+  });
+
+  // Guardia sull'assunzione di stripSqlComments (come per le altre migrazioni):
+  // il SQL strippato deve parsare ancora e produrre lo STESSO numero di statement,
+  // così un `--` in un literal non corrompe in silenzio le asserzioni testuali.
+  it('stripSqlComments non corrompe il SQL (stesso parse, stesso conteggio)', () => {
+    const rawSql = applyReview?.sql ?? '';
+    const stripped = stripSqlComments(rawSql);
+
+    const rawParse = parseSql(rawSql);
+    const strippedParse = parseSql(stripped);
+
+    expect(rawParse.error, 'il SQL grezzo non parsa').toBeNull();
+    expect(
+      strippedParse.error,
+      `lo strip ha reso il SQL non parsabile: ${strippedParse.error?.message ?? ''}`,
+    ).toBeNull();
+    expect(strippedParse.parse_tree.stmts.length).toBe(rawParse.parse_tree.stmts.length);
+  });
+});
