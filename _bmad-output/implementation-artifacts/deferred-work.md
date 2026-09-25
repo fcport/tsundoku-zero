@@ -157,3 +157,11 @@ source_spec: `spec-2-7-la-lezione-campione-che-è-anche-una-fixture.md`
 severity: medium
 reason: UX-DR8 fissa i valori ma epics.md e la storia 3.23 dicono che la verifica sul rendering «si chiude nella storia 3.23»; 1.3 àncora con design-tokens.test.ts l'ASSENZA del token --text-sentence-hero oggi (definirlo ora romperebbe quel test). 2.7 fornisce SOLO la frase più lunga (l'assemble, 25 caratteri) come input di stress; il rendering richiede la UI di presentazione dell'esercizio (Epic 3).
 status: open
+
+### DW-20: La rigenerazione del seed crea un nuovo file di migrazione timestamp-ato a ogni esecuzione senza rimuovere o consolidare i seed precedenti, che si accumulano ed eseguono tutti a ogni `db push`.
+origin: spec-deferred 8bdd787c863e
+location: scripts/generate-content-seed.ts (chooseSeedTimestamp / main writeFile)
+source_spec: `spec-3-7-il-contenuto-raggiunge-il-client-e-può-essere-aggiornato.md`
+severity: medium
+reason: `chooseSeedTimestamp` conta di proposito i seed precedenti come «più recenti» e `main` scrive sempre `<timestamp>_seed_content.sql`; nulla fa prune/overwrite del seed precedente. Lo stato finale del DB resta corretto (upsert idempotente, last-write-wins), ma i file di seed orfani si accumulano nella cartella migrazioni. Serve una politica di consolidamento/prune del seed (fuori dallo scope catturato di 3.7).
+status: open

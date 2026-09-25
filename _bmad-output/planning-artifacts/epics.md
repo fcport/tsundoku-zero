@@ -54,7 +54,7 @@ Nessuna storia copre la creazione degli account e dei progetti esterni, **ed è 
 
 **F2 — Contenuto: lezioni ed esercizi**
 
-- FR2.1: Il sistema distribuisce un insieme di **lezioni** versionate nel repository, in sola lettura per gli utenti. Una lezione ha un numero d'ordine, un titolo, i punti grammaticali che insegna e zero o più esercizi.
+- FR2.1: Il sistema distribuisce un insieme di **lezioni** versionate nel repository, in sola lettura per gli utenti. Una lezione ha un numero d'ordine, un titolo **bilingue** (inglese obbligatorio, italiano facoltativo, stessa forma e stesso ripiego dichiarato della spiegazione — `FR8.5`), i punti grammaticali che insegna e zero o più esercizi.
 - FR2.1a: Titolo e identificatore di una lezione derivano dal **punto grammaticale che insegna**, mai dal numero o dal titolo di un episodio di una fonte esterna.
 - FR2.2: Ogni esercizio espone: il tipo, il contenuto giapponese necessario a presentarlo, la risposta corretta, i distrattori quando previsti dal tipo, e una **spiegazione** che dice perché la risposta è quella.
 - FR2.3: Ogni frase giapponese di un esercizio espone kanji e kana separati, così che la furigana sia derivabile nel dominio.
