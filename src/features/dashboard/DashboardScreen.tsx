@@ -6,13 +6,25 @@
 // `Session`, e la pila usa la chiave di dominio `dueQueryKey(userId)` VERBATIM
 // (nessuna schermata ricalcola la pila).
 //
-// Questa storia (3.13) aggiunge il CANCELLO delle quest sequenziali: pila NON
-// vuota ⇒ SOLO l'azione svuota-pila (inerte, come in 3.12); pila vuota con una
-// lezione successiva ⇒ SOLO l'azione di SBLOCCO, cablata a un `useMutation` che
-// chiama `progress.unlockLesson` e invalida pila+sblocco in `onSuccess`; pila
-// vuota a curriculum esaurito ⇒ NESSUNA azione (la schermata senza-azione è 3.16).
-// Le due quest non compaiono MAI insieme. L'`onClick` di avvio sessione resta 3.18
-// (l'azione svuota-pila è ancora sola-copy).
+// Il CANCELLO delle quest sequenziali (3.13): pila NON vuota ⇒ SOLO l'azione
+// svuota-pila (inerte, come in 3.12); pila vuota con una lezione successiva ⇒ SOLO
+// l'azione di SBLOCCO, cablata a un `useMutation` che chiama `progress.unlockLesson`
+// e invalida pila+sblocco in `onSuccess`; pila vuota a curriculum esaurito ⇒
+// NESSUNA azione. Le due quest non compaiono MAI insieme. L'`onClick` di avvio
+// sessione resta 3.18 (l'azione svuota-pila è ancora sola-copy).
+//
+// Questa storia (3.16) fa CAMBIARE STATO al pile-counter a zero (nel ramo
+// `unlocked > 0`): a `count === 0` non rende «0» né `dueLabel`, ma DICHIARA il
+// PERCHÉ la pila è vuota — derivato dallo stato già presente (AD-5), mai
+// memorizzato, quindi sopravvive al refresh. Priorità: `next === null` ⇒
+// `curriculumCompleteBody` (curriculum esaurito, l'UNICA schermata senza azione);
+// l'ultima sbloccata concettuale (3.14, `exerciseCount === 0`) ⇒ `noExercisesNotice`;
+// altrimenti ⇒ `clearedBody` («hai svuotato la pila»). «Esaurito» e «concettuale»
+// sono ortogonali: nel raro caso convivono ENTRAMBE le dichiarazioni (nessuna
+// mente), sempre senza pulsante. Streak e curriculum restano visibili: a
+// `unlocked > 0` portano informazione reale, cambia SOLO il contatore, non l'intera
+// schermata (il primo-avvio a schermo pulito resta 3.15, `unlocked === 0`). A
+// `count > 0` il numero resta invariato (3.12).
 //
 // Nessuna grammatica della celebrazione (nessun verde, nessun `!`, nessuna
 // emoji): solo token del sistema di design (la regola colore vale anche qui). I
@@ -162,10 +174,45 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
 
   return (
     <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
-      {/* pile-counter: il conteggio nel ruolo tipografico più grande, l'etichetta
-          SOTTO il numero (AC1). Il conteggio PRECEDE il verbo (AC4). */}
-      <p className="text-count-hero text-ink-primary">{count}</p>
-      <p className="text-label text-ink-secondary">{t('dashboard.dueLabel')}</p>
+      {/* pile-counter che CAMBIA STATO a zero (3.16, AC1). A `count > 0` il
+          conteggio vive nel ruolo tipografico più grande con l'etichetta SOTTO
+          (3.12, AC1): il numero PRECEDE il verbo. A `count === 0` NON si rende «0»
+          né `dueLabel`, ma la DICHIARAZIONE del perché la pila è vuota, DERIVATA
+          dallo stato persistito (AD-5), mai memorizzata (sopravvive al refresh).
+          Le tre dichiarazioni hanno priorità e ortogonalità distinte (vedi sopra):
+          - `curriculumCompleteBody` SSE `next === null` (curriculum esaurito, AC2).
+          - `noExercisesNotice` (3.14, invariata) SSE l'ULTIMA sbloccata è
+            concettuale (`exerciseCount === 0`): mai `clearedBody`, la pila non si è
+            mai riempita.
+          - `clearedBody` («hai svuotato la pila») SSE l'ultima AVEVA esercizi.
+          «Esaurito» e «concettuale» convivono nel raro caso: entrambe vere, sempre
+          senza pulsante (il cancello 3.13 sotto rende NESSUNA azione a `next === null`).
+          Neutra, solo token del sistema di design, nessun conteggio nella copy. */}
+      {count > 0 ? (
+        <>
+          <p className="text-count-hero text-ink-primary">{count}</p>
+          <p className="text-label text-ink-secondary">
+            {t('dashboard.dueLabel')}
+          </p>
+        </>
+      ) : (
+        <>
+          {next === null ? (
+            <p className="text-body text-ink-primary">
+              {t('dashboard.curriculumCompleteBody')}
+            </p>
+          ) : null}
+          {lastUnlocked?.exerciseCount === 0 ? (
+            <p className="text-body text-ink-primary">
+              {t('dashboard.noExercisesNotice')}
+            </p>
+          ) : next !== null ? (
+            <p className="text-body text-ink-primary">
+              {t('dashboard.clearedBody')}
+            </p>
+          ) : null}
+        </>
+      )}
 
       {/* streak-badge: giorni consecutivi da `streak()` su review_log. */}
       <p className="text-label text-ink-secondary">
@@ -176,22 +223,6 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
       <p className="text-label text-ink-secondary">
         {t('dashboard.curriculumLabel', { unlocked, total })}
       </p>
-
-      {/* La DICHIARAZIONE «senza esercizi» (3.14, AC2): resa SSE la pila è a zero
-          E l'ULTIMA lezione sbloccata è concettuale (`exerciseCount === 0`).
-          DERIVATA dallo stato persistito, mai da un flag di mutation (AD-5):
-          sopravvive al refresh. Neutra (nessun `!`/emoji/lode, solo token del
-          sistema di design): dichiara il fatto E il perché, non è un fallimento.
-          È AGGIUNTIVA al cancello 3.13, non una nuova schermata: quando compare,
-          l'azione di sblocco della successiva resta comunque resa (se `next`
-          esiste). NON compare a pila drenata normale (`exerciseCount > 0`), a
-          nulla sbloccato (`lastUnlocked === null` = primo-avvio, 3.15) o a pila
-          non vuota (`count > 0`). */}
-      {count === 0 && lastUnlocked?.exerciseCount === 0 ? (
-        <p className="text-label text-ink-secondary">
-          {t('dashboard.noExercisesNotice')}
-        </p>
-      ) : null}
 
       {/* Il CANCELLO delle quest sequenziali (AC4): al più UNA sola azione, mai
           entrambe insieme.
