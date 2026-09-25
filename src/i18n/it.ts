@@ -70,6 +70,14 @@ export const it = {
     // («procedi» dalla pila svuotata). Verbale e concreta, mai "Continua"; nessun
     // `!`, nessuna emoji, nessun avverbio di lode.
     startAction: 'Comincia dalla prima lezione',
+    // Tetto giornaliero raggiunto (3.17): resa SSE la pila è a zero, c'è una
+    // lezione successiva e gli sblocchi di oggi hanno raggiunto il tetto. Dichiara
+    // il limite (`{{limit}}` = il tetto, MAI `{{count}}` che innescherebbe il
+    // pluralizzatore), che riapre a mezzanotte e si cambia da Impostazioni. Al
+    // posto del pulsante di sblocco, NESSUNA azione. Nessun conteggio da rivedere,
+    // nessun `!`, nessuna emoji, nessun avverbio di lode.
+    dailyLimitReachedBody:
+      'Il tetto giornaliero di sblocco di {{limit}} è stato raggiunto per oggi. Il tetto si azzera a mezzanotte, quindi la lezione successiva si potrà sbloccare allora. Il tetto si cambia dalle Impostazioni.',
   },
   settings: {
     title: 'Impostazioni',
@@ -77,6 +85,14 @@ export const it = {
       label: 'Lingua',
       en: 'Inglese',
       it: 'Italiano',
+    },
+    // Tetto giornaliero di sblocco (3.17): l'etichetta del gruppo e il testo di
+    // ogni bottone. `option` interpola `{{value}}` (MAI `{{count}}`, che
+    // innescherebbe il pluralizzatore i18next e romperebbe la parità en/it):
+    // "1 al giorno"/"2 al giorno", grammaticale per ogni N. Nessun `!`, nessuna emoji.
+    lessonsPerDay: {
+      label: 'Tetto di sblocco giornaliero',
+      option: '{{value}} al giorno',
     },
   },
   account: {

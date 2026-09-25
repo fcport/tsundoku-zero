@@ -14,6 +14,8 @@ function fakeSettings(
   return {
     loadLocale: async () => null,
     saveLocale,
+    loadLessonsPerDay: async () => null,
+    saveLessonsPerDay: async () => {},
   };
 }
 

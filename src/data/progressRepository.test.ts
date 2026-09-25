@@ -5,8 +5,9 @@ import { DataError } from './dataError';
 
 // Righe della I/O & Edge-Case Matrix per l'adattatore ProgressRepository. Il
 // client Supabase è FINTO: la select di lesson_progress e la mappa in
-// `readonly string[]` sono verificate senza rete né DB reale. LANCIA `DataError`
-// su errore o riga malformata (alimenta TanStack Query — reject).
+// `readonly UnlockedLesson[]` (id + istante di sblocco, il read-model UNICO di
+// 3.17) sono verificate senza rete né DB reale. LANCIA `DataError` su errore o
+// riga malformata (alimenta TanStack Query — reject).
 
 interface FakeProgressOptions {
   readonly rows?: readonly unknown[] | null;
@@ -51,60 +52,93 @@ function makeFakeClient(options: FakeProgressOptions = {}): {
   return { client: fake as unknown as SupabaseClient, calls, rpcs };
 }
 
-describe('listUnlockedLessonIds — happy path: ritorna gli id lezione', () => {
-  it('mappa le righe nei loro lesson_id', async () => {
+describe('listUnlockedLessons — happy path: ritorna id + istante di sblocco', () => {
+  it('mappa le righe in { lessonId, unlockedAt } (unlocked_at parsato a Date)', async () => {
     const { client, calls } = makeFakeClient({
-      rows: [{ lesson_id: 'te-form' }, { lesson_id: 'particle-wa' }],
+      rows: [
+        { lesson_id: 'te-form', unlocked_at: '2026-09-24T10:00:00.000Z' },
+        { lesson_id: 'particle-wa', unlocked_at: '2026-09-25T08:30:00.000Z' },
+      ],
     });
     const repo = createSupabaseProgressRepository(client);
 
-    const ids = await repo.listUnlockedLessonIds();
+    const unlocked = await repo.listUnlockedLessons();
 
     expect(calls.table).toBe('lesson_progress');
-    expect(calls.columns).toBe('lesson_id');
-    expect(ids).toEqual(['te-form', 'particle-wa']);
+    expect(calls.columns).toBe('lesson_id, unlocked_at');
+    expect(unlocked).toEqual([
+      { lessonId: 'te-form', unlockedAt: new Date('2026-09-24T10:00:00.000Z') },
+      { lessonId: 'particle-wa', unlockedAt: new Date('2026-09-25T08:30:00.000Z') },
+    ]);
   });
 
   it('nessuna riga ⇒ array vuoto (nessuna lezione sbloccata)', async () => {
     const { client } = makeFakeClient({ rows: [] });
     const repo = createSupabaseProgressRepository(client);
 
-    await expect(repo.listUnlockedLessonIds()).resolves.toEqual([]);
+    await expect(repo.listUnlockedLessons()).resolves.toEqual([]);
   });
 
   it('data null (nessuna riga, nessun errore) ⇒ array vuoto', async () => {
     const { client } = makeFakeClient({});
     const repo = createSupabaseProgressRepository(client);
 
-    await expect(repo.listUnlockedLessonIds()).resolves.toEqual([]);
+    await expect(repo.listUnlockedLessons()).resolves.toEqual([]);
   });
 });
 
-describe('listUnlockedLessonIds — fallimenti lanciano DataError (reject)', () => {
-  it("errore Supabase ⇒ DataError('listUnlockedLessonIds') con causa preservata", async () => {
+describe('listUnlockedLessons — fallimenti lanciano DataError (reject)', () => {
+  it("errore Supabase ⇒ DataError('listUnlockedLessons') con causa preservata", async () => {
     const supabaseError = { message: 'rls denied', code: '42501' };
     const { client } = makeFakeClient({ error: supabaseError });
     const repo = createSupabaseProgressRepository(client);
 
-    await expect(repo.listUnlockedLessonIds()).rejects.toBeInstanceOf(DataError);
-    await expect(repo.listUnlockedLessonIds()).rejects.toMatchObject({
-      operation: 'listUnlockedLessonIds',
+    await expect(repo.listUnlockedLessons()).rejects.toBeInstanceOf(DataError);
+    await expect(repo.listUnlockedLessons()).rejects.toMatchObject({
+      operation: 'listUnlockedLessons',
       cause: supabaseError,
     });
   });
 
   it('riga malformata (lesson_id non stringa) ⇒ DataError', async () => {
-    const { client } = makeFakeClient({ rows: [{ lesson_id: 42 }] });
+    const { client } = makeFakeClient({
+      rows: [{ lesson_id: 42, unlocked_at: '2026-09-24T10:00:00.000Z' }],
+    });
     const repo = createSupabaseProgressRepository(client);
 
-    await expect(repo.listUnlockedLessonIds()).rejects.toBeInstanceOf(DataError);
+    await expect(repo.listUnlockedLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (unlocked_at assente) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({ rows: [{ lesson_id: 'te-form' }] });
+    const repo = createSupabaseProgressRepository(client);
+
+    await expect(repo.listUnlockedLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (unlocked_at non stringa) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({
+      rows: [{ lesson_id: 'te-form', unlocked_at: 12345 }],
+    });
+    const repo = createSupabaseProgressRepository(client);
+
+    await expect(repo.listUnlockedLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (unlocked_at stringa non parsabile a Date) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({
+      rows: [{ lesson_id: 'te-form', unlocked_at: 'non-una-data' }],
+    });
+    const repo = createSupabaseProgressRepository(client);
+
+    await expect(repo.listUnlockedLessons()).rejects.toBeInstanceOf(DataError);
   });
 
   it('riga null (elemento non-oggetto) ⇒ DataError', async () => {
     const { client } = makeFakeClient({ rows: [null] });
     const repo = createSupabaseProgressRepository(client);
 
-    await expect(repo.listUnlockedLessonIds()).rejects.toBeInstanceOf(DataError);
+    await expect(repo.listUnlockedLessons()).rejects.toBeInstanceOf(DataError);
   });
 });
 

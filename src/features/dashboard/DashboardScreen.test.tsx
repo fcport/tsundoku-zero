@@ -8,6 +8,9 @@ import { i18n } from '../../i18n';
 import { dueQueryKey } from '../../domain/due';
 import type { ReviewState } from '../../domain/schedule';
 import type { ReviewLogEntry } from '../../domain/streak';
+import type { UnlockedLesson } from '../../domain/ports/progressRepository';
+import type { SettingsRepository } from '../../domain/ports/settingsRepository';
+import { DEFAULT_LESSONS_PER_DAY } from '../../domain/unlockPace';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { DashboardScreen } from './DashboardScreen';
 
@@ -33,8 +36,17 @@ const inMemoryPorts: Ports = {
     listDue: async () => [],
     listReviewLog: async () => [],
   },
-  progress: { listUnlockedLessonIds: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [] },
+};
+
+// Porta impostazioni finta inerte (nuova prop 3.17): con la cache seminata la
+// queryFn del tetto non parte; la lasciamo comunque totale.
+const inertSettings: SettingsRepository = {
+  loadLocale: async () => null,
+  saveLocale: async () => {},
+  loadLessonsPerDay: async () => null,
+  saveLessonsPerDay: async () => {},
 };
 
 /** Uno stato di ripasso minimo (i valori non contano: la dashboard usa solo `.length`). */
@@ -58,15 +70,30 @@ function freshClient(): QueryClient {
   return new QueryClient({ defaultOptions: { queries: { retry: false } } });
 }
 
+// Istante NEL PASSATO (giorno locale precedente a NOW nel fuso UTC): uno sblocco
+// così datato NON conta in `unlocksToday`, così i test del cancello che non
+// riguardano il tetto (3.12-3.16) restano invariati (`unlocksToday = 0 < cap`).
+const PAST = new Date('2026-09-20T12:00:00.000Z');
+// Istante DI OGGI (stesso giorno locale di NOW): uno sblocco così datato conta in
+// `unlocksToday`, usato dai test del tetto (3.17).
+const TODAY = new Date('2026-09-25T09:00:00.000Z');
+
 /**
  * Semina la cache per lo stato CARICATO: N dovuti, un log, u sbloccate su t
- * lezioni. Le quattro chiavi risolvono in modo sincrono al primo render.
+ * lezioni, il tetto giornaliero. Le cinque chiavi risolvono in modo sincrono al
+ * primo render.
  *
  * Ogni lezione seminata ha `exerciseCount: 1` di DEFAULT, così i test del cancello
  * (3.12/3.13) NON innescano la dichiarazione «senza esercizi» (3.14): il default
  * garantisce che «ultima sbloccata» abbia esercizi salvo override esplicito.
  * `lessonExerciseCounts` sovrascrive per-indice il conteggio (per la lezione
  * concettuale con `count 0`).
+ *
+ * Il read-model unico (3.17) porta `unlockedAt`: le prime `unlockedTodayCount`
+ * sbloccate hanno un istante DI OGGI (contano nel tetto), le altre un istante NEL
+ * PASSATO (non contano). Di DEFAULT `unlockedTodayCount = 0` (tutte nel passato,
+ * `unlocksToday = 0`), così i test non-tetto non sono mai capped. `lessonsPerDay`
+ * di DEFAULT è `DEFAULT_LESSONS_PER_DAY` (1).
  */
 function seededClient(opts: {
   dueCount: number;
@@ -74,6 +101,8 @@ function seededClient(opts: {
   unlocked: number;
   total: number;
   lessonExerciseCounts?: readonly number[];
+  lessonsPerDay?: number;
+  unlockedTodayCount?: number;
 }): QueryClient {
   const qc = freshClient();
   qc.setQueryData(
@@ -81,9 +110,17 @@ function seededClient(opts: {
     Array.from({ length: opts.dueCount }, (_, i) => due(`ex-${i}`)),
   );
   qc.setQueryData(['streak', UID], opts.log);
+  const unlockedToday = opts.unlockedTodayCount ?? 0;
   qc.setQueryData(
     ['unlocked', UID],
-    Array.from({ length: opts.unlocked }, (_, i) => `lesson-${i}`),
+    Array.from(
+      { length: opts.unlocked },
+      (_, i): UnlockedLesson => ({
+        lessonId: `lesson-${i}`,
+        // Le prime `unlockedToday` sbloccate contano come «oggi»; le altre no.
+        unlockedAt: i < unlockedToday ? TODAY : PAST,
+      }),
+    ),
   );
   qc.setQueryData(
     ['lessons'],
@@ -95,6 +132,10 @@ function seededClient(opts: {
       exerciseCount: opts.lessonExerciseCounts?.[i] ?? 1,
     })),
   );
+  qc.setQueryData(
+    ['lessonsPerDay', UID],
+    opts.lessonsPerDay ?? DEFAULT_LESSONS_PER_DAY,
+  );
   return qc;
 }
 
@@ -102,7 +143,7 @@ function render(qc: QueryClient, userId: string | null): string {
   const el: ReactElement = (
     <QueryClientProvider client={qc}>
       <PortsProvider value={inMemoryPorts}>
-        <DashboardScreen userId={userId} />
+        <DashboardScreen userId={userId} settings={inertSettings} />
       </PortsProvider>
     </QueryClientProvider>
   );
@@ -637,5 +678,181 @@ describe('AC4 — azione = materializza la prima lezione; curriculum vuoto ⇒ n
     expect(markup).not.toContain(en.dashboard.startAction);
     const buttons = markup.match(/<button/g) ?? [];
     expect(buttons.length).toBe(0);
+  });
+});
+
+describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
+  it('tetto NON raggiunto (cap 1, 0 sblocchi oggi) ⇒ unlockAction, un solo <button>', () => {
+    // count 0, next != null, unlocksToday 0 < cap 1: il cancello rende ancora
+    // l'azione di sblocco (comportamento invariato di 3.13/3.16).
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonsPerDay: 1,
+      unlockedTodayCount: 0,
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('tetto RAGGIUNTO (cap 1, 1 sblocco oggi) ⇒ dailyLimitReachedBody, NESSUN pulsante', () => {
+    // count 0, next != null, unlocksToday 1 >= cap 1: il cancello sostituisce
+    // l'azione con la dichiarazione del limite. `{{limit}}` = 1.
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonsPerDay: 1,
+      unlockedTodayCount: 1,
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    expect(markup).not.toContain(en.dashboard.unlockAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
+  });
+
+  it('tetto > 1, parziale (cap 3, 2 sblocchi oggi) ⇒ unlockAction (2 < 3)', () => {
+    // Con 2 sblocchi già seminati «oggi» servono almeno 2 sbloccate: unlocked 2 su
+    // 10, entrambe oggi, next = lesson-2 (con esercizi di default).
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 2,
+      total: 10,
+      lessonsPerDay: 3,
+      unlockedTodayCount: 2,
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain(
+      en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '3'),
+    );
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('tetto raggiunto ⇒ la dichiarazione porta il valore del tetto (cap 2 ⇒ {{limit}}=2)', () => {
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 2,
+      total: 10,
+      lessonsPerDay: 2,
+      unlockedTodayCount: 2,
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '2'));
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
+  });
+
+  it('pila piena (count > 0) ⇒ primaryAction, tetto NON consultato anche se raggiunto', () => {
+    // count > 0: il ramo svuota-pila resta invariato indipendentemente dal tetto.
+    const qc = seededClient({
+      dueCount: 4,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonsPerDay: 1,
+      unlockedTodayCount: 1,
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.primaryAction);
+    expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('curriculum esaurito (next === null) ⇒ nessuna dichiarazione del tetto (3.16 invariato)', () => {
+    // count 0, next null (tutte sbloccate), anche con uno sblocco oggi: il cancello
+    // rende NESSUN pulsante e NESSUN dailyLimitReachedBody (il tetto agisce solo con
+    // next != null); resta la dichiarazione 3.16 curriculumCompleteBody.
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 3,
+      total: 3,
+      lessonsPerDay: 1,
+      unlockedTodayCount: 1,
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.curriculumCompleteBody);
+    expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
+  });
+
+  it('AC5 — la copy del tetto è priva di `!`, ASCII (en) e in parità it', async () => {
+    const capped = render(
+      seededClient({
+        dueCount: 0,
+        log: [],
+        unlocked: 1,
+        total: 10,
+        lessonsPerDay: 1,
+        unlockedTodayCount: 1,
+      }),
+      UID,
+    );
+    expect(capped).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    expect(capped).not.toContain('!');
+    expect([...capped].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000)).toEqual([]);
+    // Nessuna apertura possessiva.
+    expect(capped.toLowerCase()).not.toContain('you have');
+    expect(capped.toLowerCase()).not.toContain('hai ');
+
+    await i18n.changeLanguage('it');
+    const cappedIt = render(
+      seededClient({
+        dueCount: 0,
+        log: [],
+        unlocked: 1,
+        total: 10,
+        lessonsPerDay: 1,
+        unlockedTodayCount: 1,
+      }),
+      UID,
+    );
+    expect(cappedIt).toContain(
+      itCatalog.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'),
+    );
+    expect(cappedIt).not.toContain('!');
+  });
+
+  it('lo scheletro attende anche il tetto (lessonsPerDay non seminato ⇒ aria-busy)', () => {
+    // Seminiamo tutte le chiavi TRANNE lessonsPerDay: la dashboard resta sullo
+    // scheletro (il tetto è nel cancello scheletro), non rende l'azione.
+    const qc = freshClient();
+    qc.setQueryData(dueQueryKey(UID), []);
+    qc.setQueryData(['streak', UID], []);
+    qc.setQueryData(['unlocked', UID], [
+      { lessonId: 'lesson-0', unlockedAt: PAST },
+    ]);
+    qc.setQueryData(['lessons'], [
+      { id: 'lesson-0', ordinal: 0, title: { en: 'L0' }, grammarPoints: [], exerciseCount: 1 },
+    ]);
+    // lessonsPerDay MANCANTE.
+    const markup = renderToStaticMarkup(
+      <QueryClientProvider client={qc}>
+        <PortsProvider value={inMemoryPorts}>
+          <DashboardScreen userId={UID} settings={inertSettings} />
+        </PortsProvider>
+      </QueryClientProvider>,
+    );
+    expect(markup).toContain('aria-busy="true"');
+    expect(markup).not.toContain(en.dashboard.unlockAction);
   });
 });

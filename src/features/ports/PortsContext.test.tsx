@@ -6,7 +6,10 @@ import type {
   LessonSummary,
 } from '../../domain/ports/contentRepository';
 import type { ReviewRepository } from '../../domain/ports/reviewRepository';
-import type { ProgressRepository } from '../../domain/ports/progressRepository';
+import type {
+  ProgressRepository,
+  UnlockedLesson,
+} from '../../domain/ports/progressRepository';
 import type { ReviewState } from '../../domain/schedule';
 import { PortsProvider, usePorts, type Ports } from './PortsContext';
 
@@ -42,7 +45,9 @@ const sampleDue: readonly ReviewState[] = [
     lastReviewedAt: null,
   },
 ];
-const sampleUnlocked: readonly string[] = ['te-form'];
+const sampleUnlocked: readonly UnlockedLesson[] = [
+  { lessonId: 'te-form', unlockedAt: FIXED_NOW },
+];
 
 // Porte IN MEMORIA: risolvono da valori locali, nessun client Supabase, nessuna
 // rete. Sono ciò che un test di schermata del ciclo (3.11+) inietterà.
@@ -55,7 +60,7 @@ const inMemoryReview: ReviewRepository = {
   listReviewLog: async () => sampleLog,
 };
 const inMemoryProgress: ProgressRepository = {
-  listUnlockedLessonIds: async () => sampleUnlocked,
+  listUnlockedLessons: async () => sampleUnlocked,
   unlockLesson: async () => {},
 };
 
@@ -120,7 +125,7 @@ describe('PortsProvider / usePorts — iniezione di porte in memoria', () => {
 
     await expect(captured!.content.listLessons()).resolves.toBe(sampleLessons);
     await expect(captured!.review.listDue(FIXED_NOW)).resolves.toBe(sampleDue);
-    await expect(captured!.progress.listUnlockedLessonIds()).resolves.toBe(
+    await expect(captured!.progress.listUnlockedLessons()).resolves.toBe(
       sampleUnlocked,
     );
 

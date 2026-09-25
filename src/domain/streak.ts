@@ -16,7 +16,8 @@
 // `Intl…resolvedOptions()`, nessun `Math.random()`. Sia l'istante `now` sia il
 // `timeZone` ENTRANO come parametri (`streak.length === 3`); il dominio non legge
 // orologio né fuso ambientale. Il confine di giornata è mezzanotte nel `timeZone`
-// PASSATO.
+// PASSATO — condiviso col tetto di sblocco (3.17) via `./calendarDay`.
+import { localDayOrdinal } from './calendarDay';
 
 /**
  * Una voce del registro append-only dei ripassi: il tipo MINIMO necessario allo
@@ -27,29 +28,6 @@
  */
 export interface ReviewLogEntry {
   readonly reviewedAt: Date;
-}
-
-/** Millisecondi in un giorno: usato per mappare un giorno di calendario a un ordinale. */
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
-
-/**
- * Il GIORNO LOCALE di `instant` nel `timeZone`, come ORDINALE intero. Formatta
- * l'istante nel `timeZone` ESPLICITO passato (mai `resolvedOptions()`, che
- * leggerebbe il fuso ambientale) col calendario ISO `en-CA` (`YYYY-MM-DD`), poi
- * mappa il nominale Y-M-D a `Date.UTC(...) / MS_PER_DAY`. Così due giorni di
- * calendario CONSECUTIVI differiscono sempre di esattamente 1, robusto a DST,
- * fine mese e fine anno: l'aritmetica avviene sui numeri di giorno nominali, non
- * sull'istante UTC (che una transizione DST accorcia o allunga).
- */
-function localDayOrdinal(instant: Date, timeZone: string): number {
-  const iso = new Intl.DateTimeFormat('en-CA', {
-    timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(instant);
-  const [y, m, d] = iso.split('-').map(Number);
-  return Date.UTC(y, m - 1, d) / MS_PER_DAY;
 }
 
 /**

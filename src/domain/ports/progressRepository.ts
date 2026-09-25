@@ -11,17 +11,32 @@
 // senza parametro `userId`.
 
 /**
+ * Una lezione SBLOCCATA: il suo `id` e l'ISTANTE in cui è stata sbloccata
+ * (`unlocked_at`, storia 3.8). È il read-model UNICO del progresso (3.17): da
+ * esso la dashboard deriva SIA gli id (per la sequenza del curriculum) SIA gli
+ * istanti (per il tetto giornaliero di sblocco), senza leggere `lesson_progress`
+ * due volte — id e istanti concordano sempre.
+ */
+export interface UnlockedLesson {
+  readonly lessonId: string;
+  readonly unlockedAt: Date;
+}
+
+/**
  * Porta del progresso del curriculum dichiarata dal dominio (AD-2).
  * L'adattatore concreto vive in src/data/ ed è l'unico a conoscere Supabase e la
  * tabella `lesson_progress`.
  */
 export interface ProgressRepository {
   /**
-   * Legge gli id delle lezioni SBLOCCATE dall'utente corrente. Un id assente
-   * dalla lista significa «mai sbloccata» (assenza di riga, AD-19). Opera
-   * sull'utente corrente, senza parametro `userId`.
+   * Legge le lezioni SBLOCCATE dall'utente corrente — `id` e istante di sblocco
+   * (`UnlockedLesson[]`). Una lezione assente dalla lista significa «mai
+   * sbloccata» (assenza di riga, AD-19). È il read-model UNICO: la dashboard ne
+   * ricava gli id (`.map(u => u.lessonId)`) e gli istanti (`.map(u => u.unlockedAt)`)
+   * senza doppia lettura di `lesson_progress`. Opera sull'utente corrente, senza
+   * parametro `userId`.
    */
-  listUnlockedLessonIds(): Promise<readonly string[]>;
+  listUnlockedLessons(): Promise<readonly UnlockedLesson[]>;
 
   /**
    * SBLOCCA una lezione per l'utente corrente: scrittura ATOMICA e IDEMPOTENTE

@@ -273,6 +273,121 @@ describe('migrazione user_settings — schema minimo e isolato', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Story 3.17 — Asserzioni strutturali sulla migrazione ADDITIVA lessons_per_day
+// (AC1). Il file è un SOLO `alter table user_settings add column lessons_per_day
+// int not null default 1`, con timestamp 14 cifre > 20260925150000, e nient'altro
+// (nessun DDL, nessuna policy). Il loop generico «ogni *.sql parsa» sopra copre la
+// sintassi; qui si asserisce la STRUTTURA via AST + guardia sul timestamp. La
+// CREATE di user_settings resta invariata (verificata dal suo describe sopra: 2
+// colonne).
+// ---------------------------------------------------------------------------
+
+const addLessonsPerDay = migrations.find((m) =>
+  m.name.endsWith('_add_lessons_per_day_to_user_settings.sql'),
+);
+
+describe('migrazione lessons_per_day — additiva su user_settings (Story 3.17)', () => {
+  // Guardia anti-vacuità + timestamp: il file esiste e il prefisso a 14 cifre è
+  // STRETTAMENTE > 20260925150000 (l'ultima migrazione esistente, unlock_lesson).
+  it('la migrazione esiste e il timestamp a 14 cifre è > 20260925150000', () => {
+    expect(
+      addLessonsPerDay,
+      'atteso un file *_add_lessons_per_day_to_user_settings.sql',
+    ).toBeDefined();
+    const version = addLessonsPerDay?.name.slice(0, 14) ?? '';
+    expect(version).toMatch(/^\d{14}$/);
+    expect(
+      version > '20260925150000',
+      `timestamp ${version} non è > 20260925150000`,
+    ).toBe(true);
+  });
+
+  // Via AST: il file contiene ESATTAMENTE un AlterTableStmt su user_settings con
+  // UN comando AddColumn `lessons_per_day`, e NESSUN altro statement (né CREATE,
+  // né CreatePolicyStmt). L'AST è l'autorità: un DDL estraneo fa fallire qui.
+  it('è un SOLO alter table user_settings add column lessons_per_day, nient\'altro (via AST)', () => {
+    const res = parseSql(addLessonsPerDay?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    // Un solo statement in tutto il file.
+    expect(res.parse_tree.stmts.length).toBe(1);
+
+    type AlterTableCmd = {
+      readonly subtype?: string;
+      readonly def?: {
+        readonly ColumnDef?: {
+          readonly colname?: string;
+          readonly typeName?: {
+            readonly names?: readonly { readonly String?: { readonly sval?: string } }[];
+          };
+          readonly constraints?: readonly {
+            readonly Constraint?: {
+              readonly contype?: string;
+              readonly raw_expr?: {
+                readonly A_Const?: { readonly ival?: { readonly ival?: number } };
+              };
+            };
+          }[];
+        };
+      };
+    };
+    type AlterTableStmt = {
+      readonly relation?: { readonly relname?: string };
+      readonly cmds?: readonly { readonly AlterTableCmd?: AlterTableCmd }[];
+    };
+
+    const alter = (res.parse_tree.stmts[0]?.stmt as { AlterTableStmt?: AlterTableStmt })
+      .AlterTableStmt;
+    expect(alter, 'lo statement non è un ALTER TABLE').toBeDefined();
+    expect(alter?.relation?.relname).toBe('user_settings');
+
+    // Nessuna CREATE / CREATE POLICY nel file (guardia «nient'altro»).
+    const stmt0 = res.parse_tree.stmts[0]?.stmt as Record<string, unknown>;
+    expect(stmt0.CreateStmt).toBeUndefined();
+    expect(stmt0.CreatePolicyStmt).toBeUndefined();
+
+    // Un solo comando: ADD COLUMN.
+    const cmds = alter?.cmds ?? [];
+    expect(cmds.length).toBe(1);
+    const cmd = cmds[0]?.AlterTableCmd;
+    expect(cmd?.subtype).toBe('AT_AddColumn');
+
+    // La colonna aggiunta: nome, tipo int/int4, not null, default 1.
+    const col = cmd?.def?.ColumnDef;
+    expect(col?.colname).toBe('lessons_per_day');
+
+    const typeNames = (col?.typeName?.names ?? [])
+      .map((n) => n.String?.sval)
+      .filter((n): n is string => typeof n === 'string');
+    const actualType = typeNames[typeNames.length - 1];
+    expect(['int', 'int4']).toContain(actualType);
+
+    const contypes = (col?.constraints ?? [])
+      .map((c) => c.Constraint?.contype)
+      .filter((c): c is string => typeof c === 'string');
+    expect(contypes).toContain('CONSTR_NOTNULL');
+
+    const defaultConstraint = (col?.constraints ?? [])
+      .map((c) => c.Constraint)
+      .find((c) => c?.contype === 'CONSTR_DEFAULT');
+    expect(defaultConstraint, 'nessun DEFAULT sulla colonna').toBeDefined();
+    expect(defaultConstraint?.raw_expr?.A_Const?.ival?.ival).toBe(1);
+  });
+
+  // Testo: nessun check su lessons_per_day (minimalità della tabella, come locale)
+  // e nessuna nuova policy (la riga è già isolata da RLS).
+  it('nessun check su lessons_per_day, nessuna policy nuova (testo)', () => {
+    const sql = stripSqlComments(addLessonsPerDay?.sql ?? '').toLowerCase();
+    expect(sql).not.toMatch(/check\s*\(/);
+    expect(sql).not.toMatch(/create\s+policy/);
+    // Ridondanza a colpo d'occhio del diff: la forma additiva canonica.
+    expect(sql).toMatch(
+      /alter\s+table\s+user_settings\s+add\s+column\s+lessons_per_day\s+int\s+not\s+null\s+default\s+1/,
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Gate di config: l'apply solo su main, mai su PR (AC1 / AC2 «non su PR»).
 // ---------------------------------------------------------------------------
 
