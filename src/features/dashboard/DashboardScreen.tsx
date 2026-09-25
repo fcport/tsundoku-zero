@@ -126,6 +126,40 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
   // (AD-5): sopravvive al refresh.
   const lastUnlocked = lastUnlockedLesson(lessonsQ.data, unlockedQ.data);
 
+  // Il ramo di PRIMO AVVIO (3.15): DERIVATO, mai memorizzato (AD-5). Segnale
+  // canonico `unlocked === 0` (= zero righe lesson_progress = «mai sbloccato
+  // niente»): distinto da `count === 0` (pila svuotata di 3.14) e da `next === null`
+  // (curriculum esaurito di 3.16). Sopravvive al refresh finché nulla è sbloccato.
+  // Uno stato DISTINTO: una descrizione di cosa fa l'app (firstRunBody) più UNA sola
+  // azione la cui copy significa *comincia* (startAction), riusando `unlockMutation`
+  // (materializza la prima lezione, `ordinal` minimo). NIENTE conteggi a zero (AC3):
+  // nessun pile-counter (né `text-count-hero` né `dueLabel`), nessuno streak-badge,
+  // nessun curriculum-progress («0 di N» sarebbe un altro zero) — non c'è ancora
+  // niente da contare. Copy neutra, solo token del sistema di design. `CONTAINER_HEIGHT`
+  // sul <main> (nessun salto di layout col resto). A curriculum vuoto (`next === null`,
+  // mai in produzione) resta solo la descrizione, NESSUN pulsante (AC4).
+  if (unlocked === 0) {
+    return (
+      <main
+        className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}
+      >
+        <p className="text-body text-ink-primary">
+          {t('dashboard.firstRunBody')}
+        </p>
+        {next !== null ? (
+          <button
+            type="button"
+            onClick={() => unlockMutation.mutate(next.id)}
+            disabled={unlockMutation.isPending}
+            className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+          >
+            {t('dashboard.startAction')}
+          </button>
+        ) : null}
+      </main>
+    );
+  }
+
   return (
     <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
       {/* pile-counter: il conteggio nel ruolo tipografico più grande, l'etichetta

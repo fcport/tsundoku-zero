@@ -197,3 +197,11 @@ source_spec: `spec-3-13-sbloccare-la-lezione-successiva.md`
 severity: medium
 reason: `DashboardScreen.tsx` definisce `useMutation({ mutationFn, onSuccess })` senza `onError`; la dashboard non ha alcuna superficie d'errore (stesso vuoto della lettura, già tracciato in DW-23). L'intento di 3.13 copre solo il percorso felice dello sblocco (AC1-4); l'epica sequenzia gli stati non-felici della dashboard a 3.15/3.16. Reale ma non richiesto da questa storia: va affrontato con gli stati vuoti/d'errore (3.15/3.16 o la storia dedicata di DW-23).
 status: open
+
+### DW-25: unlockMutation non ha onError: un fallimento di progress.unlockLesson non produce alcuna superficie d'errore sulla dashboard (pulsante di sblocco 3.13 e pulsante di inizio 3.15).
+origin: spec-deferred 42eb6e26bd58
+location: src/features/dashboard/DashboardScreen.tsx:78-85,149-158
+source_spec: `spec-3-15-la-prima-volta-non-somiglia-alla-fine.md`
+severity: medium
+reason: Su fallimento della RPC la mutation va in errore, isPending torna false e il pulsante si ri-abilita SENZA feedback all'utente. Gap PRE-ESISTENTE: il call-site di 3.13 (unlockAction, DashboardScreen.tsx:179-189) ha lo stesso onSuccess-senza-onError; 3.15 aggiunge un secondo trigger allo stesso unlockMutation condiviso. Fuori dall'intento di 3.15 (stato di primo avvio) e non banalmente correggibile: serve una scelta di superficie/copy d'errore condivisa dai due pulsanti (nuova chiave i18n + pattern di error-state).
+status: open
