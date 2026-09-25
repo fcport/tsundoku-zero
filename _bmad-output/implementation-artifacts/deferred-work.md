@@ -173,3 +173,11 @@ source_spec: `spec-3-8-il-progresso-è-per-utente-e-resta-per-utente.md`
 severity: medium
 reason: La prova a runtime richiede le migrazioni APPLICATE al progetto reale (solo al merge su main, AD-12/AD-13), due account reali con email univoca per run e teardown via l'Edge Function delete-account (AD-11/AD-13). Il progetto vieta l'istanza Supabase locale e non ha ancora infrastruttura Playwright. Ciò che questa storia verifica meccanicamente OFFLINE (pg-query-emscripten): RLS abilitata su tutte e tre le tabelle, le policy owner-scoped (4/4/2), la cascata su auth.users e l'assenza di policy update/delete su review_log — la condizione strutturale NECESSARIA, non l'effetto osservato a query time. ATTENZIONE all'instradamento: l'isolamento A↔B a runtime è NFR5 e appartiene alla suite e2e (Playwright) introdotta in Epic 7 (storia 7.4). NON è la 7.5, i cui AC riguardano il teardown dopo cancellazione account (assenza di righe per tabella), una proprietà diversa. Oggi né 7.4 né 7.5 dichiarano un AC esplicito «A legge/scrive le righe di B ⇒ fallisce, per ciascuna tabella»: questa obbligazion
 status: open
+
+### DW-22: Prova RUNTIME dell'idempotenza (AC3, comportamento osservato): riapplicare lo stesso review_id due volte NON deve produrre una seconda riga di log né un secondo avanzamento di stadio/contatore, esegui
+origin: spec-deferred ea5e7d8717a9
+location: supabase/migrations/*_create_apply_review.sql + src/migrations.test.ts
+source_spec: `spec-3-9-una-risposta-una-chiamata-nessun-doppione.md`
+severity: low
+reason: pg-query-emscripten PARSA soltanto il SQL: non esegue la funzione, quindi non può osservare l'effetto di una seconda chiamata. Questa storia verifica OFFLINE la condizione STRUTTURALE necessaria — firma esatta, INSERT con ON CONFLICT (id) DO NOTHING su review_log, UPDATE di review_state guardato dal risultato dell'INSERT (from logged), assenza di logica di scheduling — non l'effetto a query-time. La prova a runtime è GIÀ POSSEDUTA da Epic 4, storia 4.5 ("Riapplicare la coda non falsa niente"), i cui AC dichiarano esplicitamente «drenata due volte ⇒ review_log senza duplicati» e «stesso review_id due volte ⇒ lo stadio non avanza una seconda volta». Nessun orfano: non serve aggiungere l'obbligazione altrove. Stesso schema del differimento a runtime di 3.8.
+status: open
