@@ -35,7 +35,7 @@ Non sostituisce una rigenerazione con `bmad-architecture`: la prepara. Le voci m
 | AD-12 — Migrazioni versionate | **Intatto** | |
 | AD-13 — Test e2e senza dati condivisi | **Intatto** | |
 | AD-14 — Nessuna stringa cablata | **Modificato** | Le spiegazioni degli esercizi (FR8.5) sono **contenuto bilingue nel file di lezione**, non chiavi i18n. Il confine va ridichiarato: interfaccia da `t()`, contenuto dal file, giapponese da nessuno dei due |
-| AD-15 — L'accessibilità della sessione è un contratto | **Modificato** | Il contratto tastiera cambia: "spazio rivela, 1-4 valutano" non descrive più niente. E non basta sostituirlo con "1-n selezionano": `assemble` (AD-22) è un ordinamento, non una selezione. Da riscrivere sapendo che deve coprire tre interazioni diverse |
+| AD-15 — L'accessibilità della sessione è un contratto | **Riscritto** (storia 3.22) | Il contratto tastiera è stato riscritto e **registrato** in `docs/session-keyboard-contract.md` (con test), che sostituisce "spazio rivela, 1-4 valutano". Copre le tre interazioni (AD-22): tasto numerico `1`-`9` → posizione (mappa pura agnostica al tipo, overflow dichiarato), una sola live region `aria-live="polite"`, tab-order = ordine di lettura = ordine dei tasti numerici, anello di focus visibile, `Enter` avanza / `Esc` esce |
 | AD-16 — Attribuzione su ogni schermata | **Allentato** | Senza JMdict cade l'obbligo EDRDG. Diventa una pagina di riconoscimenti (FR10.2). `LICENSE` e `LICENSE-CONTENT` restano due file separati |
 | AD-17 — La scala degli stadi è una sola costante | **Intatto** | |
 | AD-18 — Le statistiche derivano solo dal log | **Intatto**, e più potente | `review_log` acquisisce il punto grammaticale (FR5.7), che è ciò che rende possibile FR7.3 |
@@ -204,7 +204,7 @@ Consegnato a `bmad-architecture` come agenda, non risolto qui:
 1. **OQ-8 — dove vive il contenuto.** Postgres o bundle. Tocca `ContentRepository`, FR9.1, e il costo di pubblicare una correzione di contenuto.
 2. **Il registro definitivo dei tipi di esercizio** (AD-22). Da chiudere dopo tre lezioni autorate davvero, non prima.
 3. **La forma dello schema di lezione.** Discende da 2 e non la precede.
-4. **Il contratto tastiera della schermata di esercizio** (AD-15 riscritto). Dipende da quanti e quali tipi esistono.
+4. ~~**Il contratto tastiera della schermata di esercizio** (AD-15 riscritto). Dipende da quanti e quali tipi esistono.~~ **Chiuso (storia 3.22):** riscritto e registrato in `docs/session-keyboard-contract.md` (con test), sui tre tipi del registro chiuso di AD-22.
 5. **Se la pipeline di autorazione sia una skill del repository, uno script, o un documento di procedura.** NFR9 chiede che regga 90 lezioni; quale forma lo garantisca è una scelta architetturale aperta.
 
 I punti 2, 3 e 4 hanno una dipendenza comune, ed è la ragione per cui questo documento si ferma qui: **vanno decisi dopo aver visto contenuto vero**, non da un ragionamento a tavolino. Autorare le prime tre lezioni è il prossimo passo del progetto, non una conseguenza del piano.

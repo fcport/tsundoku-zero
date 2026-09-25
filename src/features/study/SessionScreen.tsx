@@ -31,12 +31,24 @@
 // La pila vuota all'INGRESSO (`total === 0`, deep-link) resta lo `<main>` neutro e
 // vuoto. Nessuna celebrazione: nessun verde/rosso, `!`, emoji, badge o animazione.
 //
-// FUORI SCOPE (3.22+): contratto tastiera completo (tasti numerici/tab-order/live
-// region) — il completamento NON introduce live region —, responsive (3.23).
-import { useEffect, useState } from 'react';
+// CONTRATTO TASTIERA (3.22): l'intera sessione e pilotabile SENZA MOUSE (aggiornamento
+// di AD-15, registrato in `docs/session-keyboard-contract.md`). UN solo listener
+// `keydown` a livello window (via ref «ultimo valore»): un tasto numerico `1`-`9`
+// seleziona l'opzione alla posizione (`keyboardSelectionIndex`, dominio puro e
+// agnostico al tipo), `Enter` in fase spiegazione avanza (target non interattivo),
+// `Esc` esce (3.20, ora parte del contratto unificato). UNA sola live region
+// `aria-live="polite"` (sr-only) nel ramo di sessione ATTIVA annuncia esito e
+// avanzamento; il tab-order = ordine di lettura = ordine dei tasti numerici (ordine
+// di `answerOptions`, nessun `tabindex` positivo) e ogni interattivo porta un anello
+// di focus visibile (token `focus-ring`).
+//
+// FUORI SCOPE: responsive/thumb-zone (3.23); l'anello di focus app-wide su
+// auth/settings/shell (DW-10) e l'audit con screen reader reale NVDA/VoiceOver (7.6).
+import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { applyResultToDue, dueQueryKey } from '../../domain/due';
-import { selectionComplete } from '../../domain/exercise-presentation';
+import { answerOptions, selectionComplete } from '../../domain/exercise-presentation';
+import { keyboardSelectionIndex } from '../../domain/keyboard';
 import { evaluateAnswer } from '../../domain/review';
 import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
@@ -68,6 +80,24 @@ export interface SessionScreenProps {
 // nei vari rami evita salti di layout (stesso pattern della dashboard). Una sola
 // definizione così i rami non divergono.
 const CONTAINER_HEIGHT = 'min-h-[24rem]';
+
+// ANELLO DI FOCUS visibile (3.22, AC5): una sola definizione condivisa dagli
+// interattivi della SESSIONE (qui: «prossimo esercizio», «esci»; la card riusa lo
+// stesso token). `focus-visible:` mostra l'anello solo per navigazione da tastiera,
+// non al click. Il token è `focus-ring` (in scuro `accent-dark`, che porta lo stesso
+// valore di focus-ring-dark, cfr. `theme.css`). Nessun colore letterale (UX-DR1).
+const FOCUS_RING =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+
+// Riconosce un target INTERATTIVO nativo (`<button>`/`<a>`/input/textarea/select o
+// qualunque nodo `contenteditable`): sul quale `Enter` attiva GIÀ il controllo nativo
+// (3.22). Il contratto avanza con `Enter` SOLO quando il target NON è interattivo
+// (`window`/`body`), così sul bottone focalizzato non c'è doppio avanzamento.
+function isInteractiveTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  return ['BUTTON', 'A', 'INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+}
 
 // Le variabili della mutation `applyReview`: l'input pre-calcolato PIÙ il `result`
 // (usato dall'onMutate ottimistico per rimpiazzare lo stato in cache). Il `result`
@@ -104,17 +134,22 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   // deep-link, mai avviata ⇒ neutro). `total` è impostato SOLO da `start`.
   const sessionComplete = currentId === null && total > 0;
 
-  // ABBANDONO con Esc (AC2): listener a livello window, attivo per l'INTERA vita
-  // della schermata (anche scheletro/vuoto — hook top-level PRIMA di ogni
-  // early-return, regola degli hook). Su `Escape` → `onExit()`; il cleanup rimuove
-  // il listener. Glue d'effetto: verificata live, non eseguita da renderToStaticMarkup.
+  // CONTRATTO TASTIERA UNIFICATO (3.22, aggiornamento di AD-15): UN solo listener
+  // `keydown` a livello window per l'INTERA vita della schermata (numerici + `Enter`
+  // + `Esc`, coerente con «l'accessibilità è UN contratto»). Il handler dipende da
+  // stato che vive DOPO gli early-return (`activeExercise`, `answered`, `selected`):
+  // per non catturare closure stantie senza aggiungere/rimuovere il listener a ogni
+  // render, si usa il pattern «ultimo valore» — un `sessionKeyRef` aggiornato a ogni
+  // render (effetto senza dep-array, più sotto) e un listener AGGIUNTO UNA VOLTA che
+  // delega a `sessionKeyRef.current(e)`. Hook top-level PRIMA di ogni early-return
+  // (regola degli hook). Glue d'effetto: verificata live e dal test jsdom (AC6), non
+  // eseguita da renderToStaticMarkup.
+  const sessionKeyRef = useRef<(e: KeyboardEvent) => void>(() => {});
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onExit();
-    };
+    const onKey = (e: KeyboardEvent) => sessionKeyRef.current(e);
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onExit]);
+  }, []);
 
   // RICOSTRUZIONE all'ingresso (AC4): lo store è un singleton di modulo che
   // sopravvive allo smontaggio. Un effetto con cleanup su UNMOUNT azzera lo store
@@ -210,6 +245,119 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
       ? exercisesQ.data?.find((c) => c.id === currentId)
       : undefined;
 
+  // L'esercizio ATTIVO e le sue OPZIONI, sollevati a TOP-LEVEL (3.22): il contratto
+  // tastiera deve vederli PRIMA degli early-return per aggiornare `sessionKeyRef`
+  // (regola degli hook). `null`/vuoto quando non c'è una card (scheletro/vuoto/
+  // completamento): il handler tastiera li guarda. L'ordine di `answerOptions` e
+  // l'ordine di lettura = ordine dei tasti numerici (dominio, AC2/AC5).
+  const activeExercise = current?.exercise ?? null;
+  const activeOptions = activeExercise ? answerOptions(activeExercise) : [];
+  const locale = resolveLocale(i18n.language);
+  const completed = total - remainingCount(session);
+
+  // Gestore di risposta (glue d'effetto, verificata live): raccoglie il tocco/tasto,
+  // attende il completamento (assemble: tutte le tessere), poi calcola l'esito SUL
+  // CLIENT con le funzioni PURE, genera il `review_id`, avanza la coda (barra
+  // ottimistica) e persiste (conteggio ottimistico). Un `again` che riaccoda
+  // l'esercizio è, alla ripresentazione, un NUOVO tentativo (nuovo `review_id`).
+  // SOLLEVATO a top-level (3.22): la STESSA pipeline del click serve il tasto numerico
+  // (nessuna seconda strada). Guarda `activeExercise`/`currentId` nulli (nessuna card).
+  const onSelect = (index: number) => {
+    // Guardia di re-entrancy (cintura+bretelle): i bottoni sono già `disabled` dopo
+    // la risposta, ma un tocco/tasto spurio dopo il commit non deve ri-eseguire la
+    // pipeline. Senza card attiva (scheletro/vuoto) non c'e nulla da selezionare.
+    if (answered || activeExercise === null || currentId === null) return;
+
+    const next = [...selected, index];
+    setSelected(next);
+    if (!selectionComplete(activeExercise, next)) return; // assemble: attende le tessere
+
+    const now = clock.now();
+
+    // `currentState` dallo snapshot di ['due'] PRIMA dell'update ottimistico: lo
+    // stato di ripasso dell'esercizio corrente (chiave = id di RIGA).
+    const dueSnapshot = queryClient.getQueryData<readonly ReviewState[]>(
+      dueQueryKey(userId ?? ''),
+    );
+    const currentState = dueSnapshot?.find((s) => s.exerciseId === currentId);
+    if (currentState === undefined) return; // difensivo: senza stato non si schedula
+
+    // La pipeline di valutazione vive nel dominio (`evaluateAnswer`): compose→check→
+    // outcomeOf→schedule, PURA e testata. Qui resta solo il montaggio sottile.
+    const { correct, outcome, result } = evaluateAnswer(
+      activeExercise,
+      next,
+      usedExplanation,
+      currentState,
+      now,
+    );
+    const reviewId = crypto.randomUUID(); // glue di feature: `src/domain` vieta `crypto`
+
+    dispatch({ type: 'reviewed', result, now }); // avanza la coda (barra ottimistica)
+    applyMutation.mutate({
+      input: {
+        reviewId,
+        exerciseId: currentId,
+        outcome,
+        stage: result.stage,
+        dueAt: result.dueAt,
+        reviewedAt: now,
+        usedExplanation,
+      },
+      result,
+    });
+
+    setAnswered(true);
+    setAnsweredCorrect(correct);
+  };
+
+  // Avanzamento al prossimo esercizio: azzera fase/selezione/consulto e mostra il
+  // nuovo `currentExerciseId` (lo store è GIÀ avanzato dal dispatch). SOLLEVATO a
+  // top-level (3.22): serve sia il bottone che il tasto `Enter` del contratto.
+  const onNext = () => {
+    setSelected([]);
+    setAnswered(false);
+    setAnsweredCorrect(null);
+    setUsedExplanation(false);
+  };
+
+  // Il handler del contratto tastiera (3.22, aggiornamento di AD-15): un solo punto
+  // per numerici + `Enter` + `Esc`. Ignora i tasti con `Ctrl`/`Meta`/`Alt` per non
+  // dirottare le scorciatoie del browser (es. `Cmd+1`). `Esc` esce sempre (3.20).
+  // In fase `consegna` (`activeExercise` e `!answered`): la cifra `1`-`9` seleziona
+  // l'opzione alla posizione via `keyboardSelectionIndex` (dominio puro, agnostico al
+  // tipo) — saltata se la tessera assemble è già scelta (`selected.includes`) — poi
+  // `preventDefault`. In fase `spiegazione` (`answered`): `Enter` con target NON
+  // interattivo (`window`/`body`, non un `<button>`/`<a>`/input) avanza — sul bottone
+  // focalizzato agisce l'attivazione nativa (nessun doppio avanzamento).
+  const handleSessionKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onExit();
+      return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    if (activeExercise !== null && !answered) {
+      const index = keyboardSelectionIndex(e.key, activeOptions.length);
+      if (index !== null && !selected.includes(index)) {
+        e.preventDefault();
+        onSelect(index);
+      }
+      return;
+    }
+
+    if (answered && e.key === 'Enter' && !isInteractiveTarget(e.target)) {
+      onNext();
+    }
+  };
+
+  // Aggiorna il ref «ultimo valore» a OGNI render (nessun dep-array): il listener
+  // aggiunto una volta chiama sempre il handler FRESCO, con lo stato corrente, senza
+  // riattaccare l'evento. Effetto top-level PRIMA di ogni early-return.
+  useEffect(() => {
+    sessionKeyRef.current = handleSessionKey;
+  });
+
   // Scheletro finché l'id non è risolto o la pila è ancora pending (stesso pattern
   // della dashboard): stessa altezza, nessuno spinner, `aria-busy` per l'AT.
   if (!userId || dueQ.data === undefined) {
@@ -294,72 +442,10 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     );
   }
 
+  // `exercise` non-null qui (narrowing dopo la guardia `current === undefined`):
+  // combacia con `activeExercise`, ma il narrowing TS su `current` lo tipa non-null
+  // per la card. `onSelect`/`onNext`/`locale`/`completed` sono già sollevati sopra.
   const exercise = current.exercise;
-  const locale = resolveLocale(i18n.language);
-
-  // Gestore di risposta (glue d'effetto, verificata live): raccoglie il tocco,
-  // attende il completamento (assemble: tutte le tessere), poi calcola l'esito SUL
-  // CLIENT con le funzioni PURE, genera il `review_id`, avanza la coda (barra
-  // ottimistica) e persiste (conteggio ottimistico). Un `again` che riaccoda
-  // l'esercizio è, alla ripresentazione, un NUOVO tentativo (nuovo `review_id`).
-  const onSelect = (index: number) => {
-    // Guardia di re-entrancy (cintura+bretelle): i bottoni sono già `disabled` dopo
-    // la risposta, ma un tocco spurio dopo il commit non deve ri-eseguire la pipeline.
-    if (answered) return;
-
-    const next = [...selected, index];
-    setSelected(next);
-    if (!selectionComplete(exercise, next)) return; // assemble: attende tutte le tessere
-
-    const now = clock.now();
-
-    // `currentState` dallo snapshot di ['due'] PRIMA dell'update ottimistico: lo
-    // stato di ripasso dell'esercizio corrente (chiave = id di RIGA).
-    const dueSnapshot = queryClient.getQueryData<readonly ReviewState[]>(
-      dueQueryKey(userId),
-    );
-    const currentState = dueSnapshot?.find((s) => s.exerciseId === currentId);
-    if (currentState === undefined) return; // difensivo: senza stato non si schedula
-
-    // La pipeline di valutazione vive nel dominio (`evaluateAnswer`): compose→check→
-    // outcomeOf→schedule, PURA e testata. Qui resta solo il montaggio sottile.
-    const { correct, outcome, result } = evaluateAnswer(
-      exercise,
-      next,
-      usedExplanation,
-      currentState,
-      now,
-    );
-    const reviewId = crypto.randomUUID(); // glue di feature: `src/domain` vieta `crypto`
-
-    dispatch({ type: 'reviewed', result, now }); // avanza la coda (barra ottimistica)
-    applyMutation.mutate({
-      input: {
-        reviewId,
-        exerciseId: currentId,
-        outcome,
-        stage: result.stage,
-        dueAt: result.dueAt,
-        reviewedAt: now,
-        usedExplanation,
-      },
-      result,
-    });
-
-    setAnswered(true);
-    setAnsweredCorrect(correct);
-  };
-
-  // Avanzamento al prossimo esercizio: azzera fase/selezione/consulto e mostra il
-  // nuovo `currentExerciseId` (lo store è GIÀ avanzato dal dispatch).
-  const onNext = () => {
-    setSelected([]);
-    setAnswered(false);
-    setAnsweredCorrect(null);
-    setUsedExplanation(false);
-  };
-
-  const completed = total - remainingCount(session);
 
   return (
     <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
@@ -374,12 +460,13 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
         correct={answeredCorrect}
         locale={locale}
       />
-      {/* L'azione «prossimo esercizio» (mai "Continua"), visibile in spiegazione. */}
+      {/* L'azione «prossimo esercizio» (mai "Continua"), visibile in spiegazione.
+          Anello di focus visibile (3.22, AC5). */}
       {answered && (
         <button
           type="button"
           onClick={onNext}
-          className="min-h-[56px] rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 text-body"
+          className={`min-h-[56px] rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 text-body ${FOCUS_RING}`}
         >
           {t('session.next')}
         </button>
@@ -387,14 +474,28 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
       {/* L'affordance «esci» in-app (AC2, «potersene andare»): verbale e concreta,
           SECONDARIA — chiaramente non il button-primary (nessun fill, ink muto,
           nessun verde di successo). È il «tornare indietro» in-app; l'esito già dato
-          resta acquisito (persistenza per-risposta, 3.19). → `onExit`. */}
+          resta acquisito (persistenza per-risposta, 3.19). → `onExit`. Anello di
+          focus visibile (3.22, AC5). */}
       <button
         type="button"
         onClick={onExit}
-        className="text-caption text-ink-muted underline"
+        className={`text-caption text-ink-muted underline ${FOCUS_RING}`}
       >
         {t('session.exit')}
       </button>
+      {/* UNA sola live region per l'INTERA sessione (3.22, AC4): un unico nodo
+          `aria-live="polite"`, reso SOLO nel ramo di sessione ATTIVA (con la card) —
+          MAI su scheletro/completamento/vuoto, così resta esattamente una. Annuncia
+          l'ESITO (`session.outcome.*`) più l'AVANZAMENTO (`session.progress.announce`,
+          `{{completed}}`/`{{total}}`) quando la risposta è data; stringa vuota
+          altrimenti. `sr-only`: l'esito visibile lo porta già l'ExplanationPanel, e
+          l'avanzamento la ProgressMeter — questa serve alla sola assistive technology.
+          Nessun colore d'esito (nessun verde/rosso). */}
+      <p aria-live="polite" className="sr-only">
+        {answered
+          ? `${t(answeredCorrect ? 'session.outcome.correct' : 'session.outcome.incorrect')} ${t('session.progress.announce', { completed, total })}`
+          : ''}
+      </p>
     </main>
   );
 }

@@ -253,3 +253,11 @@ source_spec: `spec-3-21-arrivare-a-zero.md`
 severity: medium
 reason: Il ramo di completamento rende la riga streak solo se `streakLogQ.data !== undefined`, altrimenti il placeholder `bg-surface-sunken`. Su reject di `listReviewLog` i dati restano undefined ⇒ placeholder permanente. È il MEDESIMO pattern della dashboard (gate su `logQ.data === undefined` ⇒ scheletro anche in errore): gap PRE-ESISTENTE app-wide sugli stati d'errore dei read-model (cfr. deferred #1 di 3.18), non introdotto da 3.21. Il contenuto primario (conferma + dismiss) resta comunque reso e l'uscita funziona.
 status: open
+
+### DW-32: Rispondendo all'ultimo esercizio la sessione passa direttamente al completamento e ne' l'esito finale ne' lo stato di completamento sono annunciati da alcuna live region all'assistive technology.
+origin: spec-deferred 253deba4ecfb
+location: src/features/study/SessionScreen.tsx:385-415,494
+source_spec: `spec-3-22-l-intera-sessione-senza-mouse.md`
+severity: medium
+reason: Rispondere all'ultimo esercizio svuota la coda (currentId === null): il ramo di completamento (SessionScreen.tsx:385-415) sostituisce il ramo di sessione attiva che ospita l'unica live region aria-live="polite" (riga 494), senza fase di spiegazione intermedia (confermato dal test jsdom AC6, che vede session.complete.body subito dopo l'ultima risposta). AC4 esclude deliberatamente il completamento dall'avere una live region, quindi l'esito dell'ultimo esercizio e il "sei arrivato a zero" non vengono mai annunciati all'AT. E' un limite reale ma legato all'audit screen-reader (NVDA/VoiceOver) che l'intento delega esplicitamente alla storia 7.6 (DW-10/DW-14); il fix in questa storia sarebbe vietato dal vincolo "NON sul completamento".
+status: open
