@@ -5,7 +5,15 @@ import '../i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { registerReviewMutationDefaults } from '../features/study/reviewMutation';
+import {
+  createReviewPersister,
+  createIndexedDbStorage,
+  reviewPersistOptions,
+  resumeReviewQueue,
+} from './reviewPersister';
 import { createSupabaseClient } from '../data/supabaseClient';
 import { createSupabaseAuthGateway } from '../data/authGateway';
 import { createSupabaseSettingsRepository } from '../data/settingsRepository';
@@ -66,13 +74,34 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
 });
 
+// LA CODA DUREVOLE (4.2): «la coda sopravvive alla chiusura dell'app». I default
+// della `mutationFn` delle valutazioni si registrano PRIMA del render con il
+// `PersistQueryClientProvider` — l'hydrate applica i default per `mutationKey`, quindi
+// una coda reidratata dallo storage trova la sua `mutationFn` solo se già registrata
+// (altrimenti `No mutationFn found` alla ripresa). Poi il persister IndexedDB (glue di
+// `app`, `reviewPersister.ts`) e il provider che, al restore riuscito, chiama
+// `resumePausedMutations()` una volta per far ripartire il drenaggio da solo.
+registerReviewMutationDefaults(queryClient, ports.review);
+const persister = createReviewPersister(createIndexedDbStorage());
+
 // <BrowserRouter> abilita il routing per URL e i deep link: il rewrite di
 // vercel.json (/(.*) → /index.html, fissato da deploy-config.test.ts) serve
 // ogni deep link a index.html, poi BrowserRouter prende il controllo lato client
 // e applica il guard (nessun 404).
+//
+// <PersistQueryClientProvider> sostituisce <QueryClientProvider>: reidrata il client
+// dallo storage al mount, poi persiste le variazioni. Le opzioni di persist/hydrate
+// (`maxAge: Infinity` — la coda non scade; `shouldDehydrateQuery: () => false` — si
+// persiste SOLO la coda di mutation, MAI le query né lo store di sessione) sono estratte
+// in `reviewPersistOptions()` così un test `node` le esercita; `onSuccess` (restore
+// completato) chiama `resumeReviewQueue(queryClient)` per far ripartire il drenaggio.
 createRoot(container).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister, ...reviewPersistOptions() }}
+      onSuccess={() => resumeReviewQueue(queryClient)}
+    >
       <BrowserRouter>
         <AuthRoot
           gateway={gateway}
@@ -81,6 +110,6 @@ createRoot(container).render(
           ports={ports}
         />
       </BrowserRouter>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   </StrictMode>,
 );

@@ -27,6 +27,7 @@ import type { Exercise } from '../../domain/exercise';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { useSessionStore } from './sessionStore';
 import { SessionScreen } from './SessionScreen';
+import { registerReviewMutationDefaults } from './reviewMutation';
 
 // React 19 richiede questo flag per far girare `act` senza avvisi.
 declare global {
@@ -184,6 +185,11 @@ function seededClient(): QueryClient {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   qc.setQueryData(dueQueryKey(UID), DUE_STATES);
   qc.setQueryData(['exercises', ['ex-1', 'ex-2']], EXERCISES);
+  // La `mutationFn` delle valutazioni non è più nel componente (4.2): vive ai DEFAULT
+  // del QueryClient, risolta per `mutationKey: ['review']`. Il keydown fa scattare la
+  // mutation, quindi il client del test DEVE avere i default registrati (features→
+  // features ✓) — altrimenti `No mutationFn found`. Si usa la stessa porta in memoria.
+  registerReviewMutationDefaults(qc, inMemoryPorts().review);
   return qc;
 }
 
