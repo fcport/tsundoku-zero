@@ -5,6 +5,7 @@ import { en } from '../../i18n/en';
 import { i18n } from '../../i18n';
 import { dueQueryKey } from '../../domain/due';
 import { createSession } from '../../domain/session';
+import { streak, type ReviewLogEntry } from '../../domain/streak';
 import type { ReviewState } from '../../domain/schedule';
 import type { ExerciseContent } from '../../domain/ports/contentRepository';
 import type { Exercise } from '../../domain/exercise';
@@ -190,10 +191,72 @@ describe('Matrix — pila vuota (deep-link) ⇒ stato neutro senza card, nessuna
     expect(markup).not.toContain('role="progressbar"');
     // Affordance «esci» assente: non c'è sessione attiva da abbandonare (AC2).
     expect(markup).not.toContain(en.session.exit);
+    // Nessuna schermata di completamento (total === 0: mai avviata, AC4).
+    expect(markup).not.toContain(en.session.complete.body);
+    expect(markup).not.toContain(en.session.complete.dismiss);
     const mains = markup.match(/<main/g) ?? [];
     expect(mains.length).toBe(1);
     // Non è lo scheletro (la pila è caricata, solo vuota).
     expect(markup).not.toContain('aria-busy="true"');
+  });
+});
+
+describe('AC1/AC2/AC3 — sessione DRENATA (total > 0, coda vuota) ⇒ schermata di completamento', () => {
+  // Log seminato: oggi + ieri (fuso UTC iniettato) ⇒ streak = 2. La giornata a-zero
+  // conta per costruzione (drenare implica ≥1 risposta oggi), ancorata a mezzanotte.
+  const LOG: readonly ReviewLogEntry[] = [
+    { reviewedAt: new Date('2026-09-25T09:00:00.000Z') }, // oggi
+    { reviewedAt: new Date('2026-09-24T09:00:00.000Z') }, // ieri
+  ];
+
+  // Store DRENATO: sessione a coda vuota ma `total`/`initialIds` di una sessione
+  // avviata da 2 esercizi. Semina `['due']=[]` (pila svuotata) e `['streak', UID]`.
+  function drainedSetup(seedStreak: boolean): string {
+    useSessionStore.setState({
+      session: createSession([]),
+      total: 2,
+      initialIds: ['ex-1', 'ex-2'],
+    });
+    const qc = freshClient();
+    qc.setQueryData(dueQueryKey(UID), []);
+    if (seedStreak) qc.setQueryData(['streak', UID], LOG);
+    return render(qc, UID);
+  }
+
+  it('rende la conferma di aver finito (session.complete.body) e il dismiss (AC1)', () => {
+    const markup = drainedSetup(true);
+    expect(markup).toContain(en.session.complete.body);
+    expect(markup).toContain(en.session.complete.dismiss);
+  });
+
+  it('rende lo streak AGGIORNATO dal log via streak() (AC1/AC3)', () => {
+    const markup = drainedSetup(true);
+    // Il numero atteso è quello che la funzione PURA del dominio calcola.
+    const days = streak(LOG, NOW, 'UTC');
+    expect(days).toBe(2);
+    expect(markup).toContain(`${days} day streak`);
+  });
+
+  it('non celebra: nessun `!`, nessuna barra, nessuna card (AC2)', () => {
+    const markup = drainedSetup(true);
+    expect(markup).not.toContain('!');
+    expect(markup).not.toContain('role="progressbar"');
+    expect(markup).not.toContain(en.session.prompt.singleSelect);
+    expect(markup).not.toContain(en.session.prompt.assemble);
+    // Un solo <main>.
+    const mains = markup.match(/<main/g) ?? [];
+    expect(mains.length).toBe(1);
+  });
+
+  it('streak in caricamento (cache fredda) ⇒ body reso, placeholder al posto dello streak (Matrix)', () => {
+    const markup = drainedSetup(false);
+    // Il body è reso subito, anche senza streak.
+    expect(markup).toContain(en.session.complete.body);
+    // Nessuno «day streak» finché il log non carica; nessuno spinner.
+    expect(markup).not.toContain('day streak');
+    expect(markup).not.toContain('role="status"');
+    // Placeholder alla stessa altezza (bg-surface-sunken), nessun salto di layout.
+    expect(markup).toContain('bg-surface-sunken');
   });
 });
 

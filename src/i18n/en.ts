@@ -125,6 +125,17 @@ export const en = {
     progress: {
       label: 'Session progress',
     },
+    // La schermata di COMPLETAMENTO (3.21): resa SSE la coda si svuota DOPO una
+    // sessione avviata (`total > 0`). Chiusura SOBRIA, nessuna celebrazione: `body`
+    // conferma di aver finito il ripasso; `streakLabel` mostra i giorni consecutivi
+    // (`{{days}}`, MAI `{{count}}` che innescherebbe il pluralizzatore, coerente con
+    // `dashboard.streakLabel`); `dismiss` torna alla dashboard, verbale e concreta,
+    // mai "Continue". Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
+    complete: {
+      body: 'Your review pile is at zero. You have worked through every exercise in this session.',
+      streakLabel: '{{days}} day streak',
+      dismiss: 'Back to the dashboard',
+    },
   },
   settings: {
     title: 'Settings',
