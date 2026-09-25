@@ -3,6 +3,7 @@ import {
   createSession,
   currentExerciseId,
   isComplete,
+  remainingCount,
   sessionReducer,
   type SessionEvent,
 } from './session';
@@ -148,5 +149,36 @@ describe('sessionReducer: anti-vacuità sui due lati della decisione requeue', (
     const s = createSession(['a', 'b']);
     expect(sessionReducer(s, reviewed('a', 'again')).queue).toEqual(['b', 'a']);
     expect(sessionReducer(s, reviewed('a', 'good')).queue).toEqual(['b']);
+  });
+});
+
+// remainingCount (3.19): la barra deriva il COMPLETATO come total − remainingCount.
+// Cala su esito uscente, invariato su again (riaccodo, stessa lunghezza), 0 a coda vuota.
+describe('remainingCount: lettore puro per la barra ottimistica (3.19)', () => {
+  it('coda iniziale: pari al numero di id', () => {
+    expect(remainingCount(createSession(['a', 'b', 'c']))).toBe(3);
+  });
+
+  it('coda vuota: 0', () => {
+    expect(remainingCount(createSession([]))).toBe(0);
+  });
+
+  it('good (esce) ⇒ cala di 1', () => {
+    const s = createSession(['a', 'b', 'c']);
+    const next = sessionReducer(s, reviewed('a', 'good'));
+    expect(remainingCount(next)).toBe(2);
+  });
+
+  it('again (riaccoda) ⇒ INVARIATO (rimosso e reinserito, stessa lunghezza)', () => {
+    const s = createSession(['a', 'b', 'c']);
+    const next = sessionReducer(s, reviewed('a', 'again'));
+    expect(remainingCount(next)).toBe(3);
+  });
+
+  it('svuotamento completo (tutti good) ⇒ 0', () => {
+    let s = createSession(['a', 'b']);
+    s = sessionReducer(s, reviewed('a', 'good'));
+    s = sessionReducer(s, reviewed('b', 'good'));
+    expect(remainingCount(s)).toBe(0);
   });
 });

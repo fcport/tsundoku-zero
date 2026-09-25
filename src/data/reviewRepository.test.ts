@@ -14,13 +14,21 @@ interface FakeReviewOptions {
   readonly rows?: readonly unknown[] | null;
   /** Errore ritornato da `select()`. */
   readonly error?: unknown;
+  /** Errore ritornato da `rpc()` (per applyReview). */
+  readonly rpcError?: unknown;
+}
+
+interface FakeCalls {
+  table: string;
+  columns: string;
+  rpc: { fn: string; params: Record<string, unknown> } | null;
 }
 
 function makeFakeClient(options: FakeReviewOptions = {}): {
   client: SupabaseClient;
-  calls: { table: string; columns: string };
+  calls: FakeCalls;
 } {
-  const calls = { table: '', columns: '' };
+  const calls: FakeCalls = { table: '', columns: '', rpc: null };
 
   const fake = {
     from(table: string) {
@@ -34,6 +42,11 @@ function makeFakeClient(options: FakeReviewOptions = {}): {
           };
         },
       };
+    },
+    // Cattura la chiamata RPC (nome funzione + parametri) per l applyReview.
+    async rpc(fn: string, params: Record<string, unknown>) {
+      calls.rpc = { fn, params };
+      return { data: null, error: options.rpcError ?? null };
     },
   };
 
@@ -263,5 +276,68 @@ describe('listReviewLog — mappa review_log in ReviewLogEntry (streak, AD-18)',
     const repo = createSupabaseReviewRepository(client);
 
     await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+});
+
+// Righe della I/O Matrix per `applyReview` (storia 3.19, AD-7): UNA chiamata
+// idempotente alla RPC transazionale `apply_review`. L adattatore TRASPORTA i valori
+// GIÀ calcolati dal client (nessun ricalcolo qui né in SQL), mappa camel→snake e
+// Date→ISO. Su errore Supabase ⇒ DataError('applyReview') (reject).
+describe('applyReview — rpc(apply_review) con valori pre-calcolati (AD-7)', () => {
+  const input = {
+    reviewId: 'rev-1',
+    exerciseId: 'ex-1',
+    outcome: 'good' as const,
+    stage: 2,
+    dueAt: new Date('2026-09-28T12:00:00.000Z'),
+    reviewedAt: new Date('2026-09-25T12:00:00.000Z'),
+    usedExplanation: false,
+  };
+
+  it('chiama rpc con il nome apply_review e i parametri snake_case (date in ISO)', async () => {
+    const { client, calls } = makeFakeClient();
+    const repo = createSupabaseReviewRepository(client);
+
+    await repo.applyReview(input);
+
+    expect(calls.rpc?.fn).toBe('apply_review');
+    expect(calls.rpc?.params).toEqual({
+      review_id: 'rev-1',
+      exercise_id: 'ex-1',
+      outcome: 'good',
+      stage: 2,
+      due_at: '2026-09-28T12:00:00.000Z',
+      reviewed_at: '2026-09-25T12:00:00.000Z',
+      used_explanation: false,
+    });
+  });
+
+  it('risolve senza valore su successo (void)', async () => {
+    const { client } = makeFakeClient();
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.applyReview(input)).resolves.toBeUndefined();
+  });
+
+  it("errore Supabase ⇒ DataError('applyReview') con causa preservata", async () => {
+    const supabaseError = { message: 'rls denied', code: '42501' };
+    const { client } = makeFakeClient({ rpcError: supabaseError });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.applyReview(input)).rejects.toBeInstanceOf(DataError);
+    await expect(repo.applyReview(input)).rejects.toMatchObject({
+      operation: 'applyReview',
+      cause: supabaseError,
+    });
+  });
+
+  it('passa used_explanation true quando la spiegazione è stata consultata', async () => {
+    const { client, calls } = makeFakeClient();
+    const repo = createSupabaseReviewRepository(client);
+
+    await repo.applyReview({ ...input, usedExplanation: true, outcome: 'hard' });
+
+    expect(calls.rpc?.params.used_explanation).toBe(true);
+    expect(calls.rpc?.params.outcome).toBe('hard');
   });
 });

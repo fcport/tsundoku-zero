@@ -28,6 +28,30 @@ export function isDue(state: ReviewState, now: Date): boolean {
 }
 
 /**
+ * Applica il RISULTATO di una risposta alla pila dei dovuti (3.19): rimpiazza lo
+ * stato dell'esercizio (`exerciseId === result.exerciseId`) con `result`, poi
+ * FILTRA con `isDue(state, now)` — l'UNICA autorità della dovutezza (AD-5). PURA,
+ * sincrona, TOTALE e senza mutazione: non muta né l'array né gli stati passati
+ * (`map` copia i riferimenti in un nuovo array, `filter` ne produce un altro).
+ *
+ * È la logica dell'aggiornamento OTTIMISTICO del conteggio della pila (che la
+ * dashboard legge dalla STESSA chiave `['due', userId]`): un `good`/`easy`
+ * (intervallo > 0, `dueAt > now`) FA USCIRE l'esercizio (conteggio cala); un
+ * `again`/`hard`-a-stadio-0 (intervallo 0, `dueAt === now`) lo MANTIENE (conteggio
+ * invariato). Un esercizio non presente lascia la pila invariata (il `map` non
+ * trova nulla da rimpiazzare, il `filter` non lo introduce).
+ */
+export function applyResultToDue(
+  states: readonly ReviewState[],
+  result: ReviewState,
+  now: Date,
+): readonly ReviewState[] {
+  return states
+    .map((state) => (state.exerciseId === result.exerciseId ? result : state))
+    .filter((state) => isDue(state, now));
+}
+
+/**
  * L'identità della pila dei dovuti: la tupla `readonly` `['due', userId]`. È
  * l'UNICA definizione della chiave (`AD-5`), pura e framework-agnostica —
  * nessun consumatore la ridefinisce. Il dominio dichiara l'IDENTITÀ della pila;

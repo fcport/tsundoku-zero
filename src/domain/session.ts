@@ -91,3 +91,14 @@ export function isComplete(state: SessionState): boolean {
 export function currentExerciseId(state: SessionState): string | null {
   return state.queue[0] ?? null;
 }
+
+/**
+ * Quanti esercizi restano ancora dovuti nella coda (3.19). Superficie di LETTURA
+ * pura — la barra di avanzamento deriva il COMPLETATO come `total − remainingCount`,
+ * dove `total` è mantenuto dal chiamante (gli id iniziali). Cala quando un esito
+ * fa uscire l'esercizio; INVARIATO quando un `again`/`hard`-a-stadio-0 lo riaccoda
+ * (rimosso e reinserito: stessa lunghezza). `0` a coda vuota.
+ */
+export function remainingCount(state: SessionState): number {
+  return state.queue.length;
+}

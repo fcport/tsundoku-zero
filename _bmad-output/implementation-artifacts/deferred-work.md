@@ -229,3 +229,19 @@ source_spec: `spec-3-18-un-esercizio-per-volta-con-la-sua-consegna.md`
 severity: medium
 reason: `selected` e' un singolo indice/opzione: modella single-select. La composizione per-tipo (ordinamento delle tessere, span sui segmenti) e la valutazione dell'esito sono 3.19 (Rispondere, e sapere perche'), dove la risposta e' effettivamente costruita e misurata; li' va anche deciso se assemble mostra la frase-bersaglio (in 3.18 non c'e' esito, quindi nessuna misura da falsare).
 status: open
+
+### DW-29: Lo store di sessione (singleton di modulo) non viene resettato alla ri-entrata in /studia: alla seconda visita il guard salta `start`, mostrando la coda stale invece della pila fresca.
+origin: spec-deferred 11ea48734aa9
+location: src/features/study/SessionScreen.tsx (effetto di start della sessione)
+source_spec: `spec-3-19-rispondere-e-sapere-perché.md`
+severity: medium
+reason: `SessionScreen` avvia lo store con un effetto guardato su `initialIds.length === 0`; il singleton conserva `initialIds`/`total` fra visite e cambi utente. La ricostruzione all'ingresso ("la sessione si ricostruisce, non si ripristina", nessun "riprendi dove eri") è esplicitamente la storia 3.20, che deve resettare/ricostruire lo store all'ingresso in /studia.
+status: open
+
+### DW-30: A metà sessione, se `currentState` non è nella cache `['due']` (divergenza coda/pila da refetch onSettled o multi-device), la guardia difensiva lascia la card bloccata (opzioni piazzate, mai risposta,
+origin: spec-deferred 3b80cf02691f
+location: src/features/study/SessionScreen.tsx (onSelect, guardia currentState)
+source_spec: `spec-3-19-rispondere-e-sapere-perché.md`
+severity: low
+reason: `onSelect` fa `if (currentState === undefined) return;` dopo `setSelected(next)`: la selezione resta popolata ma `answered` non passa mai a true. Irraggiungibile nell'happy path (coda ⊆ pila per costruzione); emerge solo con mutazione esterna della pila. Si sovrappone allo stato d'errore/refetch del read-model già differito (3.18 deferred #1); va risolto con una strategia di skip/ricostruzione.
+status: open

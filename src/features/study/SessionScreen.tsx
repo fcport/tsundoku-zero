@@ -1,24 +1,34 @@
-// Livello features/study: la PRIMA schermata di sessione (3.18). Possiede l'UNICO
-// `<main>` di `/studia`, lo `useState` di `selected` (senso unico), e presenta UN
-// esercizio per volta via `<ExerciseCard>`. AD-1: importa domain/ui/i18n/@tanstack/
-// react-query, MAI data — le porte arrivano da `usePorts()`; l'`userId` è una prop
-// (l'app lo risolve).
+// Livello features/study (3.19): l'ORCHESTRAZIONE della sessione. Possiede l'UNICO
+// `<main>` di `/studia`, la fase locale (`consegna`↔`spiegazione`), `selected`/
+// `usedExplanation`, la mutation di persistenza, lo store e la barra. AD-1: importa
+// domain/ui/i18n/@tanstack/react-query/zustand, MAI data — le porte arrivano da
+// `usePorts()`; l'`userId` è una prop; `crypto.randomUUID` vive SOLO qui (glue di
+// feature, mai nel dominio).
 //
-// Legge la STESSA chiave della pila della dashboard (`dueQueryKey`, AD-5): niente id
-// passati per router-state, nessuna pila ricalcolata. Da `['due', userId]` deriva la
-// coda ORDINATA degli id (chiavi di RIGA DB), poi carica gli esercizi completi via
-// `content.listExercisesByIds` sotto la chiave `['exercises', dueIds]`. L'esercizio
-// CORRENTE è letto dal dominio puro `currentExerciseId(createSession(dueIds))` (MAI
-// indicizzando la coda): niente store Zustand in questa storia (l'avanzamento è 3.19).
+// Chiude il ciclo «rispondi → sai perché → resta registrato»:
+// - Legge la pila `['due', userId]` (chiave di DOMINIO verbatim, AD-5); avvia lo
+//   store (`start(dueIds)`) al primo caricamento (effetto guardato).
+// - Corrente da `currentExerciseId(session)`; esercizi da `['exercises', initialIds]`
+//   (ancorata agli id INIZIALI dello store: niente refetch a ogni risposta).
+// - Gestore risposta: compose→check→outcomeOf→schedule→`review_id`→`dispatch`
+//   (barra ottimistica)→`mutate` (conteggio ottimistico via onMutate/isDue).
+// - `ProgressMeter` dallo store; azione «prossimo esercizio».
 //
-// FUORI SCOPE (3.19+): esito/spiegazione/persistenza/avanzamento, barra/abbandono,
-// completamento, contratto tastiera, responsive.
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { dueQueryKey } from '../../domain/due';
-import { createSession, currentExerciseId } from '../../domain/session';
+// FUORI SCOPE (3.20+): barra sempre-visibile/abbandono/conteggio residuo, schermata
+// di completamento, contratto tastiera completo, responsive.
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { applyResultToDue, dueQueryKey } from '../../domain/due';
+import { selectionComplete } from '../../domain/exercise-presentation';
+import { evaluateAnswer } from '../../domain/review';
+import type { ReviewState } from '../../domain/schedule';
+import { currentExerciseId, remainingCount } from '../../domain/session';
+import type { ApplyReviewInput } from '../../domain/ports/reviewRepository';
+import { resolveLocale, useTranslation } from '../../i18n';
 import { usePorts } from '../ports/PortsContext';
+import { useSessionStore } from './sessionStore';
 import { ExerciseCard } from './ExerciseCard';
+import { ProgressMeter } from './ProgressMeter';
 
 export interface SessionScreenProps {
   /**
@@ -33,13 +43,39 @@ export interface SessionScreenProps {
 // definizione così i rami non divergono.
 const CONTAINER_HEIGHT = 'min-h-[24rem]';
 
+// Le variabili della mutation `applyReview`: l'input pre-calcolato PIÙ il `result`
+// (usato dall'onMutate ottimistico per rimpiazzare lo stato in cache). Il `result`
+// non attraversa la porta — è glue locale della cache.
+interface ApplyVars {
+  readonly input: ApplyReviewInput;
+  readonly result: ReviewState;
+}
+
 export function SessionScreen({ userId }: SessionScreenProps) {
   const { content, review, clock } = usePorts();
-  // Lo stato `selected` (senso unico): l'INDICE dell'opzione scelta, `null` =
-  // consegna, non-null = risposta data. L'identità è la POSIZIONE (non il testo),
-  // così opzioni di testo duplicato non premono più bottoni insieme. Vive QUI (il
-  // container), la card è controllata. L'esito/avanzamento è 3.19.
-  const [selected, setSelected] = useState<number | null>(null);
+  const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
+
+  // Lo store di sessione (delega al dominio). Ci ISCRIVIAMO via l'hook (per il
+  // re-render reattivo nel browser quando `dispatch` avanza la coda) ma LEGGIAMO i
+  // valori da `getState()`: sotto `renderToStaticMarkup` (SSR/test) l'hook restituisce
+  // lo snapshot INIZIALE dello store (zustand usa lo stato iniziale come server
+  // snapshot), mentre `getState()` riflette lo store SEMINATO dai test — così le
+  // letture pure (`currentExerciseId`/`remainingCount`) rendono in SSR come vuole la
+  // spec. Le azioni (`start`/`dispatch`) sono stabili.
+  useSessionStore((s) => s.session);
+  const { session, total, initialIds } = useSessionStore.getState();
+  const startSession = useSessionStore.getState().start;
+  const dispatch = useSessionStore.getState().dispatch;
+
+  // Fase locale e stato di risposta (senso unico), posseduti dal container. La card
+  // è controllata. `selected` è l'ARRAY ordinato degli indici toccati (assemble
+  // append-in-ordine); `answered` distingue consegna da spiegazione; `answeredCorrect`
+  // porta la correttezza calcolata alla card; `usedExplanation` registra il consulto.
+  const [selected, setSelected] = useState<number[]>([]);
+  const [answered, setAnswered] = useState(false);
+  const [answeredCorrect, setAnsweredCorrect] = useState<boolean | null>(null);
+  const [usedExplanation, setUsedExplanation] = useState(false);
 
   // La pila dei dovuti: chiave di DOMINIO verbatim (AD-5), `enabled: !!userId`.
   const dueQ = useQuery({
@@ -48,19 +84,63 @@ export function SessionScreen({ userId }: SessionScreenProps) {
     queryFn: () => review.listDue(clock.now()),
   });
 
-  // Gli id ORDINATI della coda (chiavi di riga). Derivati dallo stato dovuti letto,
-  // `[]` finché la pila non è caricata.
+  // Avvia lo store una sola volta quando la pila è caricata (effetto guardato).
+  // Ancora `total`/`initialIds` agli id INIZIALI: la coda si accorcerà, questi no.
+  // Glue di produzione (verificata live): sotto renderToStaticMarkup gli effetti
+  // non partono — i test seminano lo store direttamente.
   const dueIds = dueQ.data?.map((state) => state.exerciseId) ?? [];
+  // Effetto GUARDATO (`initialIds.length === 0`): avvia lo store una sola volta, alla
+  // prima pila non vuota caricata. `dueQ.data` è la dipendenza edge; `initialIds`
+  // guarda contro il ri-avvio e `startSession` è stabile (azione dello store zustand).
+  useEffect(() => {
+    if (dueQ.data !== undefined && initialIds.length === 0 && dueIds.length > 0) {
+      startSession(dueIds);
+    }
+  }, [dueQ.data, initialIds.length, dueIds, startSession]);
 
-  // Gli esercizi completi per gli id della pila. `enabled` SOLO quando la pila è
-  // caricata (dueQ.data definito) E non vuota: `listExercisesByIds([])` sarebbe una
-  // query degenere (il port corto-circuita, ma non la accendiamo affatto). La chiave
-  // include gli id così due pile diverse hanno cache distinte.
+  // Gli esercizi completi per gli id INIZIALI della sessione (dallo store): ancorata
+  // così la pila che si accorcia in modo ottimistico non provoca refetch/scheletri a
+  // ogni risposta. La coda di sessione è sempre un sottoinsieme di questi id.
   const exercisesQ = useQuery({
-    queryKey: ['exercises', dueIds],
-    enabled: dueQ.data !== undefined && dueIds.length > 0,
-    queryFn: () => content.listExercisesByIds(dueIds),
+    queryKey: ['exercises', initialIds],
+    enabled: initialIds.length > 0,
+    queryFn: () => content.listExercisesByIds(initialIds),
   });
+
+  // La mutation di persistenza (AC4/AC5): UNA chiamata idempotente + aggiornamento
+  // OTTIMISTICO del conteggio `['due', userId]` (la STESSA chiave della dashboard).
+  const applyMutation = useMutation({
+    mutationFn: ({ input }: ApplyVars) => review.applyReview(input),
+    onMutate: async ({ input, result }: ApplyVars) => {
+      const key = dueQueryKey(userId ?? '');
+      await queryClient.cancelQueries({ queryKey: key });
+      const prev = queryClient.getQueryData<readonly ReviewState[]>(key);
+      // Aggiornamento OTTIMISTICO delegato al dominio (AD-5): `applyResultToDue`
+      // rimpiazza lo stato dell'esercizio con `result` e rifiltra con `isDue` —
+      // `again`/`hard`@stage0 restano dovuti (conteggio invariato), `good`/`easy`/
+      // `hard`@stage>0 escono (conteggio cala).
+      queryClient.setQueryData<readonly ReviewState[]>(key, (old) =>
+        applyResultToDue(old ?? [], result, input.reviewedAt),
+      );
+      return { prev, key };
+    },
+    onError: (_e, _v, ctx) => {
+      if (ctx) queryClient.setQueryData(ctx.key, ctx.prev);
+    },
+    onSettled: (_d, _e, _v, ctx) => {
+      if (ctx) void queryClient.invalidateQueries({ queryKey: ctx.key });
+      void queryClient.invalidateQueries({ queryKey: ['streak', userId] });
+    },
+  });
+
+  // L'esercizio CORRENTE dallo store (mai indicizzando la coda): id di RIGA DB.
+  const currentId = currentExerciseId(session);
+  // Mappa id di RIGA → esercizio (l'ordine del port non è garantito): la card legge
+  // l'esercizio CORRENTE per id, mai per posizione.
+  const current =
+    currentId !== null
+      ? exercisesQ.data?.find((c) => c.id === currentId)
+      : undefined;
 
   // Scheletro finché l'id non è risolto o la pila è ancora pending (stesso pattern
   // della dashboard): stessa altezza, nessuno spinner, `aria-busy` per l'AT.
@@ -78,9 +158,9 @@ export function SessionScreen({ userId }: SessionScreenProps) {
     );
   }
 
-  // Pila vuota (deep-link): stato neutro senza card. Il completamento (schermata di
-  // zero) è 3.21: qui si dichiara solo l'assenza di esercizio corrente.
-  const currentId = currentExerciseId(createSession(dueIds));
+  // Pila vuota (deep-link) o sessione completa: stato neutro senza card. Il
+  // completamento (schermata di zero) è 3.21: qui si dichiara solo l'assenza di
+  // esercizio corrente. `total === 0` ⇒ la barra non è resa.
   if (currentId === null) {
     return (
       <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`} />
@@ -103,9 +183,6 @@ export function SessionScreen({ userId }: SessionScreenProps) {
     );
   }
 
-  // Mappa id di RIGA → esercizio (l'ordine del port non è garantito): la card legge
-  // l'esercizio CORRENTE per id, mai per posizione.
-  const current = exercisesQ.data.find((c) => c.id === currentId);
   // Id corrente assente dal caricato (bordo di contenuto): stato neutro senza card.
   if (current === undefined) {
     return (
@@ -113,13 +190,96 @@ export function SessionScreen({ userId }: SessionScreenProps) {
     );
   }
 
+  const exercise = current.exercise;
+  const locale = resolveLocale(i18n.language);
+
+  // Gestore di risposta (glue d'effetto, verificata live): raccoglie il tocco,
+  // attende il completamento (assemble: tutte le tessere), poi calcola l'esito SUL
+  // CLIENT con le funzioni PURE, genera il `review_id`, avanza la coda (barra
+  // ottimistica) e persiste (conteggio ottimistico). Un `again` che riaccoda
+  // l'esercizio è, alla ripresentazione, un NUOVO tentativo (nuovo `review_id`).
+  const onSelect = (index: number) => {
+    // Guardia di re-entrancy (cintura+bretelle): i bottoni sono già `disabled` dopo
+    // la risposta, ma un tocco spurio dopo il commit non deve ri-eseguire la pipeline.
+    if (answered) return;
+
+    const next = [...selected, index];
+    setSelected(next);
+    if (!selectionComplete(exercise, next)) return; // assemble: attende tutte le tessere
+
+    const now = clock.now();
+
+    // `currentState` dallo snapshot di ['due'] PRIMA dell'update ottimistico: lo
+    // stato di ripasso dell'esercizio corrente (chiave = id di RIGA).
+    const dueSnapshot = queryClient.getQueryData<readonly ReviewState[]>(
+      dueQueryKey(userId),
+    );
+    const currentState = dueSnapshot?.find((s) => s.exerciseId === currentId);
+    if (currentState === undefined) return; // difensivo: senza stato non si schedula
+
+    // La pipeline di valutazione vive nel dominio (`evaluateAnswer`): compose→check→
+    // outcomeOf→schedule, PURA e testata. Qui resta solo il montaggio sottile.
+    const { correct, outcome, result } = evaluateAnswer(
+      exercise,
+      next,
+      usedExplanation,
+      currentState,
+      now,
+    );
+    const reviewId = crypto.randomUUID(); // glue di feature: `src/domain` vieta `crypto`
+
+    dispatch({ type: 'reviewed', result, now }); // avanza la coda (barra ottimistica)
+    applyMutation.mutate({
+      input: {
+        reviewId,
+        exerciseId: currentId,
+        outcome,
+        stage: result.stage,
+        dueAt: result.dueAt,
+        reviewedAt: now,
+        usedExplanation,
+      },
+      result,
+    });
+
+    setAnswered(true);
+    setAnsweredCorrect(correct);
+  };
+
+  // Avanzamento al prossimo esercizio: azzera fase/selezione/consulto e mostra il
+  // nuovo `currentExerciseId` (lo store è GIÀ avanzato dal dispatch).
+  const onNext = () => {
+    setSelected([]);
+    setAnswered(false);
+    setAnsweredCorrect(null);
+    setUsedExplanation(false);
+  };
+
+  const completed = total - remainingCount(session);
+
   return (
     <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
+      <ProgressMeter completed={completed} total={total} />
       <ExerciseCard
-        exercise={current.exercise}
+        exercise={exercise}
         selected={selected}
-        onSelect={setSelected}
+        onSelect={onSelect}
+        answered={answered}
+        onReveal={() => setUsedExplanation(true)}
+        revealed={usedExplanation}
+        correct={answeredCorrect}
+        locale={locale}
       />
+      {/* L'azione «prossimo esercizio» (mai "Continua"), visibile in spiegazione. */}
+      {answered && (
+        <button
+          type="button"
+          onClick={onNext}
+          className="min-h-[56px] rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 text-body"
+        >
+          {t('session.next')}
+        </button>
+      )}
     </main>
   );
 }

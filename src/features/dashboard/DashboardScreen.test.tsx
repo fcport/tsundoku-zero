@@ -35,6 +35,7 @@ const inMemoryPorts: Ports = {
   review: {
     listDue: async () => [],
     listReviewLog: async () => [],
+    applyReview: async () => {},
   },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [], listExercisesByIds: async () => [] },

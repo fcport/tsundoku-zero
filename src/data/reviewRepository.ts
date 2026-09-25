@@ -12,7 +12,10 @@
 // esercizi sbloccati (RLS), quindi fetch-poi-filtro è accettabile. `now` è
 // INIETTATO dal chiamante (via Clock), mai letto dalla piattaforma.
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ReviewRepository } from '../domain/ports/reviewRepository';
+import type {
+  ApplyReviewInput,
+  ReviewRepository,
+} from '../domain/ports/reviewRepository';
 import type { ReviewState } from '../domain/schedule';
 import type { ReviewLogEntry } from '../domain/streak';
 import { isDue } from '../domain/due';
@@ -30,6 +33,13 @@ const REVIEW_STATE_COLUMNS =
 // `user_id` non serve: RLS isola già la riga.
 const REVIEW_LOG_TABLE = 'review_log';
 const REVIEW_LOG_COLUMNS = 'reviewed_at';
+
+// La RPC transazionale della SCRITTURA (AD-7, a DB dalla 3.9): inserisce in
+// `review_log` con `on conflict (review_id) do nothing` e aggiorna `review_state`
+// solo se l'insert ha prodotto una riga. Riceve i valori GIÀ calcolati dal client
+// (nessuna logica di valutazione/scheduling in SQL). Il nome vive qui una sola
+// volta (AD-2).
+const APPLY_REVIEW_FN = 'apply_review';
 
 // Forma GREZZA di una riga `review_log` come arriva da Supabase.
 interface ReviewLogRow {
@@ -164,6 +174,27 @@ export function createSupabaseReviewRepository(
 
       const rows = (data ?? []) as readonly ReviewLogRow[];
       return rows.map(toReviewLogEntry);
+    },
+
+    async applyReview(input: ApplyReviewInput): Promise<void> {
+      // SCRITTURA del ciclo (AD-7): UNA chiamata idempotente alla RPC transazionale
+      // `apply_review`. Mappa camel→snake e `Date`→ISO (timestamptz), trasportando i
+      // valori GIÀ calcolati dal client — nessun ricalcolo qui né in SQL. Su errore
+      // Supabase LANCIA `DataError('applyReview')` (reject): alimenta il retry di
+      // TanStack, che con lo STESSO `review_id` è idempotente (`on conflict do nothing`).
+      const { error } = await client.rpc(APPLY_REVIEW_FN, {
+        review_id: input.reviewId,
+        exercise_id: input.exerciseId,
+        outcome: input.outcome,
+        stage: input.stage,
+        due_at: input.dueAt.toISOString(),
+        reviewed_at: input.reviewedAt.toISOString(),
+        used_explanation: input.usedExplanation,
+      });
+
+      if (error) {
+        throw new DataError('applyReview', error);
+      }
     },
   };
 }

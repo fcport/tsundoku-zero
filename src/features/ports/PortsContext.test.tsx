@@ -73,6 +73,7 @@ const sampleLog = [{ reviewedAt: FIXED_NOW }] as const;
 const inMemoryReview: ReviewRepository = {
   listDue: async () => sampleDue,
   listReviewLog: async () => sampleLog,
+  applyReview: async () => {},
 };
 const inMemoryProgress: ProgressRepository = {
   listUnlockedLessons: async () => sampleUnlocked,
