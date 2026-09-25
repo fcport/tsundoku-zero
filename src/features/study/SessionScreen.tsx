@@ -23,8 +23,16 @@
 // persistenza è per-risposta e idempotente (3.19), `reset` tocca solo la coda in
 // memoria. La barra resta SEMPRE visibile nel ramo attivo (AC1).
 //
-// FUORI SCOPE (3.21+): schermata di completamento/zero, contratto tastiera completo
-// (tasti numerici/tab-order/live region), responsive.
+// ARRIVARE A ZERO (3.21): quando la coda si svuota DOPO una sessione avviata
+// (`currentId === null && total > 0`), il ramo a coda vuota rende una schermata di
+// completamento SOBRIA — una conferma di aver finito PIÙ lo streak AGGIORNATO (stessa
+// chiave `['streak', userId]` della dashboard, derivato dalla funzione PURA `streak`
+// del dominio) PIÙ l'affordance di ritorno (riusa `onExit`, già cablata dalla 3.20).
+// La pila vuota all'INGRESSO (`total === 0`, deep-link) resta lo `<main>` neutro e
+// vuoto. Nessuna celebrazione: nessun verde/rosso, `!`, emoji, badge o animazione.
+//
+// FUORI SCOPE (3.22+): contratto tastiera completo (tasti numerici/tab-order/live
+// region) — il completamento NON introduce live region —, responsive (3.23).
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { applyResultToDue, dueQueryKey } from '../../domain/due';
@@ -32,6 +40,7 @@ import { selectionComplete } from '../../domain/exercise-presentation';
 import { evaluateAnswer } from '../../domain/review';
 import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
+import { streak } from '../../domain/streak';
 import type { ApplyReviewInput } from '../../domain/ports/reviewRepository';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { usePorts } from '../ports/PortsContext';
@@ -84,6 +93,16 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   const { session, total, initialIds } = useSessionStore.getState();
   const startSession = useSessionStore.getState().start;
   const dispatch = useSessionStore.getState().dispatch;
+
+  // L'esercizio CORRENTE dallo store (mai indicizzando la coda): id di RIGA DB, `null`
+  // a coda vuota. Derivato QUI (in alto, subito dopo le letture dello store) così è
+  // disponibile per la `useQuery` streak (regola degli hook: nessun early-return prima).
+  const currentId = currentExerciseId(session);
+  // Il COMPLETAMENTO (3.21): coda vuota DOPO una sessione avviata. `total` disambigua
+  // la sessione DRENATA (`total > 0`: avviata da `start(dueIds)` con pila non vuota,
+  // poi svuotata ⇒ schermata di zero) dalla pila vuota all'INGRESSO (`total === 0`:
+  // deep-link, mai avviata ⇒ neutro). `total` è impostato SOLO da `start`.
+  const sessionComplete = currentId === null && total > 0;
 
   // ABBANDONO con Esc (AC2): listener a livello window, attivo per l'INTERA vita
   // della schermata (anche scheletro/vuoto — hook top-level PRIMA di ogni
@@ -144,6 +163,20 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     queryFn: () => content.listExercisesByIds(initialIds),
   });
 
+  // Lo streak per la schermata di completamento (3.21): la STESSA chiave
+  // `['streak', userId]` e la STESSA porta `listReviewLog()` della dashboard (AD-18/
+  // AD-5 — streak UNICO e DERIVATO, mai memorizzato). Hook TOP-LEVEL (prima di ogni
+  // early-return, regola degli hook), `enabled` SOLO al completamento così non fa
+  // fetch durante la sessione attiva; al drenaggio la chiave è già stale (la mutation
+  // di risposta la invalida in `onSettled`), quindi la lettura fresca include la
+  // risposta di OGGI ⇒ streak «aggiornato» (AC1). I giorni si derivano dalla funzione
+  // PURA `streak(log, now, timeZone)`, mai reimplementata; `now`/`timeZone` dal Clock.
+  const streakLogQ = useQuery({
+    queryKey: ['streak', userId],
+    enabled: !!userId && sessionComplete,
+    queryFn: () => review.listReviewLog(),
+  });
+
   // La mutation di persistenza (AC4/AC5): UNA chiamata idempotente + aggiornamento
   // OTTIMISTICO del conteggio `['due', userId]` (la STESSA chiave della dashboard).
   const applyMutation = useMutation({
@@ -170,8 +203,6 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     },
   });
 
-  // L'esercizio CORRENTE dallo store (mai indicizzando la coda): id di RIGA DB.
-  const currentId = currentExerciseId(session);
   // Mappa id di RIGA → esercizio (l'ordine del port non è garantito): la card legge
   // l'esercizio CORRENTE per id, mai per posizione.
   const current =
@@ -195,10 +226,46 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     );
   }
 
-  // Pila vuota (deep-link) o sessione completa: stato neutro senza card. Il
-  // completamento (schermata di zero) è 3.21: qui si dichiara solo l'assenza di
-  // esercizio corrente. `total === 0` ⇒ la barra non è resa.
+  // Coda vuota (`currentId === null`, cioè `isComplete(session)`). Due esiti (3.21):
+  // - `total > 0` (sessione DRENATA a zero) ⇒ schermata di COMPLETAMENTO SOBRIA: la
+  //   conferma di aver finito (`body`), lo streak AGGIORNATO dalla chiave `['streak']`
+  //   (o un placeholder alla stessa altezza finché il log carica) e l'affordance di
+  //   ritorno (`dismiss` → `onExit`, SECONDARIA — nessun fill, nessun verde). Nessuna
+  //   card, nessuna barra, nessuna celebrazione. Esc resta attivo (listener top-level).
+  // - `total === 0` (pila vuota all'INGRESSO, deep-link) ⇒ `<main>` neutro e vuoto,
+  //   invariato: nessun `body` di completamento.
   if (currentId === null) {
+    if (sessionComplete) {
+      return (
+        <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
+          {/* La conferma sobria di aver finito (AC1/AC2): nessun `!`, nessun verde. */}
+          <p className="text-body text-ink-primary">{t('session.complete.body')}</p>
+          {/* Lo streak AGGIORNATO (AC1/AC3): il numero dalla funzione PURA `streak`
+              sul log fresco, ancorato a mezzanotte del fuso INIETTATO. Finché il log
+              carica (cache fredda), un placeholder alla stessa altezza, nessuno
+              spinner (evita salto di layout). */}
+          {streakLogQ.data !== undefined ? (
+            <p className="text-label text-ink-secondary">
+              {t('session.complete.streakLabel', {
+                days: streak(streakLogQ.data, clock.now(), clock.timeZone()),
+              })}
+            </p>
+          ) : (
+            <div className="h-[16px] w-36 rounded-md bg-surface-sunken" />
+          )}
+          {/* L'affordance di ritorno alla dashboard (AC2): riusa `onExit` (già cablata
+              a `ROOT_PATH` dalla 3.20). SECONDARIA — chiaramente non il button-primary
+              (nessun fill, ink muto, nessun verde). Mai "Continua". */}
+          <button
+            type="button"
+            onClick={onExit}
+            className="min-h-[56px] rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 text-body"
+          >
+            {t('session.complete.dismiss')}
+          </button>
+        </main>
+      );
+    }
     return (
       <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`} />
     );

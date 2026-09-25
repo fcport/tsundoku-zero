@@ -245,3 +245,11 @@ source_spec: `spec-3-19-rispondere-e-sapere-perché.md`
 severity: low
 reason: `onSelect` fa `if (currentState === undefined) return;` dopo `setSelected(next)`: la selezione resta popolata ma `answered` non passa mai a true. Irraggiungibile nell'happy path (coda ⊆ pila per costruzione); emerge solo con mutazione esterna della pila. Si sovrappone allo stato d'errore/refetch del read-model già differito (3.18 deferred #1); va risolto con una strategia di skip/ricostruzione.
 status: open
+
+### DW-31: Sulla schermata di completamento, se la query dello streak (`['streak', userId]` → `listReviewLog()`) va in errore, `streakLogQ.data` resta undefined e il placeholder grigio resta indefinitamente, sen
+origin: spec-deferred a33e069019c2
+location: src/features/study/SessionScreen.tsx:247-255
+source_spec: `spec-3-21-arrivare-a-zero.md`
+severity: medium
+reason: Il ramo di completamento rende la riga streak solo se `streakLogQ.data !== undefined`, altrimenti il placeholder `bg-surface-sunken`. Su reject di `listReviewLog` i dati restano undefined ⇒ placeholder permanente. È il MEDESIMO pattern della dashboard (gate su `logQ.data === undefined` ⇒ scheletro anche in errore): gap PRE-ESISTENTE app-wide sugli stati d'errore dei read-model (cfr. deferred #1 di 3.18), non introdotto da 3.21. Il contenuto primario (conferma + dismiss) resta comunque reso e l'uscita funziona.
+status: open
