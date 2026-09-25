@@ -90,4 +90,18 @@ describe('useSessionStore: delega al dominio (AC5)', () => {
     useSessionStore.getState().dispatch(reviewed('a', 'good'));
     expect(useSessionStore.getState().session.queue).toEqual(['b', 'c']);
   });
+
+  it('reset riporta session/total/initialIds alla forma iniziale (3.20, AC4)', () => {
+    // Sessione avviata e avanzata: total/initialIds popolati, coda accorciata.
+    useSessionStore.getState().start(['a', 'b', 'c']);
+    useSessionStore.getState().dispatch(reviewed('a', 'good'));
+
+    useSessionStore.getState().reset();
+
+    // Torna alla forma iniziale: coda vuota, total 0, initialIds [].
+    expect(useSessionStore.getState().session).toEqual(createSession([]));
+    expect(useSessionStore.getState().session.queue).toEqual([]);
+    expect(useSessionStore.getState().total).toBe(0);
+    expect(useSessionStore.getState().initialIds).toEqual([]);
+  });
 });

@@ -108,6 +108,11 @@ export const it = {
     // L'azione di avanzamento al prossimo esercizio (3.19): verbale e concreta,
     // mai "Continua". Nessun `!`, nessuna emoji, nessun avverbio di lode.
     next: 'Prossimo esercizio',
+    // L'affordance di ABBANDONO della sessione (3.20): verbale e concreta, mai
+    // "Continua"/"Indietro" generico. L'esito già dato resta acquisito (persistenza
+    // per-risposta), nessuna penalità. Nessun `!`, nessuna emoji, nessun avverbio di
+    // lode.
+    exit: 'Esci dalla sessione',
     // La barra di avanzamento (3.19): l'`aria-label` che l'AT legge. Rappresenta il
     // completato; nessun conteggio interpolato (`{{count}}` innescherebbe il
     // pluralizzatore). Nessun `!`, nessuna emoji.

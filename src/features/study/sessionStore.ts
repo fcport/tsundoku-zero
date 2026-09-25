@@ -7,6 +7,13 @@
 // NON è persistito per specifica: nessun `persist`, nessuno storage. La sessione è
 // effimera — FR4.7 la ricostruisce dagli esercizi ancora dovuti — quindi un'istanza
 // fresca parte a coda vuota. Lo store forwarda, il dominio decide.
+//
+// La sessione si RICOSTRUISCE all'ingresso (3.20, deferred #1 di 3.19): lo store è
+// un singleton di modulo che sopravvive allo smontaggio di `SessionScreen`, quindi
+// `reset()` lo riporta alla forma iniziale all'USCITA da `/studia`. La prossima
+// entrata rientra così nell'effetto `start` guardato (`initialIds.length === 0`) e
+// riparte dalla pila FRESCA `['due']` — mai dalla coda precedente («riprendi dove
+// eri» non esiste). `reset` DELEGA al dominio (`createSession([])`), come `start`.
 import { create } from 'zustand';
 import {
   createSession,
@@ -41,6 +48,14 @@ export interface SessionStore {
   readonly start: (ids: readonly string[]) => void;
   /** Fa evolvere la sessione applicando un evento (via `sessionReducer`). */
   readonly dispatch: (event: SessionEvent) => void;
+  /**
+   * Azzera lo stato alla forma INIZIALE (coda vuota, `total` 0, `initialIds` `[]`):
+   * la ricostruzione all'ingresso della 3.20 (deferred #1 di 3.19). Chiamata
+   * all'USCITA da `/studia` (cleanup di `SessionScreen`) così la prossima entrata
+   * riparte dalla pila fresca. DELEGA al dominio (`createSession([])`); tocca SOLO la
+   * coda in memoria, mai la porta/DB (le risposte sono già persistite per-risposta).
+   */
+  readonly reset: () => void;
 }
 
 /**
@@ -62,4 +77,7 @@ export const useSessionStore = create<SessionStore>()((set) => ({
       initialIds: [...ids],
     })),
   dispatch: (event) => set((s) => ({ session: sessionReducer(s.session, event) })),
+  // Ricostruzione all'ingresso (3.20): torna alla forma iniziale — coda vuota, total
+  // 0, initialIds []. Nessuna chiamata a porta/DB; solo la coda in memoria.
+  reset: () => set(() => ({ session: createSession([]), total: 0, initialIds: [] })),
 }));
