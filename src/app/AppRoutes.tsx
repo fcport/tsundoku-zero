@@ -6,17 +6,20 @@
 //   path="*" (tutto il resto) sotto RequireAuth      → AuthenticatedShell
 //
 // Il catch-all dietro il guard protegge OGNI path non-/login (dashboard,
-// sessione, statistiche, impostazioni: nessuna esiste ancora, arrivano in
-// Epic 3/5). Più forte che elencare rotte future e coerente con «nessuna rotta
-// prima della storia che la usa»: le rotte vere sostituiranno il catch-all.
+// statistiche, impostazioni: non esistono ancora come rotte, arrivano in Epic
+// 3/5). La sessione (3.18) è la PRIMA rotta VERA (`/studia`) che affianca il
+// catch-all: dichiarata PRIMA di `path="*"` così ha precedenza, il resto ricade
+// sulla shell. Coerente con «nessuna rotta prima della storia che la usa».
 //
 // react-router è importato SOLO nel livello app. Le schermate (features) non
-// contengono controlli di auth (AC2): l'autorizzazione è tutta qui.
+// contengono controlli di auth (AC2) né stringhe di path: l'autorizzazione e il
+// routing sono tutti qui.
 import { Route, Routes } from 'react-router';
 import { AuthScreen } from '../features/auth/AuthScreen';
+import { SessionScreen } from '../features/study/SessionScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
-import { LOGIN_PATH } from './routes';
+import { LOGIN_PATH, STUDY_PATH } from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -59,6 +62,13 @@ export function AppRoutes({
         />
       </Route>
       <Route element={<RequireAuth authenticated={authenticated} />}>
+        {/* La sessione di esercizi (3.18): rotta VERA sotto il guard, PRIMA del
+            catch-all così `/studia` ha precedenza. `userId` è già una prop di
+            AppRoutes (chiave per-utente della pila, AD-5). */}
+        <Route
+          path={STUDY_PATH}
+          element={<SessionScreen userId={userId} />}
+        />
         <Route
           path="*"
           element={

@@ -7,11 +7,12 @@
 // (nessuna schermata ricalcola la pila).
 //
 // Il CANCELLO delle quest sequenziali (3.13): pila NON vuota ⇒ SOLO l'azione
-// svuota-pila (inerte, come in 3.12); pila vuota con una lezione successiva ⇒ SOLO
+// svuota-pila, ora CABLATA all'avvio sessione (3.18) via la prop `onStartSession`
+// (una callback: la dashboard non conosce react-router né stringhe di path, AD-1 —
+// la shell la cabla con `useNavigate`); pila vuota con una lezione successiva ⇒ SOLO
 // l'azione di SBLOCCO, cablata a un `useMutation` che chiama `progress.unlockLesson`
 // e invalida pila+sblocco in `onSuccess`; pila vuota a curriculum esaurito ⇒
-// NESSUNA azione. Le due quest non compaiono MAI insieme. L'`onClick` di avvio
-// sessione resta 3.18 (l'azione svuota-pila è ancora sola-copy).
+// NESSUNA azione. Le due quest non compaiono MAI insieme.
 //
 // Questa storia (3.16) fa CAMBIARE STATO al pile-counter a zero (nel ramo
 // `unlocked > 0`): a `count === 0` non rende «0» né `dueLabel`, ma DICHIARA il
@@ -66,6 +67,12 @@ export interface DashboardScreenProps {
    * chiave `['lessonsPerDay', userId]`.
    */
   readonly settings: SettingsRepository;
+  /**
+   * Avvia la sessione di esercizi (3.18): cablata SOLO sul pulsante svuota-pila
+   * (ramo `count > 0`). Una callback, non una stringa di path: la dashboard non
+   * conosce react-router (AD-1); la shell la fornisce via `useNavigate`.
+   */
+  readonly onStartSession: () => void;
 }
 
 // Altezza CONDIVISA fra scheletro e contenuto finale: la stessa classe sul
@@ -73,7 +80,11 @@ export interface DashboardScreenProps {
 // qui una sola volta, così i due rami non possono divergere.
 const CONTAINER_HEIGHT = 'min-h-[24rem]';
 
-export function DashboardScreen({ userId, settings }: DashboardScreenProps) {
+export function DashboardScreen({
+  userId,
+  settings,
+  onStartSession,
+}: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -286,10 +297,11 @@ export function DashboardScreen({ userId, settings }: DashboardScreenProps) {
           - Pila vuota a curriculum esaurito (next === null) ⇒ NESSUNA azione (la
             schermata senza-azione è 3.16): non si rende alcun pulsante. */}
       {count > 0 ? (
-        // button-primary svuota-pila: verbale e concreto. onClick/rotta (avvio
-        // sessione) resta 3.18: qui è solo la copy.
+        // button-primary svuota-pila: verbale e concreto. Ora CABLATO all'avvio
+        // sessione (3.18) via `onStartSession` (la shell naviga a /studia).
         <button
           type="button"
+          onClick={onStartSession}
           className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
         >
           {t('dashboard.primaryAction')}

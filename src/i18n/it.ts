@@ -79,6 +79,17 @@ export const it = {
     dailyLimitReachedBody:
       'Il tetto giornaliero di sblocco di {{limit}} è stato raggiunto per oggi. Il tetto si azzera a mezzanotte, quindi la lezione successiva si potrà sbloccare allora. Il tetto si cambia dalle Impostazioni.',
   },
+  session: {
+    // La CONSEGNA di un esercizio, per `kind` (3.18): descrive COME si risponde,
+    // non celebra. Nessun `!`, nessuna emoji, nessun avverbio di lode. `single-select`
+    // sceglie una parola; `select-span` indica una porzione della frase; `assemble`
+    // ordina le tessere.
+    prompt: {
+      singleSelect: "Scegli l'opzione che completa la frase.",
+      selectSpan: 'Seleziona la parte della frase che risponde alla domanda.',
+      assemble: 'Metti in ordine le tessere per costruire la frase.',
+    },
+  },
   settings: {
     title: 'Impostazioni',
     language: {

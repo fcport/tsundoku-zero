@@ -85,6 +85,17 @@ export const en = {
     dailyLimitReachedBody:
       'The daily unlock limit of {{limit}} has been reached for today. The limit resets at midnight, so the next lesson can be unlocked then. The limit can be changed in Settings.',
   },
+  session: {
+    // La CONSEGNA di un esercizio, per `kind` (3.18): descrive COME si risponde,
+    // non celebra. Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII (il
+    // giapponese non passa da t()). `single-select` sceglie una parola; `select-span`
+    // indica una porzione della frase; `assemble` ordina le tessere.
+    prompt: {
+      singleSelect: 'Choose the option that completes the sentence.',
+      selectSpan: 'Select the part of the sentence that answers the question.',
+      assemble: 'Put the tiles in order to build the sentence.',
+    },
+  },
   settings: {
     title: 'Settings',
     language: {

@@ -11,6 +11,7 @@
 // di elencare le lezioni, non del loro payload di esercizi.
 
 import type { BilingualText } from '../bilingual';
+import type { Exercise } from '../exercise';
 
 /**
  * Vista SNELLA di una lezione per il ciclo di ripasso: l'identità (`id`, lo slug
@@ -35,9 +36,22 @@ export interface LessonSummary {
 }
 
 /**
+ * Un esercizio caricato accoppiato al suo id di RIGA DB. L'`id` è la chiave
+ * autoritativa della pila dei dovuti (AD-5, `['due', userId]`): la sessione
+ * indicizza per questo id (`currentExerciseId`), non per l'id DERIVATO dal
+ * contenuto. Il tipo di dominio `Exercise` NON porta id (l'identità è DERIVATA,
+ * AD-23, e potrebbe differire dall'id di riga se il contenuto cambiasse): il port
+ * accoppia i due senza inquinare `Exercise`.
+ */
+export interface ExerciseContent {
+  readonly id: string;
+  readonly exercise: Exercise;
+}
+
+/**
  * Porta del contenuto in sola lettura dichiarata dal dominio (AD-2).
- * L'adattatore concreto vive in src/data/ ed è l'unico a conoscere Supabase e la
- * tabella `lesson`.
+ * L'adattatore concreto vive in src/data/ ed è l'unico a conoscere Supabase e le
+ * tabelle `lesson`/`exercise`.
  */
 export interface ContentRepository {
   /**
@@ -46,4 +60,13 @@ export interface ContentRepository {
    * scrittura, nessun filtro per-utente (il contenuto è lo stesso per tutti).
    */
   listLessons(): Promise<readonly LessonSummary[]>;
+  /**
+   * Legge gli esercizi COMPLETI per gli id di RIGA passati (le chiavi della pila
+   * dei dovuti, AD-5). Ritorna `ExerciseContent` (`{ id, exercise }`): l'`id` è la
+   * chiave DB, l'`exercise` è validato via la fonte UNICA (`exerciseSchema.parse`).
+   * `ids` vuoto ⇒ `[]` SENZA query (nessuna interrogazione degenere). L'ordine del
+   * risultato non è garantito: il consumatore mappa per id. Sola lettura, nessun
+   * filtro per-utente (il contenuto è lo stesso per tutti).
+   */
+  listExercisesByIds(ids: readonly string[]): Promise<readonly ExerciseContent[]>;
 }
