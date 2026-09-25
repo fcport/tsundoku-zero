@@ -11,11 +11,24 @@
 // e lo stadio 5 saturato cadono fuori da soli, senza `if (stage === 0/5)`.
 
 /**
+ * L'UNICA costante degli esiti SRS (AC4 di 3.8): l'insieme dei quattro gradini
+ * di Anki/Leitner. Come `LEITNER_INTERVALS_DAYS`, è UNA sola definizione da cui
+ * derivano sia il tipo `ReviewOutcome` sia il TESTIMONE RUNTIME che il test di
+ * migrazione confronta con il `CHECK (outcome in (...))` di `review_log`:
+ * aggiungere un esito è un cambiamento in un solo punto, e un `CHECK` SQL
+ * disallineato diventa CI rossa. L'ordine è quello di precedenza crescente della
+ * scala (`again` fallito → `easy` banale); l'insieme, non l'ordine, è ciò che il
+ * test verifica.
+ */
+export const REVIEW_OUTCOMES = ['again', 'hard', 'good', 'easy'] as const;
+
+/**
  * Esito SRS di un ripasso, nella scala a quattro gradini di Anki/Leitner.
  * `again` fallito (torna in fondo), `hard` faticoso (resta, intervallo ridotto),
- * `good` corretto (avanza di 1), `easy` banale (avanza di 2).
+ * `good` corretto (avanza di 1), `easy` banale (avanza di 2). DERIVATO da
+ * `REVIEW_OUTCOMES`: la union resta identica, ma la fonte è la costante runtime.
  */
-export type ReviewOutcome = 'again' | 'hard' | 'good' | 'easy';
+export type ReviewOutcome = (typeof REVIEW_OUTCOMES)[number];
 
 /**
  * Lo stato di ripasso di un esercizio: value object di RUNTIME (non passa dal kit
