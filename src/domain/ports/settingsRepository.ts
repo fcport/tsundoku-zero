@@ -31,4 +31,20 @@ export interface SettingsRepository {
    * Confine totale: risolve sempre `void`, mai reject. Senza sessione è un no-op.
    */
   saveLocale(locale: string): Promise<void>;
+
+  /**
+   * Legge il tetto giornaliero di sblocco persistito dell'utente corrente
+   * (`user_settings.lessons_per_day`, storia 3.17), o `null` se non disponibile
+   * (nessuna sessione, riga assente, valore non-numero, errore). MIRROR del
+   * confine totale di `loadLocale`: non rifiuta mai. Il chiamante degrada `null`
+   * al `DEFAULT_LESSONS_PER_DAY` del dominio.
+   */
+  loadLessonsPerDay(): Promise<number | null>;
+  /**
+   * Persiste il tetto giornaliero di sblocco dell'utente corrente con un upsert
+   * diretto (mai via RPC). MIRROR del confine totale di `saveLocale`: risolve
+   * sempre `void`, mai reject; senza sessione è un no-op. L'upsert invia solo
+   * `{ user_id, lessons_per_day }`: `locale` resta invariato su conflitto.
+   */
+  saveLessonsPerDay(value: number): Promise<void>;
 }

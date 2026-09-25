@@ -56,8 +56,8 @@ export function AuthenticatedShell({
           {t('auth.signOut')}
         </button>
       </header>
-      <DashboardScreen userId={userId} />
-      <SettingsScreen settings={settings} />
+      <DashboardScreen userId={userId} settings={settings} />
+      <SettingsScreen settings={settings} userId={userId} />
       <DeleteAccountSection
         account={account}
         onAccountDeleted={onAccountDeleted}

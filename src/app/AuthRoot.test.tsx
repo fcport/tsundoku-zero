@@ -24,11 +24,14 @@ const inertGateway: AuthGateway = {
   onAuthStateChange: () => () => {},
 };
 
-// Porta finta inerte (nuova prop 1.9): non invocata durante la resa server
-// (loadLocale/saveLocale vivono nella glue useEffect, non eseguita da SSR).
+// Porta finta inerte (nuova prop 1.9, estesa in 3.17): non invocata durante la
+// resa server (load/save vivono nella glue useEffect / nelle query, non eseguite
+// da SSR nello stato `checking`).
 const inertSettings: SettingsRepository = {
   loadLocale: async () => null,
   saveLocale: async () => {},
+  loadLessonsPerDay: async () => null,
+  saveLessonsPerDay: async () => {},
 };
 // Porta finta inerte (nuova prop 1.10): deleteAccount non è invocata da SSR.
 const inertAccount: AccountGateway = {
@@ -40,7 +43,7 @@ const inertAccount: AccountGateway = {
 const inertPorts: Ports = {
   clock: { now: () => new Date(), timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [] },
-  progress: { listUnlockedLessonIds: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [] },
 };
 

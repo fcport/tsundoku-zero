@@ -19,8 +19,8 @@ interface FakeClientOptions {
   readonly userId?: string | undefined;
   /** Se true, `getSession` lancia (throw SDK). */
   readonly getSessionThrows?: boolean;
-  /** Riga ritornata da `select().maybeSingle()`. */
-  readonly row?: { locale: unknown } | null;
+  /** Riga ritornata da `select().maybeSingle()` (locale e/o lessons_per_day). */
+  readonly row?: { locale?: unknown; lessons_per_day?: unknown } | null;
   /** Errore ritornato da `select().maybeSingle()`. */
   readonly selectError?: unknown;
   /** Se true, `.from()` lancia (throw SDK) sulla lettura/scrittura. */
@@ -141,5 +141,105 @@ describe('loadLocale — select().maybeSingle() con RLS sulla riga propria', () 
     const repo = createSupabaseSettingsRepository(client);
 
     await expect(repo.loadLocale()).resolves.toBeNull();
+  });
+});
+
+describe('saveLessonsPerDay — upsert diretto su user_settings (mai RPC), mirror di saveLocale', () => {
+  it('sessione con user.id + valore ⇒ upsert({ user_id, lessons_per_day })', async () => {
+    const { client, upserts } = makeFakeClient({ userId: 'user-1' });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await repo.saveLessonsPerDay(3);
+
+    expect(upserts).toHaveLength(1);
+    expect(upserts[0]?.table).toBe('user_settings');
+    // L'upsert invia SOLO { user_id, lessons_per_day }: locale NON è incluso (su
+    // conflitto PK aggiorna solo lessons_per_day, il locale esistente resta).
+    expect(upserts[0]?.values).toEqual({ user_id: 'user-1', lessons_per_day: 3 });
+  });
+
+  it('nessuna sessione ⇒ no-op (nessun upsert)', async () => {
+    const { client, upserts } = makeFakeClient({ userId: undefined });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await repo.saveLessonsPerDay(2);
+
+    expect(upserts).toHaveLength(0);
+  });
+
+  it('throw dell’SDK su getSession ⇒ risolve void, non rifiuta (confine totale)', async () => {
+    const { client, upserts } = makeFakeClient({ getSessionThrows: true });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.saveLessonsPerDay(2)).resolves.toBeUndefined();
+    expect(upserts).toHaveLength(0);
+  });
+
+  it('throw dell’SDK su from ⇒ risolve void, non rifiuta (confine totale)', async () => {
+    const { client } = makeFakeClient({ userId: 'user-1', fromThrows: true });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.saveLessonsPerDay(2)).resolves.toBeUndefined();
+  });
+});
+
+describe('loadLessonsPerDay — select().maybeSingle() con RLS sulla riga propria', () => {
+  it('riga presente ⇒ ritorna il numero', async () => {
+    const { client } = makeFakeClient({ row: { lessons_per_day: 4 } });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBe(4);
+  });
+
+  it('riga assente (null) ⇒ null', async () => {
+    const { client } = makeFakeClient({ row: null });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
+  });
+
+  it('errore sulla select ⇒ null', async () => {
+    const { client } = makeFakeClient({
+      row: { lessons_per_day: 3 },
+      selectError: { message: 'rls denied' },
+    });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
+  });
+
+  it('valore non-numero ⇒ null', async () => {
+    const { client } = makeFakeClient({ row: { lessons_per_day: 'three' } });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
+  });
+
+  it("valore 0 (fuori-range, softlock) ⇒ null (l'invariante >= 1 è imposta in lettura)", async () => {
+    const { client } = makeFakeClient({ row: { lessons_per_day: 0 } });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
+  });
+
+  it('valore negativo (-1) ⇒ null', async () => {
+    const { client } = makeFakeClient({ row: { lessons_per_day: -1 } });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
+  });
+
+  it('valore non intero (2.5) ⇒ null', async () => {
+    const { client } = makeFakeClient({ row: { lessons_per_day: 2.5 } });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
+  });
+
+  it('throw dell’SDK su from ⇒ null (confine totale)', async () => {
+    const { client } = makeFakeClient({ fromThrows: true });
+    const repo = createSupabaseSettingsRepository(client);
+
+    await expect(repo.loadLessonsPerDay()).resolves.toBeNull();
   });
 });

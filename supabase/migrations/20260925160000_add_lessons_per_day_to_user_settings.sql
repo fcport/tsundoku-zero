@@ -1,0 +1,23 @@
+-- Story 3.17 — Cambiare il ritmo.
+--
+-- Il tetto giornaliero di sblocco (FR6.5/FR6.6) nasce qui: la colonna
+-- lessons_per_day su user_settings, predefinita 1, modificabile da Impostazioni.
+--
+-- Migrazione ADDITIVA: un solo ALTER TABLE ADD COLUMN, nient'altro. La riga di
+-- user_settings è GIÀ isolata per utente da RLS (story 1.5): la colonna eredita
+-- quell'isolamento, quindi NESSUNA policy nuova. Si applica SOLO al merge su main
+-- via .github/workflows/migrate.yml (supabase db push); su una PR è validata
+-- sintatticamente offline in npm test (AD-12/AD-13).
+--
+-- Nessun check su lessons_per_day: come il locale (1.5), la tabella resta MINIMA
+-- e non accoppia lo schema alla scelta di prodotto. L'invariante >= 1 è imposta al
+-- confine (le opzioni UI sono LESSONS_PER_DAY_OPTIONS, tutte >= 1); un check
+-- irrigidirebbe lo schema senza che un AC lo richieda. Il default 1 + not null è
+-- tutta la garanzia di questa migrazione.
+--
+-- Backfill delle righe PREESISTENTI: `not null default 1` fa sì che Postgres
+-- popoli con `1` anche le righe user_settings già presenti (l'ADD COLUMN con
+-- default riscrive/materializza il valore per ogni riga esistente). Nessuna UPDATE
+-- di backfill separata è necessaria: dopo il push ogni utente ha il tetto
+-- predefinito 1, coerente con FR6.5.
+alter table user_settings add column lessons_per_day int not null default 1;

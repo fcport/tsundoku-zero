@@ -26,6 +26,16 @@
 // schermata (il primo-avvio a schermo pulito resta 3.15, `unlocked === 0`). A
 // `count > 0` il numero resta invariato (3.12).
 //
+// Il TETTO giornaliero di sblocco (3.17, FR6.5/FR6.6): a `count === 0 && next !==
+// null`, se gli sblocchi di oggi hanno raggiunto il tetto, il cancello sostituisce
+// l'azione di sblocco con una DICHIARAZIONE del limite (NESSUN pulsante), che
+// riapre a mezzanotte. Il tetto (`user_settings.lessons_per_day`, predefinito 1)
+// arriva dalla porta `settings` (NUOVA prop, non promossa a `Ports`); `capReached`
+// è DERIVATO puro (`dailyUnlockLimitReached`) dagli istanti di sblocco del
+// read-model unico, mai memorizzato. Il tetto NON tocca il ramo `count > 0`
+// (svuota-pila), il primo avvio (3.15) né le dichiarazioni 3.16 a pila vuota: agisce
+// SOLO nel blocco azione.
+//
 // Nessuna grammatica della celebrazione (nessun verde, nessun `!`, nessuna
 // emoji): solo token del sistema di design (la regola colore vale anche qui). I
 // primitivi ui (pile-counter, streak-badge, curriculum-progress, button-primary)
@@ -34,6 +44,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
 import { dueQueryKey } from '../../domain/due';
 import { streak } from '../../domain/streak';
+import {
+  DEFAULT_LESSONS_PER_DAY,
+  dailyUnlockLimitReached,
+} from '../../domain/unlockPace';
+import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { usePorts } from '../ports/PortsContext';
 import { useTranslation } from '../../i18n';
 
@@ -44,6 +59,13 @@ export interface DashboardScreenProps {
    * speciale.
    */
   readonly userId: string | null;
+  /**
+   * La porta delle impostazioni, iniettata come PROP (non promossa a `Ports`, che
+   * è per il ciclo profondo dashboard→sessione→card). Fornisce il tetto giornaliero
+   * di sblocco (`loadLessonsPerDay`), condiviso con Impostazioni via la stessa
+   * chiave `['lessonsPerDay', userId]`.
+   */
+  readonly settings: SettingsRepository;
 }
 
 // Altezza CONDIVISA fra scheletro e contenuto finale: la stessa classe sul
@@ -51,15 +73,15 @@ export interface DashboardScreenProps {
 // qui una sola volta, così i due rami non possono divergere.
 const CONTAINER_HEIGHT = 'min-h-[24rem]';
 
-export function DashboardScreen({ userId }: DashboardScreenProps) {
+export function DashboardScreen({ userId, settings }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  // Le quattro letture del read-model. La pila usa la chiave di DOMINIO verbatim
-  // (AD-5); le altre chiavi sono per-utente (`['streak'|'unlocked', userId]`) o
-  // globali (`['lessons']`, il contenuto è uguale per tutti). Tutte le per-utente
-  // sono `enabled: !!userId`: senza id non parte alcuna fetch (scheletro).
+  // Le cinque letture del read-model. La pila usa la chiave di DOMINIO verbatim
+  // (AD-5); le altre chiavi sono per-utente (`['streak'|'unlocked'|'lessonsPerDay',
+  // userId]`) o globali (`['lessons']`, il contenuto è uguale per tutti). Tutte le
+  // per-utente sono `enabled: !!userId`: senza id non parte alcuna fetch (scheletro).
   const dueQ = useQuery({
     queryKey: dueQueryKey(userId ?? ''),
     enabled: !!userId,
@@ -73,11 +95,19 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
   const unlockedQ = useQuery({
     queryKey: ['unlocked', userId],
     enabled: !!userId,
-    queryFn: () => progress.listUnlockedLessonIds(),
+    queryFn: () => progress.listUnlockedLessons(),
   });
   const lessonsQ = useQuery({
     queryKey: ['lessons'],
     queryFn: () => content.listLessons(),
+  });
+  // Il tetto giornaliero di sblocco (3.17): la STESSA chiave di Impostazioni, così
+  // un cambio là si riflette qui subito (setQueryData ottimistico). `null`/assente
+  // degrada al DEFAULT del dominio.
+  const lessonsPerDayQ = useQuery({
+    queryKey: ['lessonsPerDay', userId],
+    enabled: !!userId,
+    queryFn: () => settings.loadLessonsPerDay(),
   });
 
   // L'azione di SBLOCCO (3.13): materializza la lezione via porta
@@ -98,13 +128,16 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
 
   // Scheletro finché l'id non è risolto o una qualunque query è `pending`
   // (cache non ancora seminata). Stessa altezza del contenuto finale, nessuno
-  // spinner, `aria-busy` per l'AT (AC3).
+  // spinner, `aria-busy` per l'AT (AC3). Il tetto (`lessonsPerDayQ`) è nel cancello
+  // scheletro: la dashboard attende ANCHE il suo valore prima di decidere il blocco
+  // azione (evita di renderizzare `unlockAction` con un tetto ancora ignoto).
   if (
     !userId ||
     dueQ.data === undefined ||
     logQ.data === undefined ||
     unlockedQ.data === undefined ||
-    lessonsQ.data === undefined
+    lessonsQ.data === undefined ||
+    lessonsPerDayQ.data === undefined
   ) {
     return (
       <main
@@ -127,16 +160,32 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
   // l'autorità di dominio; orologio e fuso ENTRANO dal Clock (mai letti qui).
   const count = dueQ.data.length;
   const days = streak(logQ.data, clock.now(), clock.timeZone());
-  const unlocked = unlockedQ.data.length;
+  // Il read-model UNICO del progresso (3.17): da `unlockedQ.data` (UnlockedLesson[])
+  // derivano SIA gli id (sequenza del curriculum) SIA gli istanti (tetto), senza
+  // doppia lettura di `lesson_progress`.
+  const unlockedIds = unlockedQ.data.map((u) => u.lessonId);
+  const unlockedAt = unlockedQ.data.map((u) => u.unlockedAt);
+  const unlocked = unlockedIds.length;
   const total = lessonsQ.data.length;
   // La SUCCESSIVA lezione da sbloccare (autorità sequenziale, puro): `null` a
   // curriculum esaurito. La UI passa alla RPC solo il suo `id`.
-  const next = nextLessonToUnlock(lessonsQ.data, unlockedQ.data);
+  const next = nextLessonToUnlock(lessonsQ.data, unlockedIds);
   // L'ULTIMA lezione sbloccata (autorità sequenziale, puro): `null` se nulla è
   // sbloccato. Serve alla dichiarazione «senza esercizi» (3.14), DERIVATA dallo
   // stato persistito (`['lessons']` + `['unlocked']` + pila), mai memorizzata
   // (AD-5): sopravvive al refresh.
-  const lastUnlocked = lastUnlockedLesson(lessonsQ.data, unlockedQ.data);
+  const lastUnlocked = lastUnlockedLesson(lessonsQ.data, unlockedIds);
+  // Il tetto giornaliero: `null`/assente degrada al DEFAULT del dominio. `capReached`
+  // è DERIVATO puro dagli istanti di sblocco (mai memorizzato); orologio e fuso
+  // ENTRANO dal Clock. Il confine di giornata è mezzanotte nel fuso (coerente con
+  // «riapre a mezzanotte» della copy).
+  const cap = lessonsPerDayQ.data ?? DEFAULT_LESSONS_PER_DAY;
+  const capReached = dailyUnlockLimitReached(
+    unlockedAt,
+    cap,
+    clock.now(),
+    clock.timeZone(),
+  );
 
   // Il ramo di PRIMO AVVIO (3.15): DERIVATO, mai memorizzato (AD-5). Segnale
   // canonico `unlocked === 0` (= zero righe lesson_progress = «mai sbloccato
@@ -224,12 +273,16 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
         {t('dashboard.curriculumLabel', { unlocked, total })}
       </p>
 
-      {/* Il CANCELLO delle quest sequenziali (AC4): al più UNA sola azione, mai
-          entrambe insieme.
+      {/* Il CANCELLO delle quest sequenziali (AC4/3.13) + il tetto giornaliero
+          (3.17): al più UNA sola azione, mai entrambe insieme.
           - Pila NON vuota (count > 0) ⇒ SOLO svuota-pila (sola-copy, inerte come
-            in 3.12; l'azione di sblocco NON è presente, nemmeno disabilitata).
-          - Pila vuota (count === 0) con una lezione successiva ⇒ SOLO sblocco,
-            cablato a `unlockMutation.mutate(next.id)`.
+            in 3.12; l'azione di sblocco NON è presente, nemmeno disabilitata). Il
+            tetto NON è consultato qui.
+          - Pila vuota (count === 0) con una lezione successiva e tetto NON
+            raggiunto ⇒ SOLO sblocco, cablato a `unlockMutation.mutate(next.id)`.
+          - Pila vuota, lezione successiva, ma tetto RAGGIUNTO ⇒ NESSUN pulsante,
+            ma la DICHIARAZIONE del limite (`dailyLimitReachedBody`, con
+            `{{limit}}`=cap): il tetto riapre a mezzanotte, si cambia da Impostazioni.
           - Pila vuota a curriculum esaurito (next === null) ⇒ NESSUNA azione (la
             schermata senza-azione è 3.16): non si rende alcun pulsante. */}
       {count > 0 ? (
@@ -242,15 +295,22 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
           {t('dashboard.primaryAction')}
         </button>
       ) : next !== null ? (
-        // button-primary sblocco: materializza la lezione successiva via porta.
-        <button
-          type="button"
-          onClick={() => unlockMutation.mutate(next.id)}
-          disabled={unlockMutation.isPending}
-          className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
-        >
-          {t('dashboard.unlockAction')}
-        </button>
+        capReached ? (
+          // Tetto raggiunto: nessun pulsante, la dichiarazione del limite.
+          <p className="text-body text-ink-primary">
+            {t('dashboard.dailyLimitReachedBody', { limit: cap })}
+          </p>
+        ) : (
+          // button-primary sblocco: materializza la lezione successiva via porta.
+          <button
+            type="button"
+            onClick={() => unlockMutation.mutate(next.id)}
+            disabled={unlockMutation.isPending}
+            className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+          >
+            {t('dashboard.unlockAction')}
+          </button>
+        )
       ) : null}
     </main>
   );

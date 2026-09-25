@@ -42,7 +42,10 @@ export function nextLessonToUnlock(
  * ritorna la sbloccata con `ordinal` più ALTO — oppure `null` se nulla di sbloccato
  * combacia (o lista/insieme vuoto). Le sbloccate sono un PREFISSO contiguo (l'unico
  * percorso di scrittura, `nextLessonToUnlock`, è sequenziale) ⇒ «ordinal massimo
- * sbloccato» = «più recente», senza bisogno di un `unlocked_at` nel read-model.
+ * sbloccato» = «più recente». Dalla 3.17 il read-model (`UnlockedLesson[]`) PORTA
+ * `unlocked_at` (serve al tetto giornaliero di sblocco), ma questa funzione resta
+ * basata su `ordinal` e NON lo usa: con le sbloccate a prefisso contiguo l'istante
+ * non aggiunge nulla a «più recente».
  *
  * PURA, sincrona, TOTALE e senza mutazione: copia+ordina per `ordinal` DISCENDENTE
  * (l'input può arrivare disordinato) e ritorna la prima il cui `id` è in

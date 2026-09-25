@@ -29,10 +29,13 @@ const inertGateway: AuthGateway = {
   currentUserId: async () => null,
   onAuthStateChange: () => () => {},
 };
-// Porta finta inerte (nuova prop 1.9): non invocata durante la resa server.
+// Porta finta inerte (nuova prop 1.9, estesa in 3.17): non invocata durante la
+// resa server (le queryFn non partono con cache seminata).
 const inertSettings: SettingsRepository = {
   loadLocale: async () => null,
   saveLocale: async () => {},
+  loadLessonsPerDay: async () => null,
+  saveLessonsPerDay: async () => {},
 };
 // Porta finta inerte (nuova prop 1.10): deleteAccount non è invocata da SSR.
 const inertAccount: AccountGateway = {
@@ -44,7 +47,7 @@ const inertAccount: AccountGateway = {
 const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [] },
-  progress: { listUnlockedLessonIds: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [] },
 };
 
@@ -62,11 +65,17 @@ function seededClient(): QueryClient {
   qc.setQueryData(['streak', UID], []);
   // Stato NON di primo avvio (3.15): una lezione già sbloccata, così la dashboard
   // rende lo stato caricato con `primaryAction`. Con `unlocked === 0` renderebbe
-  // invece il primo avvio (niente `primaryAction`).
-  qc.setQueryData(['unlocked', UID], ['lesson-0']);
+  // invece il primo avvio (niente `primaryAction`). Il read-model unico (3.17)
+  // porta anche `unlockedAt`.
+  qc.setQueryData(['unlocked', UID], [
+    { lessonId: 'lesson-0', unlockedAt: new Date('2026-09-25T00:00:00.000Z') },
+  ]);
   qc.setQueryData(['lessons'], [
     { id: 'lesson-0', ordinal: 0, title: { en: 'L0' }, grammarPoints: [], exerciseCount: 1 },
   ]);
+  // Il tetto giornaliero (3.17): seminato così la dashboard non resta sullo
+  // scheletro (la query è nel cancello scheletro). `count > 0` ⇒ tetto non consultato.
+  qc.setQueryData(['lessonsPerDay', UID], 1);
   return qc;
 }
 
