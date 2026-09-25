@@ -302,3 +302,148 @@ describe('workflow — l\'apply raggiunge solo main, mai una PR', () => {
     expect(ciYml).not.toMatch(/db\s+push/);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Story 3.7 — Asserzioni strutturali sulla migrazione lesson/exercise (AC1).
+//
+// Le tabelle del contenuto nascono in SOLA LETTURA: schema canonico esatto, RLS
+// abilitata su entrambe, UNA policy select `to authenticated` per tabella e
+// ZERO policy di scrittura. FK exercise.lesson_id → lesson(id) cascade, CHECK sul
+// registro chiuso di `kind`. (Il file di SEED è coperto dal loop generico «ogni
+// *.sql parsa» sopra: qui asseriamo il DDL.)
+// ---------------------------------------------------------------------------
+
+const lessonExercise = migrations.find((m) =>
+  m.name.endsWith('_create_lesson_and_exercise.sql'),
+);
+
+describe('migrazione lesson/exercise — contenuto in sola lettura (AC1)', () => {
+  it('la migrazione esiste', () => {
+    expect(
+      lessonExercise,
+      'atteso un file *_create_lesson_and_exercise.sql',
+    ).toBeDefined();
+  });
+
+  // Via AST: le due create table espongono ESATTAMENTE le colonne canoniche.
+  it('lesson ed exercise espongono esattamente le colonne canoniche (via AST)', () => {
+    const res = pg.parse(lessonExercise?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    const createStmts = res.parse_tree.stmts
+      .map((s) => s.stmt.CreateStmt)
+      .filter((c): c is NonNullable<typeof c> => c !== undefined);
+    expect(createStmts.length).toBe(2);
+
+    const columnsOf = (relname: string): (string | undefined)[] => {
+      const create = createStmts.find((c) => c.relation?.relname === relname);
+      return (create?.tableElts ?? [])
+        .map((elt) => elt.ColumnDef?.colname)
+        .filter((n): n is string => typeof n === 'string');
+    };
+
+    expect(columnsOf('lesson')).toEqual([
+      'id',
+      'ordinal',
+      'title_en',
+      'title_it',
+      'grammar_points',
+    ]);
+    expect(columnsOf('exercise')).toEqual([
+      'id',
+      'lesson_id',
+      'kind',
+      'payload',
+      'grammar_point',
+      'explanation_en',
+      'explanation_it',
+    ]);
+  });
+
+  // Via AST: exercise.lesson_id è FK verso lesson(id) on delete cascade.
+  it('exercise.lesson_id è FK cascade verso lesson (via AST)', () => {
+    const res = pg.parse(lessonExercise?.sql ?? '');
+    const create = res.parse_tree.stmts
+      .map((s) => s.stmt.CreateStmt)
+      .find((c) => c?.relation?.relname === 'exercise');
+
+    const lessonIdCol = (create?.tableElts ?? [])
+      .map((elt) => elt.ColumnDef)
+      .find((c) => c?.colname === 'lesson_id');
+    expect(lessonIdCol, 'colonna lesson_id assente').toBeDefined();
+
+    const constraints = (lessonIdCol?.constraints ?? [])
+      .map((c) => c.Constraint)
+      .filter((c): c is NonNullable<typeof c> => c !== undefined);
+
+    const fk = constraints.find((c) => c.contype === 'CONSTR_FOREIGN');
+    expect(fk, 'lesson_id non ha un vincolo FOREIGN KEY').toBeDefined();
+    expect(fk?.pktable?.relname).toBe('lesson');
+    // fk_del_action 'c' = cascade.
+    expect(fk?.fk_del_action, 'FK non è on delete cascade').toBe('c');
+  });
+
+  // Testo: FK cascade ridondante a colpo d'occhio del diff.
+  it('il testo dichiara on delete cascade verso lesson (id)', () => {
+    const sql = stripSqlComments(lessonExercise?.sql ?? '').toLowerCase();
+    expect(sql).toMatch(/references\s+lesson\s*\(\s*id\s*\)\s+on\s+delete\s+cascade/);
+  });
+
+  // RLS abilitata su ENTRAMBE le tabelle: senza, la chiave anonima pubblicabile
+  // leggerebbe ogni riga (AD-10). Il contenuto è pubblico agli autenticati, non a
+  // chiunque; e la scrittura resta negata dal non avere policy.
+  it('abilita row level security su lesson ed exercise', () => {
+    const sql = stripSqlComments(lessonExercise?.sql ?? '').toLowerCase();
+    expect(sql).toMatch(/alter\s+table\s+lesson\s+enable\s+row\s+level\s+security/);
+    expect(sql).toMatch(/alter\s+table\s+exercise\s+enable\s+row\s+level\s+security/);
+  });
+
+  // Via AST: ESATTAMENTE due policy, entrambe `select`, una per tabella. Nessuna
+  // policy insert/update/delete (con RLS attiva e nessuna policy di scrittura, la
+  // scrittura è negata per default — è il cuore della «sola lettura»).
+  it('dichiara solo due policy select, nessuna policy di scrittura (via AST)', () => {
+    const res = pg.parse(lessonExercise?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    const policyCommands = res.parse_tree.stmts
+      .map((s) => s.stmt.CreatePolicyStmt as { cmd_name?: string } | undefined)
+      .filter((p): p is { cmd_name?: string } => p !== undefined)
+      .map((p) => p.cmd_name);
+
+    expect(policyCommands.length).toBe(2);
+    // Entrambe sono `select`; nessun insert/update/delete.
+    expect(new Set(policyCommands)).toEqual(new Set(['select']));
+  });
+
+  // Testo: le due policy select sono `to authenticated`; nessuna di scrittura.
+  it('ogni policy è for select to authenticated', () => {
+    const sql = stripSqlComments(lessonExercise?.sql ?? '').toLowerCase();
+
+    const selectCount = (sql.match(/for\s+select/g) ?? []).length;
+    expect(selectCount).toBe(2);
+
+    const authenticatedCount = (sql.match(/to\s+authenticated/g) ?? []).length;
+    expect(authenticatedCount).toBe(2);
+
+    // Nessuna policy di scrittura: la sola-lettura dipende dalla loro assenza.
+    expect(sql).not.toMatch(/for\s+insert/);
+    expect(sql).not.toMatch(/for\s+update/);
+    expect(sql).not.toMatch(/for\s+delete/);
+  });
+
+  // Il registro dei kind è CHIUSO (AD-22): un CHECK vincola i tre soli valori.
+  it('vincola kind al registro chiuso via CHECK', () => {
+    const sql = stripSqlComments(lessonExercise?.sql ?? '').toLowerCase();
+    expect(sql).toMatch(/check\s*\(\s*kind\s+in\s*\(/);
+    expect(sql).toContain("'single-select'");
+    expect(sql).toContain("'select-span'");
+    expect(sql).toContain("'assemble'");
+  });
+
+  // ordinal è unique DEFERRABLE INITIALLY DEFERRED: un riordino in un unico seed
+  // non deve violare l'unicità a metà statement.
+  it('ordinal è unique deferrable initially deferred', () => {
+    const sql = stripSqlComments(lessonExercise?.sql ?? '').toLowerCase();
+    expect(sql).toMatch(/ordinal\s+int\s+not\s+null\s+unique\s+deferrable\s+initially\s+deferred/);
+  });
+});
