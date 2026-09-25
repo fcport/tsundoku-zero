@@ -50,6 +50,7 @@ const inMemoryReview: ReviewRepository = {
 };
 const inMemoryProgress: ProgressRepository = {
   listUnlockedLessonIds: async () => sampleUnlocked,
+  unlockLesson: async () => {},
 };
 
 const inMemoryPorts: Ports = {

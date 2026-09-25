@@ -33,7 +33,7 @@ const inMemoryPorts: Ports = {
     listDue: async () => [],
     listReviewLog: async () => [],
   },
-  progress: { listUnlockedLessonIds: async () => [] },
+  progress: { listUnlockedLessonIds: async () => [], unlockLesson: async () => {} },
   content: { listLessons: async () => [] },
 };
 
@@ -247,5 +247,43 @@ describe('AC5 — chiave unica della pila: dueQueryKey(userId) verbatim', () => 
     const qc = seededClient({ dueCount: 42, log: [], unlocked: 0, total: 0 });
     const markup = render(qc, UID);
     expect(markup).toMatch(/text-count-hero[^>]*>42</);
+  });
+});
+
+describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
+  it('pila NON vuota ⇒ SOLO svuota-pila, NESSUN unlock; un solo <button>', () => {
+    // count > 0 (e ci sono lezioni da sbloccare): il cancello rende solo la
+    // svuota-pila. L'azione di sblocco NON è presente, nemmeno disabilitata.
+    const qc = seededClient({ dueCount: 5, log: [], unlocked: 1, total: 10 });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.primaryAction);
+    expect(markup).not.toContain(en.dashboard.unlockAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('pila vuota + lezione successiva ⇒ SOLO unlock, NESSUN svuota-pila; un solo <button>', () => {
+    // count === 0 con una successiva (1 sbloccata su 10): il cancello rende solo
+    // l'azione di sblocco. La svuota-pila NON è presente.
+    const qc = seededClient({ dueCount: 0, log: [], unlocked: 1, total: 10 });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('pila vuota + curriculum esaurito ⇒ NESSUNA azione (schermata esaurita = 3.16)', () => {
+    // count === 0 e next === null (tutte sbloccate): non si rende alcun pulsante.
+    // Non crasha, non inventa una schermata: il ramo grezzo mostra ancora i conteggi.
+    const qc = seededClient({ dueCount: 0, log: [], unlocked: 3, total: 3 });
+    const markup = render(qc, UID);
+
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+    expect(markup).not.toContain(en.dashboard.unlockAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
   });
 });

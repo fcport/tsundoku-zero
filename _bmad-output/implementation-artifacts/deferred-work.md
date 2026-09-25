@@ -189,3 +189,11 @@ source_spec: `spec-3-12-la-pila-con-un-numero-e-un-pulsante.md`
 severity: medium
 reason: `DashboardScreen` decide lo scheletro solo su `data === undefined` e non legge mai `isError`/`error`; con `retry: false` un `DataError` da porta non ripiega. L'intento di 3.12 (AC1-4: dashboard popolata + caricamento + microcopy) non copre il percorso d'errore, e l'epica sequenzia gli stati non-felici della dashboard a 3.15/3.16 — quindi è un vuoto reale ma non di questa storia. Va affrontato in modo trasversale (con gli stati vuoti o una storia dedicata allo stato d'errore del read-model).
 status: open
+
+### DW-24: Lo sblocco fallito è silenzioso: `unlockMutation` ha solo `onSuccess`, nessun `onError`; se `progress.unlockLesson` rigetta (DataError da RLS/rete) il pulsante si riabilita senza alcun messaggio né ri
+origin: spec-deferred f059d59434d2
+location: src/features/dashboard/DashboardScreen.tsx
+source_spec: `spec-3-13-sbloccare-la-lezione-successiva.md`
+severity: medium
+reason: `DashboardScreen.tsx` definisce `useMutation({ mutationFn, onSuccess })` senza `onError`; la dashboard non ha alcuna superficie d'errore (stesso vuoto della lettura, già tracciato in DW-23). L'intento di 3.13 copre solo il percorso felice dello sblocco (AC1-4); l'epica sequenzia gli stati non-felici della dashboard a 3.15/3.16. Reale ma non richiesto da questa storia: va affrontato con gli stati vuoti/d'errore (3.15/3.16 o la storia dedicata di DW-23).
+status: open
