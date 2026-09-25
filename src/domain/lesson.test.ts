@@ -15,7 +15,7 @@ const validExercise = {
 
 const validLesson = {
   order: 1,
-  title: 'Il verbo 読む',
+  title: { en: 'Il verbo 読む' },
   grammarPoints: ['〜を読む'],
   exercises: [validExercise],
 };
@@ -41,12 +41,35 @@ describe('parseLesson — happy path (AC2)', () => {
 });
 
 describe('parseLesson — malformati con path localizzato (AC2)', () => {
-  it('rifiuta title vuoto col path title', () => {
-    const bad = parseLesson({ ...validLesson, title: '' });
+  it('rifiuta un title che non è un oggetto bilingue, col path title', () => {
+    // Forma sbagliata (stringa nuda invece dell'oggetto `{ en, it? }`): l'issue è
+    // sul campo stesso.
+    const bad = parseLesson({ ...validLesson, title: 'titolo monolingue' });
     expect(bad.ok).toBe(false);
     if (!bad.ok) {
       expect(bad.issues.some((i) => i.path.join('.') === 'title')).toBe(true);
     }
+  });
+
+  it('rifiuta title.en vuoto col path title.en', () => {
+    const bad = parseLesson({ ...validLesson, title: { en: '' } });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.some((i) => i.path.join('.') === 'title.en')).toBe(true);
+    }
+  });
+
+  it('rifiuta title senza en (solo it) col path title.en — l’inglese è obbligatorio', () => {
+    const bad = parseLesson({ ...validLesson, title: { it: 'Solo italiano' } });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.some((i) => i.path.join('.') === 'title.en')).toBe(true);
+    }
+  });
+
+  it('accetta title con il solo en — `it` è facoltativo (ripiego dichiarato)', () => {
+    const ok = parseLesson({ ...validLesson, title: { en: 'Only English' } });
+    expect(ok.ok).toBe(true);
   });
 
   it('rifiuta grammarPoints vuoto col path grammarPoints', () => {
@@ -108,7 +131,7 @@ describe('FR2.4 — una lezione può non avere esercizi', () => {
   // futura è un riorientamento concettuale, non un esercizio con una risposta.
   const conceptualLesson = {
     order: 5,
-    title: '日本語に未来形はない',
+    title: { en: '日本語に未来形はない' },
     grammarPoints: ['非過去形は現在と未来をともに表す'],
     exercises: [],
   };
@@ -148,7 +171,7 @@ describe('FR2.4 — una lezione può non avere esercizi', () => {
   });
 
   it('rifiuta la lezione senza esercizi con grammarPoints ASSENTE, sul path grammarPoints (AC2)', () => {
-    const bad = parseLesson({ order: 5, title: '日本語に未来形はない', exercises: [] });
+    const bad = parseLesson({ order: 5, title: { en: '日本語に未来形はない' }, exercises: [] });
     expect(bad.ok).toBe(false);
     if (!bad.ok) {
       expect(bad.issues.map((i) => i.path.join('.'))).toEqual(['grammarPoints']);
@@ -162,7 +185,7 @@ describe('FR2.4 — una lezione può non avere esercizi', () => {
     // ammesso» di FR2.4 contro una regressione a `optional`.
     const bad = parseLesson({
       order: 5,
-      title: '日本語に未来形はない',
+      title: { en: '日本語に未来形はない' },
       grammarPoints: ['非過去形は現在と未来をともに表す'],
     });
     expect(bad.ok).toBe(false);
@@ -174,14 +197,14 @@ describe('FR2.4 — una lezione può non avere esercizi', () => {
 
 describe('deriveLessonId / lessonId (AC5, FR2.1a)', () => {
   it('id IDENTICO per stesso grammarPoints[0] con order/title diversi', () => {
-    const a: Lesson = { order: 1, title: 'Alfa', grammarPoints: ['〜てform'], exercises: [] };
-    const b: Lesson = { order: 9, title: 'Beta', grammarPoints: ['〜てform'], exercises: [] };
+    const a: Lesson = { order: 1, title: { en: 'Alpha' }, grammarPoints: ['〜てform'], exercises: [] };
+    const b: Lesson = { order: 9, title: { en: 'Beta' }, grammarPoints: ['〜てform'], exercises: [] };
     expect(lessonId(a)).toBe(lessonId(b));
   });
 
   it('id DIVERSO quando il punto grammaticale cambia', () => {
-    const a: Lesson = { order: 1, title: 'X', grammarPoints: ['〜てform'], exercises: [] };
-    const b: Lesson = { order: 1, title: 'X', grammarPoints: ['〜たform'], exercises: [] };
+    const a: Lesson = { order: 1, title: { en: 'X' }, grammarPoints: ['〜てform'], exercises: [] };
+    const b: Lesson = { order: 1, title: { en: 'X' }, grammarPoints: ['〜たform'], exercises: [] };
     expect(lessonId(a)).not.toBe(lessonId(b));
   });
 

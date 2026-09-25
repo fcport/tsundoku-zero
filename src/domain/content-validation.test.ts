@@ -11,7 +11,7 @@ import { validateLessons, type LessonFile } from './content-validation';
 // Una lezione valida coi TRE tipi del registro chiuso (AC1). `kana` senza kanji.
 const validLesson = {
   order: 1,
-  title: 'Il verbo 読む',
+  title: { en: 'Il verbo 読む' },
   grammarPoints: ['〜を読む'],
   exercises: [
     {
@@ -57,7 +57,7 @@ describe('validateLessons — conformi (AC1)', () => {
     const second = {
       ...validLesson,
       order: 2,
-      title: 'La forma て',
+      title: { en: 'La forma て' },
       grammarPoints: ['〜てform'],
       exercises: [
         {
@@ -165,8 +165,8 @@ describe('validateLessons — malformati con issue localizzato', () => {
 
   it('lessonId duplicato ⇒ issue che NOMINA i due file', () => {
     // Stesso grammarPoints[0] ⇒ stesso lessonId, con order/title diversi.
-    const a = { ...validLesson, order: 1, title: 'A' };
-    const b = { ...validLesson, order: 2, title: 'B' };
+    const a = { ...validLesson, order: 1, title: { en: 'A' } };
+    const b = { ...validLesson, order: 2, title: { en: 'B' } };
     const issues = validateLessons([file('a.json', a), file('b.json', b)]);
     const dup = issues.filter((i) => i.message.includes('lessonId duplicato'));
     expect(dup).toHaveLength(1);
@@ -191,13 +191,13 @@ describe('validateLessons — malformati con issue localizzato', () => {
     // un test che riguarda solo l'unicità degli id.
     const a = {
       order: 1,
-      title: 'A',
+      title: { en: 'A' },
       grammarPoints: ['punto-a', '〜を読む'],
       exercises: [shared],
     };
     const b = {
       order: 2,
-      title: 'B',
+      title: { en: 'B' },
       grammarPoints: ['punto-b', '〜を読む'],
       exercises: [{ ...shared, explanation: { en: 'B (refuso corretto).' } }],
     };
@@ -215,8 +215,8 @@ describe('validateLessons — unicità di order (d)', () => {
   it('due lezioni con lo STESSO order ⇒ issue che NOMINA i due file', () => {
     // `lessonId` non copre questo caso: deriva da `grammarPoints[0]`, qui diverso,
     // quindi le due lezioni hanno id distinti e collidono SOLO sulla posizione.
-    const a = { ...validLesson, order: 1, title: 'A', grammarPoints: ['punto-a', '〜を読む'] };
-    const b = { ...validLesson, order: 1, title: 'B', grammarPoints: ['punto-b', '〜を読む'] };
+    const a = { ...validLesson, order: 1, title: { en: 'A' }, grammarPoints: ['punto-a', '〜を読む'] };
+    const b = { ...validLesson, order: 1, title: { en: 'B' }, grammarPoints: ['punto-b', '〜を読む'] };
     const issues = validateLessons([file('a.json', a), file('b.json', b)]);
     const dup = issues.filter((i) => i.message.includes('order duplicato'));
     expect(dup).toHaveLength(1);
@@ -273,7 +273,7 @@ describe('validateLessons — AC4: scoperta per glob, nessun codice cablato', ()
     // script produrrebbe) non richiede modifiche al codice — resta [].
     const nuova = {
       order: 3,
-      title: 'Il potenziale',
+      title: { en: 'Il potenziale' },
       grammarPoints: ['可能形'],
       exercises: [
         {

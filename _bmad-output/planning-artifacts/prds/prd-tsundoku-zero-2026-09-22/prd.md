@@ -190,7 +190,7 @@ Invariato rispetto alla v1.
 
 Sostituisce integralmente F2 della v1 (dataset del vocabolario).
 
-- **FR2.1** Il sistema distribuisce un insieme di **lezioni** versionate nel repository, in sola lettura per gli utenti. Una lezione ha un numero d'ordine, un titolo, i punti grammaticali che insegna e zero o più esercizi.
+- **FR2.1** Il sistema distribuisce un insieme di **lezioni** versionate nel repository, in sola lettura per gli utenti. Una lezione ha un numero d'ordine, un titolo **bilingue**, i punti grammaticali che insegna e zero o più esercizi. Il titolo ha la stessa forma e lo stesso ripiego dichiarato della spiegazione di un esercizio (inglese obbligatorio, italiano facoltativo, `FR8.5`): discende da `FR2.1a`, perché un titolo nella sola lingua studiata non è «comprensibile a chi la fonte non l'ha mai vista» per chi quella lingua la sta ancora imparando.
 - **FR2.1a** Titolo e identificatore di una lezione derivano dal **punto grammaticale che insegna**, mai dal numero o dal titolo di un episodio di una fonte esterna. L'ordine interno può seguire quello in cui l'owner studia; ciò che l'app espone è indicizzato su concetti — che sono fatti — ed è comprensibile a chi la fonte non l'ha mai vista (§2).
 - **FR2.2** Ogni esercizio espone: il tipo, il contenuto giapponese necessario a presentarlo, la risposta corretta, i distrattori quando previsti dal tipo, e una **spiegazione** che dice *perché* la risposta è quella.
 - **FR2.3** Ogni frase giapponese di un esercizio espone kanji e kana separati, così che la furigana sia derivabile nel dominio.

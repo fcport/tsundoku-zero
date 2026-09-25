@@ -19,10 +19,16 @@ import {
   nonEmptyArray,
   nonEmptyString,
   object,
-  optional,
   refine,
   type Infer,
 } from './schema';
+import {
+  bilingualText,
+  resolveBilingual,
+  type BilingualText,
+  type BilingualLanguage,
+  type ResolvedBilingual,
+} from './bilingual';
 
 /**
  * Una frase giapponese espone `kanji` e `kana` come stringhe SEPARATE e non
@@ -38,70 +44,18 @@ export const japaneseSentence = object({
 export type JapaneseSentence = Infer<typeof japaneseSentence>;
 
 /**
- * Una spiegazione bilingue: `en` OBBLIGATORIO e non vuoto, `it` FACOLTATIVO
- * (AC3). È contenuto del file di lezione, non passa da i18n. Il ripiego di
- * visualizzazione quando `it` manca (mostrare l'inglese DICHIARANDO che la
- * traduzione non c'è ancora, invece di far passare l'inglese per italiano) è
- * incarnato da `resolveExplanation()` più sotto (AC2, FR8.5).
+ * La spiegazione bilingue di un esercizio (AC3, FR8.5). La FORMA e il ripiego
+ * dichiarato vivono in `./bilingual`, perché il `title` di una lezione ha lo
+ * stesso problema e deve avere lo stesso comportamento: una sola definizione,
+ * non due che un giorno divergono. Questi nomi restano esportati da qui per
+ * continuità con 2.5 — sono alias, non una seconda definizione.
  */
-export const explanation = object({
-  en: nonEmptyString(),
-  it: optional(nonEmptyString()),
-});
-
-/** Tipo della spiegazione, inferito: `{ en: string; it?: string }` (AC1). */
-export type Explanation = Infer<typeof explanation>;
-
-/**
- * Asse linguistico proprio della spiegazione (`'en' | 'it'`), DOMAIN-LOCAL: NON
- * è `Locale` di `src/i18n` (AD-1 vieta l'arco domain→i18n). Rispecchia i due soli
- * campi che lo schema di `explanation` ammette; concettualmente distinto da
- * `supportedLocales` dell'app (un locale `fr` non aggiungerebbe una lingua alla
- * spiegazione). Il mapping app-Locale→ExplanationLanguage è confine di Epic 3.
- */
-export type ExplanationLanguage = 'en' | 'it';
-
-/**
- * Esito di `resolveExplanation`: il `text` LETTERALE da mostrare (mai una chiave
- * i18n), la `language` EFFETTIVAMENTE resa, e `isFallback` — il segnale che
- * l'interfaccia (Epic 3) consuma per dichiarare «non ancora tradotta» invece di
- * far passare l'inglese per italiano. Campi `readonly` sullo stile di
- * `CheckOutcome`.
- */
-export interface ResolvedExplanation {
-  readonly text: string;
-  readonly language: ExplanationLanguage;
-  readonly isFallback: boolean;
-}
-
-/**
- * Decide QUALE testo di una spiegazione mostrare per una data lingua e SE è un
- * ripiego dichiarato (AC2, FR8.5). Come `check`, incarna una DECISIONE del
- * contratto: il dominio decide, Epic 3 rende (banner «non ancora tradotta»,
- * `explanation-panel`). PURA e TOTALE, esaustiva su `'en' | 'it'`.
- *
- * - `'en'` richiesto: sempre `{ text: en, language: 'en', isFallback: false }` —
- *   l'inglese richiesto NON è mai un ripiego, anche se `it` esiste.
- * - `'it'` richiesto con `it` presente: `{ text: it, language: 'it', isFallback: false }`.
- * - `'it'` richiesto ma `it` assente: ripiego DICHIARATO su `en`
- *   `{ text: en, language: 'en', isFallback: true }` (AC2).
- *
- * `text` è il contenuto letterale del file di lezione, mai una chiave `t()`
- * (AC3): questa funzione vive in `src/domain/` senza alcun import da `src/i18n`.
- */
-export function resolveExplanation(
-  explanation: Explanation,
-  language: ExplanationLanguage,
-): ResolvedExplanation {
-  if (language === 'it') {
-    if (explanation.it !== undefined) {
-      return { text: explanation.it, language: 'it', isFallback: false };
-    }
-    // `it` richiesto ma non ancora tradotto: ripiego DICHIARATO su `en` (AC2).
-    return { text: explanation.en, language: 'en', isFallback: true };
-  }
-  return { text: explanation.en, language: 'en', isFallback: false };
-}
+export { bilingualText as explanation, resolveBilingual as resolveExplanation };
+export type {
+  BilingualText as Explanation,
+  BilingualLanguage as ExplanationLanguage,
+  ResolvedBilingual as ResolvedExplanation,
+};
 
 /**
  * Uno span sui INDICI DEI SEGMENTI di `alignFurigana()` (Epic 3): intervallo
@@ -134,7 +88,7 @@ const singleSelect = object({
   sentence: japaneseSentence,
   answer: nonEmptyString(),
   distractors: nonEmptyArray(nonEmptyString()),
-  explanation,
+  explanation: bilingualText,
 });
 
 /**
@@ -148,7 +102,7 @@ const selectSpan = object({
   grammarPoint: nonEmptyString(),
   sentence: japaneseSentence,
   answer: segmentSpan,
-  explanation,
+  explanation: bilingualText,
 });
 
 /**
@@ -162,7 +116,7 @@ const assemble = object({
   grammarPoint: nonEmptyString(),
   sentence: japaneseSentence,
   answer: nonEmptyArray(nonEmptyString()),
-  explanation,
+  explanation: bilingualText,
 });
 
 /**
