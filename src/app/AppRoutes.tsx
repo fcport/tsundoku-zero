@@ -14,12 +14,12 @@
 // react-router è importato SOLO nel livello app. Le schermate (features) non
 // contengono controlli di auth (AC2) né stringhe di path: l'autorizzazione e il
 // routing sono tutti qui.
-import { Route, Routes } from 'react-router';
+import { Route, Routes, useNavigate } from 'react-router';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
-import { LOGIN_PATH, STUDY_PATH } from './routes';
+import { LOGIN_PATH, ROOT_PATH, STUDY_PATH } from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -51,6 +51,10 @@ export function AppRoutes({
   signOutPending,
   onAccountDeleted,
 }: AppRoutesProps) {
+  // Navigazione confinata al livello app (AD-1): `useNavigate` è già usato dalla
+  // shell. `onExit` della sessione (3.20) è cablato qui → ROOT_PATH (il catch-all
+  // rende la dashboard), speculare a `onStartSession` della dashboard.
+  const navigate = useNavigate();
   return (
     <Routes>
       <Route element={<RedirectIfAuthenticated authenticated={authenticated} />}>
@@ -67,7 +71,12 @@ export function AppRoutes({
             AppRoutes (chiave per-utente della pila, AD-5). */}
         <Route
           path={STUDY_PATH}
-          element={<SessionScreen userId={userId} />}
+          element={
+            <SessionScreen
+              userId={userId}
+              onExit={() => navigate(ROOT_PATH)}
+            />
+          }
         />
         <Route
           path="*"

@@ -14,8 +14,17 @@
 //   (barra ottimistica)→`mutate` (conteggio ottimistico via onMutate/isDue).
 // - `ProgressMeter` dallo store; azione «prossimo esercizio».
 //
-// FUORI SCOPE (3.20+): barra sempre-visibile/abbandono/conteggio residuo, schermata
-// di completamento, contratto tastiera completo, responsive.
+// ABBANDONO e RICOSTRUZIONE (3.20): «potersene andare» e «riprendere non costa
+// nulla». Un listener Esc a livello window PIÙ un'affordance «esci» in-app → `onExit`
+// (prop cablata dal livello app con `useNavigate`, AD-1: nessun react-router nelle
+// features). All'USCITA (unmount) un cleanup chiama `reset()` sullo store singleton,
+// così la prossima entrata riparte dalla pila FRESCA `['due']` (ricostruzione, non
+// ripristino, deferred #1 di 3.19). L'abbandono non perde nulla per COSTRUZIONE: la
+// persistenza è per-risposta e idempotente (3.19), `reset` tocca solo la coda in
+// memoria. La barra resta SEMPRE visibile nel ramo attivo (AC1).
+//
+// FUORI SCOPE (3.21+): schermata di completamento/zero, contratto tastiera completo
+// (tasti numerici/tab-order/live region), responsive.
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { applyResultToDue, dueQueryKey } from '../../domain/due';
@@ -36,6 +45,14 @@ export interface SessionScreenProps {
    * schermata mostra lo scheletro, senza ramo speciale (stesso pattern dashboard).
    */
   readonly userId: string | null;
+  /**
+   * L'ABBANDONO della sessione (3.20): navigazione come CALLBACK dal livello app
+   * (AD-1: le features non importano react-router). Invocata da Esc, dall'affordance
+   * «esci» in-app (e implicitamente dall'«indietro» del browser). Il cablaggio vive
+   * in `AppRoutes` (`() => navigate(ROOT_PATH)`), speculare a `onStartSession` della
+   * dashboard. Obbligatoria.
+   */
+  readonly onExit: () => void;
 }
 
 // Altezza CONDIVISA fra scheletro, stato neutro e card: la stessa classe sul <main>
@@ -51,7 +68,7 @@ interface ApplyVars {
   readonly result: ReviewState;
 }
 
-export function SessionScreen({ userId }: SessionScreenProps) {
+export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   const { content, review, clock } = usePorts();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
@@ -67,6 +84,26 @@ export function SessionScreen({ userId }: SessionScreenProps) {
   const { session, total, initialIds } = useSessionStore.getState();
   const startSession = useSessionStore.getState().start;
   const dispatch = useSessionStore.getState().dispatch;
+
+  // ABBANDONO con Esc (AC2): listener a livello window, attivo per l'INTERA vita
+  // della schermata (anche scheletro/vuoto — hook top-level PRIMA di ogni
+  // early-return, regola degli hook). Su `Escape` → `onExit()`; il cleanup rimuove
+  // il listener. Glue d'effetto: verificata live, non eseguita da renderToStaticMarkup.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onExit();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onExit]);
+
+  // RICOSTRUZIONE all'ingresso (AC4): lo store è un singleton di modulo che
+  // sopravvive allo smontaggio. Un effetto con cleanup su UNMOUNT azzera lo store
+  // all'USCITA da `/studia` (Esc, «esci», «indietro», completamento), così la
+  // prossima entrata rientra nell'effetto `start` guardato e riparte dalla pila
+  // fresca — nessun «riprendi dove eri». `reset` è un'azione stabile dello store.
+  const resetSession = useSessionStore.getState().reset;
+  useEffect(() => () => resetSession(), [resetSession]);
 
   // Fase locale e stato di risposta (senso unico), posseduti dal container. La card
   // è controllata. `selected` è l'ARRAY ordinato degli indici toccati (assemble
@@ -280,6 +317,17 @@ export function SessionScreen({ userId }: SessionScreenProps) {
           {t('session.next')}
         </button>
       )}
+      {/* L'affordance «esci» in-app (AC2, «potersene andare»): verbale e concreta,
+          SECONDARIA — chiaramente non il button-primary (nessun fill, ink muto,
+          nessun verde di successo). È il «tornare indietro» in-app; l'esito già dato
+          resta acquisito (persistenza per-risposta, 3.19). → `onExit`. */}
+      <button
+        type="button"
+        onClick={onExit}
+        className="text-caption text-ink-muted underline"
+      >
+        {t('session.exit')}
+      </button>
     </main>
   );
 }

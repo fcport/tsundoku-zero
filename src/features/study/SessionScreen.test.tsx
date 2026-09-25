@@ -85,11 +85,13 @@ function seedStore(ids: readonly string[]): void {
   useSessionStore.getState().start(ids);
 }
 
+const NOOP = () => {};
+
 function render(qc: QueryClient, userId: string | null): string {
   return renderToStaticMarkup(
     <QueryClientProvider client={qc}>
       <PortsProvider value={inMemoryPorts}>
-        <SessionScreen userId={userId} />
+        <SessionScreen userId={userId} onExit={NOOP} />
       </PortsProvider>
     </QueryClientProvider>,
   );
@@ -169,6 +171,10 @@ describe('AC1/AC2/AC5 — store + esercizi seminati ⇒ card dell esercizio CORR
     // aria-label dalla i18n.
     expect(markup).toContain(en.session.progress.label);
   });
+
+  it('rende l affordance «esci» nel ramo sessione-attiva (AC2)', () => {
+    expect(setup()).toContain(en.session.exit);
+  });
 });
 
 describe('Matrix — pila vuota (deep-link) ⇒ stato neutro senza card, nessuna barra', () => {
@@ -182,6 +188,8 @@ describe('Matrix — pila vuota (deep-link) ⇒ stato neutro senza card, nessuna
     expect(markup).not.toContain(en.session.prompt.selectSpan);
     // Barra non resa a total 0.
     expect(markup).not.toContain('role="progressbar"');
+    // Affordance «esci» assente: non c'è sessione attiva da abbandonare (AC2).
+    expect(markup).not.toContain(en.session.exit);
     const mains = markup.match(/<main/g) ?? [];
     expect(mains.length).toBe(1);
     // Non è lo scheletro (la pila è caricata, solo vuota).

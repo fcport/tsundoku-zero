@@ -211,6 +211,11 @@ describe('AppRoutes — rotta /studia, autenticato (3.18/3.19)', () => {
     expect(markup).not.toContain(en.dashboard.primaryAction);
   });
 
+  it('rende l affordance «esci» insieme alla consegna (3.20, AC2)', () => {
+    // `onExit` è cablato in AppRoutes con useNavigate→ROOT_PATH.
+    expect(markup).toContain(en.session.exit);
+  });
+
   it('rende la frase giapponese (lang="ja") e un solo <main>', () => {
     expect(markup).toContain('lang="ja"');
     const opens = markup.match(/<main/g) ?? [];
