@@ -18,11 +18,24 @@
 // riceve `onStartSession` (una callback, nessuna stringa di path né react-router
 // nelle features, AD-1); la shell la cabla con `useNavigate` verso `STUDY_PATH`. La
 // firma di AuthenticatedShell resta INVARIATA — la navigazione è interna.
+//
+// PRECARICO della sessione (4.1): prima di navigare, `onStartSession` innesca
+// `prefetchDueStack` — carica in UN colpo l'intera pila dovuta PIÙ il contenuto e
+// le spiegazioni (cache calda), così la sessione non perde il campo a metà. Il
+// wiring vive QUI (AD-1): `usePorts()`+`useQueryClient()` sono disponibili (la
+// shell è sotto `PortsProvider` di AuthRoot e `QueryClientProvider` di main.tsx),
+// così la feature del precarico non importa react-router né `src/data`. Una
+// guardia di re-entrancy (`useRef`) evita precarichi sovrapposti su doppio click;
+// la navigazione avviene SEMPRE dopo (anche su errore: degrado grazioso).
+import { useRef } from 'react';
 import { useNavigate } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from '../i18n';
 import { DashboardScreen } from '../features/dashboard/DashboardScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { DeleteAccountSection } from '../features/account/DeleteAccountSection';
+import { usePorts } from '../features/ports/PortsContext';
+import { prefetchDueStack } from '../features/study/prefetchDueStack';
 import { STUDY_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -51,6 +64,24 @@ export function AuthenticatedShell({
 }: AuthenticatedShellProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { review, content, clock } = usePorts();
+  const queryClient = useQueryClient();
+
+  // Guardia di re-entrancy (4.1): un ref (non stato — nessun re-render) impedisce
+  // che un doppio click avvii due precarichi sovrapposti. `void` + `.catch(() => {})`
+  // rende il rejection catturato (nessuna unhandled rejection) e `.finally` naviga
+  // SEMPRE dopo — anche su errore, la sessione ripiega sul caricamento reattivo.
+  const prefetching = useRef(false);
+  const onStartSession = () => {
+    if (prefetching.current) return;
+    prefetching.current = true;
+    void prefetchDueStack(queryClient, { review, content, clock }, userId)
+      .catch(() => {})
+      .finally(() => {
+        prefetching.current = false;
+        navigate(STUDY_PATH);
+      });
+  };
 
   return (
     <>
@@ -67,7 +98,7 @@ export function AuthenticatedShell({
       <DashboardScreen
         userId={userId}
         settings={settings}
-        onStartSession={() => navigate(STUDY_PATH)}
+        onStartSession={onStartSession}
       />
       <SettingsScreen settings={settings} userId={userId} />
       <DeleteAccountSection
