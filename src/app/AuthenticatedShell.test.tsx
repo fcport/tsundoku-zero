@@ -1,4 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
+import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, expect, it } from 'vitest';
 import { en } from '../i18n/en';
@@ -34,7 +35,7 @@ const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [] },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-  content: { listLessons: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [] },
 };
 
 function seededClient(): QueryClient {
@@ -60,17 +61,21 @@ function seededClient(): QueryClient {
 }
 
 function render(signOutPending: boolean): string {
+  // AuthenticatedShell ora usa useNavigate (avvia sessione, 3.18): il render è
+  // avvolto in <MemoryRouter> (react-router richiede un contesto di routing).
   return renderToStaticMarkup(
     <QueryClientProvider client={seededClient()}>
       <PortsProvider value={inertPorts}>
-        <AuthenticatedShell
-          settings={inertSettings}
-          account={inertAccount}
-          userId={UID}
-          onSignOut={NOOP}
-          signOutPending={signOutPending}
-          onAccountDeleted={NOOP}
-        />
+        <MemoryRouter>
+          <AuthenticatedShell
+            settings={inertSettings}
+            account={inertAccount}
+            userId={UID}
+            onSignOut={NOOP}
+            signOutPending={signOutPending}
+            onAccountDeleted={NOOP}
+          />
+        </MemoryRouter>
       </PortsProvider>
     </QueryClientProvider>,
   );

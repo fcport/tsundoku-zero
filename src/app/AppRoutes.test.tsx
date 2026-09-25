@@ -48,8 +48,22 @@ const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [] },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-  content: { listLessons: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [] },
 };
+
+// L'esercizio corrente seminato per la rotta /studia: single-select, la cui chiave
+// di riga combacia con l'unico dovuto seminato (exerciseId 'a', dueIds = ['a']).
+const STUDY_EXERCISE = {
+  id: 'a',
+  exercise: {
+    kind: 'single-select',
+    grammarPoint: 'wa-particle',
+    sentence: { kanji: '私は学生です', kana: 'わたしはがくせいです' },
+    answer: 'は',
+    distractors: ['を', 'が'],
+    explanation: { en: 'The topic particle.' },
+  },
+} as const;
 
 const NOOP = () => {};
 const UID = 'user-1';
@@ -62,6 +76,10 @@ function seededClient(): QueryClient {
   qc.setQueryData(dueQueryKey(UID), [
     { exerciseId: 'a', stage: 0, dueAt: new Date(0), reviewCount: 0, lapseCount: 0, lastReviewedAt: null },
   ]);
+  // La rotta /studia (3.18) legge la STESSA pila (dueIds = ['a']) e carica gli
+  // esercizi sotto ['exercises', dueIds]: seminata così la SessionScreen rende la
+  // card sincrona invece dello scheletro.
+  qc.setQueryData(['exercises', ['a']], [STUDY_EXERCISE]);
   qc.setQueryData(['streak', UID], []);
   // Stato NON di primo avvio (3.15): una lezione già sbloccata, così la dashboard
   // rende lo stato caricato con `primaryAction`. Con `unlocked === 0` renderebbe
@@ -176,5 +194,30 @@ describe('AppRoutes — rotta di Accesso, autenticato', () => {
     expect(markup).not.toContain('id="auth-email"');
     expect(markup).not.toContain('id="auth-password"');
     expect(markup).not.toContain(en.auth.submit);
+  });
+});
+
+describe('AppRoutes — rotta /studia, autenticato (3.18)', () => {
+  const markup = renderAt('/studia', true);
+
+  it('rende la SessionScreen: la consegna dell esercizio corrente', () => {
+    expect(markup).toContain(en.session.prompt.singleSelect);
+    // NON la dashboard: /studia ha precedenza sul catch-all.
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('rende la frase giapponese (lang="ja") e un solo <main>', () => {
+    expect(markup).toContain('lang="ja"');
+    const opens = markup.match(/<main/g) ?? [];
+    expect(opens.length).toBe(1);
+  });
+});
+
+describe('AppRoutes — rotta /studia, anonimo (3.18)', () => {
+  const markup = renderAt('/studia', false);
+
+  it('il guard blocca: nessuna SessionScreen (Navigate→null in SSR)', () => {
+    expect(markup).not.toContain(en.session.prompt.singleSelect);
+    expect(markup).not.toContain('lang="ja"');
   });
 });

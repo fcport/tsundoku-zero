@@ -13,10 +13,17 @@
 // resta l'unico livello che le mette insieme, evitando un arco features→features
 // vietato da AD-1. Impostazioni e Account sono <section>: l'unico <main> è quello
 // della dashboard (single-main di 1.7/1.8).
+//
+// La NAVIGAZIONE alla sessione (3.18) vive qui, nel livello app: la dashboard
+// riceve `onStartSession` (una callback, nessuna stringa di path né react-router
+// nelle features, AD-1); la shell la cabla con `useNavigate` verso `STUDY_PATH`. La
+// firma di AuthenticatedShell resta INVARIATA — la navigazione è interna.
+import { useNavigate } from 'react-router';
 import { useTranslation } from '../i18n';
 import { DashboardScreen } from '../features/dashboard/DashboardScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { DeleteAccountSection } from '../features/account/DeleteAccountSection';
+import { STUDY_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
 
@@ -43,6 +50,7 @@ export function AuthenticatedShell({
   onAccountDeleted,
 }: AuthenticatedShellProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -56,7 +64,11 @@ export function AuthenticatedShell({
           {t('auth.signOut')}
         </button>
       </header>
-      <DashboardScreen userId={userId} settings={settings} />
+      <DashboardScreen
+        userId={userId}
+        settings={settings}
+        onStartSession={() => navigate(STUDY_PATH)}
+      />
       <SettingsScreen settings={settings} userId={userId} />
       <DeleteAccountSection
         account={account}

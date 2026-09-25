@@ -9,6 +9,13 @@
 // per esito, poi si CLAMP aritmeticamente (`Math.min`/`Math.max`); l'intervallo è
 // un unico prodotto `scala[nextStage] × fattoreEsito`. Lo stadio 0 (intervallo 0)
 // e lo stadio 5 saturato cadono fuori da soli, senza `if (stage === 0/5)`.
+//
+// L'hash della dispersione (`fnv1a`) NON è più definito qui: vive in `./hash`
+// (estrazione pura, i test di questo modulo restano verdi), condiviso con l'ordine
+// deterministico delle opzioni (`exercise-presentation.ts`), così non esistono due
+// definizioni che un giorno divergerebbero.
+
+import { fnv1a } from './hash';
 
 /**
  * L'UNICA costante degli esiti SRS (AC4 di 3.8): l'insieme dei quattro gradini
@@ -97,20 +104,6 @@ function nextStageFor(stage: number, outcome: ReviewOutcome): number {
     case 'easy':
       return stage + 2;
   }
-}
-
-/**
- * FNV-1a a 32 bit PURO su una stringa, come il fallback JS del pacchetto `uuid`.
- * Aritmetica a parola non segnata (`>>> 0`), moltiplicazione per il primo FNV via
- * `Math.imul`. Deterministico e sincrono: stessa stringa ⇒ stesso valore.
- */
-function fnv1a(input: string): number {
-  let hash = 0x811c9dc5;
-  for (let i = 0; i < input.length; i += 1) {
-    hash ^= input.charCodeAt(i);
-    hash = Math.imul(hash, 0x01000193) >>> 0;
-  }
-  return hash >>> 0;
 }
 
 /**

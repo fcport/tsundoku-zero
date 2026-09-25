@@ -205,3 +205,27 @@ source_spec: `spec-3-15-la-prima-volta-non-somiglia-alla-fine.md`
 severity: medium
 reason: Su fallimento della RPC la mutation va in errore, isPending torna false e il pulsante si ri-abilita SENZA feedback all'utente. Gap PRE-ESISTENTE: il call-site di 3.13 (unlockAction, DashboardScreen.tsx:179-189) ha lo stesso onSuccess-senza-onError; 3.15 aggiunge un secondo trigger allo stesso unlockMutation condiviso. Fuori dall'intento di 3.15 (stato di primo avvio) e non banalmente correggibile: serve una scelta di superficie/copy d'errore condivisa dai due pulsanti (nuova chiave i18n + pattern di error-state).
 status: open
+
+### DW-26: SessionScreen (come la dashboard) non gestisce lo stato d'errore del read-model: se dueQ/exercisesQ falliscono (DataError da porta, retry:false) la query resta senza data e la schermata mostra lo sche
+origin: spec-deferred 5dcb92a20976
+location: src/features/study/SessionScreen.tsx:65,90
+source_spec: `spec-3-18-un-esercizio-per-volta-con-la-sua-consegna.md`
+severity: medium
+reason: Entrambe le query decidono lo scheletro solo su `data === undefined`, mai su `isError`/`error`. Stessa lacuna trasversale già tracciata in DW-23/DW-24/DW-25 per la dashboard; l'intento di 3.18 (AC1-4) non copre il percorso d'errore. Va affrontato con la storia dedicata allo stato d'errore del read-model.
+status: open
+
+### DW-27: Le opzioni di risposta sono rese come <button aria-pressed> indipendenti senza semantica di scelta singola (radiogroup/radio), senza nome accessibile del gruppo, e senza associazione programmatica fra
+origin: spec-deferred 3a82d42dd0b2
+location: src/features/study/ExerciseCard.tsx:71-85
+source_spec: `spec-3-18-un-esercizio-per-volta-con-la-sua-consegna.md`
+severity: medium
+reason: ExerciseCard rende un <ul> di <button aria-pressed>. AC3 di 3.18 (nessun colore-solo, etichetta+posizione, >=56px) e' soddisfatto, ma il contratto a11y di sessione (ordine di tabulazione, tasto numerico -> opzione, associazione numero<->posizione) e' un aggiornamento di AD-15 esplicitamente di competenza di 3.22 (L'intera sessione senza mouse); l'anello di focus visibile e' gia' DW-10, di competenza dell'audit screen-reader 7.6.
+status: open
+
+### DW-28: La card presenta le opzioni come scelta a tap-singolo che blocca; per assemble (ordinamento) e select-span (span) non compone una risposta valida, e per assemble mostra la frase-bersaglio completa sop
+origin: spec-deferred 89a97a09a509
+location: src/features/study/ExerciseCard.tsx; src/features/study/SessionScreen.tsx
+source_spec: `spec-3-18-un-esercizio-per-volta-con-la-sua-consegna.md`
+severity: medium
+reason: `selected` e' un singolo indice/opzione: modella single-select. La composizione per-tipo (ordinamento delle tessere, span sui segmenti) e la valutazione dell'esito sono 3.19 (Rispondere, e sapere perche'), dove la risposta e' effettivamente costruita e misurata; li' va anche deciso se assemble mostra la frase-bersaglio (in 3.18 non c'e' esito, quindi nessuna misura da falsare).
+status: open

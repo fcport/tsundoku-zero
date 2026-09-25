@@ -37,7 +37,7 @@ const inMemoryPorts: Ports = {
     listReviewLog: async () => [],
   },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-  content: { listLessons: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [] },
 };
 
 // Porta impostazioni finta inerte (nuova prop 3.17): con la cache seminata la
@@ -143,7 +143,11 @@ function render(qc: QueryClient, userId: string | null): string {
   const el: ReactElement = (
     <QueryClientProvider client={qc}>
       <PortsProvider value={inMemoryPorts}>
-        <DashboardScreen userId={userId} settings={inertSettings} />
+        <DashboardScreen
+          userId={userId}
+          settings={inertSettings}
+          onStartSession={() => {}}
+        />
       </PortsProvider>
     </QueryClientProvider>
   );
@@ -848,7 +852,11 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     const markup = renderToStaticMarkup(
       <QueryClientProvider client={qc}>
         <PortsProvider value={inMemoryPorts}>
-          <DashboardScreen userId={UID} settings={inertSettings} />
+          <DashboardScreen
+            userId={UID}
+            settings={inertSettings}
+            onStartSession={() => {}}
+          />
         </PortsProvider>
       </QueryClientProvider>,
     );

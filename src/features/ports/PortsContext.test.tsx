@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Clock } from '../../domain/ports/clock';
 import type {
   ContentRepository,
+  ExerciseContent,
   LessonSummary,
 } from '../../domain/ports/contentRepository';
 import type { ReviewRepository } from '../../domain/ports/reviewRepository';
@@ -51,8 +52,22 @@ const sampleUnlocked: readonly UnlockedLesson[] = [
 
 // Porte IN MEMORIA: risolvono da valori locali, nessun client Supabase, nessuna
 // rete. Sono ciò che un test di schermata del ciclo (3.11+) inietterà.
+const sampleExercises: readonly ExerciseContent[] = [
+  {
+    id: 'ex-1',
+    exercise: {
+      kind: 'single-select',
+      grammarPoint: 'te-form',
+      sentence: { kanji: '待って', kana: 'まって' },
+      answer: '待って',
+      distractors: ['待つ'],
+      explanation: { en: 'The te-form.' },
+    },
+  },
+];
 const inMemoryContent: ContentRepository = {
   listLessons: async () => sampleLessons,
+  listExercisesByIds: async () => sampleExercises,
 };
 const sampleLog = [{ reviewedAt: FIXED_NOW }] as const;
 const inMemoryReview: ReviewRepository = {
