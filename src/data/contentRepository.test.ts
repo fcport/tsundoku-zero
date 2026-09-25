@@ -56,6 +56,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
           title_en: 'The te-form',
           title_it: 'La forma in te',
           grammar_points: ['te-form'],
+          exercise: [{ count: 3 }],
         },
         {
           id: 'particle-wa',
@@ -63,6 +64,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
           title_en: 'The particle wa',
           title_it: null,
           grammar_points: ['wa', 'topic'],
+          exercise: [{ count: 5 }],
         },
       ],
     });
@@ -70,24 +72,28 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
 
     const lessons = await repo.listLessons();
 
-    // La select tocca la tabella lesson, chiede le colonne attese e ordina
-    // server-side per ordinal.
+    // La select tocca la tabella lesson, chiede le colonne attese (incluso il count
+    // aggregato embedded degli esercizi) e ordina server-side per ordinal.
     expect(calls.table).toBe('lesson');
     expect(calls.columns).toContain('ordinal');
+    expect(calls.columns).toContain('exercise(count)');
     expect(calls.orderBy).toBe('ordinal');
 
-    // Titolo bilingue: `it` PRESENTE quando la colonna ha un valore.
+    // Titolo bilingue: `it` PRESENTE quando la colonna ha un valore; `exerciseCount`
+    // dal count embedded.
     expect(lessons[0]).toEqual({
       id: 'te-form',
       ordinal: 1,
       title: { en: 'The te-form', it: 'La forma in te' },
       grammarPoints: ['te-form'],
+      exerciseCount: 3,
     });
 
     // Forma d'oro: `it` OMESSO (non undefined esplicito) quando la colonna è null.
     expect(lessons[1]?.title).toEqual({ en: 'The particle wa' });
     expect('it' in (lessons[1]?.title ?? {})).toBe(false);
     expect(lessons[1]?.grammarPoints).toEqual(['wa', 'topic']);
+    expect(lessons[1]?.exerciseCount).toBe(5);
   });
 
   it('nessuna riga ⇒ array vuoto', async () => {
@@ -95,6 +101,49 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
     const repo = createSupabaseContentRepository(client);
 
     await expect(repo.listLessons()).resolves.toEqual([]);
+  });
+
+  it('lezione concettuale: exercise count 0 ⇒ exerciseCount 0 (AC5)', async () => {
+    // Una lezione senza esercizi: il count embedded è `[{ count: 0 }]`. Non è un
+    // fallimento — è una lezione concettuale, mappata a `exerciseCount: 0`.
+    const { client } = makeFakeClient({
+      rows: [
+        {
+          id: 'concept',
+          ordinal: 1,
+          title_en: 'A concept',
+          title_it: null,
+          grammar_points: ['concept'],
+          exercise: [{ count: 0 }],
+        },
+      ],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    const lessons = await repo.listLessons();
+    expect(lessons[0]?.exerciseCount).toBe(0);
+  });
+
+  it('lezione concettuale: exercise array VUOTO ⇒ exerciseCount 0 (AC5)', async () => {
+    // PostgREST può emettere `exercise: []` (nessuna riga embedded) per una lezione
+    // senza esercizi, invece di `[{ count: 0 }]`. È una forma valida di «zero», non
+    // un fallimento: la lezione concettuale NON deve rigettare l'intera listLessons.
+    const { client } = makeFakeClient({
+      rows: [
+        {
+          id: 'concept',
+          ordinal: 1,
+          title_en: 'A concept',
+          title_it: null,
+          grammar_points: ['concept'],
+          exercise: [],
+        },
+      ],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    const lessons = await repo.listLessons();
+    expect(lessons[0]?.exerciseCount).toBe(0);
   });
 });
 
@@ -173,6 +222,62 @@ describe('listLessons — fallimenti lanciano DataError (reject, non valore degr
 
   it('riga null (elemento non-oggetto) ⇒ DataError', async () => {
     const { client } = makeFakeClient({ rows: [null] });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (exercise non array) ⇒ DataError (AC5)', async () => {
+    const { client } = makeFakeClient({
+      rows: [
+        {
+          id: 'x',
+          ordinal: 1,
+          title_en: 'X',
+          title_it: null,
+          grammar_points: ['g'],
+          exercise: 3,
+        },
+      ],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (exercise count non numero) ⇒ DataError (AC5)', async () => {
+    const { client } = makeFakeClient({
+      rows: [
+        {
+          id: 'x',
+          ordinal: 1,
+          title_en: 'X',
+          title_it: null,
+          grammar_points: ['g'],
+          exercise: [{ count: 'many' }],
+        },
+      ],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (exercise array di lunghezza > 1) ⇒ DataError (AC5)', async () => {
+    // Il count aggregato embedded è UNA sola riga di aggregazione: più di una voce è
+    // una forma inattesa ⇒ fallimento, non un valore degradato (a differenza di `[]`).
+    const { client } = makeFakeClient({
+      rows: [
+        {
+          id: 'x',
+          ordinal: 1,
+          title_en: 'X',
+          title_it: null,
+          grammar_points: ['g'],
+          exercise: [{ count: 1 }, { count: 2 }],
+        },
+      ],
+    });
     const repo = createSupabaseContentRepository(client);
 
     await expect(repo.listLessons()).rejects.toBeInstanceOf(DataError);

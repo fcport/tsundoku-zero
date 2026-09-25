@@ -18,18 +18,24 @@ import { DataError } from './dataError';
 
 // Il nome della tabella e le colonne vivono qui una sola volta: è l'unico
 // livello che conosce lo schema fisico (AD-2). Colonne di `lesson` (3.7):
-// id, ordinal, title_en, title_it (nullable), grammar_points (text[]).
+// id, ordinal, title_en, title_it (nullable), grammar_points (text[]). Il count
+// aggregato PostgREST della risorsa embedded `exercise` (`exercise(count)`) legge
+// server-side il numero di esercizi in un solo giro, senza scaricarne i payload
+// (LessonSummary snello): arriva come `exercise: [{ count: n }]`.
 const LESSON_TABLE = 'lesson';
-const LESSON_COLUMNS = 'id, ordinal, title_en, title_it, grammar_points';
+const LESSON_COLUMNS =
+  'id, ordinal, title_en, title_it, grammar_points, exercise(count)';
 
 // Forma GREZZA di una riga `lesson` come arriva da Supabase, prima della mappa in
-// LessonSummary. `title_it` è nullable; `grammar_points` è un array Postgres.
+// LessonSummary. `title_it` è nullable; `grammar_points` è un array Postgres;
+// `exercise` è il count aggregato embedded (`[{ count: n }]`).
 interface LessonRow {
   readonly id: unknown;
   readonly ordinal: unknown;
   readonly title_en: unknown;
   readonly title_it: unknown;
   readonly grammar_points: unknown;
+  readonly exercise: unknown;
 }
 
 /** Vero se `value` è un array le cui voci sono tutte stringhe. */
@@ -38,11 +44,45 @@ function isStringArray(value: unknown): value is readonly string[] {
 }
 
 /**
+ * Estrae `exerciseCount` dal count aggregato embedded PostgREST. Le FORME valide
+ * sono `exercise: [{ count: n }]` (numero) oppure `exercise: []` — PostgREST può
+ * emettere l'array VUOTO per una lezione SENZA esercizi (nessuna riga embedded),
+ * caso CENTRALE di 3.14: `[]` ⇒ `0`, non un fallimento. LANCIA se `exercise` non è
+ * un array, se ha lunghezza > 1 (forma inattesa), o se `[0].count` non è un numero:
+ * una forma malformata è un fallimento, non un valore degradato (mirror del
+ * contratto delle altre colonne).
+ */
+function toExerciseCount(exercise: unknown): number {
+  if (!Array.isArray(exercise)) {
+    throw new DataError('listLessons', new Error('exercise count malformato'));
+  }
+  // Array VUOTO = nessuna riga embedded = lezione concettuale (0 esercizi): forma
+  // valida per «nessun esercizio», non un fallimento.
+  if (exercise.length === 0) {
+    return 0;
+  }
+  if (exercise.length !== 1) {
+    throw new DataError('listLessons', new Error('exercise count malformato'));
+  }
+  const entry = exercise[0];
+  if (
+    entry === null ||
+    typeof entry !== 'object' ||
+    typeof (entry as { count: unknown }).count !== 'number'
+  ) {
+    throw new DataError('listLessons', new Error('exercise count malformato'));
+  }
+  return (entry as { count: number }).count;
+}
+
+/**
  * Mappa PURA di una riga grezza in `LessonSummary`. La FORMA D'ORO del titolo:
  * `title = title_it != null ? { en, it } : { en }` — l'`it` è OMESSO (non
  * `undefined` esplicito) quando la colonna è `null`, riusando `BilingualText`
- * (FR8.5: nessuna forma bilingue parallela). Su riga malformata (id/title_en non
- * stringa, ordinal non numero, grammar_points non array di stringhe) LANCIA un
+ * (FR8.5: nessuna forma bilingue parallela). `exerciseCount` deriva dal count
+ * embedded (`exercise[0].count`, `0` = lezione concettuale). Su riga malformata
+ * (id/title_en non stringa, ordinal non numero, grammar_points non array di
+ * stringhe, `exercise` non array o `count` non numero) LANCIA un
  * `DataError('listLessons')`: una riga rotta è un fallimento, non un valore
  * degradato.
  */
@@ -53,7 +93,7 @@ function toLessonSummary(row: LessonRow): LessonSummary {
   if (row === null || typeof row !== 'object') {
     throw new DataError('listLessons', new Error('riga lesson non è un oggetto'));
   }
-  const { id, ordinal, title_en, title_it, grammar_points } = row;
+  const { id, ordinal, title_en, title_it, grammar_points, exercise } = row;
   if (
     typeof id !== 'string' ||
     typeof ordinal !== 'number' ||
@@ -64,10 +104,12 @@ function toLessonSummary(row: LessonRow): LessonSummary {
     throw new DataError('listLessons', new Error('riga lesson malformata'));
   }
 
+  const exerciseCount = toExerciseCount(exercise);
+
   const title: BilingualText =
     title_it !== null ? { en: title_en, it: title_it } : { en: title_en };
 
-  return { id, ordinal, title, grammarPoints: grammar_points };
+  return { id, ordinal, title, grammarPoints: grammar_points, exerciseCount };
 }
 
 /**
