@@ -289,11 +289,14 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
 
   it('pila vuota + curriculum esaurito ⇒ NESSUNA azione (schermata esaurita = 3.16)', () => {
     // count === 0 e next === null (tutte sbloccate): non si rende alcun pulsante.
-    // Non crasha, non inventa una schermata: il ramo grezzo mostra ancora i conteggi.
+    // Il pile-counter CAMBIA STATO (3.16): dichiara curriculumCompleteBody, non «0».
     // Ultima sbloccata con esercizi (default): nessuna dichiarazione «senza esercizi».
     const qc = seededClient({ dueCount: 0, log: [], unlocked: 3, total: 3 });
     const markup = render(qc, UID);
 
+    expect(markup).toContain(en.dashboard.curriculumCompleteBody);
+    expect(markup).not.toContain('text-count-hero');
+    expect(markup).not.toContain(`>${en.dashboard.dueLabel}<`);
     expect(markup).not.toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.dashboard.unlockAction);
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
@@ -320,12 +323,13 @@ describe('AC2 — dichiarazione della lezione concettuale (3.14)', () => {
     expect(markup).toContain(en.dashboard.unlockAction);
   });
 
-  it('pila drenata normale (ultima sbloccata CON esercizi) ⇒ NESSUNA dichiarazione', () => {
-    // count === 0 ma lastUnlocked.exerciseCount > 0 (default 1): la pila è drenata,
-    // non concettuale ⇒ nessuna dichiarazione.
+  it('pila drenata normale (ultima sbloccata CON esercizi) ⇒ clearedBody, non noExercisesNotice', () => {
+    // count === 0 ma lastUnlocked.exerciseCount > 0 (default 1) e next != null: la
+    // pila è drenata, non concettuale ⇒ clearedBody (3.16), MAI noExercisesNotice.
     const qc = seededClient({ dueCount: 0, log: [], unlocked: 2, total: 10 });
     const markup = render(qc, UID);
 
+    expect(markup).toContain(en.dashboard.clearedBody);
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
   });
 
@@ -385,6 +389,149 @@ describe('AC3 — la lezione concettuale conta come sbloccata («u di t lezioni�
     expect(markup).toContain('3 of 10 lessons');
     // Ed è proprio la concettuale ad aver innescato la dichiarazione.
     expect(markup).toContain(en.dashboard.noExercisesNotice);
+  });
+});
+
+describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', () => {
+  it('AC1 — pila svuotata, lezioni disponibili ⇒ clearedBody, unlockAction, NESSUNO «0»', () => {
+    // count === 0, unlocked > 0, next != null, ultima con esercizi (default): il
+    // conteggio NON diventa «0» (nessun text-count-hero/dueLabel), dichiara
+    // clearedBody, e l'unica azione è unlockAction. Streak e curriculum restano resi.
+    const qc = seededClient({
+      dueCount: 0,
+      log: [logAt('2026-09-25T10:00:00.000Z')],
+      unlocked: 2,
+      total: 10,
+    });
+    const markup = render(qc, UID);
+
+    // Il contatore ha cambiato stato: niente «0», niente etichetta del conteggio
+    // resa come proprio elemento (`>to review<`; la sottostringa "to review"
+    // compare dentro clearedBody, quindi si asserisce l'elemento, non la sottostringa).
+    expect(markup).not.toContain('text-count-hero');
+    expect(markup).not.toContain(`>${en.dashboard.dueLabel}<`);
+    // Dichiara il perché la pila è vuota.
+    expect(markup).toContain(en.dashboard.clearedBody);
+    expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+    expect(markup).not.toContain(en.dashboard.curriculumCompleteBody);
+    // L'unica azione è lo sblocco.
+    expect(markup).toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+    // Streak e curriculum portano informazione reale a chi è di ritorno: restano.
+    expect(markup).toContain('1 day streak');
+    expect(markup).toContain('2 of 10 lessons');
+  });
+
+  it('AC2 — curriculum esaurito ⇒ curriculumCompleteBody, ZERO pulsanti, NESSUNO «0»', () => {
+    // count === 0, next === null (tutte sbloccate): unica schermata senza azione.
+    const qc = seededClient({ dueCount: 0, log: [], unlocked: 5, total: 5 });
+    const markup = render(qc, UID);
+
+    expect(markup).not.toContain('text-count-hero');
+    expect(markup).not.toContain(`>${en.dashboard.dueLabel}<`);
+    expect(markup).toContain(en.dashboard.curriculumCompleteBody);
+    // Nessun altro corpo (ultima con esercizi ⇒ né clearedBody né notice).
+    expect(markup).not.toContain(en.dashboard.clearedBody);
+    expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
+  });
+
+  it('AC3 — pila svuotata, ultima concettuale, altre disponibili ⇒ noExercisesNotice, non clearedBody', () => {
+    // count === 0, lastUnlocked.exerciseCount 0 (lesson-0), next = lesson-1 (con
+    // esercizi): la pila non si è mai riempita ⇒ noExercisesNotice, MAI clearedBody.
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonExerciseCounts: [0],
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).not.toContain('text-count-hero');
+    expect(markup).toContain(en.dashboard.noExercisesNotice);
+    expect(markup).not.toContain(en.dashboard.clearedBody);
+    expect(markup).not.toContain(en.dashboard.curriculumCompleteBody);
+    expect(markup).toContain(en.dashboard.unlockAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('AC3 — esaurito E ultima concettuale ⇒ ENTRAMBE le dichiarazioni, ZERO pulsanti', () => {
+    // count === 0, next === null (tutte sbloccate), l'ultima (lesson-2) concettuale:
+    // curriculumCompleteBody E noExercisesNotice convivono (nessuna mente), nessun pulsante.
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 3,
+      total: 3,
+      lessonExerciseCounts: [1, 1, 0],
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.curriculumCompleteBody);
+    expect(markup).toContain(en.dashboard.noExercisesNotice);
+    expect(markup).not.toContain(en.dashboard.clearedBody);
+    expect(markup).not.toContain('text-count-hero');
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
+  });
+
+  it('AC4 — pila piena (count > 0) ⇒ il conteggio resta invariato (nessuna dichiarazione 3.16)', () => {
+    // Il ramo count > 0 non cambia: text-count-hero=N, dueLabel, primaryAction, e
+    // nessuna delle dichiarazioni a pila vuota.
+    const qc = seededClient({ dueCount: 4, log: [], unlocked: 2, total: 10 });
+    const markup = render(qc, UID);
+
+    expect(markup).toMatch(/text-count-hero[^>]*>4</);
+    expect(markup).toContain(en.dashboard.dueLabel);
+    expect(markup).toContain(en.dashboard.primaryAction);
+    expect(markup).not.toContain(en.dashboard.clearedBody);
+    expect(markup).not.toContain(en.dashboard.curriculumCompleteBody);
+  });
+
+  it('AC4 — copy 3.16 priva di `!` e ASCII (en), parità en/it', () => {
+    // clearedBody (via pila drenata normale).
+    const cleared = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 2, total: 10 }),
+      UID,
+    );
+    expect(cleared).toContain(en.dashboard.clearedBody);
+    expect(cleared).not.toContain('!');
+    expect(
+      [...cleared].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000),
+    ).toEqual([]);
+
+    // curriculumCompleteBody (via curriculum esaurito).
+    const complete = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 5, total: 5 }),
+      UID,
+    );
+    expect(complete).toContain(en.dashboard.curriculumCompleteBody);
+    expect(complete).not.toContain('!');
+    expect(
+      [...complete].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000),
+    ).toEqual([]);
+  });
+
+  it('AC4 — parità en/it: le stesse chiavi rese in italiano', async () => {
+    await i18n.changeLanguage('it');
+    const cleared = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 2, total: 10 }),
+      UID,
+    );
+    expect(cleared).toContain(itCatalog.dashboard.clearedBody);
+    expect(cleared).not.toContain('!');
+
+    const complete = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 5, total: 5 }),
+      UID,
+    );
+    expect(complete).toContain(itCatalog.dashboard.curriculumCompleteBody);
+    expect(complete).not.toContain('!');
   });
 });
 

@@ -52,6 +52,20 @@ export const en = {
     // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
     noExercisesNotice:
       'The lesson you just unlocked has no exercises. It is a concept to read, so nothing was added to review and the pile stays at zero.',
+    // Pila svuotata (3.16): resa SSE la pila è a zero, qualcosa è già sbloccato e
+    // l'ultima sbloccata AVEVA esercizi (li hai risolti). Dichiara il perché la
+    // pila è vuota — hai finito il ripasso di adesso, non un errore. Distinta da
+    // noExercisesNotice (mai riempita) e da curriculumCompleteBody (niente altro
+    // da sbloccare). Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio
+    // di lode; ASCII.
+    clearedBody:
+      'Your review pile is empty. Everything due has been cleared for now, so there is nothing to review at the moment.',
+    // Curriculum esaurito (3.16): resa SSE la pila è a zero e non c'è una lezione
+    // successiva da sbloccare. Dichiara il perché non c'è azione — hai sbloccato
+    // ogni lezione, non ce ne sono altre. È l'unico stato senza azione primaria.
+    // Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
+    curriculumCompleteBody:
+      'Every lesson is unlocked. There are no more lessons to unlock and nothing is due, so there is nothing left to do here for now.',
     // Primo avvio (3.15): reso SSE nulla è ancora sbloccato (unlocked === 0).
     // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
     // conteggio/streak/curriculum a zero. Copy neutra, ASCII: nessun `!`, nessuna

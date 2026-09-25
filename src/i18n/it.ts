@@ -46,6 +46,20 @@ export const it = {
     // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
     noExercisesNotice:
       'La lezione appena sbloccata non ha esercizi. È un concetto da leggere, quindi non è stato aggiunto nulla da rivedere e la pila resta a zero.',
+    // Pila svuotata (3.16): resa SSE la pila è a zero, qualcosa è già sbloccato e
+    // l'ultima sbloccata AVEVA esercizi (li hai risolti). Dichiara il perché la
+    // pila è vuota — hai finito il ripasso di adesso, non un errore. Distinta da
+    // noExercisesNotice (mai riempita) e da curriculumCompleteBody (niente altro
+    // da sbloccare). Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio
+    // di lode.
+    clearedBody:
+      'La pila di ripasso è vuota. Tutto quello che era dovuto è stato completato per ora, quindi non resta nulla da rivedere al momento.',
+    // Curriculum esaurito (3.16): resa SSE la pila è a zero e non c'è una lezione
+    // successiva da sbloccare. Dichiara il perché non c'è azione — hai sbloccato
+    // ogni lezione, non ce ne sono altre. È l'unico stato senza azione primaria.
+    // Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio di lode.
+    curriculumCompleteBody:
+      'Ogni lezione è sbloccata. Non ci sono altre lezioni da sbloccare e nulla risulta dovuto, quindi per ora non resta altro da fare qui.',
     // Primo avvio (3.15): reso SSE nulla è ancora sbloccato (unlocked === 0).
     // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
     // conteggio/streak/curriculum a zero. Copy neutra: nessun `!`, nessuna emoji,
