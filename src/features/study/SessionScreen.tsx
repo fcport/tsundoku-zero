@@ -53,10 +53,14 @@ import { evaluateAnswer } from '../../domain/review';
 import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
 import { streak } from '../../domain/streak';
-import type { ApplyReviewInput } from '../../domain/ports/reviewRepository';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { usePorts } from '../ports/PortsContext';
 import { exercisesQueryKey } from './exercisesQueryKey';
+import {
+  REVIEW_MUTATION_KEY,
+  REVIEW_SYNC_SCOPE,
+  type ReviewMutationVars,
+} from './reviewMutation';
 import { useSessionStore } from './sessionStore';
 import { ExerciseCard } from './ExerciseCard';
 import { ProgressMeter } from './ProgressMeter';
@@ -98,14 +102,6 @@ function isInteractiveTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   if (target.isContentEditable) return true;
   return ['BUTTON', 'A', 'INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
-}
-
-// Le variabili della mutation `applyReview`: l'input pre-calcolato PIÙ il `result`
-// (usato dall'onMutate ottimistico per rimpiazzare lo stato in cache). Il `result`
-// non attraversa la porta — è glue locale della cache.
-interface ApplyVars {
-  readonly input: ApplyReviewInput;
-  readonly result: ReviewState;
 }
 
 export function SessionScreen({ userId, onExit }: SessionScreenProps) {
@@ -213,11 +209,18 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     queryFn: () => review.listReviewLog(),
   });
 
-  // La mutation di persistenza (AC4/AC5): UNA chiamata idempotente + aggiornamento
-  // OTTIMISTICO del conteggio `['due', userId]` (la STESSA chiave della dashboard).
+  // La mutation di persistenza (AC4). La `mutationFn` NON è più qui: vive ai DEFAULT
+  // del QueryClient (`registerReviewMutationDefaults`, glue di bootstrap) risolta per
+  // `mutationKey: ['review']`, così la coda DUREVOLE (4.2) la ritrova alla ripresa
+  // dopo un reload — quando questo componente potrebbe non essere montato. La mutation
+  // parte con la STESSA key/scope della registrazione; `onMutate`/`onError`/`onSettled`
+  // restano effetti d'ISTANZA (aggiornamento ottimistico del conteggio `['due',
+  // userId]`, rollback, invalidazione) — NON ripresi al reload, e va bene: al reload la
+  // pila `['due']` è rifetchata fresca e la RPC è idempotente.
   const applyMutation = useMutation({
-    mutationFn: ({ input }: ApplyVars) => review.applyReview(input),
-    onMutate: async ({ input, result }: ApplyVars) => {
+    mutationKey: REVIEW_MUTATION_KEY,
+    scope: REVIEW_SYNC_SCOPE,
+    onMutate: async ({ input, result }: ReviewMutationVars) => {
       const key = dueQueryKey(userId ?? '');
       await queryClient.cancelQueries({ queryKey: key });
       const prev = queryClient.getQueryData<readonly ReviewState[]>(key);

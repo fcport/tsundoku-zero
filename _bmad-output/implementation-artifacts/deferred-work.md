@@ -261,3 +261,27 @@ source_spec: `spec-3-22-l-intera-sessione-senza-mouse.md`
 severity: medium
 reason: Rispondere all'ultimo esercizio svuota la coda (currentId === null): il ramo di completamento (SessionScreen.tsx:385-415) sostituisce il ramo di sessione attiva che ospita l'unica live region aria-live="polite" (riga 494), senza fase di spiegazione intermedia (confermato dal test jsdom AC6, che vede session.complete.body subito dopo l'ultima risposta). AC4 esclude deliberatamente il completamento dall'avere una live region, quindi l'esito dell'ultimo esercizio e il "sei arrivato a zero" non vengono mai annunciati all'AT. E' un limite reale ma legato all'audit screen-reader (NVDA/VoiceOver) che l'intento delega esplicitamente alla storia 7.6 (DW-10/DW-14); il fix in questa storia sarebbe vietato dal vincolo "NON sul completamento".
 status: open
+
+### DW-33: La coda IndexedDB durevole non è legata all'utente autenticato né svuotata al sign-out: su un browser condiviso una coda in sospeso attraverso un cambio account può drenarsi sotto un altro utente al r
+origin: spec-deferred 7de7bf913eca
+location: src/app/reviewPersister.ts; src/app/main.tsx
+source_spec: `spec-4-2-la-coda-sopravvive-alla-chiusura-dell-app.md`
+severity: medium
+reason: DB_NAME/CLIENT_KEY sono costanti globali e resumePausedMutations() scatta all'onSuccess del restore senza verifica dell'utente; il sign-out non chiama persister.removeClient(). Fuori dallo scenario single-user dell'epica, ma reale su browser condiviso multi-account.
+status: open
+
+### DW-34: Nessun cache-buster sul client persistito con maxAge Infinity: un cambio di schema/contratto RPC fra deploy può reidratare una coda stale come input malformato.
+origin: spec-deferred 20de50e4f394
+location: src/app/main.tsx; src/app/reviewPersister.ts
+source_spec: `spec-4-2-la-coda-sopravvive-alla-chiusura-dell-app.md`
+severity: low
+reason: persistOptions non imposta buster e non scarta lo snapshot su errore di restore; con ApplyReviewInput/RPC che evolvono, una coda vecchia verrebbe rigiocata. Va legato a una fonte di versione (es. VERSION) quando disponibile.
+status: open
+
+### DW-35: throttleTime 250ms (AC5) è configurato ma non osservato da un test di coalescing delle scritture.
+origin: spec-deferred 2241a9bf697e
+location: src/app/reviewPersister.ts
+source_spec: `spec-4-2-la-coda-sopravvive-alla-chiusura-dell-app.md`
+severity: low
+reason: I test del persister provano la fedeltà del round-trip ma non che scritture ravvicinate si aggregano entro la finestra; una regressione a throttle 0 passerebbe verde. Richiede un test con fake timers.
+status: open
