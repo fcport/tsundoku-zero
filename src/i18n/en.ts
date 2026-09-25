@@ -46,6 +46,12 @@ export const en = {
     // L'azione di SBLOCCO (3.13): resa SOLO a pila vuota (il cancello). Verbale e
     // concreta, mai "Continue"; nessun `!`, nessuna emoji, nessun avverbio di lode.
     unlockAction: 'Unlock the next lesson',
+    // Dichiarazione della lezione CONCETTUALE (3.14): resa SSE la pila è a zero e
+    // l'ultima lezione sbloccata non ha esercizi. Dichiara il fatto E il perché —
+    // è concettuale, nulla da rivedere, la pila resta a zero, non è un fallimento.
+    // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
+    noExercisesNotice:
+      'The lesson you just unlocked has no exercises. It is a concept to read, so nothing was added to review and the pile stays at zero.',
   },
   settings: {
     title: 'Settings',

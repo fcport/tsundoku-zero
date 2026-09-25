@@ -24,7 +24,13 @@ const FIXED_TZ = 'Europe/Rome';
 const fixedClock: Clock = { now: () => FIXED_NOW, timeZone: () => FIXED_TZ };
 
 const sampleLessons: readonly LessonSummary[] = [
-  { id: 'te-form', ordinal: 1, title: { en: 'The te-form' }, grammarPoints: ['te-form'] },
+  {
+    id: 'te-form',
+    ordinal: 1,
+    title: { en: 'The te-form' },
+    grammarPoints: ['te-form'],
+    exerciseCount: 1,
+  },
 ];
 const sampleDue: readonly ReviewState[] = [
   {

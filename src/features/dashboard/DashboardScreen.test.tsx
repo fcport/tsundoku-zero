@@ -61,12 +61,19 @@ function freshClient(): QueryClient {
 /**
  * Semina la cache per lo stato CARICATO: N dovuti, un log, u sbloccate su t
  * lezioni. Le quattro chiavi risolvono in modo sincrono al primo render.
+ *
+ * Ogni lezione seminata ha `exerciseCount: 1` di DEFAULT, così i test del cancello
+ * (3.12/3.13) NON innescano la dichiarazione «senza esercizi» (3.14): il default
+ * garantisce che «ultima sbloccata» abbia esercizi salvo override esplicito.
+ * `lessonExerciseCounts` sovrascrive per-indice il conteggio (per la lezione
+ * concettuale con `count 0`).
  */
 function seededClient(opts: {
   dueCount: number;
   log: readonly ReviewLogEntry[];
   unlocked: number;
   total: number;
+  lessonExerciseCounts?: readonly number[];
 }): QueryClient {
   const qc = freshClient();
   qc.setQueryData(
@@ -85,6 +92,7 @@ function seededClient(opts: {
       ordinal: i,
       title: { en: `L${i}` },
       grammarPoints: [],
+      exerciseCount: opts.lessonExerciseCounts?.[i] ?? 1,
     })),
   );
   return qc;
@@ -278,12 +286,100 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
   it('pila vuota + curriculum esaurito ⇒ NESSUNA azione (schermata esaurita = 3.16)', () => {
     // count === 0 e next === null (tutte sbloccate): non si rende alcun pulsante.
     // Non crasha, non inventa una schermata: il ramo grezzo mostra ancora i conteggi.
+    // Ultima sbloccata con esercizi (default): nessuna dichiarazione «senza esercizi».
     const qc = seededClient({ dueCount: 0, log: [], unlocked: 3, total: 3 });
     const markup = render(qc, UID);
 
     expect(markup).not.toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain(en.dashboard.noExercisesNotice);
     const buttons = markup.match(/<button/g) ?? [];
     expect(buttons.length).toBe(0);
+  });
+});
+
+describe('AC2 — dichiarazione della lezione concettuale (3.14)', () => {
+  it('pila a zero + ultima sbloccata concettuale ⇒ rende la dichiarazione E l\'azione di sblocco', () => {
+    // count === 0; 1 sbloccata su 10 (lastUnlocked = lesson-0, exerciseCount 0);
+    // next = lesson-1 (ha esercizi). La dichiarazione compare E l'azione di sblocco
+    // resta resa (è AGGIUNTIVA al cancello, non lo sostituisce).
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonExerciseCounts: [0],
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.noExercisesNotice);
+    expect(markup).toContain(en.dashboard.unlockAction);
+  });
+
+  it('pila drenata normale (ultima sbloccata CON esercizi) ⇒ NESSUNA dichiarazione', () => {
+    // count === 0 ma lastUnlocked.exerciseCount > 0 (default 1): la pila è drenata,
+    // non concettuale ⇒ nessuna dichiarazione.
+    const qc = seededClient({ dueCount: 0, log: [], unlocked: 2, total: 10 });
+    const markup = render(qc, UID);
+
+    expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+  });
+
+  it('nulla sbloccato (lastUnlocked === null) ⇒ NESSUNA dichiarazione (primo-avvio = 3.15)', () => {
+    // count === 0, unlocked 0 ⇒ lastUnlocked === null: la dichiarazione NON compare
+    // (il primo-avvio è 3.15, non questa storia).
+    const qc = seededClient({ dueCount: 0, log: [], unlocked: 0, total: 10 });
+    const markup = render(qc, UID);
+
+    expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+  });
+
+  it('pila NON vuota ⇒ NESSUNA dichiarazione (solo il cancello 3.13)', () => {
+    // count > 0: anche con l'ultima sbloccata concettuale, la dichiarazione NON
+    // compare (la condizione richiede count === 0).
+    const qc = seededClient({
+      dueCount: 5,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonExerciseCounts: [0],
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+  });
+
+  it('la microcopy della dichiarazione è priva di `!` (nessuna grammatica della celebrazione)', () => {
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 1,
+      total: 10,
+      lessonExerciseCounts: [0],
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain(en.dashboard.noExercisesNotice);
+    expect(markup).not.toContain('!');
+  });
+});
+
+describe('AC3 — la lezione concettuale conta come sbloccata («u di t lezioni»)', () => {
+  it('una concettuale sbloccata è conteggiata fra le sbloccate', () => {
+    // 3 sbloccate su 10, l'ultima (lesson-2) concettuale: il conteggio del
+    // curriculum resta «3 of 10» — la concettuale è inclusa (ha la sua riga di
+    // progresso, quindi `listUnlockedLessonIds` la vede).
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 3,
+      total: 10,
+      lessonExerciseCounts: [1, 1, 0],
+    });
+    const markup = render(qc, UID);
+
+    expect(markup).toContain('3 of 10 lessons');
+    // Ed è proprio la concettuale ad aver innescato la dichiarazione.
+    expect(markup).toContain(en.dashboard.noExercisesNotice);
   });
 });

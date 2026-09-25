@@ -36,3 +36,29 @@ export function nextLessonToUnlock(
   }
   return null;
 }
+
+/**
+ * L'ULTIMA lezione sbloccata: data la lista delle lezioni e gli id già sbloccati,
+ * ritorna la sbloccata con `ordinal` più ALTO — oppure `null` se nulla di sbloccato
+ * combacia (o lista/insieme vuoto). Le sbloccate sono un PREFISSO contiguo (l'unico
+ * percorso di scrittura, `nextLessonToUnlock`, è sequenziale) ⇒ «ordinal massimo
+ * sbloccato» = «più recente», senza bisogno di un `unlocked_at` nel read-model.
+ *
+ * PURA, sincrona, TOTALE e senza mutazione: copia+ordina per `ordinal` DISCENDENTE
+ * (l'input può arrivare disordinato) e ritorna la prima il cui `id` è in
+ * `unlockedIds`. Gli id sbloccati assenti dalle lezioni sono ignorati (nessun match).
+ * Nessun clock, nessuna rete, nessun costrutto temporale (AD-1).
+ */
+export function lastUnlockedLesson(
+  lessons: readonly LessonSummary[],
+  unlockedIds: readonly string[],
+): LessonSummary | null {
+  const unlocked = new Set(unlockedIds);
+  const ordered = [...lessons].sort((a, b) => b.ordinal - a.ordinal);
+  for (const lesson of ordered) {
+    if (unlocked.has(lesson.id)) {
+      return lesson;
+    }
+  }
+  return null;
+}

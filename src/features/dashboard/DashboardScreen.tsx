@@ -19,7 +19,7 @@
 // primitivi ui (pile-counter, streak-badge, curriculum-progress, button-primary)
 // sono composti INLINE: l'estrazione nasce col secondo consumatore.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { nextLessonToUnlock } from '../../domain/curriculum';
+import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
 import { dueQueryKey } from '../../domain/due';
 import { streak } from '../../domain/streak';
 import { usePorts } from '../ports/PortsContext';
@@ -120,6 +120,11 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
   // La SUCCESSIVA lezione da sbloccare (autorità sequenziale, puro): `null` a
   // curriculum esaurito. La UI passa alla RPC solo il suo `id`.
   const next = nextLessonToUnlock(lessonsQ.data, unlockedQ.data);
+  // L'ULTIMA lezione sbloccata (autorità sequenziale, puro): `null` se nulla è
+  // sbloccato. Serve alla dichiarazione «senza esercizi» (3.14), DERIVATA dallo
+  // stato persistito (`['lessons']` + `['unlocked']` + pila), mai memorizzata
+  // (AD-5): sopravvive al refresh.
+  const lastUnlocked = lastUnlockedLesson(lessonsQ.data, unlockedQ.data);
 
   return (
     <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
@@ -137,6 +142,22 @@ export function DashboardScreen({ userId }: DashboardScreenProps) {
       <p className="text-label text-ink-secondary">
         {t('dashboard.curriculumLabel', { unlocked, total })}
       </p>
+
+      {/* La DICHIARAZIONE «senza esercizi» (3.14, AC2): resa SSE la pila è a zero
+          E l'ULTIMA lezione sbloccata è concettuale (`exerciseCount === 0`).
+          DERIVATA dallo stato persistito, mai da un flag di mutation (AD-5):
+          sopravvive al refresh. Neutra (nessun `!`/emoji/lode, solo token del
+          sistema di design): dichiara il fatto E il perché, non è un fallimento.
+          È AGGIUNTIVA al cancello 3.13, non una nuova schermata: quando compare,
+          l'azione di sblocco della successiva resta comunque resa (se `next`
+          esiste). NON compare a pila drenata normale (`exerciseCount > 0`), a
+          nulla sbloccato (`lastUnlocked === null` = primo-avvio, 3.15) o a pila
+          non vuota (`count > 0`). */}
+      {count === 0 && lastUnlocked?.exerciseCount === 0 ? (
+        <p className="text-label text-ink-secondary">
+          {t('dashboard.noExercisesNotice')}
+        </p>
+      ) : null}
 
       {/* Il CANCELLO delle quest sequenziali (AC4): al più UNA sola azione, mai
           entrambe insieme.

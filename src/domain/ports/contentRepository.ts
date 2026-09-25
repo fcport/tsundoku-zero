@@ -24,6 +24,14 @@ export interface LessonSummary {
   readonly ordinal: number;
   readonly title: BilingualText;
   readonly grammarPoints: readonly string[];
+  /**
+   * Conteggio degli esercizi della lezione (AD-19). `0` = lezione CONCETTUALE:
+   * sbloccarla crea solo la riga `lesson_progress`, nessuna `review_state`, quindi
+   * NON muove la pila. È CONTENUTO (uguale per tutti, non progresso utente): letto
+   * server-side col count aggregato PostgREST. Additivo: `nextLessonToUnlock` non
+   * lo usa; lo consuma `lastUnlockedLesson` per la dichiarazione «senza esercizi».
+   */
+  readonly exerciseCount: number;
 }
 
 /**
