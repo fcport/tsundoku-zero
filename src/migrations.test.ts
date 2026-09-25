@@ -6,6 +6,7 @@ import PgQueryModule, {
   type PgQueryModule as PgQuery,
 } from 'pg-query-emscripten';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { LEITNER_INTERVALS_DAYS, REVIEW_OUTCOMES } from './domain/schedule';
 
 // Story 1.5 — Lo schema nasce versionato e isolato.
 //
@@ -74,6 +75,22 @@ beforeAll(async () => {
   pg = await new PgQueryModule();
 });
 
+// pg-query-emscripten gira su un heap WASM che non si libera fra una parse e
+// l'altra: oltre una certa quota di invocazioni ripetute il modulo va in crash
+// (`… is not a function`). Poiché le asserzioni parsano SPESSO lo stesso testo,
+// memoizziamo il risultato per stringa: ogni SQL distinto attraversa il WASM UNA
+// sola volta, e le decine di `parse` dei test diventano una manciata di
+// invocazioni reali. Il risultato è deterministico (stesso testo ⇒ stesso AST),
+// quindi la cache non altera il significato dei test.
+const parseCache = new Map<string, PgParseResult>();
+function parseSql(sql: string): PgParseResult {
+  const cached = parseCache.get(sql);
+  if (cached !== undefined) return cached;
+  const res = pg.parse(sql);
+  parseCache.set(sql, res);
+  return res;
+}
+
 describe('supabase/migrations — validazione sintattica offline (AC2)', () => {
   // Guardia anti-vacuità: se la cartella fosse vuota o il glob rotto, un file
   // "tutto valido" passerebbe senza aver verificato niente.
@@ -87,7 +104,7 @@ describe('supabase/migrations — validazione sintattica offline (AC2)', () => {
   // toccare i dati dell'owner.
   for (const { name, sql } of migrations) {
     it(`parsa senza errori di sintassi: ${name}`, () => {
-      const res: PgParseResult = pg.parse(sql);
+      const res: PgParseResult = parseSql(sql);
       expect(
         res.error,
         `errore di sintassi in ${name}: ${res.error?.message ?? ''}`,
@@ -99,7 +116,7 @@ describe('supabase/migrations — validazione sintattica offline (AC2)', () => {
   // Prova NEGATIVA: dimostra che il parser coglie davvero un typo. Se questo
   // passasse (error nullo su SQL rotto), il gate (a) sarebbe finto.
   it('un typo (creat table) produce un errore di sintassi', () => {
-    const res = pg.parse('creat table t (id uuid);');
+    const res = parseSql('creat table t (id uuid);');
     expect(res.error).not.toBeNull();
     expect(res.error?.message ?? '').toMatch(/syntax error/i);
   });
@@ -121,7 +138,7 @@ describe('migrazione user_settings — schema minimo e isolato', () => {
   // fa fallire questo test — è il gate meccanico di «e nient'altro».
   it('espone esattamente le colonne user_id e locale (via AST)', () => {
     const sql = userSettings?.sql ?? '';
-    const res = pg.parse(sql);
+    const res = parseSql(sql);
     expect(res.error).toBeNull();
 
     const createStmts = res.parse_tree.stmts
@@ -144,7 +161,7 @@ describe('migrazione user_settings — schema minimo e isolato', () => {
   // cascade. Lo leggiamo dall'AST della colonna: fk verso schema auth / tabella
   // users, azione di cancellazione 'c' (cascade), e un vincolo PRIMARY.
   it('user_id è PK e FK cascade verso auth.users (via AST)', () => {
-    const res = pg.parse(userSettings?.sql ?? '');
+    const res = parseSql(userSettings?.sql ?? '');
     const create = res.parse_tree.stmts
       .map((s) => s.stmt.CreateStmt)
       .find((c) => c?.relation?.relname === 'user_settings');
@@ -188,7 +205,7 @@ describe('migrazione user_settings — schema minimo e isolato', () => {
   // manca una, questo test è rosso.
   it('dichiara 4 policy owner-scoped, una per operazione', () => {
     const sql = userSettings?.sql ?? '';
-    const res = pg.parse(sql);
+    const res = parseSql(sql);
     expect(res.error).toBeNull();
 
     // Conta le CreatePolicyStmt e raccoglie i comandi coperti.
@@ -240,8 +257,8 @@ describe('migrazione user_settings — schema minimo e isolato', () => {
     const raw = userSettings?.sql ?? '';
     const stripped = stripSqlComments(raw);
 
-    const rawParse = pg.parse(raw);
-    const strippedParse = pg.parse(stripped);
+    const rawParse = parseSql(raw);
+    const strippedParse = parseSql(stripped);
 
     expect(rawParse.error, 'il SQL grezzo non parsa').toBeNull();
     expect(
@@ -327,7 +344,7 @@ describe('migrazione lesson/exercise — contenuto in sola lettura (AC1)', () =>
 
   // Via AST: le due create table espongono ESATTAMENTE le colonne canoniche.
   it('lesson ed exercise espongono esattamente le colonne canoniche (via AST)', () => {
-    const res = pg.parse(lessonExercise?.sql ?? '');
+    const res = parseSql(lessonExercise?.sql ?? '');
     expect(res.error).toBeNull();
 
     const createStmts = res.parse_tree.stmts
@@ -362,7 +379,7 @@ describe('migrazione lesson/exercise — contenuto in sola lettura (AC1)', () =>
 
   // Via AST: exercise.lesson_id è FK verso lesson(id) on delete cascade.
   it('exercise.lesson_id è FK cascade verso lesson (via AST)', () => {
-    const res = pg.parse(lessonExercise?.sql ?? '');
+    const res = parseSql(lessonExercise?.sql ?? '');
     const create = res.parse_tree.stmts
       .map((s) => s.stmt.CreateStmt)
       .find((c) => c?.relation?.relname === 'exercise');
@@ -402,7 +419,7 @@ describe('migrazione lesson/exercise — contenuto in sola lettura (AC1)', () =>
   // policy insert/update/delete (con RLS attiva e nessuna policy di scrittura, la
   // scrittura è negata per default — è il cuore della «sola lettura»).
   it('dichiara solo due policy select, nessuna policy di scrittura (via AST)', () => {
-    const res = pg.parse(lessonExercise?.sql ?? '');
+    const res = parseSql(lessonExercise?.sql ?? '');
     expect(res.error).toBeNull();
 
     const policyCommands = res.parse_tree.stmts
@@ -445,5 +462,433 @@ describe('migrazione lesson/exercise — contenuto in sola lettura (AC1)', () =>
   it('ordinal è unique deferrable initially deferred', () => {
     const sql = stripSqlComments(lessonExercise?.sql ?? '').toLowerCase();
     expect(sql).toMatch(/ordinal\s+int\s+not\s+null\s+unique\s+deferrable\s+initially\s+deferred/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Story 3.8 — Asserzioni strutturali sulla migrazione review_state / review_log /
+// lesson_progress (AC1–AC5).
+//
+// Le tre tabelle PER-UTENTE nascono ISOLATE PER RIGA: schema canonico esatto, FK
+// user_id cascade verso auth.users su TUTTE E TRE, RLS abilitata su tutte, 4
+// policy owner-scoped su review_state/lesson_progress e SOLO 2 (select/insert) su
+// review_log (append-only), CHECK sullo stadio DERIVATO dalla scala Leitner e
+// CHECK sull'esito allineato all'insieme REVIEW_OUTCOMES. La prova RLS a runtime
+// (A non legge/scrive le righe di B) è differita a Epic 7 (7.5) — vedi frontmatter
+// `deferred`: qui si prova la STRUTTURA (RLS + policy + cascata), condizione
+// necessaria e meccanicamente verificabile offline (AD-12/AD-13).
+// ---------------------------------------------------------------------------
+
+const reviewProgress = migrations.find((m) =>
+  m.name.endsWith('_create_review_and_progress.sql'),
+);
+
+/**
+ * Ritorna la CreateStmt di `relname` dall'AST di una migrazione (o undefined).
+ * Usato dai test per tabella: si parsa una volta, si estrae la tabella cercata.
+ */
+function createTableOf(parse: PgParseResult, relname: string) {
+  return parse.parse_tree.stmts
+    .map((s) => s.stmt.CreateStmt)
+    .find((c) => c?.relation?.relname === relname);
+}
+
+describe('migrazione review/progress — progresso per-utente e isolato (Story 3.8)', () => {
+  // AC1 (guardia anti-vacuità): la migrazione esiste. Senza, ogni asserzione qui
+  // sotto su `reviewProgress?.sql ?? ''` girerebbe su stringa vuota e passerebbe
+  // vuota. Il timestamp deve essere > dell'ultima esistente (20260925090001).
+  it('la migrazione esiste', () => {
+    expect(
+      reviewProgress,
+      'atteso un file *_create_review_and_progress.sql',
+    ).toBeDefined();
+    // Timestamp > dell'ultima migrazione esistente: db push le applica in ordine.
+    const version = reviewProgress?.name.slice(0, 14) ?? '';
+    // Guardia sulla FORMA: 14 cifre esatte. Senza, un prefisso malformato (troppo
+    // corto, o con lettere) passerebbe silenziosamente il confronto lessicografico
+    // d'ordine invece di fallire in modo esplicito.
+    expect(version).toMatch(/^\d{14}$/);
+    expect(version > '20260925090001', `timestamp ${version} non è > 20260925090001`).toBe(true);
+  });
+
+  // AC1 (righe "Migrazione ben formata" + "Schema minimo"): via AST, le TRE
+  // create table espongono ESATTAMENTE le colonne canoniche. Una colonna in
+  // più/meno (created_at, updated_at, …) fa fallire — è il gate di «minimalità».
+  it('le tre tabelle espongono esattamente le colonne canoniche (via AST)', () => {
+    const res = parseSql(reviewProgress?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    const createStmts = res.parse_tree.stmts
+      .map((s) => s.stmt.CreateStmt)
+      .filter((c): c is NonNullable<typeof c> => c !== undefined);
+    expect(createStmts.length).toBe(3);
+
+    const columnsOf = (relname: string): (string | undefined)[] => {
+      const create = createStmts.find((c) => c.relation?.relname === relname);
+      return (create?.tableElts ?? [])
+        .map((elt) => elt.ColumnDef?.colname)
+        .filter((n): n is string => typeof n === 'string');
+    };
+
+    expect(columnsOf('review_state')).toEqual([
+      'user_id',
+      'exercise_id',
+      'stage',
+      'due_at',
+      'review_count',
+      'lapse_count',
+      'last_reviewed_at',
+    ]);
+    expect(columnsOf('review_log')).toEqual([
+      'id',
+      'user_id',
+      'exercise_id',
+      'grammar_point',
+      'outcome',
+      'used_explanation',
+      'reviewed_at',
+    ]);
+    expect(columnsOf('lesson_progress')).toEqual([
+      'user_id',
+      'lesson_id',
+      'unlocked_at',
+    ]);
+  });
+
+  // AC1 (schema canonico, oltre ai NOMI): via AST, ogni colonna delle tre tabelle
+  // ha il TIPO e la NULLABILITÀ attesi. Il test dei nomi sopra non coglierebbe una
+  // colonna `stage text` invece di `int`, né un `due_at` reso nullable: qui sì. Il
+  // tipo si legge dall'ULTIMO segmento di `typeName.names` (pg_query normalizza e
+  // antepone `pg_catalog` a `int4`/`bool`, quindi si prende l'ultimo). Si accettano
+  // le forme equivalenti (`int`↔`int4`, `boolean`↔`bool`). La nullabilità: una
+  // colonna è not-null se ha un `CONSTR_NOTNULL`, oppure è PK di colonna
+  // (`CONSTR_PRIMARY`), oppure fa parte della PK COMPOSITE (not-null implicito).
+  it('ogni colonna ha il tipo e la nullabilità canonici (via AST)', () => {
+    const res = parseSql(reviewProgress?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    // Forme di tipo equivalenti accettate (l'AST può normalizzare l'alias SQL).
+    const TYPE_ALIASES: Record<string, readonly string[]> = {
+      int: ['int', 'int4'],
+      timestamptz: ['timestamptz'],
+      boolean: ['boolean', 'bool'],
+      uuid: ['uuid'],
+      text: ['text'],
+    };
+
+    // Tipo canonico atteso per ogni colonna, per tabella.
+    const expectedTypes: Record<string, Record<string, keyof typeof TYPE_ALIASES>> = {
+      review_state: {
+        user_id: 'uuid',
+        exercise_id: 'uuid',
+        stage: 'int',
+        due_at: 'timestamptz',
+        review_count: 'int',
+        lapse_count: 'int',
+        last_reviewed_at: 'timestamptz',
+      },
+      review_log: {
+        id: 'uuid',
+        user_id: 'uuid',
+        exercise_id: 'uuid',
+        grammar_point: 'text',
+        outcome: 'text',
+        used_explanation: 'boolean',
+        reviewed_at: 'timestamptz',
+      },
+      lesson_progress: {
+        user_id: 'uuid',
+        lesson_id: 'text',
+        unlocked_at: 'timestamptz',
+      },
+    };
+
+    // L'UNICA colonna nullable delle tre tabelle: tutto il resto è not null.
+    const nullableColumns = new Set(['review_state.last_reviewed_at']);
+
+    // Le porzioni dell'AST non modellate dalla d.ts del pacchetto (vincolo di
+    // TABELLA e `typeName` di colonna) le leggiamo con tipi locali, come il test
+    // delle policy fa per CreatePolicyStmt: la d.ts resta invariata (tocchiamo solo
+    // questo file di test).
+    type TableConstraintElt = {
+      readonly Constraint?: {
+        readonly contype?: string;
+        readonly keys?: readonly { readonly String?: { readonly sval?: string } }[];
+      };
+    };
+    type ColumnWithType = {
+      readonly typeName?: {
+        readonly names?: readonly { readonly String?: { readonly sval?: string } }[];
+      };
+    };
+
+    for (const [relname, typeByCol] of Object.entries(expectedTypes)) {
+      const create = createTableOf(res, relname);
+      expect(create, `tabella ${relname} assente`).toBeDefined();
+
+      // Colonne che compongono la PK composite (not-null implicito).
+      const pkKeys = new Set(
+        (create?.tableElts ?? [])
+          .map((elt) => (elt as TableConstraintElt).Constraint)
+          .filter((c): c is NonNullable<typeof c> => c?.contype === 'CONSTR_PRIMARY')
+          .flatMap((c) => (c.keys ?? []).map((k) => k.String?.sval))
+          .filter((n): n is string => typeof n === 'string'),
+      );
+
+      for (const [colname, expectedType] of Object.entries(typeByCol)) {
+        const col = (create?.tableElts ?? [])
+          .map((elt) => elt.ColumnDef)
+          .find((c) => c?.colname === colname);
+        expect(col, `colonna ${relname}.${colname} assente`).toBeDefined();
+
+        // Tipo: ultimo segmento di typeName.names.
+        const typeNames = ((col as ColumnWithType | undefined)?.typeName?.names ?? [])
+          .map((n) => n.String?.sval)
+          .filter((n): n is string => typeof n === 'string');
+        const actualType = typeNames[typeNames.length - 1];
+        expect(
+          TYPE_ALIASES[expectedType],
+          `tipo di ${relname}.${colname}: atteso ${expectedType} (${TYPE_ALIASES[expectedType].join('|')}), trovato ${actualType}`,
+        ).toContain(actualType);
+
+        // Nullabilità.
+        const contypes = (col?.constraints ?? [])
+          .map((k) => k.Constraint?.contype)
+          .filter((t): t is string => typeof t === 'string');
+        const isNotNull =
+          contypes.includes('CONSTR_NOTNULL') ||
+          contypes.includes('CONSTR_PRIMARY') ||
+          pkKeys.has(colname);
+
+        if (nullableColumns.has(`${relname}.${colname}`)) {
+          expect(isNotNull, `${relname}.${colname} dovrebbe essere nullable`).toBe(false);
+        } else {
+          expect(isNotNull, `${relname}.${colname} dovrebbe essere not null`).toBe(true);
+        }
+      }
+    }
+  });
+
+  // AC1 (default): review_count e lapse_count sono `int not null default 0`. Un
+  // contatore senza default costringerebbe apply_review (3.9) a scrivere lo zero a
+  // mano; il default 0 è parte dello schema canonico. Verifica testuale sul SQL
+  // strippato, come il test di user_settings per `locale ... default 'en'`.
+  it('review_count e lapse_count sono int not null default 0', () => {
+    const sql = stripSqlComments(reviewProgress?.sql ?? '').toLowerCase();
+    expect(sql).toMatch(/review_count\s+int\s+not\s+null\s+default\s+0/);
+    expect(sql).toMatch(/lapse_count\s+int\s+not\s+null\s+default\s+0/);
+  });
+
+  // AC5 (riga "Cascata account"): via AST, il `user_id` di CIASCUNA delle tre
+  // tabelle è FK verso auth.users (id) on delete cascade. Se manca su una, rosso.
+  it('user_id è FK cascade verso auth.users su tutte e tre (via AST)', () => {
+    const res = parseSql(reviewProgress?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    for (const relname of ['review_state', 'review_log', 'lesson_progress']) {
+      const create = createTableOf(res, relname);
+      const userIdCol = (create?.tableElts ?? [])
+        .map((elt) => elt.ColumnDef)
+        .find((c) => c?.colname === 'user_id');
+      expect(userIdCol, `colonna user_id assente in ${relname}`).toBeDefined();
+
+      const constraints = (userIdCol?.constraints ?? [])
+        .map((c) => c.Constraint)
+        .filter((c): c is NonNullable<typeof c> => c !== undefined);
+
+      const fk = constraints.find((c) => c.contype === 'CONSTR_FOREIGN');
+      expect(fk, `user_id di ${relname} non ha FK`).toBeDefined();
+      expect(fk?.pktable?.schemaname, `FK di ${relname} non punta a schema auth`).toBe('auth');
+      expect(fk?.pktable?.relname, `FK di ${relname} non punta a users`).toBe('users');
+      // fk_del_action 'c' = cascade: la cancellazione dell'utente propaga (AD-11).
+      expect(fk?.fk_del_action, `FK user_id di ${relname} non è on delete cascade`).toBe('c');
+    }
+  });
+
+  // AC5 / boundary "Never" (nessuna FK di contenuto su review_log): review_log ha
+  // UNA SOLA FK a livello colonna (user_id → auth.users). exercise_id NON è FK: il
+  // log è indipendente e durevole; una FK cascade verso exercise rifarebbe
+  // dipendere le statistiche dal contenuto mutabile.
+  it('review_log ha una sola FK (user_id), nessuna FK di contenuto (via AST)', () => {
+    const res = parseSql(reviewProgress?.sql ?? '');
+    const create = createTableOf(res, 'review_log');
+
+    const fkColumns = (create?.tableElts ?? [])
+      .map((elt) => elt.ColumnDef)
+      .filter((c): c is NonNullable<typeof c> => c !== undefined)
+      .filter((c) =>
+        (c.constraints ?? []).some((k) => k.Constraint?.contype === 'CONSTR_FOREIGN'),
+      )
+      .map((c) => c.colname);
+
+    expect(fkColumns).toEqual(['user_id']);
+    // exercise_id NON deve essere FK.
+    expect(fkColumns).not.toContain('exercise_id');
+  });
+
+  // review_state.exercise_id → exercise(id) cascade e lesson_progress.lesson_id →
+  // lesson(id) cascade: lo stato/progresso è legato al contenuto vivo (via AST).
+  it('review_state.exercise_id → exercise e lesson_progress.lesson_id → lesson, entrambe cascade (via AST)', () => {
+    const res = parseSql(reviewProgress?.sql ?? '');
+
+    const fkOf = (relname: string, colname: string) => {
+      const create = createTableOf(res, relname);
+      const col = (create?.tableElts ?? [])
+        .map((elt) => elt.ColumnDef)
+        .find((c) => c?.colname === colname);
+      return (col?.constraints ?? [])
+        .map((c) => c.Constraint)
+        .find((c) => c?.contype === 'CONSTR_FOREIGN');
+    };
+
+    const exFk = fkOf('review_state', 'exercise_id');
+    expect(exFk, 'review_state.exercise_id non ha FK').toBeDefined();
+    expect(exFk?.pktable?.relname).toBe('exercise');
+    expect(exFk?.fk_del_action, 'FK exercise_id non è cascade').toBe('c');
+
+    const lsFk = fkOf('lesson_progress', 'lesson_id');
+    expect(lsFk, 'lesson_progress.lesson_id non ha FK').toBeDefined();
+    expect(lsFk?.pktable?.relname).toBe('lesson');
+    expect(lsFk?.fk_del_action, 'FK lesson_id non è cascade').toBe('c');
+  });
+
+  // AC1 (PK composite, via testo): review_state e lesson_progress hanno PK
+  // composite; review_log ha PK su id.
+  it('le PK composite e la PK di review_log sono dichiarate (testo)', () => {
+    const sql = stripSqlComments(reviewProgress?.sql ?? '').toLowerCase();
+    expect(sql).toMatch(/primary\s+key\s*\(\s*user_id\s*,\s*exercise_id\s*\)/);
+    expect(sql).toMatch(/primary\s+key\s*\(\s*user_id\s*,\s*lesson_id\s*\)/);
+    expect(sql).toMatch(/id\s+uuid\s+primary\s+key/);
+  });
+
+  // AC5 (riga "Isolamento per riga"): RLS abilitata su tutte e tre. Senza, la
+  // chiave anonima pubblicabile leggerebbe ogni riga (AD-10).
+  it('abilita row level security su tutte e tre le tabelle', () => {
+    const sql = stripSqlComments(reviewProgress?.sql ?? '').toLowerCase();
+    for (const t of ['review_state', 'review_log', 'lesson_progress']) {
+      expect(sql).toMatch(
+        new RegExp(`alter\\s+table\\s+${t}\\s+enable\\s+row\\s+level\\s+security`),
+      );
+    }
+  });
+
+  // AC5 (righe "Isolamento per riga" + "Append-only del log", via AST): conteggio
+  // e comandi delle policy per tabella. review_state e lesson_progress: 4 policy
+  // (select/insert/update/delete). review_log: SOLO 2 (select/insert), ZERO
+  // update/delete — l'append-only è imposto dall'assenza di policy (default-deny).
+  it('conta le policy per tabella: 4/4/2 e i comandi coperti (via AST)', () => {
+    const res = parseSql(reviewProgress?.sql ?? '');
+    expect(res.error).toBeNull();
+
+    const policies = res.parse_tree.stmts
+      .map(
+        (s) =>
+          s.stmt.CreatePolicyStmt as
+            | { cmd_name?: string; table?: { relname?: string } }
+            | undefined,
+      )
+      .filter((p): p is { cmd_name?: string; table?: { relname?: string } } => p !== undefined);
+
+    const commandsFor = (relname: string): Set<string | undefined> =>
+      new Set(policies.filter((p) => p.table?.relname === relname).map((p) => p.cmd_name));
+
+    const reviewStateCmds = commandsFor('review_state');
+    expect(reviewStateCmds.size).toBe(4);
+    expect(reviewStateCmds).toEqual(new Set(['select', 'insert', 'update', 'delete']));
+
+    const lessonProgressCmds = commandsFor('lesson_progress');
+    expect(lessonProgressCmds.size).toBe(4);
+    expect(lessonProgressCmds).toEqual(new Set(['select', 'insert', 'update', 'delete']));
+
+    const reviewLogCmds = commandsFor('review_log');
+    expect(reviewLogCmds.size).toBe(2);
+    expect(reviewLogCmds).toEqual(new Set(['select', 'insert']));
+    // Append-only: nessuna policy update/delete su review_log.
+    expect(reviewLogCmds.has('update')).toBe(false);
+    expect(reviewLogCmds.has('delete')).toBe(false);
+  });
+
+  // Ogni policy owner-scoped: `to authenticated` e la sottoquery (select
+  // auth.uid()) = user_id (10 policy in totale: 4 + 4 + 2).
+  it('ogni policy è to authenticated e usa (select auth.uid()) = user_id', () => {
+    const sql = stripSqlComments(reviewProgress?.sql ?? '').toLowerCase();
+
+    const authenticatedCount = (sql.match(/to\s+authenticated/g) ?? []).length;
+    expect(authenticatedCount).toBe(10);
+
+    // Il predicato owner-scoped compare ESATTAMENTE 12 volte, non «almeno 10». Il
+    // conto: 10 policy in totale, ma le due `update` (review_state e
+    // lesson_progress) portano il predicato DUE volte ciascuna (using + with
+    // check). Quindi review_state = 5 (select+insert+delete = 3, update = 2),
+    // lesson_progress = 5, review_log = 2 (select+insert) → 5 + 5 + 2 = 12.
+    // L'uguaglianza esatta impedisce che una policy che PERDE il proprio predicato
+    // owner-scoped venga compensata da un'altra che ne ha uno di troppo.
+    const ownerScopedCount = (
+      sql.match(/\(\s*select\s+auth\.uid\(\)\s*\)\s*=\s*user_id/g) ?? []
+    ).length;
+    expect(ownerScopedCount).toBe(12);
+  });
+
+  // AC3 (riga "Scala dello stadio"): il CHECK su review_state.stage NON è un
+  // elenco parallelo — il limite superiore SQL === LEITNER_INTERVALS_DAYS.length -
+  // 1 (import da ./domain/schedule). Un drift della scala qui è CI rossa.
+  it('il CHECK su stage deriva dalla scala Leitner (limite superiore === length - 1)', () => {
+    const sql = stripSqlComments(reviewProgress?.sql ?? '').toLowerCase();
+    const maxStage = LEITNER_INTERVALS_DAYS.length - 1;
+    const match = sql.match(/check\s*\(\s*stage\s+between\s+0\s+and\s+(\d+)\s*\)/);
+    expect(match, 'CHECK (stage between 0 and N) assente').not.toBeNull();
+    expect(Number(match?.[1])).toBe(maxStage);
+  });
+
+  // AC4 (riga "Insieme degli esiti"): il CHECK su review_log.outcome contiene
+  // ESATTAMENTE l'insieme di REVIEW_OUTCOMES (import da ./domain/schedule). I due
+  // insiemi divergono ⇒ rosso.
+  it('il CHECK su outcome === set(REVIEW_OUTCOMES)', () => {
+    const sql = stripSqlComments(reviewProgress?.sql ?? '');
+    const match = sql.match(/check\s*\(\s*outcome\s+in\s*\(([^)]*)\)\s*\)/i);
+    expect(match, 'CHECK (outcome in (...)) assente').not.toBeNull();
+    const sqlOutcomes = new Set(
+      (match?.[1] ?? '')
+        .split(',')
+        .map((s) => s.trim().replace(/^'|'$/g, ''))
+        .filter((s) => s.length > 0),
+    );
+    expect(sqlOutcomes).toEqual(new Set(REVIEW_OUTCOMES));
+  });
+
+  // AC2 (riga "Migrazione ben formata"): la denormalizzazione di grammar_point è
+  // documentata — un commento dichiara che una statistica non può dipendere da
+  // dati mutabili che una riautorazione riscriverebbe. Si ispeziona il SQL GREZZO
+  // (il commento vive proprio nei commenti, che stripSqlComments toglierebbe).
+  it('documenta la denormalizzazione di grammar_point (commento nel SQL grezzo)', () => {
+    const raw = (reviewProgress?.sql ?? '').toLowerCase();
+    expect(raw).toContain('denormalizzato');
+    expect(raw).toMatch(/statistica\s+non\s+può\s+dipendere\s+da\s+dati\s+mutabili/);
+    expect(raw).toMatch(/riautorazione/);
+  });
+
+  // Boundary/append-only (commento): il file dichiara PERCHÉ review_log è
+  // append-only (default-deny di RLS, non trigger).
+  it('documenta l\'append-only di review_log (commento nel SQL grezzo)', () => {
+    const raw = (reviewProgress?.sql ?? '').toLowerCase();
+    expect(raw).toContain('append-only');
+  });
+
+  // Guardia sull'assunzione di stripSqlComments (come per user_settings): il SQL
+  // strippato deve parsare ancora e produrre lo STESSO numero di statement, così
+  // un `--` in un literal non corrompe in silenzio le asserzioni testuali.
+  it('stripSqlComments non corrompe il SQL (stesso parse, stesso conteggio)', () => {
+    const rawSql = reviewProgress?.sql ?? '';
+    const stripped = stripSqlComments(rawSql);
+
+    const rawParse = parseSql(rawSql);
+    const strippedParse = parseSql(stripped);
+
+    expect(rawParse.error, 'il SQL grezzo non parsa').toBeNull();
+    expect(
+      strippedParse.error,
+      `lo strip ha reso il SQL non parsabile: ${strippedParse.error?.message ?? ''}`,
+    ).toBeNull();
+    expect(strippedParse.parse_tree.stmts.length).toBe(rawParse.parse_tree.stmts.length);
   });
 });

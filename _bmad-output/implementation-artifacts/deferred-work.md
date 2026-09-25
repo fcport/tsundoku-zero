@@ -165,3 +165,11 @@ source_spec: `spec-3-7-il-contenuto-raggiunge-il-client-e-può-essere-aggiornato
 severity: medium
 reason: `chooseSeedTimestamp` conta di proposito i seed precedenti come «più recenti» e `main` scrive sempre `<timestamp>_seed_content.sql`; nulla fa prune/overwrite del seed precedente. Lo stato finale del DB resta corretto (upsert idempotente, last-write-wins), ma i file di seed orfani si accumulano nella cartella migrazioni. Serve una politica di consolidamento/prune del seed (fuori dallo scope catturato di 3.7).
 status: open
+
+### DW-21: Prova RLS a runtime (AC5, seconda clausola): dimostrare esplicitamente, per ciascuna delle tre tabelle, che l'utente A non legge né scrive le righe di B MENTRE entrambi gli account sono vivi; più il c
+origin: spec-deferred 170ff712160a
+location: supabase/migrations/*_create_review_and_progress.sql + src/migrations.test.ts
+source_spec: `spec-3-8-il-progresso-è-per-utente-e-resta-per-utente.md`
+severity: medium
+reason: La prova a runtime richiede le migrazioni APPLICATE al progetto reale (solo al merge su main, AD-12/AD-13), due account reali con email univoca per run e teardown via l'Edge Function delete-account (AD-11/AD-13). Il progetto vieta l'istanza Supabase locale e non ha ancora infrastruttura Playwright. Ciò che questa storia verifica meccanicamente OFFLINE (pg-query-emscripten): RLS abilitata su tutte e tre le tabelle, le policy owner-scoped (4/4/2), la cascata su auth.users e l'assenza di policy update/delete su review_log — la condizione strutturale NECESSARIA, non l'effetto osservato a query time. ATTENZIONE all'instradamento: l'isolamento A↔B a runtime è NFR5 e appartiene alla suite e2e (Playwright) introdotta in Epic 7 (storia 7.4). NON è la 7.5, i cui AC riguardano il teardown dopo cancellazione account (assenza di righe per tabella), una proprietà diversa. Oggi né 7.4 né 7.5 dichiarano un AC esplicito «A legge/scrive le righe di B ⇒ fallisce, per ciascuna tabella»: questa obbligazion
+status: open
