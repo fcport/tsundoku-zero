@@ -115,6 +115,11 @@ describe('Caricamento — userId null / pila pending ⇒ scheletro', () => {
     expect(markup).not.toContain(en.session.prompt.singleSelect);
   });
 
+  it('lo scheletro NON ha live region aria-live (3.22 AC4)', () => {
+    const markup = render(freshClient(), null);
+    expect(markup).not.toContain('aria-live');
+  });
+
   it('pila non seminata (query pending) ⇒ scheletro aria-busy', () => {
     const markup = render(freshClient(), UID);
     expect(markup).toContain('aria-busy="true"');
@@ -176,6 +181,36 @@ describe('AC1/AC2/AC5 — store + esercizi seminati ⇒ card dell esercizio CORR
   it('rende l affordance «esci» nel ramo sessione-attiva (AC2)', () => {
     expect(setup()).toContain(en.session.exit);
   });
+
+  it('rende ESATTAMENTE una live region aria-live="polite" (3.22 AC4)', () => {
+    const markup = setup();
+    const liveRegions = markup.match(/aria-live="polite"/g) ?? [];
+    expect(liveRegions.length).toBe(1);
+  });
+
+  it('la live region e sr-only e vuota prima della risposta (3.22 AC4)', () => {
+    const markup = setup();
+    // Nessuna risposta ancora: l'esito non e annunciato (stringa vuota). La classe
+    // sr-only la tiene fuori dal flusso visibile.
+    expect(markup).toContain('sr-only');
+    // L'avanzamento annunciato NON compare finche non c'e una risposta.
+    expect(markup).not.toContain('0 of 2 completed');
+  });
+
+  it('ogni opzione porta l anello di focus visibile focus-ring (3.22 AC5)', () => {
+    const markup = setup();
+    // Il token focus-ring compare via focus-visible: sulle opzioni.
+    expect(markup).toContain('focus-visible:outline-focus-ring');
+  });
+
+  it('«prossimo esercizio» e «esci» portano il focus-ring (3.22 AC5)', () => {
+    // Il markup di setup rende «esci» sempre; il focus-ring vi compare.
+    const markup = setup();
+    // Almeno due interattivi col focus-ring (opzioni + esci). Il conteggio esatto
+    // dipende dal numero di opzioni; qui basta che l anello sia presente su piu nodi.
+    const rings = markup.match(/focus-visible:outline-focus-ring/g) ?? [];
+    expect(rings.length).toBeGreaterThanOrEqual(2);
+  });
 });
 
 describe('Matrix — pila vuota (deep-link) ⇒ stato neutro senza card, nessuna barra', () => {
@@ -198,6 +233,8 @@ describe('Matrix — pila vuota (deep-link) ⇒ stato neutro senza card, nessuna
     expect(mains.length).toBe(1);
     // Non è lo scheletro (la pila è caricata, solo vuota).
     expect(markup).not.toContain('aria-busy="true"');
+    // Nessuna live region nello stato vuoto (3.22 AC4).
+    expect(markup).not.toContain('aria-live');
   });
 });
 
@@ -246,6 +283,11 @@ describe('AC1/AC2/AC3 — sessione DRENATA (total > 0, coda vuota) ⇒ schermata
     // Un solo <main>.
     const mains = markup.match(/<main/g) ?? [];
     expect(mains.length).toBe(1);
+  });
+
+  it('il completamento NON ha live region aria-live (3.22 AC4)', () => {
+    const markup = drainedSetup(true);
+    expect(markup).not.toContain('aria-live');
   });
 
   it('streak in caricamento (cache fredda) ⇒ body reso, placeholder al posto dello streak (Matrix)', () => {

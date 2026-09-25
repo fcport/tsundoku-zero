@@ -122,8 +122,14 @@ export const en = {
     // La barra di avanzamento (3.19): l'`aria-label` che l'AT legge. Rappresenta il
     // completato; nessun conteggio interpolato (`{{count}}` innescherebbe il
     // pluralizzatore). Nessun `!`, nessuna emoji; ASCII.
+    //
+    // `announce` (3.22): l'avanzamento annunciato dalla live region unica
+    // `aria-live="polite"` del contratto tastiera. Interpola `{{completed}}` e
+    // `{{total}}` (MAI `{{count}}`, che innescherebbe il pluralizzatore i18next e
+    // romperebbe la parità en/it). Nessun `!`, nessuna emoji; ASCII.
     progress: {
       label: 'Session progress',
+      announce: '{{completed}} of {{total}} completed',
     },
     // La schermata di COMPLETAMENTO (3.21): resa SSE la coda si svuota DOPO una
     // sessione avviata (`total > 0`). Chiusura SOBRIA, nessuna celebrazione: `body`

@@ -30,6 +30,13 @@ import type { Locale } from '../../i18n';
 import { JapaneseText } from '../../ui/JapaneseText';
 import { ExplanationPanel } from './ExplanationPanel';
 
+// ANELLO DI FOCUS visibile (3.22, AC5): la stessa definizione della sessione
+// (`SessionScreen`), applicata qui alle opzioni e a «mostra la spiegazione». Il token
+// è `focus-ring` (in scuro `accent-dark`, cfr. `theme.css`); `focus-visible:` mostra
+// l'anello solo per navigazione da tastiera. Nessun colore letterale (UX-DR1).
+const FOCUS_RING =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+
 export interface ExerciseCardProps {
   /** L'esercizio da presentare (già validato/caricato, `Exercise` di dominio). */
   readonly exercise: Exercise;
@@ -132,7 +139,7 @@ export function ExerciseCard({
                 aria-pressed={isChosen}
                 disabled={isDisabled}
                 onClick={isDisabled ? undefined : () => onSelect(i)}
-                className="min-h-[56px] w-full rounded-md border border-border-strong bg-surface-base text-ink-primary p-3 text-body"
+                className={`min-h-[56px] w-full rounded-md border border-border-strong bg-surface-base text-ink-primary p-3 text-body ${FOCUS_RING}`}
               >
                 {/* Badge di posizione SOLO per assemble e SOLO su una tessera piazzata:
                     l'ordine dei tocchi è l'informazione (append in ordine). */}
@@ -153,7 +160,7 @@ export function ExerciseCard({
         <button
           type="button"
           onClick={onReveal}
-          className="text-label text-ink-secondary underline"
+          className={`text-label text-ink-secondary underline ${FOCUS_RING}`}
         >
           {t('session.explanation.reveal')}
         </button>
