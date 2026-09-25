@@ -52,6 +52,16 @@ export const en = {
     // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
     noExercisesNotice:
       'The lesson you just unlocked has no exercises. It is a concept to read, so nothing was added to review and the pile stays at zero.',
+    // Primo avvio (3.15): reso SSE nulla è ancora sbloccato (unlocked === 0).
+    // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
+    // conteggio/streak/curriculum a zero. Copy neutra, ASCII: nessun `!`, nessuna
+    // emoji, nessun avverbio di lode.
+    firstRunBody:
+      'This app builds your Japanese grammar one lesson at a time. Unlock the first lesson to fill your review pile, then work through it exercise by exercise.',
+    // L'azione di primo avvio: significa *comincia*, distinta da unlockAction
+    // («procedi» dalla pila svuotata). Verbale e concreta, mai "Continue"; nessun
+    // `!`, nessuna emoji, nessun avverbio di lode.
+    startAction: 'Start with the first lesson',
   },
   settings: {
     title: 'Settings',

@@ -177,8 +177,10 @@ describe('AC3 — scheletro senza salti', () => {
 
   it('scheletro e contenuto condividono la stessa classe di altezza (nessun salto)', () => {
     const skeleton = render(freshClient(), null);
+    // `unlocked: 1` (non 0): lo stato caricato NORMALE (il primo avvio, `unlocked
+    // === 0`, è ora un ramo distinto — 3.15).
     const loaded = render(
-      seededClient({ dueCount: 1, log: [], unlocked: 0, total: 1 }),
+      seededClient({ dueCount: 1, log: [], unlocked: 1, total: 1 }),
       UID,
     );
     // La stessa classe min-h-[...] compare sul <main> in entrambi i rami.
@@ -252,7 +254,9 @@ describe('AC5 — chiave unica della pila: dueQueryKey(userId) verbatim', () => 
   it('la dashboard legge la cache seminata su dueQueryKey(userId) (nessuna chiave divergente)', () => {
     // Seminiamo SOLO su dueQueryKey; se la dashboard usasse una chiave diversa la
     // sua query resterebbe pending e mostrerebbe lo scheletro invece del conteggio.
-    const qc = seededClient({ dueCount: 42, log: [], unlocked: 0, total: 0 });
+    // `unlocked: 1` (non 0): stato caricato NORMALE, non il primo avvio (3.15) che
+    // NON rende il `text-count-hero`.
+    const qc = seededClient({ dueCount: 42, log: [], unlocked: 1, total: 1 });
     const markup = render(qc, UID);
     expect(markup).toMatch(/text-count-hero[^>]*>42</);
   });
@@ -381,5 +385,110 @@ describe('AC3 — la lezione concettuale conta come sbloccata («u di t lezioni�
     expect(markup).toContain('3 of 10 lessons');
     // Ed è proprio la concettuale ad aver innescato la dichiarazione.
     expect(markup).toContain(en.dashboard.noExercisesNotice);
+  });
+});
+
+describe('AC1/AC2/AC3/AC4 — stato di primo avvio (unlocked === 0)', () => {
+  // Primo avvio: nulla sbloccato, curriculum disponibile. `next` = la prima lezione
+  // (ordinal minimo); l'azione la materializza.
+  const qc = seededClient({ dueCount: 0, log: [], unlocked: 0, total: 10 });
+  const markup = render(qc, UID);
+
+  it('rende la descrizione di cosa fa l\'app (firstRunBody, AC1)', () => {
+    expect(markup).toContain(en.dashboard.firstRunBody);
+  });
+
+  it('offre UNA sola azione primaria per cominciare (startAction, un solo <button>, AC1)', () => {
+    expect(markup).toContain(en.dashboard.startAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('rende un solo <main> (il landmark, con la classe di altezza condivisa)', () => {
+    const mains = markup.match(/<main/g) ?? [];
+    expect(mains.length).toBe(1);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*min-h-\[[^\]]+\]/);
+  });
+
+  it('NON porta la copy della pila svuotata: nessun unlockAction (AC2)', () => {
+    // Il primo avvio ha copy propria («comincia»); NON porta unlockAction («procedi»).
+    expect(markup).not.toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('NON mostra un conteggio a zero: nessun text-count-hero, nessun dueLabel (AC3)', () => {
+    expect(markup).not.toContain('text-count-hero');
+    expect(markup).not.toContain(en.dashboard.dueLabel);
+  });
+
+  it('NON mostra uno streak a zero: nessun «day streak» (AC3)', () => {
+    // 0 day streak degenererebbe in un altro zero: non è reso affatto.
+    expect(markup).not.toContain('day streak');
+    expect(markup).not.toContain('0 day streak');
+  });
+
+  it('NON mostra il progresso del curriculum a zero: nessun «of ... lessons» (AC3)', () => {
+    // «0 of N lessons» sarebbe un altro zero: il ramo non rende il curriculum.
+    expect(markup).not.toContain('of 10 lessons');
+    expect(markup).not.toContain('0 of');
+  });
+
+  it('la microcopy del primo avvio è priva di `!` (nessuna grammatica della celebrazione, AC5)', () => {
+    expect(markup).not.toContain('!');
+  });
+
+  it('nessun carattere >= U+2000 nel markup (en ASCII, AC5)', () => {
+    const offending = [...markup].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
+    expect(offending).toEqual([]);
+  });
+});
+
+describe('AC2 — primo avvio ≠ pila svuotata (testi distinti)', () => {
+  it('il primo avvio porta startAction/firstRunBody; la svuotata porta unlockAction', () => {
+    // Primo avvio: unlocked 0.
+    const firstRun = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 0, total: 10 }),
+      UID,
+    );
+    // Pila svuotata: unlocked >= 1, count 0, next != null.
+    const drained = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 1, total: 10 }),
+      UID,
+    );
+
+    // Il primo avvio: la sua copy propria, MAI quella della svuotata.
+    expect(firstRun).toContain(en.dashboard.startAction);
+    expect(firstRun).toContain(en.dashboard.firstRunBody);
+    expect(firstRun).not.toContain(en.dashboard.unlockAction);
+
+    // La svuotata: unlockAction, MAI la copy di primo avvio.
+    expect(drained).toContain(en.dashboard.unlockAction);
+    expect(drained).not.toContain(en.dashboard.startAction);
+    expect(drained).not.toContain(en.dashboard.firstRunBody);
+  });
+});
+
+describe('AC4 — azione = materializza la prima lezione; curriculum vuoto ⇒ nessun pulsante', () => {
+  it('curriculum disponibile ⇒ il pulsante cabla startAction (unlockMutation.mutate(next.id))', () => {
+    // next = lesson-0 (ordinal minimo): il pulsante di primo avvio la materializza.
+    const markup = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 0, total: 3 }),
+      UID,
+    );
+    expect(markup).toContain(en.dashboard.startAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(1);
+  });
+
+  it('curriculum vuoto (total 0 ⇒ next === null) ⇒ solo la descrizione, NESSUN pulsante', () => {
+    // unlocked 0 e total 0 (mai in produzione): firstRunBody senza azione.
+    const markup = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 0, total: 0 }),
+      UID,
+    );
+    expect(markup).toContain(en.dashboard.firstRunBody);
+    expect(markup).not.toContain(en.dashboard.startAction);
+    const buttons = markup.match(/<button/g) ?? [];
+    expect(buttons.length).toBe(0);
   });
 });

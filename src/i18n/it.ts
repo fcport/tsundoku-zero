@@ -46,6 +46,16 @@ export const it = {
     // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
     noExercisesNotice:
       'La lezione appena sbloccata non ha esercizi. È un concetto da leggere, quindi non è stato aggiunto nulla da rivedere e la pila resta a zero.',
+    // Primo avvio (3.15): reso SSE nulla è ancora sbloccato (unlocked === 0).
+    // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
+    // conteggio/streak/curriculum a zero. Copy neutra: nessun `!`, nessuna emoji,
+    // nessun avverbio di lode.
+    firstRunBody:
+      'Questa app costruisce la tua grammatica giapponese una lezione per volta. Sblocca la prima lezione per riempire la pila di ripasso, poi affrontala esercizio per esercizio.',
+    // L'azione di primo avvio: significa *comincia*, distinta da unlockAction
+    // («procedi» dalla pila svuotata). Verbale e concreta, mai "Continua"; nessun
+    // `!`, nessuna emoji, nessun avverbio di lode.
+    startAction: 'Comincia dalla prima lezione',
   },
   settings: {
     title: 'Impostazioni',

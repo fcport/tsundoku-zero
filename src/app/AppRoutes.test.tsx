@@ -60,8 +60,13 @@ function seededClient(): QueryClient {
     { exerciseId: 'a', stage: 0, dueAt: new Date(0), reviewCount: 0, lapseCount: 0, lastReviewedAt: null },
   ]);
   qc.setQueryData(['streak', UID], []);
-  qc.setQueryData(['unlocked', UID], []);
-  qc.setQueryData(['lessons'], []);
+  // Stato NON di primo avvio (3.15): una lezione già sbloccata, così la dashboard
+  // rende lo stato caricato con `primaryAction`. Con `unlocked === 0` renderebbe
+  // invece il primo avvio (niente `primaryAction`).
+  qc.setQueryData(['unlocked', UID], ['lesson-0']);
+  qc.setQueryData(['lessons'], [
+    { id: 'lesson-0', ordinal: 0, title: { en: 'L0' }, grammarPoints: [], exerciseCount: 1 },
+  ]);
   return qc;
 }
 
