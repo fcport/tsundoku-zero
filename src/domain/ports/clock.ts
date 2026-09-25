@@ -19,4 +19,13 @@
 export interface Clock {
   /** L'istante corrente. In produzione `new Date()`; nei test un valore fisso. */
   now(): Date;
+  /**
+   * Il fuso orario IANA (es. `Europe/Rome`) per il confine di giornata dello
+   * streak (AD-18). Il dominio non legge MAI il fuso ambientale
+   * (`Intl…resolvedOptions()` è vietato sotto src/domain, AD-1): entra da qui e
+   * `streak(log, now, timeZone)` lo riceve iniettato. In produzione è il fuso
+   * LOCALE del browser; un test inietta un fuso fisso per un confine
+   * deterministico.
+   */
+  timeZone(): string;
 }

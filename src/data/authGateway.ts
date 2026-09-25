@@ -175,6 +175,19 @@ export function createSupabaseAuthGateway(client: SupabaseClient): AuthGateway {
       }
     },
 
+    async currentUserId(): Promise<string | null> {
+      // Mirror di isAuthenticated: legge la stessa sessione ma ne estrae l'id
+      // (mai la Session, che il dominio non vede). Confine TOTALE: la catena
+      // opzionale `session?.user?.id` copre sessione assente, `user` assente o
+      // `id` assente (⇒ `null`); un throw dell'SDK è intercettato dal `catch`.
+      try {
+        const { data } = await client.auth.getSession();
+        return data.session?.user?.id ?? null;
+      } catch {
+        return null;
+      }
+    },
+
     onAuthStateChange(
       listener: (authenticated: boolean) => void,
     ): Unsubscribe {

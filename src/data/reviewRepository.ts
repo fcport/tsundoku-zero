@@ -14,6 +14,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ReviewRepository } from '../domain/ports/reviewRepository';
 import type { ReviewState } from '../domain/schedule';
+import type { ReviewLogEntry } from '../domain/streak';
 import { isDue } from '../domain/due';
 import { DataError } from './dataError';
 
@@ -23,6 +24,39 @@ import { DataError } from './dataError';
 const REVIEW_STATE_TABLE = 'review_state';
 const REVIEW_STATE_COLUMNS =
   'exercise_id, stage, due_at, review_count, lapse_count, last_reviewed_at';
+
+// Il registro append-only dei ripassi (3.7): allo streak serve solo l'istante
+// della risposta. `reviewed_at` è timestamptz ⇒ stringa ISO da supabase-js.
+// `user_id` non serve: RLS isola già la riga.
+const REVIEW_LOG_TABLE = 'review_log';
+const REVIEW_LOG_COLUMNS = 'reviewed_at';
+
+// Forma GREZZA di una riga `review_log` come arriva da Supabase.
+interface ReviewLogRow {
+  readonly reviewed_at: unknown;
+}
+
+/**
+ * Mappa PURA di una riga grezza di `review_log` in `ReviewLogEntry` di dominio:
+ * `reviewed_at` (stringa ISO) diventa `reviewedAt: Date`. Su riga non-oggetto,
+ * `reviewed_at` non stringa o timestamp non parsabile LANCIA un
+ * `DataError('listReviewLog')` — una riga rotta è un fallimento, non un valore
+ * degradato (alimenta TanStack Query, che esige un reject).
+ */
+function toReviewLogEntry(row: ReviewLogRow): ReviewLogEntry {
+  if (row === null || typeof row !== 'object') {
+    throw new DataError('listReviewLog', new Error('riga review_log non è un oggetto'));
+  }
+  const { reviewed_at } = row;
+  if (typeof reviewed_at !== 'string') {
+    throw new DataError('listReviewLog', new Error('riga review_log malformata'));
+  }
+  const reviewedAt = new Date(reviewed_at);
+  if (Number.isNaN(reviewedAt.getTime())) {
+    throw new DataError('listReviewLog', new Error('timestamp review_log non valido'));
+  }
+  return { reviewedAt };
+}
 
 // Forma GREZZA di una riga `review_state`. `due_at`/`last_reviewed_at` sono
 // timestamptz, che supabase-js consegna come stringa ISO; `last_reviewed_at` è
@@ -113,6 +147,23 @@ export function createSupabaseReviewRepository(
 
       const rows = (data ?? []) as readonly ReviewStateRow[];
       return rows.map(toReviewState).filter((state) => isDue(state, now));
+    },
+
+    async listReviewLog(): Promise<readonly ReviewLogEntry[]> {
+      // Canale unico dello streak (AD-18): legge TUTTO il log (RLS per-utente,
+      // poche righe) senza filtro `isDue` — la dovutezza non c'entra col log
+      // delle risposte. Su errore Supabase LANCIA (reject); ogni riga passa da
+      // `toReviewLogEntry`, che LANCIA su riga/timestamp malformato.
+      const { data, error } = await client
+        .from(REVIEW_LOG_TABLE)
+        .select(REVIEW_LOG_COLUMNS);
+
+      if (error) {
+        throw new DataError('listReviewLog', error);
+      }
+
+      const rows = (data ?? []) as readonly ReviewLogRow[];
+      return rows.map(toReviewLogEntry);
     },
   };
 }

@@ -6,10 +6,14 @@
 import type { Clock } from '../domain/ports/clock';
 
 /**
- * L'orologio di sistema: ritorna l'istante corrente come `new Date()`. È
- * l'adattatore di produzione della porta `Clock`; un test inietta invece un
- * clock con un `now()` fisso, così le letture temporali sono deterministiche.
+ * L'orologio di sistema: `now()` ritorna l'istante corrente come `new Date()`,
+ * `timeZone()` il fuso IANA locale del browser via
+ * `Intl.DateTimeFormat().resolvedOptions().timeZone` (vietato sotto src/domain,
+ * AD-1: solo questo adattatore lo legge). È l'adattatore di produzione della
+ * porta `Clock`; un test inietta invece un clock con `now()`/`timeZone()` fissi,
+ * così le letture temporali sono deterministiche.
  */
 export const systemClock: Clock = {
   now: () => new Date(),
+  timeZone: () => Intl.DateTimeFormat().resolvedOptions().timeZone,
 };

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   authResultFromResponse,
   classifyAuthError,
+  createSupabaseAuthGateway,
   hasSession,
 } from './authGateway';
 
@@ -145,5 +147,46 @@ describe('hasSession — session ⇒ boolean (mappa della subscription)', () => 
 
   it('undefined ⇒ false', () => {
     expect(hasSession(undefined)).toBe(false);
+  });
+});
+
+// Righe della I/O Matrix per `currentUserId` (storia 3.12): il client è FINTO —
+// solo `auth.getSession` è invocato. Sessione con `user.id` ⇒ id; nessuna
+// sessione o SDK che lancia ⇒ `null` (confine TOTALE, mai reject).
+interface FakeSessionOptions {
+  /** Valore di `data.session` ritornato da getSession (o `null`). */
+  readonly session?: unknown;
+  /** Se true, getSession LANCIA (imita un throw dell'SDK). */
+  readonly throws?: boolean;
+}
+
+function makeSessionClient(options: FakeSessionOptions = {}): SupabaseClient {
+  const fake = {
+    auth: {
+      getSession: async () => {
+        if (options.throws) throw new Error('boom');
+        return { data: { session: options.session ?? null }, error: null };
+      },
+    },
+  };
+  return fake as unknown as SupabaseClient;
+}
+
+describe('currentUserId — id dell utente o null (confine totale, 3.12)', () => {
+  it('sessione con user.id ⇒ ritorna l id (stringa)', async () => {
+    const gateway = createSupabaseAuthGateway(
+      makeSessionClient({ session: { user: { id: 'user-42' } } }),
+    );
+    await expect(gateway.currentUserId()).resolves.toBe('user-42');
+  });
+
+  it('nessuna sessione ⇒ null', async () => {
+    const gateway = createSupabaseAuthGateway(makeSessionClient({ session: null }));
+    await expect(gateway.currentUserId()).resolves.toBeNull();
+  });
+
+  it('SDK che lancia ⇒ null (non rifiuta)', async () => {
+    const gateway = createSupabaseAuthGateway(makeSessionClient({ throws: true }));
+    await expect(gateway.currentUserId()).resolves.toBeNull();
   });
 });

@@ -69,6 +69,9 @@ transcripts/
 # (_bmad/, .bmad-loop/) e le personalizzazioni (_bmad/custom/).
 .claude/skills/
 
+# Lock di runtime dello scheduler di Claude Code: artefatto di sessione, non lavoro del progetto
+.claude/scheduled_tasks.lock
+
 # Output di rendering delle skill: rigenerato, non lavoro del progetto
 _bmad/render/
 
