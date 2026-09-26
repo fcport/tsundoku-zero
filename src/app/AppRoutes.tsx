@@ -18,9 +18,16 @@ import { Route, Routes, useNavigate } from 'react-router';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
 import { StatsScreen } from '../features/stats/StatsScreen';
+import { PrivacyScreen } from '../features/legal/PrivacyScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
-import { LOGIN_PATH, ROOT_PATH, STATS_PATH, STUDY_PATH } from './routes';
+import {
+  LOGIN_PATH,
+  PRIVACY_PATH,
+  ROOT_PATH,
+  STATS_PATH,
+  STUDY_PATH,
+} from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -58,11 +65,30 @@ export function AppRoutes({
   const navigate = useNavigate();
   return (
     <Routes>
+      {/* La privacy policy (7.1): l'UNICA rotta pubblica in ENTRAMBI gli stati —
+          raggiungibile da anonimo (prima della registrazione) e da autenticato.
+          Dichiarata come figlio DIRETTO di <Routes>, FUORI da entrambe le guardie,
+          cosi il match statico `/privacy` batte il catch-all `*`. `onExit` e
+          DETERMINISTICO dal livello app (niente navigate(-1), che su deep-link
+          diretto sarebbe un vicolo cieco): autenticato -> ROOT_PATH, anonimo ->
+          LOGIN_PATH. */}
+      <Route
+        path={PRIVACY_PATH}
+        element={
+          <PrivacyScreen
+            onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+          />
+        }
+      />
       <Route element={<RedirectIfAuthenticated authenticated={authenticated} />}>
         <Route
           path={LOGIN_PATH}
           element={
-            <AuthScreen gateway={gateway} onAuthenticated={onAuthenticated} />
+            <AuthScreen
+              gateway={gateway}
+              onAuthenticated={onAuthenticated}
+              onViewPrivacy={() => navigate(PRIVACY_PATH)}
+            />
           }
         />
       </Route>

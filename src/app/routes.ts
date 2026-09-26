@@ -29,3 +29,14 @@ export const STUDY_PATH = '/studia';
  * features non portano stringhe di path.
  */
 export const STATS_PATH = '/statistiche';
+
+/**
+ * La rotta della PRIVACY POLICY (7.1): l'UNICA rotta pubblica raggiungibile in
+ * ENTRAMBI gli stati (anonimo — prima della registrazione — e autenticato). Vive
+ * fuori da entrambe le guardie in `AppRoutes`, dichiarata come figlio DIRETTO di
+ * `<Routes>` così il match statico `/privacy` batte il catch-all `*`. La
+ * navigazione la cabla il livello app (`AppRoutes` per il collegamento sul login e
+ * per l'uscita `onExit`; `AuthenticatedShell` per il collegamento nelle
+ * Impostazioni); le features non portano stringhe di path.
+ */
+export const PRIVACY_PATH = '/privacy';

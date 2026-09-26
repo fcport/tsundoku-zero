@@ -14,19 +14,38 @@
 // propria intestazione <h2>). Il branding <App/> vive SOLO sulla radice protetta
 // autenticata (AuthenticatedShell), per non annidare due <main>.
 import { useState } from 'react';
+import { useTranslation } from '../../i18n';
 import type { AuthGateway } from '../../domain/ports/authGateway';
 import { AuthForm, type AuthFormValues } from './AuthForm';
 import { applyAuthOutcome } from './authOutcome';
 import { AUTH_MODE_COPY, submitForMode, type AuthMode } from './authMode';
 import type { AuthErrorMessage } from './authFailureMessage';
 
+// ANELLO DI FOCUS visibile: lo STESSO token degli interattivi delle schermate-rotta
+// (`StatsScreen`, `PrivacyScreen`). `focus-visible:` mostra l'anello solo per
+// navigazione da tastiera. Token `focus-ring`: nessun colore letterale (UX-DR1).
+const FOCUS_RING =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+
 export interface AuthScreenProps {
   readonly gateway: AuthGateway;
   /** Invocata quando l'autenticazione va a buon fine: l'utente atterra dentro. */
   readonly onAuthenticated: () => void;
+  /**
+   * La navigazione alla privacy policy (7.1): una CALLBACK dal livello app (AD-1:
+   * le features non importano react-router). Il cablaggio vive in `AppRoutes`
+   * (`() => navigate(PRIVACY_PATH)`), cosi lo sconosciuto puo leggere cosa si
+   * memorizza PRIMA di consegnare la propria email. Obbligatoria.
+   */
+  readonly onViewPrivacy: () => void;
 }
 
-export function AuthScreen({ gateway, onAuthenticated }: AuthScreenProps) {
+export function AuthScreen({
+  gateway,
+  onAuthenticated,
+  onViewPrivacy,
+}: AuthScreenProps) {
+  const { t } = useTranslation();
   const [values, setValues] = useState<AuthFormValues>({
     email: '',
     password: '',
@@ -63,6 +82,17 @@ export function AuthScreen({ gateway, onAuthenticated }: AuthScreenProps) {
             .finally(() => setPending(false));
         }}
       />
+      {/* Il collegamento alla privacy policy (7.1): un'affordance SECONDARIA
+          (button, idioma del repo: `onExit`/`onViewStats` sono gia button), DENTRO
+          il `<main>`, DOPO il form. Cosi lo sconosciuto legge cosa si memorizza
+          PRIMA di registrarsi. -> `onViewPrivacy` (cablato in AppRoutes). */}
+      <button
+        type="button"
+        onClick={onViewPrivacy}
+        className={`text-caption text-ink-secondary underline ${FOCUS_RING}`}
+      >
+        {t('legal.privacy.linkLabel')}
+      </button>
     </main>
   );
 }

@@ -341,3 +341,19 @@ source_spec: `spec-6-2-il-flusso-di-autorazione-documentato-e-ripetibile.md`
 severity: medium
 reason: src/domain/content-validation.ts controlla la forma (parseLesson: start>=0, end>start), kana-senza-Han, l'unicità cross-file e il grammarPoint dichiarato, ma NON i bound di segmento. La segmentazione (alignFurigana) è Epic 3 e il controllo kana è dichiarato "di CARATTERE, non di segmentazione". Un select-span con end oltre i segmenti reali passa il gate e produrrebbe un esercizio rotto; oggi lo intercetta solo la revisione umana (passo 5 del runbook). Non correggibile in 6.2: l'intent vieta di modificare il validatore; naturale ricongiungimento a Epic 3.
 status: open
+
+### DW-43: FOCUS_RING è duplicato come costante di modulo in più file (PrivacyScreen, AuthScreen, SettingsScreen, StatsScreen, SessionScreen) invece di un token di design condiviso ed esportato.
+origin: spec-deferred 84569b3f4b0a
+location: src/features/legal/PrivacyScreen.tsx e sibling
+source_spec: `spec-7-1-dire-cosa-si-tiene-e-come-cancellarlo.md`
+severity: low
+reason: La stessa stringa di classi dell'anello di focus è copiata in 4+ file; un singolo token esportato eviterebbe che gli anelli divergano. Pattern pre-esistente, non introdotto da questa storia ma esteso da essa.
+status: open
+
+### DW-44: Le schermate-rotta pubbliche standalone (/privacy, /statistiche, /login) rendono l'intestazione di testa come <h2> senza alcun <h1>, quindi da anonimo l'outline dei titoli parte dal livello 2.
+origin: spec-deferred b9d11196b9ad
+location: src/features/legal/PrivacyScreen.tsx:36
+source_spec: `spec-7-1-dire-cosa-si-tiene-e-come-cancellarlo.md`
+severity: low
+reason: PrivacyScreen segue la convenzione delle schermate-rotta di StatsScreen (h2 di testa, nessun aria-labelledby sul <main>). Osservazione di accessibilità a livello app, coerente col tema accessibilità di Epic 7 (storia 7.6); non richiesta dagli AC di 7.1.
+status: open

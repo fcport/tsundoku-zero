@@ -227,4 +227,25 @@ export const it = {
   sync: {
     pending: 'Sincronizzazione in sospeso',
   },
+  // La privacy policy (7.1): STESSE chiavi di `en` (parità ricorsiva). Dichiara
+  // cosa il sistema memorizza, cosa NON raccoglie e come cancellare l'account.
+  // `stored` nomina i soli dati memorizzati (email, hash della password, lezioni
+  // sbloccate, stato di revisione, log delle risposte, preferenze); `notCollected`
+  // nomina cio che NON si raccoglie (nome, data di nascita, analitica sul singolo
+  // individuo); `deletion` spiega la cancellazione da Impostazioni -> Cancella
+  // account e dichiara che distrugge ANCHE il log delle risposte. Nessun `!`,
+  // nessuna emoji, nessun avverbio di lode.
+  legal: {
+    privacy: {
+      title: 'Informativa sulla privacy',
+      linkLabel: "Leggi l'informativa sulla privacy",
+      stored:
+        "Questo servizio memorizza soltanto ciò che gli serve per insegnarti: la tua email, un hash della tua password, le lezioni che hai sbloccato, il tuo stato di revisione, un log delle tue risposte e le tue preferenze. Nient'altro viene conservato.",
+      notCollected:
+        'Questo servizio non raccoglie il tuo nome, la tua data di nascita, né alcuna analitica su di te come individuo.',
+      deletion:
+        'Puoi cancellare il tuo account dalle Impostazioni, tramite Cancella account. La cancellazione distrugge anche il log delle tue risposte, e non si può annullare.',
+      back: 'Indietro',
+    },
+  },
 } as const;

@@ -205,6 +205,53 @@ describe('AppRoutes — rotta di Accesso, anonimo', () => {
     const opens = markup.match(/<main/g) ?? [];
     expect(opens.length).toBe(1);
   });
+
+  it('7.1 — contiene il collegamento alla privacy policy (raggiungibile PRIMA della registrazione)', () => {
+    // Lo sconosciuto legge il collegamento sulla schermata di Accesso, prima di
+    // consegnare la propria email: l'affordance verso `/privacy`.
+    expect(markup).toContain(en.legal.privacy.linkLabel);
+  });
+});
+
+describe('AppRoutes — rotta /privacy, anonimo (7.1)', () => {
+  // La rotta pubblica ungated: raggiungibile con `authenticated=false`, PRIMA della
+  // registrazione. Il match statico `/privacy` batte il catch-all `*`, e la pagina
+  // non e rediretta (nessuna guardia): rende la PrivacyScreen.
+  const markup = renderAt('/privacy', false);
+
+  it('rende la PrivacyScreen (dichiarazioni + ritorno), NON rediretta', () => {
+    expect(markup).toContain(en.legal.privacy.stored);
+    expect(markup).toContain(en.legal.privacy.notCollected);
+    expect(markup).toContain(en.legal.privacy.deletion);
+    expect(markup).toContain(en.legal.privacy.back);
+    // NON la dashboard: `/privacy` non ricade sul catch-all protetto.
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('ha un solo landmark <main>', () => {
+    const opens = markup.match(/<main/g) ?? [];
+    expect(opens.length).toBe(1);
+  });
+});
+
+describe('AppRoutes — rotta /privacy, autenticato (7.1)', () => {
+  // La stessa rotta ungated, raggiungibile anche da autenticato: vive fuori da
+  // RequireAuth E da RedirectIfAuthenticated, quindi rende la PrivacyScreen in
+  // entrambi gli stati.
+  const markup = renderAt('/privacy', true);
+
+  it('rende la PrivacyScreen (dichiarazioni + ritorno)', () => {
+    expect(markup).toContain(en.legal.privacy.stored);
+    expect(markup).toContain(en.legal.privacy.notCollected);
+    expect(markup).toContain(en.legal.privacy.deletion);
+    // NON la dashboard: `/privacy` ha precedenza sul catch-all anche da autenticato.
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('ha un solo landmark <main>', () => {
+    const opens = markup.match(/<main/g) ?? [];
+    expect(opens.length).toBe(1);
+  });
 });
 
 describe('AppRoutes — rotta di Accesso, autenticato', () => {

@@ -242,4 +242,28 @@ export const en = {
   sync: {
     pending: 'Sync pending',
   },
+  // La privacy policy (7.1): la pagina pubblica `/privacy` che dichiara, PRIMA
+  // della registrazione, cosa il sistema memorizza, cosa NON raccoglie e come
+  // cancellare l'account. Dichiarazioni FATTUALI (un impegno, non boilerplate):
+  // `stored` nomina i soli dati memorizzati (email, hash della password, lezioni
+  // sbloccate, stato di revisione, log delle risposte, preferenze — corrispondenti
+  // ad auth + lesson_progress + review_state + review_log + user_settings);
+  // `notCollected` nomina cio che NON si raccoglie (nome, data di nascita, analitica
+  // sul singolo individuo); `deletion` spiega la cancellazione da Impostazioni ->
+  // Cancella account e dichiara che distrugge ANCHE il log delle risposte.
+  // `linkLabel` e l'affordance dal login e dalle Impostazioni; `back` e il ritorno.
+  // Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
+  legal: {
+    privacy: {
+      title: 'Privacy policy',
+      linkLabel: 'Read the privacy policy',
+      stored:
+        'This service stores only what it needs to teach you: your email, a hash of your password, which lessons you have unlocked, your review state, a log of your answers, and your preferences. Nothing else is kept.',
+      notCollected:
+        'This service does not collect your name, your date of birth, or any analytics about you as an individual.',
+      deletion:
+        'You can delete your account from Settings, through Delete account. Deletion also destroys the log of your answers, and it cannot be undone.',
+      back: 'Back',
+    },
+  },
 } as const;
