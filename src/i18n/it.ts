@@ -83,31 +83,35 @@ export const it = {
     // emoji, nessun avverbio di lode.
     viewStats: 'Vedi le tue statistiche',
   },
-  // Le statistiche (Epic 5): STESSE chiavi di `en` (parità ricorsiva). La vista
-  // delle risposte nel tempo (5.1, FR7.1). Nessun `!`, nessuna emoji, nessun
-  // avverbio di lode.
+  // Le statistiche (Epic 5): STESSE chiavi di `en` (parità ricorsiva). Gli stati a
+  // dati insufficienti DICHIARANO «cosa manca e quanto» (5.4, FR7.5): il grafico
+  // temporale nomina la soglia e i giorni finora; distribuzione e tassi nominano il
+  // minimo onesto («almeno uno»). Nessun `!`, nessuna emoji, nessun avverbio di lode.
   stats: {
     title: 'Statistiche',
-    // Risposte nel tempo (5.1): `heading` intitola la serie; `dayLabel` etichetta
+    // Risposte nel tempo (5.1/5.4): `heading` intitola la serie; `dayLabel` etichetta
     // ogni giorno (`{{date}}` = YYYY-MM-DD, `{{answers}}` = conteggio del giorno,
     // MAI `{{count}}` che innescherebbe il pluralizzatore i18next e romperebbe la
-    // parità en/it); `empty` è il placeholder testuale neutro a log vuoto (mai un
-    // grafico vuoto). La ricca dichiarazione «cosa manca» è la storia 5.4.
+    // parità en/it). `insufficient` è la dichiarazione quantificata sotto soglia
+    // (`{{needed}}` = `MIN_ANSWER_DAYS`, l'unica fonte del numero; `{{soFar}}` = giorni
+    // con risposte finora): dice COSA manca e QUANTO, mai un grafico sparso.
     answersOverTime: {
       heading: 'Risposte nel tempo',
       dayLabel: '{{date}} - risposte: {{answers}}',
-      empty: 'Non ci sono ancora risposte da mostrare. Quando ripasserai gli esercizi, le tue risposte per giorno compariranno qui.',
+      insufficient:
+        'Servono almeno {{needed}} giorni di risposte per disegnare questo grafico. Giorni con risposte finora: {{soFar}}.',
     },
     // Distribuzione per stadio (5.2, FR7.2): STESSE chiavi di `en` (parita
     // ricorsiva). `heading` intitola la sezione; `stageLabel` etichetta ogni stadio
     // (`{{stage}}` = indice 0-5, `{{exercises}}` = numero di esercizi, MAI
-    // `{{count}}` che innescherebbe il pluralizzatore i18next); `empty` e il
-    // placeholder testuale neutro a log vuoto. Nessuna etichetta mnemonica ne
-    // intervallo in giorni: l'AC chiede «sei stadi, 0-5».
+    // `{{count}}` che innescherebbe il pluralizzatore i18next); `empty` e la
+    // dichiarazione quantificata a log vuoto (5.4): asse CATEGORIALE, meaningful con
+    // qualunque dato, quindi il minimo onesto e «almeno un esercizio ripassato».
+    // Nessuna etichetta mnemonica ne intervallo in giorni: l'AC chiede «sei stadi, 0-5».
     stageDistribution: {
       heading: 'Esercizi per stadio di ripasso',
       stageLabel: 'Stadio {{stage}} - esercizi: {{exercises}}',
-      empty: 'Non ci sono ancora esercizi da mostrare. Quando ripasserai gli esercizi, a che punto sono compariranno qui.',
+      empty: 'Questa vista ha bisogno di almeno un esercizio ripassato. Ripassa un esercizio e il suo stadio comparira qui.',
     },
     // Tassi d'errore per punto grammaticale (5.3, FR7.3): STESSE chiavi di `en`
     // (parita ricorsiva). `heading` intitola la sezione; `entryLabel` etichetta ogni
@@ -117,14 +121,15 @@ export const it = {
     // STATICA (nessun `{{lesson}}`): il titolo della lezione e CONTENUTO reso a parte
     // in un nodo con `lang` sulla lingua effettivamente resa (WCAG 3.1.2
     // Language-of-Parts). `unknownLesson` e il fallback neutro per un punto orfano;
-    // `empty` e il placeholder testuale neutro a log vuoto. Nessun `!`, nessuna
-    // emoji, nessun avverbio di lode.
+    // `empty` e la dichiarazione quantificata a log vuoto (5.4): asse CATEGORIALE,
+    // meaningful con qualunque dato, quindi il minimo onesto e «almeno una risposta».
+    // Nessun `!`, nessuna emoji, nessun avverbio di lode.
     grammarPointErrorRates: {
       heading: 'Punti grammaticali per tasso di errore',
       entryLabel: 'errori: {{errors}} su {{total}}',
       lessonLabel: 'Lezione:',
       unknownLesson: 'Nessuna lezione insegna piu questo punto',
-      empty: 'Non ci sono ancora punti grammaticali da mostrare. Quando ripasserai gli esercizi, quanto spesso sbagli ogni regola comparira qui.',
+      empty: 'Questa vista ha bisogno di almeno una risposta. Rispondi a un esercizio e quanto spesso sbagli ogni regola comparira qui.',
     },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continua"/"Indietro" generico.

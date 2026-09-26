@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { en } from '../../i18n/en';
 import { it as itCatalog } from '../../i18n/it';
 import { i18n } from '../../i18n';
+import { MIN_ANSWER_DAYS } from '../../domain/answersOverTime';
 import type { ReviewLogRecord } from '../../domain/streak';
 import type { ReviewOutcome } from '../../domain/schedule';
 import type { LessonSummary } from '../../domain/ports/contentRepository';
@@ -86,8 +87,10 @@ afterEach(async () => {
 });
 
 describe('AC1 — serie con dati: intestazione + conteggi per giorno come testo', () => {
-  // Log su 24 e 25 (fuso UTC): serie contigua [24: 1, 25: 1].
+  // Log su 23, 24 e 25 (fuso UTC): serie contigua [23: 1, 24: 1, 25: 1]. TRE giorni
+  // distinti con risposte (>= MIN_ANSWER_DAYS): il grafico temporale e meaningful (5.4).
   const qc = seededClient([
+    logAt('2026-09-23T10:00:00.000Z'),
     logAt('2026-09-24T10:00:00.000Z'),
     logAt('2026-09-25T10:00:00.000Z'),
   ]);
@@ -104,6 +107,7 @@ describe('AC1 — serie con dati: intestazione + conteggi per giorno come testo'
   it('mostra il conteggio di ciascun giorno come TESTO', () => {
     // Il dayLabel interpola {{date}} e {{answers}}: il giorno e il suo conteggio,
     // in forma etichetta-valore (nessuna concordanza di numero).
+    expect(markup).toContain('2026-09-23 - answers: 1');
     expect(markup).toContain('2026-09-24 - answers: 1');
     expect(markup).toContain('2026-09-25 - answers: 1');
   });
@@ -117,8 +121,15 @@ describe('AC1 — serie con dati: intestazione + conteggi per giorno come testo'
     expect(markup).toContain(en.stats.back);
   });
 
-  it('non porta il placeholder del log vuoto', () => {
-    expect(markup).not.toContain(en.stats.answersOverTime.empty);
+  it('non porta la dichiarazione di dati insufficienti (serie sufficiente)', () => {
+    // A tre giorni distinti il grafico e meaningful: nessuna dichiarazione «servono
+    // almeno N giorni» (5.4). Confronto sulla resa interpolata della chiave.
+    expect(markup).not.toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 3,
+      }),
+    );
   });
 
   it("l'affordance di ritorno porta l'anello di focus da tastiera (focus-visible)", () => {
@@ -129,26 +140,44 @@ describe('AC1 — serie con dati: intestazione + conteggi per giorno come testo'
 });
 
 describe('AC1 — ultima risposta nel passato ⇒ la serie si estende fino a oggi (code a 0 come TESTO)', () => {
-  // Unica risposta il 23 (UTC); NOW è il 25: la serie contigua è [23:1, 24:0, 25:0].
-  // Verifica alla SUPERFICIE della vista (non solo del dominio) che i giorni a
-  // conteggio 0 compaiano come TESTO ("answers: 0") — la contiguità che l'AC1 osserva.
-  const qc = seededClient([logAt('2026-09-23T10:00:00.000Z')]);
+  // Risposte su 21, 22, 23 (UTC): TRE giorni distinti (>= MIN_ANSWER_DAYS, serie
+  // meaningful, 5.4); NOW è il 25, quindi la serie contigua e [21:1, 22:1, 23:1, 24:0,
+  // 25:0]. Verifica alla SUPERFICIE della vista (non solo del dominio) che i giorni di
+  // CODA a conteggio 0 compaiano come TESTO ("answers: 0") — la contiguità che l'AC1
+  // osserva, resa solo perche il grafico e sufficiente.
+  const qc = seededClient([
+    logAt('2026-09-21T10:00:00.000Z'),
+    logAt('2026-09-22T10:00:00.000Z'),
+    logAt('2026-09-23T10:00:00.000Z'),
+  ]);
   const markup = render(qc, UID);
 
-  it('rende il giorno con risposta e i giorni successivi a 0 come testo', () => {
+  it('rende i giorni con risposta e i giorni di coda a 0 come testo', () => {
     expect(markup).toContain('2026-09-23 - answers: 1');
     expect(markup).toContain('2026-09-24 - answers: 0');
     expect(markup).toContain('2026-09-25 - answers: 0');
   });
 
-  it('NON rende il placeholder del log vuoto (il log non è vuoto)', () => {
-    expect(markup).not.toContain(en.stats.answersOverTime.empty);
+  it('NON rende la dichiarazione di dati insufficienti (tre giorni distinti)', () => {
+    // I giorni di coda a 0 NON contano verso la soglia (daysWithAnswers esclude gli
+    // zeri): qui i tre giorni pieni bastano, quindi nessuna dichiarazione (5.4).
+    expect(markup).not.toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 3,
+      }),
+    );
   });
 });
 
 describe('AC1 — più risposte lo stesso giorno ⇒ un solo giorno col conteggio sommato', () => {
-  it('tre risposte il 25 ⇒ «2026-09-25 - answers: 3»', () => {
+  it('tre risposte il 25 (+ due altri giorni per la soglia) ⇒ «2026-09-25 - answers: 3»', () => {
+    // Tre risposte il 25 sommano nello stesso giorno; il 23 e il 24 portano un'altra
+    // risposta ciascuno perche il grafico raggiunga MIN_ANSWER_DAYS giorni distinti e
+    // sia reso (5.4). Il giorno pieno che l'AC osserva resta il 25 con conteggio 3.
     const qc = seededClient([
+      logAt('2026-09-23T10:00:00.000Z'),
+      logAt('2026-09-24T10:00:00.000Z'),
       logAt('2026-09-25T01:00:00.000Z'),
       logAt('2026-09-25T10:00:00.000Z'),
       logAt('2026-09-25T20:00:00.000Z'),
@@ -158,7 +187,123 @@ describe('AC1 — più risposte lo stesso giorno ⇒ un solo giorno col conteggi
   });
 });
 
-describe('AC5 — log vuoto ⇒ placeholder testuale neutro, NON un grafico', () => {
+// I test 5.4 (FR7.5): il grafico temporale e MEANINGFUL solo con risposte su almeno
+// MIN_ANSWER_DAYS giorni distinti. Sotto soglia rende SOLO una dichiarazione
+// quantificata («servono almeno N giorni; finora M»), mai un grafico sparso; le tre
+// viste decidono la sufficienza INDIPENDENTEMENTE (UX-DR18).
+describe('5.4 AC1 — temporale sotto soglia ⇒ dichiarazione quantificata, nessun grafico', () => {
+  // Risposte su 24 e 25 (DUE giorni distinti < MIN_ANSWER_DAYS): insufficiente.
+  const qc = seededClient([
+    logAt('2026-09-24T10:00:00.000Z'),
+    logAt('2026-09-25T10:00:00.000Z'),
+  ]);
+  const markup = render(qc, UID);
+
+  it('rende la dichiarazione quantificata (soglia + giorni finora)', () => {
+    // Nomina COSA manca e QUANTO: la soglia MIN_ANSWER_DAYS e i giorni finora (2).
+    expect(markup).toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 2,
+      }),
+    );
+  });
+
+  it('NON rende l\'intestazione del temporale ne le barre della serie', () => {
+    expect(markup).not.toContain(en.stats.answersOverTime.heading);
+    // La dichiarazione non e una lista di barre: nessun conteggio per-giorno reso.
+    expect(markup).not.toContain('2026-09-24 - answers:');
+    expect(markup).not.toContain('2026-09-25 - answers:');
+  });
+
+  it('interpola soFar corretto (2) e la soglia dal dominio (nessun 3 letterale nel codice)', () => {
+    // La copy nomina esattamente due giorni finora e la soglia MIN_ANSWER_DAYS.
+    expect(markup).toContain('Days with answers so far: 2.');
+    expect(markup).toContain(`at least ${MIN_ANSWER_DAYS} days`);
+  });
+});
+
+describe('5.4 AC1/AC2 — confine della soglia: 2 giorni insufficiente, 3 giorni sufficiente', () => {
+  it('due giorni distinti ⇒ insufficiente (dichiarazione, nessuna intestazione)', () => {
+    const markup = render(
+      seededClient([
+        logAt('2026-09-24T10:00:00.000Z'),
+        logAt('2026-09-25T10:00:00.000Z'),
+      ]),
+      UID,
+    );
+    expect(markup).toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 2,
+      }),
+    );
+    expect(markup).not.toContain(en.stats.answersOverTime.heading);
+  });
+
+  it('tre giorni distinti (la soglia esatta) ⇒ sufficiente (intestazione + barre)', () => {
+    const markup = render(
+      seededClient([
+        logAt('2026-09-23T10:00:00.000Z'),
+        logAt('2026-09-24T10:00:00.000Z'),
+        logAt('2026-09-25T10:00:00.000Z'),
+      ]),
+      UID,
+    );
+    expect(markup).toContain(en.stats.answersOverTime.heading);
+    expect(markup).toContain('2026-09-23 - answers: 1');
+    expect(markup).toContain('2026-09-25 - answers: 1');
+    // A soglia esatta nessuna dichiarazione di insufficienza.
+    expect(markup).not.toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 3,
+      }),
+    );
+  });
+});
+
+describe('5.4 AC — indipendenza delle viste: 5 esercizi in UN giorno', () => {
+  // Cinque esercizi tutti risposti il 25 (UN solo giorno di calendario): il grafico
+  // temporale e insufficiente (daysWithAnswers = 1 < MIN_ANSWER_DAYS) MENTRE la
+  // distribuzione e i tassi rendono i loro dati reali (assi categoriali, meaningful
+  // con qualunque dato). UX-DR18: le tre viste decidono INDIPENDENTEMENTE.
+  const qc = seededClient([
+    logAt('2026-09-25T01:00:00.000Z', 'ex-1', 'again', 'gp-1'),
+    logAt('2026-09-25T02:00:00.000Z', 'ex-2', 'good', 'gp-1'),
+    logAt('2026-09-25T03:00:00.000Z', 'ex-3', 'good', 'gp-1'),
+    logAt('2026-09-25T04:00:00.000Z', 'ex-4', 'good', 'gp-1'),
+    logAt('2026-09-25T05:00:00.000Z', 'ex-5', 'good', 'gp-1'),
+  ]);
+  const markup = render(qc, UID);
+
+  it('temporale insufficiente: dichiarazione «finora 1», nessuna intestazione temporale', () => {
+    expect(markup).toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 1,
+      }),
+    );
+    expect(markup).not.toContain(en.stats.answersOverTime.heading);
+  });
+
+  it('distribuzione resa coi dati reali (non e insufficiente)', () => {
+    // Cinque esercizi: quattro allo stadio 1 (un `good`), uno allo stadio 0 (`again`).
+    expect(markup).toContain(en.stats.stageDistribution.heading);
+    expect(markup).toContain('Stage 0 - exercises: 1');
+    expect(markup).toContain('Stage 1 - exercises: 4');
+    expect(markup).not.toContain(en.stats.stageDistribution.empty);
+  });
+
+  it('tassi d errore resi coi dati reali (non e insufficiente)', () => {
+    // gp-1: un errore (`again`) su cinque risposte.
+    expect(markup).toContain(en.stats.grammarPointErrorRates.heading);
+    expect(markup).toContain('errors: 1 of 5');
+    expect(markup).not.toContain(en.stats.grammarPointErrorRates.empty);
+  });
+});
+
+describe('AC5 — log vuoto ⇒ dichiarazione quantificata «cosa manca e quanto», NON un grafico', () => {
   const qc = seededClient([]);
   const markup = render(qc, UID);
 
@@ -166,11 +311,17 @@ describe('AC5 — log vuoto ⇒ placeholder testuale neutro, NON un grafico', ()
     expect(markup).toContain(en.stats.title);
   });
 
-  it('rende il placeholder del log vuoto (tutte e tre le sezioni)', () => {
-    expect(markup).toContain(en.stats.answersOverTime.empty);
-    // AC5 di 5.2: anche la distribuzione rende un placeholder testuale neutro.
+  it('rende una dichiarazione quantificata in tutte e tre le sezioni (5.4)', () => {
+    // Temporale: la soglia (MIN_ANSWER_DAYS) e i giorni finora (0) interpolati.
+    expect(markup).toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 0,
+      }),
+    );
+    // AC5 di 5.2: la distribuzione dichiara il minimo onesto («almeno un esercizio»).
     expect(markup).toContain(en.stats.stageDistribution.empty);
-    // AC5 di 5.3: anche i tassi d'errore rendono un placeholder testuale neutro.
+    // AC5 di 5.3: i tassi d'errore dichiarano il minimo onesto («almeno una risposta»).
     expect(markup).toContain(en.stats.grammarPointErrorRates.empty);
   });
 
@@ -194,8 +345,12 @@ describe('5.2 AC — distribuzione per stadio: intestazione + sei stadi con cont
   //  - ex-B: good, good ⇒ stadio 2
   //  - ex-C: good, good ⇒ stadio 2
   // Distribuzione: stadio 0 => 0, 1 => 1, 2 => 2, 3..5 => 0.
+  // Le risposte sono sparse su 19, 20 e 21 (TRE giorni distinti >= MIN_ANSWER_DAYS)
+  // cosi ANCHE il grafico temporale e reso: entrambe le sezioni compaiono nello stesso
+  // <main> (5.4). Lo stadio finale di ogni esercizio non dipende dal giorno di
+  // calendario, solo dalla sequenza di esiti.
   const qc = seededClient([
-    logAt('2026-09-20T10:00:00.000Z', 'ex-A', 'good'),
+    logAt('2026-09-19T10:00:00.000Z', 'ex-A', 'good'),
     logAt('2026-09-20T10:00:00.000Z', 'ex-B', 'good'),
     logAt('2026-09-21T10:00:00.000Z', 'ex-B', 'good'),
     logAt('2026-09-20T10:00:00.000Z', 'ex-C', 'good'),
@@ -356,15 +511,18 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
   it('la serie resa deriva dal SOLO log seminato su [streak, userId], senza listDue', () => {
     // Seminiamo SOLO `['streak', UID]`; se la vista leggesse un'altra fonte (pila,
     // review_count) la sua serie non rifletterebbe questo log. `listDue` LANCIA se
-    // toccata: un render riuscito dimostra che non è consultata.
+    // toccata: un render riuscito dimostra che non è consultata. Tre giorni distinti
+    // (>= MIN_ANSWER_DAYS) cosi il grafico temporale e reso e la serie e osservabile.
     const calls: string[] = [];
     const qc = seededClient([
+      logAt('2026-09-23T10:00:00.000Z'),
       logAt('2026-09-24T10:00:00.000Z'),
       logAt('2026-09-25T10:00:00.000Z'),
     ]);
     const markup = render(qc, UID, spyPorts(calls));
 
-    // La serie viene dal log seminato: i due giorni con conteggio 1.
+    // La serie viene dal log seminato: i tre giorni con conteggio 1.
+    expect(markup).toContain('2026-09-23 - answers: 1');
     expect(markup).toContain('2026-09-24 - answers: 1');
     expect(markup).toContain('2026-09-25 - answers: 1');
     // Né listDue né applyReview sono toccate (leggere/scrivere la pila).
@@ -531,9 +689,17 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
         exerciseCount: 1,
       },
     ];
+    // Lo STESSO esercizio ex-1 risposto `again` su 23, 24 e 25 (TRE giorni distinti,
+    // >= MIN_ANSWER_DAYS): il grafico temporale e reso (5.4). ex-1 resta allo stadio 0
+    // (una serie di `again`), quindi un solo esercizio allo stadio 0; gp-1 accumula
+    // tre errori su tre risposte.
     const markup = render(
       seededClient(
-        [logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'again', 'gp-1')],
+        [
+          logAt('2026-09-23T10:00:00.000Z', 'ex-1', 'again', 'gp-1'),
+          logAt('2026-09-24T10:00:00.000Z', 'ex-1', 'again', 'gp-1'),
+          logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'again', 'gp-1'),
+        ],
         lessons,
       ),
       UID,
@@ -546,16 +712,22 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     expect(markup).toContain('Stadio 0 - esercizi: 1');
     // I tassi d'errore per punto in italiano: intestazione, tasso, titolo risolto (it).
     expect(markup).toContain(itCatalog.stats.grammarPointErrorRates.heading);
-    expect(markup).toContain('errori: 1 su 1');
+    expect(markup).toContain('errori: 3 su 3');
     expect(markup).toContain('La forma in te');
     expect(markup).toContain(itCatalog.stats.back);
     expect(markup).not.toContain('!');
   });
 
-  it('it: log vuoto ⇒ placeholder italiano (tutte e tre le sezioni), nessun grafico', async () => {
+  it('it: log vuoto ⇒ dichiarazione quantificata italiana (tutte e tre le sezioni), nessun grafico', async () => {
     await i18n.changeLanguage('it');
     const markup = render(seededClient([]), UID);
-    expect(markup).toContain(itCatalog.stats.answersOverTime.empty);
+    // Temporale: la soglia (MIN_ANSWER_DAYS) e i giorni finora (0) interpolati in it.
+    expect(markup).toContain(
+      i18n.t('stats.answersOverTime.insufficient', {
+        needed: MIN_ANSWER_DAYS,
+        soFar: 0,
+      }),
+    );
     expect(markup).toContain(itCatalog.stats.stageDistribution.empty);
     expect(markup).toContain(itCatalog.stats.grammarPointErrorRates.empty);
     expect(markup).not.toContain(itCatalog.stats.answersOverTime.heading);

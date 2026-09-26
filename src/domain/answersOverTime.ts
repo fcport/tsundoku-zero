@@ -47,8 +47,12 @@ export interface DailyAnswerCount {
  * quel `YYYY-MM-DD`. `new Date(numero)` con argomento è deterministico e ammesso nel
  * dominio (a differenza di `new Date()` senza argomenti).
  *
- * Log vuoto ⇒ `[]` (nessuna serie): la vista rende un placeholder testuale neutro,
- * non un grafico vuoto (la ricca dichiarazione «cosa manca» è la storia 5.4).
+ * Log vuoto ⇒ `[]` (nessuna serie): la vista rende una dichiarazione testuale
+ * «cosa manca e quanto» (5.4), non un grafico vuoto. La soglia di SUFFICIENZA del
+ * trend — quanti giorni distinti con risposte servono perché una serie «nel tempo»
+ * sia meaningful — è `MIN_ANSWER_DAYS` qui sotto (fonte UNICA del numero), affiancata
+ * dall'helper puro `daysWithAnswers`; la vista compone soglia e conteggio, mai
+ * disegna un grafico sparso a 1-2 giorni (5.4, FR7.5).
  */
 export function answersOverTime(
   log: readonly ReviewLogEntry[],
@@ -80,4 +84,32 @@ export function answersOverTime(
     });
   }
   return series;
+}
+
+/**
+ * La SOGLIA UNICA del trend (5.4, FR7.5): quanti giorni DISTINTI con risposte
+ * servono perché il grafico «nel tempo» sia meaningful. Un trend con uno o due punti
+ * non è un trend — i documenti UX fissano «servono almeno 3 giorni di revisioni per
+ * disegnare questo grafico». È l'UNICA fonte del numero: sia il gate della vista
+ * (`daysWithAnswers(series) >= MIN_ANSWER_DAYS`) sia la copy («almeno {{needed}}») la
+ * leggono, così non possono divergere (stessa disciplina anti-«secondo numero» con
+ * cui l'asse dei sei stadi deriva dalla costante unica di `schedule.ts`, AD-17/AD-18).
+ */
+export const MIN_ANSWER_DAYS = 3;
+
+/**
+ * Quanti giorni DISTINTI della serie portano almeno una risposta (5.4). PURA,
+ * TOTALE, senza tempo: conta i soli `DailyAnswerCount` con `count > 0`, così gli zeri
+ * interni (buchi di ritmo) e di coda (ritmo interrotto fino a oggi) NON gonfiano il
+ * conteggio. Serie vuota ⇒ 0. È il conteggio dei giorni «finora» che la vista
+ * confronta con `MIN_ANSWER_DAYS` per decidere la sufficienza del trend e che
+ * interpola nella dichiarazione («giorni con risposte finora: {{soFar}}»). Non muta
+ * l'input.
+ */
+export function daysWithAnswers(series: readonly DailyAnswerCount[]): number {
+  let days = 0;
+  for (const day of series) {
+    if (day.count > 0) days += 1;
+  }
+  return days;
 }
