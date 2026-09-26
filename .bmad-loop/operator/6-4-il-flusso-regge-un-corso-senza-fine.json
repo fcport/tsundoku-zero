@@ -1,0 +1,11 @@
+{
+  "actions": [
+    "Misura il tempo reale di M5 (AC2): guarda la fonte di una lezione e cronometra un'esecuzione completa del flusso del runbook, dall'inizio (guardare la fonte) alla fine (esercizio giocabile, `npm run validate-content` verde, seed rigenerato, lezione committata). Registra il tempo reale nella tabella di docs/authoring-cost.md, sostituendo la riga \u00abda misurare\u00bb. Non inventare tempi.",
+    "Autora, rileggi (rilettura umana obbligatoria di FR11.2, passo 5 del runbook) e committa almeno quattro lezioni ulteriori sotto content/lessons/ per raggiungere il traguardo DoD di almeno cinque (obiettivo undici). Committare contenuto di corso richiede la rilettura umana, non delegabile a un agente.",
+    "A ogni lezione aggiunta, aggiorna la sentinella `<!-- authored-lessons: N -->` di docs/authoring-cost.md al nuovo conteggio reale: il test src/authoring-cost.test.ts \u00e8 rosso finch\u00e9 la sentinella non coincide col numero di file sotto content/lessons/. Aggiorna anche il verdetto DoD: al raggiungimento delle cinque lezioni, porta la sentinella `<!-- dod-status: below-target -->` a `<!-- dod-status: met -->` \u2014 il test accoppia questa sentinella al conteggio e resta rosso finch\u00e9 non \u00e8 riallineata."
+  ],
+  "parked_at": "2026-09-26",
+  "run_id": "20260924-095204-a75b",
+  "spec_file": "_bmad-output/implementation-artifacts/spec-6-4-il-flusso-regge-un-corso-senza-fine.md",
+  "story_key": "6-4-il-flusso-regge-un-corso-senza-fine"
+}

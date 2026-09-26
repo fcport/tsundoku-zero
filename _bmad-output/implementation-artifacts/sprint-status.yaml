@@ -103,7 +103,7 @@ development_status:
   6-1-il-transcript-non-entra-nel-repository: done
   6-2-il-flusso-di-autorazione-documentato-e-ripetibile: done
   6-3-il-confronto-che-impedisce-la-contaminazione: awaiting-operator
-  6-4-il-flusso-regge-un-corso-senza-fine: backlog
+  6-4-il-flusso-regge-un-corso-senza-fine: awaiting-operator
   epic-6-retrospective: optional
 
   epic-7: backlog
