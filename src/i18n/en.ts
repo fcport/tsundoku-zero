@@ -89,32 +89,39 @@ export const en = {
     // emoji, nessun avverbio di lode; ASCII.
     viewStats: 'See your statistics',
   },
-  // Le statistiche (Epic 5): la vista delle risposte nel tempo (5.1, FR7.1). Le
-  // storie 5.2-5.4 arricchiranno questa sezione. Nessun `!`, nessuna emoji, nessun
-  // avverbio di lode; ASCII (il giapponese non passa da t()).
+  // Le statistiche (Epic 5): la vista delle risposte nel tempo (5.1, FR7.1),
+  // distribuzione per stadio (5.2), tassi d'errore per punto (5.3). Gli stati a dati
+  // insufficienti DICHIARANO «cosa manca e quanto» (5.4, FR7.5): il grafico temporale
+  // nomina la soglia e i giorni finora; distribuzione e tassi nominano il minimo
+  // onesto («almeno uno»). Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII
+  // (il giapponese non passa da t()).
   stats: {
     title: 'Statistics',
-    // Risposte nel tempo (5.1): `heading` intitola la serie; `dayLabel` etichetta
+    // Risposte nel tempo (5.1/5.4): `heading` intitola la serie; `dayLabel` etichetta
     // ogni giorno (`{{date}}` = YYYY-MM-DD, `{{answers}}` = conteggio del giorno,
     // MAI `{{count}}` che innescherebbe il pluralizzatore i18next e romperebbe la
-    // parità en/it); `empty` è il placeholder testuale neutro a log vuoto (mai un
-    // grafico vuoto). La ricca dichiarazione «cosa manca» è la storia 5.4.
+    // parità en/it). `insufficient` è la dichiarazione quantificata sotto soglia
+    // (`{{needed}}` = `MIN_ANSWER_DAYS`, l'unica fonte del numero; `{{soFar}}` = giorni
+    // con risposte finora): dice COSA manca (giorni di risposte) e QUANTO (soglia +
+    // finora), mai un grafico sparso a 1-2 giorni (5.4).
     answersOverTime: {
       heading: 'Answers over time',
       dayLabel: '{{date}} - answers: {{answers}}',
-      empty: 'There are no answers to show yet. Once you review exercises, your answers per day will appear here.',
+      insufficient:
+        'This chart needs at least {{needed}} days of answers. Days with answers so far: {{soFar}}.',
     },
     // Distribuzione per stadio (5.2, FR7.2): `heading` intitola la sezione;
     // `stageLabel` etichetta ogni stadio (`{{stage}}` = indice 0-5, `{{exercises}}`
     // = numero di esercizi in quello stadio, MAI `{{count}}` che innescherebbe il
-    // pluralizzatore i18next e romperebbe la parita en/it); `empty` e il placeholder
-    // testuale neutro a log vuoto (mai un grafico vuoto). Nessuna etichetta mnemonica
-    // ne intervallo in giorni: l'AC chiede «sei stadi, 0-5». La ricca dichiarazione
-    // «cosa manca» e la storia 5.4.
+    // pluralizzatore i18next e romperebbe la parita en/it); `empty` è la dichiarazione
+    // quantificata a log vuoto (5.4): asse CATEGORIALE, meaningful con qualunque dato,
+    // quindi il minimo onesto è «almeno un esercizio ripassato» (nessuna soglia
+    // numerica fabbricata). Nessuna etichetta mnemonica ne intervallo in giorni: l'AC
+    // chiede «sei stadi, 0-5».
     stageDistribution: {
       heading: 'Exercises by review stage',
       stageLabel: 'Stage {{stage}} - exercises: {{exercises}}',
-      empty: 'There are no exercises to show yet. Once you review exercises, how far along they are will appear here.',
+      empty: 'This view needs at least one reviewed exercise. Review an exercise and its stage will appear here.',
     },
     // Tassi d'errore per punto grammaticale (5.3, FR7.3): `heading` intitola la
     // sezione; `entryLabel` etichetta ogni voce col tasso come TESTO (`{{errors}}` =
@@ -125,16 +132,17 @@ export const en = {
     // della lezione e CONTENUTO reso a parte in un nodo con `lang` sulla lingua
     // effettivamente resa (WCAG 3.1.2 Language-of-Parts: un titolo inglese in ripiego
     // non deve essere annunciato con pronuncia italiana). `unknownLesson` e il
-    // fallback neutro per un punto orfano (drift contenuti); `empty` e il placeholder
-    // testuale neutro a log vuoto (mai un grafico vuoto). Nessun `!`, nessuna emoji,
-    // nessun avverbio di lode; ASCII (il giapponese non passa da t()). La ricca
-    // dichiarazione «cosa manca» e la storia 5.4.
+    // fallback neutro per un punto orfano (drift contenuti); `empty` e la dichiarazione
+    // quantificata a log vuoto (5.4): asse CATEGORIALE, meaningful con qualunque dato,
+    // quindi il minimo onesto e «almeno una risposta» (nessuna soglia numerica
+    // fabbricata). Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII (il
+    // giapponese non passa da t()).
     grammarPointErrorRates: {
       heading: 'Grammar points by error rate',
       entryLabel: 'errors: {{errors}} of {{total}}',
       lessonLabel: 'Lesson:',
       unknownLesson: 'No lesson teaches this point anymore',
-      empty: 'There are no grammar points to show yet. Once you review exercises, how often you miss each rule will appear here.',
+      empty: 'This view needs at least one answer. Answer an exercise and how often you miss each rule will appear here.',
     },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continue"/"Back" generico.

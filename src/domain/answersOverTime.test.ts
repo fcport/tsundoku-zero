@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { answersOverTime } from './answersOverTime';
+import {
+  answersOverTime,
+  daysWithAnswers,
+  MIN_ANSWER_DAYS,
+  type DailyAnswerCount,
+} from './answersOverTime';
 import type { ReviewLogEntry } from './streak';
 
 // I/O Matrix di `answersOverTime.ts` (Story 5.1, AD-18): le risposte per giorno di
@@ -145,5 +150,51 @@ describe('answersOverTime: purezza osservabile — ordine irrilevante, non-mutaz
   it('anti-vacuità: serie con più giorni e log vuoto ⇒ []', () => {
     expect(answersOverTime(log, now, TOKYO)).toHaveLength(3);
     expect(answersOverTime([], now, TOKYO)).toEqual([]);
+  });
+});
+
+// I/O Matrix di `daysWithAnswers`/`MIN_ANSWER_DAYS` (Story 5.4, FR7.5): la soglia
+// UNICA del trend e il conteggio dei giorni DISTINTI con risposte. `daysWithAnswers`
+// e pura, totale, senza tempo: conta i soli `count > 0`, escludendo gli zeri interni
+// (buchi di ritmo) e di coda (ritmo interrotto). La vista confronta questo conteggio
+// con `MIN_ANSWER_DAYS` per decidere la sufficienza del grafico temporale.
+describe('daysWithAnswers: giorni distinti con risposte (5.4)', () => {
+  /** Un `DailyAnswerCount` conciso per i fixture (la `date` non incide sul conteggio). */
+  function day(date: string, count: number): DailyAnswerCount {
+    return { date, count };
+  }
+
+  it('serie vuota ⇒ 0', () => {
+    expect(daysWithAnswers([])).toBe(0);
+  });
+
+  it('solo giorni con risposte ⇒ il numero di giorni', () => {
+    expect(daysWithAnswers([day('2026-09-22', 1), day('2026-09-23', 2)])).toBe(2);
+  });
+
+  it('esclude gli zeri interni e di coda (conta solo count > 0)', () => {
+    // Un solo giorno con risposte; gli altri sono zeri di coda (ritmo interrotto).
+    expect(
+      daysWithAnswers([day('2026-09-21', 1), day('2026-09-22', 0), day('2026-09-23', 0)]),
+    ).toBe(1);
+    // Zero INTERNO fra due giorni pieni: contano solo i due pieni.
+    expect(
+      daysWithAnswers([day('2026-09-21', 2), day('2026-09-22', 0), day('2026-09-23', 3)]),
+    ).toBe(2);
+  });
+
+  it('è pura: non muta la serie passata', () => {
+    const series = [day('2026-09-21', 1), day('2026-09-22', 0), day('2026-09-23', 2)];
+    const snapshot = series.map((d) => ({ ...d }));
+    const lengthBefore = series.length;
+    daysWithAnswers(series);
+    expect(series.length).toBe(lengthBefore);
+    expect(series).toEqual(snapshot);
+  });
+
+  // Fonte UNICA del numero: la soglia e fissata qui (documenti UX: «almeno 3
+  // giorni»); copy e gate la leggono da qui, mai da un `3` letterale duplicato.
+  it('MIN_ANSWER_DAYS e la costante di soglia (=== 3, fonte unica)', () => {
+    expect(MIN_ANSWER_DAYS).toBe(3);
   });
 });

@@ -16,11 +16,16 @@
 // difendibile e divergente. L'aggregazione vive nel dominio (`answersOverTime`,
 // pura e totale); orologio e fuso ENTRANO dal Clock iniettato.
 //
-// A log vuoto rende placeholder testuali neutri e minimali
-// (`stats.answersOverTime.empty`/`stats.stageDistribution.empty`/
-// `stats.grammarPointErrorRates.empty`), MAI un riquadro di grafico vuoto: la ricca
-// dichiarazione «cosa manca e quanto» degli stati a dati insufficienti è la storia
-// 5.4.
+// A dati insufficienti ogni vista rende una DICHIARAZIONE testuale «cosa manca e
+// quanto» (5.4, FR7.5), MAI un riquadro di grafico vuoto né una schermata muta. Le
+// tre viste decidono la sufficienza INDIPENDENTEMENTE (UX-DR18). Il grafico temporale
+// ha un asse TEMPORALE: è meaningful SSE `daysWithAnswers(series) >= MIN_ANSWER_DAYS`
+// (soglia UNICA dal dominio, motivata dai documenti UX «almeno 3 giorni»); sotto
+// soglia rende SOLO la dichiarazione quantificata (soglia + giorni finora), mai un
+// grafico sparso a 1-2 giorni. Distribuzione e tassi hanno assi CATEGORIALI: sono
+// meaningful con QUALUNQUE dato, quindi la loro insufficienza è «nessun dato» (log
+// vuoto) e la dichiarazione nomina il minimo onesto («almeno uno»), senza soglie
+// numeriche fabbricate.
 //
 // FONTE UNICA e derivata anche per i tassi d'errore per punto (AD-18, 5.3): il tasso
 // NON si legge da `review_state`/`lapse_count` — si DERIVA dal SOLO log via
@@ -46,7 +51,11 @@
 // lunghezza inline proporzionale (larghezza = count/max), con token neutri
 // (`bg-ink-secondary`/`bg-surface-sunken`, mai verde), coerente con `ProgressMeter`.
 import { useQuery } from '@tanstack/react-query';
-import { answersOverTime } from '../../domain/answersOverTime';
+import {
+  answersOverTime,
+  daysWithAnswers,
+  MIN_ANSWER_DAYS,
+} from '../../domain/answersOverTime';
 import { stageDistribution } from '../../domain/stageDistribution';
 import { grammarPointErrorRates } from '../../domain/grammarPointErrorRates';
 import { lessonsByGrammarPoint } from '../../domain/curriculum';
@@ -125,9 +134,13 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
 
   // La serie DERIVATA dal solo log (AD-18): pura, orologio e fuso dal Clock.
   const series = answersOverTime(logQ.data, clock.now(), clock.timeZone());
-  // Il massimo giornaliero per la larghezza proporzionale della barra. `series` non
-  // è vuota nel ramo sotto (il vuoto è gestito prima); `Math.max(1, ...)` evita la
-  // divisione per zero quando ogni giorno ha `count` 0 (code a 0 da ritmo interrotto).
+  // I giorni DISTINTI con risposte «finora» (5.4): l'helper puro del dominio conta i
+  // soli giorni con `count > 0` (esclude zeri interni/coda). Sotto `MIN_ANSWER_DAYS`
+  // il grafico temporale è insufficiente e rende SOLO la dichiarazione quantificata.
+  const answerDays = daysWithAnswers(series);
+  // Il massimo giornaliero per la larghezza proporzionale della barra. Nel ramo
+  // meaningful `series` non è vuota; `Math.max(1, ...)` evita la divisione per zero
+  // quando ogni giorno ha `count` 0 (code a 0 da ritmo interrotto).
   const max = Math.max(1, ...series.map((day) => day.count));
 
   // La distribuzione per stadio DERIVATA dal SOLO log (AD-18): pura e SENZA
@@ -151,11 +164,16 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
           SOPRA lo split empty/dati così compare in ENTRAMBI gli stati. La sezione
           delle risposte nel tempo ha una propria intestazione subordinata (`<h3>`). */}
       <h2 className="text-display text-ink-primary">{t('stats.title')}</h2>
-      {series.length === 0 ? (
-        // Log vuoto: placeholder testuale neutro, MAI un grafico vuoto (5.1). La
-        // ricca dichiarazione «cosa manca» è la storia 5.4.
+      {answerDays < MIN_ANSWER_DAYS ? (
+        // Sotto soglia (5.4): un trend con meno di `MIN_ANSWER_DAYS` giorni distinti
+        // non è un trend. Rende SOLO la dichiarazione quantificata (soglia + giorni
+        // finora, entrambi dal dominio, mai un `3` letterale), nessuna intestazione né
+        // barra: MAI un grafico sparso a 1-2 giorni.
         <p className="text-body text-ink-primary">
-          {t('stats.answersOverTime.empty')}
+          {t('stats.answersOverTime.insufficient', {
+            needed: MIN_ANSWER_DAYS,
+            soFar: answerDays,
+          })}
         </p>
       ) : (
         <>
