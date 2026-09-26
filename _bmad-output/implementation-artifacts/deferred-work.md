@@ -285,3 +285,11 @@ source_spec: `spec-4-2-la-coda-sopravvive-alla-chiusura-dell-app.md`
 severity: low
 reason: I test del persister provano la fedeltà del round-trip ma non che scritture ravvicinate si aggregano entro la finestra; una regressione a throttle 0 passerebbe verde. Richiede un test con fake timers.
 status: open
+
+### DW-36: Un fallimento di invio PERMANENTE (non di rete) esaurisce i ritentativi e lascia la risposta in stato `error`: non più `paused`, non ripersistita, persa al reload e senza alcun segnale all'utente.
+origin: spec-deferred 26e7aa0a7878
+location: src/features/study/reviewMutation.ts (retry); src/app/reviewPersister.ts (resumeReviewQueue .catch)
+source_spec: `spec-4-3-il-ritorno-della-rete-non-chiede-il-permesso.md`
+severity: medium
+reason: Con `retry: REVIEW_SYNC_MAX_RETRIES` finito, dopo l'ultimo fallimento la mutation esce da `paused` ⇒ il dehydrate (solo `isPaused`) non la ripersiste e `resumeReviewQueue` la assorbe col `.catch`. L'`onError` del componente fa il rollback ottimistico ma nessuno informa l'utente né riprova al riavvio. La visibilità è la storia 4.4 (indicatore) e l'idempotenza la 4.5, ma nessuna delle due garantisce il RECUPERO di un invio permanentemente fallito.
+status: open

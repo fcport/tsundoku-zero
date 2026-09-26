@@ -17,6 +17,7 @@
 // questo confine — l'unico punto dove il tipo `string` del persister e l'oggetto
 // clonato da IndexedDB si incontrano.
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { onlineManager } from '@tanstack/react-query';
 import type { QueryClient } from '@tanstack/react-query';
 import type {
   AsyncStorage,
@@ -191,11 +192,34 @@ export function reviewPersistOptions(): ReviewPersistOptions {
 }
 
 /**
- * Fa ripartire il drenaggio della coda dopo un restore riuscito (l'`onSuccess` del
- * provider): riprende le mutation in pausa reidratate. Il `.catch` evita una unhandled
- * rejection se la ripresa fallisce (la correttezza è garantita dalla RPC idempotente e
- * dal refetch fresco della pila; il retry è la storia 4.3).
+ * Fa ripartire il drenaggio della coda: riprende le mutation in pausa reidratate.
+ * Invocata in DUE punti — il resume all'AVVIO (l'`onSuccess` del provider, dopo un
+ * restore riuscito) e il resume al RITORNO DELLA RETE (`subscribeReviewQueueResume`,
+ * qui sotto). Il `.catch` assorbe la reject FINALE di una mutation dopo che i suoi
+ * ritentativi si sono esauriti (il `retry` vive ora sui default della mutation, 4.3):
+ * evita una unhandled rejection: la correttezza dell'esito è garantita dalla RPC
+ * idempotente per `review_id` e dal rollback ottimistico del componente sull'errore.
  */
 export function resumeReviewQueue(queryClient: QueryClient): void {
   void queryClient.resumePausedMutations().catch(() => {});
+}
+
+/**
+ * Il resume ESPLICITO al ritorno della rete (4.3): sottoscrive `onlineManager` e, alla
+ * transizione a online, rilancia il drenaggio della coda via `resumeReviewQueue`. È un
+ * helper NOSTRO — esportato e testabile in isolamento (su un client non montato, così
+ * solo questo listener agisce) — non un dettaglio interno della libreria: la boundary
+ * della 4.2 delega qui «il listener online per il resume». Cablato in `main.tsx` per
+ * l'intera vita dell'app, accanto al resume all'avvio (`onSuccess`).
+ *
+ * Coesiste in modo BENIGNO col resume che `QueryClient.mount()` (invocato dal provider)
+ * fa già al ritorno online: il `Retryer` in pausa risolve la sua `continue`-promise una
+ * sola volta, quindi la `mutationFn` esegue UNA volta; e la RPC è comunque idempotente
+ * per `review_id`. Ritorna la funzione di `unsubscribe` (il root non smonta: in
+ * `main.tsx` è ignorata, ma resta disponibile per i test).
+ */
+export function subscribeReviewQueueResume(queryClient: QueryClient): () => void {
+  return onlineManager.subscribe((online) => {
+    if (online) resumeReviewQueue(queryClient);
+  });
 }

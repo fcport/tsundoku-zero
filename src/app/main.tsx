@@ -13,6 +13,7 @@ import {
   createIndexedDbStorage,
   reviewPersistOptions,
   resumeReviewQueue,
+  subscribeReviewQueueResume,
 } from './reviewPersister';
 import { createSupabaseClient } from '../data/supabaseClient';
 import { createSupabaseAuthGateway } from '../data/authGateway';
@@ -83,6 +84,12 @@ const queryClient = new QueryClient({
 // `resumePausedMutations()` una volta per far ripartire il drenaggio da solo.
 registerReviewMutationDefaults(queryClient, ports.review);
 const persister = createReviewPersister(createIndexedDbStorage());
+
+// Il drenaggio della coda riparte da SÉ in DUE momenti: all'AVVIO (l'`onSuccess` del
+// provider, dopo il restore) e al RITORNO DELLA RETE a sessione viva (4.3): questo
+// listener `onlineManager` rilancia `resumeReviewQueue` quando il campo torna. Vive per
+// l'intera vita dell'app — l'unsubscribe è ignorato (il root non smonta).
+subscribeReviewQueueResume(queryClient);
 
 // <BrowserRouter> abilita il routing per URL e i deep link: il rewrite di
 // vercel.json (/(.*) → /index.html, fissato da deploy-config.test.ts) serve

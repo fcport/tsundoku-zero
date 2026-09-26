@@ -30,6 +30,7 @@ import type {
 import {
   REVIEW_MUTATION_KEY,
   REVIEW_SYNC_SCOPE,
+  REVIEW_SYNC_MAX_RETRIES,
   registerReviewMutationDefaults,
   type ReviewMutationVars,
 } from './reviewMutation';
@@ -244,5 +245,186 @@ describe('4.2 — la coda di valutazioni sopravvive alla chiusura (default + per
 
     source.clear();
     target.clear();
+  });
+});
+
+/** Un deferred `Promise` esterno: risolve/rigetta quando il test lo decide. */
+function deferred<T = void>() {
+  let resolve!: (value: T) => void;
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+}
+
+/**
+ * Avvia la mutation `['review']` con un `retryDelay: 0` a livello di observer: i default
+ * portano il `retry` (numero di ritentativi) MA il backoff reale rallenterebbe il test,
+ * quindi si sovrascrive SOLO il delay a 0 — il `retry` continua a venire dai default,
+ * come in produzione. Evita fake-timer fragili (vedi Design Notes della spec).
+ */
+function startMutationNoDelay(
+  qc: QueryClient,
+  vars: ReviewMutationVars,
+): Promise<unknown> {
+  const observer = new MutationObserver<unknown, Error, ReviewMutationVars>(qc, {
+    mutationKey: [...REVIEW_MUTATION_KEY],
+    scope: REVIEW_SYNC_SCOPE,
+    retryDelay: 0,
+  });
+  return observer.mutate(vars);
+}
+
+describe('4.3 — il ritorno della rete non chiede il permesso (serie/ordine, coerenza, retry)', () => {
+  it('backoff — i default portano retry = REVIEW_SYNC_MAX_RETRIES e retryDelay = min(1000·2^attempt, 30_000)', () => {
+    // I test di retry sovrascrivono `retryDelay: 0` a livello observer per non attendere
+    // il backoff: senza QUESTO test la formula di produzione (base 1000, esponente 2,
+    // tetto 30 s) resterebbe SCOPERTA e una regressione (tetto perso, base/segno errati)
+    // spedirebbe verde. Qui si leggono i default SPEDITI e si asserisce la formula
+    // direttamente, senza fake-timer.
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(qc, spyReview(async () => {}));
+
+    const defaults = qc.getMutationDefaults([...REVIEW_MUTATION_KEY]);
+    expect(defaults.retry).toBe(REVIEW_SYNC_MAX_RETRIES);
+
+    // `retryDelay` sui default è una union (numero | funzione | undefined): si restringe
+    // a funzione prima di invocarla, così il typecheck resta pulito.
+    const retryDelay = defaults.retryDelay;
+    expect(typeof retryDelay).toBe('function');
+    if (typeof retryDelay !== 'function') {
+      throw new Error('retryDelay non è una funzione');
+    }
+
+    // La formula: raddoppio esponenziale (1000·2^attempt)…
+    expect(retryDelay(0, new Error())).toBe(1000);
+    expect(retryDelay(1, new Error())).toBe(2000);
+    expect(retryDelay(2, new Error())).toBe(4000);
+    // …con il TETTO a 30 s (`Math.min`): un attempt alto non supera il cap.
+    expect(retryDelay(20, new Error())).toBe(30_000);
+
+    qc.clear();
+  });
+
+  it('AC2 — due mutation stesso scope: la seconda applyReview non parte finché la prima non si risolve, ordine A prima di B', async () => {
+    const order: string[] = [];
+    const firstGate = deferred();
+    const applyReview = vi.fn<(input: ApplyReviewInput) => Promise<void>>(
+      async (input) => {
+        order.push(input.reviewId);
+        // La PRIMA (`A`) resta appesa al gate: finché non lo risolviamo, lo scope
+        // serializza e la seconda (`B`) NON deve partire.
+        if (input.reviewId === 'A') await firstGate.promise;
+      },
+    );
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(qc, spyReview(applyReview));
+
+    onlineManager.setOnline(true);
+    // Due risposte accodate online, stesso `mutationKey`+`scope`: A poi B.
+    const pA = startMutation(qc, makeVars('A'));
+    const pB = startMutation(qc, makeVars('B'));
+    // Lascia sfilare i microtask: A parte, B resta in attesa dello scope.
+    await Promise.resolve();
+    await Promise.resolve();
+
+    // Solo A è in volo: lo scope tiene B in coda finché A non si risolve.
+    expect(applyReview).toHaveBeenCalledTimes(1);
+    expect(order).toEqual(['A']);
+
+    // Sblocca A: solo ORA B può partire, e dopo A (ordine preservato).
+    firstGate.resolve();
+    await Promise.all([pA, pB]);
+
+    expect(applyReview).toHaveBeenCalledTimes(2);
+    expect(order).toEqual(['A', 'B']);
+
+    qc.clear();
+  });
+
+  it('AC3 — drenata più tardi (nuovo client, hydrate, resume): stesso outcome, stesso dueAt, reviewedAt = istante della risposta, nessun ricalcolo', async () => {
+    const applyReview = vi.fn<(input: ApplyReviewInput) => Promise<void>>(
+      async () => {},
+    );
+    const source = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(source, spyReview(async () => {}));
+
+    // Risposta creata OFFLINE con esito/`dueAt`/`reviewedAt` fissati (Epic 3, mai
+    // ricalcolati): entra `paused`.
+    onlineManager.setOnline(false);
+    void startMutation(source, makeVars('rev-consistency'));
+    await Promise.resolve();
+    expect(onlyMutation(source)?.state.isPaused).toBe(true);
+
+    // Round-trip: NUOVO client (riapertura), default registrati PRIMA dell'hydrate.
+    const dehydrated = dehydrate(source);
+    const target = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(target, spyReview(applyReview));
+    hydrate(target, dehydrated);
+
+    // Tornata la rete, la ripresa drena: `applyReview` riceve ESATTAMENTE l'input
+    // originale — nessuna `mutationFn` che ricalcola o rimpiazza `reviewedAt` con «ora».
+    onlineManager.setOnline(true);
+    await target.resumePausedMutations();
+
+    expect(applyReview).toHaveBeenCalledTimes(1);
+    const passed = applyReview.mock.calls[0][0];
+    expect(passed.reviewId).toBe('rev-consistency');
+    expect(passed.outcome).toBe('good');
+    expect(passed.stage).toBe(1);
+    expect(passed.dueAt).toBeInstanceOf(Date);
+    expect(passed.dueAt.getTime()).toBe(DUE_AT.getTime());
+    // `reviewedAt` è l'istante della RISPOSTA originale, NON ricalcolato a «ora».
+    expect(passed.reviewedAt).toBeInstanceOf(Date);
+    expect(passed.reviewedAt.getTime()).toBe(REVIEWED_AT.getTime());
+
+    source.clear();
+    target.clear();
+  });
+
+  it('AC4 — applyReview fallisce una volta poi risolve: ritentativo AUTOMATICO (2 chiamate), la mutation finisce success', async () => {
+    let attempts = 0;
+    const applyReview = vi.fn<(input: ApplyReviewInput) => Promise<void>>(
+      async () => {
+        attempts += 1;
+        // Il PRIMO invio fallisce (errore transitorio), il secondo risolve: è ciò che
+        // il `retry` dei default deve assorbire da solo.
+        if (attempts === 1) throw new Error('errore di invio transitorio');
+      },
+    );
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(qc, spyReview(applyReview));
+
+    onlineManager.setOnline(true);
+    // `retryDelay: 0` a livello observer: il `retry` viene dai default, il backoff no.
+    await startMutationNoDelay(qc, makeVars('rev-retry'));
+
+    // Ritentativo automatico: due chiamate, nessun intervento utente.
+    expect(applyReview).toHaveBeenCalledTimes(2);
+    expect(onlyMutation(qc)?.state.status).toBe('success');
+
+    qc.clear();
+  });
+
+  it('AC4 (permanente) — applyReview fallisce sempre: dopo REVIEW_SYNC_MAX_RETRIES la mutation va in error', async () => {
+    const applyReview = vi.fn<(input: ApplyReviewInput) => Promise<void>>(
+      async () => {
+        throw new Error('errore permanente');
+      },
+    );
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(qc, spyReview(applyReview));
+
+    onlineManager.setOnline(true);
+    // La `Promise` di `mutate` rigetta dopo l'esaurimento dei ritentativi: la si assorbe.
+    await startMutationNoDelay(qc, makeVars('rev-permanent')).catch(() => {});
+
+    // 1 tentativo iniziale + REVIEW_SYNC_MAX_RETRIES ritentativi = errore, non infinito.
+    expect(applyReview).toHaveBeenCalledTimes(1 + REVIEW_SYNC_MAX_RETRIES);
+    expect(onlyMutation(qc)?.state.status).toBe('error');
+
+    qc.clear();
   });
 });

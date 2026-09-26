@@ -25,11 +25,18 @@ import type {
 export const REVIEW_MUTATION_KEY = ['review'] as const;
 
 // Lo SCOPE della coda di sincronizzazione: uno scope condiviso serializza il
-// drenaggio (una mutation in volo alla volta per scope). In 4.2 c'è un solo scope,
-// quindi non ha effetto osservabile — è FOUNDATIONAL per il drenaggio in serie che
-// la storia 4.3 verificherà. Impostato allo stesso sito di registrazione così non
-// diverge dalla `mutationFn`.
+// drenaggio (una mutation in volo alla volta per scope). Il drenaggio in serie e in
+// ORDINE — la seconda mutation non parte finché la prima non si risolve — è ORA
+// verificato (4.3): con più risposte accodate lo scope garantisce A prima di B.
+// Impostato allo stesso sito di registrazione così non diverge dalla `mutationFn`.
 export const REVIEW_SYNC_SCOPE = { id: 'review-sync' } as const;
+
+// Il numero MASSIMO di ritentativi di invio di una singola risposta (4.3). Un
+// fallimento di invio mentre si è online si ritenta da solo — sicuro perché la RPC
+// `apply_review` è idempotente per `review_id` (`on conflict do nothing`): un
+// ritentativo con lo stesso `reviewId` è un no-op. MAI infinito: un errore
+// permanente risale in `error` dopo questi ritentativi invece di girare all'infinito.
+export const REVIEW_SYNC_MAX_RETRIES = 3;
 
 /**
  * Le variabili della mutation `applyReview`: l'input PRE-CALCOLATO (Epic 3, mai
@@ -60,5 +67,13 @@ export function registerReviewMutationDefaults(
   qc.setMutationDefaults(REVIEW_MUTATION_KEY, {
     mutationFn: ({ input }: ReviewMutationVars) => review.applyReview(input),
     scope: REVIEW_SYNC_SCOPE,
+    // Ritentativo AUTOMATICO del drenaggio (4.3): un fallimento di invio mentre si è
+    // online si ritenta da solo, senza pulsante «riprova». Con `networkMode: 'online'`
+    // (default) una mutation offline entra `paused` e NON consuma ritentativi — retry e
+    // pausa coesistono. Backoff esponenziale LIMITATO (tetto a 30 s) e finito: dopo
+    // `REVIEW_SYNC_MAX_RETRIES` un errore permanente risale in `error` (rollback
+    // ottimistico del componente), non gira all'infinito.
+    retry: REVIEW_SYNC_MAX_RETRIES,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30_000),
   });
 }
