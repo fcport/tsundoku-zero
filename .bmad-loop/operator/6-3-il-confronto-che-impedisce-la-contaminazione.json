@@ -1,0 +1,12 @@
+{
+  "actions": [
+    "Metti il transcript privato della lezione campione della storia 2.7 (content/lessons/01-la-particella-wo.json) nella cartella .authoring/, che non \u00e8 mai versionata (storia 6.1).",
+    "Esegui `npm run check-contamination` per confrontare ogni frase giapponese e ogni spiegazione delle lezioni esistenti con quel transcript.",
+    "Per ogni sovrapposizione non banale segnalata, riscrivi la frase o la spiegazione partendo dal fatto (docs/authoring-pipeline.md), oppure \u2014 se \u00e8 un esempio canonico pubblico \u2014 motivala in .authoring/contamination-allowlist.json con una reason non vuota.",
+    "Registra l'esito reale (data + verdetto) nella tabella di audit retroattivo di docs/contamination-check.md, sostituendo la riga \u00abda verificare\u00bb della lezione campione."
+  ],
+  "parked_at": "2026-09-26",
+  "run_id": "20260924-095204-a75b",
+  "spec_file": "_bmad-output/implementation-artifacts/spec-6-3-il-confronto-che-impedisce-la-contaminazione.md",
+  "story_key": "6-3-il-confronto-che-impedisce-la-contaminazione"
+}

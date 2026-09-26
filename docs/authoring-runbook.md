@@ -12,8 +12,9 @@ incluso passi davvero il cancello di validazione.
 Il **confine con la fonte** — cosa si estrae dal transcript e cosa no — è di
 `docs/authoring-pipeline.md`: questo runbook lo dà per letto e lo rinvia lì.
 Qui si stabilisce **come si lavora**, non dove passa la linea. Lo **strumento
-meccanico di confronto anti-contaminazione** è della storia 6.3: oggi la difesa
-è la revisione umana descritta al passo 5.
+meccanico di confronto anti-contaminazione** è arrivato con la storia 6.3
+(`npm run check-contamination`, documentato in `docs/contamination-check.md`): il
+passo 5 lo cabla nella revisione umana, che resta comunque obbligatoria.
 
 ## In una frase
 
@@ -136,24 +137,42 @@ mentre cambiare la frase o la risposta corretta produce un esercizio nuovo.
 
 **Nessun esercizio raggiunge il repository senza essere stato riletto da un
 umano.** Questa revisione umana è **obbligatoria** e viene **prima del commit**:
-non è un passo saltabile, ed è la difesa di oggi contro la contaminazione della fonte
-(il controllo **meccanico** arriva con la storia 6.3, e resterà **fuori dalla
-CI** perché il transcript non è nel repository).
+non è un passo saltabile. La difesa contro la contaminazione della fonte ha ora
+**due strati**: la rilettura umana (sotto) e, a partire dalla storia 6.3, il
+**controllo meccanico** `npm run check-contamination`. Il controllo meccanico
+resta **fuori dalla CI** perché il transcript non è nel repository (è l'unico
+anello che non si chiude a valle — `docs/contamination-check.md`), quindi va
+eseguito **qui**, in locale, come parte di questa revisione obbligatoria.
 
-Checklist della rilettura, un esercizio alla volta:
+Prima, esegui il **controllo meccanico** contro la tua cartella di lavoro:
+
+```
+npm run check-contamination
+```
+
+Confronta ogni frase giapponese e ogni spiegazione prodotte con il/i transcript
+sotto `.authoring/` e segnala le **sovrapposizioni verbatim non banali**. Uscita
+**0** ⇒ nessuna sovrapposizione non motivata. Uscita **non-zero** ⇒ o c'è una
+sovrapposizione (riscrivila dal fatto, o motivala se è un esempio canonico
+pubblico), **oppure** non c'è alcun transcript da confrontare (niente da
+confrontare ⇒ nulla verificato: **non** è un verde). Cosa confronta, le soglie e
+come rispondere a una segnalazione sono in `docs/contamination-check.md`.
+
+Poi, la checklist della rilettura, un esercizio alla volta:
 
 - [ ] **Leggi ogni esercizio** dall'inizio: la consegna è chiara, la risposta
       corretta è davvero corretta, i distrattori sono plausibili ma sbagliati.
-- [ ] **Confine anti-contaminazione** (oggi umano — il controllo meccanico è la
-      storia 6.3): nessuna frase, formulazione, esempio o metafora viene dalla
-      fonte. Le frasi sono inventate dal fatto; la terminologia è quella standard
-      (vedi `docs/authoring-pipeline.md`).
+- [ ] **Confine anti-contaminazione** (il controllo meccanico della storia 6.3 lo
+      verifica ora, ma la rilettura resta): nessuna frase, formulazione, esempio o
+      metafora viene dalla fonte. Le frasi sono inventate dal fatto; la
+      terminologia è quella standard (vedi `docs/authoring-pipeline.md`).
 - [ ] **Verifica i fatti**: la regola grammaticale insegnata è corretta e la
       spiegazione la descrive fedelmente.
 - [ ] **Titolo e concetto**: `title` e `grammarPoints` descrivono il concetto,
       non il numero o il titolo dell'episodio della fonte.
 
-Solo dopo che questa rilettura è fatta l'esercizio può essere committato.
+Solo dopo che il controllo meccanico è verde e questa rilettura è fatta
+l'esercizio può essere committato.
 
 ### 6. Cancello di validazione
 
