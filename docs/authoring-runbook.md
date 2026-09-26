@@ -285,3 +285,11 @@ Nota sull'esempio: ogni esercizio porta un `grammarPoint` che è **fra i
 ogni `grammarPoint` d'esercizio coincide con uno dei due dichiarati. Rileggendo,
 verifica che sia davvero così: un `grammarPoint` che la lezione non dichiara è un
 issue del cancello.
+
+## Accettazione: sostenibilità della pipeline
+
+Questo runbook dice **come** si autora una lezione. Perché il costo di ripetere il
+flusso non degradi al crescere del corso (`NFR9`), quanto deve costare in tempo
+(`M5`) e dove siamo rispetto al traguardo di contenuto della Definition of Done
+(almeno cinque lezioni) sono l'analisi di accettazione dell'epica 6, in
+`docs/authoring-cost.md` (storia 6.4).
