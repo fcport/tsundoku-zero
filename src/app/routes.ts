@@ -40,3 +40,16 @@ export const STATS_PATH = '/statistiche';
  * Impostazioni); le features non portano stringhe di path.
  */
 export const PRIVACY_PATH = '/privacy';
+
+/**
+ * La rotta dei RICONOSCIMENTI (7.2): la SECONDA rotta pubblica raggiungibile in
+ * ENTRAMBI gli stati (anonimo e autenticato), gemella di `/privacy`. Vive fuori da
+ * entrambe le guardie in `AppRoutes`, dichiarata come figlio DIRETTO di `<Routes>`
+ * così il match statico `/riconoscimenti` batte il catch-all `*`. Il percorso NON
+ * porta il nome della fonte (è `/riconoscimenti`, non `/cure-dolly`): il nome della
+ * fonte resta confinato al CONTENUTO della pagina, mai nell'identità/URL. La
+ * navigazione la cabla il livello app (`AppRoutes` per il collegamento sul login e
+ * per l'uscita `onExit`; `AuthenticatedShell` per il collegamento nelle
+ * Impostazioni); le features non portano stringhe di path.
+ */
+export const ACKNOWLEDGEMENTS_PATH = '/riconoscimenti';

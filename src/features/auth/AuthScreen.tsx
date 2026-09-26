@@ -38,12 +38,21 @@ export interface AuthScreenProps {
    * memorizza PRIMA di consegnare la propria email. Obbligatoria.
    */
   readonly onViewPrivacy: () => void;
+  /**
+   * La navigazione ai riconoscimenti (7.2): una CALLBACK dal livello app (AD-1: le
+   * features non importano react-router). Il cablaggio vive in `AppRoutes`
+   * (`() => navigate(ACKNOWLEDGEMENTS_PATH)`), gemella di `onViewPrivacy`: la pagina
+   * dei riconoscimenti e PUBBLICA, raggiungibile PRIMA della registrazione.
+   * Obbligatoria.
+   */
+  readonly onViewAcknowledgements: () => void;
 }
 
 export function AuthScreen({
   gateway,
   onAuthenticated,
   onViewPrivacy,
+  onViewAcknowledgements,
 }: AuthScreenProps) {
   const { t } = useTranslation();
   const [values, setValues] = useState<AuthFormValues>({
@@ -92,6 +101,17 @@ export function AuthScreen({
         className={`text-caption text-ink-secondary underline ${FOCUS_RING}`}
       >
         {t('legal.privacy.linkLabel')}
+      </button>
+      {/* Il collegamento ai riconoscimenti (7.2): gemello di quello alla privacy,
+          un'affordance SECONDARIA (button, idioma del repo) DENTRO il `<main>`,
+          accanto ad esso. La pagina e PUBBLICA: lo sconosciuto puo leggere la fonte
+          del metodo PRIMA di registrarsi. -> `onViewAcknowledgements`. */}
+      <button
+        type="button"
+        onClick={onViewAcknowledgements}
+        className={`text-caption text-ink-secondary underline ${FOCUS_RING}`}
+      >
+        {t('legal.acknowledgements.linkLabel')}
       </button>
     </main>
   );

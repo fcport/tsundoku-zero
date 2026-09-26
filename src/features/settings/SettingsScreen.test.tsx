@@ -50,7 +50,12 @@ const NOOP = () => {};
 function render(qc: QueryClient, userId: string | null = UID): string {
   const el: ReactElement = (
     <QueryClientProvider client={qc}>
-      <SettingsScreen settings={inertSettings} userId={userId} onViewPrivacy={NOOP} />
+      <SettingsScreen
+        settings={inertSettings}
+        userId={userId}
+        onViewPrivacy={NOOP}
+        onViewAcknowledgements={NOOP}
+      />
     </QueryClientProvider>
   );
   return renderToStaticMarkup(el);
@@ -99,9 +104,9 @@ describe('SettingsScreen — resa in inglese', () => {
 
   it('AC4 — contiene ESATTAMENTE due gruppi role="group" (lingua e tetto)', () => {
     // La cancellazione account resta la sua <section> separata (1.10) nella shell:
-    // qui, dentro la <section> Impostazioni, esattamente due role="group". Il
-    // collegamento alla privacy (7.1) vive FUORI dai gruppi, quindi il conteggio
-    // resta 2.
+    // qui, dentro la <section> Impostazioni, esattamente due role="group". I
+    // collegamenti alla privacy (7.1) e ai riconoscimenti (7.2) vivono FUORI dai
+    // gruppi, quindi il conteggio resta 2.
     const markup = render(seededClient(DEFAULT_LESSONS_PER_DAY));
     const groups = markup.match(/role="group"/g) ?? [];
     expect(groups.length).toBe(2);
@@ -110,6 +115,11 @@ describe('SettingsScreen — resa in inglese', () => {
   it('7.1 — contiene il collegamento alla privacy policy (legal.privacy.linkLabel)', () => {
     const markup = render(seededClient(DEFAULT_LESSONS_PER_DAY));
     expect(markup).toContain(en.legal.privacy.linkLabel);
+  });
+
+  it('7.2 — contiene il collegamento ai riconoscimenti (legal.acknowledgements.linkLabel)', () => {
+    const markup = render(seededClient(DEFAULT_LESSONS_PER_DAY));
+    expect(markup).toContain(en.legal.acknowledgements.linkLabel);
   });
 });
 

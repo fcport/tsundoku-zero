@@ -36,7 +36,12 @@ import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { DeleteAccountSection } from '../features/account/DeleteAccountSection';
 import { usePorts } from '../features/ports/PortsContext';
 import { prefetchDueStack } from '../features/study/prefetchDueStack';
-import { PRIVACY_PATH, STATS_PATH, STUDY_PATH } from './routes';
+import {
+  ACKNOWLEDGEMENTS_PATH,
+  PRIVACY_PATH,
+  STATS_PATH,
+  STUDY_PATH,
+} from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
 
@@ -110,6 +115,7 @@ export function AuthenticatedShell({
         settings={settings}
         userId={userId}
         onViewPrivacy={() => navigate(PRIVACY_PATH)}
+        onViewAcknowledgements={() => navigate(ACKNOWLEDGEMENTS_PATH)}
       />
       <DeleteAccountSection
         account={account}

@@ -265,5 +265,30 @@ export const en = {
         'You can delete your account from Settings, through Delete account. Deletion also destroys the log of your answers, and it cannot be undone.',
       back: 'Back',
     },
+    // I riconoscimenti (7.2): la pagina pubblica `/riconoscimenti` che attribuisce
+    // la FONTE del metodo e ne delimita i confini. `method` attribuisce a Cure
+    // Dolly la divulgazione del modello strutturale (il nome della fonte compare
+    // SOLO qui, MAI nel namespace `app` di branding ne nel percorso di rotta);
+    // `channelLabel` e il testo del link al canale reale; `originalContent`
+    // dichiara che gli esercizi sono originali e non riproducono materiale della
+    // fonte; `noAffiliation` nega affiliazione/approvazione/continuita;
+    // `scholarship` attesta la sostanza linguistica citando una fonte accademica
+    // indipendente, verificabile e specifica (autore, titolo, editore, anno).
+    // Dichiarazioni FATTUALI: nessun `!`, nessuna emoji, nessun avverbio di lode;
+    // ASCII.
+    acknowledgements: {
+      title: 'Acknowledgements',
+      linkLabel: 'Read the acknowledgements',
+      method:
+        'The structural way of explaining Japanese grammar used here was made widely known by Cure Dolly, whose lessons brought this model to a broad audience. The source is the channel:',
+      channelLabel: 'Organic Japanese with Cure Dolly',
+      originalContent:
+        'The exercises and their explanations are original to this project. They do not reproduce, copy, or adapt any material from that channel.',
+      noAffiliation:
+        'This project is independent. It is not affiliated with, endorsed by, or a continuation of that channel.',
+      scholarship:
+        'The grammar taught here is established linguistics, not a private theory. This structural description of Japanese is documented in the academic literature, for example in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
+      back: 'Back',
+    },
   },
 } as const;

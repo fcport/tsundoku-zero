@@ -211,6 +211,12 @@ describe('AppRoutes — rotta di Accesso, anonimo', () => {
     // consegnare la propria email: l'affordance verso `/privacy`.
     expect(markup).toContain(en.legal.privacy.linkLabel);
   });
+
+  it('7.2 — contiene il collegamento ai riconoscimenti (raggiungibile PRIMA della registrazione)', () => {
+    // Gemello del collegamento privacy: la pagina dei riconoscimenti e PUBBLICA,
+    // l'affordance verso `/riconoscimenti` e sul login prima della registrazione.
+    expect(markup).toContain(en.legal.acknowledgements.linkLabel);
+  });
 });
 
 describe('AppRoutes — rotta /privacy, anonimo (7.1)', () => {
@@ -245,6 +251,49 @@ describe('AppRoutes — rotta /privacy, autenticato (7.1)', () => {
     expect(markup).toContain(en.legal.privacy.notCollected);
     expect(markup).toContain(en.legal.privacy.deletion);
     // NON la dashboard: `/privacy` ha precedenza sul catch-all anche da autenticato.
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('ha un solo landmark <main>', () => {
+    const opens = markup.match(/<main/g) ?? [];
+    expect(opens.length).toBe(1);
+  });
+});
+
+describe('AppRoutes — rotta /riconoscimenti, anonimo (7.2)', () => {
+  // La rotta pubblica ungated, gemella di `/privacy`: raggiungibile con
+  // `authenticated=false`, PRIMA della registrazione. Il match statico
+  // `/riconoscimenti` batte il catch-all `*`, e la pagina non e rediretta (nessuna
+  // guardia): rende l'AcknowledgementsScreen.
+  const markup = renderAt('/riconoscimenti', false);
+
+  it('rende l AcknowledgementsScreen (attribuzione + confini + ritorno), NON rediretta', () => {
+    expect(markup).toContain(en.legal.acknowledgements.method);
+    expect(markup).toContain(en.legal.acknowledgements.originalContent);
+    expect(markup).toContain(en.legal.acknowledgements.noAffiliation);
+    expect(markup).toContain(en.legal.acknowledgements.scholarship);
+    expect(markup).toContain(en.legal.acknowledgements.back);
+    // NON la dashboard: `/riconoscimenti` non ricade sul catch-all protetto.
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('ha un solo landmark <main>', () => {
+    const opens = markup.match(/<main/g) ?? [];
+    expect(opens.length).toBe(1);
+  });
+});
+
+describe('AppRoutes — rotta /riconoscimenti, autenticato (7.2)', () => {
+  // La stessa rotta ungated, raggiungibile anche da autenticato: vive fuori da
+  // RequireAuth E da RedirectIfAuthenticated, quindi rende l'AcknowledgementsScreen
+  // in entrambi gli stati.
+  const markup = renderAt('/riconoscimenti', true);
+
+  it('rende l AcknowledgementsScreen (attribuzione + confini + ritorno)', () => {
+    expect(markup).toContain(en.legal.acknowledgements.method);
+    expect(markup).toContain(en.legal.acknowledgements.originalContent);
+    expect(markup).toContain(en.legal.acknowledgements.scholarship);
+    // NON la dashboard: ha precedenza sul catch-all anche da autenticato.
     expect(markup).not.toContain(en.dashboard.primaryAction);
   });
 
