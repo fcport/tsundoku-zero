@@ -84,6 +84,29 @@ export const en = {
     // nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
     dailyLimitReachedBody:
       'The daily unlock limit of {{limit}} has been reached for today. The limit resets at midnight, so the next lesson can be unlocked then. The limit can be changed in Settings.',
+    // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
+    // della dashboard. Verbale e concreta, mai "Continue"; nessun `!`, nessuna
+    // emoji, nessun avverbio di lode; ASCII.
+    viewStats: 'See your statistics',
+  },
+  // Le statistiche (Epic 5): la vista delle risposte nel tempo (5.1, FR7.1). Le
+  // storie 5.2-5.4 arricchiranno questa sezione. Nessun `!`, nessuna emoji, nessun
+  // avverbio di lode; ASCII (il giapponese non passa da t()).
+  stats: {
+    title: 'Statistics',
+    // Risposte nel tempo (5.1): `heading` intitola la serie; `dayLabel` etichetta
+    // ogni giorno (`{{date}}` = YYYY-MM-DD, `{{answers}}` = conteggio del giorno,
+    // MAI `{{count}}` che innescherebbe il pluralizzatore i18next e romperebbe la
+    // parità en/it); `empty` è il placeholder testuale neutro a log vuoto (mai un
+    // grafico vuoto). La ricca dichiarazione «cosa manca» è la storia 5.4.
+    answersOverTime: {
+      heading: 'Answers over time',
+      dayLabel: '{{date}} - answers: {{answers}}',
+      empty: 'There are no answers to show yet. Once you review exercises, your answers per day will appear here.',
+    },
+    // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
+    // mai "Continue"/"Back" generico.
+    back: 'Back to the dashboard',
   },
   session: {
     // La CONSEGNA di un esercizio, per `kind` (3.18): descrive COME si risponde,

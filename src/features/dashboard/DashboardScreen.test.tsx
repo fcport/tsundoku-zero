@@ -148,6 +148,7 @@ function render(qc: QueryClient, userId: string | null): string {
           userId={userId}
           settings={inertSettings}
           onStartSession={() => {}}
+          onViewStats={() => {}}
         />
       </PortsProvider>
     </QueryClientProvider>
@@ -195,10 +196,12 @@ describe('AC1/AC2 — dashboard popolata: conteggio grande, etichetta sotto, str
 
   it('contiene ESATTAMENTE una azione primaria (button-primary, AC2)', () => {
     expect(markup).toContain(en.dashboard.primaryAction);
-    // Un solo <button> nel markup della dashboard (nessun doppione, nessuna
-    // variante disabilitata).
+    // Due <button> nel ramo contenuto: l'azione primaria (svuota-pila) PIÙ
+    // l'affordance secondaria «vedi statistiche» (5.1), sempre presente nel
+    // contenuto. Nessun doppione, nessuna variante disabilitata dell'azione.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('rende un solo <main> (la dashboard è il landmark)', () => {
@@ -317,8 +320,10 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
 
     expect(markup).toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.dashboard.unlockAction);
+    // Due <button>: la quest svuota-pila PIÙ l'affordance «vedi statistiche» (5.1).
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('pila vuota + lezione successiva ⇒ SOLO unlock, NESSUN svuota-pila; un solo <button>', () => {
@@ -329,12 +334,14 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
 
     expect(markup).toContain(en.dashboard.unlockAction);
     expect(markup).not.toContain(en.dashboard.primaryAction);
+    // Due <button>: la quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1).
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
-  it('pila vuota + curriculum esaurito ⇒ NESSUNA azione (schermata esaurita = 3.16)', () => {
-    // count === 0 e next === null (tutte sbloccate): non si rende alcun pulsante.
+  it('pila vuota + curriculum esaurito ⇒ NESSUNA quest (schermata esaurita = 3.16)', () => {
+    // count === 0 e next === null (tutte sbloccate): non si rende alcuna quest.
     // Il pile-counter CAMBIA STATO (3.16): dichiara curriculumCompleteBody, non «0».
     // Ultima sbloccata con esercizi (default): nessuna dichiarazione «senza esercizi».
     const qc = seededClient({ dueCount: 0, log: [], unlocked: 3, total: 3 });
@@ -346,8 +353,10 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
     expect(markup).not.toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.dashboard.unlockAction);
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+    // Nessuna quest: resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 });
 
@@ -460,11 +469,12 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).toContain(en.dashboard.clearedBody);
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
     expect(markup).not.toContain(en.dashboard.curriculumCompleteBody);
-    // L'unica azione è lo sblocco.
+    // L'unica quest è lo sblocco; PIÙ l'affordance «vedi statistiche» (5.1).
     expect(markup).toContain(en.dashboard.unlockAction);
     expect(markup).not.toContain(en.dashboard.primaryAction);
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
     // Streak e curriculum portano informazione reale a chi è di ritorno: restano.
     expect(markup).toContain('1 day streak');
     expect(markup).toContain('2 of 10 lessons');
@@ -481,8 +491,10 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     // Nessun altro corpo (ultima con esercizi ⇒ né clearedBody né notice).
     expect(markup).not.toContain(en.dashboard.clearedBody);
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
+    // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('AC3 — pila svuotata, ultima concettuale, altre disponibili ⇒ noExercisesNotice, non clearedBody', () => {
@@ -502,11 +514,13 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).not.toContain(en.dashboard.clearedBody);
     expect(markup).not.toContain(en.dashboard.curriculumCompleteBody);
     expect(markup).toContain(en.dashboard.unlockAction);
+    // La quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
-  it('AC3 — esaurito E ultima concettuale ⇒ ENTRAMBE le dichiarazioni, ZERO pulsanti', () => {
+  it('AC3 — esaurito E ultima concettuale ⇒ ENTRAMBE le dichiarazioni, ZERO quest', () => {
     // count === 0, next === null (tutte sbloccate), l'ultima (lesson-2) concettuale:
     // curriculumCompleteBody E noExercisesNotice convivono (nessuna mente), nessun pulsante.
     const qc = seededClient({
@@ -522,8 +536,10 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).toContain(en.dashboard.noExercisesNotice);
     expect(markup).not.toContain(en.dashboard.clearedBody);
     expect(markup).not.toContain('text-count-hero');
+    // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('AC4 — pila piena (count > 0) ⇒ il conteggio resta invariato (nessuna dichiarazione 3.16)', () => {
@@ -702,11 +718,13 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
 
     expect(markup).toContain(en.dashboard.unlockAction);
     expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    // La quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
-  it('tetto RAGGIUNTO (cap 1, 1 sblocco oggi) ⇒ dailyLimitReachedBody, NESSUN pulsante', () => {
+  it('tetto RAGGIUNTO (cap 1, 1 sblocco oggi) ⇒ dailyLimitReachedBody, NESSUNA quest', () => {
     // count 0, next != null, unlocksToday 1 >= cap 1: il cancello sostituisce
     // l'azione con la dichiarazione del limite. `{{limit}}` = 1.
     const qc = seededClient({
@@ -721,8 +739,10 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
 
     expect(markup).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
     expect(markup).not.toContain(en.dashboard.unlockAction);
+    // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('tetto > 1, parziale (cap 3, 2 sblocchi oggi) ⇒ unlockAction (2 < 3)', () => {
@@ -742,8 +762,10 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).not.toContain(
       en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '3'),
     );
+    // La quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('tetto raggiunto ⇒ la dichiarazione porta il valore del tetto (cap 2 ⇒ {{limit}}=2)', () => {
@@ -758,8 +780,10 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     const markup = render(qc, UID);
 
     expect(markup).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '2'));
+    // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('pila piena (count > 0) ⇒ primaryAction, tetto NON consultato anche se raggiunto', () => {
@@ -776,8 +800,10 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
 
     expect(markup).toContain(en.dashboard.primaryAction);
     expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    // La quest svuota-pila PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(2);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('curriculum esaurito (next === null) ⇒ nessuna dichiarazione del tetto (3.16 invariato)', () => {
@@ -796,8 +822,10 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
 
     expect(markup).toContain(en.dashboard.curriculumCompleteBody);
     expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
+    // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(markup).toContain(en.dashboard.viewStats);
   });
 
   it('AC5 — la copy del tetto è priva di `!`, ASCII (en) e in parità it', async () => {
@@ -857,6 +885,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
             userId={UID}
             settings={inertSettings}
             onStartSession={() => {}}
+            onViewStats={() => {}}
           />
         </PortsProvider>
       </QueryClientProvider>,
