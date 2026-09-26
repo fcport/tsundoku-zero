@@ -26,6 +26,7 @@ import type { ExerciseContent } from '../domain/ports/contentRepository';
 import type { Exercise } from '../domain/exercise';
 import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import { AuthenticatedShell } from './AuthenticatedShell';
+import { STATS_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
 
@@ -162,6 +163,16 @@ function primaryButton(): HTMLButtonElement {
   return button as HTMLButtonElement;
 }
 
+/** Trova l'affordance secondaria «vedi statistiche» per il suo testo da t(). */
+function viewStatsButton(): HTMLButtonElement {
+  const buttons = Array.from(container.querySelectorAll('button'));
+  const button = buttons.find(
+    (b) => b.textContent?.trim() === en.dashboard.viewStats,
+  );
+  if (!button) throw new Error('affordance «vedi statistiche» non trovata');
+  return button as HTMLButtonElement;
+}
+
 /** Lascia risolvere il precarico asincrono (microtask) dentro `act`. */
 async function flush(): Promise<void> {
   await act(async () => {
@@ -253,5 +264,23 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
     await flush();
 
     expect(currentPath).toBe('/studia');
+  });
+});
+
+describe('AuthenticatedShell — navigazione alle statistiche (5.1)', () => {
+  // La SOLA porta di ingresso alla StatsScreen dalla dashboard: un click su «vedi
+  // statistiche» deve portare a `/statistiche`. La navigazione è una callback
+  // cablata dalla shell (AD-1) — osservata qui dalla superficie esterna (un click,
+  // il pathname della sonda), non da un'asserzione statica sul markup. Nessun
+  // precarico: l'affordance naviga e basta.
+  it('un click su «vedi statistiche» naviga a /statistiche', () => {
+    mount(seededClient(), spyPorts());
+    expect(currentPath).toBe('/');
+
+    act(() => {
+      viewStatsButton().click();
+    });
+
+    expect(currentPath).toBe(STATS_PATH);
   });
 });

@@ -78,6 +78,29 @@ export const it = {
     // nessun `!`, nessuna emoji, nessun avverbio di lode.
     dailyLimitReachedBody:
       'Il tetto giornaliero di sblocco di {{limit}} è stato raggiunto per oggi. Il tetto si azzera a mezzanotte, quindi la lezione successiva si potrà sbloccare allora. Il tetto si cambia dalle Impostazioni.',
+    // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
+    // della dashboard. Verbale e concreta, mai "Continua"; nessun `!`, nessuna
+    // emoji, nessun avverbio di lode.
+    viewStats: 'Vedi le tue statistiche',
+  },
+  // Le statistiche (Epic 5): STESSE chiavi di `en` (parità ricorsiva). La vista
+  // delle risposte nel tempo (5.1, FR7.1). Nessun `!`, nessuna emoji, nessun
+  // avverbio di lode.
+  stats: {
+    title: 'Statistiche',
+    // Risposte nel tempo (5.1): `heading` intitola la serie; `dayLabel` etichetta
+    // ogni giorno (`{{date}}` = YYYY-MM-DD, `{{answers}}` = conteggio del giorno,
+    // MAI `{{count}}` che innescherebbe il pluralizzatore i18next e romperebbe la
+    // parità en/it); `empty` è il placeholder testuale neutro a log vuoto (mai un
+    // grafico vuoto). La ricca dichiarazione «cosa manca» è la storia 5.4.
+    answersOverTime: {
+      heading: 'Risposte nel tempo',
+      dayLabel: '{{date}} - risposte: {{answers}}',
+      empty: 'Non ci sono ancora risposte da mostrare. Quando ripasserai gli esercizi, le tue risposte per giorno compariranno qui.',
+    },
+    // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
+    // mai "Continua"/"Indietro" generico.
+    back: 'Torna alla dashboard',
   },
   session: {
     // La CONSEGNA di un esercizio, per `kind` (3.18): descrive COME si risponde,

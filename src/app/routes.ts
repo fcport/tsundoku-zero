@@ -19,3 +19,13 @@ export const ROOT_PATH = '/';
  * stringhe di path.
  */
 export const STUDY_PATH = '/studia';
+
+/**
+ * La rotta delle STATISTICHE (5.1): la prima vista di Epic 5 (FR7.1), una rotta
+ * protetta VERA che affianca `/studia` prima del catch-all. Mostra le risposte per
+ * giorno derivate dal solo `review_log`. La navigazione la cabla il livello app
+ * (`AuthenticatedShell` via `useNavigate` per l'ingresso dalla dashboard;
+ * `AppRoutes` per l'uscita `onExit`→`ROOT_PATH`, speculare alla sessione); le
+ * features non portano stringhe di path.
+ */
+export const STATS_PATH = '/statistiche';

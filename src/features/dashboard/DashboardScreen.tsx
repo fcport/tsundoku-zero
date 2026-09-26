@@ -73,6 +73,12 @@ export interface DashboardScreenProps {
    * conosce react-router (AD-1); la shell la fornisce via `useNavigate`.
    */
   readonly onStartSession: () => void;
+  /**
+   * Naviga alle statistiche (5.1): l'affordance «vedi statistiche» del ramo
+   * contenuto. Una callback, non una stringa di path (AD-1): la shell la cabla con
+   * `useNavigate` verso `STATS_PATH`.
+   */
+  readonly onViewStats: () => void;
 }
 
 // Altezza CONDIVISA fra scheletro e contenuto finale: la stessa classe sul
@@ -84,6 +90,7 @@ export function DashboardScreen({
   userId,
   settings,
   onStartSession,
+  onViewStats,
 }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t } = useTranslation();
@@ -324,6 +331,17 @@ export function DashboardScreen({
           </button>
         )
       ) : null}
+
+      {/* Affordance di navigazione verso le statistiche (5.1): SECONDARIA —
+          chiaramente non il button-primary (nessun fill, ink muto, nessun verde).
+          La navigazione è una callback cablata dal livello app (AD-1). */}
+      <button
+        type="button"
+        onClick={onViewStats}
+        className="text-caption text-ink-muted underline"
+      >
+        {t('dashboard.viewStats')}
+      </button>
     </main>
   );
 }

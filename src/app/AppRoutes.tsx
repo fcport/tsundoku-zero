@@ -17,9 +17,10 @@
 import { Route, Routes, useNavigate } from 'react-router';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
+import { StatsScreen } from '../features/stats/StatsScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
-import { LOGIN_PATH, ROOT_PATH, STUDY_PATH } from './routes';
+import { LOGIN_PATH, ROOT_PATH, STATS_PATH, STUDY_PATH } from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -73,6 +74,17 @@ export function AppRoutes({
           path={STUDY_PATH}
           element={
             <SessionScreen
+              userId={userId}
+              onExit={() => navigate(ROOT_PATH)}
+            />
+          }
+        />
+        {/* Le statistiche (5.1): rotta VERA sotto il guard, PRIMA del catch-all così
+            `/statistiche` ha precedenza. `onExit`→ROOT_PATH, speculare alla sessione. */}
+        <Route
+          path={STATS_PATH}
+          element={
+            <StatsScreen
               userId={userId}
               onExit={() => navigate(ROOT_PATH)}
             />

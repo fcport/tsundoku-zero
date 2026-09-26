@@ -172,6 +172,25 @@ describe('AppRoutes — deep link protetto, anonimo', () => {
   });
 });
 
+describe('AppRoutes — rotta /statistiche, autenticato (5.1)', () => {
+  // `seededClient()` semina `['streak', UID] = []`, quindi la StatsScreen rende il
+  // ramo a log vuoto (placeholder + affordance di ritorno). Il render riuscito con
+  // una stringa specifica della StatsScreen prova che la rotta è montata sotto il
+  // guard, PRIMA del catch-all.
+  const markup = renderAt('/statistiche', true);
+
+  it('rende la StatsScreen (affordance di ritorno da t())', () => {
+    expect(markup).toContain(en.stats.back);
+    // NON la dashboard: /statistiche ha precedenza sul catch-all.
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('ha un solo landmark <main>', () => {
+    const opens = markup.match(/<main/g) ?? [];
+    expect(opens.length).toBe(1);
+  });
+});
+
 describe('AppRoutes — rotta di Accesso, anonimo', () => {
   const markup = renderAt('/login', false);
 

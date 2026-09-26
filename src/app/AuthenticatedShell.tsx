@@ -36,7 +36,7 @@ import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { DeleteAccountSection } from '../features/account/DeleteAccountSection';
 import { usePorts } from '../features/ports/PortsContext';
 import { prefetchDueStack } from '../features/study/prefetchDueStack';
-import { STUDY_PATH } from './routes';
+import { STATS_PATH, STUDY_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
 
@@ -83,6 +83,11 @@ export function AuthenticatedShell({
       });
   };
 
+  // La navigazione alle statistiche (5.1): vive nel livello app (AD-1), la dashboard
+  // riceve solo la callback. Nessun precarico: la vista riusa la cache calda di
+  // `['streak', userId]` già seminata dalla dashboard stessa.
+  const onViewStats = () => navigate(STATS_PATH);
+
   return (
     <>
       <header className="flex justify-end p-6">
@@ -99,6 +104,7 @@ export function AuthenticatedShell({
         userId={userId}
         settings={settings}
         onStartSession={onStartSession}
+        onViewStats={onViewStats}
       />
       <SettingsScreen settings={settings} userId={userId} />
       <DeleteAccountSection

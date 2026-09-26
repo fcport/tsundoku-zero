@@ -309,3 +309,19 @@ source_spec: `spec-4-5-riapplicare-la-coda-non-falsa-niente.md`
 severity: medium
 reason: «Applicato esattamente una volta» = (client invia una review_id stabile) ∘ (server deduplica su quella id). La metà client è provata a runtime in reviewIdempotency.test.ts; la metà server è provata strutturalmente (AST) in migrations.test.ts (Story 3.9) e il passthrough dell'adapter in reviewRepository.test.ts. Il solo anello non verificato a runtime è la RPC live che deduplica su Postgres reale — operator-gated per AD-12/AD-13 (nessuna istanza locale; un solo progetto reale con i dati M1 dell'owner) e post-merge per SPINE-DELTA §148 (le migrazioni si applicano solo al merge su main, mai da un ramo di PR). Serve inoltre infrastruttura e2e (utenti per-run + teardown via Edge Function) oggi assente nel repo. Coerente coi deferred già registrati in 4.3/4.4.
 status: open
+
+### DW-39: StatsScreen (come dashboard e sessione) non ha un ramo di errore di query: se review.listReviewLog() fallisce, logQ.data resta undefined e la schermata mostra uno scheletro aria-busy permanente, senza
+origin: spec-deferred 0f352f9eeb48
+location: src/features/stats/StatsScreen.tsx
+source_spec: `spec-5-1-quante-risposte-e-quando.md`
+severity: medium
+reason: In src/features/stats/StatsScreen.tsx l'unico ramo non-contenuto è `if (!userId || logQ.data === undefined) return <scheletro>`; nessuna gestione di isError. Rispecchia il pattern consolidato del repo (DashboardScreen e SessionScreen si fermano allo scheletro sul solo `data === undefined`), quindi è una lacuna trasversale all'app, meglio affrontata in modo uniforme che solo su questa schermata.
+status: open
+
+### DW-40: La serie giornaliera delle risposte è illimitata: answersOverTime emette un elemento per giorno dal primo giorno con risposte fino a oggi (contigua, code di zeri incluse), senza finestra né paginazion
+origin: spec-deferred ecddd843cd7f
+location: src/domain/answersOverTime.ts
+source_spec: `spec-5-1-quante-risposte-e-quando.md`
+severity: low
+reason: src/domain/answersOverTime.ts costruisce la serie da min(ordinali) a max(oggi, ordinali); un utente che ha studiato mesi fa e poi si è fermato genera decine/centinaia di <li> a conteggio 0 in StatsScreen. L'intento della storia non richiede una finestra e gli utenti attuali hanno cronologie brevi, quindi è una preoccupazione futura di scalabilità/UX, non un difetto di 5.1.
+status: open
