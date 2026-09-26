@@ -19,9 +19,11 @@ import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
 import { StatsScreen } from '../features/stats/StatsScreen';
 import { PrivacyScreen } from '../features/legal/PrivacyScreen';
+import { AcknowledgementsScreen } from '../features/legal/AcknowledgementsScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
 import {
+  ACKNOWLEDGEMENTS_PATH,
   LOGIN_PATH,
   PRIVACY_PATH,
   ROOT_PATH,
@@ -80,6 +82,19 @@ export function AppRoutes({
           />
         }
       />
+      {/* I riconoscimenti (7.2): la SECONDA rotta pubblica in ENTRAMBI gli stati,
+          gemella di `/privacy`. Figlio DIRETTO di <Routes>, FUORI da entrambe le
+          guardie, cosi il match statico `/riconoscimenti` batte il catch-all `*`.
+          `onExit` DETERMINISTICO dal livello app (niente navigate(-1), vicolo cieco
+          su deep-link diretto): autenticato -> ROOT_PATH, anonimo -> LOGIN_PATH. */}
+      <Route
+        path={ACKNOWLEDGEMENTS_PATH}
+        element={
+          <AcknowledgementsScreen
+            onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+          />
+        }
+      />
       <Route element={<RedirectIfAuthenticated authenticated={authenticated} />}>
         <Route
           path={LOGIN_PATH}
@@ -88,6 +103,7 @@ export function AppRoutes({
               gateway={gateway}
               onAuthenticated={onAuthenticated}
               onViewPrivacy={() => navigate(PRIVACY_PATH)}
+              onViewAcknowledgements={() => navigate(ACKNOWLEDGEMENTS_PATH)}
             />
           }
         />

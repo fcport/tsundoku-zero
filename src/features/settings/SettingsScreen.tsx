@@ -51,12 +51,20 @@ export interface SettingsScreenProps {
    * `AuthenticatedShell` (`() => navigate(PRIVACY_PATH)`). Obbligatoria.
    */
   readonly onViewPrivacy: () => void;
+  /**
+   * La navigazione ai riconoscimenti (7.2): una CALLBACK dal livello app (AD-1: le
+   * features non importano react-router). Il cablaggio vive in `AuthenticatedShell`
+   * (`() => navigate(ACKNOWLEDGEMENTS_PATH)`), gemella di `onViewPrivacy`.
+   * Obbligatoria.
+   */
+  readonly onViewAcknowledgements: () => void;
 }
 
 export function SettingsScreen({
   settings,
   userId,
   onViewPrivacy,
+  onViewAcknowledgements,
 }: SettingsScreenProps) {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
@@ -108,6 +116,17 @@ export function SettingsScreen({
         className={`self-start text-caption text-ink-secondary underline ${FOCUS_RING}`}
       >
         {t('legal.privacy.linkLabel')}
+      </button>
+      {/* Il collegamento ai riconoscimenti (7.2): gemello di quello alla privacy,
+          un'affordance SECONDARIA (button, idioma del repo) DENTRO la <section> ma
+          FUORI dai due `role="group"` (lingua e tetto), cosi il conteggio dei gruppi
+          resta 2. -> `onViewAcknowledgements` (cablato in AuthenticatedShell). */}
+      <button
+        type="button"
+        onClick={onViewAcknowledgements}
+        className={`self-start text-caption text-ink-secondary underline ${FOCUS_RING}`}
+      >
+        {t('legal.acknowledgements.linkLabel')}
       </button>
     </section>
   );

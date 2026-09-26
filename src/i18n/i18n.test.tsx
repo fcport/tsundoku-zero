@@ -7,6 +7,7 @@ import { App } from '../ui/App';
 import { en } from './en';
 import { it as itCatalog } from './it';
 import { i18n } from './index';
+import { ACKNOWLEDGEMENTS_PATH } from '../app/routes';
 
 // Codifica la I/O & Edge-Case Matrix e gli AC della storia 1.4. L'ambiente è
 // `node` (vitest.config.ts): nessun jsdom, il render passa da
@@ -94,6 +95,38 @@ describe('AC3 — giapponese come dato con lang="ja"; interfaccia da t()', () =>
   it('la stringa giapponese non è un valore dei cataloghi (non viene da t())', () => {
     const allValues = [...leafValues(en), ...leafValues(itCatalog)];
     expect(allValues).not.toContain('積ん読ゼロ');
+  });
+});
+
+describe('7.2 — il nome della fonte non compare nell identita del prodotto', () => {
+  // Il nome della fonte ("Dolly") e confinato al CONTENUTO della pagina dei
+  // riconoscimenti: MAI nel namespace `app` di branding (nome prodotto/tagline) ne
+  // nel percorso della rotta (`/riconoscimenti`, non `/cure-dolly`). L'assert
+  // positivo su `method` prova che il confine e chirurgico, non una svista che
+  // svuoterebbe il test (se la copy non nominasse la fonte, la negativa passerebbe
+  // per la ragione sbagliata).
+  const hasDolly = (v: string) => v.toLowerCase().includes('dolly');
+
+  it('il namespace `app` di en/it NON contiene "dolly" (case-insensitive)', () => {
+    for (const v of leafValues(en.app)) {
+      expect(hasDolly(v), `nome della fonte inatteso in en.app: ${v}`).toBe(
+        false,
+      );
+    }
+    for (const v of leafValues(itCatalog.app)) {
+      expect(hasDolly(v), `nome della fonte inatteso in it.app: ${v}`).toBe(
+        false,
+      );
+    }
+  });
+
+  it('il percorso della rotta ACKNOWLEDGEMENTS_PATH NON contiene "dolly"', () => {
+    expect(hasDolly(ACKNOWLEDGEMENTS_PATH)).toBe(false);
+  });
+
+  it('la copy dei riconoscimenti (`method`) SI nomina la fonte (confine chirurgico)', () => {
+    expect(hasDolly(en.legal.acknowledgements.method)).toBe(true);
+    expect(hasDolly(itCatalog.legal.acknowledgements.method)).toBe(true);
   });
 });
 

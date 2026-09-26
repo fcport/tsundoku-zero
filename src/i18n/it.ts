@@ -247,5 +247,27 @@ export const it = {
         'Puoi cancellare il tuo account dalle Impostazioni, tramite Cancella account. La cancellazione distrugge anche il log delle tue risposte, e non si può annullare.',
       back: 'Indietro',
     },
+    // I riconoscimenti (7.2): STESSE chiavi di `en` (parità ricorsiva). Attribuisce
+    // la FONTE del metodo (Cure Dolly) SOLO nel contenuto di questa pagina — mai nel
+    // namespace `app` di branding né nel percorso di rotta — e ne delimita i
+    // confini: `originalContent` dichiara che gli esercizi sono originali e non
+    // riproducono materiale della fonte; `noAffiliation` nega
+    // affiliazione/approvazione/continuazione; `scholarship` cita una fonte
+    // accademica indipendente e verificabile (proper-noun della citazione identici a
+    // `en`). Nessun `!`, nessuna emoji, nessun avverbio di lode.
+    acknowledgements: {
+      title: 'Riconoscimenti',
+      linkLabel: 'Leggi i riconoscimenti',
+      method:
+        'Il modo strutturale di spiegare la grammatica giapponese usato qui è stato reso ampiamente noto da Cure Dolly, le cui lezioni hanno divulgato questo modello a un vasto pubblico. La fonte è il canale:',
+      channelLabel: 'Organic Japanese with Cure Dolly',
+      originalContent:
+        'Gli esercizi e le loro spiegazioni sono originali di questo progetto. Non riproducono, copiano o adattano alcun materiale di quel canale.',
+      noAffiliation:
+        'Questo progetto è indipendente. Non è affiliato, approvato, né una continuazione di quel canale.',
+      scholarship:
+        'La grammatica insegnata qui è linguistica consolidata, non una teoria privata. Questa descrizione strutturale del giapponese è documentata nella letteratura accademica, per esempio in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
+      back: 'Indietro',
+    },
   },
 } as const;
