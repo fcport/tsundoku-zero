@@ -18,16 +18,32 @@
 // orologio né fuso ambientale. Il confine di giornata è mezzanotte nel `timeZone`
 // PASSATO — condiviso col tetto di sblocco (3.17) via `./calendarDay`.
 import { localDayOrdinal } from './calendarDay';
+import type { ReviewOutcome } from './schedule';
 
 /**
  * Una voce del registro append-only dei ripassi: il tipo MINIMO necessario allo
  * streak — solo l'istante in cui è avvenuta la risposta. NON è uno `ReviewState`
  * (quello è lo stato CORRENTE di un esercizio, non il registro per-risposta):
  * strutturalmente compatibile con la futura riga `review_log` (3.7+), senza
- * anticiparne lo schema.
+ * anticiparne lo schema. `answersOverTime` e `streak` consumano SOLO questo tipo
+ * (giorno/streak): resta minimo di proposito.
  */
 export interface ReviewLogEntry {
   readonly reviewedAt: Date;
+}
+
+/**
+ * La proiezione COMPLETA di una riga `review_log`, come la restituisce ora il
+ * canale unico `listReviewLog`: un `ReviewLogEntry` (istante) ESTESO con l'identità
+ * dell'esercizio (`exerciseId`) e l'esito (`outcome`). Serve alle statistiche di
+ * STATO (5.2/5.3), che derivano lo
+ * stadio corrente di un esercizio rigiocando i suoi esiti dal SOLO log (AD-18), mai
+ * da `review_state`. `extends ReviewLogEntry` ⇒ resta assegnabile a `streak` e
+ * `answersOverTime`, che continuano a leggere solo `reviewedAt`.
+ */
+export interface ReviewLogRecord extends ReviewLogEntry {
+  readonly exerciseId: string;
+  readonly outcome: ReviewOutcome;
 }
 
 /**

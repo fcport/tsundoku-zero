@@ -104,6 +104,18 @@ export const en = {
       dayLabel: '{{date}} - answers: {{answers}}',
       empty: 'There are no answers to show yet. Once you review exercises, your answers per day will appear here.',
     },
+    // Distribuzione per stadio (5.2, FR7.2): `heading` intitola la sezione;
+    // `stageLabel` etichetta ogni stadio (`{{stage}}` = indice 0-5, `{{exercises}}`
+    // = numero di esercizi in quello stadio, MAI `{{count}}` che innescherebbe il
+    // pluralizzatore i18next e romperebbe la parita en/it); `empty` e il placeholder
+    // testuale neutro a log vuoto (mai un grafico vuoto). Nessuna etichetta mnemonica
+    // ne intervallo in giorni: l'AC chiede «sei stadi, 0-5». La ricca dichiarazione
+    // «cosa manca» e la storia 5.4.
+    stageDistribution: {
+      heading: 'Exercises by review stage',
+      stageLabel: 'Stage {{stage}} - exercises: {{exercises}}',
+      empty: 'There are no exercises to show yet. Once you review exercises, how far along they are will appear here.',
+    },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continue"/"Back" generico.
     back: 'Back to the dashboard',

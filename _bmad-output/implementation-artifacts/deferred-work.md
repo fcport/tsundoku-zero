@@ -325,3 +325,11 @@ source_spec: `spec-5-1-quante-risposte-e-quando.md`
 severity: low
 reason: src/domain/answersOverTime.ts costruisce la serie da min(ordinali) a max(oggi, ordinali); un utente che ha studiato mesi fa e poi si è fermato genera decine/centinaia di <li> a conteggio 0 in StatsScreen. L'intento della storia non richiede una finestra e gli utenti attuali hanno cronologie brevi, quindi è una preoccupazione futura di scalabilità/UX, non un difetto di 5.1.
 status: open
+
+### DW-41: listReviewLog legge l'intero review_log senza paginazione né finestra, e la ricostruzione dello stadio (stageDistribution) vi aggiunge una passata O(numero totale di risposte) a ogni render della vist
+origin: spec-deferred b0e30e1865c6
+location: src/data/reviewRepository.ts / src/domain/stageDistribution.ts
+source_spec: `spec-5-2-a-che-punto-sono-i-miei-esercizi.md`
+severity: low
+reason: src/data/reviewRepository.ts:listReviewLog fa una select senza limit; src/domain/stageDistribution.ts raggruppa e ripiega tutte le voci del log. Il commento della porta assume «poche righe». Su account di lunga data la lista cresce illimitata. È una preoccupazione PRE-ESISTENTE (la stessa fonte alimenta già streak/answersOverTime, cfr. il deferred analogo di 5.1 sulla serie giornaliera illimitata) e futura di scalabilità: gli utenti attuali hanno cronologie brevi, quindi non è un difetto introdotto da 5.2.
+status: open

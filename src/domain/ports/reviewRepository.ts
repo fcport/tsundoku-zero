@@ -6,7 +6,7 @@
 // nascano, con il contratto ancorato a `isDue` di `../due`.
 
 import type { ReviewOutcome, ReviewState } from '../schedule';
-import type { ReviewLogEntry } from '../streak';
+import type { ReviewLogRecord } from '../streak';
 
 /**
  * L'input di `applyReview` (3.19): i valori GIÀ CALCOLATI sul client per una
@@ -43,13 +43,18 @@ export interface ReviewRepository {
   listDue(now: Date): Promise<readonly ReviewState[]>;
   /**
    * Legge il registro dei ripassi (`review_log`) dell'utente corrente: l'UNICO
-   * canale da cui lo streak si calcola (AD-18). Ritorna solo l'istante di ogni
-   * risposta (`ReviewLogEntry`, `../streak`); `streak(log, now, timeZone)` lo
-   * deriva a ogni lettura, mai memorizzato. Non prende `now`: la dovutezza non
-   * c'entra, il confine di giornata lo applica `streak` col fuso iniettato.
-   * Opera sull'utente corrente (RLS isola la riga), senza parametro `userId`.
+   * canale da cui le statistiche derivate si calcolano (AD-18). Ritorna la
+   * proiezione COMPLETA di ogni riga (`ReviewLogRecord`, `../streak`):
+   * `reviewedAt` (istante), `exerciseId` (identita) e `outcome` (esito). Lo streak
+   * e `answersOverTime` consumano solo `reviewedAt` (`ReviewLogRecord` e
+   * assegnabile al loro `ReviewLogEntry`); le statistiche di STATO (5.2/5.3)
+   * DERIVANO lo stadio corrente rigiocando `exerciseId`/`outcome` dal log, mai da
+   * `review_state`. Nulla e memorizzato: si ricalcola a ogni lettura. Non prende
+   * `now`: la dovutezza non c'entra, il confine di giornata lo applica il
+   * consumatore col fuso iniettato. Opera sull'utente corrente (RLS isola la
+   * riga), senza parametro `userId`.
    */
-  listReviewLog(): Promise<readonly ReviewLogEntry[]>;
+  listReviewLog(): Promise<readonly ReviewLogRecord[]>;
   /**
    * L'UNICA via di persistenza di una risposta (AD-7, AC4): UNA chiamata
    * IDEMPOTENTE che trasporta i valori GIÀ CALCOLATI dal client (`ApplyReviewInput`)

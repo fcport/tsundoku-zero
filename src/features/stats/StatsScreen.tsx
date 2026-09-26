@@ -1,5 +1,6 @@
-// Livello features/stats (5.1): la PRIMA schermata delle statistiche di Epic 5
-// (FR7.1) — le risposte per giorno di calendario. Una schermata-rotta col proprio
+// Livello features/stats (5.1/5.2): la schermata delle statistiche di Epic 5. Due
+// sezioni: le risposte per giorno di calendario (5.1, FR7.1) e la distribuzione
+// degli esercizi per stadio di ripasso (5.2, FR7.2). Una schermata-rotta col proprio
 // `<main>`, raggiunta dalla dashboard e con un'affordance di ritorno secondaria
 // (`onExit`, cablata dal livello app come la sessione). AD-1: importa
 // domain/ui/i18n/@tanstack/react-query, MAI data né react-router — le porte arrivano
@@ -14,11 +15,18 @@
 // difendibile e divergente. L'aggregazione vive nel dominio (`answersOverTime`,
 // pura e totale); orologio e fuso ENTRANO dal Clock iniettato.
 //
-// A log vuoto (`answersOverTime` ⇒ `[]`) rende un placeholder testuale neutro e
-// minimale (`stats.answersOverTime.empty`), MAI un riquadro di grafico vuoto: la
-// ricca dichiarazione «cosa manca e quanto» degli stati a dati insufficienti è la
-// storia 5.4. La distribuzione per stadio (5.2) e i tassi d'errore (5.3) sono fuori
-// scopo: questa storia conta «quante risposte, e quando», non l'accuratezza.
+// A log vuoto rende placeholder testuali neutri e minimali
+// (`stats.answersOverTime.empty`/`stats.stageDistribution.empty`), MAI un riquadro
+// di grafico vuoto: la ricca dichiarazione «cosa manca e quanto» degli stati a dati
+// insufficienti è la storia 5.4. I tassi d'errore per punto grammaticale sono la
+// storia 5.3, fuori scopo.
+//
+// FONTE UNICA e derivata anche per la distribuzione (AD-18): lo stadio corrente di
+// un esercizio NON si legge da `review_state` — si RICOSTRUISCE rigiocando i suoi
+// esiti dal SOLO log via `stageDistribution` (dominio, pura e SENZA orologio: lo
+// stadio non dipende dal tempo). L'asse dei sei stadi deriva dalla costante unica
+// della scala Leitner (`LEITNER_INTERVALS_DAYS`), non da un elenco parallelo nella
+// vista.
 //
 // Nessuna grammatica della celebrazione (nessun verde, nessun `!`, nessuna emoji):
 // solo token del sistema di design. L'informazione non è MAI veicolata dal solo
@@ -27,6 +35,7 @@
 // (`bg-ink-secondary`/`bg-surface-sunken`, mai verde), coerente con `ProgressMeter`.
 import { useQuery } from '@tanstack/react-query';
 import { answersOverTime } from '../../domain/answersOverTime';
+import { stageDistribution } from '../../domain/stageDistribution';
 import { usePorts } from '../ports/PortsContext';
 import { useTranslation } from '../../i18n';
 
@@ -92,6 +101,13 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
   // divisione per zero quando ogni giorno ha `count` 0 (code a 0 da ritmo interrotto).
   const max = Math.max(1, ...series.map((day) => day.count));
 
+  // La distribuzione per stadio DERIVATA dal SOLO log (AD-18): pura e SENZA
+  // orologio (lo stadio non dipende dal tempo). `[]` a log vuoto ⇒ placeholder. Il
+  // massimo per la larghezza proporzionale della barra; `Math.max(1, ...)` evita la
+  // divisione per zero quando qualche stadio è a 0.
+  const distribution = stageDistribution(logQ.data);
+  const stageMax = Math.max(1, ...distribution.map((s) => s.count));
+
   return (
     <main className={CONTAINER}>
       {/* Il titolo di livello schermata (`<h2>`, come ogni altra schermata): reso
@@ -127,6 +143,43 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
                   <div
                     className="h-full rounded-md bg-ink-secondary"
                     style={{ width: `${(day.count / max) * 100}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+      {/* La SECONDA sezione (5.2): la distribuzione per stadio, derivata dal SOLO
+          log (nessun clock). A distribuzione vuota (log vuoto) un placeholder
+          testuale neutro, MAI un riquadro di grafico vuoto. */}
+      {distribution.length === 0 ? (
+        <p className="text-body text-ink-primary">
+          {t('stats.stageDistribution.empty')}
+        </p>
+      ) : (
+        <>
+          {/* L'intestazione della distribuzione (subordinata al titolo: `<h3>`). */}
+          <h3 className="text-display text-ink-primary">
+            {t('stats.stageDistribution.heading')}
+          </h3>
+          {/* La lista ordinata di barre per-stadio: ogni stadio (0-5, contiguo,
+              zeri inclusi — l'asse deriva da `LEITNER_INTERVALS_DAYS`) porta il
+              proprio conteggio come TESTO (mai dal solo colore) più una barra
+              proporzionale (larghezza = count/max, token neutri, nessun verde). */}
+          <ol className="flex flex-col gap-3">
+            {distribution.map((bucket) => (
+              <li key={bucket.stage} className="flex flex-col gap-1">
+                <span className="text-label text-ink-secondary">
+                  {t('stats.stageDistribution.stageLabel', {
+                    stage: bucket.stage,
+                    exercises: bucket.count,
+                  })}
+                </span>
+                <div className="h-[4px] w-full overflow-hidden rounded-md bg-surface-sunken">
+                  <div
+                    className="h-full rounded-md bg-ink-secondary"
+                    style={{ width: `${(bucket.count / stageMax) * 100}%` }}
                   />
                 </div>
               </li>

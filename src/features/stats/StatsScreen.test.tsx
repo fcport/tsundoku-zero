@@ -5,7 +5,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { en } from '../../i18n/en';
 import { it as itCatalog } from '../../i18n/it';
 import { i18n } from '../../i18n';
-import type { ReviewLogEntry } from '../../domain/streak';
+import type { ReviewLogRecord } from '../../domain/streak';
+import type { ReviewOutcome } from '../../domain/schedule';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { StatsScreen } from './StatsScreen';
 
@@ -32,9 +33,16 @@ const inMemoryPorts: Ports = {
   content: { listLessons: async () => [], listExercisesByIds: async () => [] },
 };
 
-/** Una voce di log per un istante (mezzogiorno UTC nei fixture). */
-function logAt(iso: string): ReviewLogEntry {
-  return { reviewedAt: new Date(iso) };
+// Una voce di log COMPLETA (`ReviewLogRecord`): `answersOverTime` legge solo
+// `reviewedAt`, `stageDistribution` legge `exerciseId`/`outcome`. Default `ex-1`/
+// `good` per i test della serie (dove l'esercizio/esito non contano); i test della
+// distribuzione passano `exerciseId`/`outcome` espliciti.
+function logAt(
+  iso: string,
+  exerciseId = 'ex-1',
+  outcome: ReviewOutcome = 'good',
+): ReviewLogRecord {
+  return { reviewedAt: new Date(iso), exerciseId, outcome };
 }
 
 function freshClient(): QueryClient {
@@ -42,7 +50,7 @@ function freshClient(): QueryClient {
 }
 
 /** Semina la cache del log sulla STESSA chiave `['streak', UID]` della dashboard. */
-function seededClient(log: readonly ReviewLogEntry[]): QueryClient {
+function seededClient(log: readonly ReviewLogRecord[]): QueryClient {
   const qc = freshClient();
   qc.setQueryData(['streak', UID], log);
   return qc;
@@ -147,19 +155,115 @@ describe('AC5 — log vuoto ⇒ placeholder testuale neutro, NON un grafico', ()
     expect(markup).toContain(en.stats.title);
   });
 
-  it('rende il placeholder del log vuoto', () => {
+  it('rende il placeholder del log vuoto (entrambe le sezioni)', () => {
     expect(markup).toContain(en.stats.answersOverTime.empty);
+    // AC5 di 5.2: anche la distribuzione rende un placeholder testuale neutro.
+    expect(markup).toContain(en.stats.stageDistribution.empty);
   });
 
-  it("NON rende l'intestazione della sezione né una barra (nessun grafico vuoto)", () => {
+  it("NON rende le intestazioni delle sezioni né una barra (nessun grafico vuoto)", () => {
     expect(markup).not.toContain(en.stats.answersOverTime.heading);
-    // Nessuna lista di barre: nessun <ol>/<li> reso.
+    expect(markup).not.toContain(en.stats.stageDistribution.heading);
+    // Nessuna lista di barre: nessun <ol>/<li> reso (né serie né distribuzione).
     expect(markup).not.toContain('<ol');
     expect(markup).not.toContain('<li');
   });
 
   it('offre comunque l\'affordance di ritorno', () => {
     expect(markup).toContain(en.stats.back);
+  });
+});
+
+describe('5.2 AC — distribuzione per stadio: intestazione + sei stadi con conteggi come testo', () => {
+  // Tre esercizi a stadi finali diversi:
+  //  - ex-A: good ⇒ stadio 1
+  //  - ex-B: good, good ⇒ stadio 2
+  //  - ex-C: good, good ⇒ stadio 2
+  // Distribuzione: stadio 0 => 0, 1 => 1, 2 => 2, 3..5 => 0.
+  const qc = seededClient([
+    logAt('2026-09-20T10:00:00.000Z', 'ex-A', 'good'),
+    logAt('2026-09-20T10:00:00.000Z', 'ex-B', 'good'),
+    logAt('2026-09-21T10:00:00.000Z', 'ex-B', 'good'),
+    logAt('2026-09-20T10:00:00.000Z', 'ex-C', 'good'),
+    logAt('2026-09-21T10:00:00.000Z', 'ex-C', 'good'),
+  ]);
+  const markup = render(qc, UID);
+
+  it("rende l'intestazione della distribuzione per stadio", () => {
+    expect(markup).toContain(en.stats.stageDistribution.heading);
+  });
+
+  it('mostra ESATTAMENTE i sei stadi 0-5 col conteggio come TESTO', () => {
+    expect(markup).toContain('Stage 0 - exercises: 0');
+    expect(markup).toContain('Stage 1 - exercises: 1');
+    expect(markup).toContain('Stage 2 - exercises: 2');
+    expect(markup).toContain('Stage 3 - exercises: 0');
+    expect(markup).toContain('Stage 4 - exercises: 0');
+    expect(markup).toContain('Stage 5 - exercises: 0');
+    // Nessun settimo stadio.
+    expect(markup).not.toContain('Stage 6 -');
+  });
+
+  it('include uno stadio a conteggio 0 come testo (asse contiguo, zeri inclusi)', () => {
+    expect(markup).toContain('Stage 0 - exercises: 0');
+  });
+
+  it('NON rende il placeholder della distribuzione (il log non è vuoto)', () => {
+    expect(markup).not.toContain(en.stats.stageDistribution.empty);
+  });
+
+  it('rende un solo <main> (il landmark) con entrambe le sezioni', () => {
+    const mains = markup.match(/<main/g) ?? [];
+    expect(mains.length).toBe(1);
+    // Entrambe le intestazioni presenti nello stesso <main>.
+    expect(markup).toContain(en.stats.answersOverTime.heading);
+    expect(markup).toContain(en.stats.stageDistribution.heading);
+  });
+});
+
+describe('5.2 AC — un esercizio con piu risposte conta UNA volta, allo stadio finale', () => {
+  it('good, good, again per ex-1 ⇒ stadio finale 0 (una sola volta)', () => {
+    const qc = seededClient([
+      logAt('2026-09-20T10:00:00.000Z', 'ex-1', 'good'), // 0 -> 1
+      logAt('2026-09-21T10:00:00.000Z', 'ex-1', 'good'), // 1 -> 2
+      logAt('2026-09-22T10:00:00.000Z', 'ex-1', 'again'), // 2 -> 0
+    ]);
+    const markup = render(qc, UID);
+    // L'unico esercizio cade nel bucket 0; ogni altro stadio a 0.
+    expect(markup).toContain('Stage 0 - exercises: 1');
+    expect(markup).toContain('Stage 1 - exercises: 0');
+    expect(markup).toContain('Stage 2 - exercises: 0');
+  });
+});
+
+describe('5.2 AC — la fonte è SOLO review.listReviewLog() (mai listDue/review_state)', () => {
+  it('la distribuzione resa deriva dal SOLO log seminato, senza listDue', () => {
+    const calls: string[] = [];
+    const spyPorts: Ports = {
+      clock: { now: () => NOW, timeZone: () => TZ },
+      review: {
+        listDue: async () => {
+          calls.push('listDue');
+          throw new Error('listDue non deve essere consultata dalle statistiche');
+        },
+        listReviewLog: async () => {
+          calls.push('listReviewLog');
+          return [];
+        },
+        applyReview: async () => {
+          calls.push('applyReview');
+        },
+      },
+      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+      content: { listLessons: async () => [], listExercisesByIds: async () => [] },
+    };
+    const qc = seededClient([logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'good')]);
+    const markup = render(qc, UID, spyPorts);
+
+    // La distribuzione riflette il SOLO log seminato: un esercizio allo stadio 1.
+    expect(markup).toContain('Stage 1 - exercises: 1');
+    expect(calls).not.toContain('listDue');
+    expect(calls).not.toContain('applyReview');
   });
 });
 
@@ -252,23 +356,29 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     expect(offending).toEqual([]);
   });
 
-  it('it: rende le stesse chiavi in italiano', async () => {
+  it('it: rende le stesse chiavi in italiano (serie e distribuzione)', async () => {
     await i18n.changeLanguage('it');
     const markup = render(
-      seededClient([logAt('2026-09-25T10:00:00.000Z')]),
+      seededClient([logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'good')]),
       UID,
     );
     expect(markup).toContain(itCatalog.stats.title);
     expect(markup).toContain(itCatalog.stats.answersOverTime.heading);
     expect(markup).toContain('2026-09-25 - risposte: 1');
+    // La distribuzione per stadio in italiano: intestazione ed etichette di stadio.
+    expect(markup).toContain(itCatalog.stats.stageDistribution.heading);
+    expect(markup).toContain('Stadio 1 - esercizi: 1');
+    expect(markup).toContain('Stadio 0 - esercizi: 0');
     expect(markup).toContain(itCatalog.stats.back);
     expect(markup).not.toContain('!');
   });
 
-  it('it: log vuoto ⇒ placeholder italiano, nessun grafico', async () => {
+  it('it: log vuoto ⇒ placeholder italiano (entrambe le sezioni), nessun grafico', async () => {
     await i18n.changeLanguage('it');
     const markup = render(seededClient([]), UID);
     expect(markup).toContain(itCatalog.stats.answersOverTime.empty);
+    expect(markup).toContain(itCatalog.stats.stageDistribution.empty);
     expect(markup).not.toContain(itCatalog.stats.answersOverTime.heading);
+    expect(markup).not.toContain(itCatalog.stats.stageDistribution.heading);
   });
 });
