@@ -301,3 +301,11 @@ source_spec: `spec-4-4-un-indicatore-che-non-spaventa.md`
 severity: medium
 reason: `useIsMutating({ mutationKey: ['review'] })` filtra `status: 'pending'`; una mutation `error` (dopo `REVIEW_SYNC_MAX_RETRIES`, 4.3) non è più contata. È indistinguibile da una coda drenata con successo. Coerente con l'epica, che vieta esplicitamente una superficie d'errore/modale «sei offline» e il pulsante «riprova»; il RECUPERO di un invio permanentemente fallito resta non garantito. Stesso rischio già registrato come deferred nella storia 4.3 (l'indicatore 4.4 e l'idempotenza 4.5 lo rendono visibile/una-volta, ma nessuno lo recupera).
 status: open
+
+### DW-38: Il vero e2e runtime dell'idempotenza contro il Supabase reale (la RPC `apply_review` che deduplica davvero su Postgres) non è esercitato: qui la porta è MODELLATA in memoria e il contratto SQL è prova
+origin: spec-deferred 1c032098ec87
+location: src/features/study/reviewIdempotency.test.ts:108 (makeModeledReviewGate)
+source_spec: `spec-4-5-riapplicare-la-coda-non-falsa-niente.md`
+severity: medium
+reason: «Applicato esattamente una volta» = (client invia una review_id stabile) ∘ (server deduplica su quella id). La metà client è provata a runtime in reviewIdempotency.test.ts; la metà server è provata strutturalmente (AST) in migrations.test.ts (Story 3.9) e il passthrough dell'adapter in reviewRepository.test.ts. Il solo anello non verificato a runtime è la RPC live che deduplica su Postgres reale — operator-gated per AD-12/AD-13 (nessuna istanza locale; un solo progetto reale con i dati M1 dell'owner) e post-merge per SPINE-DELTA §148 (le migrazioni si applicano solo al merge su main, mai da un ramo di PR). Serve inoltre infrastruttura e2e (utenti per-run + teardown via Edge Function) oggi assente nel repo. Coerente coi deferred già registrati in 4.3/4.4.
+status: open
