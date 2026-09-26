@@ -10,7 +10,9 @@ esistenza e contenuti.
 
 Copre solo il confine con la fonte. La **procedura operativa** della sessione di
 autorazione è il runbook `docs/authoring-runbook.md` (storia 6.2); lo **strumento
-di confronto anti-contaminazione** è della storia 6.3. Qui si stabilisce dove
+meccanico di confronto anti-contaminazione** — che confronta il contenuto prodotto
+con il transcript e segnala le sovrapposizioni verbatim — è `npm run check-contamination`,
+descritto in `docs/contamination-check.md` (storia 6.3). Qui si stabilisce dove
 passa la linea, non come si lavora.
 
 ## La linea in una frase
