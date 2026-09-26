@@ -293,3 +293,11 @@ source_spec: `spec-4-3-il-ritorno-della-rete-non-chiede-il-permesso.md`
 severity: medium
 reason: Con `retry: REVIEW_SYNC_MAX_RETRIES` finito, dopo l'ultimo fallimento la mutation esce da `paused` ⇒ il dehydrate (solo `isPaused`) non la ripersiste e `resumeReviewQueue` la assorbe col `.catch`. L'`onError` del componente fa il rollback ottimistico ma nessuno informa l'utente né riprova al riavvio. La visibilità è la storia 4.4 (indicatore) e l'idempotenza la 4.5, ma nessuna delle due garantisce il RECUPERO di un invio permanentemente fallito.
 status: open
+
+### DW-37: L'indicatore conta solo le mutation `['review']` in stato `pending` (in volo o `paused`): una valutazione che esaurisce i ritentativi e finisce in `error` esce dal conteggio, così l'indicatore sparisc
+origin: spec-deferred 9fe9de1b111c
+location: src/features/study/SyncIndicator.tsx:28 (filtro `status: pending`)
+source_spec: `spec-4-4-un-indicatore-che-non-spaventa.md`
+severity: medium
+reason: `useIsMutating({ mutationKey: ['review'] })` filtra `status: 'pending'`; una mutation `error` (dopo `REVIEW_SYNC_MAX_RETRIES`, 4.3) non è più contata. È indistinguibile da una coda drenata con successo. Coerente con l'epica, che vieta esplicitamente una superficie d'errore/modale «sei offline» e il pulsante «riprova»; il RECUPERO di un invio permanentemente fallito resta non garantito. Stesso rischio già registrato come deferred nella storia 4.3 (l'indicatore 4.4 e l'idempotenza 4.5 lo rendono visibile/una-volta, ma nessuno lo recupera).
+status: open
