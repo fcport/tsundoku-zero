@@ -164,4 +164,11 @@ export const it = {
       error: "L'account non è stato cancellato. Riprova.",
     },
   },
+  // Indicatore di sincronizzazione (4.4): STESSA chiave di `en` (parità
+  // ricorsiva). Testo STABILE e SENZA conteggio annunciato quando la coda ha
+  // risposte non ancora sincronizzate. Non è un errore: nessun `!`, nessuna
+  // emoji, nessun allarme.
+  sync: {
+    pending: 'Sincronizzazione in sospeso',
+  },
 } as const;

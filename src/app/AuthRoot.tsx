@@ -16,6 +16,7 @@ import { AppRoutes } from './AppRoutes';
 import { submitSignOut } from '../features/auth/signOut';
 import { i18n, resolveLocale } from '../i18n';
 import { PortsProvider, type Ports } from '../features/ports/PortsContext';
+import { SyncIndicator } from '../features/study/SyncIndicator';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 import type { AccountGateway } from '../domain/ports/accountGateway';
@@ -179,6 +180,16 @@ export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
           void submitSignOut(gateway).finally(() => setStatus('anonymous'));
         }}
       />
+      {/*
+       * Indicatore di sincronizzazione (4.4): sovrapposizione GLOBALE montata una
+       * sola volta nel composition root, sibling di <AppRoutes>. Indipendente
+       * dalla rotta — visibile sia in sessione sia in dashboard — perché la coda
+       * `paused` sopravvive all'uscita dalla sessione (il reset dello store tocca
+       * solo la coda in memoria, non le mutation). Deriva il suo stato dalla coda
+       * reale e sparisce da sé quando la coda si drena. Non reso nello stato
+       * `checking` (return anticipato sopra), dove non c'è coda.
+       */}
+      <SyncIndicator />
     </PortsProvider>
   );
 }

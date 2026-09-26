@@ -170,4 +170,13 @@ export const en = {
       error: 'The account could not be deleted. Try again.',
     },
   },
+  // Indicatore di sincronizzazione (4.4): il testo STABILE annunciato quando la
+  // coda di valutazioni ha risposte non ancora sincronizzate. SENZA conteggio —
+  // il contenuto della live region non deve variare col numero di risposte
+  // accodate, così `aria-live="polite"` annuncia UNA volta alla comparsa e non a
+  // ogni risposta. Non è un errore: nessun `!`, nessuna emoji, nessun allarme;
+  // ASCII, terso.
+  sync: {
+    pending: 'Sync pending',
+  },
 } as const;

@@ -88,7 +88,7 @@ development_status:
   4-1-la-sessione-si-carica-tutta-in-una-volta: done
   4-2-la-coda-sopravvive-alla-chiusura-dell-app: done
   4-3-il-ritorno-della-rete-non-chiede-il-permesso: done
-  4-4-un-indicatore-che-non-spaventa: backlog
+  4-4-un-indicatore-che-non-spaventa: done
   4-5-riapplicare-la-coda-non-falsa-niente: backlog
   epic-4-retrospective: optional
 
