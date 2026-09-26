@@ -32,6 +32,12 @@ import { changeLocale } from './changeLocale';
 import { LessonsPerDayOptions } from './LessonsPerDayOptions';
 import { changeLessonsPerDay } from './changeLessonsPerDay';
 
+// ANELLO DI FOCUS visibile: lo STESSO token degli interattivi delle schermate-rotta
+// (`StatsScreen`, `PrivacyScreen`). `focus-visible:` mostra l'anello solo per
+// navigazione da tastiera. Token `focus-ring`: nessun colore letterale (UX-DR1).
+const FOCUS_RING =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+
 export interface SettingsScreenProps {
   readonly settings: SettingsRepository;
   /**
@@ -39,9 +45,19 @@ export interface SettingsScreenProps {
    * del tetto di sblocco, CONDIVISA con la dashboard.
    */
   readonly userId: string | null;
+  /**
+   * La navigazione alla privacy policy (7.1): una CALLBACK dal livello app (AD-1:
+   * le features non importano react-router). Il cablaggio vive in
+   * `AuthenticatedShell` (`() => navigate(PRIVACY_PATH)`). Obbligatoria.
+   */
+  readonly onViewPrivacy: () => void;
 }
 
-export function SettingsScreen({ settings, userId }: SettingsScreenProps) {
+export function SettingsScreen({
+  settings,
+  userId,
+  onViewPrivacy,
+}: SettingsScreenProps) {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const current: Locale = resolveLocale(i18n.language);
@@ -82,6 +98,17 @@ export function SettingsScreen({ settings, userId }: SettingsScreenProps) {
           })
         }
       />
+      {/* Il collegamento alla privacy policy (7.1): un'affordance SECONDARIA
+          (button, idioma del repo) DENTRO la <section> ma FUORI dai due
+          `role="group"` (lingua e tetto), cosi il conteggio dei gruppi resta 2.
+          -> `onViewPrivacy` (cablato in AuthenticatedShell). */}
+      <button
+        type="button"
+        onClick={onViewPrivacy}
+        className={`self-start text-caption text-ink-secondary underline ${FOCUS_RING}`}
+      >
+        {t('legal.privacy.linkLabel')}
+      </button>
     </section>
   );
 }
