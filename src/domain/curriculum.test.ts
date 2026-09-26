@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { LessonSummary } from './ports/contentRepository';
-import { lastUnlockedLesson, nextLessonToUnlock } from './curriculum';
+import {
+  lastUnlockedLesson,
+  lessonsByGrammarPoint,
+  nextLessonToUnlock,
+} from './curriculum';
 
 // Le righe «selettore» della I/O & Edge-Case Matrix (AC3/AC4). `nextLessonToUnlock`
 // e `lastUnlockedLesson` sono PURI: nessun clock, nessuna rete. La sequenza dipende
@@ -10,6 +14,15 @@ import { lastUnlockedLesson, nextLessonToUnlock } from './curriculum';
 /** Una LessonSummary minima: solo `id`/`ordinal` contano per i selettori. */
 function lesson(id: string, ordinal: number): LessonSummary {
   return { id, ordinal, title: { en: id }, grammarPoints: [], exerciseCount: 0 };
+}
+
+/** Una LessonSummary con i suoi punti grammaticali (per lessonsByGrammarPoint). */
+function lessonWithPoints(
+  id: string,
+  ordinal: number,
+  grammarPoints: readonly string[],
+): LessonSummary {
+  return { id, ordinal, title: { en: id }, grammarPoints, exerciseCount: 0 };
 }
 
 describe('nextLessonToUnlock — autorità sequenziale dello sblocco (AC3)', () => {
@@ -88,5 +101,42 @@ describe('lastUnlockedLesson — l\'ultima sbloccata = ordinal massimo sbloccato
     // (l1, l2) ritorna la più alta (l2).
     const lessons = [lesson('l1', 1), lesson('l2', 2), lesson('l3', 3)];
     expect(lastUnlockedLesson(lessons, ['l1', 'l2', 'ghost'])).toEqual(lesson('l2', 2));
+  });
+});
+
+describe('lessonsByGrammarPoint — join puro punto -> lezione (5.3)', () => {
+  it('una lezione con PIU punti ⇒ tutti mappati a quella lezione', () => {
+    const l = lessonWithPoints('l1', 1, ['te-form', 'particles', 'counters']);
+    const map = lessonsByGrammarPoint([l]);
+    expect(map.get('te-form')).toBe(l);
+    expect(map.get('particles')).toBe(l);
+    expect(map.get('counters')).toBe(l);
+    expect(map.size).toBe(3);
+  });
+
+  it('piu lezioni ⇒ ogni punto mappato alla propria lezione', () => {
+    const l1 = lessonWithPoints('l1', 1, ['te-form']);
+    const l2 = lessonWithPoints('l2', 2, ['particles']);
+    const map = lessonsByGrammarPoint([l1, l2]);
+    expect(map.get('te-form')).toBe(l1);
+    expect(map.get('particles')).toBe(l2);
+  });
+
+  it('collisione (stesso punto in due lezioni) ⇒ vince l ordinal piu basso', () => {
+    // `shared` compare in l2 (ord 2) e l1 (ord 1): il primo occupante in ordine
+    // crescente e l1, che vince. L'input arriva disordinato per provare l'ordinamento.
+    const l2 = lessonWithPoints('l2', 2, ['shared']);
+    const l1 = lessonWithPoints('l1', 1, ['shared']);
+    const map = lessonsByGrammarPoint([l2, l1]);
+    expect(map.get('shared')).toBe(l1);
+  });
+
+  it('lista vuota ⇒ mappa vuota', () => {
+    expect(lessonsByGrammarPoint([]).size).toBe(0);
+  });
+
+  it('una lezione senza punti ⇒ non contribuisce alla mappa', () => {
+    const map = lessonsByGrammarPoint([lessonWithPoints('l1', 1, [])]);
+    expect(map.size).toBe(0);
   });
 });

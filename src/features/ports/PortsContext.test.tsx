@@ -70,7 +70,7 @@ const inMemoryContent: ContentRepository = {
   listExercisesByIds: async () => sampleExercises,
 };
 const sampleLog = [
-  { exerciseId: 'ex-1', outcome: 'good', reviewedAt: FIXED_NOW },
+  { exerciseId: 'ex-1', outcome: 'good', reviewedAt: FIXED_NOW, grammarPoint: 'te-form' },
 ] as const;
 const inMemoryReview: ReviewRepository = {
   listDue: async () => sampleDue,

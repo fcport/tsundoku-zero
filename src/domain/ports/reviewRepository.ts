@@ -45,11 +45,14 @@ export interface ReviewRepository {
    * Legge il registro dei ripassi (`review_log`) dell'utente corrente: l'UNICO
    * canale da cui le statistiche derivate si calcolano (AD-18). Ritorna la
    * proiezione COMPLETA di ogni riga (`ReviewLogRecord`, `../streak`):
-   * `reviewedAt` (istante), `exerciseId` (identita) e `outcome` (esito). Lo streak
-   * e `answersOverTime` consumano solo `reviewedAt` (`ReviewLogRecord` e
-   * assegnabile al loro `ReviewLogEntry`); le statistiche di STATO (5.2/5.3)
-   * DERIVANO lo stadio corrente rigiocando `exerciseId`/`outcome` dal log, mai da
-   * `review_state`. Nulla e memorizzato: si ricalcola a ogni lettura. Non prende
+   * `reviewedAt` (istante), `exerciseId` (identita), `outcome` (esito) e
+   * `grammarPoint` (il punto grammaticale DENORMALIZZATO al momento della risposta,
+   * AD-23/FR5.7). Lo streak e `answersOverTime` consumano solo `reviewedAt`
+   * (`ReviewLogRecord` e assegnabile al loro `ReviewLogEntry`); le statistiche di
+   * STATO (5.2) DERIVANO lo stadio corrente rigiocando `exerciseId`/`outcome` dal
+   * log, mai da `review_state`; il tasso d'errore per punto (5.3) aggrega su
+   * `grammarPoint`, mai su `exerciseId` (cosi la storia sopravvive alla
+   * riautorazione). Nulla e memorizzato: si ricalcola a ogni lettura. Non prende
    * `now`: la dovutezza non c'entra, il confine di giornata lo applica il
    * consumatore col fuso iniettato. Opera sull'utente corrente (RLS isola la
    * riga), senza parametro `userId`.

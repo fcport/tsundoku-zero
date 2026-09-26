@@ -35,15 +35,20 @@ export interface ReviewLogEntry {
 /**
  * La proiezione COMPLETA di una riga `review_log`, come la restituisce ora il
  * canale unico `listReviewLog`: un `ReviewLogEntry` (istante) ESTESO con l'identità
- * dell'esercizio (`exerciseId`) e l'esito (`outcome`). Serve alle statistiche di
- * STATO (5.2/5.3), che derivano lo
- * stadio corrente di un esercizio rigiocando i suoi esiti dal SOLO log (AD-18), mai
- * da `review_state`. `extends ReviewLogEntry` ⇒ resta assegnabile a `streak` e
- * `answersOverTime`, che continuano a leggere solo `reviewedAt`.
+ * dell'esercizio (`exerciseId`), l'esito (`outcome`) e il punto grammaticale
+ * DENORMALIZZATO al momento della risposta (`grammarPoint`, snapshot scritto da
+ * `apply_review`, AD-18/AD-23/FR5.7). Serve alle statistiche di STATO (5.2/5.3):
+ * 5.2 deriva lo stadio corrente di un esercizio rigiocando i suoi esiti dal SOLO
+ * log (mai da `review_state`); 5.3 aggrega il tasso d'errore per `grammarPoint`
+ * (mai per `exerciseId`, così la storia sopravvive alla riautorazione di un
+ * esercizio). `extends ReviewLogEntry` ⇒ resta assegnabile a `streak` e
+ * `answersOverTime`, che continuano a leggere solo `reviewedAt`; `stageDistribution`
+ * legge `exerciseId`/`outcome` e ignora `grammarPoint` (aggiunta ADDITIVA).
  */
 export interface ReviewLogRecord extends ReviewLogEntry {
   readonly exerciseId: string;
   readonly outcome: ReviewOutcome;
+  readonly grammarPoint: string;
 }
 
 /**
