@@ -38,6 +38,7 @@ import {
   createReviewPersister,
   reviewPersistOptions,
   resumeReviewQueue,
+  subscribeReviewQueueResume,
 } from './reviewPersister';
 
 const DUE_AT = new Date('2026-10-01T00:00:00.000Z');
@@ -233,5 +234,84 @@ describe('4.2 — reviewPersistOptions + resumeReviewQueue (wiring del provider 
     expect(passed.dueAt).toBeInstanceOf(Date);
 
     target.clear();
+  });
+});
+
+// Il resume al RITORNO DELLA RETE (4.3) come codice NOSTRO, non come dettaglio di
+// libreria: `subscribeReviewQueueResume` sottoscrive `onlineManager` e, alla transizione
+// a online, rilancia il drenaggio. Testato in ISOLAMENTO su un client NON montato (mai
+// passato a un provider), così SOLO il nostro listener agisce — nessun resume built-in
+// del `mount()` a confondere il conteggio delle chiamate.
+describe('4.3 — subscribeReviewQueueResume: resume esplicito al ritorno della rete (AC1)', () => {
+  it('AC1 — con una mutation paused offline, tornata la rete il listener drena applyReview UNA volta', async () => {
+    const applyReview = vi.fn<(input: ApplyReviewInput) => Promise<void>>(
+      async () => {},
+    );
+    // Client NON montato con la spia ai default: solo `subscribeReviewQueueResume` può
+    // farne ripartire il drenaggio (nessun resume built-in di un provider).
+    const client = await buildPersistedClient();
+    const target = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(target, spyReview(applyReview));
+    hydrate(target, client.clientState);
+    expect(target.getMutationCache().getAll()[0]?.state.isPaused).toBe(true);
+
+    onlineManager.setOnline(false);
+    const unsubscribe = subscribeReviewQueueResume(target);
+    try {
+      expect(applyReview).not.toHaveBeenCalled();
+
+      // La rete torna: la transizione a online del singleton `onlineManager` fa scattare
+      // il nostro listener, che chiama `resumeReviewQueue(target)`.
+      onlineManager.setOnline(true);
+      await vi.waitFor(() => expect(applyReview).toHaveBeenCalledTimes(1));
+
+      const passed = applyReview.mock.calls[0][0];
+      expect(passed.reviewId).toBe('rev-persist-1');
+      expect(passed.dueAt).toBeInstanceOf(Date);
+    } finally {
+      unsubscribe();
+      target.clear();
+    }
+  });
+
+  it('coesistenza benigna — mount() (resume built-in) PIÙ il nostro listener drenano applyReview ESATTAMENTE una volta', async () => {
+    // La produzione ha DUE percorsi di resume al ritorno online: quello built-in di
+    // `QueryClient.mount()` (che il provider invoca e che sottoscrive `onlineManager`) E
+    // il nostro `subscribeReviewQueueResume`. Il commento di `subscribeReviewQueueResume`
+    // sostiene che la coesistenza è BENIGNA (il `Retryer` in pausa risolve la sua
+    // `continue`-promise una sola volta ⇒ la `mutationFn` esegue una volta). Qui lo si
+    // RIPRODUCE — `mount()` + il nostro listener insieme — invece di solo ragionarci.
+    const applyReview = vi.fn<(input: ApplyReviewInput) => Promise<void>>(
+      async () => {},
+    );
+    const client = await buildPersistedClient();
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    registerReviewMutationDefaults(qc, spyReview(applyReview));
+    hydrate(qc, client.clientState);
+    expect(qc.getMutationCache().getAll()[0]?.state.isPaused).toBe(true);
+
+    onlineManager.setOnline(false);
+    // `mount()` attiva lo STESSO resume built-in di `onlineManager` che usa il provider;
+    // il nostro listener è cablato accanto. Entrambi puntano alla stessa mutation paused.
+    qc.mount();
+    const unsubscribe = subscribeReviewQueueResume(qc);
+    try {
+      expect(applyReview).not.toHaveBeenCalled();
+
+      // Il ritorno online fa scattare ENTRAMBI i percorsi di resume.
+      onlineManager.setOnline(true);
+      await vi.waitFor(() => expect(applyReview).toHaveBeenCalledTimes(1));
+
+      // …e RESTA a una: si drenano i microtask e un turno di timer, poi si ri-asserisce
+      // (guardia contro un doppio drenaggio dei due percorsi che coesistono).
+      await Promise.resolve();
+      await Promise.resolve();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(applyReview).toHaveBeenCalledTimes(1);
+    } finally {
+      unsubscribe();
+      qc.unmount();
+      qc.clear();
+    }
   });
 });
