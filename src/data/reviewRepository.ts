@@ -17,7 +17,8 @@ import type {
   ReviewRepository,
 } from '../domain/ports/reviewRepository';
 import type { ReviewState } from '../domain/schedule';
-import type { ReviewLogEntry } from '../domain/streak';
+import { REVIEW_OUTCOMES, type ReviewOutcome } from '../domain/schedule';
+import type { ReviewLogRecord } from '../domain/streak';
 import { isDue } from '../domain/due';
 import { DataError } from './dataError';
 
@@ -28,11 +29,13 @@ const REVIEW_STATE_TABLE = 'review_state';
 const REVIEW_STATE_COLUMNS =
   'exercise_id, stage, due_at, review_count, lapse_count, last_reviewed_at';
 
-// Il registro append-only dei ripassi (3.7): allo streak serve solo l'istante
-// della risposta. `reviewed_at` è timestamptz ⇒ stringa ISO da supabase-js.
-// `user_id` non serve: RLS isola già la riga.
+// Il registro append-only dei ripassi (3.7): il canale UNICO delle statistiche
+// derivate (AD-18) ora porta la riga COMPLETA. `exercise_id` (identita) e `outcome`
+// (esito) esistono gia a DB (3.7); qui si estende solo la LETTURA — nessuna
+// migrazione, nessuna modifica alla RPC. `reviewed_at` e timestamptz ⇒ stringa ISO
+// da supabase-js. `user_id` non serve: RLS isola gia la riga.
 const REVIEW_LOG_TABLE = 'review_log';
-const REVIEW_LOG_COLUMNS = 'reviewed_at';
+const REVIEW_LOG_COLUMNS = 'exercise_id, outcome, reviewed_at';
 
 // La RPC transazionale della SCRITTURA (AD-7, a DB dalla 3.9): inserisce in
 // `review_log` con `on conflict (review_id) do nothing` e aggiorna `review_state`
@@ -41,23 +44,40 @@ const REVIEW_LOG_COLUMNS = 'reviewed_at';
 // volta (AD-2).
 const APPLY_REVIEW_FN = 'apply_review';
 
-// Forma GREZZA di una riga `review_log` come arriva da Supabase.
+// Forma GREZZA di una riga `review_log` come arriva da Supabase. La riga porta la
+// proiezione COMPLETA (statistiche di stato, AD-18): l'identita dell'esercizio,
+// l'esito e l'istante.
 interface ReviewLogRow {
+  readonly exercise_id: unknown;
+  readonly outcome: unknown;
   readonly reviewed_at: unknown;
 }
 
+// Testimone RUNTIME dell'insieme esiti, dalla fonte UNICA di `schedule.ts`: la
+// validazione dell'adattatore usa la STESSA costante da cui deriva `ReviewOutcome`,
+// cosi un esito nuovo si aggiunge in un solo punto.
+const OUTCOME_SET: ReadonlySet<string> = new Set(REVIEW_OUTCOMES);
+
 /**
- * Mappa PURA di una riga grezza di `review_log` in `ReviewLogEntry` di dominio:
- * `reviewed_at` (stringa ISO) diventa `reviewedAt: Date`. Su riga non-oggetto,
- * `reviewed_at` non stringa o timestamp non parsabile LANCIA un
- * `DataError('listReviewLog')` — una riga rotta è un fallimento, non un valore
- * degradato (alimenta TanStack Query, che esige un reject).
+ * Mappa PURA di una riga grezza di `review_log` in `ReviewLogRecord` di dominio:
+ * `exercise_id` (stringa) diventa `exerciseId`; `outcome` (membro di
+ * `REVIEW_OUTCOMES`) diventa `outcome`; `reviewed_at` (stringa ISO) diventa
+ * `reviewedAt: Date`. Su riga non-oggetto, `exercise_id` non stringa, `outcome`
+ * fuori da `REVIEW_OUTCOMES`, `reviewed_at` non stringa o timestamp non parsabile
+ * LANCIA un `DataError('listReviewLog')` — una riga rotta è un fallimento, non un
+ * valore degradato (alimenta TanStack Query, che esige un reject).
  */
-function toReviewLogEntry(row: ReviewLogRow): ReviewLogEntry {
+function toReviewLogRecord(row: ReviewLogRow): ReviewLogRecord {
   if (row === null || typeof row !== 'object') {
     throw new DataError('listReviewLog', new Error('riga review_log non è un oggetto'));
   }
-  const { reviewed_at } = row;
+  const { exercise_id, outcome, reviewed_at } = row;
+  if (typeof exercise_id !== 'string') {
+    throw new DataError('listReviewLog', new Error('riga review_log malformata'));
+  }
+  if (typeof outcome !== 'string' || !OUTCOME_SET.has(outcome)) {
+    throw new DataError('listReviewLog', new Error('outcome review_log non valido'));
+  }
   if (typeof reviewed_at !== 'string') {
     throw new DataError('listReviewLog', new Error('riga review_log malformata'));
   }
@@ -65,7 +85,7 @@ function toReviewLogEntry(row: ReviewLogRow): ReviewLogEntry {
   if (Number.isNaN(reviewedAt.getTime())) {
     throw new DataError('listReviewLog', new Error('timestamp review_log non valido'));
   }
-  return { reviewedAt };
+  return { exerciseId: exercise_id, outcome: outcome as ReviewOutcome, reviewedAt };
 }
 
 // Forma GREZZA di una riga `review_state`. `due_at`/`last_reviewed_at` sono
@@ -159,11 +179,14 @@ export function createSupabaseReviewRepository(
       return rows.map(toReviewState).filter((state) => isDue(state, now));
     },
 
-    async listReviewLog(): Promise<readonly ReviewLogEntry[]> {
-      // Canale unico dello streak (AD-18): legge TUTTO il log (RLS per-utente,
-      // poche righe) senza filtro `isDue` — la dovutezza non c'entra col log
-      // delle risposte. Su errore Supabase LANCIA (reject); ogni riga passa da
-      // `toReviewLogEntry`, che LANCIA su riga/timestamp malformato.
+    async listReviewLog(): Promise<readonly ReviewLogRecord[]> {
+      // Canale unico delle statistiche derivate (AD-18): legge TUTTO il log (RLS
+      // per-utente, poche righe) senza filtro `isDue` — la dovutezza non c'entra
+      // col log delle risposte. Porta la riga COMPLETA (exercise_id/outcome/
+      // reviewed_at): lo streak legge solo l'istante, le statistiche di stato
+      // (5.2/5.3) derivano lo stadio. Su errore Supabase LANCIA (reject); ogni
+      // riga passa da `toReviewLogRecord`, che LANCIA su riga/esito/timestamp
+      // malformato.
       const { data, error } = await client
         .from(REVIEW_LOG_TABLE)
         .select(REVIEW_LOG_COLUMNS);
@@ -173,7 +196,7 @@ export function createSupabaseReviewRepository(
       }
 
       const rows = (data ?? []) as readonly ReviewLogRow[];
-      return rows.map(toReviewLogEntry);
+      return rows.map(toReviewLogRecord);
     },
 
     async applyReview(input: ApplyReviewInput): Promise<void> {

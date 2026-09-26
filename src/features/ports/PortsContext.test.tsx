@@ -69,7 +69,9 @@ const inMemoryContent: ContentRepository = {
   listLessons: async () => sampleLessons,
   listExercisesByIds: async () => sampleExercises,
 };
-const sampleLog = [{ reviewedAt: FIXED_NOW }] as const;
+const sampleLog = [
+  { exerciseId: 'ex-1', outcome: 'good', reviewedAt: FIXED_NOW },
+] as const;
 const inMemoryReview: ReviewRepository = {
   listDue: async () => sampleDue,
   listReviewLog: async () => sampleLog,

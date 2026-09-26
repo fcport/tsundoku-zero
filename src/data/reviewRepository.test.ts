@@ -214,16 +214,18 @@ describe('listDue — fallimenti lanciano DataError (reject)', () => {
   });
 });
 
-// Righe della I/O Matrix per `listReviewLog` (storia 3.12): il canale UNICO dello
-// streak (AD-18). Legge TUTTO il log — nessun filtro `isDue`, `now` non serve — e
-// mappa `reviewed_at` (stringa ISO) in `reviewedAt: Date`. Lo stesso client finto
-// (from→select) serve la tabella `review_log`.
-describe('listReviewLog — mappa review_log in ReviewLogEntry (streak, AD-18)', () => {
-  it('righe valide ⇒ entries con reviewedAt: Date, dalla tabella review_log', async () => {
+// Righe della I/O Matrix per `listReviewLog` (storie 3.12/5.2): il canale UNICO
+// delle statistiche derivate (AD-18). Legge TUTTO il log — nessun filtro `isDue`,
+// `now` non serve — e mappa la riga COMPLETA (`exercise_id`/`outcome`/`reviewed_at`)
+// in `ReviewLogRecord` (exerciseId/outcome/reviewedAt). L'adattatore VALIDA
+// `outcome` contro `REVIEW_OUTCOMES` e `exercise_id` come stringa. Lo stesso client
+// finto (from→select) serve la tabella `review_log`.
+describe('listReviewLog — mappa review_log in ReviewLogRecord (statistiche, AD-18)', () => {
+  it('righe valide ⇒ record con exerciseId/outcome/reviewedAt, dalla tabella review_log', async () => {
     const { client, calls } = makeFakeClient({
       rows: [
-        { reviewed_at: '2026-09-24T08:00:00.000Z' },
-        { reviewed_at: '2026-09-25T09:30:00.000Z' },
+        { exercise_id: 'ex-1', outcome: 'good', reviewed_at: '2026-09-24T08:00:00.000Z' },
+        { exercise_id: 'ex-2', outcome: 'again', reviewed_at: '2026-09-25T09:30:00.000Z' },
       ],
     });
     const repo = createSupabaseReviewRepository(client);
@@ -232,9 +234,11 @@ describe('listReviewLog — mappa review_log in ReviewLogEntry (streak, AD-18)',
 
     expect(calls.table).toBe('review_log');
     expect(calls.columns).toContain('reviewed_at');
+    expect(calls.columns).toContain('exercise_id');
+    expect(calls.columns).toContain('outcome');
     expect(log).toEqual([
-      { reviewedAt: new Date('2026-09-24T08:00:00.000Z') },
-      { reviewedAt: new Date('2026-09-25T09:30:00.000Z') },
+      { exerciseId: 'ex-1', outcome: 'good', reviewedAt: new Date('2026-09-24T08:00:00.000Z') },
+      { exerciseId: 'ex-2', outcome: 'again', reviewedAt: new Date('2026-09-25T09:30:00.000Z') },
     ]);
   });
 
@@ -258,14 +262,45 @@ describe('listReviewLog — mappa review_log in ReviewLogEntry (streak, AD-18)',
   });
 
   it('riga malformata (reviewed_at non stringa) ⇒ DataError', async () => {
-    const { client } = makeFakeClient({ rows: [{ reviewed_at: 12345 }] });
+    const { client } = makeFakeClient({
+      rows: [{ exercise_id: 'ex-1', outcome: 'good', reviewed_at: 12345 }],
+    });
     const repo = createSupabaseReviewRepository(client);
 
     await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
   });
 
   it('reviewed_at stringa NON parsabile ⇒ DataError (timestamp non valido)', async () => {
-    const { client } = makeFakeClient({ rows: [{ reviewed_at: 'not-a-date' }] });
+    const { client } = makeFakeClient({
+      rows: [{ exercise_id: 'ex-1', outcome: 'good', reviewed_at: 'not-a-date' }],
+    });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (exercise_id non stringa) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({
+      rows: [{ exercise_id: 42, outcome: 'good', reviewed_at: '2026-09-24T08:00:00.000Z' }],
+    });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (outcome fuori da REVIEW_OUTCOMES) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({
+      rows: [{ exercise_id: 'ex-1', outcome: 'perfetto', reviewed_at: '2026-09-24T08:00:00.000Z' }],
+    });
+    const repo = createSupabaseReviewRepository(client);
+
+    await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (outcome non stringa) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({
+      rows: [{ exercise_id: 'ex-1', outcome: 3, reviewed_at: '2026-09-24T08:00:00.000Z' }],
+    });
     const repo = createSupabaseReviewRepository(client);
 
     await expect(repo.listReviewLog()).rejects.toBeInstanceOf(DataError);

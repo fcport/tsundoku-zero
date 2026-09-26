@@ -98,6 +98,17 @@ export const it = {
       dayLabel: '{{date}} - risposte: {{answers}}',
       empty: 'Non ci sono ancora risposte da mostrare. Quando ripasserai gli esercizi, le tue risposte per giorno compariranno qui.',
     },
+    // Distribuzione per stadio (5.2, FR7.2): STESSE chiavi di `en` (parita
+    // ricorsiva). `heading` intitola la sezione; `stageLabel` etichetta ogni stadio
+    // (`{{stage}}` = indice 0-5, `{{exercises}}` = numero di esercizi, MAI
+    // `{{count}}` che innescherebbe il pluralizzatore i18next); `empty` e il
+    // placeholder testuale neutro a log vuoto. Nessuna etichetta mnemonica ne
+    // intervallo in giorni: l'AC chiede «sei stadi, 0-5».
+    stageDistribution: {
+      heading: 'Esercizi per stadio di ripasso',
+      stageLabel: 'Stadio {{stage}} - esercizi: {{exercises}}',
+      empty: 'Non ci sono ancora esercizi da mostrare. Quando ripasserai gli esercizi, a che punto sono compariranno qui.',
+    },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continua"/"Indietro" generico.
     back: 'Torna alla dashboard',

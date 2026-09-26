@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   LEITNER_INTERVALS_DAYS,
+  nextStage,
+  REVIEW_OUTCOMES,
   schedule,
   type ReviewOutcome,
   type ReviewState,
@@ -150,6 +152,47 @@ describe('schedule: purezza — nessuna mutazione dell input', () => {
     expect(input.lapseCount).toBe(snapshot.lapseCount);
     expect(input.dueAt.getTime()).toBe(snapshot.dueAt.getTime());
     expect(input.lastReviewedAt).toBe(snapshot.lastReviewedAt);
+  });
+});
+
+describe('nextStage: la transizione di stadio pura e clampata (export 5.2)', () => {
+  const MAX_STAGE = LEITNER_INTERVALS_DAYS.length - 1; // 5
+
+  it('good avanza di 1 sotto il tetto', () => {
+    expect(nextStage(2, 'good')).toBe(3);
+  });
+
+  it('easy avanza di 2 sotto il tetto', () => {
+    expect(nextStage(1, 'easy')).toBe(3);
+  });
+
+  it('hard tiene lo stadio', () => {
+    expect(nextStage(3, 'hard')).toBe(3);
+  });
+
+  it('again azzera da qualunque stadio', () => {
+    expect(nextStage(4, 'again')).toBe(0);
+    expect(nextStage(0, 'again')).toBe(0);
+  });
+
+  it('clamp in alto: easy oltre il tetto satura a MAX_STAGE (non 6/7)', () => {
+    expect(nextStage(MAX_STAGE, 'easy')).toBe(MAX_STAGE);
+    expect(nextStage(MAX_STAGE - 1, 'easy')).toBe(MAX_STAGE);
+    expect(nextStage(MAX_STAGE, 'good')).toBe(MAX_STAGE);
+  });
+
+  it('clamp in basso: hard/again a stadio 0 restano 0 (mai negativi)', () => {
+    expect(nextStage(0, 'hard')).toBe(0);
+    expect(nextStage(0, 'again')).toBe(0);
+  });
+
+  it('coincide con lo `stage` risultante di `schedule` (unica transizione)', () => {
+    for (const outcome of REVIEW_OUTCOMES) {
+      for (let stage = 0; stage <= MAX_STAGE; stage += 1) {
+        const scheduled = schedule(stateAt({ stage }), outcome, NOW);
+        expect(scheduled.stage).toBe(nextStage(stage, outcome));
+      }
+    }
   });
 });
 

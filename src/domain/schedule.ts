@@ -107,6 +107,20 @@ function nextStageFor(stage: number, outcome: ReviewOutcome): number {
 }
 
 /**
+ * L'UNICA transizione di STADIO del motore, esposta pura e totale: dato uno stadio
+ * e un esito, restituisce lo stadio PROSSIMO gia CLAMPATO in `[0, MAX_STAGE]`
+ * (`Math.max(0, Math.min(MAX_STAGE, nextStageFor(...)))`). Incapsula sia la scelta
+ * per esito (`nextStageFor`) sia il clamp aritmetico che `schedule` applicava
+ * inline, cosi non esistono due definizioni della transizione: `schedule` la usa
+ * per lo stato prossimo e `stageDistribution` (5.2) la usa per RICOSTRUIRE lo
+ * stadio corrente rigiocando gli esiti dal log (AD-18), senza duplicare ne la
+ * logica ne i valori della scala. Senza tempo: lo stadio non dipende dall'orologio.
+ */
+export function nextStage(stage: number, outcome: ReviewOutcome): number {
+  return Math.max(0, Math.min(MAX_STAGE, nextStageFor(stage, outcome)));
+}
+
+/**
  * Frazione DETERMINISTICA in `[0, 1)` derivata da `exerciseId` e dallo stadio
  * risultante `s` (Design Notes): FNV-1a su `` `${exerciseId}:${s}` `` diviso per
  * `2**32`. A parità di `stage`/`now`/`outcome` due esercizi differiscono solo per
@@ -133,7 +147,7 @@ function fraction(exerciseId: string, stage: number): number {
  * `lastReviewedAt = now`.
  */
 export function schedule(state: ReviewState, outcome: ReviewOutcome, now: Date): ReviewState {
-  const s = Math.max(0, Math.min(MAX_STAGE, nextStageFor(state.stage, outcome)));
+  const s = nextStage(state.stage, outcome);
   const intervalMs = LEITNER_INTERVALS_DAYS[s] * OUTCOME_FACTOR[outcome] * MS_PER_DAY;
   const jitter = fraction(state.exerciseId, s) * intervalMs * DISPERSION_FRACTION;
 
