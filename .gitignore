@@ -44,16 +44,19 @@ supabase/.temp/
 # ============================================================
 # FR11.7 — Materiale della fonte: input privato, mai versionato
 # ============================================================
-# I transcript delle lezioni sono opera protetta. Servono come
-# input alla sessione di autorazione, da cui si estraggono FATTI
-# (quale punto grammaticale, qual è la regola, quale confusione
-# risolve) e da cui si riscrive da zero.
+# TRANSCRIPT, SOTTOTITOLI e TRASCRIZIONI della fonte sono opera
+# protetta. Servono come input privato alla sessione di autorazione,
+# da cui si estraggono FATTI (quale punto grammaticale, qual è la
+# regola, quale confusione risolve) e da cui si riscrive DA ZERO.
 #
-# Non entrano nel repository. Parafrasare con i sinonimi una
-# spiegazione altrui resta opera derivata: la strada corretta è
-# partire dal fatto, non dalla formulazione.
+# Non entrano MAI nel repository, nemmeno come fixture. Parafrasare
+# con i sinonimi una spiegazione altrui resta opera derivata: la
+# strada corretta è partire dal fatto, non dalla formulazione.
 #
-# Vedi: PRD §2 · storie 2.1 e 2.9
+# Questa esclusione è protetta dal test di igiene
+# src/source-boundary.test.ts: toglierla è CI rossa.
+#
+# Vedi: PRD §2 · storia 6.1 · docs/authoring-pipeline.md
 .transcripts/
 transcripts/
 *.transcript
@@ -61,7 +64,8 @@ transcripts/
 *.vtt
 *.srt
 
-# Scratch di autorazione
+# Scratch di autorazione (cartella di lavoro dell'autore):
+# transcript e appunti privati vivono qui, mai versionati.
 .authoring/
 
 # Skill BMad vendorizzate: si reinstallano dall'installer del framework,
