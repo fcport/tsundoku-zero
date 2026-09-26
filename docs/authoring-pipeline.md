@@ -9,8 +9,9 @@ file di documentazione con un test — `src/source-boundary.test.ts` — che ne 
 esistenza e contenuti.
 
 Copre solo il confine con la fonte. La **procedura operativa** della sessione di
-autorazione è della storia 6.2; lo **strumento di confronto anti-contaminazione** è
-della storia 6.3. Qui si stabilisce dove passa la linea, non come si lavora.
+autorazione è il runbook `docs/authoring-runbook.md` (storia 6.2); lo **strumento
+di confronto anti-contaminazione** è della storia 6.3. Qui si stabilisce dove
+passa la linea, non come si lavora.
 
 ## La linea in una frase
 

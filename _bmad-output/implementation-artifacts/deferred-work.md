@@ -333,3 +333,11 @@ source_spec: `spec-5-2-a-che-punto-sono-i-miei-esercizi.md`
 severity: low
 reason: src/data/reviewRepository.ts:listReviewLog fa una select senza limit; src/domain/stageDistribution.ts raggruppa e ripiega tutte le voci del log. Il commento della porta assume «poche righe». Su account di lunga data la lista cresce illimitata. È una preoccupazione PRE-ESISTENTE (la stessa fonte alimenta già streak/answersOverTime, cfr. il deferred analogo di 5.1 sulla serie giornaliera illimitata) e futura di scalabilità: gli utenti attuali hanno cronologie brevi, quindi non è un difetto introdotto da 5.2.
 status: open
+
+### DW-42: Il cancello validateLessons non verifica che gli indici start/end di un esercizio select-span siano entro il numero reale di segmenti della frase: un end fuori range supera la validazione.
+origin: spec-deferred 1f33191032d2
+location: src/domain/content-validation.ts
+source_spec: `spec-6-2-il-flusso-di-autorazione-documentato-e-ripetibile.md`
+severity: medium
+reason: src/domain/content-validation.ts controlla la forma (parseLesson: start>=0, end>start), kana-senza-Han, l'unicità cross-file e il grammarPoint dichiarato, ma NON i bound di segmento. La segmentazione (alignFurigana) è Epic 3 e il controllo kana è dichiarato "di CARATTERE, non di segmentazione". Un select-span con end oltre i segmenti reali passa il gate e produrrebbe un esercizio rotto; oggi lo intercetta solo la revisione umana (passo 5 del runbook). Non correggibile in 6.2: l'intent vieta di modificare il validatore; naturale ricongiungimento a Epic 3.
+status: open
