@@ -109,6 +109,23 @@ export const it = {
       stageLabel: 'Stadio {{stage}} - esercizi: {{exercises}}',
       empty: 'Non ci sono ancora esercizi da mostrare. Quando ripasserai gli esercizi, a che punto sono compariranno qui.',
     },
+    // Tassi d'errore per punto grammaticale (5.3, FR7.3): STESSE chiavi di `en`
+    // (parita ricorsiva). `heading` intitola la sezione; `entryLabel` etichetta ogni
+    // voce col tasso come TESTO (`{{errors}}` = risposte fallite, `{{total}}` =
+    // risposte totali, MAI `{{count}}` che innescherebbe il pluralizzatore); il
+    // punto grammaticale e reso a parte in `lang="ja"`. `lessonLabel` e un'etichetta
+    // STATICA (nessun `{{lesson}}`): il titolo della lezione e CONTENUTO reso a parte
+    // in un nodo con `lang` sulla lingua effettivamente resa (WCAG 3.1.2
+    // Language-of-Parts). `unknownLesson` e il fallback neutro per un punto orfano;
+    // `empty` e il placeholder testuale neutro a log vuoto. Nessun `!`, nessuna
+    // emoji, nessun avverbio di lode.
+    grammarPointErrorRates: {
+      heading: 'Punti grammaticali per tasso di errore',
+      entryLabel: 'errori: {{errors}} su {{total}}',
+      lessonLabel: 'Lezione:',
+      unknownLesson: 'Nessuna lezione insegna piu questo punto',
+      empty: 'Non ci sono ancora punti grammaticali da mostrare. Quando ripasserai gli esercizi, quanto spesso sbagli ogni regola comparira qui.',
+    },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continua"/"Indietro" generico.
     back: 'Torna alla dashboard',

@@ -12,13 +12,17 @@ import type { ReviewLogRecord } from './streak';
 
 const N = LEITNER_INTERVALS_DAYS.length; // 6
 
-/** Una voce di log completa: esercizio, esito e istante. */
+/**
+ * Una voce di log completa: esercizio, esito e istante. `grammarPoint` e richiesto
+ * dal tipo `ReviewLogRecord` ma IRRILEVANTE per `stageDistribution` (che legge solo
+ * `exerciseId`/`outcome`/`reviewedAt`): un valore fisso basta.
+ */
 function rec(
   exerciseId: string,
   outcome: ReviewLogRecord['outcome'],
   iso: string,
 ): ReviewLogRecord {
-  return { exerciseId, outcome, reviewedAt: new Date(iso) };
+  return { exerciseId, outcome, reviewedAt: new Date(iso), grammarPoint: 'gp-1' };
 }
 
 /** Il conteggio del bucket `stage` in una distribuzione. */

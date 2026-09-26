@@ -116,6 +116,26 @@ export const en = {
       stageLabel: 'Stage {{stage}} - exercises: {{exercises}}',
       empty: 'There are no exercises to show yet. Once you review exercises, how far along they are will appear here.',
     },
+    // Tassi d'errore per punto grammaticale (5.3, FR7.3): `heading` intitola la
+    // sezione; `entryLabel` etichetta ogni voce col tasso come TESTO (`{{errors}}` =
+    // risposte fallite, `{{total}}` = risposte totali, MAI `{{count}}` che
+    // innescherebbe il pluralizzatore i18next e romperebbe la parita en/it); il
+    // punto grammaticale e reso a parte in `lang="ja"` (e giapponese, non passa da
+    // t()). `lessonLabel` e un'etichetta STATICA (nessun `{{lesson}}`): il titolo
+    // della lezione e CONTENUTO reso a parte in un nodo con `lang` sulla lingua
+    // effettivamente resa (WCAG 3.1.2 Language-of-Parts: un titolo inglese in ripiego
+    // non deve essere annunciato con pronuncia italiana). `unknownLesson` e il
+    // fallback neutro per un punto orfano (drift contenuti); `empty` e il placeholder
+    // testuale neutro a log vuoto (mai un grafico vuoto). Nessun `!`, nessuna emoji,
+    // nessun avverbio di lode; ASCII (il giapponese non passa da t()). La ricca
+    // dichiarazione «cosa manca» e la storia 5.4.
+    grammarPointErrorRates: {
+      heading: 'Grammar points by error rate',
+      entryLabel: 'errors: {{errors}} of {{total}}',
+      lessonLabel: 'Lesson:',
+      unknownLesson: 'No lesson teaches this point anymore',
+      empty: 'There are no grammar points to show yet. Once you review exercises, how often you miss each rule will appear here.',
+    },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continue"/"Back" generico.
     back: 'Back to the dashboard',

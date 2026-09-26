@@ -1,10 +1,11 @@
-// Livello features/stats (5.1/5.2): la schermata delle statistiche di Epic 5. Due
-// sezioni: le risposte per giorno di calendario (5.1, FR7.1) e la distribuzione
-// degli esercizi per stadio di ripasso (5.2, FR7.2). Una schermata-rotta col proprio
-// `<main>`, raggiunta dalla dashboard e con un'affordance di ritorno secondaria
-// (`onExit`, cablata dal livello app come la sessione). AD-1: importa
-// domain/ui/i18n/@tanstack/react-query, MAI data né react-router — le porte arrivano
-// da `usePorts()`; l'`userId` è una prop; la navigazione è una callback.
+// Livello features/stats (5.1/5.2/5.3): la schermata delle statistiche di Epic 5. Tre
+// sezioni: le risposte per giorno di calendario (5.1, FR7.1), la distribuzione degli
+// esercizi per stadio di ripasso (5.2, FR7.2) e i tassi d'errore per punto
+// grammaticale (5.3, FR7.3). Una schermata-rotta col proprio `<main>`, raggiunta
+// dalla dashboard e con un'affordance di ritorno secondaria (`onExit`, cablata dal
+// livello app come la sessione). AD-1: importa domain/ui/i18n/@tanstack/react-query,
+// MAI data né react-router — le porte arrivano da `usePorts()`; l'`userId` è una
+// prop; la navigazione è una callback.
 //
 // FONTE UNICA e derivata (AD-18): la serie giornaliera si calcola dal SOLO
 // `review_log`, letto via `review.listReviewLog()` sulla STESSA identità di query
@@ -16,10 +17,21 @@
 // pura e totale); orologio e fuso ENTRANO dal Clock iniettato.
 //
 // A log vuoto rende placeholder testuali neutri e minimali
-// (`stats.answersOverTime.empty`/`stats.stageDistribution.empty`), MAI un riquadro
-// di grafico vuoto: la ricca dichiarazione «cosa manca e quanto» degli stati a dati
-// insufficienti è la storia 5.4. I tassi d'errore per punto grammaticale sono la
-// storia 5.3, fuori scopo.
+// (`stats.answersOverTime.empty`/`stats.stageDistribution.empty`/
+// `stats.grammarPointErrorRates.empty`), MAI un riquadro di grafico vuoto: la ricca
+// dichiarazione «cosa manca e quanto» degli stati a dati insufficienti è la storia
+// 5.4.
+//
+// FONTE UNICA e derivata anche per i tassi d'errore per punto (AD-18, 5.3): il tasso
+// NON si legge da `review_state`/`lapse_count` — si DERIVA dal SOLO log via
+// `grammarPointErrorRates` (dominio, pura e SENZA orologio), aggregando per
+// `grammarPoint` DEL LOG (denormalizzato), MAI per `exerciseId`: cosi la storia
+// sopravvive alla riautorazione di un esercizio. Ogni voce NOMINA la lezione che
+// insegna quel punto — un ARRICCHIMENTO che dipende dal catalogo (`content.
+// listLessons()`, STESSA chiave `['lessons']` della dashboard), risolto via l'helper
+// puro `lessonsByGrammarPoint` + `resolveBilingual` per la lingua corrente. Il punto
+// e CONTENUTO giapponese: reso in `<span lang="ja">`, mai da t(); un punto orfano
+// (assente da ogni lezione) rende un fallback neutro (`unknownLesson`), mai un crash.
 //
 // FONTE UNICA e derivata anche per la distribuzione (AD-18): lo stadio corrente di
 // un esercizio NON si legge da `review_state` — si RICOSTRUISCE rigiocando i suoi
@@ -36,8 +48,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { answersOverTime } from '../../domain/answersOverTime';
 import { stageDistribution } from '../../domain/stageDistribution';
+import { grammarPointErrorRates } from '../../domain/grammarPointErrorRates';
+import { lessonsByGrammarPoint } from '../../domain/curriculum';
+import { resolveBilingual } from '../../domain/bilingual';
 import { usePorts } from '../ports/PortsContext';
-import { useTranslation } from '../../i18n';
+import { resolveLocale, useTranslation } from '../../i18n';
 
 export interface StatsScreenProps {
   /**
@@ -69,8 +84,11 @@ const FOCUS_RING =
 const CONTAINER = 'min-h-[24rem] flex flex-col items-stretch gap-6 p-6';
 
 export function StatsScreen({ userId, onExit }: StatsScreenProps) {
-  const { review, clock } = usePorts();
-  const { t } = useTranslation();
+  const { review, content, clock } = usePorts();
+  const { t, i18n } = useTranslation();
+  // La lingua CORRENTE per risolvere il titolo bilingue della lezione (FR8.5):
+  // `i18n.language` (grezzo) validato via l'unica fonte dei locali (AD-14).
+  const locale = resolveLocale(i18n.language);
 
   // Il log dei ripassi: la STESSA chiave `['streak', userId]` e la STESSA porta
   // `listReviewLog()` di dashboard e sessione (AD-18 — fonte UNICA e derivata).
@@ -81,9 +99,20 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
     queryFn: () => review.listReviewLog(),
   });
 
-  // Scheletro finché l'id non è risolto o il log è ancora pending (cache non
-  // seminata). Stessa altezza del contenuto, nessuno spinner, `aria-busy` per l'AT.
-  if (!userId || logQ.data === undefined) {
+  // Il catalogo delle lezioni: la STESSA chiave `['lessons']` e la STESSA porta
+  // `listLessons()` della dashboard (cache condivisa; il contenuto e uguale per
+  // tutti, nessun `enabled` per-utente). Serve SOLO a NOMINARE la lezione accanto a
+  // ciascun punto grammaticale (5.3): il tasso deriva dal SOLO log, questo e
+  // arricchimento.
+  const lessonsQ = useQuery({
+    queryKey: ['lessons'],
+    queryFn: () => content.listLessons(),
+  });
+
+  // Scheletro finché l'id non è risolto o una delle due query è ancora pending
+  // (cache non seminata). Stessa altezza del contenuto, nessuno spinner, `aria-busy`
+  // per l'AT.
+  if (!userId || logQ.data === undefined || lessonsQ.data === undefined) {
     return (
       <main aria-busy="true" className={CONTAINER}>
         <div className="h-[20px] w-40 rounded-md bg-surface-sunken" />
@@ -107,6 +136,14 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
   // divisione per zero quando qualche stadio è a 0.
   const distribution = stageDistribution(logQ.data);
   const stageMax = Math.max(1, ...distribution.map((s) => s.count));
+
+  // I tassi d'errore per punto grammaticale DERIVATI dal SOLO log (AD-18): puri e
+  // SENZA orologio (il tasso non dipende dal tempo). `[]` a log vuoto ⇒ placeholder.
+  // `errorRate` e gia in `[0,1]`: la barra e larghezza inline = errorRate, nessuna
+  // normalizzazione al massimo (a tasso 0 la barra e vuota). Il join punto -> lezione
+  // e un helper puro sul catalogo (arricchimento, non fonte del tasso).
+  const errorRates = grammarPointErrorRates(logQ.data);
+  const lessonByPoint = lessonsByGrammarPoint(lessonsQ.data);
 
   return (
     <main className={CONTAINER}>
@@ -184,6 +221,77 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
                 </div>
               </li>
             ))}
+          </ol>
+        </>
+      )}
+      {/* La TERZA sezione (5.3): i tassi d'errore per punto grammaticale, derivati
+          dal SOLO log (nessun clock), aggregati per `grammarPoint` DEL LOG (mai per
+          esercizio). A elenco vuoto (log vuoto) un placeholder testuale neutro, MAI
+          un riquadro di grafico vuoto. */}
+      {errorRates.length === 0 ? (
+        <p className="text-body text-ink-primary">
+          {t('stats.grammarPointErrorRates.empty')}
+        </p>
+      ) : (
+        <>
+          {/* L'intestazione dei tassi d'errore (subordinata al titolo: `<h3>`). */}
+          <h3 className="text-display text-ink-primary">
+            {t('stats.grammarPointErrorRates.heading')}
+          </h3>
+          {/* La lista ordinata di voci per-punto (tasso desc): ogni voce porta il
+              punto grammaticale in `<span lang="ja">` (e giapponese, mai da t()), il
+              tasso come TESTO (mai dal solo colore), il nome della lezione che lo
+              insegna o un fallback neutro (`unknownLesson`) per un punto orfano, e una
+              barra proporzionale (larghezza = errorRate, gia in [0,1], token neutri,
+              nessun verde). */}
+          <ol className="flex flex-col gap-3">
+            {errorRates.map((entry) => {
+              const lesson = lessonByPoint.get(entry.grammarPoint);
+              const resolved = lesson
+                ? resolveBilingual(lesson.title, locale)
+                : null;
+              return (
+                <li key={entry.grammarPoint} className="flex flex-col gap-1">
+                  {/* Il punto grammaticale: CONTENUTO giapponese, reso in lang="ja"
+                      (WCAG 3.1.2), mai da t(). */}
+                  <span className="text-label text-ink-primary" lang="ja">
+                    {entry.grammarPoint}
+                  </span>
+                  {/* Il tasso come TESTO (etichetta-valore, nessuna concordanza di
+                      numero): errori su totale. */}
+                  <span className="text-label text-ink-secondary">
+                    {t('stats.grammarPointErrorRates.entryLabel', {
+                      errors: entry.errors,
+                      total: entry.total,
+                    })}
+                  </span>
+                  {/* La lezione azionabile che insegna il punto: l'etichetta STATICA
+                      (interfaccia, da t()) seguita dal titolo bilingue risolto per la
+                      lingua CORRENTE (`resolveBilingual` + locale, FR8.5). Il titolo e
+                      CONTENUTO reso in un nodo con `lang` sulla lingua EFFETTIVAMENTE
+                      resa (WCAG 3.1.2: se e ripiego, il titolo e in inglese ⇒
+                      lang="en", mai annunciato con pronuncia italiana). Un punto orfano
+                      (drift contenuti) rende invece un fallback neutro
+                      (`unknownLesson`), mai un crash. */}
+                  {resolved ? (
+                    <span className="text-label text-ink-secondary">
+                      {t('stats.grammarPointErrorRates.lessonLabel')}{' '}
+                      <span lang={resolved.language}>{resolved.text}</span>
+                    </span>
+                  ) : (
+                    <span className="text-label text-ink-secondary">
+                      {t('stats.grammarPointErrorRates.unknownLesson')}
+                    </span>
+                  )}
+                  <div className="h-[4px] w-full overflow-hidden rounded-md bg-surface-sunken">
+                    <div
+                      className="h-full rounded-md bg-ink-secondary"
+                      style={{ width: `${entry.errorRate * 100}%` }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         </>
       )}

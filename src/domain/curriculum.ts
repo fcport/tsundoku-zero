@@ -65,3 +65,35 @@ export function lastUnlockedLesson(
   }
   return null;
 }
+
+/**
+ * Il JOIN puro punto -> lezione (5.3): mappa OGNI `grammarPoint` di OGNI lezione
+ * alla lezione che lo insegna. Serve alla vista statistiche per NOMINARE, accanto a
+ * ciascun tasso d'errore (`grammarPointErrorRates`), la lezione azionabile su cui
+ * tornare. Vive fuori dall'aggregazione perche il nome della lezione dipende dal
+ * catalogo vivo (`content.listLessons()`), mentre il tasso deriva dal SOLO log
+ * (AD-18): tenerli separati evita di accoppiare la statistica al contenuto.
+ *
+ * PURA, sincrona, TOTALE e senza mutazione, senza tempo: copia+ordina per `ordinal`
+ * CRESCENTE (l'input puo arrivare disordinato) e inserisce ogni punto. L'unicita di
+ * un `grammarPoint` fra lezioni NON e imposta (solo `lessonId = grammarPoints[0]`):
+ * alla COLLISIONE (stesso punto in piu lezioni) vince il PRIMO occupante, cioe la
+ * lezione con `ordinal` piu basso (deterministico). Un `grammarPoint` del log
+ * assente da questa mappa e un punto ORFANO (drift contenuti): la vista rende un
+ * fallback neutro senza perdere la voce.
+ */
+export function lessonsByGrammarPoint(
+  lessons: readonly LessonSummary[],
+): ReadonlyMap<string, LessonSummary> {
+  const byPoint = new Map<string, LessonSummary>();
+  const ordered = [...lessons].sort((a, b) => a.ordinal - b.ordinal);
+  for (const lesson of ordered) {
+    for (const grammarPoint of lesson.grammarPoints) {
+      // Primo occupante vince: la lezione con ordinal piu basso (ordine crescente).
+      if (!byPoint.has(grammarPoint)) {
+        byPoint.set(grammarPoint, lesson);
+      }
+    }
+  }
+  return byPoint;
+}

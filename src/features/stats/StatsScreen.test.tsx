@@ -7,6 +7,7 @@ import { it as itCatalog } from '../../i18n/it';
 import { i18n } from '../../i18n';
 import type { ReviewLogRecord } from '../../domain/streak';
 import type { ReviewOutcome } from '../../domain/schedule';
+import type { LessonSummary } from '../../domain/ports/contentRepository';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { StatsScreen } from './StatsScreen';
 
@@ -34,25 +35,35 @@ const inMemoryPorts: Ports = {
 };
 
 // Una voce di log COMPLETA (`ReviewLogRecord`): `answersOverTime` legge solo
-// `reviewedAt`, `stageDistribution` legge `exerciseId`/`outcome`. Default `ex-1`/
-// `good` per i test della serie (dove l'esercizio/esito non contano); i test della
-// distribuzione passano `exerciseId`/`outcome` espliciti.
+// `reviewedAt`, `stageDistribution` legge `exerciseId`/`outcome`,
+// `grammarPointErrorRates` legge `grammarPoint`/`outcome`. Default `ex-1`/`good`/
+// `gp-1` per i test della serie (dove l'esercizio/esito/punto non contano); i test
+// della distribuzione e dei tassi d'errore passano i campi espliciti.
 function logAt(
   iso: string,
   exerciseId = 'ex-1',
   outcome: ReviewOutcome = 'good',
+  grammarPoint = 'gp-1',
 ): ReviewLogRecord {
-  return { reviewedAt: new Date(iso), exerciseId, outcome };
+  return { reviewedAt: new Date(iso), exerciseId, outcome, grammarPoint };
 }
 
 function freshClient(): QueryClient {
   return new QueryClient({ defaultOptions: { queries: { retry: false } } });
 }
 
-/** Semina la cache del log sulla STESSA chiave `['streak', UID]` della dashboard. */
-function seededClient(log: readonly ReviewLogRecord[]): QueryClient {
+/**
+ * Semina la cache del log sulla STESSA chiave `['streak', UID]` della dashboard, e
+ * il catalogo delle lezioni sulla STESSA chiave `['lessons']` (default `[]`) cosi il
+ * gate scheletro non scatta per la query dei contenuti.
+ */
+function seededClient(
+  log: readonly ReviewLogRecord[],
+  lessons: readonly LessonSummary[] = [],
+): QueryClient {
   const qc = freshClient();
   qc.setQueryData(['streak', UID], log);
+  qc.setQueryData(['lessons'], lessons);
   return qc;
 }
 
@@ -155,16 +166,19 @@ describe('AC5 — log vuoto ⇒ placeholder testuale neutro, NON un grafico', ()
     expect(markup).toContain(en.stats.title);
   });
 
-  it('rende il placeholder del log vuoto (entrambe le sezioni)', () => {
+  it('rende il placeholder del log vuoto (tutte e tre le sezioni)', () => {
     expect(markup).toContain(en.stats.answersOverTime.empty);
     // AC5 di 5.2: anche la distribuzione rende un placeholder testuale neutro.
     expect(markup).toContain(en.stats.stageDistribution.empty);
+    // AC5 di 5.3: anche i tassi d'errore rendono un placeholder testuale neutro.
+    expect(markup).toContain(en.stats.grammarPointErrorRates.empty);
   });
 
   it("NON rende le intestazioni delle sezioni né una barra (nessun grafico vuoto)", () => {
     expect(markup).not.toContain(en.stats.answersOverTime.heading);
     expect(markup).not.toContain(en.stats.stageDistribution.heading);
-    // Nessuna lista di barre: nessun <ol>/<li> reso (né serie né distribuzione).
+    expect(markup).not.toContain(en.stats.grammarPointErrorRates.heading);
+    // Nessuna lista di barre: nessun <ol>/<li> reso (serie, distribuzione o tassi).
     expect(markup).not.toContain('<ol');
     expect(markup).not.toContain('<li');
   });
@@ -280,6 +294,20 @@ describe('AC — scheletro: userId null o cache pending', () => {
     expect(markup).not.toContain(en.stats.answersOverTime.heading);
   });
 
+  it('log seminato ma lezioni pending ⇒ scheletro (il gate attende anche [lessons])', () => {
+    // Stato RAGGIUNGIBILE: `['streak', UID]` seminato mentre `['lessons']` e ancora
+    // pending (non seminato). Il gate scheletro attende ENTRAMBE (`lessonsQ.data ===
+    // undefined`): senza questa clausola `lessonsByGrammarPoint(undefined)` andrebbe
+    // in crash. Nessuna intestazione delle tre sezioni compare.
+    const qc = freshClient();
+    qc.setQueryData(['streak', UID], [logAt('2026-09-25T10:00:00.000Z')]);
+    const markup = render(qc, UID);
+    expect(markup).toContain('aria-busy="true"');
+    expect(markup).not.toContain(en.stats.answersOverTime.heading);
+    expect(markup).not.toContain(en.stats.stageDistribution.heading);
+    expect(markup).not.toContain(en.stats.grammarPointErrorRates.heading);
+  });
+
   it('lo scheletro non contiene uno spinner', () => {
     const markup = render(freshClient(), null);
     expect(markup.toLowerCase()).not.toContain('spinner');
@@ -345,6 +373,142 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
   });
 });
 
+// I test 5.3: i tassi d'errore per punto grammaticale (FR7.3). Il punto grammaticale
+// del log e reso in `lang="ja"`; ogni voce NOMINA la lezione che lo insegna (titolo
+// risolto), o un fallback neutro per un punto orfano. La fonte e il SOLO log +
+// catalogo; parita en/it.
+describe('5.3 AC — tassi d errore per punto grammaticale: punto in lang="ja" + nome lezione', () => {
+  // Un punto (`gp-shite`) su due esercizi diversi ma stesso punto, con un `again` e
+  // un `good` ⇒ una sola voce (per punto, non per esercizio). Una lezione lo insegna.
+  const lessons: readonly LessonSummary[] = [
+    {
+      id: 'gp-shite',
+      ordinal: 1,
+      title: { en: 'The shite-form' },
+      grammarPoints: ['gp-shite'],
+      exerciseCount: 2,
+    },
+  ];
+  const qc = seededClient(
+    [
+      logAt('2026-09-20T10:00:00.000Z', 'ex-A', 'again', 'gp-shite'),
+      logAt('2026-09-21T10:00:00.000Z', 'ex-B', 'good', 'gp-shite'),
+    ],
+    lessons,
+  );
+  const markup = render(qc, UID);
+
+  it("rende l'intestazione dei tassi d'errore per punto", () => {
+    expect(markup).toContain(en.stats.grammarPointErrorRates.heading);
+  });
+
+  it('rende il punto grammaticale in un nodo lang="ja"', () => {
+    expect(markup).toMatch(/lang="ja"[^>]*>gp-shite/);
+  });
+
+  it('rende il tasso come TESTO (errori su totale)', () => {
+    // Un `again` su due risposte ⇒ errori 1 su 2.
+    expect(markup).toContain('errors: 1 of 2');
+  });
+
+  it('NOMINA la lezione che insegna il punto (titolo risolto)', () => {
+    expect(markup).toContain('The shite-form');
+  });
+
+  it('NON rende il placeholder dei tassi (il log non e vuoto)', () => {
+    expect(markup).not.toContain(en.stats.grammarPointErrorRates.empty);
+  });
+
+  it('aggrega per punto: un solo <li> con gp-shite (due esercizi, una voce)', () => {
+    const occurrences = markup.match(/>gp-shite/g) ?? [];
+    expect(occurrences.length).toBe(1);
+  });
+});
+
+describe('5.3 AC — punto ORFANO (assente da ogni lezione) ⇒ fallback neutro, nessun crash', () => {
+  it('un punto del log assente dal catalogo rende il fallback unknownLesson', () => {
+    // Catalogo con una lezione che NON insegna il punto del log.
+    const lessons: readonly LessonSummary[] = [
+      {
+        id: 'gp-other',
+        ordinal: 1,
+        title: { en: 'Another lesson' },
+        grammarPoints: ['gp-other'],
+        exerciseCount: 1,
+      },
+    ];
+    const qc = seededClient(
+      [logAt('2026-09-20T10:00:00.000Z', 'ex-1', 'again', 'gp-orphan')],
+      lessons,
+    );
+    const markup = render(qc, UID);
+    // La voce compare comunque col punto e il tasso, e il fallback neutro.
+    expect(markup).toMatch(/lang="ja"[^>]*>gp-orphan/);
+    expect(markup).toContain('errors: 1 of 1');
+    expect(markup).toContain(en.stats.grammarPointErrorRates.unknownLesson);
+    // Il titolo dell'altra lezione NON compare (non insegna questo punto).
+    expect(markup).not.toContain('Another lesson');
+  });
+});
+
+describe('5.3 AC — log vuoto ⇒ placeholder testuale neutro, NON un grafico', () => {
+  it('nessun <ol> della terza sezione a log vuoto', () => {
+    const markup = render(seededClient([]), UID);
+    expect(markup).toContain(en.stats.grammarPointErrorRates.empty);
+    expect(markup).not.toContain(en.stats.grammarPointErrorRates.heading);
+  });
+});
+
+describe('5.3 AC — la fonte e SOLO review.listReviewLog() + content.listLessons()', () => {
+  it("i tassi resi derivano dal SOLO log + catalogo seminati, senza listDue", () => {
+    const calls: string[] = [];
+    const spyPorts: Ports = {
+      clock: { now: () => NOW, timeZone: () => TZ },
+      review: {
+        listDue: async () => {
+          calls.push('listDue');
+          throw new Error('listDue non deve essere consultata dalle statistiche');
+        },
+        listReviewLog: async () => {
+          calls.push('listReviewLog');
+          return [];
+        },
+        applyReview: async () => {
+          calls.push('applyReview');
+        },
+      },
+      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+      content: {
+        listLessons: async () => {
+          calls.push('listLessons');
+          return [];
+        },
+        listExercisesByIds: async () => [],
+      },
+    };
+    const lessons: readonly LessonSummary[] = [
+      {
+        id: 'gp-1',
+        ordinal: 1,
+        title: { en: 'Lesson one' },
+        grammarPoints: ['gp-1'],
+        exerciseCount: 1,
+      },
+    ];
+    const qc = seededClient(
+      [logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'again', 'gp-1')],
+      lessons,
+    );
+    const markup = render(qc, UID, spyPorts);
+
+    // Il tasso riflette il SOLO log seminato: un errore su un totale.
+    expect(markup).toContain('errors: 1 of 1');
+    expect(markup).toContain('Lesson one');
+    expect(calls).not.toContain('listDue');
+    expect(calls).not.toContain('applyReview');
+  });
+});
+
 describe('AC — parità en/it e microcopy senza celebrazione', () => {
   it('en: nessun `!`, ASCII (nessun code point >= U+2000)', () => {
     const markup = render(
@@ -356,10 +520,22 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     expect(offending).toEqual([]);
   });
 
-  it('it: rende le stesse chiavi in italiano (serie e distribuzione)', async () => {
+  it('it: rende le stesse chiavi in italiano (serie, distribuzione e tassi)', async () => {
     await i18n.changeLanguage('it');
+    const lessons: readonly LessonSummary[] = [
+      {
+        id: 'gp-1',
+        ordinal: 1,
+        title: { en: 'The te-form', it: 'La forma in te' },
+        grammarPoints: ['gp-1'],
+        exerciseCount: 1,
+      },
+    ];
     const markup = render(
-      seededClient([logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'good')]),
+      seededClient(
+        [logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'again', 'gp-1')],
+        lessons,
+      ),
       UID,
     );
     expect(markup).toContain(itCatalog.stats.title);
@@ -367,18 +543,23 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     expect(markup).toContain('2026-09-25 - risposte: 1');
     // La distribuzione per stadio in italiano: intestazione ed etichette di stadio.
     expect(markup).toContain(itCatalog.stats.stageDistribution.heading);
-    expect(markup).toContain('Stadio 1 - esercizi: 1');
-    expect(markup).toContain('Stadio 0 - esercizi: 0');
+    expect(markup).toContain('Stadio 0 - esercizi: 1');
+    // I tassi d'errore per punto in italiano: intestazione, tasso, titolo risolto (it).
+    expect(markup).toContain(itCatalog.stats.grammarPointErrorRates.heading);
+    expect(markup).toContain('errori: 1 su 1');
+    expect(markup).toContain('La forma in te');
     expect(markup).toContain(itCatalog.stats.back);
     expect(markup).not.toContain('!');
   });
 
-  it('it: log vuoto ⇒ placeholder italiano (entrambe le sezioni), nessun grafico', async () => {
+  it('it: log vuoto ⇒ placeholder italiano (tutte e tre le sezioni), nessun grafico', async () => {
     await i18n.changeLanguage('it');
     const markup = render(seededClient([]), UID);
     expect(markup).toContain(itCatalog.stats.answersOverTime.empty);
     expect(markup).toContain(itCatalog.stats.stageDistribution.empty);
+    expect(markup).toContain(itCatalog.stats.grammarPointErrorRates.empty);
     expect(markup).not.toContain(itCatalog.stats.answersOverTime.heading);
     expect(markup).not.toContain(itCatalog.stats.stageDistribution.heading);
+    expect(markup).not.toContain(itCatalog.stats.grammarPointErrorRates.heading);
   });
 });
