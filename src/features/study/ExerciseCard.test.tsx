@@ -98,6 +98,24 @@ describe('AC1 — consegna + giapponese', () => {
     expect(markup).not.toContain('whitespace-nowrap');
     expect(markup).not.toContain('break-keep');
   });
+
+  it('la CARD è vincolata a w-full con padding responsive p-4 sm:p-6 (3.23, AC2/AC3)', () => {
+    // La card è un figlio flex del `<main>` `items-center`: senza `w-full`
+    // crescerebbe a max-content e sfonderebbe su telefono (il `w-full` del solo
+    // paragrafo non basta, riempirebbe una card già troppo larga). `w-full` la
+    // vincola alla colonna del contenitore responsive; `p-4 sm:p-6` riduce il
+    // padding interno sotto 640px così la frase più lunga sta in ≤3 righe di testo
+    // base a larghezza telefono senza overflow. Verificato sul rendering reale
+    // (Chrome headless), registrato in `## Auto Run Result`.
+    const markup = render(singleSelect);
+    // Ancoriamo alla className ESATTA dell'`<article>`: `w-full` e `p-4` da soli
+    // comparirebbero anche su paragrafo/`<ul>`/opzioni (tautologia), quindi non
+    // guarderebbero la card. La stringa completa è unica dell'`<article>`, così se
+    // la card perde `w-full`/`p-4`/`sm:p-6` il test fallisce davvero.
+    expect(markup).toContain(
+      '<article class="w-full flex flex-col items-center gap-6 rounded-md bg-surface-raised p-4 sm:p-6">',
+    );
+  });
 });
 
 describe('AC2 — numero di opzioni DERIVATO dal tipo, ordine deterministico', () => {

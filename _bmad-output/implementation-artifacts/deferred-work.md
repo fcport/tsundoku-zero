@@ -381,3 +381,27 @@ source_spec: `spec-7-5-la-cancellazione-verificata-tabella-per-tabella.md`
 severity: low
 reason: PER_USER_TABLES elenca staticamente review_state/review_log/lesson_progress/user_settings (e2e/account-deletion.spec.ts). L'intento della 7.5 nomina esattamente queste quattro tabelle; una tabella per-utente aggiunta in futuro senza `on delete cascade` lascerebbe righe orfane che questo test non interroga. Un guard più forte enumererebbe le tabelle per-utente da information_schema, o imporrebbe di aggiungere la nuova tabella qui.
 status: open
+
+### DW-48: Il token --font-jp (Noto Sans JP) è definito in theme.css ma non è mai applicato ad alcun contenuto lang="ja": il giapponese rende nel ripiego di font-sans, non nella famiglia caricata.
+origin: spec-deferred 2dd96b6273f2
+location: src/ui/JapaneseText.tsx:59 ; src/ui/theme.css:152
+source_spec: `spec-3-23-le-stesse-schermate-su-telefono-e-portatile.md`
+severity: medium
+reason: grep di `font-jp` in src/ mostra solo la definizione del token e commenti, nessuna classe `font-jp` applicata; JapaneseText rende `<span lang="ja">` senza classe di font e @layer base imposta solo font-sans sul body. È pre-esistente (JapaneseText/3.11), non introdotto da 3.23. Le metriche CJK full-width restano ≈1em, quindi il conteggio righe verificato non cambia — è fedeltà del font, non layout.
+status: open
+
+### DW-49: A 280px di larghezza la frase campione occupa 4 righe (AC3 chiede ≤3): a 26px pieni 25 grafemi CJK non stanno in 3 righe entro ~208px di contenuto.
+origin: spec-deferred 324a98478c1b
+location: src/features/study/ExerciseCard.tsx:140 ; src/ui/theme.css (token sentence-hero-mobile)
+source_spec: `spec-3-23-le-stesse-schermate-su-telefono-e-portatile.md`
+severity: low
+reason: Verifica sul rendering reale (viewport emulato): 3 righe a 320–390px (fascia telefono mainstream, che la matrice I/O fissa a 320–360px, e lì passa), 4 righe a 280px. È un limite tipografico dei letterali FISSATI da UX-DR8 (26px), non un difetto introdotto da questo giro né dal layout: nessuna correzione ammessa (gutter/padding già ridotti a `p-4`) lo porta a 3 righe a 280px senza toccare i 26px. Nessun overflow orizzontale a 280px: la frase è leggibile, solo più alta. Riservato all'audit su dispositivo reale (Epic 7.6).
+status: open
+
+### DW-50: La thumb-zone in sessione misura 136px dal fondo del viewport (AC7 chiede ≤120px): il token `pb-thumb-zone` (120px) più il box del bersaglio pone l'ultima opzione ~16px sopra la fascia stretta.
+origin: spec-deferred 7b6ec22b685a
+location: src/features/study/SessionScreen.tsx (MAIN_CLASS, pb-thumb-zone/justify-end)
+source_spec: `spec-3-23-le-stesse-schermate-su-telefono-e-portatile.md`
+severity: low
+reason: Verifica sul rendering reale: `pb-thumb-zone` (120px) è applicato con `justify-end` sotto 640px (codice atterrato nei commit precedenti della storia, non toccato da questo giro); i 16px in più vengono dal bordo/box dell'opzione, non dal padding. L'ultima opzione resta in una fascia di raggiungibilità comoda; nessuno scroll. Riservato alla decisione umana / audit su dispositivo reale (Epic 7.6), coerente con «l'audit su screen reader reale resta 7.6» delle Design Notes.
+status: open

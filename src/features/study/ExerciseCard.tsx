@@ -107,7 +107,16 @@ export function ExerciseCard({
   const showExplanation = revealed || answered;
 
   return (
-    <article className="flex flex-col items-center gap-6 rounded-md bg-surface-raised p-6">
+    // `w-full` sulla CARD (3.23): l'`<article>` è un figlio flex del `<main>`
+    // `items-center`, che gli darebbe larghezza AUTO (max-content) — così la card
+    // cresce oltre il viewport su telefono e il `w-full` del solo paragrafo non
+    // basta (riempie una card GIÀ troppo larga). Vincolando la card a `w-full` la
+    // colonna è quella del contenitore responsive e la frase sa dove andare a capo.
+    // `p-4 sm:p-6`: padding interno RIDOTTO sotto 640px (16px invece di 24px), così
+    // la frase più lunga sta in ≤3 righe di testo base a larghezza telefono
+    // (320–390px) senza overflow; da 640px torna a `p-6`. Misurato su rendering reale
+    // (Chrome headless), registrato in `## Auto Run Result`.
+    <article className="w-full flex flex-col items-center gap-6 rounded-md bg-surface-raised p-4 sm:p-6">
       {/* La consegna: chiave i18n per il kind (AC1). */}
       <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
 
