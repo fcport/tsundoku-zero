@@ -3,7 +3,7 @@ title: 'Il percorso completo, verificato da una macchina'
 type: 'chore'
 created: '2026-09-28'
 baseline_revision: '6a4e3b2579ac9829a2c1aa8b6ab99bcc74eff5d4'
-status: 'awaiting-operator'
+status: done
 review_loop_iteration: 0
 followup_review_recommended: true
 context: []
@@ -178,3 +178,13 @@ L'agente ha completato tutto ciò che è realizzabile e verificabile offline. Re
 - L'esecuzione REALE dell'e2e non è verificabile offline: il verde vero dipende dalle tre azioni operatore (`operator_actions`). Finché non sono fatte, i job e2e falliscono al secret-check o alla registrazione (per costruzione, con messaggi nominati).
 - La derivazione delle risposte e gli ancoraggi i18n sono verificati per **corrispondenza** col codice/contenuto attuali (in planning e review), ma la loro tenuta a runtime è misurata solo in CI. Un cambio futuro dei testi i18n o del contenuto della lezione 01 richiederebbe l'aggiornamento delle ancore/soluzioni dell'e2e.
 - Il ciclo assume esattamente un esercizio per `kind` nella lezione 01 (documentato nel test): un secondo esercizio dello stesso tipo richiederebbe una disambiguazione per id.
+
+## Operator Confirmation
+
+Confirmed 2026-09-28: the external actions this story owed were carried out.
+
+- Disattiva «Confirm email» nella console Supabase (Authentication > Providers > Email) così signUp restituisce subito una sessione e la registrazione dell'e2e prosegue senza conferma via email (cfr. src/data/authGateway.ts).
+- Imposta i GitHub Actions secrets VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (Settings > Secrets and variables > Actions) con l'URL del progetto Supabase reale e la sua anon key pubblica, così i job e2e.yml (pull request) e il collaudo in migrate.yml (push su main) possono costruire ed eseguire l'app contro il progetto reale. Non impostare mai la service_role.
+- Apri una pull request e verifica che il workflow «E2E (percorso principale)» esegua il test verde contro il Supabase reale; dopo il merge su main, verifica che «Migrate & deploy functions» applichi le migrazioni e poi esegua verde l'e2e di collaudo.
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
