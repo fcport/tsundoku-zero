@@ -95,3 +95,54 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
         run: supabase functions deploy delete-account --project-ref "$SUPABASE_PROJECT_REF"
+
+      # E2E di COLLAUDO (storia 7.4): dopo aver applicato le migrazioni e deployato
+      # la funzione, il percorso principale gira di nuovo contro il progetto reale —
+      # ora sullo schema APPENA aggiornato. L'ordine è VINCOLANTE: il collaudo gira
+      # DOPO `db push`/`functions deploy` (questi step precedono nello stesso job),
+      # così una migrazione che rompesse il percorso principale è colta subito, sul
+      # ramo main, non dall'uso. Stessa disciplina dell'e2e di PR (e2e.yml): SOLO le
+      # VITE_* (anon pubblica), MAI la service_role.
+      - name: Verifica i secret dell'e2e di collaudo
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=()
+          [ -n "${VITE_SUPABASE_URL:-}" ] || missing+=("VITE_SUPABASE_URL")
+          [ -n "${VITE_SUPABASE_ANON_KEY:-}" ] || missing+=("VITE_SUPABASE_ANON_KEY")
+          if [ "${#missing[@]}" -ne 0 ]; then
+            echo "Secret mancanti: ${missing[*]}. Impostali in GitHub > Settings > Secrets and variables > Actions." >&2
+            exit 1
+          fi
+
+      - name: Setup Node (collaudo e2e)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies (collaudo e2e)
+        run: npm ci
+
+      - name: Install Playwright (chromium)
+        run: npx playwright install --with-deps chromium
+
+      # Il collaudo vero e proprio: gira DOPO che lo schema è stato aggiornato.
+      - name: E2E di collaudo (percorso principale, schema aggiornato)
+        env:
+          CI: 'true'
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm run test:e2e
+
+      - name: Upload Playwright report (collaudo)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-collaudo
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
