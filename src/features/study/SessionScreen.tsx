@@ -182,6 +182,12 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   const [answered, setAnswered] = useState(false);
   const [answeredCorrect, setAnsweredCorrect] = useState<boolean | null>(null);
   const [usedExplanation, setUsedExplanation] = useState(false);
+  // L'esercizio a cui si è APPENA risposto. La coda avanza subito alla risposta
+  // (`dispatch({ type: 'reviewed' })`, barra ottimistica), quindi `currentId` punta
+  // già al SUCCESSIVO: senza questo ancoraggio la card mostrava l'esercizio seguente
+  // nello stato «risposto», con la selezione e l'esito del precedente — e dopo
+  // l'ultimo esercizio saltava dritta alla schermata finale, senza riscontro.
+  const [answeredId, setAnsweredId] = useState<string | null>(null);
 
   // La pila dei dovuti: chiave di DOMINIO verbatim (AD-5), `enabled: !!userId`.
   const dueQ = useQuery({
@@ -262,9 +268,12 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
 
   // Mappa id di RIGA → esercizio (l'ordine del port non è garantito): la card legge
   // l'esercizio CORRENTE per id, mai per posizione.
+  // L'esercizio MOSTRATO: durante il riscontro quello a cui si è risposto, altrimenti
+  // il corrente della coda.
+  const shownId = answered && answeredId !== null ? answeredId : currentId;
   const current =
-    currentId !== null
-      ? exercisesQ.data?.find((c) => c.id === currentId)
+    shownId !== null
+      ? exercisesQ.data?.find((c) => c.id === shownId)
       : undefined;
 
   // L'esercizio ATTIVO e le sue OPZIONI, sollevati a TOP-LEVEL (3.22): il contratto
@@ -315,6 +324,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     );
     const reviewId = crypto.randomUUID(); // glue di feature: `src/domain` vieta `crypto`
 
+    setAnsweredId(currentId); // la card resta su questo esercizio fino a «Prossimo»
     dispatch({ type: 'reviewed', result, now }); // avanza la coda (barra ottimistica)
     applyMutation.mutate({
       input: {
@@ -337,6 +347,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   // nuovo `currentExerciseId` (lo store è GIÀ avanzato dal dispatch). SOLLEVATO a
   // top-level (3.22): serve sia il bottone che il tasto `Enter` del contratto.
   const onNext = () => {
+    setAnsweredId(null);
     setSelected([]);
     setAnswered(false);
     setAnsweredCorrect(null);
@@ -401,7 +412,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   //   card, nessuna barra, nessuna celebrazione. Esc resta attivo (listener top-level).
   // - `total === 0` (pila vuota all'INGRESSO, deep-link) ⇒ `<main>` neutro e vuoto,
   //   invariato: nessun `body` di completamento.
-  if (currentId === null) {
+  if (shownId === null) {
     if (sessionComplete) {
       return (
         <main className={MAIN_CLASS}>
@@ -461,7 +472,12 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
 
   return (
     <main className={MAIN_CLASS}>
-      <ProgressMeter completed={completed} total={total} />
+      {/* `mb-auto` ancora la barra in ALTO anche sotto 640px, dove il <main> spinge il
+          contenuto in basso (zona del pollice): senza, la barra galleggiava a metà
+          schermo e saltava su e giù a ogni esercizio, secondo l'altezza della card. */}
+      <div className="mb-auto w-full sm:mb-0">
+        <ProgressMeter completed={completed} total={total} />
+      </div>
       <ExerciseCard
         exercise={exercise}
         selected={selected}

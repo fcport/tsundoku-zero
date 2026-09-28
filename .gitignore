@@ -90,3 +90,5 @@ _bmad/render/
 # Artefatti di esecuzione di bmad-loop: log, stato, heartbeat
 .bmad-loop/runs/
 .gstack/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

@@ -223,12 +223,18 @@ describe('AC6 — sessione completa pilotata da SOLA TASTIERA fino a pila zero',
     expect(html()).not.toContain(en.session.next);
 
     // ex-2 (assemble): premo le cifre delle tessere NELL'ORDINE corretto. L'ultima
-    // tessera completa la risposta ⇒ ex-2 è valutato good ⇒ la coda si SVUOTA (pila a
-    // zero) ⇒ schermata di COMPLETAMENTO direttamente (nessun altro esercizio dopo).
+    // tessera completa la risposta ⇒ ex-2 è valutato good ⇒ la coda si SVUOTA. Il
+    // riscontro di ex-2 resta però visibile (la card è ancorata all'esercizio appena
+    // risposto): prima si saltava dritti al completamento, senza vedere l'esito.
     for (const tile of secondExercise.answer) {
       pressKey(keyForOption(secondExercise, tile));
     }
+    expect(html()).toContain(en.session.next);
+    expect(html()).toContain(en.session.prompt.assemble);
+    expect(html()).not.toContain(en.session.complete.body);
 
+    // Enter chiude il riscontro ⇒ schermata di COMPLETAMENTO (pila a zero).
+    pressKey('Enter');
     expect(html()).toContain(en.session.complete.body);
     // Nessuna card: la consegna di un esercizio non è più resa.
     expect(html()).not.toContain(en.session.prompt.singleSelect);

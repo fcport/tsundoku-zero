@@ -8,11 +8,10 @@
 // (1.3): ogni interattivo con `border-strong`, nessuna ombra, nessun verde di
 // successo.
 //
-// La shell compone TRE feature come sibling — la dashboard (l'unico <main>),
-// Impostazioni (<SettingsScreen>) e Account (<DeleteAccountSection>) — così l'app
-// resta l'unico livello che le mette insieme, evitando un arco features→features
-// vietato da AD-1. Impostazioni e Account sono <section>: l'unico <main> è quello
-// della dashboard (single-main di 1.7/1.8).
+// La shell compone l'intestazione (nome dell'app, Impostazioni, Esci) e la
+// dashboard, l'unico <main> (single-main di 1.7/1.8). Impostazioni e Account
+// vivono sulla loro pagina (`SettingsPage`, rotta `SETTINGS_PATH`): in coda alla
+// dashboard sommergevano l'unica cosa che conta lì, la pila da svuotare.
 //
 // La NAVIGAZIONE alla sessione (3.18) vive qui, nel livello app: la dashboard
 // riceve `onStartSession` (una callback, nessuna stringa di path né react-router
@@ -27,15 +26,15 @@
 // così la feature del precarico non importa react-router né `src/data`. Una
 // guardia di re-entrancy (`useRef`) evita precarichi sovrapposti su doppio click;
 // la navigazione avviene SEMPRE dopo (anche su errore: degrado grazioso).
-import { useRef } from "react";
-import { useNavigate } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
-import { useTranslation } from "../i18n";
-import { DashboardScreen } from "../features/dashboard/DashboardScreen";
-import { usePorts } from "../features/ports/PortsContext";
-import { prefetchDueStack } from "../features/study/prefetchDueStack";
-import { SETTINGS_PATH, STATS_PATH, STUDY_PATH } from "./routes";
-import type { SettingsRepository } from "../domain/ports/settingsRepository";
+import { useRef } from 'react';
+import { useNavigate } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from '../i18n';
+import { DashboardScreen } from '../features/dashboard/DashboardScreen';
+import { usePorts } from '../features/ports/PortsContext';
+import { prefetchDueStack } from '../features/study/prefetchDueStack';
+import { SETTINGS_PATH, STATS_PATH, STUDY_PATH } from './routes';
+import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 export interface AuthenticatedShellProps {
   /** La porta delle impostazioni, inoltrata alla feature Impostazioni. */
@@ -85,7 +84,7 @@ export function AuthenticatedShell({
           servizio, le impostazioni ora su una pagina propria. */}
       <header className="flex items-center justify-between gap-3 p-4 sm:p-6">
         <h1 className="text-label font-semibold text-ink-primary">
-          <span lang="ja">積ん読ゼロ</span> · {t("app.name")}
+          <span lang="ja">積ん読ゼロ</span> · {t('app.name')}
         </h1>
         <div className="flex items-center gap-2">
           <button
@@ -93,7 +92,7 @@ export function AuthenticatedShell({
             onClick={() => navigate(SETTINGS_PATH)}
             className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
           >
-            {t("dashboard.openSettings")}
+            {t('dashboard.openSettings')}
           </button>
           <button
             type="button"
@@ -101,7 +100,7 @@ export function AuthenticatedShell({
             disabled={signOutPending}
             className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
           >
-            {t("auth.signOut")}
+            {t('auth.signOut')}
           </button>
         </div>
       </header>

@@ -160,10 +160,10 @@ test('percorso principale: registrazione, sblocco, esercizi, pila a zero', async
   await primaryAction.click();
   await expect(page).toHaveURL(/\/studia$/);
 
-  // 5) Risolve i TRE esercizi. Dopo ogni risposta la spiegazione appare con
-  //    `session.next`; al DRENAGGIO (dopo l'ultimo) la coda si svuota e
-  //    `SessionScreen` rende DIRETTAMENTE la schermata di completamento (nessun
-  //    `next`). Quindi `next.or(complete)` distingue i due casi in modo
+  // 5) Risolve i TRE esercizi. Dopo ogni risposta, ULTIMA COMPRESA, il riscontro
+  //    appare con `session.next`; dopo l'ultima, `next` porta alla schermata di
+  //    completamento. `next.or(complete)` resta come attesa robusta: distingue i
+  //    due casi in modo
   //    DETERMINISTICO: dopo aver risolto la card ATTENDIAMO lo stato post-risposta
   //    (una delle due affordance visibile) PRIMA di decidere. Senza questa attesa,
   //    un `isVisible()` sincrono letto prima del re-render tornerebbe false e il
