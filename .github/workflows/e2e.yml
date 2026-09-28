@@ -1,0 +1,87 @@
+name: E2E (percorso principale)
+
+# Esegue l'UNICO test e2e (storia 7.4) contro il progetto Supabase REALE sullo
+# schema CORRENTE: pilota registrazione → sblocco → esercizi → pila a zero dal
+# browser, con email unica per run e teardown verificato via delete-account.
+#
+# Trigger SOLO `pull_request`: una PR valida il percorso principale sullo schema
+# GIÀ applicato, ma NON applica migrazioni (restano di migrate.yml, su push:main —
+# i dati di studio dell'owner sono la metrica M1, AD-12/AD-13). Nessun trigger su
+# push:main qui: dopo il merge, migrate.yml applica le migrazioni e POI esegue un
+# e2e di collaudo (l'ordine è vincolante).
+#
+# Segreti: SOLO le VITE_* (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, l'anon
+# pubblica). MAI la service_role né altri secret privilegiati (coerente con
+# .env.example e src/service-role-confinement.test). Dipendenza operatore: la
+# console Supabase deve avere "Confirm email" DISATTIVATO, altrimenti signUp torna
+# session:null e la registrazione e2e non prosegue (vedi src/data/authGateway.ts).
+on:
+  pull_request:
+
+# Un solo run per ref: le nuove push annullano quello precedente (come ci.yml).
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: percorso principale (Supabase reale, schema corrente)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Pre-flight fail-fast che NOMINA il secret mancante (idioma di migrate.yml
+      # e di src/app/env.ts): senza le VITE_* l'app non parte e l'errore sarebbe
+      # opaco. Qui fermiamo subito il job dicendo QUALE secret manca e dove
+      # impostarlo. SOLO le VITE_* (anon pubblica), MAI la service_role.
+      - name: Verifica i secret richiesti
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=()
+          [ -n "${VITE_SUPABASE_URL:-}" ] || missing+=("VITE_SUPABASE_URL")
+          [ -n "${VITE_SUPABASE_ANON_KEY:-}" ] || missing+=("VITE_SUPABASE_ANON_KEY")
+          if [ "${#missing[@]}" -ne 0 ]; then
+            echo "Secret mancanti: ${missing[*]}. Impostali in GitHub > Settings > Secrets and variables > Actions." >&2
+            exit 1
+          fi
+
+      # Install deterministico dal lockfile versionato — mai npm install.
+      - name: Install dependencies
+        run: npm ci
+
+      # Installa il solo chromium con le sue dipendenze di sistema: la config
+      # Playwright dichiara un unico project chromium.
+      - name: Install Playwright (chromium)
+        run: npx playwright install --with-deps chromium
+
+      # Esegue l'e2e contro il Supabase REALE (schema CORRENTE): il webServer
+      # della config fa `npm run build && vite preview` con le VITE_* iniettate,
+      # così il bundle punta al progetto reale. Nessuna migrazione applicata qui.
+      - name: Run e2e (percorso principale)
+        env:
+          CI: 'true'
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm run test:e2e
+
+      # Il report HTML come artefatto per la diagnosi di un fallimento (non
+      # bloccante: sempre caricato).
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7

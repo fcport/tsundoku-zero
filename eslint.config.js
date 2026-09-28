@@ -192,6 +192,20 @@ export default tseslint.config(
     },
   },
   {
+    // Il toolchain e2e (storia 7.4): gli spec Playwright vivono in `e2e/`, FUORI
+    // da `src/`, e girano in Node (usano `process.env`, `crypto`, i moduli
+    // `node:*` per leggere il contenuto). NON fanno parte del grafo AD-1
+    // (`boundaries/include` resta `src/**/*`): non importano moduli di `src/`,
+    // quindi le sonde di confine non li toccano. `playwright.config.ts` è già
+    // coperto dall'override `*.config.{ts,js}` sopra.
+    files: ['e2e/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     // Gli script di manutenzione (es. check-contrast) girano in Node: process,
     // console, i moduli node:*. Non fanno parte dell'albero dei componenti,
     // quindi la regola colore di src/ui|features non li tocca.
