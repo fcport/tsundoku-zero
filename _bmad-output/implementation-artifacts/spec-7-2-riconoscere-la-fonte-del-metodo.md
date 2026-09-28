@@ -3,7 +3,7 @@ title: 'Riconoscere la fonte del metodo'
 type: 'feature'
 created: '2026-09-26'
 baseline_revision: 'b7c5c2b71034b03f0d367e40d474364bbc10d41c'
-status: 'awaiting-operator'
+status: done
 review_loop_iteration: 0
 followup_review_recommended: false
 context: []
@@ -194,3 +194,12 @@ L'AC4 osserva tre superfici — nome prodotto, **dominio**, identita visiva — 
 
 - La correttezza dell'attribuzione dipende dall'URL esterno (`UCkdmU8hGK4Fg3LghTVtKltQ`): verificato in fase di planning come canale reale della fonte, ma la sua raggiungibilita nel tempo e confermabile solo dal vivo (operator action #2).
 - Le affermazioni di navigazione (link->`/riconoscimenti`, `onExit`->ROOT/LOGIN) sono glue non eseguita in ambiente node: coperte reali arriveranno dall'e2e del percorso (Epic 7 storia 7.4).
+
+## Operator Confirmation
+
+Confirmed 2026-09-28: the external actions this story owed were carried out.
+
+- Quando configuri il dominio pubblico del deploy (console Vercel), verifica che il dominio scelto NON contenga il nome della fonte ('Cure Dolly' o 'Dolly'): l'AC 'il nome della fonte non compare nel dominio' e verificabile solo sul dominio reale, che vive fuori dal repository (deploy-config.test.ts fissa solo vercel.json, non il dominio).
+- Sul deploy pubblico reale apri /riconoscimenti sia in inglese sia in italiano e verifica che il collegamento al canale apra, in una nuova scheda, il canale YouTube corretto della fonte (Organic Japanese with Cure Dolly, https://www.youtube.com/channel/UCkdmU8hGK4Fg3LghTVtKltQ): la correttezza e la raggiungibilita dell'URL esterno non sono verificabili da un test unitario.
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
