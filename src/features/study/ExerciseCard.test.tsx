@@ -84,6 +84,20 @@ describe('AC1 — consegna + giapponese', () => {
     expect(markup).toContain('lang="ja"');
     expect(markup).toContain('<ruby>');
   });
+
+  it('la frase usa il ruolo sentence-hero responsive, NON più text-display (3.23)', () => {
+    const markup = render(singleSelect);
+    // Il ruolo interim `text-display` è stato SOSTITUITO dal ruolo di frase (UX-DR8):
+    // base mobile-first `text-sentence-hero-mobile` (26px) che passa a
+    // `sm:text-sentence-hero` (32px) da 640px. Nessun `text-display` sulla frase.
+    expect(markup).toContain('text-sentence-hero-mobile');
+    expect(markup).toContain('sm:text-sentence-hero');
+    expect(markup).not.toContain('text-display');
+    // Nessun CSS forza il segmento atomico sull'intera frase (AC4): il nucleo
+    // group-ruby va a capo da solo ai confini di grafema CJK (default del browser).
+    expect(markup).not.toContain('whitespace-nowrap');
+    expect(markup).not.toContain('break-keep');
+  });
 });
 
 describe('AC2 — numero di opzioni DERIVATO dal tipo, ordine deterministico', () => {

@@ -894,3 +894,38 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).not.toContain(en.dashboard.unlockAction);
   });
 });
+
+describe('3.23 — il <main> compone il contenitore responsive condiviso; count-hero-mobile', () => {
+  it('AC6 — il <main> è colonna singola centrata limitata a measure, gutter responsive', () => {
+    const markup = render(
+      seededClient({ dueCount: 23, log: [], unlocked: 1, total: 10 }),
+      UID,
+    );
+    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*mx-auto[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+  });
+
+  it('AC8 — scheletro e contenuto condividono la STESSA classe responsive (nessun ramo per dispositivo)', () => {
+    const skeleton = render(freshClient(), null);
+    const loaded = render(
+      seededClient({ dueCount: 1, log: [], unlocked: 1, total: 1 }),
+      UID,
+    );
+    for (const klass of ['max-w-measure', 'px-gutter-mobile', 'sm:px-gutter-desktop']) {
+      expect(skeleton).toContain(klass);
+      expect(loaded).toContain(klass);
+    }
+  });
+
+  it('il pile-counter usa count-hero-mobile sotto 640px e count-hero da 640px', () => {
+    const markup = render(
+      seededClient({ dueCount: 23, log: [], unlocked: 1, total: 10 }),
+      UID,
+    );
+    // Base mobile-first 56px + variante 72px da 640px, entrambe già in theme.css.
+    expect(markup).toContain('text-count-hero-mobile');
+    expect(markup).toContain('sm:text-count-hero');
+  });
+});

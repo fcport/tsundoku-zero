@@ -50,6 +50,7 @@ import {
   dailyUnlockLimitReached,
 } from '../../domain/unlockPace';
 import type { SettingsRepository } from '../../domain/ports/settingsRepository';
+import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { usePorts } from '../ports/PortsContext';
 import { useTranslation } from '../../i18n';
 
@@ -85,6 +86,14 @@ export interface DashboardScreenProps {
 // contenitore <main> nei due rami garantisce nessun salto di layout (AC3). Vive
 // qui una sola volta, così i due rami non possono divergere.
 const CONTAINER_HEIGHT = 'min-h-[24rem]';
+
+// La classe CONDIVISA del <main> della dashboard (3.23): l'altezza condivisa PIÙ il
+// contenitore responsive di `src/ui/layout.ts` (colonna singola centrata, `measure`,
+// gutter 20/32px, mai allargata a ≥1024px) PIÙ il layout in colonna. Il gutter
+// orizzontale è di `RESPONSIVE_CONTAINER` (20px<640 / 32px≥640); qui resta solo il
+// padding verticale (`py-6`). Una sola definizione, composta in TUTTI i rami <main>
+// così non divergono (AC6/AC8).
+const MAIN_CLASS = `${CONTAINER_HEIGHT} ${RESPONSIVE_CONTAINER} flex flex-col items-center gap-6 py-6`;
 
 export function DashboardScreen({
   userId,
@@ -158,13 +167,14 @@ export function DashboardScreen({
     lessonsPerDayQ.data === undefined
   ) {
     return (
-      <main
-        aria-busy="true"
-        className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}
-      >
+      <main aria-busy="true" className={MAIN_CLASS}>
         {/* Blocchi neutri alla stessa altezza dei corrispondenti finali:
-            conteggio + etichetta, streak, progresso, azione. Nessuno spinner. */}
-        <div className="h-[72px] w-32 rounded-md bg-surface-sunken" />
+            conteggio + etichetta, streak, progresso, azione. Nessuno spinner.
+            L'altezza del blocco conteggio è RESPONSIVE come il ruolo del contatore
+            (3.23): 56px sotto 640px (`count-hero-mobile`), 72px da 640px
+            (`count-hero`), così lo scheletro combacia col caricato a ogni larghezza
+            (nessun salto di layout su mobile). */}
+        <div className="h-[56px] sm:h-[72px] w-32 rounded-md bg-surface-sunken" />
         <div className="h-[20px] w-40 rounded-md bg-surface-sunken" />
         <div className="h-[16px] w-36 rounded-md bg-surface-sunken" />
         <div className="h-[16px] w-44 rounded-md bg-surface-sunken" />
@@ -219,9 +229,7 @@ export function DashboardScreen({
   // mai in produzione) resta solo la descrizione, NESSUN pulsante (AC4).
   if (unlocked === 0) {
     return (
-      <main
-        className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}
-      >
+      <main className={MAIN_CLASS}>
         <p className="text-body text-ink-primary">
           {t('dashboard.firstRunBody')}
         </p>
@@ -240,7 +248,7 @@ export function DashboardScreen({
   }
 
   return (
-    <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
+    <main className={MAIN_CLASS}>
       {/* pile-counter che CAMBIA STATO a zero (3.16, AC1). A `count > 0` il
           conteggio vive nel ruolo tipografico più grande con l'etichetta SOTTO
           (3.12, AC1): il numero PRECEDE il verbo. A `count === 0` NON si rende «0»
@@ -257,7 +265,12 @@ export function DashboardScreen({
           Neutra, solo token del sistema di design, nessun conteggio nella copy. */}
       {count > 0 ? (
         <>
-          <p className="text-count-hero text-ink-primary">{count}</p>
+          {/* pile-counter (3.12) col ruolo responsive (3.23): 56px sotto 640px
+              (`text-count-hero-mobile`, base mobile-first) che passa a 72px da 640px
+              (`sm:text-count-hero`), entrambe già in `theme.css`. */}
+          <p className="text-count-hero-mobile sm:text-count-hero text-ink-primary">
+            {count}
+          </p>
           <p className="text-label text-ink-secondary">
             {t('dashboard.dueLabel')}
           </p>

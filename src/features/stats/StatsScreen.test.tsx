@@ -86,6 +86,27 @@ afterEach(async () => {
   await i18n.changeLanguage('en');
 });
 
+describe('3.23 — il <main> compone il contenitore responsive condiviso (parità di schermata)', () => {
+  // La classe di `src/ui/layout.ts` (`RESPONSIVE_CONTAINER`): colonna centrata a
+  // `measure`, gutter 20/32px. Un test qui evita che la schermata perda il
+  // contenitore senza che alcun test fallisca. Vale sia sullo scheletro sia sul
+  // contenuto (stesso `CONTAINER` in entrambi i rami, nessun ramo per dispositivo).
+  it('contenuto: il <main> porta max-w-measure, px-gutter-mobile, sm:px-gutter-desktop', () => {
+    const markup = render(seededClient([]), UID);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+  });
+
+  it('scheletro: lo stesso <main> porta le stesse classi responsive (userId null)', () => {
+    const markup = render(freshClient(), null);
+    expect(markup).toContain('aria-busy="true"');
+    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+  });
+});
+
 describe('AC1 — serie con dati: intestazione + conteggi per giorno come testo', () => {
   // Log su 23, 24 e 25 (fuso UTC): serie contigua [23: 1, 24: 1, 25: 1]. TRE giorni
   // distinti con risposte (>= MIN_ANSWER_DAYS): il grafico temporale e meaningful (5.4).

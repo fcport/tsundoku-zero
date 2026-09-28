@@ -112,8 +112,14 @@ export function ExerciseCard({
       <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
 
       {/* La frase giapponese resa dal primitivo esistente (AC1): segmenti allineati
-          + visibilità risolta nel dominio. Ruolo tipografico interim (text-display). */}
-      <p className="text-display text-ink-primary">
+          + visibilità risolta nel dominio. Ruolo tipografico `sentence-hero` (UX-DR8,
+          fissato dalla 3.23): 26px sotto 640px (`text-sentence-hero-mobile`, base
+          mobile-first) che passa a 32px da 640px (`sm:text-sentence-hero`), entrambi
+          con interlinea 1.9 (spazio per la furigana SOPRA ogni riga quando va a capo).
+          Nessun `white-space:nowrap`/`word-break:keep-all`: il nucleo group-ruby va a
+          capo DA SOLO ai confini di grafema CJK (default del browser), così AC2/AC3
+          (fit) e AC4 (nessun grafema spezzato) sono soddisfatte insieme. */}
+      <p className="text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary">
         <JapaneseText segments={segments} showFurigana={furiganaVisible(exercise)} />
       </p>
 

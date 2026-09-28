@@ -15,6 +15,7 @@
 // autenticata (AuthenticatedShell), per non annidare due <main>.
 import { useState } from 'react';
 import { useTranslation } from '../../i18n';
+import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import type { AuthGateway } from '../../domain/ports/authGateway';
 import { AuthForm, type AuthFormValues } from './AuthForm';
 import { applyAuthOutcome } from './authOutcome';
@@ -66,7 +67,9 @@ export function AuthScreen({
   const copy = AUTH_MODE_COPY[mode];
 
   return (
-    <main className="flex flex-col items-center gap-6 p-6">
+    <main
+      className={`${RESPONSIVE_CONTAINER} flex flex-col items-center gap-6 py-6`}
+    >
       <AuthForm
         values={values}
         error={error}

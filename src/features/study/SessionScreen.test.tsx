@@ -213,6 +213,58 @@ describe('AC1/AC2/AC5 — store + esercizi seminati ⇒ card dell esercizio CORR
   });
 });
 
+describe('3.23 — il <main> compone il contenitore responsive condiviso + thumb-zone', () => {
+  function setup(): string {
+    seedStore(['ex-1', 'ex-2']);
+    const qc = seededClient(
+      [due('ex-1'), due('ex-2')],
+      [
+        { id: 'ex-1', exercise: firstExercise },
+        { id: 'ex-2', exercise: secondExercise },
+      ],
+    );
+    return render(qc, UID);
+  }
+
+  it('AC6 — il <main> è colonna singola centrata limitata a measure (max-w-measure, mx-auto)', () => {
+    const markup = setup();
+    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*mx-auto[^"]*"/);
+  });
+
+  it('AC6 — gutter responsive: gutter-mobile <640, gutter-desktop ≥640 (variante sm:)', () => {
+    const markup = setup();
+    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+  });
+
+  it('AC7 — sotto 640px il <main> è alto quanto il viewport e ancora in basso (thumb-zone)', () => {
+    const markup = setup();
+    // Alto quanto il viewport sotto 640px (min-h-screen) → altezza minima da 640px.
+    expect(markup).toMatch(/<main[^>]*class="[^"]*min-h-screen[^"]*"/);
+    // Il blocco interattivo è spinto verso il basso (justify-end) e il padding
+    // inferiore è la thumb-zone (120px): l'ultimo bersaglio cade entro 120px dal fondo.
+    expect(markup).toMatch(/<main[^>]*class="[^"]*justify-end[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*pb-thumb-zone[^"]*"/);
+    // Da 640px ricentra (sm:justify-center): la centratura è invariata (AC6).
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:justify-center[^"]*"/);
+  });
+
+  it('AC8 — lo scheletro condivide la STESSA classe responsive del contenuto (nessun ramo per dispositivo)', () => {
+    const skeleton = render(freshClient(), null);
+    const loaded = setup();
+    for (const klass of [
+      'max-w-measure',
+      'px-gutter-mobile',
+      'sm:px-gutter-desktop',
+      'pb-thumb-zone',
+    ]) {
+      expect(skeleton).toContain(klass);
+      expect(loaded).toContain(klass);
+    }
+  });
+});
+
 describe('Matrix — pila vuota (deep-link) ⇒ stato neutro senza card, nessuna barra', () => {
   it('store vuoto + pila vuota ⇒ nessuna card, nessuna barra, un solo <main>', () => {
     const qc = freshClient();

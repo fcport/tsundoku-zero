@@ -42,8 +42,11 @@
 // di `answerOptions`, nessun `tabindex` positivo) e ogni interattivo porta un anello
 // di focus visibile (token `focus-ring`).
 //
-// FUORI SCOPE: responsive/thumb-zone (3.23); l'anello di focus app-wide su
-// auth/settings/shell (DW-10) e l'audit con screen reader reale NVDA/VoiceOver (7.6).
+// RESPONSIVE (3.23): il <main> compone il contenitore condiviso di `src/ui/layout.ts`
+// (colonna singola centrata, `measure`, gutter 20/32px) e ancora il blocco interattivo
+// nella thumb-zone sotto 640px (vedi `MAIN_CLASS`). FUORI SCOPE: l'anello di focus
+// app-wide su auth/settings/shell (DW-10) e l'audit con screen reader reale NVDA/
+// VoiceOver (7.6).
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { applyResultToDue, dueQueryKey } from '../../domain/due';
@@ -54,6 +57,7 @@ import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
 import { streak } from '../../domain/streak';
 import { resolveLocale, useTranslation } from '../../i18n';
+import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { usePorts } from '../ports/PortsContext';
 import { exercisesQueryKey } from './exercisesQueryKey';
 import {
@@ -83,8 +87,22 @@ export interface SessionScreenProps {
 
 // Altezza CONDIVISA fra scheletro, stato neutro e card: la stessa classe sul <main>
 // nei vari rami evita salti di layout (stesso pattern della dashboard). Una sola
-// definizione così i rami non divergono.
-const CONTAINER_HEIGHT = 'min-h-[24rem]';
+// definizione così i rami non divergono. Sotto 640px il <main> è alto QUANTO IL
+// VIEWPORT (`min-h-screen`) così il blocco interattivo può cadere nella thumb-zone
+// (vedi `MAIN_CLASS`); da 640px torna all'altezza minima condivisa (`sm:min-h-[24rem]`),
+// centrata come le altre schermate.
+const CONTAINER_HEIGHT = 'min-h-screen sm:min-h-[24rem]';
+
+// La classe CONDIVISA del <main> della sessione (3.23): l'altezza condivisa PIÙ il
+// contenitore responsive di `src/ui/layout.ts` (colonna singola centrata, `measure`,
+// gutter 20/32px) PIÙ l'ANCORAGGIO alla thumb-zone sotto 640px. `flex flex-col`:
+// sotto 640px `justify-end` spinge il contenuto (card + opzioni) verso il basso e
+// `pb-thumb-zone` (padding inferiore 120px) garantisce che l'ULTIMO bersaglio opzione
+// cada entro 120px dal bordo inferiore del viewport (AC7, UX-DR36/UJ-1: una mano, in
+// alto la frase, in basso i bersagli). Da 640px `sm:justify-center` ricentra e
+// `sm:pb-6` ripristina il padding simmetrico: la centratura è invariata (AC6). Una
+// sola definizione, composta in TUTTI i rami <main> così non divergono.
+const MAIN_CLASS = `${CONTAINER_HEIGHT} ${RESPONSIVE_CONTAINER} flex flex-col items-center justify-end gap-6 pt-6 pb-thumb-zone sm:justify-center sm:py-6`;
 
 // ANELLO DI FOCUS visibile (3.22, AC5): una sola definizione condivisa dagli
 // interattivi della SESSIONE (qui: «prossimo esercizio», «esci»; la card riusa lo
@@ -366,10 +384,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   // della dashboard): stessa altezza, nessuno spinner, `aria-busy` per l'AT.
   if (!userId || dueQ.data === undefined) {
     return (
-      <main
-        aria-busy="true"
-        className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}
-      >
+      <main aria-busy="true" className={MAIN_CLASS}>
         <div className="h-[20px] w-48 rounded-md bg-surface-sunken" />
         <div className="h-[40px] w-64 rounded-md bg-surface-sunken" />
         <div className="h-14 w-full rounded-md bg-surface-sunken" />
@@ -389,7 +404,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   if (currentId === null) {
     if (sessionComplete) {
       return (
-        <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
+        <main className={MAIN_CLASS}>
           {/* La conferma sobria di aver finito (AC1/AC2): nessun `!`, nessun verde. */}
           <p className="text-body text-ink-primary">{t('session.complete.body')}</p>
           {/* Lo streak AGGIORNATO (AC1/AC3): il numero dalla funzione PURA `streak`
@@ -418,19 +433,14 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
         </main>
       );
     }
-    return (
-      <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`} />
-    );
+    return <main className={MAIN_CLASS} />;
   }
 
   // La pila non è vuota ma gli esercizi non sono ancora caricati: scheletro (la
   // query è enabled, sta risolvendo).
   if (exercisesQ.data === undefined) {
     return (
-      <main
-        aria-busy="true"
-        className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}
-      >
+      <main aria-busy="true" className={MAIN_CLASS}>
         <div className="h-[20px] w-48 rounded-md bg-surface-sunken" />
         <div className="h-[40px] w-64 rounded-md bg-surface-sunken" />
         <div className="h-14 w-full rounded-md bg-surface-sunken" />
@@ -441,9 +451,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
 
   // Id corrente assente dal caricato (bordo di contenuto): stato neutro senza card.
   if (current === undefined) {
-    return (
-      <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`} />
-    );
+    return <main className={MAIN_CLASS} />;
   }
 
   // `exercise` non-null qui (narrowing dopo la guardia `current === undefined`):
@@ -452,7 +460,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   const exercise = current.exercise;
 
   return (
-    <main className={`${CONTAINER_HEIGHT} flex flex-col items-center gap-6 p-6`}>
+    <main className={MAIN_CLASS}>
       <ProgressMeter completed={completed} total={total} />
       <ExerciseCard
         exercise={exercise}

@@ -43,6 +43,15 @@ describe('AcknowledgementsScreen — attribuzione e confini (en)', () => {
     expect(mains.length).toBe(1);
   });
 
+  it('3.23 — il <main> compone il contenitore responsive condiviso (parità di schermata)', () => {
+    // La classe di `src/ui/layout.ts` (`RESPONSIVE_CONTAINER`): colonna centrata a
+    // `measure`, gutter 20/32px. Un test qui evita che la schermata perda il
+    // contenitore senza che alcun test fallisca.
+    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+  });
+
   it('AC1 — collegamento REALE al canale della fonte (`<a href>` esterno, focus visibile)', () => {
     // Un vero <a href> all'URL stabile in forma channel-id, target esterno e
     // rel="noreferrer": il collegamento punta FUORI dall'app, non e una callback.
