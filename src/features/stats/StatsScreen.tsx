@@ -60,6 +60,7 @@ import { stageDistribution } from '../../domain/stageDistribution';
 import { grammarPointErrorRates } from '../../domain/grammarPointErrorRates';
 import { lessonsByGrammarPoint } from '../../domain/curriculum';
 import { resolveBilingual } from '../../domain/bilingual';
+import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { usePorts } from '../ports/PortsContext';
 import { resolveLocale, useTranslation } from '../../i18n';
 
@@ -89,8 +90,10 @@ const FOCUS_RING =
 // Classe CONDIVISA del <main> fra scheletro e contenuto: la STESSA stringa nei due
 // rami evita salti di layout (stesso pattern della dashboard e della sessione).
 // `items-stretch` perché le barre per-giorno e i blocchi scheletro occupano l'intera
-// larghezza; l'altezza minima è condivisa.
-const CONTAINER = 'min-h-[24rem] flex flex-col items-stretch gap-6 p-6';
+// larghezza; l'altezza minima è condivisa. Compone il contenitore responsive di
+// `src/ui/layout.ts` (3.23): colonna singola centrata, `measure`, gutter 20/32px, mai
+// allargata a ≥1024px; il gutter orizzontale è del contenitore, qui resta `py-6`.
+const CONTAINER = `min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-stretch gap-6 py-6`;
 
 export function StatsScreen({ userId, onExit }: StatsScreenProps) {
   const { review, content, clock } = usePorts();

@@ -68,8 +68,12 @@
   --color-danger-subtle-dark: #38211E;
 
   /* --------------------------------------------------------------------------
-   * Tipografia — 13 ruoli (i 13 di DESIGN.md). Il ruolo di frase giapponese
-   * (UX-DR8) resta deliberatamente NON definito qui: lo fissa la storia 3.23.
+   * Tipografia — 15 ruoli (i 13 di DESIGN.md più sentence-hero(-mobile)). Il
+   * ruolo della frase giapponese (UX-DR8) è fissato QUI dalla storia 3.23: 32px
+   * desktop / 26px mobile, interlinea 1.9 (NON 1.75 di word-hero, che valeva
+   * per una parola sola). L'interlinea alta serve perché col testo su più righe
+   * la furigana serve SOPRA ogni riga, non solo la prima. La verifica sul
+   * rendering reale (Chrome headless) è registrata nello spec 3.23.
    * Ogni ruolo dichiara size + line-height (--text-<ruolo>--line-height) e,
    * quando DESIGN.md lo prescrive, font-weight e letter-spacing.
    * ------------------------------------------------------------------------ */
@@ -81,6 +85,14 @@
   --text-word-hero-mobile: 44px;
   --text-word-hero-mobile--line-height: 1.8;
   --text-word-hero-mobile--font-weight: 500;
+
+  /* sentence-hero: la frase giapponese (UX-DR8), fissata dalla 3.23.
+   * 32px con interlinea 1.9; la variante mobile 26px, stessa interlinea 1.9. */
+  --text-sentence-hero: 32px;
+  --text-sentence-hero--line-height: 1.9;
+
+  --text-sentence-hero-mobile: 26px;
+  --text-sentence-hero-mobile--line-height: 1.9;
 
   /* word-ruby: dimensione relativa (0.42em del corpo base), niente line-height
    * in DESIGN.md; peso 400 e letter-spacing 0.04em. */

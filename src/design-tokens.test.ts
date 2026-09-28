@@ -58,6 +58,8 @@ const EXPECTED_COLORS: Record<string, string> = {
 const EXPECTED_TEXT_ROLES = [
   'word-hero',
   'word-hero-mobile',
+  'sentence-hero',
+  'sentence-hero-mobile',
   'word-ruby',
   'reading',
   'meaning',
@@ -104,13 +106,13 @@ describe('AC1 — nessun blocco prefers-color-scheme scritto a mano', () => {
   });
 });
 
-describe('AC1 — i 13 ruoli tipografici (nessun sentence-hero)', () => {
+describe('AC1 — i 15 ruoli tipografici (i 13 di DESIGN.md + sentence-hero(-mobile))', () => {
   const textTokens = [...css.matchAll(/--text-([a-z0-9-]+)\s*:/g)]
     .map((m) => m[1])
     // Scarta i sottoproprietari (--text-body--line-height ecc.): solo la radice.
     .filter((name) => !name.includes('--'));
 
-  it('definisce esattamente i 13 ruoli di DESIGN.md', () => {
+  it('definisce esattamente i 15 ruoli (i 13 di DESIGN.md + sentence-hero(-mobile))', () => {
     expect(new Set(textTokens)).toEqual(new Set(EXPECTED_TEXT_ROLES));
   });
 
@@ -124,19 +126,25 @@ describe('AC1 — i 13 ruoli tipografici (nessun sentence-hero)', () => {
   });
 });
 
-describe('AC8 — sentence-hero NON è definito (deferito a 3.23)', () => {
-  it('nessun token --text-sentence-hero / --text-sentence-hero-mobile', () => {
-    // Verificabile dall'assenza del TOKEN (una commento può nominarlo).
-    expect(css).not.toMatch(/--text-sentence-hero\b/);
-    expect(css).not.toMatch(/--text-sentence-hero-mobile\b/);
+describe('AC1 — sentence-hero È definito (fissato dalla 3.23, UX-DR8)', () => {
+  it('--text-sentence-hero dichiara 32px e line-height 1.9 (NON 1.75)', () => {
+    expect(css).toMatch(/--text-sentence-hero\s*:\s*32px\s*;/);
+    expect(css).toMatch(/--text-sentence-hero--line-height\s*:\s*1\.9\s*;/);
+    // L'interlinea è 1.9, non l'1.75 di word-hero (che valeva per una parola sola).
+    expect(css).not.toMatch(/--text-sentence-hero--line-height\s*:\s*1\.75\s*;/);
   });
 
-  it('non compare fra i ruoli tipografici estratti', () => {
+  it('--text-sentence-hero-mobile dichiara 26px e line-height 1.9', () => {
+    expect(css).toMatch(/--text-sentence-hero-mobile\s*:\s*26px\s*;/);
+    expect(css).toMatch(/--text-sentence-hero-mobile--line-height\s*:\s*1\.9\s*;/);
+  });
+
+  it('compare fra i ruoli tipografici estratti', () => {
     const textTokens = [...css.matchAll(/--text-([a-z0-9-]+)\s*:/g)]
       .map((m) => m[1])
       .filter((name) => !name.includes('--'));
-    expect(textTokens).not.toContain('sentence-hero');
-    expect(textTokens).not.toContain('sentence-hero-mobile');
+    expect(textTokens).toContain('sentence-hero');
+    expect(textTokens).toContain('sentence-hero-mobile');
   });
 });
 

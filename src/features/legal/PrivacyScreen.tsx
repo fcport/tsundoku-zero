@@ -17,6 +17,7 @@
 // L'affordance di ritorno e SECONDARIA (nessun fill accent), con l'anello di focus
 // da tastiera, modellata su quella di `StatsScreen`.
 import { useTranslation } from '../../i18n';
+import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 
 export interface PrivacyScreenProps {
   /**
@@ -39,7 +40,7 @@ export function PrivacyScreen({ onExit }: PrivacyScreenProps) {
   const { t } = useTranslation();
 
   return (
-    <main className="flex flex-col gap-6 p-6">
+    <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-6 py-6`}>
       <h2 className="text-display text-ink-primary">{t('legal.privacy.title')}</h2>
       {/* Le tre dichiarazioni fattuali: cosa si memorizza, cosa non si raccoglie,
           come si cancella. Ognuna un paragrafo autonomo, tutta copy da t(). */}

@@ -39,6 +39,15 @@ describe('PrivacyScreen — dichiarazioni fattuali (en)', () => {
     expect(mains.length).toBe(1);
   });
 
+  it('3.23 — il <main> compone il contenitore responsive condiviso (parità di schermata)', () => {
+    // La classe di `src/ui/layout.ts` (`RESPONSIVE_CONTAINER`): colonna centrata a
+    // `measure`, gutter 20/32px. Un test qui evita che la schermata perda il
+    // contenitore senza che alcun test fallisca.
+    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+  });
+
   it("offre l'affordance di ritorno con l'anello di focus da tastiera", () => {
     expect(markup).toContain(en.legal.privacy.back);
     expect(markup).toContain('focus-visible:outline-focus-ring');

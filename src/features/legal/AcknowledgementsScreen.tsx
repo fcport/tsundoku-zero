@@ -10,6 +10,7 @@
 // (`onExit`) iniettata dal livello app, come in `PrivacyScreen`.
 //
 // Gemella di `PrivacyScreen` (7.1): stessa struttura, stesso `<main>` unico (l'unico
+// landmark, ora col contenitore responsive condiviso di `src/ui/layout.ts`, 3.23),
 // landmark della pagina), stesso token `FOCUS_RING`, stesso `onExit` deterministico.
 // L'UNICA novita e un vero collegamento ESTERNO: un `<a href>` (non un
 // `<button>`-callback) perche punta FUORI dall'app, al canale della fonte. L'URL e
@@ -23,6 +24,7 @@
 // formulazione che suggerisca affiliazione/approvazione/continuita: solo token del
 // sistema di design (nessun colore letterale).
 import { useTranslation } from '../../i18n';
+import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 
 export interface AcknowledgementsScreenProps {
   /**
@@ -53,7 +55,7 @@ export function AcknowledgementsScreen({
   const { t } = useTranslation();
 
   return (
-    <main className="flex flex-col gap-6 p-6">
+    <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-6 py-6`}>
       <h2 className="text-display text-ink-primary">
         {t('legal.acknowledgements.title')}
       </h2>
