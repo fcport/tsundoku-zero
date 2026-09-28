@@ -118,8 +118,17 @@ export function ExerciseCard({
           con interlinea 1.9 (spazio per la furigana SOPRA ogni riga quando va a capo).
           Nessun `white-space:nowrap`/`word-break:keep-all`: il nucleo group-ruby va a
           capo DA SOLO ai confini di grafema CJK (default del browser), così AC2/AC3
-          (fit) e AC4 (nessun grafema spezzato) sono soddisfatte insieme. */}
-      <p className="text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary">
+          (fit) e AC4 (nessun grafema spezzato) sono soddisfatte insieme.
+
+          `w-full` NON e' cosmetico ed e' la ragione per cui AC2/AC3 passano: la card
+          e' `flex flex-col items-center`, e `align-items:center` da' a ogni figlio
+          larghezza AUTO — il paragrafo si dimensiona sul proprio contenuto (max-content)
+          invece che sulla card, quindi non sa dove andare a capo e sfonda in orizzontale
+          su ogni telefono. Misurato in Chrome headless sulla frase piu' lunga della
+          lezione campione: senza `w-full` la riga arriva a 358px dentro un viewport da
+          320 (sfonda anche a 360 e 390); con `w-full` sta in 284px su 320, a 26px
+          pieni. `text-center` conserva la centratura che `items-center` produceva. */}
+      <p className="w-full text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary">
         <JapaneseText segments={segments} showFurigana={furiganaVisible(exercise)} />
       </p>
 
