@@ -207,6 +207,15 @@ da tutto ciò che c'è in `content/lessons/`, così la nuova lezione raggiunge i
 client. Il comando rivalida prima di scrivere: se il contenuto non è conforme,
 fallisce e non genera nulla.
 
+> **Non cancellare i seed precedenti.** La cronologia delle migrazioni è append-only:
+> `supabase db push` confronta i file locali con la tabella `schema_migrations` del
+> progetto remoto e **fallisce** se una migrazione già applicata sparisce dal
+> repository — «Remote migration versions not found in local migrations directory» —
+> e recuperare richiede di riparare a mano la cronologia in produzione. I seed si
+> accumulano: ciascuno è un upsert idempotente, quindi applicarli in sequenza converge
+> sullo stato dell'ultimo. Il controllo anti-deriva confronta il contenuto con il seed
+> **più recente**, non con «l'unico».
+
 ## Esempio completo
 
 Quello che segue è una lezione **valida**, prodotta seguendo questo flusso: fatti

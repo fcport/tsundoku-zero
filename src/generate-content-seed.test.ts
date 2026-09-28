@@ -305,17 +305,31 @@ describe('seed committato — non deve divergere da content/lessons/ (anti-drift
   }
 
   /** Il file `*_seed_content.sql` committato, individuato per suffisso. */
+  /**
+   * Il seed PIÙ RECENTE fra quelli committati — non «l'unico». La cronologia delle
+   * migrazioni è append-only: `supabase db push` confronta i file locali con la tabella
+   * `schema_migrations` del progetto remoto e FALLISCE se una migrazione già applicata
+   * sparisce dal repository («Remote migration versions not found in local migrations
+   * directory»). Pretendere un solo file di seed significava cancellare il precedente a
+   * ogni rigenerazione, cioè rompere `db push` a ogni cambio di contenuto e richiedere
+   * una riparazione manuale della cronologia — un costo che cresce con le lezioni, che
+   * è esattamente ciò che `NFR9` vieta. I seed si accumulano; ciascuno è un upsert
+   * idempotente, quindi applicarli in sequenza converge sullo stato dell'ultimo.
+   */
   function committedSeed(): { name: string; sql: string } {
-    const name = readdirSync(migrationsDir).find((f) => f.endsWith('_seed_content.sql'));
+    const seeds = readdirSync(migrationsDir)
+      .filter((f) => f.endsWith('_seed_content.sql'))
+      .sort(); // i nomi iniziano col timestamp: l'ordine lessicografico è cronologico
+    const name = seeds[seeds.length - 1];
     if (name === undefined) {
       throw new Error('nessun file *_seed_content.sql committato');
     }
     return { name, sql: readFileSync(join(migrationsDir, name), 'utf8') };
   }
 
-  it('esiste esattamente un seed committato', () => {
+  it('esiste almeno un seed committato', () => {
     const seeds = readdirSync(migrationsDir).filter((f) => f.endsWith('_seed_content.sql'));
-    expect(seeds.length, `attesi 1 seed, trovati: ${seeds.join(', ')}`).toBe(1);
+    expect(seeds.length, 'nessun seed committato').toBeGreaterThanOrEqual(1);
   });
 
   it('buildSeedSql(contenuto reale) === contenuto del seed committato', () => {
