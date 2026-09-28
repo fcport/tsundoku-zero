@@ -1,0 +1,63 @@
+Licenza del contenuto delle lezioni
+====================================
+
+Copyright (c) 2026 Federico Casadei
+
+Questo file licenzia il CONTENUTO delle lezioni — i file dati sotto
+`content/lessons/` (le frasi giapponesi, le spiegazioni bilingui e i titoli
+autorati) — non il codice dell'applicazione. Il codice è licenziato a parte,
+con licenza MIT, nel file `LICENSE`. Le due licenze sono separate perché codice
+e contenuto sono due tipi di opera diversi: vedi `README.md`, sezione «Le due
+licenze».
+
+Il contenuto delle lezioni è rilasciato sotto:
+
+    Creative Commons Attribution-ShareAlike 4.0 International
+    (CC BY-SA 4.0)
+
+Identificatore SPDX: CC-BY-SA-4.0
+
+Testo legale integrale (autoritativo):
+    https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+Sintesi leggibile (deed):
+    https://creativecommons.org/licenses/by-sa/4.0/
+
+Questo file identifica la licenza in modo non ambiguo — nome completo,
+identificatore SPDX e URL canonico del testo legale — invece di trascrivere le
+circa 7500 parole del legalcode, per non introdurre refusi in un testo lungo. Il
+testo autoritativo è quello all'URL sopra.
+
+Riassunto dei termini (traduzione di cortesia del deed Creative Commons)
+-----------------------------------------------------------------------
+
+Sei libero di:
+
+- Condividere — riprodurre e distribuire il materiale con qualsiasi mezzo e
+  formato.
+- Adattare — remixare, trasformare il materiale e basarti su di esso per
+  qualsiasi fine, anche commerciale.
+
+Il licenziante non può revocare questi diritti fintanto che rispetti i termini
+della licenza. Alle seguenti condizioni:
+
+- Attribuzione (BY) — devi riconoscere una menzione di paternità adeguata,
+  fornire un link alla licenza e indicare se sono state effettuate delle
+  modifiche. Puoi farlo in qualsiasi maniera ragionevole possibile, ma non in
+  modo tale da suggerire che il licenziante avalli te o il tuo utilizzo del
+  materiale.
+- StessaLicenza (SA, share-alike) — se remixi, trasformi il materiale o ti basi
+  su di esso, devi distribuire i tuoi contributi con la stessa licenza del
+  materiale originario.
+
+Non ci sono ulteriori restrizioni — non puoi applicare termini legali o misure
+tecnologiche che impongano ad altri soggetti dei vincoli giuridici su quanto la
+licenza consente loro di fare.
+
+Attribuzione
+------------
+
+Nel riusare il contenuto, attribuisci: «Tsundoku Zero — contenuto delle lezioni
+di Federico Casadei, CC BY-SA 4.0» con un link alla licenza
+(https://creativecommons.org/licenses/by-sa/4.0/) e l'indicazione di eventuali
+modifiche.

@@ -357,3 +357,19 @@ source_spec: `spec-7-1-dire-cosa-si-tiene-e-come-cancellarlo.md`
 severity: low
 reason: PrivacyScreen segue la convenzione delle schermate-rotta di StatsScreen (h2 di testa, nessun aria-labelledby sul <main>). Osservazione di accessibilità a livello app, coerente col tema accessibilità di Epic 7 (storia 7.6); non richiesta dagli AC di 7.1.
 status: open
+
+### DW-45: I file di lezione (`content/lessons/*.json`) non portano un identificatore di licenza al proprio interno (es. un campo SPDX o un `content/lessons/LICENSE`): un singolo file copiato fuori dal repositor
+origin: spec-deferred e329d6227ade
+location: content/lessons/*.json
+source_spec: `spec-7-3-due-licenze-perché-sono-due-cose-diverse.md`
+severity: low
+reason: La licenza del contenuto vive solo alla radice (LICENSE-CONTENT). L'argomento del README «riusare il contenuto in modo indipendente» è più solido se ogni file dati porta il proprio marcatore. Fuori ambito per 7.3 (aggiungere un campo tocca lo schema di lezione, territorio Epic 2/AD-25); miglioramento reale da valutare più avanti.
+status: open
+
+### DW-46: Il README non ha una sezione «Getting started» (npm ci / npm run dev / configurazione delle chiavi Supabase / comandi di test): un contributore non può eseguire il progetto leggendo solo il README.
+origin: spec-deferred 4d9b4fd93ecf
+location: README.md
+source_spec: `spec-7-3-due-licenze-perché-sono-due-cose-diverse.md`
+severity: low
+reason: Gli AC di 7.3 enumerano sette domande di progettazione e il brief dichiara «the README is not a feature list», quindi il getting-started è fuori dall'ambito imposto dall'intento; ma per un repository «destinato al deploy pubblico» è un'aggiunta utile prima del lancio (Epic 7).
+status: open
