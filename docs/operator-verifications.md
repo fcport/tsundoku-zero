@@ -45,11 +45,30 @@ Controllo aggiuntivo non richiesto dall'AC ma dovuto ad `AD-11`: la stessa funzi
 chiamata **senza** `Authorization` risponde **401**, quindi non cancella su richiesta
 anonima.
 
+## 7.4 — Il percorso completo verificato da una macchina
+
+Verificata il 28-09-2026 con la pull request #1.
+
+| Criterio | Come | Esito |
+|---|---|---|
+| «Confirm email» disattivato sulla console Supabase | Management API (`mailer_autoconfirm`) | già `true`: `signUp` restituisce subito una sessione |
+| Secret `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` su GitHub Actions | impostati il 28-09-2026 leggendoli da `.env` | presenti; nessuna `service_role` fra i secret |
+| «E2E (percorso principale)» verde su pull request, contro il Supabase reale | PR #1 | **2 test passati** in 17,4s (percorso principale + cancellazione) |
+| Dopo il merge, «Migrate & deploy functions» applica le migrazioni e POI esegue il collaudo | run su `main` dopo il merge | ordine rispettato: `db push` → `functions deploy` → `E2E di collaudo`, tutti verdi |
+| Teardown verificato (`AD-13`) | conteggio righe sul progetto reale dopo ogni run | 0 utenti residui; contenuto intatto (1 lezione, 3 esercizi) |
+
+Osservazione collaterale, non richiesta da questa storia: la PR ha prodotto
+un'**anteprima dedicata** (`…-git-verifica-e2e-…vercel.app`, distinta dalla produzione,
+HTTP 200), che è l'AC2 della storia 1.2 — fino a oggi dato per funzionante e mai
+provato. L'anteprima è però protetta dall'autenticazione Vercel: raggiungibile solo da
+chi ha accesso al progetto. Se le anteprime devono essere pubbliche, è
+un'impostazione da cambiare in Vercel (Deployment Protection), non un difetto del
+repository.
+
 ## In attesa
 
 | Storia | Cosa serve | Di chi |
 |---|---|---|
 | 6.3 | il transcript privato della lezione campione in `.authoring/` (mai versionato, storia 6.1), poi `npm run check-contamination` | owner |
 | 6.4 | cronometrare un flusso di autorazione reale (M5) e autorare almeno quattro lezioni in più con rilettura umana (FR11.2) | owner |
-| 7.4 | una pull request che faccia girare «E2E (percorso principale)» sul Supabase reale | questa PR |
 | 7.6 | uno screen reader vero con voce TTS giapponese (NVDA/VoiceOver) | owner |
