@@ -3,7 +3,7 @@ title: 'La cancellazione, verificata tabella per tabella'
 type: 'chore'
 created: '2026-09-28'
 baseline_revision: '5540f679d7e71380376be7a368f3266836242bb8'
-status: 'awaiting-operator'
+status: done
 review_loop_iteration: 0
 followup_review_recommended: false
 context: []
@@ -170,3 +170,13 @@ L'agente ha completato tutto ciò che è realizzabile e verificabile offline. Re
 - L'esecuzione REALE dell'e2e non è verificabile offline: il verde vero dipende dalle azioni operatore (`operator_actions`). Finché non sono fatte, i job e2e falliscono al secret-check o alla registrazione (per costruzione, con messaggi nominati).
 - La verifica poggia sulla semantica «PostgREST autorizza per firma del JWT, non per esistenza dell'utente»: se il progetto reale rifiutasse il JWT dopo la cancellazione, la query di verifica fallirebbe (l'asserzione `error` nullo la renderebbe rossa, NON un falso verde) — è il Block If dello spec, verificato in planning ma misurabile solo in CI.
 - Il test è scoperto verso una futura nuova tabella per-utente non agganciata alla cascata (differito): oggi copre le quattro tabelle nominate dall'intento.
+
+## Operator Confirmation
+
+Confirmed 2026-09-28: the external actions this story owed were carried out.
+
+- Verifica che «Confirm email» sia DISATTIVATO nella console Supabase (Authentication > Providers > Email): senza, signUp restituisce session:null e il test di cancellazione non prosegue oltre la registrazione. Azione già dovuta da 7.4, ricordata qui perché la 7.5 la condivide.
+- Verifica che i GitHub Actions secrets VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (Settings > Secrets and variables > Actions) siano impostati con l'URL e la anon key pubblica del progetto Supabase reale, così i job e2e possono costruire ed eseguire la suite. Non impostare mai la service_role. Azione già dovuta da 7.4, condivisa con la 7.5.
+- Apri una pull request e verifica che il test «cancellazione verificata tabella per tabella» (e2e/account-deletion.spec.ts) giri VERDE nel workflow «E2E (percorso principale)» contro il Supabase reale; dopo il merge su main, verifica che l'e2e di collaudo in «Migrate & deploy functions» resti verde con l'intera suite (percorso principale + cancellazione).
+
+_Appended by the bmad-loop orchestrator (`bmad-loop confirm`, #335): a human confirmed these external actions out of band, and the story was advanced from `awaiting-operator` to `done`._
