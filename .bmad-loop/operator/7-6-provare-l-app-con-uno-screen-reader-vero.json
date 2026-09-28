@@ -1,0 +1,12 @@
+{
+  "actions": [
+    "Abilita uno screen reader reale con una voce TTS giapponese: su Windows, NVDA con una voce giapponese (Windows OneCore / Vocalizer / eSpeak `ja`) abbinato a Firefox oppure Chrome; su macOS, VoiceOver con una voce giapponese (Kyoko/Otoya) abbinato a Safari.",
+    "Avvia l'app con `npm run dev` contro il progetto Supabase reale, accedi con un account che abbia almeno la prima lezione sbloccata e raggiungi una sessione di esercizio (card con consegna + frase giapponese + opzioni).",
+    "Percorri la sessione con lo screen reader e registra l'esito in `docs/session-screen-reader-audit.md` \u2192 sezione \u00abEsito misurato\u00bb, una riga per AC (PASS/FAIL + nota di ci\u00f2 che hai sentito, e la colonna \u00abData / browser / SR / voce\u00bb): AC1 la frase giapponese \u00e8 pronunciata UNA volta e non due (il `<rt>`/furigana non \u00e8 vocalizzato); AC2 consegna, opzioni, esito e spiegazione sono annunciati in ordine comprensibile senza salti; AC3 l'avanzamento (\u00abX di N completati\u00bb) \u00e8 annunciato UNA volta sola dall'unica live region, senza doppioni.",
+    "Registra nella sezione \u00abDifetti\u00bb del documento ogni discrepanza fra comportamento atteso e ci\u00f2 che lo screen reader ha fatto davvero (o dichiara esplicitamente \u00abnessun difetto\u00bb), poi committa il documento di audit compilato."
+  ],
+  "parked_at": "2026-09-28",
+  "run_id": "20260924-095204-a75b",
+  "spec_file": "_bmad-output/implementation-artifacts/spec-7-6-provare-l-app-con-uno-screen-reader-vero.md",
+  "story_key": "7-6-provare-l-app-con-uno-screen-reader-vero"
+}
