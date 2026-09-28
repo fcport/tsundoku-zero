@@ -14,7 +14,7 @@
 //
 // Gira in Node (globals `process`, moduli `node:*`): legge il file dal disco con
 // un percorso RELATIVO alla radice del repo (cwd del run Playwright).
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 // Forma MINIMA del contenuto che ci interessa: le sole chiavi lette dallo helper
@@ -45,14 +45,50 @@ export type ExerciseSolution =
   | { readonly kind: 'assemble'; readonly tokensInOrder: readonly string[] }
   | { readonly kind: 'select-span'; readonly optionIndex: number };
 
-// Il percorso del contenuto canonico della prima lezione (relativo alla radice
-// del repo = cwd del run Playwright). Una sola fonte, come il dominio.
-const LESSON_PATH = resolve(
-  process.cwd(),
-  'content',
-  'lessons',
-  '01-la-particella-wo.json',
-);
+const LESSONS_DIR = resolve(process.cwd(), 'content', 'lessons');
+
+/**
+ * Il percorso della lezione che l'app sblocca PER PRIMA: quella con `order`
+ * minimo fra tutte in `content/lessons/`, che è il criterio del dominio
+ * (`curriculum.ts` ordina per `ordinal` e prende la prima non sbloccata).
+ *
+ * NON è cablato a un nome di file. Lo era — `01-la-particella-wo.json` — e il
+ * 28-09-2026 l'e2e si è rotto appena il curriculum ha acquisito la sua prima
+ * lezione vera: il test cercava una tessera (`私は`) della lezione campione
+ * mentre l'app serviva un'altra lezione. Un test che va aggiornato a ogni
+ * cambio di contenuto è un costo che cresce con le lezioni, cioè ciò che
+ * `NFR9` vieta.
+ */
+function firstLessonPath(): string {
+  if (!existsSync(LESSONS_DIR)) {
+    throw new Error(
+      `Cartella del contenuto assente: ${LESSONS_DIR}. L'e2e va lanciato dalla radice del repo.`,
+    );
+  }
+  const files = readdirSync(LESSONS_DIR).filter((f) => f.endsWith('.json'));
+  if (files.length === 0) {
+    throw new Error(`Nessuna lezione in ${LESSONS_DIR}: l'e2e non ha contenuto da percorrere.`);
+  }
+  let best: { path: string; order: number } | undefined;
+  for (const file of files) {
+    const path = resolve(LESSONS_DIR, file);
+    let order: unknown;
+    try {
+      order = (JSON.parse(readFileSync(path, 'utf-8')) as { order?: unknown }).order;
+    } catch (cause) {
+      throw new Error(`Lezione malformata (JSON non valido): ${path}.`, { cause });
+    }
+    if (typeof order !== 'number') {
+      throw new Error(`Lezione senza "order" numerico: ${path}.`);
+    }
+    if (best === undefined || order < best.order) {
+      best = { path, order };
+    }
+  }
+  return best!.path;
+}
+
+const LESSON_PATH = firstLessonPath();
 
 /**
  * Legge la prima lezione e DERIVA la soluzione di ciascun esercizio nell'ordine
