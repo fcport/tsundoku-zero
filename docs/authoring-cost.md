@@ -111,6 +111,29 @@ registrare perché li pagherà ogni lezione futura:
    conteggio. Entrambi i passi sono già nel runbook (6 e 7) e sono **imposti da un test**,
    quindi non si possono dimenticare — ma vanno contati nel tempo.
 
+**Il debito che la prima lezione ha pagato, e che la seconda non pagherà.** Oltre agli
+8 minuti di autorazione, la prima lezione vera ha fatto emergere tre difetti latenti
+della pipeline, costati circa quaranta minuti in più. Non sono costo per-lezione: sono
+debito una volta sola, e vanno tenuti distinti dalla misura di `M5` invece di gonfiarla.
+
+1. **Il seed cancellava la migrazione precedente.** Un test pretendeva «esattamente un
+   seed committato», ma la cronologia delle migrazioni è append-only: `supabase db push`
+   fallisce se un file già applicato sparisce dal repository. Sarebbe stato un intervento
+   manuale sulla cronologia in produzione **a ogni cambio di contenuto**. Ora i seed si
+   accumulano e il controllo anti-deriva guarda il più recente.
+2. **Il collaudo e2e era legato al nome di un file.** Cercava una tessera della lezione
+   campione; appena il curriculum ha avuto la sua prima lezione vera, si è rotto. Ora
+   sceglie la lezione come la sceglie il dominio: `order` minimo.
+3. **Il seed aggiornava senza rimuovere.** Correggere una frase cambia l'identità
+   dell'esercizio (`AD-23`), quindi la versione sbagliata restava nel database a fianco
+   di quella corretta — misurato: 4 esercizi per una lezione che ne ha 3. Ora il seed
+   riconcilia.
+
+Tutti e tre avrebbero colpito **ogni** lezione successiva, e tutti e tre violavano
+`NFR9` allo stesso modo: un costo manuale che cresce col numero di lezioni già autorate.
+Sono stati trovati perché la prima lezione vera è stata portata fino in produzione, non
+fermandosi ai test verdi in locale.
+
 Quando l'operatore misura le lezioni successive, aggiunge una riga per ciascuna. Solo
 con più righe si vede se `M5` regge o va ritarata: il punto di `NFR9` è che la decima
 riga non sia più lenta della seconda.
