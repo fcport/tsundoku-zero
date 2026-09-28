@@ -154,8 +154,28 @@ describe('buildSeedSql — l\'SQL di seed è valido, idempotente e derivato dal 
     expect(sql).not.toMatch(/insert\s+into\s+lesson[\s\S]*?values\s*on\s+conflict/i);
     // Non c'è nemmeno un insert su exercise.
     expect(sql).not.toMatch(/insert\s+into\s+exercise/i);
-    // Difesa in più: nessuno statement affatto (solo commenti).
+    // Difesa in più: nessuno statement affatto (solo commenti). Vale ANCHE per la
+    // riconciliazione: con contenuto vuoto il seed non cancella niente, perché una
+    // cartella senza lezioni è quasi sempre una cwd sbagliata, non l'intenzione di
+    // azzerare il curriculum.
     expect(parseSql(sql).parse_tree.stmts.length).toBe(0);
+    expect(sql).not.toMatch(/delete\s+from/i);
+  });
+
+  it('con contenuto, RICONCILIA: rimuove le righe che il contenuto non contiene più', () => {
+    // L'upsert da solo aggiorna e aggiunge ma non rimuove: correggere la frase di un
+    // esercizio ne cambia l'identità (AD-23) e abbandonerebbe la versione precedente
+    // nel database, a fianco di quella corretta. Il seed deve cancellare gli id che
+    // non appartengono più al contenuto — esercizi PRIMA delle lezioni (vincolo).
+    const sql = buildSeedSql([fullLesson, emptyLesson]);
+    const delExercise = /delete\s+from\s+exercise\s+where\s+id\s+not\s+in\s*\(/i;
+    const delLesson = /delete\s+from\s+lesson\s+where\s+id\s+not\s+in\s*\(/i;
+    expect(sql).toMatch(delExercise);
+    expect(sql).toMatch(delLesson);
+    // Ordine: gli esercizi referenziano `lesson`, quindi vanno cancellati prima.
+    expect(sql.search(delExercise)).toBeLessThan(sql.search(delLesson));
+    // E l'SQL resta valido.
+    expect(parseSql(sql).error).toBeNull();
   });
 
   // Robustezza dell'escape: un apostrofo (l'oggetto) non rompe l'SQL.

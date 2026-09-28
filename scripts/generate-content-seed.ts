@@ -165,6 +165,49 @@ export function buildSeedSql(lessons: readonly Lesson[]): string {
   }
   parts.push('');
 
+  // --- riconciliazione ----------------------------------------------------------
+  // L'upsert da solo AGGIORNA e AGGIUNGE, ma non rimuove: una riga che il contenuto
+  // non contiene piu' resterebbe nel database per sempre. Non e' teorico — il
+  // 28-09-2026 correggere la frase di un `select-span` ne ha lasciato la versione
+  // SBAGLIATA a fianco di quella corretta (4 esercizi nel db per una lezione che ne
+  // ha 3), e sbloccando quella lezione l'app avrebbe servito anche il vecchio.
+  // L'identita' di un esercizio deriva dal contenuto (AD-23), quindi correggere una
+  // frase PRODUCE un id nuovo e abbandona il precedente: la rimozione e' necessaria,
+  // non opzionale.
+  //
+  // `review_state` referenzia `exercise` con `on delete cascade`: lo stato di ripasso
+  // di un esercizio che non esiste piu' se ne va con lui, che e' corretto.
+  // `review_log` NON ha vincolo verso `exercise` (AD-18/AD-23, deliberato): le
+  // statistiche sopravvivono alla riautorazione e questa cancellazione non le tocca.
+  const lessonIds = lessons.map((lesson) => sqlString(lessonId(lesson)));
+  const exerciseIds = lessons.flatMap((lesson) =>
+    lesson.exercises.map((exercise) => sqlString(deriveExerciseId(exercise))),
+  );
+  // Con contenuto VUOTO non si cancella NULLA: una cartella `content/lessons/` senza
+  // lezioni e' molto piu' probabilmente una cwd sbagliata che l'intenzione di azzerare
+  // il curriculum, e un seed che svuota le tabelle su input vuoto sarebbe un'arma
+  // puntata ai piedi. Il seed resta allora un no-op (solo commenti).
+  if (lessonIds.length > 0) {
+    parts.push('-- Rimuove cio che il contenuto non contiene piu (esercizi prima: FK).');
+    parts.push(
+      exerciseIds.length > 0
+        ? `delete from exercise where id not in (\n${exerciseIds.map((id) => `  ${id}`).join(',\n')}\n);`
+        : '-- Nessun esercizio nel contenuto: ogni esercizio delle lezioni presenti va rimosso.',
+    );
+    if (exerciseIds.length === 0) {
+      parts.push(
+        `delete from exercise where lesson_id in (\n${lessonIds.map((id) => `  ${id}`).join(',\n')}\n);`,
+      );
+    }
+    parts.push(
+      `delete from lesson where id not in (\n${lessonIds.map((id) => `  ${id}`).join(',\n')}\n);`,
+    );
+    parts.push('');
+  } else {
+    parts.push('-- Contenuto vuoto: nessuna cancellazione (vedi il commento nel generatore).');
+    parts.push('');
+  }
+
   return parts.join('\n');
 }
 
