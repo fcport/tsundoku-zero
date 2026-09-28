@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "\"I ate breakfast.\" What is the past of 食べる?",
+        "it": "«Ho fatto colazione.» Qual è il passato di 食べる?"
+      },
       "sentence": {
         "kanji": "朝ごはんを食べた",
         "kana": "あさごはんをたべた"
+      },
+      "gap": {
+        "kanji": "朝ごはんを＿",
+        "kana": "あさごはんを＿"
       },
       "answer": "食べた",
       "distractors": ["食べった", "食べいた", "食んだ"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "\"I run in the park every morning.\" What is the te-form of 走る?",
+        "it": "«Ogni mattina corro al parco.» Qual è la forma in て di 走る?"
+      },
       "sentence": {
         "kanji": "毎朝公園を走っている",
         "kana": "まいあさこうえんをはしっている"
+      },
+      "gap": {
+        "kanji": "毎朝公園を＿いる",
+        "kana": "まいあさこうえんを＿いる"
       },
       "answer": "走って",
       "distractors": ["走て", "走りて", "走んで"],
@@ -37,9 +53,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "て形・た形の作り方",
+      "prompt": {
+        "en": "\"My younger brother took the medicine.\" What is the past of 飲む?",
+        "it": "«Mio fratello minore ha preso la medicina.» Qual è il passato di 飲む?"
+      },
       "sentence": {
         "kanji": "弟が薬を飲んだ",
         "kana": "おとうとがくすりをのんだ"
+      },
+      "gap": {
+        "kanji": "弟が薬を＿",
+        "kana": "おとうとがくすりを＿"
       },
       "answer": "飲んだ",
       "distractors": ["飲った", "飲いだ", "飲みた"],
@@ -51,9 +75,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "て形・た形の作り方",
+      "prompt": {
+        "en": "\"I swam in the pool yesterday.\" What is the past of 泳ぐ?",
+        "it": "«Ieri ho nuotato in piscina.» Qual è il passato di 泳ぐ?"
+      },
       "sentence": {
         "kanji": "昨日プールで泳いだ",
         "kana": "きのうプールでおよいだ"
+      },
+      "gap": {
+        "kanji": "昨日プールで＿",
+        "kana": "きのうプールで＿"
       },
       "answer": "泳いだ",
       "distractors": ["泳った", "泳んだ", "泳いた"],
@@ -65,6 +97,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "て形・た形の作り方",
+      "prompt": {
+        "en": "Which part is the past ending of 出す?",
+        "it": "Quale parte è la desinenza del passato di 出す?"
+      },
       "sentence": {
         "kanji": "手紙を出した",
         "kana": "てがみをだした"
@@ -78,6 +114,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "て形・た形の作り方",
+      "prompt": {
+        "en": "Build: \"I walked to school.\"",
+        "it": "Componi: «Sono andato a scuola a piedi.»"
+      },
       "sentence": {
         "kanji": "歩いて学校に行った",
         "kana": "あるいてがっこうにいった"
@@ -91,9 +131,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "\"A friend came on Sunday.\" What is the past of 来る?",
+        "it": "«Domenica è venuto un amico.» Qual è il passato di 来る?"
+      },
       "sentence": {
         "kanji": "日曜日に友達が来た",
         "kana": "にちようびにともだちがきた"
+      },
+      "gap": {
+        "kanji": "日曜日に友達が＿",
+        "kana": "にちようびにともだちが＿"
       },
       "answer": "来た",
       "distractors": ["来った", "来いた", "来んだ"],

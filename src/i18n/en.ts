@@ -11,6 +11,7 @@
 export const en = {
   app: {
     tagline: 'A Japanese grammar exercise generator',
+    name: 'Tsundoku Zero',
   },
   auth: {
     title: 'Sign up',
@@ -88,6 +89,8 @@ export const en = {
     // della dashboard. Verbale e concreta, mai "Continue"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode; ASCII.
     viewStats: 'See your statistics',
+    currentLesson: 'Lesson {{order}}: {{title}}',
+    openSettings: 'Settings',
   },
   // Le statistiche (Epic 5): la vista delle risposte nel tempo (5.1, FR7.1),
   // distribuzione per stadio (5.2), tassi d'errore per punto (5.3). Gli stati a dati
@@ -158,6 +161,14 @@ export const en = {
       selectSpan: 'Select the part of the sentence that answers the question.',
       assemble: 'Put the tiles in order to build the sentence.',
     },
+    option: {
+      correct: 'Correct answer',
+      yours: 'Your answer',
+    },
+    assembled: {
+      label: 'Your sentence',
+      empty: 'Tap the tiles in order.',
+    },
     // L'esito DICHIARATO in testo (3.19), da `check().correct`: nessun verde/rosso,
     // l'informazione la porta il contenuto della spiegazione. Nessun `!`, nessuna
     // emoji, nessun avverbio di lode; ASCII.
@@ -208,6 +219,7 @@ export const en = {
   },
   settings: {
     title: 'Settings',
+    back: 'Back to the dashboard',
     language: {
       label: 'Language',
       en: 'English',

@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "動作の場所を示す「で」",
+      "prompt": {
+        "en": "\"I study at the library.\" Which particle marks where the action happens?",
+        "it": "«Studio in biblioteca.» Quale particella marca dove avviene l'azione?"
+      },
       "sentence": {
         "kanji": "図書館で勉強する",
         "kana": "としょかんでべんきょうする"
+      },
+      "gap": {
+        "kanji": "図書館＿勉強する",
+        "kana": "としょかん＿べんきょうする"
       },
       "answer": "で",
       "distractors": ["に", "を"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "動作の場所を示す「で」",
+      "prompt": {
+        "en": "\"My older sister is in the kitchen.\" Which particle marks where she is?",
+        "it": "«Mia sorella maggiore è in cucina.» Quale particella marca dove si trova?"
+      },
       "sentence": {
         "kanji": "姉は台所にいる",
         "kana": "あねはだいどころにいる"
+      },
+      "gap": {
+        "kanji": "姉は台所＿いる",
+        "kana": "あねはだいどころ＿いる"
       },
       "answer": "に",
       "distractors": ["で", "を"],
@@ -37,6 +53,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "手段を示す「で」",
+      "prompt": {
+        "en": "Which part says what was used to write?",
+        "it": "Quale parte dice con che cosa si è scritto?"
+      },
       "sentence": {
         "kanji": "ペンで名前を書いた",
         "kana": "ペンでなまえをかいた"
@@ -50,6 +70,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "手段を示す「で」",
+      "prompt": {
+        "en": "Build: \"I go to school by bicycle.\"",
+        "it": "Componi: «Vado a scuola in bicicletta.»"
+      },
       "sentence": {
         "kanji": "自転車で学校に通う",
         "kana": "じてんしゃでがっこうにかよう"
@@ -63,9 +87,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "手段を示す「で」",
+      "prompt": {
+        "en": "\"I wrote a letter in English.\" Which particle marks the language used?",
+        "it": "«Ho scritto una lettera in inglese.» Quale particella marca la lingua usata?"
+      },
       "sentence": {
         "kanji": "英語で手紙を書いた",
         "kana": "えいごでてがみをかいた"
+      },
+      "gap": {
+        "kanji": "英語＿手紙を書いた",
+        "kana": "えいご＿てがみをかいた"
       },
       "answer": "で",
       "distractors": ["を", "が"],
@@ -77,9 +109,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "名詞をつなぐ「と」",
+      "prompt": {
+        "en": "\"I bought bread and milk.\" Which particle joins the two nouns?",
+        "it": "«Ho comprato pane e latte.» Quale particella unisce i due nomi?"
+      },
       "sentence": {
         "kanji": "パンと牛乳を買った",
         "kana": "パンとぎゅうにゅうをかった"
+      },
+      "gap": {
+        "kanji": "パン＿牛乳を買った",
+        "kana": "パン＿ぎゅうにゅうをかった"
       },
       "answer": "と",
       "distractors": ["を", "へ"],
@@ -91,6 +131,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "名詞をつなぐ「と」",
+      "prompt": {
+        "en": "Build: \"My older and younger brothers are swimming in the river.\"",
+        "it": "Componi: «Il fratello maggiore e il minore stanno nuotando nel fiume.»"
+      },
       "sentence": {
         "kanji": "兄と弟が川で泳いでいる",
         "kana": "あにとおとうとがかわでおよいでいる"

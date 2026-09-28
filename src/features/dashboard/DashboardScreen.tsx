@@ -52,7 +52,9 @@ import {
 import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { usePorts } from '../ports/PortsContext';
-import { useTranslation } from '../../i18n';
+import { resolveLocale, useTranslation } from '../../i18n';
+import { resolveBilingual } from '../../domain/bilingual';
+import { RESERVED_ORDER_START } from '../../domain/lesson';
 
 export interface DashboardScreenProps {
   /**
@@ -102,7 +104,7 @@ export function DashboardScreen({
   onViewStats,
 }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
 
   // Le cinque letture del read-model. La pila usa la chiave di DOMINIO verbatim
@@ -194,15 +196,18 @@ export function DashboardScreen({
   const unlockedIds = unlockedQ.data.map((u) => u.lessonId);
   const unlockedAt = unlockedQ.data.map((u) => u.unlockedAt);
   const unlocked = unlockedIds.length;
-  const total = lessonsQ.data.length;
+  // Solo il curriculum: la fascia riservata (order ≥ 900, fixture dei test) non si
+  // conta e non si sblocca, anche se un seed vecchio l'avesse portata nel database.
+  const curriculum = lessonsQ.data.filter((lesson) => lesson.ordinal < RESERVED_ORDER_START);
+  const total = curriculum.length;
   // La SUCCESSIVA lezione da sbloccare (autorità sequenziale, puro): `null` a
   // curriculum esaurito. La UI passa alla RPC solo il suo `id`.
-  const next = nextLessonToUnlock(lessonsQ.data, unlockedIds);
+  const next = nextLessonToUnlock(curriculum, unlockedIds);
   // L'ULTIMA lezione sbloccata (autorità sequenziale, puro): `null` se nulla è
   // sbloccato. Serve alla dichiarazione «senza esercizi» (3.14), DERIVATA dallo
   // stato persistito (`['lessons']` + `['unlocked']` + pila), mai memorizzata
   // (AD-5): sopravvive al refresh.
-  const lastUnlocked = lastUnlockedLesson(lessonsQ.data, unlockedIds);
+  const lastUnlocked = lastUnlockedLesson(curriculum, unlockedIds);
   // Il tetto giornaliero: `null`/assente degrada al DEFAULT del dominio. `capReached`
   // è DERIVATO puro dagli istanti di sblocco (mai memorizzato); orologio e fuso
   // ENTRANO dal Clock. Il confine di giornata è mezzanotte nel fuso (coerente con
@@ -293,6 +298,17 @@ export function DashboardScreen({
           ) : null}
         </>
       )}
+
+      {/* La lezione su cui si sta lavorando: l'ultima sbloccata, per numero e titolo.
+          Senza, la dashboard non diceva mai che cosa si stesse studiando. */}
+      {lastUnlocked !== null ? (
+        <p className="text-body text-center text-ink-primary">
+          {t('dashboard.currentLesson', {
+            order: lastUnlocked.ordinal,
+            title: resolveBilingual(lastUnlocked.title, resolveLocale(i18n.language)).text,
+          })}
+        </p>
+      ) : null}
 
       {/* streak-badge: giorni consecutivi da `streak()` su review_log. */}
       <p className="text-label text-ink-secondary">

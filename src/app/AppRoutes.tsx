@@ -21,6 +21,7 @@ import { StatsScreen } from '../features/stats/StatsScreen';
 import { PrivacyScreen } from '../features/legal/PrivacyScreen';
 import { AcknowledgementsScreen } from '../features/legal/AcknowledgementsScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
+import { SettingsPage } from './SettingsPage';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
 import {
   ACKNOWLEDGEMENTS_PATH,
@@ -28,6 +29,7 @@ import {
   PRIVACY_PATH,
   ROOT_PATH,
   STATS_PATH,
+  SETTINGS_PATH,
   STUDY_PATH,
 } from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
@@ -133,15 +135,24 @@ export function AppRoutes({
           }
         />
         <Route
+          path={SETTINGS_PATH}
+          element={
+            <SettingsPage
+              settings={settings}
+              account={account}
+              userId={userId}
+              onAccountDeleted={onAccountDeleted}
+            />
+          }
+        />
+        <Route
           path="*"
           element={
             <AuthenticatedShell
               settings={settings}
-              account={account}
               userId={userId}
               onSignOut={onSignOut}
               signOutPending={signOutPending}
-              onAccountDeleted={onAccountDeleted}
             />
           }
         />

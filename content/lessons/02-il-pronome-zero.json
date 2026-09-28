@@ -9,6 +9,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "Build: \"My younger brother bakes bread.\"",
+        "it": "Componi: «Mio fratello minore cuoce il pane.»"
+      },
       "sentence": {
         "kanji": "弟がパンを焼く",
         "kana": "おとうとがパンをやく"
@@ -22,6 +26,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "Which part is the object of the verb?",
+        "it": "Quale parte è l'oggetto del verbo?"
+      },
       "sentence": {
         "kanji": "ピザを焼いた",
         "kana": "ピザをやいた"
@@ -35,9 +43,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "\"The cat ate the fish.\" Which particle marks what was eaten?",
+        "it": "«Il gatto ha mangiato il pesce.» Quale particella marca ciò che è stato mangiato?"
+      },
       "sentence": {
         "kanji": "猫が魚を食べた",
         "kana": "ねこがさかなをたべた"
+      },
+      "gap": {
+        "kanji": "猫が魚＿食べた",
+        "kana": "ねこがさかな＿たべた"
       },
       "answer": "を",
       "distractors": ["が", "の"],
@@ -49,6 +65,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "No subject is written. Which part is the copula?",
+        "it": "Il soggetto non è scritto. Quale parte è la copula?"
+      },
       "sentence": {
         "kanji": "もう八時だ",
         "kana": "もうはちじだ"
@@ -62,6 +82,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "Build: \"(I) write in my diary every night.\"",
+        "it": "Componi: «(Io) scrivo il diario ogni sera.»"
+      },
       "sentence": {
         "kanji": "毎晩日記を書く",
         "kana": "まいばんにっきをかく"
@@ -75,9 +99,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "\"(I) open the window.\" Which particle marks the window?",
+        "it": "«(Io) apro la finestra.» Quale particella marca la finestra?"
+      },
       "sentence": {
         "kanji": "窓を開ける",
         "kana": "まどをあける"
+      },
+      "gap": {
+        "kanji": "窓＿開ける",
+        "kana": "まど＿あける"
       },
       "answer": "を",
       "distractors": ["が", "で"],

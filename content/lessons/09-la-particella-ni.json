@@ -9,6 +9,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "目的を示す「に」",
+      "prompt": {
+        "en": "Build: \"I go to the library to borrow a book.\"",
+        "it": "Componi: «Vado in biblioteca a prendere in prestito un libro.»"
+      },
       "sentence": {
         "kanji": "図書館に本を借りに行く",
         "kana": "としょかんにほんをかりにいく"
@@ -22,9 +26,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "目的を示す「に」",
+      "prompt": {
+        "en": "\"I went to the sea to swim.\" How do you say \"to swim\" (purpose)?",
+        "it": "«Sono andato al mare a nuotare.» Come si dice «a nuotare» (scopo)?"
+      },
       "sentence": {
         "kanji": "海に泳ぎに行った",
         "kana": "うみにおよぎにいった"
+      },
+      "gap": {
+        "kanji": "海に＿行った",
+        "kana": "うみに＿いった"
       },
       "answer": "泳ぎに",
       "distractors": ["泳ぐに", "泳いに", "泳ぎで"],
@@ -36,9 +48,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "存在の場所を示す「に」",
+      "prompt": {
+        "en": "\"The cat is in the garden.\" Which particle marks where the cat is?",
+        "it": "«Il gatto è in giardino.» Quale particella marca dove si trova il gatto?"
+      },
       "sentence": {
         "kanji": "猫が庭にいる",
         "kana": "ねこがにわにいる"
+      },
+      "gap": {
+        "kanji": "猫が庭＿いる",
+        "kana": "ねこがにわ＿いる"
       },
       "answer": "に",
       "distractors": ["で", "を"],
@@ -50,6 +70,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "存在の場所を示す「に」",
+      "prompt": {
+        "en": "Which part says where the umbrella is?",
+        "it": "Quale parte dice dove si trova l'ombrello?"
+      },
       "sentence": {
         "kanji": "ここに傘がある",
         "kana": "ここにかさがある"
@@ -63,9 +87,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "変化の結果を示す「に」",
+      "prompt": {
+        "en": "\"My older brother became a doctor.\" Which particle marks what he became?",
+        "it": "«Mio fratello maggiore è diventato medico.» Quale particella marca ciò che è diventato?"
+      },
       "sentence": {
         "kanji": "兄は医者になった",
         "kana": "あにはいしゃになった"
+      },
+      "gap": {
+        "kanji": "兄は医者＿なった",
+        "kana": "あにはいしゃ＿なった"
       },
       "answer": "に",
       "distractors": ["を", "で"],
@@ -77,9 +109,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "変化の結果を示す「に」",
+      "prompt": {
+        "en": "\"The room became bright.\" Which form of 明るい goes before なる?",
+        "it": "«La stanza è diventata luminosa.» Quale forma di 明るい va davanti a なる?"
+      },
       "sentence": {
         "kanji": "部屋が明るくなった",
         "kana": "へやがあかるくなった"
+      },
+      "gap": {
+        "kanji": "部屋が＿なった",
+        "kana": "へやが＿なった"
       },
       "answer": "明るく",
       "distractors": ["明るいに", "明るに", "明るいく"],
@@ -91,9 +131,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "方向を示す「へ」",
+      "prompt": {
+        "en": "\"Next month I'm going to Kyoto.\" Which particle marks the direction?",
+        "it": "«Il mese prossimo vado a Kyoto.» Quale particella marca la direzione?"
+      },
       "sentence": {
         "kanji": "来月京都へ行く",
         "kana": "らいげつきょうとへいく"
+      },
+      "gap": {
+        "kanji": "来月京都＿行く",
+        "kana": "らいげつきょうと＿いく"
       },
       "answer": "へ",
       "distractors": ["が", "の"],

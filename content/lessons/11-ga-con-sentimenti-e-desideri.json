@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "感情・理解の述語と「が」",
+      "prompt": {
+        "en": "\"I like dogs.\" Which particle marks what is liked?",
+        "it": "«Mi piacciono i cani.» Quale particella marca ciò che piace?"
+      },
       "sentence": {
         "kanji": "私は犬が好きだ",
         "kana": "わたしはいぬがすきだ"
+      },
+      "gap": {
+        "kanji": "私は犬＿好きだ",
+        "kana": "わたしはいぬ＿すきだ"
       },
       "answer": "が",
       "distractors": ["を", "で"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "感情・理解の述語と「が」",
+      "prompt": {
+        "en": "\"My younger brother understands kanji.\" Which particle marks what is understood?",
+        "it": "«Mio fratello minore capisce i kanji.» Quale particella marca ciò che si capisce?"
+      },
       "sentence": {
         "kanji": "弟は漢字が分かる",
         "kana": "おとうとはかんじがわかる"
+      },
+      "gap": {
+        "kanji": "弟は漢字＿分かる",
+        "kana": "おとうとはかんじ＿わかる"
       },
       "answer": "が",
       "distractors": ["を", "で"],
@@ -37,6 +53,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "欲求の「ほしい」と「たい」",
+      "prompt": {
+        "en": "Build: \"I want a new bicycle.\"",
+        "it": "Componi: «Voglio una bicicletta nuova.»"
+      },
       "sentence": {
         "kanji": "新しい自転車がほしい",
         "kana": "あたらしいじてんしゃがほしい"
@@ -50,6 +70,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "欲求の「ほしい」と「たい」",
+      "prompt": {
+        "en": "Which part is the thing that is wanted?",
+        "it": "Quale parte è la cosa desiderata?"
+      },
       "sentence": {
         "kanji": "ラーメンが食べたい",
         "kana": "ラーメンがたべたい"
@@ -63,9 +87,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "他人の感情を示す「がる」",
+      "prompt": {
+        "en": "\"My younger sister wants a new game.\" How do you describe someone else's wish?",
+        "it": "«Mia sorella minore vuole un gioco nuovo.» Come si descrive il desiderio di un altro?"
+      },
       "sentence": {
         "kanji": "妹が新しいゲームをほしがっている",
         "kana": "いもうとがあたらしいゲームをほしがっている"
+      },
+      "gap": {
+        "kanji": "妹が新しいゲームを＿",
+        "kana": "いもうとがあたらしいゲームを＿"
       },
       "answer": "ほしがっている",
       "distractors": ["ほしい", "ほしいだ", "ほしくている"],
@@ -77,9 +109,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "他人の感情を示す「がる」",
+      "prompt": {
+        "en": "\"The child wants to play outside.\" How do you describe the child's wish?",
+        "it": "«Il bambino vuole giocare fuori.» Come si descrive il desiderio del bambino?"
+      },
       "sentence": {
         "kanji": "子供が外で遊びたがっている",
         "kana": "こどもがそとであそびたがっている"
+      },
+      "gap": {
+        "kanji": "子供が外で＿",
+        "kana": "こどもがそとで＿"
       },
       "answer": "遊びたがっている",
       "distractors": ["遊びたい", "遊びたいだ", "遊ぶたがっている"],

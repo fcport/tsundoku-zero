@@ -100,6 +100,13 @@ describe('buildSeedSql — l\'SQL di seed è valido, idempotente e derivato dal 
     expect(sql).toContain(`'${lessonId(fullLesson)}'`);
   });
 
+  it('la fascia riservata (order ≥ 900) non entra nel seed', () => {
+    const reserved = { ...fullLesson, order: 900, grammarPoints: ['fixture'] };
+    const sql = buildSeedSql([fullLesson, reserved]);
+    expect(sql).toContain(`'${lessonId(fullLesson)}'`);
+    expect(sql).not.toContain(`'${lessonId(reserved)}', 900`);
+  });
+
   it('emette exercise.id = deriveExerciseId(exercise) per ogni esercizio', () => {
     const sql = buildSeedSql([fullLesson]);
     for (const exercise of fullLesson.exercises) {

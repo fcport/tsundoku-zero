@@ -79,6 +79,23 @@ export const segmentSpan = refine(
 export type SegmentSpan = Infer<typeof segmentSpan>;
 
 /**
+ * La DOMANDA di un esercizio (`prompt`), bilingue come la spiegazione: cosa si
+ * chiede a chi risponde, mostrata PRIMA della risposta. Senza di essa la consegna
+ * generica per tipo («scegli l'opzione…») non dice che cosa cercare, e la domanda
+ * vera compariva solo nella spiegazione, dopo aver risposto. Facoltativa per
+ * compatibilità con il contenuto già pubblicato: assente ⇒ la UI ripiega sulla
+ * consegna generica. NON entra nell'identità dell'esercizio (AD-23): aggiungerla o
+ * correggerla non azzera il progresso.
+ */
+const prompt = optional(bilingualText);
+
+/**
+ * Il segnaposto dello spazio vuoto di `gap`: il carattere a tutta larghezza `＿`
+ * (U+FF3F). Uno solo per frase, sia in `kanji` sia in `kana`.
+ */
+export const GAP_MARK = '＿';
+
+/**
  * `single-select` — una consegna, *n* opzioni, una risposta. `answer` è l'unica
  * opzione corretta (stringa non vuota); `distractors` è un array NON VUOTO di
  * opzioni sbagliate (una consegna, *n* opzioni, una risposta). `check` è
@@ -97,6 +114,12 @@ const singleSelect = object({
   distractors: nonEmptyArray(nonEmptyString()),
   explanation: bilingualText,
   showFurigana: optional(boolean()),
+  prompt,
+  // La frase con la risposta sostituita da `GAP_MARK`, mostrata PRIMA della
+  // risposta: senza, la risposta giusta è già scritta nella frase. Il legame con
+  // `sentence`/`answer` (il segnaposto rimpiazzato dà la frase) è una regola di
+  // contenuto in `content-validation`. Fuori dall'identità (AD-23).
+  gap: optional(japaneseSentence),
 });
 
 /**
@@ -112,6 +135,7 @@ const selectSpan = object({
   answer: segmentSpan,
   explanation: bilingualText,
   showFurigana: optional(boolean()),
+  prompt,
 });
 
 /**
@@ -127,6 +151,7 @@ const assemble = object({
   answer: nonEmptyArray(nonEmptyString()),
   explanation: bilingualText,
   showFurigana: optional(boolean()),
+  prompt,
 });
 
 /**

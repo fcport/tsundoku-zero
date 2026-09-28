@@ -28,6 +28,7 @@
 // in `lesson.ts`): usato in `try/catch`, non è né I/O né un global vietato.
 import { parseLesson, lessonId, type Lesson } from './lesson';
 import { deriveExerciseId } from './exercise-identity';
+import { GAP_MARK } from './exercise';
 
 /**
  * Un file di lezione da validare: il suo `path` (per localizzare l'issue in CI) e
@@ -119,6 +120,31 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
           message:
             'coerenza kanji/kana: il campo kana (lettura) non deve contenere ideogrammi Han (kanji)',
         });
+      }
+    });
+
+    // (f) Coerenza dello spazio vuoto (`gap`, solo single-select): un solo
+    // segnaposto in `kanji` e in `kana`, nessun Han nella lettura, e rimpiazzando il
+    // segnaposto con la risposta si deve riottenere ESATTAMENTE la frase. Così la
+    // frase mostrata prima della risposta non può divergere da quella dell'esercizio.
+    lesson.exercises.forEach((exercise, i) => {
+      if (exercise.kind !== 'single-select' || exercise.gap === undefined) return;
+      const { gap } = exercise;
+      const at = (field: string) => ['exercises', i, 'gap', field];
+      if (gap.kanji.split(GAP_MARK).length !== 2) {
+        issues.push({ file, path: at('kanji'), message: `gap.kanji deve contenere esattamente un ${GAP_MARK}` });
+      } else if (gap.kanji.replace(GAP_MARK, exercise.answer) !== exercise.sentence.kanji) {
+        issues.push({
+          file,
+          path: at('kanji'),
+          message: `gap.kanji con ${GAP_MARK} sostituito dalla risposta deve coincidere con sentence.kanji`,
+        });
+      }
+      if (gap.kana.split(GAP_MARK).length !== 2) {
+        issues.push({ file, path: at('kana'), message: `gap.kana deve contenere esattamente un ${GAP_MARK}` });
+      }
+      if (HAN.test(gap.kana)) {
+        issues.push({ file, path: at('kana'), message: 'gap.kana (lettura) non deve contenere ideogrammi Han' });
       }
     });
 

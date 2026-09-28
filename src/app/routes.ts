@@ -53,3 +53,11 @@ export const PRIVACY_PATH = '/privacy';
  * Impostazioni); le features non portano stringhe di path.
  */
 export const ACKNOWLEDGEMENTS_PATH = '/riconoscimenti';
+
+/**
+ * La rotta delle IMPOSTAZIONI: lingua, tetto giornaliero di sblocco, collegamenti
+ * legali e cancellazione dell'account. Prima vivevano in coda alla dashboard, dove
+ * sommergevano l'unica cosa che conta lì (la pila da svuotare); ora la dashboard
+ * porta solo un collegamento. Protetta, cablata dal livello app come le altre.
+ */
+export const SETTINGS_PATH = '/impostazioni';

@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "連用形につく「ます」「たい」",
+      "prompt": {
+        "en": "\"I write a letter every week.\" What is the polite form of 書く?",
+        "it": "«Ogni settimana scrivo una lettera.» Qual è la forma cortese di 書く?"
+      },
       "sentence": {
         "kanji": "毎週手紙を書きます",
         "kana": "まいしゅうてがみをかきます"
+      },
+      "gap": {
+        "kanji": "毎週手紙を＿",
+        "kana": "まいしゅうてがみを＿"
       },
       "answer": "書きます",
       "distractors": ["書くます", "書かます", "書こます"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "連用形につく「ます」「たい」",
+      "prompt": {
+        "en": "\"I want to rest properly.\" How do you say \"want to rest\"?",
+        "it": "«Voglio riposarmi con calma.» Come si dice «voler riposare»?"
+      },
       "sentence": {
         "kanji": "ゆっくり休みたい",
         "kana": "ゆっくりやすみたい"
+      },
+      "gap": {
+        "kanji": "ゆっくり＿",
+        "kana": "ゆっくり＿"
       },
       "answer": "休みたい",
       "distractors": ["休むたい", "休またい", "休みったい"],
@@ -37,6 +53,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "連用形につく「ます」「たい」",
+      "prompt": {
+        "en": "Build: \"Let's have lunch together.\"",
+        "it": "Componi: «Pranziamo insieme.»"
+      },
       "sentence": {
         "kanji": "一緒に昼ごはんを食べましょう",
         "kana": "いっしょにひるごはんをたべましょう"
@@ -50,9 +70,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "未然形につく「せる」「れる」",
+      "prompt": {
+        "en": "\"The teacher had the pupils read a book.\" What is the causative past of 読む?",
+        "it": "«L'insegnante ha fatto leggere un libro agli studenti.» Qual è il causativo passato di 読む?"
+      },
       "sentence": {
         "kanji": "先生が生徒に本を読ませた",
         "kana": "せんせいがせいとにほんをよませた"
+      },
+      "gap": {
+        "kanji": "先生が生徒に本を＿",
+        "kana": "せんせいがせいとにほんを＿"
       },
       "answer": "読ませた",
       "distractors": ["読みせた", "読むさせた", "読めさせた"],
@@ -64,9 +92,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "未然形につく「せる」「れる」",
+      "prompt": {
+        "en": "\"The mother made the child eat vegetables.\" What is the causative past of 食べる?",
+        "it": "«La madre ha fatto mangiare le verdure al bambino.» Qual è il causativo passato di 食べる?"
+      },
       "sentence": {
         "kanji": "母が子供に野菜を食べさせた",
         "kana": "ははがこどもにやさいをたべさせた"
+      },
+      "gap": {
+        "kanji": "母が子供に野菜を＿",
+        "kana": "ははがこどもにやさいを＿"
       },
       "answer": "食べさせた",
       "distractors": ["食べせた", "食べらせた", "食べませた"],
@@ -78,6 +114,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "未然形につく「せる」「れる」",
+      "prompt": {
+        "en": "Which part turns 盗む into a passive past?",
+        "it": "Quale parte trasforma 盗む in un passivo al passato?"
+      },
       "sentence": {
         "kanji": "財布を盗まれた",
         "kana": "さいふをぬすまれた"
@@ -91,9 +131,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "意向形",
+      "prompt": {
+        "en": "\"Let's go home together.\" What is the volitional of 帰る?",
+        "it": "«Torniamo a casa insieme.» Qual è il volitivo di 帰る?"
+      },
       "sentence": {
         "kanji": "一緒に帰ろう",
         "kana": "いっしょにかえろう"
+      },
+      "gap": {
+        "kanji": "一緒に＿",
+        "kana": "いっしょに＿"
       },
       "answer": "帰ろう",
       "distractors": ["帰りよう", "帰るう", "帰よう"],
@@ -105,9 +153,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "意向形",
+      "prompt": {
+        "en": "\"Let's get started.\" What is the volitional of 始める?",
+        "it": "«Cominciamo.» Qual è il volitivo di 始める?"
+      },
       "sentence": {
         "kanji": "そろそろ始めよう",
         "kana": "そろそろはじめよう"
+      },
+      "gap": {
+        "kanji": "そろそろ＿",
+        "kana": "そろそろ＿"
       },
       "answer": "始めよう",
       "distractors": ["始めろう", "始めおう", "始まよう"],

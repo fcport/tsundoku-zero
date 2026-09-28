@@ -15,7 +15,7 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join } from 'node:path';
-import { parseLesson, lessonId, type Lesson } from '../src/domain/lesson.ts';
+import { isCurriculumLesson, parseLesson, lessonId, type Lesson } from '../src/domain/lesson.ts';
 import { deriveExerciseId } from '../src/domain/exercise-identity.ts';
 import { validateLessons, type LessonFile } from '../src/domain/content-validation.ts';
 
@@ -64,16 +64,20 @@ function exercisePayload(exercise: Exercise): string {
         sentence: exercise.sentence,
         answer: exercise.answer,
         distractors: exercise.distractors,
+        ...(exercise.gap !== undefined ? { gap: exercise.gap } : {}),
+        ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
       });
     case 'select-span':
       return JSON.stringify({
         sentence: exercise.sentence,
         answer: exercise.answer,
+        ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
       });
     case 'assemble':
       return JSON.stringify({
         sentence: exercise.sentence,
         answer: exercise.answer,
+        ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
       });
     default: {
       // Registro chiuso (AD-22): un kind non gestito è errore di COMPILAZIONE.
@@ -101,7 +105,12 @@ type Exercise = Lesson['exercises'][number];
  * su `exercise` è OMESSO del tutto (un `insert … values` senza righe è SQL
  * invalido). Riceve `Lesson` GIÀ validate: non rivalida.
  */
-export function buildSeedSql(lessons: readonly Lesson[]): string {
+export function buildSeedSql(allLessons: readonly Lesson[]): string {
+  // La fascia riservata (order ≥ 900: fixture dei test, esempi) valida come il resto
+  // ma NON raggiunge il database: altrimenti l'app la conterebbe fra le lezioni e la
+  // sbloccherebbe in coda al curriculum. Una fixture già presente nel database viene
+  // rimossa dalla riconciliazione qui sotto, come ogni lezione che il seed non porta.
+  const lessons = allLessons.filter(isCurriculumLesson);
   const parts: string[] = [];
   parts.push('-- Seed del contenuto (lezioni ed esercizi), generato da');
   parts.push('-- scripts/generate-content-seed.ts a partire da content/lessons/.');
@@ -356,7 +365,7 @@ async function main(): Promise<void> {
   const outName = `${chooseSeedTimestamp(existing, new Date())}_seed_content.sql`;
   const outPath = join(MIGRATIONS_DIR, outName);
   await writeFile(outPath, sql, 'utf8');
-  console.log(`Seed generato: ${outPath} (${lessons.length} lezione/i).`);
+  console.log(`Seed generato: ${outPath} (${lessons.filter(isCurriculumLesson).length} lezione/i di curriculum).`);
 }
 
 // Esegui il CLI solo come ENTRYPOINT, non quando importato dai test. La

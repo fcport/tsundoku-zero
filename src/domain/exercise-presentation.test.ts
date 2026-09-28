@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   answerOptions,
   composeResponse,
+  correctOptionIndex,
+  sentenceView,
   selectionComplete,
 } from './exercise-presentation';
 import { alignFurigana } from './furigana';
@@ -195,5 +197,43 @@ describe('round-trip composeResponse → check (3.19)', () => {
 
   it('select-span: mono-segmento indice 0, answer {0,1} ⇒ corretto', () => {
     expect(check(selectSpan, composeResponse(selectSpan, [0])).correct).toBe(true);
+  });
+});
+
+describe('sentenceView — la frase non rivela la soluzione prima della risposta', () => {
+  const gapped: Exercise = {
+    kind: 'single-select',
+    grammarPoint: 'x',
+    sentence: { kanji: '猫が魚を食べた', kana: 'ねこがさかなをたべた' },
+    gap: { kanji: '猫が魚＿食べた', kana: 'ねこがさかな＿たべた' },
+    answer: 'を',
+    distractors: ['が'],
+    explanation: { en: 'x' },
+  };
+
+  it('single-select con gap: i due lati dello spazio, la risposta assente', () => {
+    const view = sentenceView(gapped, false);
+    expect(view.kind).toBe('gap');
+    if (view.kind !== 'gap') return;
+    expect(view.before.map((s) => s.text).join('')).toBe('猫が魚');
+    expect(view.after.map((s) => s.text).join('')).toBe('食べた');
+  });
+
+  it('assemble: prima della risposta la frase è nascosta', () => {
+    expect(sentenceView(assemble, false)).toEqual({ kind: 'hidden' });
+  });
+
+  it('dopo la risposta la frase è sempre intera', () => {
+    for (const exercise of [gapped, assemble]) {
+      expect(sentenceView(exercise, true)).toEqual({
+        kind: 'full',
+        segments: alignFurigana(exercise.sentence.kanji, exercise.sentence.kana),
+      });
+    }
+  });
+
+  it('correctOptionIndex indica la risposta fra le opzioni permutate', () => {
+    expect(answerOptions(gapped)[correctOptionIndex(gapped)!]).toBe('を');
+    expect(correctOptionIndex(assemble)).toBeNull();
   });
 });

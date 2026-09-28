@@ -115,3 +115,16 @@ export function deriveLessonId(grammarPoint: string): string {
 export function lessonId(lesson: Lesson): string {
   return deriveLessonId(lesson.grammarPoints[0]);
 }
+
+/**
+ * La prima posizione della FASCIA RISERVATA (`docs/authoring-runbook.md`): da
+ * `order: 900` in su vivono esempi di documentazione e lezioni che servono da
+ * fixture ai test. Validano come ogni altra lezione, ma non fanno parte del
+ * curriculum: non vanno sbloccate né contate come lezioni da studiare.
+ */
+export const RESERVED_ORDER_START = 900;
+
+/** Vero sse la lezione appartiene al curriculum, cioè non è nella fascia riservata. */
+export function isCurriculumLesson(lesson: { readonly order: number }): boolean {
+  return lesson.order < RESERVED_ORDER_START;
+}

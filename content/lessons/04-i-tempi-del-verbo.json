@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "非過去形",
+      "prompt": {
+        "en": "\"It will rain tomorrow.\" Which verb form fits?",
+        "it": "«Domani pioverà.» Quale forma del verbo è giusta?"
+      },
       "sentence": {
         "kanji": "明日は雨が降る",
         "kana": "あしたはあめがふる"
+      },
+      "gap": {
+        "kanji": "明日は雨が＿",
+        "kana": "あしたはあめが＿"
       },
       "answer": "降る",
       "distractors": ["降った", "降っていた"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "「ている」の進行",
+      "prompt": {
+        "en": "\"My father is reading the newspaper.\" Which form says the action is in progress?",
+        "it": "«Mio padre sta leggendo il giornale.» Quale forma dice che l'azione è in corso?"
+      },
       "sentence": {
         "kanji": "父が新聞を読んでいる",
         "kana": "ちちがしんぶんをよんでいる"
+      },
+      "gap": {
+        "kanji": "父が新聞を＿",
+        "kana": "ちちがしんぶんを＿"
       },
       "answer": "読んでいる",
       "distractors": ["読むいる", "読みている", "読んいる"],
@@ -37,6 +53,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "「ている」の進行",
+      "prompt": {
+        "en": "Which part shows that the action is in progress?",
+        "it": "Quale parte indica che l'azione è in corso?"
+      },
       "sentence": {
         "kanji": "妹がテレビを見ている",
         "kana": "いもうとがテレビをみている"
@@ -50,6 +70,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "過去形の「た」",
+      "prompt": {
+        "en": "Which part carries the past tense?",
+        "it": "Quale parte porta il passato?"
+      },
       "sentence": {
         "kanji": "昨日カレーを作った",
         "kana": "きのうカレーをつくった"
@@ -63,6 +87,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "過去形の「た」",
+      "prompt": {
+        "en": "Build: \"I bought new shoes last week.\"",
+        "it": "Componi: «La settimana scorsa ho comprato delle scarpe nuove.»"
+      },
       "sentence": {
         "kanji": "先週新しい靴を買った",
         "kana": "せんしゅうあたらしいくつをかった"
@@ -76,6 +104,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "時を示す「に」",
+      "prompt": {
+        "en": "Build: \"A friend is coming at seven.\"",
+        "it": "Componi: «Alle sette viene un amico.»"
+      },
       "sentence": {
         "kanji": "七時に友達が来る",
         "kana": "しちじにともだちがくる"
@@ -89,9 +121,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "時を示す「に」",
+      "prompt": {
+        "en": "\"I will graduate from university next year.\" How is \"next year\" written here?",
+        "it": "«L'anno prossimo mi laureo.» Come si scrive qui «l'anno prossimo»?"
+      },
       "sentence": {
         "kanji": "来年大学を卒業する",
         "kana": "らいねんだいがくをそつぎょうする"
+      },
+      "gap": {
+        "kanji": "＿大学を卒業する",
+        "kana": "＿だいがくをそつぎょうする"
       },
       "answer": "来年",
       "distractors": ["来年を", "来年が"],

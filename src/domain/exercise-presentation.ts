@@ -16,9 +16,9 @@
 // piattaforma, nessun `Math.random()`. Usa l'UNICO hash condiviso (`./hash`, la
 // stessa `fnv1a` della dispersione delle scadenze) e l'identità di dominio
 // (`./exercise-identity`), così l'ordine non può nascere divergente.
-import type { Exercise, ExerciseResponse } from './exercise';
+import { GAP_MARK, type Exercise, type ExerciseResponse } from './exercise';
 import { deriveExerciseId } from './exercise-identity';
-import { alignFurigana } from './furigana';
+import { alignFurigana, type FuriganaSegment } from './furigana';
 import { fnv1a } from './hash';
 
 /**
@@ -135,6 +135,68 @@ export function selectionComplete(
       const _exhaustive: never = exercise;
       void _exhaustive;
       return false;
+    }
+  }
+}
+
+/**
+ * Cosa mostrare della FRASE, prima e dopo la risposta. Prima della risposta la
+ * frase non deve contenere la soluzione:
+ * - `single-select` con `gap`: la frase con lo spazio vuoto al posto della risposta,
+ *   la furigana allineata separatamente sui due lati del segnaposto;
+ * - `assemble`: la frase NON si mostra (è la risposta); si costruisce con le tessere;
+ * - `select-span`, o `single-select` senza `gap` (contenuto precedente): la frase
+ *   intera, perché la domanda riguarda una sua parte.
+ * Dopo la risposta si mostra sempre la frase intera: è la soluzione.
+ */
+export type SentenceView =
+  | { readonly kind: 'full'; readonly segments: readonly FuriganaSegment[] }
+  | {
+      readonly kind: 'gap';
+      readonly before: readonly FuriganaSegment[];
+      readonly after: readonly FuriganaSegment[];
+    }
+  | { readonly kind: 'hidden' };
+
+const nonEmpty = (segments: FuriganaSegment[]) => segments.filter((s) => s.text !== '');
+
+export function sentenceView(exercise: Exercise, answered: boolean): SentenceView {
+  const full: SentenceView = {
+    kind: 'full',
+    segments: alignFurigana(exercise.sentence.kanji, exercise.sentence.kana),
+  };
+  if (answered) return full;
+  if (exercise.kind === 'assemble') return { kind: 'hidden' };
+  if (exercise.kind === 'single-select' && exercise.gap !== undefined) {
+    const [kanjiBefore = '', kanjiAfter = ''] = exercise.gap.kanji.split(GAP_MARK);
+    const [kanaBefore = '', kanaAfter = ''] = exercise.gap.kana.split(GAP_MARK);
+    return {
+      kind: 'gap',
+      before: nonEmpty(alignFurigana(kanjiBefore, kanaBefore)),
+      after: nonEmpty(alignFurigana(kanjiAfter, kanaAfter)),
+    };
+  }
+  return full;
+}
+
+/**
+ * L'indice, in `answerOptions(exercise)`, dell'opzione CORRETTA, per mostrarla dopo
+ * la risposta: per `single-select` la posizione di `answer` fra le opzioni
+ * permutate, per `select-span` il segmento d'inizio dello span. `null` per
+ * `assemble`, dove la soluzione è un ordine, non un'opzione (la mostra la frase).
+ */
+export function correctOptionIndex(exercise: Exercise): number | null {
+  switch (exercise.kind) {
+    case 'single-select':
+      return answerOptions(exercise).indexOf(exercise.answer);
+    case 'select-span':
+      return exercise.answer.start;
+    case 'assemble':
+      return null;
+    default: {
+      const _exhaustive: never = exercise;
+      void _exhaustive;
+      return null;
     }
   }
 }

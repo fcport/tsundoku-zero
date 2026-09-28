@@ -9,6 +9,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "て形で節をつなぐ",
+      "prompt": {
+        "en": "Build: \"I ate breakfast and went to school.\"",
+        "it": "Componi: «Ho fatto colazione e sono andato a scuola.»"
+      },
       "sentence": {
         "kanji": "朝ごはんを食べて学校に行った",
         "kana": "あさごはんをたべてがっこうにいった"
@@ -22,9 +26,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "て形で節をつなぐ",
+      "prompt": {
+        "en": "\"I opened the window and looked outside.\" Which form of 開ける joins the two actions?",
+        "it": "«Ho aperto la finestra e ho guardato fuori.» Quale forma di 開ける unisce le due azioni?"
+      },
       "sentence": {
         "kanji": "窓を開けて外を見た",
         "kana": "まどをあけてそとをみた"
+      },
+      "gap": {
+        "kanji": "窓を＿外を見た",
+        "kana": "まどを＿そとをみた"
       },
       "answer": "開けて",
       "distractors": ["開けって", "開きて", "開けるて"],
@@ -36,9 +48,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "恩恵を受ける「てくれる」",
+      "prompt": {
+        "en": "\"A friend helped me with my homework.\" Which verb says the favour was done for me?",
+        "it": "«Un amico mi ha aiutato con i compiti.» Quale verbo dice che il favore è stato fatto a me?"
+      },
       "sentence": {
         "kanji": "友達が私の宿題を手伝ってくれた",
         "kana": "ともだちがわたしのしゅくだいをてつだってくれた"
+      },
+      "gap": {
+        "kanji": "友達が私の宿題を手伝って＿",
+        "kana": "ともだちがわたしのしゅくだいをてつだって＿"
       },
       "answer": "くれた",
       "distractors": ["あげた"],
@@ -50,6 +70,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "恩恵を受ける「てくれる」",
+      "prompt": {
+        "en": "Which part says the dinner was made for the speaker?",
+        "it": "Quale parte dice che la cena è stata preparata per chi parla?"
+      },
       "sentence": {
         "kanji": "父が夕飯を作ってくれた",
         "kana": "ちちがゆうはんをつくってくれた"
@@ -63,9 +87,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "恩恵を与える「てあげる」",
+      "prompt": {
+        "en": "\"I read a picture book to my younger sister.\" Which verb says I did it for her?",
+        "it": "«Ho letto un libro illustrato a mia sorella minore.» Quale verbo dice che l'ho fatto per lei?"
+      },
       "sentence": {
         "kanji": "私は妹に絵本を読んであげた",
         "kana": "わたしはいもうとにえほんをよんであげた"
+      },
+      "gap": {
+        "kanji": "私は妹に絵本を読んで＿",
+        "kana": "わたしはいもうとにえほんをよんで＿"
       },
       "answer": "あげた",
       "distractors": ["くれた"],
@@ -77,6 +109,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "恩恵を受ける「てくれる」",
+      "prompt": {
+        "en": "Build: \"My older brother was busy and didn't help me.\"",
+        "it": "Componi: «Mio fratello maggiore era impegnato e non mi ha aiutato.»"
+      },
       "sentence": {
         "kanji": "兄は忙しくて手伝ってくれなかった",
         "kana": "あにはいそがしくててつだってくれなかった"

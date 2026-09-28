@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "否定の「ない」",
+      "prompt": {
+        "en": "\"I have no time today.\" What is the negative of ある?",
+        "it": "«Oggi non ho tempo.» Qual è la negazione di ある?"
+      },
       "sentence": {
         "kanji": "今日は時間がない",
         "kana": "きょうはじかんがない"
+      },
+      "gap": {
+        "kanji": "今日は時間が＿",
+        "kana": "きょうはじかんが＿"
       },
       "answer": "ない",
       "distractors": ["あらない", "ないだ", "なく"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "否定の「ない」",
+      "prompt": {
+        "en": "\"My older brother doesn't drink alcohol.\" What is the negative of 飲む?",
+        "it": "«Mio fratello maggiore non beve alcolici.» Qual è la negazione di 飲む?"
+      },
       "sentence": {
         "kanji": "兄はお酒を飲まない",
         "kana": "あにはおさけをのまない"
+      },
+      "gap": {
+        "kanji": "兄はお酒を＿",
+        "kana": "あにはおさけを＿"
       },
       "answer": "飲まない",
       "distractors": ["飲むない", "飲みない", "飲まらない"],
@@ -37,9 +53,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "否定の「ない」",
+      "prompt": {
+        "en": "\"My mother doesn't buy meat.\" What is the negative of 買う?",
+        "it": "«Mia madre non compra carne.» Qual è la negazione di 買う?"
+      },
       "sentence": {
         "kanji": "母は肉を買わない",
         "kana": "はははにくをかわない"
+      },
+      "gap": {
+        "kanji": "母は肉を＿",
+        "kana": "はははにくを＿"
       },
       "answer": "買わない",
       "distractors": ["買あない", "買いない", "買うない"],
@@ -51,6 +75,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "名詞文の否定「ではない」",
+      "prompt": {
+        "en": "Which part makes the sentence negative?",
+        "it": "Quale parte rende negativa la frase?"
+      },
       "sentence": {
         "kanji": "あれは駅ではない",
         "kana": "あれはえきではない"
@@ -64,9 +92,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "形容詞の否定「くない」",
+      "prompt": {
+        "en": "\"This room is not cold.\" What is the negative of 寒い?",
+        "it": "«Questa stanza non è fredda.» Qual è la negazione di 寒い?"
+      },
       "sentence": {
         "kanji": "この部屋は寒くない",
         "kana": "このへやはさむくない"
+      },
+      "gap": {
+        "kanji": "この部屋は＿",
+        "kana": "このへやは＿"
       },
       "answer": "寒くない",
       "distractors": ["寒いない", "寒いではない", "寒じゃない"],
@@ -78,9 +114,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "形容詞の否定「くない」",
+      "prompt": {
+        "en": "\"This film is not good.\" What is the negative of いい?",
+        "it": "«Questo film non è bello.» Qual è la negazione di いい?"
+      },
       "sentence": {
         "kanji": "この映画はよくない",
         "kana": "このえいがはよくない"
+      },
+      "gap": {
+        "kanji": "この映画は＿",
+        "kana": "このえいがは＿"
       },
       "answer": "よくない",
       "distractors": ["いくない", "いいない", "よいない"],
@@ -92,6 +136,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "否定の「ない」",
+      "prompt": {
+        "en": "Build: \"It did not rain yesterday.\"",
+        "it": "Componi: «Ieri non è piovuto.»"
+      },
       "sentence": {
         "kanji": "昨日は雨が降らなかった",
         "kana": "きのうはあめがふらなかった"
@@ -105,6 +153,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "否定の「ない」",
+      "prompt": {
+        "en": "Which part is the past negative ending?",
+        "it": "Quale parte è la desinenza negativa al passato?"
+      },
       "sentence": {
         "kanji": "テレビを見なかった",
         "kana": "テレビをみなかった"
@@ -118,9 +170,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "丁寧な否定「ません」",
+      "prompt": {
+        "en": "\"I don't smoke.\" (polite) What is the polite negative of 吸う?",
+        "it": "«Non fumo.» (cortese) Qual è la negazione cortese di 吸う?"
+      },
       "sentence": {
         "kanji": "私はたばこを吸いません",
         "kana": "わたしはたばこをすいません"
+      },
+      "gap": {
+        "kanji": "私はたばこを＿",
+        "kana": "わたしはたばこを＿"
       },
       "answer": "吸いません",
       "distractors": ["吸わません", "吸うません", "吸いまさない"],

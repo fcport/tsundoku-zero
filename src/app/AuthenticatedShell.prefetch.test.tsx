@@ -28,7 +28,6 @@ import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { STATS_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
-import type { AccountGateway } from '../domain/ports/accountGateway';
 
 // React 19 richiede questo flag per far girare `act` senza avvisi.
 declare global {
@@ -70,9 +69,6 @@ const inertSettings: SettingsRepository = {
   saveLocale: async () => {},
   loadLessonsPerDay: async () => null,
   saveLessonsPerDay: async () => {},
-};
-const inertAccount: AccountGateway = {
-  deleteAccount: async () => ({ ok: true }),
 };
 
 let listDue: ReturnType<typeof vi.fn>;
@@ -138,11 +134,9 @@ function mount(qc: QueryClient, ports: Ports): void {
             <MemoryRouter initialEntries={['/']}>
               <AuthenticatedShell
                 settings={inertSettings}
-                account={inertAccount}
                 userId={UID}
                 onSignOut={() => {}}
                 signOutPending={false}
-                onAccountDeleted={() => {}}
               />
               <LocationProbe />
             </MemoryRouter>

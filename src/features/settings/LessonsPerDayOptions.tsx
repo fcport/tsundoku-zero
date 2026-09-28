@@ -42,7 +42,7 @@ export function LessonsPerDayOptions({
           type="button"
           aria-pressed={value === current}
           onClick={() => onSelect(value)}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
+          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label aria-pressed:border-2 aria-pressed:border-accent aria-pressed:bg-accent-subtle aria-pressed:font-semibold"
         >
           {t('settings.lessonsPerDay.option', { value })}
         </button>

@@ -9,9 +9,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "可能形",
+      "prompt": {
+        "en": "\"You can swim in this river.\" What is the potential of 泳ぐ?",
+        "it": "«In questo fiume si può nuotare.» Qual è il potenziale di 泳ぐ?"
+      },
       "sentence": {
         "kanji": "この川で泳げる",
         "kana": "このかわでおよげる"
+      },
+      "gap": {
+        "kanji": "この川で＿",
+        "kana": "このかわで＿"
       },
       "answer": "泳げる",
       "distractors": ["泳ぎる", "泳ぐれる", "泳げられる"],
@@ -23,9 +31,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "可能形",
+      "prompt": {
+        "en": "\"This fish can be eaten raw.\" What is the potential of 食べる?",
+        "it": "«Questo pesce si può mangiare crudo.» Qual è il potenziale di 食べる?"
+      },
       "sentence": {
         "kanji": "この魚は生で食べられる",
         "kana": "このさかなはなまでたべられる"
+      },
+      "gap": {
+        "kanji": "この魚は生で＿",
+        "kana": "このさかなはなまで＿"
       },
       "answer": "食べられる",
       "distractors": ["食べえる", "食べらる", "食べされる"],
@@ -37,9 +53,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "不規則動詞の可能形",
+      "prompt": {
+        "en": "\"My older brother can speak Chinese.\" What is the potential of する?",
+        "it": "«Mio fratello maggiore sa il cinese.» Qual è il potenziale di する?"
+      },
       "sentence": {
         "kanji": "兄は中国語ができる",
         "kana": "あにはちゅうごくごができる"
+      },
+      "gap": {
+        "kanji": "兄は中国語が＿",
+        "kana": "あにはちゅうごくごが＿"
       },
       "answer": "できる",
       "distractors": ["するれる", "しれる", "すられる"],
@@ -51,6 +75,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "可能形と「が」",
+      "prompt": {
+        "en": "Which part is the thing that can be read?",
+        "it": "Quale parte è ciò che si riesce a leggere?"
+      },
       "sentence": {
         "kanji": "ひらがなが読める",
         "kana": "ひらがながよめる"
@@ -64,9 +92,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "可能形",
+      "prompt": {
+        "en": "\"I couldn't sleep well yesterday.\" How do you say \"couldn't sleep\"?",
+        "it": "«Ieri non sono riuscito a dormire bene.» Come si dice «non sono riuscito a dormire»?"
+      },
       "sentence": {
         "kanji": "昨日はよく眠れなかった",
         "kana": "きのうはよくねむれなかった"
+      },
+      "gap": {
+        "kanji": "昨日はよく＿",
+        "kana": "きのうはよく＿"
       },
       "answer": "眠れなかった",
       "distractors": ["眠りれなかった", "眠るなかった", "眠れないかった"],
@@ -78,6 +114,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "可能形",
+      "prompt": {
+        "en": "Build: \"On Sunday I can't meet my friends.\"",
+        "it": "Componi: «Domenica non posso vedere i miei amici.»"
+      },
       "sentence": {
         "kanji": "日曜日は友達に会えない",
         "kana": "にちようびはともだちにあえない"
@@ -91,9 +131,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "不規則動詞の可能形",
+      "prompt": {
+        "en": "\"I can come tomorrow.\" What is the potential of 来る?",
+        "it": "«Domani posso venire.» Qual è il potenziale di 来る?"
+      },
       "sentence": {
         "kanji": "明日は来られる",
         "kana": "あしたはこられる"
+      },
+      "gap": {
+        "kanji": "明日は＿",
+        "kana": "あしたは＿"
       },
       "answer": "来られる",
       "distractors": ["来えれる", "来れられる", "来られれる"],

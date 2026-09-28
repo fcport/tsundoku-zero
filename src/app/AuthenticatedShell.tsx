@@ -27,45 +27,31 @@
 // così la feature del precarico non importa react-router né `src/data`. Una
 // guardia di re-entrancy (`useRef`) evita precarichi sovrapposti su doppio click;
 // la navigazione avviene SEMPRE dopo (anche su errore: degrado grazioso).
-import { useRef } from 'react';
-import { useNavigate } from 'react-router';
-import { useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from '../i18n';
-import { DashboardScreen } from '../features/dashboard/DashboardScreen';
-import { SettingsScreen } from '../features/settings/SettingsScreen';
-import { DeleteAccountSection } from '../features/account/DeleteAccountSection';
-import { usePorts } from '../features/ports/PortsContext';
-import { prefetchDueStack } from '../features/study/prefetchDueStack';
-import {
-  ACKNOWLEDGEMENTS_PATH,
-  PRIVACY_PATH,
-  STATS_PATH,
-  STUDY_PATH,
-} from './routes';
-import type { SettingsRepository } from '../domain/ports/settingsRepository';
-import type { AccountGateway } from '../domain/ports/accountGateway';
+import { useRef } from "react";
+import { useNavigate } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "../i18n";
+import { DashboardScreen } from "../features/dashboard/DashboardScreen";
+import { usePorts } from "../features/ports/PortsContext";
+import { prefetchDueStack } from "../features/study/prefetchDueStack";
+import { SETTINGS_PATH, STATS_PATH, STUDY_PATH } from "./routes";
+import type { SettingsRepository } from "../domain/ports/settingsRepository";
 
 export interface AuthenticatedShellProps {
   /** La porta delle impostazioni, inoltrata alla feature Impostazioni. */
   readonly settings: SettingsRepository;
-  /** La porta di cancellazione account, inoltrata alla feature Account. */
-  readonly account: AccountGateway;
   /** L'id dell'utente corrente (o `null` finché non risolto), passato alla dashboard. */
   readonly userId: string | null;
   readonly onSignOut: () => void;
   /** Vero durante la disconnessione: disabilita il bottone. */
   readonly signOutPending: boolean;
-  /** Invocato dopo una cancellazione riuscita: torna anonimo (AuthRoot). */
-  readonly onAccountDeleted: () => void;
 }
 
 export function AuthenticatedShell({
   settings,
-  account,
   userId,
   onSignOut,
   signOutPending,
-  onAccountDeleted,
 }: AuthenticatedShellProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -95,31 +81,35 @@ export function AuthenticatedShell({
 
   return (
     <>
-      <header className="flex justify-end p-6">
-        <button
-          type="button"
-          onClick={onSignOut}
-          disabled={signOutPending}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
-        >
-          {t('auth.signOut')}
-        </button>
+      {/* Intestazione: il nome dell'app (prima mancava del tutto) e le due azioni di
+          servizio, le impostazioni ora su una pagina propria. */}
+      <header className="flex items-center justify-between gap-3 p-4 sm:p-6">
+        <h1 className="text-label font-semibold text-ink-primary">
+          <span lang="ja">積ん読ゼロ</span> · {t("app.name")}
+        </h1>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => navigate(SETTINGS_PATH)}
+            className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
+          >
+            {t("dashboard.openSettings")}
+          </button>
+          <button
+            type="button"
+            onClick={onSignOut}
+            disabled={signOutPending}
+            className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
+          >
+            {t("auth.signOut")}
+          </button>
+        </div>
       </header>
       <DashboardScreen
         userId={userId}
         settings={settings}
         onStartSession={onStartSession}
         onViewStats={onViewStats}
-      />
-      <SettingsScreen
-        settings={settings}
-        userId={userId}
-        onViewPrivacy={() => navigate(PRIVACY_PATH)}
-        onViewAcknowledgements={() => navigate(ACKNOWLEDGEMENTS_PATH)}
-      />
-      <DeleteAccountSection
-        account={account}
-        onAccountDeleted={onAccountDeleted}
       />
     </>
   );

@@ -9,6 +9,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "Build: \"My younger sister sings every morning.\"",
+        "it": "Componi: «Mia sorella minore canta ogni mattina.»"
+      },
       "sentence": {
         "kanji": "妹が毎朝歌います",
         "kana": "いもうとがまいあさうたいます"
@@ -22,6 +26,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "Which part is the copula?",
+        "it": "Quale parte è la copula?"
+      },
       "sentence": {
         "kanji": "妹が学生だ",
         "kana": "いもうとががくせいだ"
@@ -35,9 +43,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "\"The water is cold.\" Which predicate is correct?",
+        "it": "«L'acqua è fredda.» Qual è il predicato corretto?"
+      },
       "sentence": {
         "kanji": "水が冷たい",
         "kana": "みずがつめたい"
+      },
+      "gap": {
+        "kanji": "水が＿",
+        "kana": "みずが＿"
       },
       "answer": "冷たい",
       "distractors": ["冷たいだ", "冷だ", "冷たくだ"],

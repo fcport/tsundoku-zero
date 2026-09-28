@@ -7,7 +7,6 @@ import { AuthenticatedShell } from './AuthenticatedShell';
 import { dueQueryKey } from '../domain/due';
 import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
-import type { AccountGateway } from '../domain/ports/accountGateway';
 
 // Righe della I/O Matrix per la radice protetta (storia 1.7, aggiornata in 3.12).
 // La shell autenticata ora è dashboard (<DashboardScreen>: l'unico <main>, con
@@ -25,10 +24,6 @@ const inertSettings: SettingsRepository = {
   saveLocale: async () => {},
   loadLessonsPerDay: async () => null,
   saveLessonsPerDay: async () => {},
-};
-// Porta finta inerte (nuova prop 1.10): deleteAccount non è invocata da SSR.
-const inertAccount: AccountGateway = {
-  deleteAccount: async () => ({ ok: true }),
 };
 // Porte del ciclo iniettate alla dashboard (3.12): inerti con cache seminata.
 const inertPorts: Ports = {
@@ -69,16 +64,20 @@ function render(signOutPending: boolean): string {
         <MemoryRouter>
           <AuthenticatedShell
             settings={inertSettings}
-            account={inertAccount}
             userId={UID}
             onSignOut={NOOP}
             signOutPending={signOutPending}
-            onAccountDeleted={NOOP}
           />
         </MemoryRouter>
       </PortsProvider>
     </QueryClientProvider>,
   );
+}
+
+/** Il tag di apertura del <button> che contiene l'etichetta del Disconnetti. */
+function signOutTag(markup: string): string {
+  const start = markup.lastIndexOf('<button', markup.indexOf(en.auth.signOut));
+  return markup.slice(start, markup.indexOf('>', start) + 1);
 }
 
 describe('AuthenticatedShell — dashboard + bottone Disconnetti', () => {
@@ -108,21 +107,15 @@ describe('AuthenticatedShell — dashboard + bottone Disconnetti', () => {
 describe('AuthenticatedShell — pending disabilita Disconnetti', () => {
   it('signOutPending={true} ⇒ il bottone Disconnetti è disabled', () => {
     const markup = render(true);
-    // Il Disconnetti è il PRIMO <button> del markup (nell'<header>, prima della
-    // dashboard): estraiamo il suo tag di apertura.
-    const buttonTag = markup.slice(
-      markup.indexOf('<button'),
-      markup.indexOf('>', markup.indexOf('<button')) + 1,
-    );
+    // Il Disconnetti è il <button> dell'<header> che porta la sua etichetta (prima
+    // c'è il collegamento alle Impostazioni): estraiamo il suo tag di apertura.
+    const buttonTag = signOutTag(markup);
     expect(buttonTag).toContain('disabled');
   });
 
   it('signOutPending={false} ⇒ il bottone Disconnetti NON è disabled', () => {
     const markup = render(false);
-    const buttonTag = markup.slice(
-      markup.indexOf('<button'),
-      markup.indexOf('>', markup.indexOf('<button')) + 1,
-    );
+    const buttonTag = signOutTag(markup);
     expect(buttonTag).not.toContain('disabled');
   });
 });

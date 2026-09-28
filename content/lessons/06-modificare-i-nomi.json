@@ -9,6 +9,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "名詞を修飾する述語",
+      "prompt": {
+        "en": "Which part describes the shop?",
+        "it": "Quale parte descrive il locale?"
+      },
       "sentence": {
         "kanji": "おいしい店に行った",
         "kana": "おいしいみせにいった"
@@ -22,6 +26,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "名詞を修飾する述語",
+      "prompt": {
+        "en": "Build: \"The umbrella I bought yesterday broke.\"",
+        "it": "Componi: «L'ombrello che ho comprato ieri si è rotto.»"
+      },
       "sentence": {
         "kanji": "昨日買った傘が壊れた",
         "kana": "きのうかったかさがこわれた"
@@ -35,9 +43,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "名詞を修飾する「な」",
+      "prompt": {
+        "en": "\"I live in a quiet town.\" Which form of 静か goes before a noun?",
+        "it": "«Vivo in una città tranquilla.» Quale forma di 静か va davanti a un nome?"
+      },
       "sentence": {
         "kanji": "静かな町に住んでいる",
         "kana": "しずかなまちにすんでいる"
+      },
+      "gap": {
+        "kanji": "＿町に住んでいる",
+        "kana": "＿まちにすんでいる"
       },
       "answer": "静かな",
       "distractors": ["静かだ", "静かの", "静かい"],
@@ -49,6 +65,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "名詞を修飾する「な」",
+      "prompt": {
+        "en": "Build: \"A famous singer came.\"",
+        "it": "Componi: «È venuto un cantante famoso.»"
+      },
       "sentence": {
         "kanji": "有名な歌手が来た",
         "kana": "ゆうめいなかしゅがきた"
@@ -62,9 +82,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "名詞を修飾する「の」",
+      "prompt": {
+        "en": "\"I bought a wooden desk.\" Which particle links 木 to 机?",
+        "it": "«Ho comprato una scrivania di legno.» Quale particella collega 木 a 机?"
+      },
       "sentence": {
         "kanji": "木の机を買った",
         "kana": "きのつくえをかった"
+      },
+      "gap": {
+        "kanji": "木＿机を買った",
+        "kana": "き＿つくえをかった"
       },
       "answer": "の",
       "distractors": ["な", "が"],
@@ -76,9 +104,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "名詞を修飾する「の」",
+      "prompt": {
+        "en": "\"The Japanese teacher came.\" Which particle links the two nouns?",
+        "it": "«È venuto l'insegnante di giapponese.» Quale particella collega i due nomi?"
+      },
       "sentence": {
         "kanji": "日本語の先生が来た",
         "kana": "にほんごのせんせいがきた"
+      },
+      "gap": {
+        "kanji": "日本語＿先生が来た",
+        "kana": "にほんご＿せんせいがきた"
       },
       "answer": "の",
       "distractors": ["な", "だ"],

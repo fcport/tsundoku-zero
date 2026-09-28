@@ -5,6 +5,7 @@
 export const it = {
   app: {
     tagline: 'Un generatore di esercizi di grammatica giapponese',
+    name: 'Tsundoku Zero',
   },
   auth: {
     title: 'Registrazione',
@@ -82,6 +83,8 @@ export const it = {
     // della dashboard. Verbale e concreta, mai "Continua"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode.
     viewStats: 'Vedi le tue statistiche',
+    currentLesson: 'Lezione {{order}}: {{title}}',
+    openSettings: 'Impostazioni',
   },
   // Le statistiche (Epic 5): STESSE chiavi di `en` (parità ricorsiva). Gli stati a
   // dati insufficienti DICHIARANO «cosa manca e quanto» (5.4, FR7.5): il grafico
@@ -145,6 +148,18 @@ export const it = {
       selectSpan: 'Seleziona la parte della frase che risponde alla domanda.',
       assemble: 'Metti in ordine le tessere per costruire la frase.',
     },
+    // Dopo la risposta: quale opzione era giusta e quale hai scelto, in TESTO (non
+    // solo col colore). Nessun `!`, nessuna emoji.
+    option: {
+      correct: 'Risposta corretta',
+      yours: 'La tua risposta',
+    },
+    // La frase che si compone toccando le tessere (assemble), al posto della frase
+    // intera che prima rivelava la soluzione.
+    assembled: {
+      label: 'La tua frase',
+      empty: 'Tocca le tessere in ordine.',
+    },
     // L'esito DICHIARATO in testo (3.19), da `check().correct`: nessun verde/rosso,
     // l'informazione la porta il contenuto della spiegazione. Nessun `!`, nessuna
     // emoji, nessun avverbio di lode.
@@ -195,6 +210,7 @@ export const it = {
   },
   settings: {
     title: 'Impostazioni',
+    back: 'Torna alla dashboard',
     language: {
       label: 'Lingua',
       en: 'Inglese',

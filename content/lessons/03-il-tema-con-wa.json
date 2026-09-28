@@ -9,6 +9,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "Which part is the topic?",
+        "it": "Quale parte è il tema?"
+      },
       "sentence": {
         "kanji": "これは私の傘だ",
         "kana": "これはわたしのかさだ"
@@ -22,9 +26,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "\"As for Tokyo, there are many people.\" Which particle marks Tokyo?",
+        "it": "«Quanto a Tokyo, ci sono molte persone.» Quale particella marca Tokyo?"
+      },
       "sentence": {
         "kanji": "東京は人が多い",
         "kana": "とうきょうはひとがおおい"
+      },
+      "gap": {
+        "kanji": "東京＿人が多い",
+        "kana": "とうきょう＿ひとがおおい"
       },
       "answer": "は",
       "distractors": ["を", "へ"],
@@ -36,6 +48,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "Build: \"I drink coffee every day.\" Start with the topic.",
+        "it": "Componi: «Bevo caffè ogni giorno.» Comincia dal tema."
+      },
       "sentence": {
         "kanji": "私は毎日コーヒーを飲む",
         "kana": "わたしはまいにちコーヒーをのむ"
@@ -49,6 +65,10 @@
     {
       "kind": "select-span",
       "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "Which part says where the letter ends up?",
+        "it": "Quale parte dice dove finisce la lettera?"
+      },
       "sentence": {
         "kanji": "ポストに手紙を入れた",
         "kana": "ポストにてがみをいれた"
@@ -62,9 +82,17 @@
     {
       "kind": "single-select",
       "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "\"I gave flowers to the teacher.\" Which particle marks the recipient?",
+        "it": "«Ho dato dei fiori all'insegnante.» Quale particella marca il destinatario?"
+      },
       "sentence": {
         "kanji": "先生に花をあげた",
         "kana": "せんせいにはなをあげた"
+      },
+      "gap": {
+        "kanji": "先生＿花をあげた",
+        "kana": "せんせい＿はなをあげた"
       },
       "answer": "に",
       "distractors": ["を", "で"],
@@ -76,6 +104,10 @@
     {
       "kind": "assemble",
       "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "Build: \"My older sister sent a letter to a friend.\"",
+        "it": "Componi: «Mia sorella maggiore ha spedito una lettera a un amico.»"
+      },
       "sentence": {
         "kanji": "姉が友達に手紙を送った",
         "kana": "あねがともだちにてがみをおくった"

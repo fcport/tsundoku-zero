@@ -18,12 +18,19 @@
 // ordine — una tessera già piazzata è `disabled` e porta un BADGE di posizione.
 //
 // L'ordine e il numero delle opzioni sono DOMINIO (`answerOptions`, AC2), mai decisi
-// qui. Nessuna grammatica della celebrazione (AC2): nessun verde/rosso, l'etichetta
-// e la posizione portano l'informazione; ogni opzione `min-h-[56px]` (bersaglio ≥56px).
+// qui. Nessuna grammatica della celebrazione: niente verde, niente `!`. Dopo la
+// risposta l'opzione giusta e la scelta sbagliata sono DICHIARATE in testo
+// («Risposta corretta», «La tua risposta») e rinforzate dai token `accent` e
+// `danger`: il colore sottolinea, non porta da solo l'informazione. Con il solo
+// testo dell'esito, dalle opzioni non si capiva quale fosse quella giusta.
+// Ogni opzione `min-h-[56px]` (bersaglio ≥56px).
 // La card è l'UNICA superficie `surface-raised`.
 import { useTranslation } from '../../i18n';
-import { answerOptions } from '../../domain/exercise-presentation';
-import { alignFurigana } from '../../domain/furigana';
+import {
+  answerOptions,
+  correctOptionIndex,
+  sentenceView,
+} from '../../domain/exercise-presentation';
 import { furiganaVisible, resolveExplanation } from '../../domain/exercise';
 import type { Exercise } from '../../domain/exercise';
 import type { Locale } from '../../i18n';
@@ -97,65 +104,95 @@ export function ExerciseCard({
 }: ExerciseCardProps) {
   const { t } = useTranslation();
   const options = answerOptions(exercise);
-  // I segmenti della frase (contenuto), allineati nel dominio (AD-21); la
-  // visibilità della furigana è risolta dal dominio (predefinito VISIBILE).
-  const segments = alignFurigana(exercise.sentence.kanji, exercise.sentence.kana);
+  // Cosa mostrare della frase (dominio): prima della risposta mai la soluzione —
+  // spazio vuoto per la scelta singola, nessuna frase per il riordino (è la risposta).
+  const view = sentenceView(exercise, answered);
+  const showFurigana = furiganaVisible(exercise);
+  // La DOMANDA dell'esercizio, se il contenuto la porta; altrimenti resta la sola
+  // consegna generica per tipo (contenuto precedente all'introduzione di `prompt`).
+  const question = exercise.prompt ? resolveExplanation(exercise.prompt, locale).text : null;
   // La spiegazione bilingue RISOLTA nel dominio (FR8.5): `locale` coincide con
   // `BilingualLanguage` ('en'|'it'). Resa dall'`ExplanationPanel` (consulto o esito).
   const explanation = resolveExplanation(exercise.explanation, locale);
   // La spiegazione è visibile se rivelata prima (consulto) o dopo la risposta.
   const showExplanation = revealed || answered;
+  // Dopo la risposta: quale opzione era giusta (null per assemble, dove la
+  // soluzione è l'ordine, mostrato dalla frase intera).
+  const correctIndex = answered ? correctOptionIndex(exercise) : null;
 
   return (
     // `w-full` sulla CARD (3.23): l'`<article>` è un figlio flex del `<main>`
-    // `items-center`, che gli darebbe larghezza AUTO (max-content) — così la card
-    // cresce oltre il viewport su telefono e il `w-full` del solo paragrafo non
-    // basta (riempie una card GIÀ troppo larga). Vincolando la card a `w-full` la
-    // colonna è quella del contenitore responsive e la frase sa dove andare a capo.
-    // `p-4 sm:p-6`: padding interno RIDOTTO sotto 640px (16px invece di 24px), così
-    // la frase più lunga sta in ≤3 righe di testo base a larghezza telefono
-    // (320–390px) senza overflow; da 640px torna a `p-6`. Misurato su rendering reale
-    // (Chrome headless), registrato in `## Auto Run Result`.
+    // `items-center`, che gli darebbe larghezza AUTO (max-content). `p-4 sm:p-6`:
+    // padding ridotto sotto 640px perché la frase più lunga stia in ≤3 righe.
     <article className="w-full flex flex-col items-center gap-6 rounded-md bg-surface-raised p-4 sm:p-6">
-      {/* La consegna: chiave i18n per il kind (AC1). */}
-      <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
+      {/* La consegna (come si risponde, per tipo) sopra la domanda vera. */}
+      <div className="flex w-full flex-col gap-2 text-center">
+        <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
+        {question !== null && (
+          <p className="text-body font-semibold text-ink-primary">{question}</p>
+        )}
+      </div>
 
-      {/* La frase giapponese resa dal primitivo esistente (AC1): segmenti allineati
-          + visibilità risolta nel dominio. Ruolo tipografico `sentence-hero` (UX-DR8,
-          fissato dalla 3.23): 26px sotto 640px (`text-sentence-hero-mobile`, base
-          mobile-first) che passa a 32px da 640px (`sm:text-sentence-hero`), entrambi
-          con interlinea 1.9 (spazio per la furigana SOPRA ogni riga quando va a capo).
-          Nessun `white-space:nowrap`/`word-break:keep-all`: il nucleo group-ruby va a
-          capo DA SOLO ai confini di grafema CJK (default del browser), così AC2/AC3
-          (fit) e AC4 (nessun grafema spezzato) sono soddisfatte insieme.
-
-          `w-full` NON e' cosmetico ed e' la ragione per cui AC2/AC3 passano: la card
-          e' `flex flex-col items-center`, e `align-items:center` da' a ogni figlio
-          larghezza AUTO — il paragrafo si dimensiona sul proprio contenuto (max-content)
-          invece che sulla card, quindi non sa dove andare a capo e sfonda in orizzontale
-          su ogni telefono. Misurato in Chrome headless sulla frase piu' lunga della
-          lezione campione: senza `w-full` la riga arriva a 358px dentro un viewport da
-          320 (sfonda anche a 360 e 390); con `w-full` sta in 284px su 320, a 26px
-          pieni. `text-center` conserva la centratura che `items-center` produceva. */}
-      <p className="w-full text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary">
-        <JapaneseText segments={segments} showFurigana={furiganaVisible(exercise)} />
-      </p>
+      {/* La frase (ruolo `sentence-hero`, UX-DR8/3.23). `w-full` + `text-center`
+          sono necessari: in un flex `items-center` il paragrafo avrebbe larghezza
+          max-content e sfonderebbe su telefono (misurato in Chrome headless). */}
+      {view.kind === 'full' && (
+        <p className="w-full text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary">
+          <JapaneseText segments={view.segments} showFurigana={showFurigana} />
+        </p>
+      )}
+      {view.kind === 'gap' && (
+        <p className="w-full text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary">
+          <JapaneseText segments={view.before} showFurigana={showFurigana} />
+          <span
+            data-testid="sentence-gap"
+            className="mx-1 inline-block min-w-[2.5em] border-b-2 border-accent align-baseline"
+          >
+            {' '}
+          </span>
+          <JapaneseText segments={view.after} showFurigana={showFurigana} />
+        </p>
+      )}
+      {view.kind === 'hidden' && (
+        // Riordino: la frase si compone qui, tessera dopo tessera, invece di essere
+        // mostrata già fatta sopra le tessere.
+        <div className="flex w-full flex-col items-center gap-2">
+          <span className="text-caption text-ink-muted">{t('session.assembled.label')}</span>
+          <p
+            lang="ja"
+            className="min-h-[3rem] w-full rounded-md border border-dashed border-border-strong bg-surface-base p-3 text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary"
+          >
+            {selected.length > 0 ? (
+              selected.map((i) => options[i]).join('')
+            ) : (
+              <span className="text-body text-ink-muted">{t('session.assembled.empty')}</span>
+            )}
+          </p>
+        </div>
+      )}
 
       {/* Un <button> per ciascuna opzione di answerOptions (numero e ordine dal
-          dominio, AC2). Consegna: abilitati, onSelect cablato — MA una tessera già
-          scelta (assemble) è disabled e porta un badge d'ordine (append-only, nessun
-          undo). Risposta data: tutti disabled (senso unico, AC4), le scelte
-          aria-pressed="true". Nessuna distinzione per solo colore (AC2): stessi token;
-          etichetta e posizione portano l'informazione. min-h-[56px] su ciascuna. */}
+          dominio, AC2). Consegna: abilitati; una tessera già scelta (assemble) è
+          disabled e porta un badge d'ordine. Risposta data: tutti disabled, e
+          l'opzione giusta e quella scelta sbagliata sono DICHIARATE in testo, non
+          solo col colore. min-h-[56px] su ciascuna. */}
       <ul className="flex w-full flex-col gap-3">
         {options.map((option, i) => {
-          // La posizione di questo indice fra le scelte (1-based) o 0 se non scelto:
-          // per assemble è il badge d'ordine; per gli altri tipi distingue la scelta.
           const orderPosition = selected.indexOf(i) + 1;
           const isChosen = orderPosition > 0;
-          // Consegna: una scelta già piazzata (assemble) è disabled; le altre
-          // abilitate. Risposta data: tutte disabled.
           const isDisabled = answered || isChosen;
+          const isCorrectOption = correctIndex === i;
+          // La scelta sbagliata la dichiara l'esito (`correct`), non un confronto
+          // locale: una sola fonte di verità sulla correttezza, `check()`.
+          const isWrongChoice =
+            answered && isChosen && correct === false && correctIndex !== null;
+          const tone = isCorrectOption
+            ? 'border-2 border-accent bg-accent-subtle'
+            : isWrongChoice
+              ? 'border-2 border-danger bg-danger-subtle'
+              : !answered && isChosen
+                ? 'border border-accent bg-accent-subtle'
+                : 'border border-border-strong bg-surface-base';
           return (
             <li key={i}>
               <button
@@ -163,14 +200,20 @@ export function ExerciseCard({
                 aria-pressed={isChosen}
                 disabled={isDisabled}
                 onClick={isDisabled ? undefined : () => onSelect(i)}
-                className={`min-h-[56px] w-full rounded-md border border-border-strong bg-surface-base text-ink-primary p-3 text-body ${FOCUS_RING}`}
+                className={`flex min-h-[56px] w-full flex-col items-center justify-center rounded-md ${tone} text-ink-primary p-3 text-body ${FOCUS_RING}`}
               >
-                {/* Badge di posizione SOLO per assemble e SOLO su una tessera piazzata:
-                    l'ordine dei tocchi è l'informazione (append in ordine). */}
-                {exercise.kind === 'assemble' && isChosen && (
-                  <span className="text-label text-ink-secondary">{orderPosition}. </span>
+                <span>
+                  {exercise.kind === 'assemble' && isChosen && (
+                    <span className="text-label text-ink-secondary">{orderPosition}. </span>
+                  )}
+                  {option}
+                </span>
+                {isCorrectOption && (
+                  <span className="text-caption text-accent">{t('session.option.correct')}</span>
                 )}
-                {option}
+                {isWrongChoice && (
+                  <span className="text-caption text-danger">{t('session.option.yours')}</span>
+                )}
               </button>
             </li>
           );
@@ -178,8 +221,7 @@ export function ExerciseCard({
       </ul>
 
       {/* Consulto PRE-risposta (AC3): nello stato consegna, un'azione «mostra la
-          spiegazione» che imposta usedExplanation. Nessuno stile di penalità; una
-          volta rivelata non ricompare (revealed). */}
+          spiegazione» che imposta usedExplanation. Una volta rivelata non ricompare. */}
       {!answered && !revealed && (
         <button
           type="button"
@@ -191,7 +233,7 @@ export function ExerciseCard({
       )}
 
       {/* La spiegazione: consulto (correct null ⇒ solo spiegazione) o esito
-          (correct non-null ⇒ dichiarazione testuale + spiegazione). Nessun colore. */}
+          (correct non-null ⇒ dichiarazione testuale + spiegazione). */}
       {showExplanation && (
         <ExplanationPanel explanation={explanation} correct={answered ? correct : null} />
       )}

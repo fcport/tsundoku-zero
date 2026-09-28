@@ -290,3 +290,35 @@ describe('validateLessons — AC4: scoperta per glob, nessun codice cablato', ()
     ).toEqual([]);
   });
 });
+
+describe('validateLessons — lo spazio vuoto (`gap`) della scelta singola', () => {
+  const withGap = (gap: { kanji: string; kana: string }) => ({
+    ...validLesson,
+    exercises: [{ ...validLesson.exercises[0], gap }, ...validLesson.exercises.slice(1)],
+  });
+  const gapIssues = (gap: { kanji: string; kana: string }) =>
+    validateLessons([file('01.json', withGap(gap))]).map((i) => `${i.path.join('.')}: ${i.message}`);
+
+  it('un gap coerente con frase e risposta ⇒ nessun issue', () => {
+    expect(gapIssues({ kanji: '本を＿', kana: 'ほんを＿' })).toEqual([]);
+  });
+
+  it('il segnaposto rimpiazzato dalla risposta deve ridare la frase', () => {
+    expect(gapIssues({ kanji: '本が＿', kana: 'ほんが＿' })).toEqual([
+      expect.stringContaining('exercises.0.gap.kanji'),
+    ]);
+  });
+
+  it('un solo segnaposto, in kanji e in kana', () => {
+    const issues = gapIssues({ kanji: '本を読む', kana: 'ほん＿を＿' });
+    expect(issues).toHaveLength(2);
+    expect(issues[0]).toContain('gap.kanji');
+    expect(issues[1]).toContain('gap.kana');
+  });
+
+  it('la lettura del gap non contiene kanji', () => {
+    expect(gapIssues({ kanji: '本を＿', kana: '本を＿' })).toEqual([
+      expect.stringContaining('exercises.0.gap.kana'),
+    ]);
+  });
+});
