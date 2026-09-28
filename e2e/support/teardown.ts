@@ -13,24 +13,11 @@
 // Segreti: SOLO `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` (l'anon pubblica) —
 // MAI la `service_role` né altri secret privilegiati (coerente con `.env.example`
 // e `src/service-role-confinement.test`). NON importa moduli di `src/` (AD-1);
-// usa `@supabase/supabase-js` (già dipendenza del progetto) come il livello data.
-import { createClient } from '@supabase/supabase-js';
+// il client (anon key, senza persistenza di sessione) arriva da
+// `createAnonClient()` — la fonte UNICA condivisa con `account-deletion.spec.ts`
+// (storia 7.5), che elimina la duplicazione di `requiredEnv`+`createClient`.
+import { createAnonClient } from './supabaseTestClient';
 import type { TestUser } from './testUser';
-
-/**
- * Legge una VITE_* richiesta dall'ambiente e la restituisce non vuota, oppure
- * lancia NOMINANDO il secret mancante (idioma di `migrate.yml`/`src/app/env.ts`):
- * un errore opaco della SDK non deve mascherare una config assente.
- */
-function requiredEnv(name: string): string {
-  const value = process.env[name];
-  if (typeof value !== 'string' || value.trim().length === 0) {
-    throw new Error(
-      `Secret mancante: ${name}. L'e2e richiede VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (l'anon pubblica) nell'ambiente (locale in .env, in CI come GitHub Actions secrets).`,
-    );
-  }
-  return value.trim();
-}
 
 /**
  * Cancella l'utente di test invocando `delete-account` come lui stesso, e
@@ -44,15 +31,11 @@ function requiredEnv(name: string): string {
  * (anche su fallimento del test): pulizia verificata, non best-effort.
  */
 export async function deleteTestUser(user: TestUser): Promise<void> {
-  const supabaseUrl = requiredEnv('VITE_SUPABASE_URL');
-  const supabaseAnonKey = requiredEnv('VITE_SUPABASE_ANON_KEY');
-
   // Client effimero, SENZA persistenza di sessione (non è il browser dell'app,
   // non deve scrivere storage): serve solo a portare il JWT del test user
-  // all'invoke della funzione. Stessa anon key pubblica del client dell'app.
-  const client = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  // all'invoke della funzione. Stessa anon key pubblica del client dell'app,
+  // stesse opzioni: `createAnonClient()` è la fonte unica di segreti+client.
+  const client = createAnonClient();
 
   const signIn = await client.auth.signInWithPassword({
     email: user.email,
