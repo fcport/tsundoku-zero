@@ -1,0 +1,106 @@
+{
+  "order": 9,
+  "title": {
+    "en": "The particle に: destination, purpose, location, change; and へ",
+    "it": "La particella に: destinazione, scopo, luogo, cambiamento; e へ"
+  },
+  "grammarPoints": ["目的地を示す「に」", "目的を示す「に」", "存在の場所を示す「に」", "変化の結果を示す「に」", "方向を示す「へ」"],
+  "exercises": [
+    {
+      "kind": "assemble",
+      "grammarPoint": "目的を示す「に」",
+      "sentence": {
+        "kanji": "図書館に本を借りに行く",
+        "kana": "としょかんにほんをかりにいく"
+      },
+      "answer": ["図書館に", "本を", "借りに", "行く"],
+      "explanation": {
+        "en": "The sentence has two に: 図書館に is the place you go to, 借りに is the purpose of going. The i-stem 借り works as a noun (\"borrowing\"), so it can take に: \"I go to the library to borrow a book\".",
+        "it": "La frase ha due に: 図書館に è il luogo in cui si va, 借りに è lo scopo dell'andare. Il radicale in i 借り funziona come un nome («il prendere in prestito»), quindi può prendere に: «vado in biblioteca a prendere in prestito un libro»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "目的を示す「に」",
+      "sentence": {
+        "kanji": "海に泳ぎに行った",
+        "kana": "うみにおよぎにいった"
+      },
+      "answer": "泳ぎに",
+      "distractors": ["泳ぐに", "泳いに", "泳ぎで"],
+      "explanation": {
+        "en": "Purpose with a verb of movement is the i-stem plus に: 泳ぐ → 泳ぎ + に. The purpose に attaches to a noun, and the i-stem is the noun form of the verb; the dictionary form 泳ぐ cannot take に here.",
+        "it": "Lo scopo con un verbo di movimento è il radicale in i più に: 泳ぐ → 泳ぎ + に. Il に di scopo si attacca a un nome, e il radicale in i è la forma nominale del verbo; la forma del dizionario 泳ぐ qui non può prendere に."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "存在の場所を示す「に」",
+      "sentence": {
+        "kanji": "猫が庭にいる",
+        "kana": "ねこがにわにいる"
+      },
+      "answer": "に",
+      "distractors": ["で", "を"],
+      "explanation": {
+        "en": "The place where someone or something is — with いる for living beings, ある for things — is marked by に. で is for the place where an action happens, and いる is not an action.",
+        "it": "Il luogo in cui qualcuno o qualcosa si trova — con いる per gli esseri viventi, ある per le cose — è marcato da に. で serve per il luogo in cui avviene un'azione, e いる non è un'azione."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "存在の場所を示す「に」",
+      "sentence": {
+        "kanji": "ここに傘がある",
+        "kana": "ここにかさがある"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the location: ここに. The umbrella is the subject of ある (there is), and に marks where it is. When ある or いる say where something or someone is, the place is marked by に, not で.",
+        "it": "Seleziona il luogo: ここに. L'ombrello è il soggetto di ある (c'è), e に marca dove si trova. Quando ある o いる dicono dove si trova qualcosa o qualcuno, il luogo è marcato da に, non da で."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "変化の結果を示す「に」",
+      "sentence": {
+        "kanji": "兄は医者になった",
+        "kana": "あにはいしゃになった"
+      },
+      "answer": "に",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "なる means \"become\", and the result of the change is marked by に: 医者になった, \"became a doctor\". With a noun or a な-adjective, the result normally takes に.",
+        "it": "なる significa «diventare», e il risultato del cambiamento è marcato da に: 医者になった, «è diventato medico». Con un nome o un aggettivo in な, il risultato prende normalmente に."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "変化の結果を示す「に」",
+      "sentence": {
+        "kanji": "部屋が明るくなった",
+        "kana": "へやがあかるくなった"
+      },
+      "answer": "明るく",
+      "distractors": ["明るいに", "明るに", "明るいく"],
+      "explanation": {
+        "en": "に attaches to nouns, and 明るい (bright) is an い-adjective. Before なる, an い-adjective changes its final い into く: 明るくなった, \"became bright\".",
+        "it": "に si attacca ai nomi, e 明るい (luminoso) è un aggettivo in い. Davanti a なる, un aggettivo in い cambia la い finale in く: 明るくなった, «è diventato luminoso»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "方向を示す「へ」",
+      "sentence": {
+        "kanji": "来月京都へ行く",
+        "kana": "らいげつきょうとへいく"
+      },
+      "answer": "へ",
+      "distractors": ["が", "の"],
+      "explanation": {
+        "en": "The particle へ, pronounced え, marks the direction of a movement. Of the uses of に in this lesson, it overlaps only with the destination, so here に would also be correct. へ cannot mark where something is: 庭へいる is wrong.",
+        "it": "La particella へ, pronunciata え, marca la direzione di un movimento. Tra gli usi di に visti in questa lezione, si sovrappone solo alla destinazione, quindi qui anche に sarebbe corretto. へ non può marcare dove si trova qualcosa: 庭へいる è sbagliato."
+      }
+    }
+  ]
+}

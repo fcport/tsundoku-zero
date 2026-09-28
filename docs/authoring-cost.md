@@ -144,23 +144,32 @@ La Definition of Done del PRD §11 chiede **almeno cinque** lezioni autorate,
 revisionate e giocabili; l'**obiettivo è undici**, pari a quelle già viste
 dall'owner. Questo è il traguardo dell'epica di contenuto.
 
-<!-- authored-lessons: 2 -->
-<!-- dod-status: below-target -->
+<!-- authored-lessons: 14 -->
+<!-- dod-status: met -->
 
-**Stato reale.** Il repository contiene al momento **2** lezioni autorate sotto
-`content/lessons/`, entrambe **valide** contro il cancello di Epic 2
+**Stato reale.** Il repository contiene al momento **14** file di lezione sotto
+`content/lessons/`, tutti **validi** contro il cancello di Epic 2
 (`validateLessons` → `[]`):
 
-- `content/lessons/01-il-soggetto-con-ga.json` — `order: 1`, la prima lezione **reale**
-  del curriculum: が come marcatore del soggetto e le tre forme del predicato (verbo,
-  copula だ, aggettivo in い). Tre esercizi, uno per `kind`.
+- **13 lezioni di curriculum**, `order` da 1 a 13, una per ciascun transcript non vuoto
+  della cartella di lavoro. Il dettaglio — quanti esercizi ha ogni lezione, per tipo, e
+  da quale transcript sono stati estratti i fatti — è in `docs/content-inventory.md`.
 - `content/lessons/01-la-particella-wo.json` — `order: 900`, la lezione campione della
   storia 2.7. Vive nella **fascia riservata 900+** perché nasce come fixture dei test e
   la sua posizione nel curriculum è provvisoria: quando arriverà la lezione vera su を
-  va **sostituita**, non affiancata (avrebbero lo stesso `lessonId`).
+  va **sostituita**, non affiancata (avrebbero lo stesso `lessonId`). La lezione 2 del
+  curriculum esercita を come punto secondario, ma il suo punto primario è il pronome
+  zero: i due file non collidono.
 
-**Verdetto DoD:** lo stato attuale è **sotto il traguardo** — mancano lezioni per
-raggiungere le cinque (e altre ancora per l'obiettivo di undici). Il verdetto è tenuto
+**Verdetto DoD:** il traguardo delle cinque lezioni è **raggiunto**, e anche l'obiettivo
+di undici. Le lezioni dalla 2 alla 13 sono però state autorate con l'assistenza di un LLM
+e sono state pubblicate **senza la rilettura umana obbligatoria** del passo 5 del runbook
+(`FR11.2`): il 28-09-2026 l'owner ha rinunciato esplicitamente a farla, per la lunghezza.
+Al suo posto c'è stata una **rilettura indipendente eseguita da un secondo LLM**, che ha
+trovato cinque errori reali (un distrattore corretto, quattro spiegazioni imprecise) e tre
+casi dubbi, tutti corretti prima del commit. È una difesa più debole di quella prevista:
+chi incontra un esercizio sbagliato in queste lezioni sa da dove viene. Il conteggio misura
+i file validi, non la rilettura. Il verdetto è tenuto
 onesto da una seconda sentinella machine-readable — `<!-- dod-status: … -->` — che il
 test **accoppia al conteggio reale**: finché le lezioni sono meno di cinque vale
 `below-target`; quando si raggiungono le cinque va portata a `met`. Così il verdetto

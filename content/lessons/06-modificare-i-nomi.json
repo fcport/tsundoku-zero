@@ -1,0 +1,91 @@
+{
+  "order": 6,
+  "title": {
+    "en": "Describing a noun: predicates, な and の",
+    "it": "Descrivere un nome: predicati, な e の"
+  },
+  "grammarPoints": ["名詞を修飾する述語", "名詞を修飾する「な」", "名詞を修飾する「の」"],
+  "exercises": [
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞を修飾する述語",
+      "sentence": {
+        "kanji": "おいしい店に行った",
+        "kana": "おいしいみせにいった"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the word that describes 店 (shop): おいしい. An い-adjective is a complete predicate on its own; placed directly before a noun, it describes that noun — \"a shop that is delicious\", a good place to eat.",
+        "it": "Seleziona la parola che descrive 店 (locale): おいしい. Un aggettivo in い è da solo un predicato completo; messo subito prima di un nome, descrive quel nome — «un locale che è buono», un posto dove si mangia bene."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞を修飾する述語",
+      "sentence": {
+        "kanji": "昨日買った傘が壊れた",
+        "kana": "きのうかったかさがこわれた"
+      },
+      "answer": ["昨日", "買った", "傘が", "壊れた"],
+      "explanation": {
+        "en": "A whole verb clause can describe a noun, just by standing in front of it. 昨日買った (bought yesterday) describes 傘 (umbrella): \"the umbrella I bought yesterday broke\". Japanese has no word for \"that\" or \"which\": position alone does the work.",
+        "it": "Un'intera proposizione verbale può descrivere un nome, semplicemente mettendosi davanti a esso. 昨日買った (comprato ieri) descrive 傘 (ombrello): «l'ombrello che ho comprato ieri si è rotto». Il giapponese non ha una parola per «che»: basta la posizione."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞を修飾する「な」",
+      "sentence": {
+        "kanji": "静かな町に住んでいる",
+        "kana": "しずかなまちにすんでいる"
+      },
+      "answer": "静かな",
+      "distractors": ["静かだ", "静かの", "静かい"],
+      "explanation": {
+        "en": "静か (quiet) is a noun of the adjectival kind, the so-called な-adjective. At the end of a sentence it takes だ (町が静かだ); when it sits before a noun to describe it, だ becomes な: 静かな町.",
+        "it": "静か (tranquillo) è un nome di tipo aggettivale, il cosiddetto aggettivo in な. A fine frase prende だ (町が静かだ); quando sta davanti a un nome per descriverlo, だ diventa な: 静かな町."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞を修飾する「な」",
+      "sentence": {
+        "kanji": "有名な歌手が来た",
+        "kana": "ゆうめいなかしゅがきた"
+      },
+      "answer": ["有名な", "歌手が", "来た"],
+      "explanation": {
+        "en": "有名 (famous) is a な-adjective: before the noun 歌手 (singer) it takes な. The phrase 有名な歌手 as a whole is then marked by が as the subject of 来た (came).",
+        "it": "有名 (famoso) è un aggettivo in な: davanti al nome 歌手 (cantante) prende な. L'intera espressione 有名な歌手 è poi marcata da が come soggetto di 来た (è venuto)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞を修飾する「の」",
+      "sentence": {
+        "kanji": "木の机を買った",
+        "kana": "きのつくえをかった"
+      },
+      "answer": "の",
+      "distractors": ["な", "が"],
+      "explanation": {
+        "en": "木 (wood) is an ordinary noun, not a な-adjective, so it cannot take な. To let one noun describe another — its owner, its material, the kind it belongs to — Japanese uses の: 木の机, a wooden desk.",
+        "it": "木 (legno) è un nome ordinario, non un aggettivo in な, quindi non può prendere な. Per far descrivere un nome da un altro — il possessore, il materiale, il tipo a cui appartiene — il giapponese usa の: 木の机, una scrivania di legno."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞を修飾する「の」",
+      "sentence": {
+        "kanji": "日本語の先生が来た",
+        "kana": "にほんごのせんせいがきた"
+      },
+      "answer": "の",
+      "distractors": ["な", "だ"],
+      "explanation": {
+        "en": "日本語の先生 is \"a teacher of Japanese\": の links the noun 日本語 to the noun 先生 and tells what kind of teacher it is. だ closes a sentence and cannot join two nouns; な belongs to the adjectival nouns only.",
+        "it": "日本語の先生 è «un insegnante di giapponese»: の collega il nome 日本語 al nome 先生 e dice di che tipo di insegnante si tratta. だ chiude una frase e non può unire due nomi; な appartiene solo ai nomi aggettivali."
+      }
+    }
+  ]
+}

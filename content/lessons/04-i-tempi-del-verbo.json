@@ -1,0 +1,104 @@
+{
+  "order": 4,
+  "title": {
+    "en": "Non-past, ongoing and past; time words with or without に",
+    "it": "Non passato, in corso e passato; le espressioni di tempo con o senza に"
+  },
+  "grammarPoints": ["非過去形", "「ている」の進行", "過去形の「た」", "時を示す「に」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "非過去形",
+      "sentence": {
+        "kanji": "明日は雨が降る",
+        "kana": "あしたはあめがふる"
+      },
+      "answer": "降る",
+      "distractors": ["降った", "降っていた"],
+      "explanation": {
+        "en": "The dictionary form is a non-past tense, not a present: most of the time it describes something that will happen. With 明日 (tomorrow), 降る means \"it will rain\". A past form cannot go with tomorrow.",
+        "it": "La forma del dizionario è un tempo non passato, non un presente: il più delle volte descrive qualcosa che accadrà. Con 明日 (domani), 降る significa «pioverà». Una forma al passato non può stare con domani."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「ている」の進行",
+      "sentence": {
+        "kanji": "父が新聞を読んでいる",
+        "kana": "ちちがしんぶんをよんでいる"
+      },
+      "answer": "読んでいる",
+      "distractors": ["読むいる", "読みている", "読んいる"],
+      "explanation": {
+        "en": "An action in progress is the te-form of the verb followed by いる: \"is reading\". 読む ends in む, so its te-form is 読んで; いる cannot attach to the dictionary form or to the stem.",
+        "it": "Un'azione in corso è la forma in て del verbo seguita da いる: «sta leggendo». 読む finisce in む, quindi la sua forma in て è 読んで; いる non si attacca alla forma del dizionario né al radicale."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「ている」の進行",
+      "sentence": {
+        "kanji": "妹がテレビを見ている",
+        "kana": "いもうとがテレビをみている"
+      },
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select ている. 見る (watch) is a verb that drops る before an ending, so its te-form is 見て; adding いる gives \"is watching\". The sentence describes what is happening right now.",
+        "it": "Seleziona ている. 見る (guardare) è un verbo che perde る davanti a una desinenza, quindi la sua forma in て è 見て; aggiungendo いる si ottiene «sta guardando». La frase descrive ciò che accade in questo momento."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "過去形の「た」",
+      "sentence": {
+        "kanji": "昨日カレーを作った",
+        "kana": "きのうカレーをつくった"
+      },
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select the part that carries the past: った. The past tense is formed exactly like the te-form, with た in place of て: 作る → 作って → 作った. 昨日 (yesterday) is relative to today, so it needs no particle.",
+        "it": "Seleziona la parte che porta il passato: った. Il passato si forma esattamente come la forma in て, con た al posto di て: 作る → 作って → 作った. 昨日 (ieri) è relativo a oggi, quindi non richiede particella."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "過去形の「た」",
+      "sentence": {
+        "kanji": "先週新しい靴を買った",
+        "kana": "せんしゅうあたらしいくつをかった"
+      },
+      "answer": ["先週", "新しい", "靴を", "買った"],
+      "explanation": {
+        "en": "先週 (last week) is measured from now, so it stands at the front with no particle and places the whole sentence in that time. 買う ends in う, so its past is 買った.",
+        "it": "先週 (la settimana scorsa) si misura a partire da adesso, quindi sta in testa senza particella e colloca tutta la frase in quel tempo. 買う finisce in う, quindi il suo passato è 買った."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "時を示す「に」",
+      "sentence": {
+        "kanji": "七時に友達が来る",
+        "kana": "しちじにともだちがくる"
+      },
+      "answer": ["七時に", "友達が", "来る"],
+      "explanation": {
+        "en": "七時 (seven o'clock) is a fixed point on the clock, not a time measured from today, so it takes に. A quick test: if English needs \"at\", \"on\" or \"in\" before the time word, Japanese needs に. The non-past 来る refers to a future arrival.",
+        "it": "七時 (le sette) è un punto fisso dell'orologio, non un tempo misurato da oggi, quindi prende に. Una prova rapida: se in inglese serve «at», «on» o «in» davanti all'espressione di tempo, in giapponese serve に. Il non passato 来る indica un arrivo futuro."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "時を示す「に」",
+      "sentence": {
+        "kanji": "来年大学を卒業する",
+        "kana": "らいねんだいがくをそつぎょうする"
+      },
+      "answer": "来年",
+      "distractors": ["来年を", "来年が"],
+      "explanation": {
+        "en": "来年 (next year) only makes sense relative to the present year, so it takes no particle: it simply opens the sentence. に is for absolute times such as a date, a weekday or an hour; を and が would turn 来年 into an object or a subject, which it is not.",
+        "it": "来年 (l'anno prossimo) ha senso solo rispetto all'anno in corso, quindi non prende particella: apre semplicemente la frase. に serve per i tempi assoluti, come una data, un giorno della settimana o un'ora; を e が farebbero di 来年 un oggetto o un soggetto, e non lo è."
+      }
+    }
+  ]
+}

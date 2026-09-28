@@ -1,0 +1,106 @@
+{
+  "order": 5,
+  "title": {
+    "en": "The three verb groups and the te/ta forms",
+    "it": "I tre gruppi verbali e le forme in て/た"
+  },
+  "grammarPoints": ["動詞の三つのグループ", "て形・た形の作り方"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "動詞の三つのグループ",
+      "sentence": {
+        "kanji": "朝ごはんを食べた",
+        "kana": "あさごはんをたべた"
+      },
+      "answer": "食べた",
+      "distractors": ["食べった", "食べいた", "食んだ"],
+      "explanation": {
+        "en": "食べる is an ichidan verb (it ends in -eru and belongs to the simplest group): to attach anything, you remove る and add the ending. So the past is 食べ + た.",
+        "it": "食べる è un verbo ichidan (finisce in -eru e appartiene al gruppo più semplice): per attaccare qualunque cosa si toglie る e si aggiunge la desinenza. Quindi il passato è 食べ + た."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "動詞の三つのグループ",
+      "sentence": {
+        "kanji": "毎朝公園を走っている",
+        "kana": "まいあさこうえんをはしっている"
+      },
+      "answer": "走って",
+      "distractors": ["走て", "走りて", "走んで"],
+      "explanation": {
+        "en": "走る ends in -iru but is a godan verb, one of the minority that look like ichidan verbs. Godan verbs in る form the te-form with a small っ: 走る → 走って. Treating it as ichidan would give the wrong 走て.",
+        "it": "走る finisce in -iru ma è un verbo godan, uno della minoranza che somiglia agli ichidan. I verbi godan in る formano la forma in て con una piccola っ: 走る → 走って. Trattarlo come ichidan darebbe l'errato 走て."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "て形・た形の作り方",
+      "sentence": {
+        "kanji": "弟が薬を飲んだ",
+        "kana": "おとうとがくすりをのんだ"
+      },
+      "answer": "飲んだ",
+      "distractors": ["飲った", "飲いだ", "飲みた"],
+      "explanation": {
+        "en": "Godan verbs ending in む, ぶ or ぬ replace that syllable with ん and a voiced ending: んで for the te-form, んだ for the past. So 飲む (drink) → 飲んだ.",
+        "it": "I verbi godan in む, ぶ o ぬ sostituiscono quella sillaba con ん e una desinenza sonora: んで per la forma in て, んだ per il passato. Quindi 飲む (bere) → 飲んだ."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "て形・た形の作り方",
+      "sentence": {
+        "kanji": "昨日プールで泳いだ",
+        "kana": "きのうプールでおよいだ"
+      },
+      "answer": "泳いだ",
+      "distractors": ["泳った", "泳んだ", "泳いた"],
+      "explanation": {
+        "en": "Verbs in く become いて/いた; verbs in ぐ follow the same pattern with voicing, いで/いだ. 泳ぐ (swim) ends in ぐ, so its past is 泳いだ, not 泳いた.",
+        "it": "I verbi in く diventano いて/いた; i verbi in ぐ seguono lo stesso schema con la sonorizzazione, いで/いだ. 泳ぐ (nuotare) finisce in ぐ, quindi il passato è 泳いだ, non 泳いた."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "て形・た形の作り方",
+      "sentence": {
+        "kanji": "手紙を出した",
+        "kana": "てがみをだした"
+      },
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select した. Verbs ending in す change it to し before て or た: 出す (send) → 出して → 出した. It is the same shift from the u-row to the i-row that other endings use.",
+        "it": "Seleziona した. I verbi in す la cambiano in し davanti a て o た: 出す (spedire) → 出して → 出した. È lo stesso passaggio dalla riga in u alla riga in i che usano altre desinenze."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "て形・た形の作り方",
+      "sentence": {
+        "kanji": "歩いて学校に行った",
+        "kana": "あるいてがっこうにいった"
+      },
+      "answer": ["歩いて", "学校に", "行った"],
+      "explanation": {
+        "en": "歩く (walk) follows the く rule: 歩いて. 行く (go) is the one exception to that rule: it becomes 行って/行った, never 行いた.",
+        "it": "歩く (camminare) segue la regola dei verbi in く: 歩いて. 行く (andare) è l'unica eccezione a quella regola: diventa 行って/行った, mai 行いた."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "動詞の三つのグループ",
+      "sentence": {
+        "kanji": "日曜日に友達が来た",
+        "kana": "にちようびにともだちがきた"
+      },
+      "answer": "来た",
+      "distractors": ["来った", "来いた", "来んだ"],
+      "explanation": {
+        "en": "Japanese has only two irregular verbs: 来る (come) and する (do). Their te/ta forms must be learned as they are: 来る → 来て/来た (read きて/きた), する → して/した.",
+        "it": "Il giapponese ha solo due verbi irregolari: 来る (venire) e する (fare). Le loro forme in て/た vanno imparate così come sono: 来る → 来て/来た (letti きて/きた), する → して/した."
+      }
+    }
+  ]
+}

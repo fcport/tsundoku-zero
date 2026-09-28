@@ -1,0 +1,91 @@
+{
+  "order": 13,
+  "title": {
+    "en": "Joining clauses with the te-form; てくれる and てあげる",
+    "it": "Unire proposizioni con la forma in て; てくれる e てあげる"
+  },
+  "grammarPoints": ["て形で節をつなぐ", "恩恵を受ける「てくれる」", "恩恵を与える「てあげる」"],
+  "exercises": [
+    {
+      "kind": "assemble",
+      "grammarPoint": "て形で節をつなぐ",
+      "sentence": {
+        "kanji": "朝ごはんを食べて学校に行った",
+        "kana": "あさごはんをたべてがっこうにいった"
+      },
+      "answer": ["朝ごはんを", "食べて", "学校に", "行った"],
+      "explanation": {
+        "en": "The te-form ends a clause and announces that another one follows: \"ate breakfast and went to school\". The te-form carries no tense of its own; the past た at the end of the sentence applies to both actions.",
+        "it": "La forma in て chiude una proposizione e annuncia che ne segue un'altra: «ho fatto colazione e sono andato a scuola». La forma in て non porta un tempo proprio; il passato た in fondo alla frase vale per entrambe le azioni."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "て形で節をつなぐ",
+      "sentence": {
+        "kanji": "窓を開けて外を見た",
+        "kana": "まどをあけてそとをみた"
+      },
+      "answer": "開けて",
+      "distractors": ["開けって", "開きて", "開けるて"],
+      "explanation": {
+        "en": "開ける (open) is ichidan: remove る and add て, 開けて. The first clause (opened the window) is joined to the second (looked outside); only the last verb, 見た, shows that both happened in the past.",
+        "it": "開ける (aprire) è ichidan: si toglie る e si aggiunge て, 開けて. La prima proposizione (ho aperto la finestra) si unisce alla seconda (ho guardato fuori); solo l'ultimo verbo, 見た, mostra che entrambe sono avvenute nel passato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "恩恵を受ける「てくれる」",
+      "sentence": {
+        "kanji": "友達が私の宿題を手伝ってくれた",
+        "kana": "ともだちがわたしのしゅくだいをてつだってくれた"
+      },
+      "answer": "くれた",
+      "distractors": ["あげた"],
+      "explanation": {
+        "en": "te-form + くれる means someone does something for the speaker or the speaker's side: the friend helped with my homework, as a favour to me. あげる points the other way, from the speaker's side to others, so it cannot be used when the benefit comes to me.",
+        "it": "forma in て + くれる significa che qualcuno fa qualcosa per chi parla o per la sua cerchia: l'amico mi ha aiutato con i compiti, come favore a me. あげる va nella direzione opposta, da chi parla verso gli altri, quindi non si può usare quando il beneficio arriva a me."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "恩恵を受ける「てくれる」",
+      "sentence": {
+        "kanji": "父が夕飯を作ってくれた",
+        "kana": "ちちがゆうはんをつくってくれた"
+      },
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select ってくれた: the te-form ending of 作る followed by くれた. It tells you the dinner was made for the speaker's benefit — \"my father made dinner for me\" — without any word for \"for me\".",
+        "it": "Seleziona ってくれた: la desinenza in て di 作る seguita da くれた. Dice che la cena è stata preparata a beneficio di chi parla — «mio padre mi ha preparato la cena» — senza bisogno di una parola per «per me»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "恩恵を与える「てあげる」",
+      "sentence": {
+        "kanji": "私は妹に絵本を読んであげた",
+        "kana": "わたしはいもうとにえほんをよんであげた"
+      },
+      "answer": "あげた",
+      "distractors": ["くれた"],
+      "explanation": {
+        "en": "te-form + あげる means the speaker (or someone) does something for another person: I read a picture book to my younger sister, for her sake. くれる is reserved for favours that come toward the speaker.",
+        "it": "forma in て + あげる significa che chi parla (o qualcuno) fa qualcosa per un'altra persona: ho letto un libro illustrato a mia sorella minore, per lei. くれる è riservato ai favori che arrivano verso chi parla."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "恩恵を受ける「てくれる」",
+      "sentence": {
+        "kanji": "兄は忙しくて手伝ってくれなかった",
+        "kana": "あにはいそがしくててつだってくれなかった"
+      },
+      "answer": ["兄は", "忙しくて", "手伝ってくれなかった"],
+      "explanation": {
+        "en": "An い-adjective has a te-form too: 忙しい → 忙しくて, here giving the reason, \"was busy, and so…\". The second clause is the negative past of てくれる: my brother did not help me. The single tense marker at the end covers both clauses.",
+        "it": "Anche un aggettivo in い ha una forma in て: 忙しい → 忙しくて, qui a indicare il motivo, «era impegnato, e così…». La seconda proposizione è il passato negativo di てくれる: mio fratello non mi ha aiutato. L'unico segnale di tempo, in fondo, vale per entrambe le proposizioni."
+      }
+    }
+  ]
+}

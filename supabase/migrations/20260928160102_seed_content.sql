@@ -1,0 +1,348 @@
+-- Seed del contenuto (lezioni ed esercizi), generato da
+-- scripts/generate-content-seed.ts a partire da content/lessons/.
+-- NON modificare a mano: rigenera con `npm run generate-content-seed`.
+-- Idempotente: upsert su `id`; gli id derivano dal contenuto
+-- (lessonId/deriveExerciseId), quindi un contenuto invariato non cambia nulla.
+
+insert into lesson (id, ordinal, title_en, title_it, grammar_points) values
+  ('が-が示す主語', 1, 'The subject with が, and the three predicates', 'Il soggetto con が, e i tre predicati', array['「が」が示す主語', '述語の三つの形']),
+  ('を-で示す目的語', 900, 'Marking the object with を', 'Marcare l''oggetto con を', array['「を」で示す目的語', '熟字訓の読み']),
+  ('ゼロ代名詞', 2, 'The zero pronoun, and the object with を', 'Il pronome zero, e l''oggetto con を', array['ゼロ代名詞', '「を」で示す目的語']),
+  ('は-が示す主題', 3, 'The topic with は, and the target with に', 'Il tema con は, e il destinatario con に', array['「は」が示す主題', '到達点を示す「に」']),
+  ('非過去形', 4, 'Non-past, ongoing and past; time words with or without に', 'Non passato, in corso e passato; le espressioni di tempo con o senza に', array['非過去形', '「ている」の進行', '過去形の「た」', '時を示す「に」']),
+  ('動詞の三つのグループ', 5, 'The three verb groups and the te/ta forms', 'I tre gruppi verbali e le forme in て/た', array['動詞の三つのグループ', 'て形・た形の作り方']),
+  ('名詞を修飾する述語', 6, 'Describing a noun: predicates, な and の', 'Descrivere un nome: predicati, な e の', array['名詞を修飾する述語', '名詞を修飾する「な」', '名詞を修飾する「の」']),
+  ('否定の-ない', 7, 'Negation with ない', 'La negazione con ない', array['否定の「ない」', '名詞文の否定「ではない」', '形容詞の否定「くない」', '丁寧な否定「ません」']),
+  ('動詞の語幹と助動詞', 8, 'Verb stems and the auxiliaries that attach to them', 'I radicali del verbo e gli ausiliari che vi si attaccano', array['動詞の語幹と助動詞', '連用形につく「ます」「たい」', '未然形につく「せる」「れる」', '意向形']),
+  ('目的地を示す-に', 9, 'The particle に: destination, purpose, location, change; and へ', 'La particella に: destinazione, scopo, luogo, cambiamento; e へ', array['目的地を示す「に」', '目的を示す「に」', '存在の場所を示す「に」', '変化の結果を示す「に」', '方向を示す「へ」']),
+  ('動作の場所を示す-で', 10, 'で for the place of an action and for the means; と to join nouns', 'で per il luogo di un''azione e per il mezzo; と per unire i nomi', array['動作の場所を示す「で」', '手段を示す「で」', '名詞をつなぐ「と」']),
+  ('感情-理解の述語と-が', 11, 'が with 好き, 分かる, ほしい and たい; がる for other people', 'が con 好き, 分かる, ほしい e たい; がる per gli altri', array['感情・理解の述語と「が」', '欲求の「ほしい」と「たい」', '他人の感情を示す「がる」']),
+  ('可能形', 12, 'The potential form and できる', 'La forma potenziale e できる', array['可能形', '不規則動詞の可能形', '可能形と「が」']),
+  ('て形で節をつなぐ', 13, 'Joining clauses with the te-form; てくれる and てあげる', 'Unire proposizioni con la forma in て; てくれる e てあげる', array['て形で節をつなぐ', '恩恵を受ける「てくれる」', '恩恵を与える「てあげる」'])
+on conflict (id) do update set
+  ordinal = excluded.ordinal,
+  title_en = excluded.title_en,
+  title_it = excluded.title_it,
+  grammar_points = excluded.grammar_points;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('57975a13-e0c2-5eda-9d3f-5bb832248016', 'が-が示す主語', 'assemble', '{"sentence":{"kanji":"妹が毎朝歌います","kana":"いもうとがまいあさうたいます"},"answer":["妹が","毎朝","歌います"]}'::jsonb, '「が」が示す主語', 'が marks the subject: it tells you which element the predicate is about. Here 妹 (younger sister) is the subject and 歌います (sings) is the predicate. 毎朝 (every morning) adds information but is not the subject, so it carries no が. A sentence has exactly one subject marked by が.', 'が marca il soggetto: dice di quale elemento parla il predicato. Qui 妹 (sorella minore) è il soggetto e 歌います (canta) è il predicato. 毎朝 (ogni mattina) aggiunge informazione ma non è il soggetto, quindi non porta が. Una frase ha esattamente un soggetto marcato da が.'),
+  ('2e47b85b-29ba-54d7-a09a-2533decd1cb3', 'が-が示す主語', 'select-span', '{"sentence":{"kanji":"妹が学生だ","kana":"いもうとががくせいだ"},"answer":{"start":1,"end":2}}'::jsonb, '述語の三つの形', 'Select the copula. だ states an identity between the subject and what precedes it: 妹 = 学生. The relation holds in one direction only — this sentence says the sister is a student, not that students are the sister. だ is one of the three things a predicate can end with; the other two are a verb and an い-adjective.', 'Seleziona la copula. だ afferma un''identità fra il soggetto e ciò che la precede: 妹 = 学生. La relazione vale in una sola direzione — questa frase dice che la sorella è una studentessa, non che le studentesse siano la sorella. だ è una delle tre cose con cui un predicato può chiudersi; le altre due sono un verbo e un aggettivo in い.'),
+  ('8347f682-389b-5c65-81af-6af0f0424823', 'が-が示す主語', 'single-select', '{"sentence":{"kanji":"水が冷たい","kana":"みずがつめたい"},"answer":"冷たい","distractors":["冷たいだ","冷だ","冷たくだ"]}'::jsonb, '述語の三つの形', 'An い-adjective is already a complete predicate: 冷たい does not mean "cold", it means "is cold". The identity function that だ performs is built into the adjective, so だ is never added after an い-adjective. This is why a predicate can end in three ways — a verb, だ, or an い-adjective — and never in two of them at once.', 'Un aggettivo in い è già un predicato completo: 冷たい non significa «freddo», significa «è freddo». La funzione di identità che svolge だ è incorporata nell''aggettivo, quindi だ non si aggiunge mai dopo un aggettivo in い. È la ragione per cui un predicato può chiudersi in tre modi — un verbo, だ, o un aggettivo in い — e mai in due insieme.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('8fed4be3-4edc-5561-af8c-ca448d7603bc', 'を-で示す目的語', 'single-select', '{"sentence":{"kanji":"今日は日本語を勉強します","kana":"きょうはにほんごをべんきょうします"},"answer":"きょう","distractors":["こんにち","いまび","きょうび"]}'::jsonb, '熟字訓の読み', 'The word 今日 is a jukujikun: the reading きょう is assigned to the whole compound, not to each kanji, so it cannot be spelled out character by character. Here を marks 日本語 as the object being studied.', 'La parola 今日 è un jukujikun: la lettura きょう è assegnata all''intero composto, non ai singoli kanji, quindi non si può ricostruire carattere per carattere. Qui を marca 日本語 come oggetto studiato.'),
+  ('56f118fd-9f93-5298-a813-00080f91554c', 'を-で示す目的語', 'assemble', '{"sentence":{"kanji":"私は図書館で新しい本を借りて、毎晩少しずつ読みます","kana":"わたしはとしょかんであたらしいほんをかりて、まいばんすこしずつよみます"},"answer":["私は","図書館で","新しい","本を","借りて、","毎晩","少しずつ","読みます"]}'::jsonb, '「を」で示す目的語', 'を marks 本 (the book) as the object of the verbs 借りる and 読む. Note the okurigana that carry the inflection outside the kanji: 新しい (adjective ending), 借りて (te-form), and 読みます (polite ending).', null),
+  ('4339dc49-815a-5f53-bd76-c7464e90c853', 'を-で示す目的語', 'select-span', '{"sentence":{"kanji":"果物をください","kana":"くだものをください"},"answer":{"start":0,"end":1}}'::jsonb, '「を」で示す目的語', 'Select the object marked by を. 果物 (fruit) is a jukujikun read くだもの as a single unit — 果 and 物 are not read separately — so it forms one furigana segment, and here that segment is exactly the object: segment index 0, with をください as the following segment.', 'Seleziona l''oggetto marcato da を. 果物 (frutta) è un jukujikun letto くだもの come unità — 果 e 物 non si leggono separatamente — quindi forma un solo segmento di furigana, e qui quel segmento è esattamente l''oggetto: indice 0, con をください come segmento successivo.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('0f32d14b-3435-526b-bbac-b35ac5c7db99', 'ゼロ代名詞', 'assemble', '{"sentence":{"kanji":"弟がパンを焼く","kana":"おとうとがパンをやく"},"answer":["弟が","パンを","焼く"]}'::jsonb, '「を」で示す目的語', 'Two roles, two particles. が marks 弟 (younger brother) as the one who performs the action; を marks パン (bread) as what the action is applied to — the object. Each particle travels with its noun, and the verb 焼く (bake) closes the sentence.', 'Due ruoli, due particelle. が marca 弟 (fratello minore) come chi compie l''azione; を marca パン (pane) come ciò su cui l''azione si esercita — l''oggetto. Ogni particella viaggia con il suo nome, e il verbo 焼く (cuocere) chiude la frase.'),
+  ('3ac7b3aa-91eb-55f4-bd8b-99d8c49f8990', 'ゼロ代名詞', 'select-span', '{"sentence":{"kanji":"ピザを焼いた","kana":"ピザをやいた"},"answer":{"start":0,"end":1}}'::jsonb, '「を」で示す目的語', 'Select the object: ピザを. を marks the pizza as the thing that was baked. No subject is written, yet the sentence is complete: its subject is a zero pronoun, understood as the speaker unless the context points to someone else — "I baked a pizza".', 'Seleziona l''oggetto: ピザを. を marca la pizza come la cosa che è stata cotta. Nessun soggetto è scritto, eppure la frase è completa: il suo soggetto è un pronome zero, inteso come chi parla a meno che il contesto indichi qualcun altro — «ho cotto una pizza».'),
+  ('aa3360be-653c-52cd-bcc5-aacdbd09a332', 'ゼロ代名詞', 'single-select', '{"sentence":{"kanji":"猫が魚を食べた","kana":"ねこがさかなをたべた"},"answer":"を","distractors":["が","の"]}'::jsonb, '「を」で示す目的語', 'The fish is what gets eaten, so it takes the object particle を. が is already used by 猫 (cat), the one who eats; の would turn 魚 into a modifier of the next noun, but a verb follows, not a noun.', 'Il pesce è ciò che viene mangiato, quindi prende la particella dell''oggetto を. が è già usata da 猫 (gatto), chi mangia; の farebbe di 魚 un modificatore del nome seguente, ma segue un verbo, non un nome.'),
+  ('0cde5b10-898c-581d-9750-a83dbf5ad084', 'ゼロ代名詞', 'select-span', '{"sentence":{"kanji":"もう八時だ","kana":"もうはちじだ"},"answer":{"start":2,"end":3}}'::jsonb, 'ゼロ代名詞', 'Select the copula だ. The sentence has a predicate (八時だ, "is eight o''clock") but no written subject. Japanese does not need one on the page: the subject is a zero pronoun whose value comes from the situation — here, the present time.', 'Seleziona la copula だ. La frase ha un predicato (八時だ, «sono le otto») ma nessun soggetto scritto. Il giapponese non ha bisogno di scriverlo: il soggetto è un pronome zero il cui valore viene dalla situazione — qui, l''ora attuale.'),
+  ('e9ac22ea-8073-5d03-a921-43dbccd1614e', 'ゼロ代名詞', 'assemble', '{"sentence":{"kanji":"毎晩日記を書く","kana":"まいばんにっきをかく"},"answer":["毎晩","日記を","書く"]}'::jsonb, 'ゼロ代名詞', 'There is no が anywhere, but every action still has someone performing it. The subject of 書く (write) is a zero pronoun; with nothing else in the context, it defaults to the speaker: "I write in my diary every night".', 'Non c''è nessun が, ma ogni azione ha comunque qualcuno che la compie. Il soggetto di 書く (scrivere) è un pronome zero; se il contesto non dice altro, vale chi parla: «ogni sera scrivo il diario».'),
+  ('579c5b10-3119-59bc-8ed4-87dd1c948f35', 'ゼロ代名詞', 'single-select', '{"sentence":{"kanji":"窓を開ける","kana":"まどをあける"},"answer":"を","distractors":["が","で"]}'::jsonb, 'ゼロ代名詞', '窓 (window) is what gets opened, so it is the object and takes を. With が the window would become the subject, and the sentence would lose the person who opens it. That person is still there as a zero pronoun: "(I) open the window".', '窓 (finestra) è ciò che viene aperto, quindi è l''oggetto e prende を. Con が la finestra diventerebbe il soggetto, e la frase perderebbe chi la apre. Quella persona c''è comunque, come pronome zero: «(io) apro la finestra».')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('18239c82-53c0-5b50-b5ea-1ea27f2ef47b', 'は-が示す主題', 'select-span', '{"sentence":{"kanji":"これは私の傘だ","kana":"これはわたしのかさだ"},"answer":{"start":0,"end":1}}'::jsonb, '「は」が示す主題', 'Select the topic: これは. は announces what the sentence is about — "as for this" — and then steps aside. It is not a case particle: it gives the noun no grammatical role (subject, object, target): the subject of 私の傘だ is left unspoken and is understood from the topic.', 'Seleziona il tema: これは. は annuncia di che cosa parla la frase — «quanto a questo» — e poi si fa da parte. Non è una particella di caso: non assegna al nome alcun ruolo grammaticale (soggetto, oggetto, destinatario): il soggetto di 私の傘だ resta sottinteso e si ricava dal tema.'),
+  ('4a486ed2-e831-53d7-bb03-619e7e55f5e5', 'は-が示す主題', 'single-select', '{"sentence":{"kanji":"東京は人が多い","kana":"とうきょうはひとがおおい"},"answer":"は","distractors":["を","へ"]}'::jsonb, '「は」が示す主題', 'The subject of 多い (are many) is 人, already marked by が. 東京 has no grammatical role in the predicate: it only sets the scene, "as for Tokyo". Marking what the sentence is about, without a grammatical role, is exactly the job of は.', 'Il soggetto di 多い (sono molti) è 人, già marcato da が. 東京 non ha alcun ruolo grammaticale nel predicato: fissa solo la scena, «quanto a Tokyo». Marcare ciò di cui si parla, senza un ruolo grammaticale, è esattamente il compito di は.'),
+  ('8bd02c8c-712f-5b02-950e-c60858e8f452', 'は-が示す主題', 'assemble', '{"sentence":{"kanji":"私は毎日コーヒーを飲む","kana":"わたしはまいにちコーヒーをのむ"},"answer":["私は","毎日","コーヒーを","飲む"]}'::jsonb, '「は」が示す主題', '私は is the topic: "as for me". The one who drinks is an unspoken subject that the topic makes clear. Moving は onto another noun would change the emphasis — what the sentence is about — but never who does what; that is fixed by the case particles such as が and を.', '私は è il tema: «quanto a me». Chi beve è un soggetto sottinteso che il tema rende chiaro. Spostare は su un altro nome cambierebbe l''enfasi — ciò di cui si parla — ma mai chi fa cosa: quello lo fissano le particelle di caso come が e を.'),
+  ('61e926e3-590c-5339-9425-120cfbbb25da', 'は-が示す主題', 'select-span', '{"sentence":{"kanji":"ポストに手紙を入れた","kana":"ポストにてがみをいれた"},"answer":{"start":0,"end":1}}'::jsonb, '到達点を示す「に」', 'Select the target of the action: ポストに. The letter is the object (を); the postbox is where the action ends up, so it is marked by に. The one who put the letter in is an unspoken subject.', 'Seleziona il punto d''arrivo dell''azione: ポストに. La lettera è l''oggetto (を); la cassetta postale è dove l''azione va a finire, quindi è marcata da に. Chi ha imbucato la lettera è un soggetto sottinteso.'),
+  ('f1d776a4-259a-5651-914b-90de125c1c1c', 'は-が示す主題', 'single-select', '{"sentence":{"kanji":"先生に花をあげた","kana":"せんせいにはなをあげた"},"answer":"に","distractors":["を","で"]}'::jsonb, '到達点を示す「に」', '花 (flowers) is what is given, so it takes を. The teacher is the recipient — the person the giving is aimed at — and a recipient is marked by に.', '花 (fiori) è ciò che viene dato, quindi prende を. L''insegnante è il destinatario — la persona a cui il dare è rivolto — e un destinatario è marcato da に.'),
+  ('34bfcd4c-14f4-5e5a-86c3-764f90e7c57a', 'は-が示す主題', 'assemble', '{"sentence":{"kanji":"姉が友達に手紙を送った","kana":"あねがともだちにてがみをおくった"},"answer":["姉が","友達に","手紙を","送った"]}'::jsonb, '到達点を示す「に」', 'が marks who sends (姉, older sister), に marks who the letter goes to (友達, a friend), を marks what is sent (手紙, a letter). The particles, not the word order, decide the roles: this is the most neutral order, but 手紙を could also come before 友達に without changing the meaning.', 'が marca chi spedisce (姉, sorella maggiore), に marca a chi va la lettera (友達, un amico), を marca ciò che viene spedito (手紙, una lettera). Sono le particelle, non l''ordine delle parole, a decidere i ruoli: questo è l''ordine più neutro, ma 手紙を potrebbe venire prima di 友達に senza cambiare il significato.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('b7d38cc8-562b-59dd-92df-b6599109a919', '非過去形', 'single-select', '{"sentence":{"kanji":"明日は雨が降る","kana":"あしたはあめがふる"},"answer":"降る","distractors":["降った","降っていた"]}'::jsonb, '非過去形', 'The dictionary form is a non-past tense, not a present: most of the time it describes something that will happen. With 明日 (tomorrow), 降る means "it will rain". A past form cannot go with tomorrow.', 'La forma del dizionario è un tempo non passato, non un presente: il più delle volte descrive qualcosa che accadrà. Con 明日 (domani), 降る significa «pioverà». Una forma al passato non può stare con domani.'),
+  ('3ed770d8-53e8-583b-9402-cdba8605fcb4', '非過去形', 'single-select', '{"sentence":{"kanji":"父が新聞を読んでいる","kana":"ちちがしんぶんをよんでいる"},"answer":"読んでいる","distractors":["読むいる","読みている","読んいる"]}'::jsonb, '「ている」の進行', 'An action in progress is the te-form of the verb followed by いる: "is reading". 読む ends in む, so its te-form is 読んで; いる cannot attach to the dictionary form or to the stem.', 'Un''azione in corso è la forma in て del verbo seguita da いる: «sta leggendo». 読む finisce in む, quindi la sua forma in て è 読んで; いる non si attacca alla forma del dizionario né al radicale.'),
+  ('3b4b6752-0757-51a1-b94d-13f807ec11e8', '非過去形', 'select-span', '{"sentence":{"kanji":"妹がテレビを見ている","kana":"いもうとがテレビをみている"},"answer":{"start":1,"end":2}}'::jsonb, '「ている」の進行', 'Select ている. 見る (watch) is a verb that drops る before an ending, so its te-form is 見て; adding いる gives "is watching". The sentence describes what is happening right now.', 'Seleziona ている. 見る (guardare) è un verbo che perde る davanti a una desinenza, quindi la sua forma in て è 見て; aggiungendo いる si ottiene «sta guardando». La frase descrive ciò che accade in questo momento.'),
+  ('2281b09b-cfa1-5201-b30a-a4d0e9916bdd', '非過去形', 'select-span', '{"sentence":{"kanji":"昨日カレーを作った","kana":"きのうカレーをつくった"},"answer":{"start":1,"end":2}}'::jsonb, '過去形の「た」', 'Select the part that carries the past: った. The past tense is formed exactly like the te-form, with た in place of て: 作る → 作って → 作った. 昨日 (yesterday) is relative to today, so it needs no particle.', 'Seleziona la parte che porta il passato: った. Il passato si forma esattamente come la forma in て, con た al posto di て: 作る → 作って → 作った. 昨日 (ieri) è relativo a oggi, quindi non richiede particella.'),
+  ('5f4f76f1-97eb-5e69-b160-43aaeca96e13', '非過去形', 'assemble', '{"sentence":{"kanji":"先週新しい靴を買った","kana":"せんしゅうあたらしいくつをかった"},"answer":["先週","新しい","靴を","買った"]}'::jsonb, '過去形の「た」', '先週 (last week) is measured from now, so it stands at the front with no particle and places the whole sentence in that time. 買う ends in う, so its past is 買った.', '先週 (la settimana scorsa) si misura a partire da adesso, quindi sta in testa senza particella e colloca tutta la frase in quel tempo. 買う finisce in う, quindi il suo passato è 買った.'),
+  ('4af79a02-6a52-5ed0-8de8-d892d154cd92', '非過去形', 'assemble', '{"sentence":{"kanji":"七時に友達が来る","kana":"しちじにともだちがくる"},"answer":["七時に","友達が","来る"]}'::jsonb, '時を示す「に」', '七時 (seven o''clock) is a fixed point on the clock, not a time measured from today, so it takes に. A quick test: if English needs "at", "on" or "in" before the time word, Japanese needs に. The non-past 来る refers to a future arrival.', '七時 (le sette) è un punto fisso dell''orologio, non un tempo misurato da oggi, quindi prende に. Una prova rapida: se in inglese serve «at», «on» o «in» davanti all''espressione di tempo, in giapponese serve に. Il non passato 来る indica un arrivo futuro.'),
+  ('1362ab6a-c76c-52f2-8990-3d5c04dced59', '非過去形', 'single-select', '{"sentence":{"kanji":"来年大学を卒業する","kana":"らいねんだいがくをそつぎょうする"},"answer":"来年","distractors":["来年を","来年が"]}'::jsonb, '時を示す「に」', '来年 (next year) only makes sense relative to the present year, so it takes no particle: it simply opens the sentence. に is for absolute times such as a date, a weekday or an hour; を and が would turn 来年 into an object or a subject, which it is not.', '来年 (l''anno prossimo) ha senso solo rispetto all''anno in corso, quindi non prende particella: apre semplicemente la frase. に serve per i tempi assoluti, come una data, un giorno della settimana o un''ora; を e が farebbero di 来年 un oggetto o un soggetto, e non lo è.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('3edb0ae6-beb3-5405-a88e-42582289500c', '動詞の三つのグループ', 'single-select', '{"sentence":{"kanji":"朝ごはんを食べた","kana":"あさごはんをたべた"},"answer":"食べた","distractors":["食べった","食べいた","食んだ"]}'::jsonb, '動詞の三つのグループ', '食べる is an ichidan verb (it ends in -eru and belongs to the simplest group): to attach anything, you remove る and add the ending. So the past is 食べ + た.', '食べる è un verbo ichidan (finisce in -eru e appartiene al gruppo più semplice): per attaccare qualunque cosa si toglie る e si aggiunge la desinenza. Quindi il passato è 食べ + た.'),
+  ('d5c8da5e-6e1b-5e48-b374-a114cb6e4e43', '動詞の三つのグループ', 'single-select', '{"sentence":{"kanji":"毎朝公園を走っている","kana":"まいあさこうえんをはしっている"},"answer":"走って","distractors":["走て","走りて","走んで"]}'::jsonb, '動詞の三つのグループ', '走る ends in -iru but is a godan verb, one of the minority that look like ichidan verbs. Godan verbs in る form the te-form with a small っ: 走る → 走って. Treating it as ichidan would give the wrong 走て.', '走る finisce in -iru ma è un verbo godan, uno della minoranza che somiglia agli ichidan. I verbi godan in る formano la forma in て con una piccola っ: 走る → 走って. Trattarlo come ichidan darebbe l''errato 走て.'),
+  ('cd298cc6-62a9-54aa-8f73-d88e3c6214f9', '動詞の三つのグループ', 'single-select', '{"sentence":{"kanji":"弟が薬を飲んだ","kana":"おとうとがくすりをのんだ"},"answer":"飲んだ","distractors":["飲った","飲いだ","飲みた"]}'::jsonb, 'て形・た形の作り方', 'Godan verbs ending in む, ぶ or ぬ replace that syllable with ん and a voiced ending: んで for the te-form, んだ for the past. So 飲む (drink) → 飲んだ.', 'I verbi godan in む, ぶ o ぬ sostituiscono quella sillaba con ん e una desinenza sonora: んで per la forma in て, んだ per il passato. Quindi 飲む (bere) → 飲んだ.'),
+  ('a83154b8-bddd-5726-ad4a-9cc36ddc9b02', '動詞の三つのグループ', 'single-select', '{"sentence":{"kanji":"昨日プールで泳いだ","kana":"きのうプールでおよいだ"},"answer":"泳いだ","distractors":["泳った","泳んだ","泳いた"]}'::jsonb, 'て形・た形の作り方', 'Verbs in く become いて/いた; verbs in ぐ follow the same pattern with voicing, いで/いだ. 泳ぐ (swim) ends in ぐ, so its past is 泳いだ, not 泳いた.', 'I verbi in く diventano いて/いた; i verbi in ぐ seguono lo stesso schema con la sonorizzazione, いで/いだ. 泳ぐ (nuotare) finisce in ぐ, quindi il passato è 泳いだ, non 泳いた.'),
+  ('5a77229e-6cec-5a7a-a56d-015085d4fd93', '動詞の三つのグループ', 'select-span', '{"sentence":{"kanji":"手紙を出した","kana":"てがみをだした"},"answer":{"start":1,"end":2}}'::jsonb, 'て形・た形の作り方', 'Select した. Verbs ending in す change it to し before て or た: 出す (send) → 出して → 出した. It is the same shift from the u-row to the i-row that other endings use.', 'Seleziona した. I verbi in す la cambiano in し davanti a て o た: 出す (spedire) → 出して → 出した. È lo stesso passaggio dalla riga in u alla riga in i che usano altre desinenze.'),
+  ('10054a46-427c-5262-9c64-6c52b362676c', '動詞の三つのグループ', 'assemble', '{"sentence":{"kanji":"歩いて学校に行った","kana":"あるいてがっこうにいった"},"answer":["歩いて","学校に","行った"]}'::jsonb, 'て形・た形の作り方', '歩く (walk) follows the く rule: 歩いて. 行く (go) is the one exception to that rule: it becomes 行って/行った, never 行いた.', '歩く (camminare) segue la regola dei verbi in く: 歩いて. 行く (andare) è l''unica eccezione a quella regola: diventa 行って/行った, mai 行いた.'),
+  ('3b9faea7-4987-5660-b634-29e62290f61d', '動詞の三つのグループ', 'single-select', '{"sentence":{"kanji":"日曜日に友達が来た","kana":"にちようびにともだちがきた"},"answer":"来た","distractors":["来った","来いた","来んだ"]}'::jsonb, '動詞の三つのグループ', 'Japanese has only two irregular verbs: 来る (come) and する (do). Their te/ta forms must be learned as they are: 来る → 来て/来た (read きて/きた), する → して/した.', 'Il giapponese ha solo due verbi irregolari: 来る (venire) e する (fare). Le loro forme in て/た vanno imparate così come sono: 来る → 来て/来た (letti きて/きた), する → して/した.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('88bacd49-0013-53ad-8822-bc64198450cd', '名詞を修飾する述語', 'select-span', '{"sentence":{"kanji":"おいしい店に行った","kana":"おいしいみせにいった"},"answer":{"start":0,"end":1}}'::jsonb, '名詞を修飾する述語', 'Select the word that describes 店 (shop): おいしい. An い-adjective is a complete predicate on its own; placed directly before a noun, it describes that noun — "a shop that is delicious", a good place to eat.', 'Seleziona la parola che descrive 店 (locale): おいしい. Un aggettivo in い è da solo un predicato completo; messo subito prima di un nome, descrive quel nome — «un locale che è buono», un posto dove si mangia bene.'),
+  ('f514db52-f4fc-5d2f-af57-5ff12b9949c1', '名詞を修飾する述語', 'assemble', '{"sentence":{"kanji":"昨日買った傘が壊れた","kana":"きのうかったかさがこわれた"},"answer":["昨日","買った","傘が","壊れた"]}'::jsonb, '名詞を修飾する述語', 'A whole verb clause can describe a noun, just by standing in front of it. 昨日買った (bought yesterday) describes 傘 (umbrella): "the umbrella I bought yesterday broke". Japanese has no word for "that" or "which": position alone does the work.', 'Un''intera proposizione verbale può descrivere un nome, semplicemente mettendosi davanti a esso. 昨日買った (comprato ieri) descrive 傘 (ombrello): «l''ombrello che ho comprato ieri si è rotto». Il giapponese non ha una parola per «che»: basta la posizione.'),
+  ('349ef8de-fce0-5138-84a5-10426df29fe8', '名詞を修飾する述語', 'single-select', '{"sentence":{"kanji":"静かな町に住んでいる","kana":"しずかなまちにすんでいる"},"answer":"静かな","distractors":["静かだ","静かの","静かい"]}'::jsonb, '名詞を修飾する「な」', '静か (quiet) is a noun of the adjectival kind, the so-called な-adjective. At the end of a sentence it takes だ (町が静かだ); when it sits before a noun to describe it, だ becomes な: 静かな町.', '静か (tranquillo) è un nome di tipo aggettivale, il cosiddetto aggettivo in な. A fine frase prende だ (町が静かだ); quando sta davanti a un nome per descriverlo, だ diventa な: 静かな町.'),
+  ('dfcc733a-c32e-5f45-9fd1-43b4c27d2055', '名詞を修飾する述語', 'assemble', '{"sentence":{"kanji":"有名な歌手が来た","kana":"ゆうめいなかしゅがきた"},"answer":["有名な","歌手が","来た"]}'::jsonb, '名詞を修飾する「な」', '有名 (famous) is a な-adjective: before the noun 歌手 (singer) it takes な. The phrase 有名な歌手 as a whole is then marked by が as the subject of 来た (came).', '有名 (famoso) è un aggettivo in な: davanti al nome 歌手 (cantante) prende な. L''intera espressione 有名な歌手 è poi marcata da が come soggetto di 来た (è venuto).'),
+  ('79ae205c-615d-5647-9b01-d6800dee970c', '名詞を修飾する述語', 'single-select', '{"sentence":{"kanji":"木の机を買った","kana":"きのつくえをかった"},"answer":"の","distractors":["な","が"]}'::jsonb, '名詞を修飾する「の」', '木 (wood) is an ordinary noun, not a な-adjective, so it cannot take な. To let one noun describe another — its owner, its material, the kind it belongs to — Japanese uses の: 木の机, a wooden desk.', '木 (legno) è un nome ordinario, non un aggettivo in な, quindi non può prendere な. Per far descrivere un nome da un altro — il possessore, il materiale, il tipo a cui appartiene — il giapponese usa の: 木の机, una scrivania di legno.'),
+  ('3be87963-5201-5b19-a2c5-b8b43bc26ea1', '名詞を修飾する述語', 'single-select', '{"sentence":{"kanji":"日本語の先生が来た","kana":"にほんごのせんせいがきた"},"answer":"の","distractors":["な","だ"]}'::jsonb, '名詞を修飾する「の」', '日本語の先生 is "a teacher of Japanese": の links the noun 日本語 to the noun 先生 and tells what kind of teacher it is. だ closes a sentence and cannot join two nouns; な belongs to the adjectival nouns only.', '日本語の先生 è «un insegnante di giapponese»: の collega il nome 日本語 al nome 先生 e dice di che tipo di insegnante si tratta. だ chiude una frase e non può unire due nomi; な appartiene solo ai nomi aggettivali.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('de4b81da-1d12-5346-860e-ea0c1cad7e66', '否定の-ない', 'single-select', '{"sentence":{"kanji":"今日は時間がない","kana":"きょうはじかんがない"},"answer":"ない","distractors":["あらない","ないだ","なく"]}'::jsonb, '否定の「ない」', 'ある (there is) has no regular negative: "there is not" is the い-adjective ない. Because ない is an adjective, it is already a full predicate and never takes だ.', 'ある (c''è) non ha una negazione regolare: «non c''è» è l''aggettivo in い ない. Poiché ない è un aggettivo, è già un predicato completo e non prende mai だ.'),
+  ('b377835e-ce27-5345-8523-26d307f4fa86', '否定の-ない', 'single-select', '{"sentence":{"kanji":"兄はお酒を飲まない","kana":"あにはおさけをのまない"},"answer":"飲まない","distractors":["飲むない","飲みない","飲まらない"]}'::jsonb, '否定の「ない」', 'A verb is made negative by attaching ない to its a-stem: the final u-row kana moves to the a-row. 飲む → 飲ま + ない. The result is an い-adjective, so the negative verb behaves like one.', 'Un verbo si nega attaccando ない al suo radicale in a: l''ultimo kana della riga in u passa alla riga in a. 飲む → 飲ま + ない. Il risultato è un aggettivo in い, quindi il verbo negato si comporta come tale.'),
+  ('42743f63-d12a-5fe3-845f-62a6c9511434', '否定の-ない', 'single-select', '{"sentence":{"kanji":"母は肉を買わない","kana":"はははにくをかわない"},"answer":"買わない","distractors":["買あない","買いない","買うない"]}'::jsonb, '否定の「ない」', 'The only irregularity of the a-stem: verbs ending in う take わ instead of あ. So 買う (buy) → 買わない, not 買あない.', 'L''unica irregolarità del radicale in a: i verbi in う prendono わ invece di あ. Quindi 買う (comprare) → 買わない, non 買あない.'),
+  ('15e5d9ee-259e-58fd-952b-2a29db6134f7', '否定の-ない', 'select-span', '{"sentence":{"kanji":"あれは駅ではない","kana":"あれはえきではない"},"answer":{"start":2,"end":3}}'::jsonb, '名詞文の否定「ではない」', 'Select the negative ending: ではない. A noun sentence is negated by turning だ into its te-form で, adding は, and then ない: 駅だ → 駅ではない, "is not a station". In speech it often contracts to じゃない.', 'Seleziona la desinenza negativa: ではない. Una frase nominale si nega trasformando だ nella sua forma in て で, aggiungendo は e poi ない: 駅だ → 駅ではない, «non è una stazione». Nel parlato si contrae spesso in じゃない.'),
+  ('ef8c40a5-800f-5e9f-a558-497b7536040a', '否定の-ない', 'single-select', '{"sentence":{"kanji":"この部屋は寒くない","kana":"このへやはさむくない"},"answer":"寒くない","distractors":["寒いない","寒いではない","寒じゃない"]}'::jsonb, '形容詞の否定「くない」', 'An い-adjective changes its final い into く before any addition: 寒い (cold) → 寒く + ない. ではない is only for nouns and な-adjectives.', 'Un aggettivo in い cambia la い finale in く prima di qualunque aggiunta: 寒い (freddo) → 寒く + ない. ではない è solo per i nomi e gli aggettivi in な.'),
+  ('fba6f22c-731b-51d4-a33f-9b4f83ba8de9', '否定の-ない', 'single-select', '{"sentence":{"kanji":"この映画はよくない","kana":"このえいがはよくない"},"answer":"よくない","distractors":["いくない","いいない","よいない"]}'::jsonb, '形容詞の否定「くない」', 'いい (good) has an older form, よい, and every change is built on that one: "not good" is よくない and "was good" is よかった. いくない does not exist.', 'いい (buono) ha una forma più antica, よい, e ogni trasformazione si costruisce su quella: «non buono» è よくない e «era buono» è よかった. いくない non esiste.'),
+  ('b340d16c-bcce-5281-806c-2f88c74cfb10', '否定の-ない', 'assemble', '{"sentence":{"kanji":"昨日は雨が降らなかった","kana":"きのうはあめがふらなかった"},"answer":["昨日は","雨が","降らなかった"]}'::jsonb, '否定の「ない」', 'Since a negative verb ends in the adjective ない, its past follows the adjective rule: drop い, add かった. 降る → 降らない → 降らなかった, "it did not rain".', 'Poiché un verbo negato finisce con l''aggettivo ない, il suo passato segue la regola degli aggettivi: si toglie い e si aggiunge かった. 降る → 降らない → 降らなかった, «non è piovuto».'),
+  ('a1216140-12ce-5d2a-935e-ab787b263c95', '否定の-ない', 'select-span', '{"sentence":{"kanji":"テレビを見なかった","kana":"テレビをみなかった"},"answer":{"start":2,"end":3}}'::jsonb, '否定の「ない」', 'Select the past negative ending: なかった. 見る is an ichidan verb, so ない attaches after removing る: 見ない; then ない goes into the past like any い-adjective: 見なかった.', 'Seleziona la desinenza negativa passata: なかった. 見る è un verbo ichidan, quindi ない si attacca dopo aver tolto る: 見ない; poi ない va al passato come qualunque aggettivo in い: 見なかった.'),
+  ('52bf43ea-e519-5318-be37-3953bf03d7be', '否定の-ない', 'single-select', '{"sentence":{"kanji":"私はたばこを吸いません","kana":"わたしはたばこをすいません"},"answer":"吸いません","distractors":["吸わません","吸うません","吸いまさない"]}'::jsonb, '丁寧な否定「ません」', 'The polite ending ます attaches to the i-stem (吸う → 吸い) and, unlike the other endings, does not use ない for its negative: it becomes ません. So 吸います → 吸いません.', 'La desinenza cortese ます si attacca al radicale in i (吸う → 吸い) e, a differenza delle altre desinenze, non usa ない per negarsi: diventa ません. Quindi 吸います → 吸いません.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('890ece21-e470-5522-9007-238149cdf418', '動詞の語幹と助動詞', 'single-select', '{"sentence":{"kanji":"毎週手紙を書きます","kana":"まいしゅうてがみをかきます"},"answer":"書きます","distractors":["書くます","書かます","書こます"]}'::jsonb, '連用形につく「ます」「たい」', 'The polite auxiliary ます attaches to the i-stem: the final u-row kana moves to the i-row. 書く → 書き + ます. It changes the register, not the meaning.', 'L''ausiliare cortese ます si attacca al radicale in i: l''ultimo kana della riga in u passa alla riga in i. 書く → 書き + ます. Cambia il registro, non il significato.'),
+  ('9c01efa2-0480-512a-b7ec-ace89c604eb4', '動詞の語幹と助動詞', 'single-select', '{"sentence":{"kanji":"ゆっくり休みたい","kana":"ゆっくりやすみたい"},"answer":"休みたい","distractors":["休むたい","休またい","休みったい"]}'::jsonb, '連用形につく「ます」「たい」', 'たい (want to) also attaches to the i-stem: 休む → 休み + たい. Unlike ます it is an い-adjective, so it is negated and put in the past like one: 休みたくない, 休みたかった.', 'Anche たい (voler fare) si attacca al radicale in i: 休む → 休み + たい. A differenza di ます è un aggettivo in い, quindi si nega e va al passato come tale: 休みたくない, 休みたかった.'),
+  ('cb90a02a-6d35-5b29-ae38-611a76e319d3', '動詞の語幹と助動詞', 'assemble', '{"sentence":{"kanji":"一緒に昼ごはんを食べましょう","kana":"いっしょにひるごはんをたべましょう"},"answer":["一緒に","昼ごはんを","食べましょう"]}'::jsonb, '連用形につく「ます」「たい」', 'ましょう is the volitional of ます, "let''s" in the polite register. Like ます, it goes on the i-stem; for the ichidan verb 食べる, the stem is simply 食べ.', 'ましょう è il volitivo di ます, «facciamo» nel registro cortese. Come ます, va sul radicale in i; per il verbo ichidan 食べる, il radicale è semplicemente 食べ.'),
+  ('5fd847ca-3b86-509a-94eb-615047363693', '動詞の語幹と助動詞', 'single-select', '{"sentence":{"kanji":"先生が生徒に本を読ませた","kana":"せんせいがせいとにほんをよませた"},"answer":"読ませた","distractors":["読みせた","読むさせた","読めさせた"]}'::jsonb, '未然形につく「せる」「れる」', 'The causative (make or let someone do) attaches せる to the a-stem of a godan verb: 読む → 読ま + せる. The person made to act is marked by に: the teacher had the pupils read a book.', 'Il causativo (far fare o lasciar fare) attacca せる al radicale in a di un verbo godan: 読む → 読ま + せる. La persona fatta agire è marcata da に: l''insegnante ha fatto leggere un libro agli studenti.'),
+  ('82a7d415-c9cc-5d00-8d43-37bb64d9afd1', '動詞の語幹と助動詞', 'single-select', '{"sentence":{"kanji":"母が子供に野菜を食べさせた","kana":"ははがこどもにやさいをたべさせた"},"answer":"食べさせた","distractors":["食べせた","食べらせた","食べませた"]}'::jsonb, '未然形につく「せる」「れる」', 'An ichidan verb loses る and takes the longer form of the auxiliary, させる: 食べる → 食べさせる. Where an auxiliary has two forms, the longer one always goes on ichidan verbs.', 'Un verbo ichidan perde る e prende la forma più lunga dell''ausiliare, させる: 食べる → 食べさせる. Quando un ausiliare ha due forme, la più lunga va sempre sui verbi ichidan.'),
+  ('60424dec-be6d-5efb-a460-98282ec99bf0', '動詞の語幹と助動詞', 'select-span', '{"sentence":{"kanji":"財布を盗まれた","kana":"さいふをぬすまれた"},"answer":{"start":1,"end":2}}'::jsonb, '未然形につく「せる」「れる」', 'Select まれた: the a-stem ま of 盗む (steal), the passive auxiliary れる, and the past た. The passive also attaches to the a-stem (ichidan verbs take られる): "(my) wallet was stolen", with the victim left as an unspoken subject.', 'Seleziona まれた: il radicale in a ま di 盗む (rubare), l''ausiliare passivo れる e il passato た. Anche il passivo si attacca al radicale in a (i verbi ichidan prendono られる): «mi hanno rubato il portafoglio», con la vittima come soggetto sottinteso.'),
+  ('219d9482-5afc-5f6c-bddf-de8c75155efa', '動詞の語幹と助動詞', 'single-select', '{"sentence":{"kanji":"一緒に帰ろう","kana":"いっしょにかえろう"},"answer":"帰ろう","distractors":["帰りよう","帰るう","帰よう"]}'::jsonb, '意向形', 'The volitional ("let''s") moves the final kana to the o-row and adds う, which lengthens the vowel: 帰る → 帰ろう. 帰る ends in -eru but is godan, so it does not take よう.', 'Il volitivo («facciamo») sposta l''ultimo kana alla riga in o e aggiunge う, che allunga la vocale: 帰る → 帰ろう. 帰る finisce in -eru ma è godan, quindi non prende よう.'),
+  ('83685bf3-6246-59cf-b37c-fb267e5680a3', '動詞の語幹と助動詞', 'single-select', '{"sentence":{"kanji":"そろそろ始めよう","kana":"そろそろはじめよう"},"answer":"始めよう","distractors":["始めろう","始めおう","始まよう"]}'::jsonb, '意向形', 'Ichidan verbs make the volitional by removing る and adding よう: 始める (begin) → 始めよう, "let''s get started".', 'I verbi ichidan formano il volitivo togliendo る e aggiungendo よう: 始める (cominciare) → 始めよう, «cominciamo».')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('65ce9fba-80c4-5be5-a3d4-bdcd2dc6b00f', '目的地を示す-に', 'assemble', '{"sentence":{"kanji":"図書館に本を借りに行く","kana":"としょかんにほんをかりにいく"},"answer":["図書館に","本を","借りに","行く"]}'::jsonb, '目的を示す「に」', 'The sentence has two に: 図書館に is the place you go to, 借りに is the purpose of going. The i-stem 借り works as a noun ("borrowing"), so it can take に: "I go to the library to borrow a book".', 'La frase ha due に: 図書館に è il luogo in cui si va, 借りに è lo scopo dell''andare. Il radicale in i 借り funziona come un nome («il prendere in prestito»), quindi può prendere に: «vado in biblioteca a prendere in prestito un libro».'),
+  ('6fd6cdc9-b3a2-595a-a61b-b9601056c094', '目的地を示す-に', 'single-select', '{"sentence":{"kanji":"海に泳ぎに行った","kana":"うみにおよぎにいった"},"answer":"泳ぎに","distractors":["泳ぐに","泳いに","泳ぎで"]}'::jsonb, '目的を示す「に」', 'Purpose with a verb of movement is the i-stem plus に: 泳ぐ → 泳ぎ + に. The purpose に attaches to a noun, and the i-stem is the noun form of the verb; the dictionary form 泳ぐ cannot take に here.', 'Lo scopo con un verbo di movimento è il radicale in i più に: 泳ぐ → 泳ぎ + に. Il に di scopo si attacca a un nome, e il radicale in i è la forma nominale del verbo; la forma del dizionario 泳ぐ qui non può prendere に.'),
+  ('f8fe3190-e688-51fe-83d9-b05fe9c9fdc5', '目的地を示す-に', 'single-select', '{"sentence":{"kanji":"猫が庭にいる","kana":"ねこがにわにいる"},"answer":"に","distractors":["で","を"]}'::jsonb, '存在の場所を示す「に」', 'The place where someone or something is — with いる for living beings, ある for things — is marked by に. で is for the place where an action happens, and いる is not an action.', 'Il luogo in cui qualcuno o qualcosa si trova — con いる per gli esseri viventi, ある per le cose — è marcato da に. で serve per il luogo in cui avviene un''azione, e いる non è un''azione.'),
+  ('ff2cd48a-e2f0-5e68-ae7d-5db0bcfc73f1', '目的地を示す-に', 'select-span', '{"sentence":{"kanji":"ここに傘がある","kana":"ここにかさがある"},"answer":{"start":0,"end":1}}'::jsonb, '存在の場所を示す「に」', 'Select the location: ここに. The umbrella is the subject of ある (there is), and に marks where it is. When ある or いる say where something or someone is, the place is marked by に, not で.', 'Seleziona il luogo: ここに. L''ombrello è il soggetto di ある (c''è), e に marca dove si trova. Quando ある o いる dicono dove si trova qualcosa o qualcuno, il luogo è marcato da に, non da で.'),
+  ('369af471-99a9-5cf0-a96d-b23acb38413b', '目的地を示す-に', 'single-select', '{"sentence":{"kanji":"兄は医者になった","kana":"あにはいしゃになった"},"answer":"に","distractors":["を","で"]}'::jsonb, '変化の結果を示す「に」', 'なる means "become", and the result of the change is marked by に: 医者になった, "became a doctor". With a noun or a な-adjective, the result normally takes に.', 'なる significa «diventare», e il risultato del cambiamento è marcato da に: 医者になった, «è diventato medico». Con un nome o un aggettivo in な, il risultato prende normalmente に.'),
+  ('dd21cd3e-299e-5f96-9c2c-04ebcfb63da1', '目的地を示す-に', 'single-select', '{"sentence":{"kanji":"部屋が明るくなった","kana":"へやがあかるくなった"},"answer":"明るく","distractors":["明るいに","明るに","明るいく"]}'::jsonb, '変化の結果を示す「に」', 'に attaches to nouns, and 明るい (bright) is an い-adjective. Before なる, an い-adjective changes its final い into く: 明るくなった, "became bright".', 'に si attacca ai nomi, e 明るい (luminoso) è un aggettivo in い. Davanti a なる, un aggettivo in い cambia la い finale in く: 明るくなった, «è diventato luminoso».'),
+  ('76e29e2e-d600-5905-8028-5b2f911e6d34', '目的地を示す-に', 'single-select', '{"sentence":{"kanji":"来月京都へ行く","kana":"らいげつきょうとへいく"},"answer":"へ","distractors":["が","の"]}'::jsonb, '方向を示す「へ」', 'The particle へ, pronounced え, marks the direction of a movement. Of the uses of に in this lesson, it overlaps only with the destination, so here に would also be correct. へ cannot mark where something is: 庭へいる is wrong.', 'La particella へ, pronunciata え, marca la direzione di un movimento. Tra gli usi di に visti in questa lezione, si sovrappone solo alla destinazione, quindi qui anche に sarebbe corretto. へ non può marcare dove si trova qualcosa: 庭へいる è sbagliato.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('d176c834-1d3d-5076-864b-72adb47f4948', '動作の場所を示す-で', 'single-select', '{"sentence":{"kanji":"図書館で勉強する","kana":"としょかんでべんきょうする"},"answer":"で","distractors":["に","を"]}'::jsonb, '動作の場所を示す「で」', 'Studying is an action, and the place where an action takes place is marked by で. に would name a place you go to or are at, not the scene of an activity.', 'Studiare è un''azione, e il luogo in cui si svolge un''azione è marcato da で. に indicherebbe un luogo in cui si va o in cui ci si trova, non la scena di un''attività.'),
+  ('e12190eb-47b7-5eab-b513-73b09b4713aa', '動作の場所を示す-で', 'single-select', '{"sentence":{"kanji":"姉は台所にいる","kana":"あねはだいどころにいる"},"answer":"に","distractors":["で","を"]}'::jsonb, '動作の場所を示す「で」', 'Here nothing is being done: いる only says where the sister is, so the place takes に. Compare 台所で料理する, "cooks in the kitchen", where an action calls for で.', 'Qui non si fa nulla: いる dice solo dove si trova la sorella, quindi il luogo prende に. Si confronti con 台所で料理する, «cucina in cucina», dove un''azione richiede で.'),
+  ('52e10f75-c252-59df-b6a8-d4362bae79a6', '動作の場所を示す-で', 'select-span', '{"sentence":{"kanji":"ペンで名前を書いた","kana":"ペンでなまえをかいた"},"answer":{"start":0,"end":1}}'::jsonb, '手段を示す「で」', 'Select the means: ペンで. Besides the place of an action, で marks the tool or means used to do it: "wrote the name with a pen". The name is the object (を).', 'Seleziona il mezzo: ペンで. Oltre al luogo di un''azione, で marca lo strumento o il mezzo con cui la si compie: «ha scritto il nome con la penna». Il nome è l''oggetto (を).'),
+  ('4c9bdd6a-99e8-52b1-9dd1-e1df78cda4d4', '動作の場所を示す-で', 'assemble', '{"sentence":{"kanji":"自転車で学校に通う","kana":"じてんしゃでがっこうにかよう"},"answer":["自転車で","学校に","通う"]}'::jsonb, '手段を示す「で」', 'A means of transport is a means like any other, so it takes で: 自転車で, "by bicycle". The destination of the commute is marked by に.', 'Un mezzo di trasporto è un mezzo come un altro, quindi prende で: 自転車で, «in bicicletta». La destinazione del tragitto è marcata da に.'),
+  ('0bfa5305-e678-52b2-be6c-c6a0e5b761d8', '動作の場所を示す-で', 'single-select', '{"sentence":{"kanji":"英語で手紙を書いた","kana":"えいごでてがみをかいた"},"answer":"で","distractors":["を","が"]}'::jsonb, '手段を示す「で」', 'A language used to say or write something is a means, so it takes で: 英語で, "in English". The letter is already the object with を, and a verb has only one object.', 'Una lingua usata per dire o scrivere qualcosa è un mezzo, quindi prende で: 英語で, «in inglese». La lettera è già l''oggetto con を, e un verbo ha un solo oggetto.'),
+  ('8369e4be-0eaf-5345-8615-b6b8d8a98d93', '動作の場所を示す-で', 'single-select', '{"sentence":{"kanji":"パンと牛乳を買った","kana":"パンとぎゅうにゅうをかった"},"answer":"と","distractors":["を","へ"]}'::jsonb, '名詞をつなぐ「と」', 'と joins nouns into a list: パンと牛乳, "bread and milk". It says nothing about their role in the sentence; the を after the last noun makes the whole list the object of 買った.', 'と unisce i nomi in un elenco: パンと牛乳, «pane e latte». Non dice nulla del loro ruolo nella frase; il を dopo l''ultimo nome rende l''intero elenco oggetto di 買った.'),
+  ('dd3ffd65-32ba-5b83-b664-6ed29a402cdb', '動作の場所を示す-で', 'assemble', '{"sentence":{"kanji":"兄と弟が川で泳いでいる","kana":"あにとおとうとがかわでおよいでいる"},"answer":["兄と","弟が","川で","泳いでいる"]}'::jsonb, '名詞をつなぐ「と」', '兄と弟 is one unit, "older and younger brother", and が after it marks both as the subject. 川で is where the swimming happens: an action, so で.', '兄と弟 è un''unica unità, «il fratello maggiore e il minore», e が dopo di essa li marca entrambi come soggetto. 川で è dove avviene il nuotare: un''azione, quindi で.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('53fc7beb-c295-5291-89ec-7310f54c0e85', '感情-理解の述語と-が', 'single-select', '{"sentence":{"kanji":"私は犬が好きだ","kana":"わたしはいぬがすきだ"},"answer":"が","distractors":["を","で"]}'::jsonb, '感情・理解の述語と「が」', '好き is not a verb: it is a な-adjective, a noun that closes the sentence with だ. A verb takes its object with を, but 好きだ does not have an object, so what is liked is marked by が. The person who likes it is the topic, 私は.', '好き non è un verbo: è un aggettivo in な, un nome che chiude la frase con だ. Un verbo prende il suo oggetto con を, ma 好きだ non ha un oggetto, quindi ciò che piace è marcato da が. Chi prova il gusto è il tema, 私は.'),
+  ('e3af00c5-e946-563c-bbf1-d525bb7067c2', '感情-理解の述語と-が', 'single-select', '{"sentence":{"kanji":"弟は漢字が分かる","kana":"おとうとはかんじがわかる"},"answer":"が","distractors":["を","で"]}'::jsonb, '感情・理解の述語と「が」', '分かる describes a state — something is clear, understandable — not an action done to an object. What is understood is therefore marked by が, never by を: 漢字が分かる. The person is the topic, 弟は.', '分かる descrive uno stato — qualcosa è chiaro, comprensibile — non un''azione compiuta su un oggetto. Ciò che si capisce è quindi marcato da が, mai da を: 漢字が分かる. La persona è il tema, 弟は.'),
+  ('f8a17f20-6a3c-5b1f-abde-422365eb833a', '感情-理解の述語と-が', 'assemble', '{"sentence":{"kanji":"新しい自転車がほしい","kana":"あたらしいじてんしゃがほしい"},"answer":["新しい","自転車が","ほしい"]}'::jsonb, '欲求の「ほしい」と「たい」', 'ほしい (wanted) ends in い: it is an adjective, not a verb. The thing wanted is marked by が. With no one else named, the feeling is the speaker''s: "I want a new bicycle".', 'ほしい (desiderato) finisce in い: è un aggettivo, non un verbo. La cosa desiderata è marcata da が. Se non si nomina nessun altro, il sentimento è di chi parla: «voglio una bicicletta nuova».'),
+  ('cfc027a4-598d-522e-aeff-53f35b8f2e4f', '感情-理解の述語と-が', 'select-span', '{"sentence":{"kanji":"ラーメンが食べたい","kana":"ラーメンがたべたい"},"answer":{"start":0,"end":1}}'::jsonb, '欲求の「ほしい」と「たい」', 'Select what is desired: ラーメンが. 食べたい is the i-stem 食べ plus the adjective たい, so, like any adjective, it takes が for the thing it is about. With を (ラーメンを食べたい) the sentence is also correct, but が is the more traditional choice.', 'Seleziona ciò che si desidera: ラーメンが. 食べたい è il radicale in i 食べ più l''aggettivo たい, quindi, come ogni aggettivo, prende が per la cosa di cui parla. Anche con を (ラーメンを食べたい) la frase è corretta, ma が è la scelta più tradizionale.'),
+  ('9c045dfa-041f-5013-ac0a-02f0d02c79ed', '感情-理解の述語と-が', 'single-select', '{"sentence":{"kanji":"妹が新しいゲームをほしがっている","kana":"いもうとがあたらしいゲームをほしがっている"},"answer":"ほしがっている","distractors":["ほしい","ほしいだ","ほしくている"]}'::jsonb, '他人の感情を示す「がる」', 'ほしい and たい state the speaker''s own feelings: you cannot state someone else''s inner feeling as a fact. For another person you drop the final い and add the verb がる, "shows signs of": ほしがる. As a verb, it takes its object with を.', 'ほしい e たい esprimono i sentimenti di chi parla: il sentimento interiore di un altro non si può affermare come un fatto. Per un''altra persona si toglie la い finale e si aggiunge il verbo がる, «mostra segni di»: ほしがる. Essendo un verbo, prende l''oggetto con を.'),
+  ('433e230a-0f7d-5b8b-9da7-1f844e6d758c', '感情-理解の述語と-が', 'single-select', '{"sentence":{"kanji":"子供が外で遊びたがっている","kana":"こどもがそとであそびたがっている"},"answer":"遊びたがっている","distractors":["遊びたい","遊びたいだ","遊ぶたがっている"]}'::jsonb, '他人の感情を示す「がる」', 'The child is not the speaker, so 遊びたい cannot describe the child''s wish directly. たい drops its い and takes がる: 遊びたがる, "is showing that they want to play", here in the ongoing form 遊びたがっている.', 'Il bambino non è chi parla, quindi 遊びたい non può descrivere direttamente il suo desiderio. たい perde la い e prende がる: 遊びたがる, «mostra di voler giocare», qui nella forma in corso 遊びたがっている.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('b1fa153e-1704-5115-b2ea-fcb8cb5e0483', '可能形', 'single-select', '{"sentence":{"kanji":"この川で泳げる","kana":"このかわでおよげる"},"answer":"泳げる","distractors":["泳ぎる","泳ぐれる","泳げられる"]}'::jsonb, '可能形', 'A godan verb forms the potential by moving its final kana to the e-row and adding る: 泳ぐ → 泳げ + る, "can swim". The result is an ordinary ichidan verb.', 'Un verbo godan forma il potenziale spostando l''ultimo kana alla riga in e e aggiungendo る: 泳ぐ → 泳げ + る, «si può nuotare». Il risultato è un normale verbo ichidan.'),
+  ('e2e3e4f9-6c89-55ea-a10b-e438b2cbfa7c', '可能形', 'single-select', '{"sentence":{"kanji":"この魚は生で食べられる","kana":"このさかなはなまでたべられる"},"answer":"食べられる","distractors":["食べえる","食べらる","食べされる"]}'::jsonb, '可能形', 'An ichidan verb removes る and adds られる: 食べる → 食べられる, "can be eaten". In casual speech you will also hear 食べれる, but 食べられる is the standard form.', 'Un verbo ichidan toglie る e aggiunge られる: 食べる → 食べられる, «si può mangiare». Nel parlato informale si sente anche 食べれる, ma 食べられる è la forma standard.'),
+  ('86dd7435-ccdf-554c-951f-5a0c3815cda7', '可能形', 'single-select', '{"sentence":{"kanji":"兄は中国語ができる","kana":"あにはちゅうごくごができる"},"answer":"できる","distractors":["するれる","しれる","すられる"]}'::jsonb, '不規則動詞の可能形', 'する is irregular and its potential is a separate verb: できる. What is possible is marked by が: 中国語ができる, "Chinese is within (his) ability" — he can speak Chinese.', 'する è irregolare e il suo potenziale è un verbo a sé: できる. Ciò che è possibile è marcato da が: 中国語ができる, «il cinese è alla sua portata» — sa parlare cinese.'),
+  ('84c9b0a0-3ca9-517a-801b-c339fed2146e', '可能形', 'select-span', '{"sentence":{"kanji":"ひらがなが読める","kana":"ひらがながよめる"},"answer":{"start":0,"end":1}}'::jsonb, '可能形と「が」', 'Select the phrase marked by が: ひらがなが. A potential verb describes a state — something is readable — so the thing that can be read usually takes が rather than を. The person who can read it stays unspoken or appears as the topic with は.', 'Seleziona l''espressione marcata da が: ひらがなが. Un verbo potenziale descrive uno stato — qualcosa è leggibile — quindi la cosa che si può leggere di solito prende が invece di を. Chi sa leggere resta sottinteso o compare come tema con は.'),
+  ('b3a6d49e-13cf-516e-a87e-a19b5e30bcfd', '可能形', 'single-select', '{"sentence":{"kanji":"昨日はよく眠れなかった","kana":"きのうはよくねむれなかった"},"answer":"眠れなかった","distractors":["眠りれなかった","眠るなかった","眠れないかった"]}'::jsonb, '可能形', 'Since the potential is an ichidan verb, it negates and goes into the past like one: 眠れる → 眠れない → 眠れなかった, "(I) couldn''t sleep well".', 'Poiché il potenziale è un verbo ichidan, si nega e va al passato come tale: 眠れる → 眠れない → 眠れなかった, «non sono riuscito a dormire bene».'),
+  ('03e003e9-bc42-5550-98fa-1a83f70cbce6', '可能形', 'assemble', '{"sentence":{"kanji":"日曜日は友達に会えない","kana":"にちようびはともだちにあえない"},"answer":["日曜日は","友達に","会えない"]}'::jsonb, '可能形', '会う (meet) → 会える (can meet) → 会えない (cannot meet). The person you meet is marked by に. 日曜日 is the topic here, so it takes は instead of に.', '会う (incontrare) → 会える (poter incontrare) → 会えない (non poter incontrare). La persona che si incontra è marcata da に. 日曜日 qui è il tema, quindi prende は invece di に.'),
+  ('0239c596-9ece-5ceb-a7fb-7bd19a34c098', '可能形', 'single-select', '{"sentence":{"kanji":"明日は来られる","kana":"あしたはこられる"},"answer":"来られる","distractors":["来えれる","来れられる","来られれる"]}'::jsonb, '不規則動詞の可能形', 'The other irregular verb, 来る, has the potential 来られる (read こられる), "can come". Together with できる for する, these are the only two potentials that break the regular pattern.', 'L''altro verbo irregolare, 来る, ha il potenziale 来られる (letto こられる), «poter venire». Insieme a できる per する, sono gli unici due potenziali che rompono lo schema regolare.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values
+  ('8b92cea7-e170-59d5-af03-0d9948f66eec', 'て形で節をつなぐ', 'assemble', '{"sentence":{"kanji":"朝ごはんを食べて学校に行った","kana":"あさごはんをたべてがっこうにいった"},"answer":["朝ごはんを","食べて","学校に","行った"]}'::jsonb, 'て形で節をつなぐ', 'The te-form ends a clause and announces that another one follows: "ate breakfast and went to school". The te-form carries no tense of its own; the past た at the end of the sentence applies to both actions.', 'La forma in て chiude una proposizione e annuncia che ne segue un''altra: «ho fatto colazione e sono andato a scuola». La forma in て non porta un tempo proprio; il passato た in fondo alla frase vale per entrambe le azioni.'),
+  ('5037d864-083c-5c3d-babd-d31145d5d7c1', 'て形で節をつなぐ', 'single-select', '{"sentence":{"kanji":"窓を開けて外を見た","kana":"まどをあけてそとをみた"},"answer":"開けて","distractors":["開けって","開きて","開けるて"]}'::jsonb, 'て形で節をつなぐ', '開ける (open) is ichidan: remove る and add て, 開けて. The first clause (opened the window) is joined to the second (looked outside); only the last verb, 見た, shows that both happened in the past.', '開ける (aprire) è ichidan: si toglie る e si aggiunge て, 開けて. La prima proposizione (ho aperto la finestra) si unisce alla seconda (ho guardato fuori); solo l''ultimo verbo, 見た, mostra che entrambe sono avvenute nel passato.'),
+  ('ade2203c-7d24-5132-8eb2-3fd07457c52b', 'て形で節をつなぐ', 'single-select', '{"sentence":{"kanji":"友達が私の宿題を手伝ってくれた","kana":"ともだちがわたしのしゅくだいをてつだってくれた"},"answer":"くれた","distractors":["あげた"]}'::jsonb, '恩恵を受ける「てくれる」', 'te-form + くれる means someone does something for the speaker or the speaker''s side: the friend helped with my homework, as a favour to me. あげる points the other way, from the speaker''s side to others, so it cannot be used when the benefit comes to me.', 'forma in て + くれる significa che qualcuno fa qualcosa per chi parla o per la sua cerchia: l''amico mi ha aiutato con i compiti, come favore a me. あげる va nella direzione opposta, da chi parla verso gli altri, quindi non si può usare quando il beneficio arriva a me.'),
+  ('c2fb3ce9-039f-5f33-81e5-87058ea852c3', 'て形で節をつなぐ', 'select-span', '{"sentence":{"kanji":"父が夕飯を作ってくれた","kana":"ちちがゆうはんをつくってくれた"},"answer":{"start":1,"end":2}}'::jsonb, '恩恵を受ける「てくれる」', 'Select ってくれた: the te-form ending of 作る followed by くれた. It tells you the dinner was made for the speaker''s benefit — "my father made dinner for me" — without any word for "for me".', 'Seleziona ってくれた: la desinenza in て di 作る seguita da くれた. Dice che la cena è stata preparata a beneficio di chi parla — «mio padre mi ha preparato la cena» — senza bisogno di una parola per «per me».'),
+  ('9cfd0154-9276-5de8-8f67-efcf5be968fe', 'て形で節をつなぐ', 'single-select', '{"sentence":{"kanji":"私は妹に絵本を読んであげた","kana":"わたしはいもうとにえほんをよんであげた"},"answer":"あげた","distractors":["くれた"]}'::jsonb, '恩恵を与える「てあげる」', 'te-form + あげる means the speaker (or someone) does something for another person: I read a picture book to my younger sister, for her sake. くれる is reserved for favours that come toward the speaker.', 'forma in て + あげる significa che chi parla (o qualcuno) fa qualcosa per un''altra persona: ho letto un libro illustrato a mia sorella minore, per lei. くれる è riservato ai favori che arrivano verso chi parla.'),
+  ('25d90831-d6f2-5de8-9121-c357c506b9c6', 'て形で節をつなぐ', 'assemble', '{"sentence":{"kanji":"兄は忙しくて手伝ってくれなかった","kana":"あにはいそがしくててつだってくれなかった"},"answer":["兄は","忙しくて","手伝ってくれなかった"]}'::jsonb, '恩恵を受ける「てくれる」', 'An い-adjective has a te-form too: 忙しい → 忙しくて, here giving the reason, "was busy, and so…". The second clause is the negative past of てくれる: my brother did not help me. The single tense marker at the end covers both clauses.', 'Anche un aggettivo in い ha una forma in て: 忙しい → 忙しくて, qui a indicare il motivo, «era impegnato, e così…». La seconda proposizione è il passato negativo di てくれる: mio fratello non mi ha aiutato. L''unico segnale di tempo, in fondo, vale per entrambe le proposizioni.')
+on conflict (id) do update set
+  lesson_id = excluded.lesson_id,
+  kind = excluded.kind,
+  payload = excluded.payload,
+  grammar_point = excluded.grammar_point,
+  explanation_en = excluded.explanation_en,
+  explanation_it = excluded.explanation_it;
+
+-- Rimuove cio che il contenuto non contiene piu (esercizi prima: FK).
+delete from exercise where id not in (
+  '57975a13-e0c2-5eda-9d3f-5bb832248016',
+  '2e47b85b-29ba-54d7-a09a-2533decd1cb3',
+  '8347f682-389b-5c65-81af-6af0f0424823',
+  '8fed4be3-4edc-5561-af8c-ca448d7603bc',
+  '56f118fd-9f93-5298-a813-00080f91554c',
+  '4339dc49-815a-5f53-bd76-c7464e90c853',
+  '0f32d14b-3435-526b-bbac-b35ac5c7db99',
+  '3ac7b3aa-91eb-55f4-bd8b-99d8c49f8990',
+  'aa3360be-653c-52cd-bcc5-aacdbd09a332',
+  '0cde5b10-898c-581d-9750-a83dbf5ad084',
+  'e9ac22ea-8073-5d03-a921-43dbccd1614e',
+  '579c5b10-3119-59bc-8ed4-87dd1c948f35',
+  '18239c82-53c0-5b50-b5ea-1ea27f2ef47b',
+  '4a486ed2-e831-53d7-bb03-619e7e55f5e5',
+  '8bd02c8c-712f-5b02-950e-c60858e8f452',
+  '61e926e3-590c-5339-9425-120cfbbb25da',
+  'f1d776a4-259a-5651-914b-90de125c1c1c',
+  '34bfcd4c-14f4-5e5a-86c3-764f90e7c57a',
+  'b7d38cc8-562b-59dd-92df-b6599109a919',
+  '3ed770d8-53e8-583b-9402-cdba8605fcb4',
+  '3b4b6752-0757-51a1-b94d-13f807ec11e8',
+  '2281b09b-cfa1-5201-b30a-a4d0e9916bdd',
+  '5f4f76f1-97eb-5e69-b160-43aaeca96e13',
+  '4af79a02-6a52-5ed0-8de8-d892d154cd92',
+  '1362ab6a-c76c-52f2-8990-3d5c04dced59',
+  '3edb0ae6-beb3-5405-a88e-42582289500c',
+  'd5c8da5e-6e1b-5e48-b374-a114cb6e4e43',
+  'cd298cc6-62a9-54aa-8f73-d88e3c6214f9',
+  'a83154b8-bddd-5726-ad4a-9cc36ddc9b02',
+  '5a77229e-6cec-5a7a-a56d-015085d4fd93',
+  '10054a46-427c-5262-9c64-6c52b362676c',
+  '3b9faea7-4987-5660-b634-29e62290f61d',
+  '88bacd49-0013-53ad-8822-bc64198450cd',
+  'f514db52-f4fc-5d2f-af57-5ff12b9949c1',
+  '349ef8de-fce0-5138-84a5-10426df29fe8',
+  'dfcc733a-c32e-5f45-9fd1-43b4c27d2055',
+  '79ae205c-615d-5647-9b01-d6800dee970c',
+  '3be87963-5201-5b19-a2c5-b8b43bc26ea1',
+  'de4b81da-1d12-5346-860e-ea0c1cad7e66',
+  'b377835e-ce27-5345-8523-26d307f4fa86',
+  '42743f63-d12a-5fe3-845f-62a6c9511434',
+  '15e5d9ee-259e-58fd-952b-2a29db6134f7',
+  'ef8c40a5-800f-5e9f-a558-497b7536040a',
+  'fba6f22c-731b-51d4-a33f-9b4f83ba8de9',
+  'b340d16c-bcce-5281-806c-2f88c74cfb10',
+  'a1216140-12ce-5d2a-935e-ab787b263c95',
+  '52bf43ea-e519-5318-be37-3953bf03d7be',
+  '890ece21-e470-5522-9007-238149cdf418',
+  '9c01efa2-0480-512a-b7ec-ace89c604eb4',
+  'cb90a02a-6d35-5b29-ae38-611a76e319d3',
+  '5fd847ca-3b86-509a-94eb-615047363693',
+  '82a7d415-c9cc-5d00-8d43-37bb64d9afd1',
+  '60424dec-be6d-5efb-a460-98282ec99bf0',
+  '219d9482-5afc-5f6c-bddf-de8c75155efa',
+  '83685bf3-6246-59cf-b37c-fb267e5680a3',
+  '65ce9fba-80c4-5be5-a3d4-bdcd2dc6b00f',
+  '6fd6cdc9-b3a2-595a-a61b-b9601056c094',
+  'f8fe3190-e688-51fe-83d9-b05fe9c9fdc5',
+  'ff2cd48a-e2f0-5e68-ae7d-5db0bcfc73f1',
+  '369af471-99a9-5cf0-a96d-b23acb38413b',
+  'dd21cd3e-299e-5f96-9c2c-04ebcfb63da1',
+  '76e29e2e-d600-5905-8028-5b2f911e6d34',
+  'd176c834-1d3d-5076-864b-72adb47f4948',
+  'e12190eb-47b7-5eab-b513-73b09b4713aa',
+  '52e10f75-c252-59df-b6a8-d4362bae79a6',
+  '4c9bdd6a-99e8-52b1-9dd1-e1df78cda4d4',
+  '0bfa5305-e678-52b2-be6c-c6a0e5b761d8',
+  '8369e4be-0eaf-5345-8615-b6b8d8a98d93',
+  'dd3ffd65-32ba-5b83-b664-6ed29a402cdb',
+  '53fc7beb-c295-5291-89ec-7310f54c0e85',
+  'e3af00c5-e946-563c-bbf1-d525bb7067c2',
+  'f8a17f20-6a3c-5b1f-abde-422365eb833a',
+  'cfc027a4-598d-522e-aeff-53f35b8f2e4f',
+  '9c045dfa-041f-5013-ac0a-02f0d02c79ed',
+  '433e230a-0f7d-5b8b-9da7-1f844e6d758c',
+  'b1fa153e-1704-5115-b2ea-fcb8cb5e0483',
+  'e2e3e4f9-6c89-55ea-a10b-e438b2cbfa7c',
+  '86dd7435-ccdf-554c-951f-5a0c3815cda7',
+  '84c9b0a0-3ca9-517a-801b-c339fed2146e',
+  'b3a6d49e-13cf-516e-a87e-a19b5e30bcfd',
+  '03e003e9-bc42-5550-98fa-1a83f70cbce6',
+  '0239c596-9ece-5ceb-a7fb-7bd19a34c098',
+  '8b92cea7-e170-59d5-af03-0d9948f66eec',
+  '5037d864-083c-5c3d-babd-d31145d5d7c1',
+  'ade2203c-7d24-5132-8eb2-3fd07457c52b',
+  'c2fb3ce9-039f-5f33-81e5-87058ea852c3',
+  '9cfd0154-9276-5de8-8f67-efcf5be968fe',
+  '25d90831-d6f2-5de8-9121-c357c506b9c6'
+);
+delete from lesson where id not in (
+  'が-が示す主語',
+  'を-で示す目的語',
+  'ゼロ代名詞',
+  'は-が示す主題',
+  '非過去形',
+  '動詞の三つのグループ',
+  '名詞を修飾する述語',
+  '否定の-ない',
+  '動詞の語幹と助動詞',
+  '目的地を示す-に',
+  '動作の場所を示す-で',
+  '感情-理解の述語と-が',
+  '可能形',
+  'て形で節をつなぐ'
+);

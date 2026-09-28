@@ -1,0 +1,120 @@
+{
+  "order": 8,
+  "title": {
+    "en": "Verb stems and the auxiliaries that attach to them",
+    "it": "I radicali del verbo e gli ausiliari che vi si attaccano"
+  },
+  "grammarPoints": ["動詞の語幹と助動詞", "連用形につく「ます」「たい」", "未然形につく「せる」「れる」", "意向形"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "連用形につく「ます」「たい」",
+      "sentence": {
+        "kanji": "毎週手紙を書きます",
+        "kana": "まいしゅうてがみをかきます"
+      },
+      "answer": "書きます",
+      "distractors": ["書くます", "書かます", "書こます"],
+      "explanation": {
+        "en": "The polite auxiliary ます attaches to the i-stem: the final u-row kana moves to the i-row. 書く → 書き + ます. It changes the register, not the meaning.",
+        "it": "L'ausiliare cortese ます si attacca al radicale in i: l'ultimo kana della riga in u passa alla riga in i. 書く → 書き + ます. Cambia il registro, non il significato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "連用形につく「ます」「たい」",
+      "sentence": {
+        "kanji": "ゆっくり休みたい",
+        "kana": "ゆっくりやすみたい"
+      },
+      "answer": "休みたい",
+      "distractors": ["休むたい", "休またい", "休みったい"],
+      "explanation": {
+        "en": "たい (want to) also attaches to the i-stem: 休む → 休み + たい. Unlike ます it is an い-adjective, so it is negated and put in the past like one: 休みたくない, 休みたかった.",
+        "it": "Anche たい (voler fare) si attacca al radicale in i: 休む → 休み + たい. A differenza di ます è un aggettivo in い, quindi si nega e va al passato come tale: 休みたくない, 休みたかった."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "連用形につく「ます」「たい」",
+      "sentence": {
+        "kanji": "一緒に昼ごはんを食べましょう",
+        "kana": "いっしょにひるごはんをたべましょう"
+      },
+      "answer": ["一緒に", "昼ごはんを", "食べましょう"],
+      "explanation": {
+        "en": "ましょう is the volitional of ます, \"let's\" in the polite register. Like ます, it goes on the i-stem; for the ichidan verb 食べる, the stem is simply 食べ.",
+        "it": "ましょう è il volitivo di ます, «facciamo» nel registro cortese. Come ます, va sul radicale in i; per il verbo ichidan 食べる, il radicale è semplicemente 食べ."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "未然形につく「せる」「れる」",
+      "sentence": {
+        "kanji": "先生が生徒に本を読ませた",
+        "kana": "せんせいがせいとにほんをよませた"
+      },
+      "answer": "読ませた",
+      "distractors": ["読みせた", "読むさせた", "読めさせた"],
+      "explanation": {
+        "en": "The causative (make or let someone do) attaches せる to the a-stem of a godan verb: 読む → 読ま + せる. The person made to act is marked by に: the teacher had the pupils read a book.",
+        "it": "Il causativo (far fare o lasciar fare) attacca せる al radicale in a di un verbo godan: 読む → 読ま + せる. La persona fatta agire è marcata da に: l'insegnante ha fatto leggere un libro agli studenti."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "未然形につく「せる」「れる」",
+      "sentence": {
+        "kanji": "母が子供に野菜を食べさせた",
+        "kana": "ははがこどもにやさいをたべさせた"
+      },
+      "answer": "食べさせた",
+      "distractors": ["食べせた", "食べらせた", "食べませた"],
+      "explanation": {
+        "en": "An ichidan verb loses る and takes the longer form of the auxiliary, させる: 食べる → 食べさせる. Where an auxiliary has two forms, the longer one always goes on ichidan verbs.",
+        "it": "Un verbo ichidan perde る e prende la forma più lunga dell'ausiliare, させる: 食べる → 食べさせる. Quando un ausiliare ha due forme, la più lunga va sempre sui verbi ichidan."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "未然形につく「せる」「れる」",
+      "sentence": {
+        "kanji": "財布を盗まれた",
+        "kana": "さいふをぬすまれた"
+      },
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select まれた: the a-stem ま of 盗む (steal), the passive auxiliary れる, and the past た. The passive also attaches to the a-stem (ichidan verbs take られる): \"(my) wallet was stolen\", with the victim left as an unspoken subject.",
+        "it": "Seleziona まれた: il radicale in a ま di 盗む (rubare), l'ausiliare passivo れる e il passato た. Anche il passivo si attacca al radicale in a (i verbi ichidan prendono られる): «mi hanno rubato il portafoglio», con la vittima come soggetto sottinteso."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "意向形",
+      "sentence": {
+        "kanji": "一緒に帰ろう",
+        "kana": "いっしょにかえろう"
+      },
+      "answer": "帰ろう",
+      "distractors": ["帰りよう", "帰るう", "帰よう"],
+      "explanation": {
+        "en": "The volitional (\"let's\") moves the final kana to the o-row and adds う, which lengthens the vowel: 帰る → 帰ろう. 帰る ends in -eru but is godan, so it does not take よう.",
+        "it": "Il volitivo («facciamo») sposta l'ultimo kana alla riga in o e aggiunge う, che allunga la vocale: 帰る → 帰ろう. 帰る finisce in -eru ma è godan, quindi non prende よう."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "意向形",
+      "sentence": {
+        "kanji": "そろそろ始めよう",
+        "kana": "そろそろはじめよう"
+      },
+      "answer": "始めよう",
+      "distractors": ["始めろう", "始めおう", "始まよう"],
+      "explanation": {
+        "en": "Ichidan verbs make the volitional by removing る and adding よう: 始める (begin) → 始めよう, \"let's get started\".",
+        "it": "I verbi ichidan formano il volitivo togliendo る e aggiungendo よう: 始める (cominciare) → 始めよう, «cominciamo»."
+      }
+    }
+  ]
+}

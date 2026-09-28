@@ -1,0 +1,90 @@
+{
+  "order": 3,
+  "title": {
+    "en": "The topic with は, and the target with に",
+    "it": "Il tema con は, e il destinatario con に"
+  },
+  "grammarPoints": ["「は」が示す主題", "到達点を示す「に」"],
+  "exercises": [
+    {
+      "kind": "select-span",
+      "grammarPoint": "「は」が示す主題",
+      "sentence": {
+        "kanji": "これは私の傘だ",
+        "kana": "これはわたしのかさだ"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the topic: これは. は announces what the sentence is about — \"as for this\" — and then steps aside. It is not a case particle: it gives the noun no grammatical role (subject, object, target): the subject of 私の傘だ is left unspoken and is understood from the topic.",
+        "it": "Seleziona il tema: これは. は annuncia di che cosa parla la frase — «quanto a questo» — e poi si fa da parte. Non è una particella di caso: non assegna al nome alcun ruolo grammaticale (soggetto, oggetto, destinatario): il soggetto di 私の傘だ resta sottinteso e si ricava dal tema."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「は」が示す主題",
+      "sentence": {
+        "kanji": "東京は人が多い",
+        "kana": "とうきょうはひとがおおい"
+      },
+      "answer": "は",
+      "distractors": ["を", "へ"],
+      "explanation": {
+        "en": "The subject of 多い (are many) is 人, already marked by が. 東京 has no grammatical role in the predicate: it only sets the scene, \"as for Tokyo\". Marking what the sentence is about, without a grammatical role, is exactly the job of は.",
+        "it": "Il soggetto di 多い (sono molti) è 人, già marcato da が. 東京 non ha alcun ruolo grammaticale nel predicato: fissa solo la scena, «quanto a Tokyo». Marcare ciò di cui si parla, senza un ruolo grammaticale, è esattamente il compito di は."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「は」が示す主題",
+      "sentence": {
+        "kanji": "私は毎日コーヒーを飲む",
+        "kana": "わたしはまいにちコーヒーをのむ"
+      },
+      "answer": ["私は", "毎日", "コーヒーを", "飲む"],
+      "explanation": {
+        "en": "私は is the topic: \"as for me\". The one who drinks is an unspoken subject that the topic makes clear. Moving は onto another noun would change the emphasis — what the sentence is about — but never who does what; that is fixed by the case particles such as が and を.",
+        "it": "私は è il tema: «quanto a me». Chi beve è un soggetto sottinteso che il tema rende chiaro. Spostare は su un altro nome cambierebbe l'enfasi — ciò di cui si parla — ma mai chi fa cosa: quello lo fissano le particelle di caso come が e を."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "到達点を示す「に」",
+      "sentence": {
+        "kanji": "ポストに手紙を入れた",
+        "kana": "ポストにてがみをいれた"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the target of the action: ポストに. The letter is the object (を); the postbox is where the action ends up, so it is marked by に. The one who put the letter in is an unspoken subject.",
+        "it": "Seleziona il punto d'arrivo dell'azione: ポストに. La lettera è l'oggetto (を); la cassetta postale è dove l'azione va a finire, quindi è marcata da に. Chi ha imbucato la lettera è un soggetto sottinteso."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "到達点を示す「に」",
+      "sentence": {
+        "kanji": "先生に花をあげた",
+        "kana": "せんせいにはなをあげた"
+      },
+      "answer": "に",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "花 (flowers) is what is given, so it takes を. The teacher is the recipient — the person the giving is aimed at — and a recipient is marked by に.",
+        "it": "花 (fiori) è ciò che viene dato, quindi prende を. L'insegnante è il destinatario — la persona a cui il dare è rivolto — e un destinatario è marcato da に."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "到達点を示す「に」",
+      "sentence": {
+        "kanji": "姉が友達に手紙を送った",
+        "kana": "あねがともだちにてがみをおくった"
+      },
+      "answer": ["姉が", "友達に", "手紙を", "送った"],
+      "explanation": {
+        "en": "が marks who sends (姉, older sister), に marks who the letter goes to (友達, a friend), を marks what is sent (手紙, a letter). The particles, not the word order, decide the roles: this is the most neutral order, but 手紙を could also come before 友達に without changing the meaning.",
+        "it": "が marca chi spedisce (姉, sorella maggiore), に marca a chi va la lettera (友達, un amico), を marca ciò che viene spedito (手紙, una lettera). Sono le particelle, non l'ordine delle parole, a decidere i ruoli: questo è l'ordine più neutro, ma 手紙を potrebbe venire prima di 友達に senza cambiare il significato."
+      }
+    }
+  ]
+}

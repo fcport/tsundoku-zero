@@ -1,0 +1,90 @@
+{
+  "order": 2,
+  "title": {
+    "en": "The zero pronoun, and the object with を",
+    "it": "Il pronome zero, e l'oggetto con を"
+  },
+  "grammarPoints": ["ゼロ代名詞", "「を」で示す目的語"],
+  "exercises": [
+    {
+      "kind": "assemble",
+      "grammarPoint": "「を」で示す目的語",
+      "sentence": {
+        "kanji": "弟がパンを焼く",
+        "kana": "おとうとがパンをやく"
+      },
+      "answer": ["弟が", "パンを", "焼く"],
+      "explanation": {
+        "en": "Two roles, two particles. が marks 弟 (younger brother) as the one who performs the action; を marks パン (bread) as what the action is applied to — the object. Each particle travels with its noun, and the verb 焼く (bake) closes the sentence.",
+        "it": "Due ruoli, due particelle. が marca 弟 (fratello minore) come chi compie l'azione; を marca パン (pane) come ciò su cui l'azione si esercita — l'oggetto. Ogni particella viaggia con il suo nome, e il verbo 焼く (cuocere) chiude la frase."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「を」で示す目的語",
+      "sentence": {
+        "kanji": "ピザを焼いた",
+        "kana": "ピザをやいた"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the object: ピザを. を marks the pizza as the thing that was baked. No subject is written, yet the sentence is complete: its subject is a zero pronoun, understood as the speaker unless the context points to someone else — \"I baked a pizza\".",
+        "it": "Seleziona l'oggetto: ピザを. を marca la pizza come la cosa che è stata cotta. Nessun soggetto è scritto, eppure la frase è completa: il suo soggetto è un pronome zero, inteso come chi parla a meno che il contesto indichi qualcun altro — «ho cotto una pizza»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「を」で示す目的語",
+      "sentence": {
+        "kanji": "猫が魚を食べた",
+        "kana": "ねこがさかなをたべた"
+      },
+      "answer": "を",
+      "distractors": ["が", "の"],
+      "explanation": {
+        "en": "The fish is what gets eaten, so it takes the object particle を. が is already used by 猫 (cat), the one who eats; の would turn 魚 into a modifier of the next noun, but a verb follows, not a noun.",
+        "it": "Il pesce è ciò che viene mangiato, quindi prende la particella dell'oggetto を. が è già usata da 猫 (gatto), chi mangia; の farebbe di 魚 un modificatore del nome seguente, ma segue un verbo, non un nome."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "ゼロ代名詞",
+      "sentence": {
+        "kanji": "もう八時だ",
+        "kana": "もうはちじだ"
+      },
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select the copula だ. The sentence has a predicate (八時だ, \"is eight o'clock\") but no written subject. Japanese does not need one on the page: the subject is a zero pronoun whose value comes from the situation — here, the present time.",
+        "it": "Seleziona la copula だ. La frase ha un predicato (八時だ, «sono le otto») ma nessun soggetto scritto. Il giapponese non ha bisogno di scriverlo: il soggetto è un pronome zero il cui valore viene dalla situazione — qui, l'ora attuale."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "ゼロ代名詞",
+      "sentence": {
+        "kanji": "毎晩日記を書く",
+        "kana": "まいばんにっきをかく"
+      },
+      "answer": ["毎晩", "日記を", "書く"],
+      "explanation": {
+        "en": "There is no が anywhere, but every action still has someone performing it. The subject of 書く (write) is a zero pronoun; with nothing else in the context, it defaults to the speaker: \"I write in my diary every night\".",
+        "it": "Non c'è nessun が, ma ogni azione ha comunque qualcuno che la compie. Il soggetto di 書く (scrivere) è un pronome zero; se il contesto non dice altro, vale chi parla: «ogni sera scrivo il diario»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "ゼロ代名詞",
+      "sentence": {
+        "kanji": "窓を開ける",
+        "kana": "まどをあける"
+      },
+      "answer": "を",
+      "distractors": ["が", "で"],
+      "explanation": {
+        "en": "窓 (window) is what gets opened, so it is the object and takes を. With が the window would become the subject, and the sentence would lose the person who opens it. That person is still there as a zero pronoun: \"(I) open the window\".",
+        "it": "窓 (finestra) è ciò che viene aperto, quindi è l'oggetto e prende を. Con が la finestra diventerebbe il soggetto, e la frase perderebbe chi la apre. Quella persona c'è comunque, come pronome zero: «(io) apro la finestra»."
+      }
+    }
+  ]
+}

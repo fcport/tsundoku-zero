@@ -1,0 +1,92 @@
+{
+  "order": 11,
+  "title": {
+    "en": "が with 好き, 分かる, ほしい and たい; がる for other people",
+    "it": "が con 好き, 分かる, ほしい e たい; がる per gli altri"
+  },
+  "grammarPoints": ["感情・理解の述語と「が」", "欲求の「ほしい」と「たい」", "他人の感情を示す「がる」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "感情・理解の述語と「が」",
+      "sentence": {
+        "kanji": "私は犬が好きだ",
+        "kana": "わたしはいぬがすきだ"
+      },
+      "answer": "が",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "好き is not a verb: it is a な-adjective, a noun that closes the sentence with だ. A verb takes its object with を, but 好きだ does not have an object, so what is liked is marked by が. The person who likes it is the topic, 私は.",
+        "it": "好き non è un verbo: è un aggettivo in な, un nome che chiude la frase con だ. Un verbo prende il suo oggetto con を, ma 好きだ non ha un oggetto, quindi ciò che piace è marcato da が. Chi prova il gusto è il tema, 私は."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "感情・理解の述語と「が」",
+      "sentence": {
+        "kanji": "弟は漢字が分かる",
+        "kana": "おとうとはかんじがわかる"
+      },
+      "answer": "が",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "分かる describes a state — something is clear, understandable — not an action done to an object. What is understood is therefore marked by が, never by を: 漢字が分かる. The person is the topic, 弟は.",
+        "it": "分かる descrive uno stato — qualcosa è chiaro, comprensibile — non un'azione compiuta su un oggetto. Ciò che si capisce è quindi marcato da が, mai da を: 漢字が分かる. La persona è il tema, 弟は."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "欲求の「ほしい」と「たい」",
+      "sentence": {
+        "kanji": "新しい自転車がほしい",
+        "kana": "あたらしいじてんしゃがほしい"
+      },
+      "answer": ["新しい", "自転車が", "ほしい"],
+      "explanation": {
+        "en": "ほしい (wanted) ends in い: it is an adjective, not a verb. The thing wanted is marked by が. With no one else named, the feeling is the speaker's: \"I want a new bicycle\".",
+        "it": "ほしい (desiderato) finisce in い: è un aggettivo, non un verbo. La cosa desiderata è marcata da が. Se non si nomina nessun altro, il sentimento è di chi parla: «voglio una bicicletta nuova»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "欲求の「ほしい」と「たい」",
+      "sentence": {
+        "kanji": "ラーメンが食べたい",
+        "kana": "ラーメンがたべたい"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select what is desired: ラーメンが. 食べたい is the i-stem 食べ plus the adjective たい, so, like any adjective, it takes が for the thing it is about. With を (ラーメンを食べたい) the sentence is also correct, but が is the more traditional choice.",
+        "it": "Seleziona ciò che si desidera: ラーメンが. 食べたい è il radicale in i 食べ più l'aggettivo たい, quindi, come ogni aggettivo, prende が per la cosa di cui parla. Anche con を (ラーメンを食べたい) la frase è corretta, ma が è la scelta più tradizionale."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "他人の感情を示す「がる」",
+      "sentence": {
+        "kanji": "妹が新しいゲームをほしがっている",
+        "kana": "いもうとがあたらしいゲームをほしがっている"
+      },
+      "answer": "ほしがっている",
+      "distractors": ["ほしい", "ほしいだ", "ほしくている"],
+      "explanation": {
+        "en": "ほしい and たい state the speaker's own feelings: you cannot state someone else's inner feeling as a fact. For another person you drop the final い and add the verb がる, \"shows signs of\": ほしがる. As a verb, it takes its object with を.",
+        "it": "ほしい e たい esprimono i sentimenti di chi parla: il sentimento interiore di un altro non si può affermare come un fatto. Per un'altra persona si toglie la い finale e si aggiunge il verbo がる, «mostra segni di»: ほしがる. Essendo un verbo, prende l'oggetto con を."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "他人の感情を示す「がる」",
+      "sentence": {
+        "kanji": "子供が外で遊びたがっている",
+        "kana": "こどもがそとであそびたがっている"
+      },
+      "answer": "遊びたがっている",
+      "distractors": ["遊びたい", "遊びたいだ", "遊ぶたがっている"],
+      "explanation": {
+        "en": "The child is not the speaker, so 遊びたい cannot describe the child's wish directly. たい drops its い and takes がる: 遊びたがる, \"is showing that they want to play\", here in the ongoing form 遊びたがっている.",
+        "it": "Il bambino non è chi parla, quindi 遊びたい non può descrivere direttamente il suo desiderio. たい perde la い e prende がる: 遊びたがる, «mostra di voler giocare», qui nella forma in corso 遊びたがっている."
+      }
+    }
+  ]
+}

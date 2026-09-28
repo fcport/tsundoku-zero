@@ -1,0 +1,133 @@
+{
+  "order": 7,
+  "title": {
+    "en": "Negation with ない",
+    "it": "La negazione con ない"
+  },
+  "grammarPoints": ["否定の「ない」", "名詞文の否定「ではない」", "形容詞の否定「くない」", "丁寧な否定「ません」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "否定の「ない」",
+      "sentence": {
+        "kanji": "今日は時間がない",
+        "kana": "きょうはじかんがない"
+      },
+      "answer": "ない",
+      "distractors": ["あらない", "ないだ", "なく"],
+      "explanation": {
+        "en": "ある (there is) has no regular negative: \"there is not\" is the い-adjective ない. Because ない is an adjective, it is already a full predicate and never takes だ.",
+        "it": "ある (c'è) non ha una negazione regolare: «non c'è» è l'aggettivo in い ない. Poiché ない è un aggettivo, è già un predicato completo e non prende mai だ."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "否定の「ない」",
+      "sentence": {
+        "kanji": "兄はお酒を飲まない",
+        "kana": "あにはおさけをのまない"
+      },
+      "answer": "飲まない",
+      "distractors": ["飲むない", "飲みない", "飲まらない"],
+      "explanation": {
+        "en": "A verb is made negative by attaching ない to its a-stem: the final u-row kana moves to the a-row. 飲む → 飲ま + ない. The result is an い-adjective, so the negative verb behaves like one.",
+        "it": "Un verbo si nega attaccando ない al suo radicale in a: l'ultimo kana della riga in u passa alla riga in a. 飲む → 飲ま + ない. Il risultato è un aggettivo in い, quindi il verbo negato si comporta come tale."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "否定の「ない」",
+      "sentence": {
+        "kanji": "母は肉を買わない",
+        "kana": "はははにくをかわない"
+      },
+      "answer": "買わない",
+      "distractors": ["買あない", "買いない", "買うない"],
+      "explanation": {
+        "en": "The only irregularity of the a-stem: verbs ending in う take わ instead of あ. So 買う (buy) → 買わない, not 買あない.",
+        "it": "L'unica irregolarità del radicale in a: i verbi in う prendono わ invece di あ. Quindi 買う (comprare) → 買わない, non 買あない."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞文の否定「ではない」",
+      "sentence": {
+        "kanji": "あれは駅ではない",
+        "kana": "あれはえきではない"
+      },
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select the negative ending: ではない. A noun sentence is negated by turning だ into its te-form で, adding は, and then ない: 駅だ → 駅ではない, \"is not a station\". In speech it often contracts to じゃない.",
+        "it": "Seleziona la desinenza negativa: ではない. Una frase nominale si nega trasformando だ nella sua forma in て で, aggiungendo は e poi ない: 駅だ → 駅ではない, «non è una stazione». Nel parlato si contrae spesso in じゃない."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "形容詞の否定「くない」",
+      "sentence": {
+        "kanji": "この部屋は寒くない",
+        "kana": "このへやはさむくない"
+      },
+      "answer": "寒くない",
+      "distractors": ["寒いない", "寒いではない", "寒じゃない"],
+      "explanation": {
+        "en": "An い-adjective changes its final い into く before any addition: 寒い (cold) → 寒く + ない. ではない is only for nouns and な-adjectives.",
+        "it": "Un aggettivo in い cambia la い finale in く prima di qualunque aggiunta: 寒い (freddo) → 寒く + ない. ではない è solo per i nomi e gli aggettivi in な."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "形容詞の否定「くない」",
+      "sentence": {
+        "kanji": "この映画はよくない",
+        "kana": "このえいがはよくない"
+      },
+      "answer": "よくない",
+      "distractors": ["いくない", "いいない", "よいない"],
+      "explanation": {
+        "en": "いい (good) has an older form, よい, and every change is built on that one: \"not good\" is よくない and \"was good\" is よかった. いくない does not exist.",
+        "it": "いい (buono) ha una forma più antica, よい, e ogni trasformazione si costruisce su quella: «non buono» è よくない e «era buono» è よかった. いくない non esiste."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "否定の「ない」",
+      "sentence": {
+        "kanji": "昨日は雨が降らなかった",
+        "kana": "きのうはあめがふらなかった"
+      },
+      "answer": ["昨日は", "雨が", "降らなかった"],
+      "explanation": {
+        "en": "Since a negative verb ends in the adjective ない, its past follows the adjective rule: drop い, add かった. 降る → 降らない → 降らなかった, \"it did not rain\".",
+        "it": "Poiché un verbo negato finisce con l'aggettivo ない, il suo passato segue la regola degli aggettivi: si toglie い e si aggiunge かった. 降る → 降らない → 降らなかった, «non è piovuto»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "否定の「ない」",
+      "sentence": {
+        "kanji": "テレビを見なかった",
+        "kana": "テレビをみなかった"
+      },
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select the past negative ending: なかった. 見る is an ichidan verb, so ない attaches after removing る: 見ない; then ない goes into the past like any い-adjective: 見なかった.",
+        "it": "Seleziona la desinenza negativa passata: なかった. 見る è un verbo ichidan, quindi ない si attacca dopo aver tolto る: 見ない; poi ない va al passato come qualunque aggettivo in い: 見なかった."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧な否定「ません」",
+      "sentence": {
+        "kanji": "私はたばこを吸いません",
+        "kana": "わたしはたばこをすいません"
+      },
+      "answer": "吸いません",
+      "distractors": ["吸わません", "吸うません", "吸いまさない"],
+      "explanation": {
+        "en": "The polite ending ます attaches to the i-stem (吸う → 吸い) and, unlike the other endings, does not use ない for its negative: it becomes ません. So 吸います → 吸いません.",
+        "it": "La desinenza cortese ます si attacca al radicale in i (吸う → 吸い) e, a differenza delle altre desinenze, non usa ない per negarsi: diventa ません. Quindi 吸います → 吸いません."
+      }
+    }
+  ]
+}

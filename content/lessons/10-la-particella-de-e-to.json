@@ -1,0 +1,105 @@
+{
+  "order": 10,
+  "title": {
+    "en": "で for the place of an action and for the means; と to join nouns",
+    "it": "で per il luogo di un'azione e per il mezzo; と per unire i nomi"
+  },
+  "grammarPoints": ["動作の場所を示す「で」", "手段を示す「で」", "名詞をつなぐ「と」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "動作の場所を示す「で」",
+      "sentence": {
+        "kanji": "図書館で勉強する",
+        "kana": "としょかんでべんきょうする"
+      },
+      "answer": "で",
+      "distractors": ["に", "を"],
+      "explanation": {
+        "en": "Studying is an action, and the place where an action takes place is marked by で. に would name a place you go to or are at, not the scene of an activity.",
+        "it": "Studiare è un'azione, e il luogo in cui si svolge un'azione è marcato da で. に indicherebbe un luogo in cui si va o in cui ci si trova, non la scena di un'attività."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "動作の場所を示す「で」",
+      "sentence": {
+        "kanji": "姉は台所にいる",
+        "kana": "あねはだいどころにいる"
+      },
+      "answer": "に",
+      "distractors": ["で", "を"],
+      "explanation": {
+        "en": "Here nothing is being done: いる only says where the sister is, so the place takes に. Compare 台所で料理する, \"cooks in the kitchen\", where an action calls for で.",
+        "it": "Qui non si fa nulla: いる dice solo dove si trova la sorella, quindi il luogo prende に. Si confronti con 台所で料理する, «cucina in cucina», dove un'azione richiede で."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "手段を示す「で」",
+      "sentence": {
+        "kanji": "ペンで名前を書いた",
+        "kana": "ペンでなまえをかいた"
+      },
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select the means: ペンで. Besides the place of an action, で marks the tool or means used to do it: \"wrote the name with a pen\". The name is the object (を).",
+        "it": "Seleziona il mezzo: ペンで. Oltre al luogo di un'azione, で marca lo strumento o il mezzo con cui la si compie: «ha scritto il nome con la penna». Il nome è l'oggetto (を)."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "手段を示す「で」",
+      "sentence": {
+        "kanji": "自転車で学校に通う",
+        "kana": "じてんしゃでがっこうにかよう"
+      },
+      "answer": ["自転車で", "学校に", "通う"],
+      "explanation": {
+        "en": "A means of transport is a means like any other, so it takes で: 自転車で, \"by bicycle\". The destination of the commute is marked by に.",
+        "it": "Un mezzo di trasporto è un mezzo come un altro, quindi prende で: 自転車で, «in bicicletta». La destinazione del tragitto è marcata da に."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "手段を示す「で」",
+      "sentence": {
+        "kanji": "英語で手紙を書いた",
+        "kana": "えいごでてがみをかいた"
+      },
+      "answer": "で",
+      "distractors": ["を", "が"],
+      "explanation": {
+        "en": "A language used to say or write something is a means, so it takes で: 英語で, \"in English\". The letter is already the object with を, and a verb has only one object.",
+        "it": "Una lingua usata per dire o scrivere qualcosa è un mezzo, quindi prende で: 英語で, «in inglese». La lettera è già l'oggetto con を, e un verbo ha un solo oggetto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞をつなぐ「と」",
+      "sentence": {
+        "kanji": "パンと牛乳を買った",
+        "kana": "パンとぎゅうにゅうをかった"
+      },
+      "answer": "と",
+      "distractors": ["を", "へ"],
+      "explanation": {
+        "en": "と joins nouns into a list: パンと牛乳, \"bread and milk\". It says nothing about their role in the sentence; the を after the last noun makes the whole list the object of 買った.",
+        "it": "と unisce i nomi in un elenco: パンと牛乳, «pane e latte». Non dice nulla del loro ruolo nella frase; il を dopo l'ultimo nome rende l'intero elenco oggetto di 買った."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞をつなぐ「と」",
+      "sentence": {
+        "kanji": "兄と弟が川で泳いでいる",
+        "kana": "あにとおとうとがかわでおよいでいる"
+      },
+      "answer": ["兄と", "弟が", "川で", "泳いでいる"],
+      "explanation": {
+        "en": "兄と弟 is one unit, \"older and younger brother\", and が after it marks both as the subject. 川で is where the swimming happens: an action, so で.",
+        "it": "兄と弟 è un'unica unità, «il fratello maggiore e il minore», e が dopo di essa li marca entrambi come soggetto. 川で è dove avviene il nuotare: un'azione, quindi で."
+      }
+    }
+  ]
+}
