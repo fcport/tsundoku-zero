@@ -69,26 +69,102 @@ function stripYamlComments(yaml: string): string {
     .join('\n');
 }
 
-// Il modulo WASM si inizializza una volta (await new Module()).
-let pg: PgQuery;
+// pg-query-emscripten gira su una memoria WASM che non si libera fra una parse e
+// l'altra: un'istanza del modulo regge circa 56 KB di SQL in TUTTA la sua vita, poi
+// va in crash con `… is not a function` — misurato parsando il seed del contenuto
+// un'istruzione alla volta su un'istanza nuova. Il limite è cumulativo, quindi
+// cresce con il repository: il seed si allunga a ogni lezione, e con la tredicesima
+// lezione il totale delle migrazioni lo ha superato.
+//
+// Due difese. (1) Ogni istanza ha un BUDGET di byte ben sotto il limite: esaurito
+// quello, si passa all'istanza successiva di un pool creato nel `beforeAll` (la
+// creazione è asincrona, la parse no). (2) Un testo più lungo del budget si parsa
+// un'istruzione alla volta e se ne uniscono gli alberi: la grammatica applicata è
+// la stessa. La cache per stringa resta: ogni SQL distinto attraversa il WASM una
+// sola volta, e il risultato è deterministico (stesso testo ⇒ stesso AST).
+const WASM_BYTES_BUDGET = 32 * 1024;
+const utf8Length = (text: string) => new TextEncoder().encode(text).length;
+
+let pool: PgQuery[] = [];
+let current = 0;
+let usedBytes = 0;
 beforeAll(async () => {
-  pg = await new PgQueryModule();
+  // Il test parsa ogni migrazione e, per alcune, anche la versione senza commenti:
+  // il doppio dei byte totali, con un margine per il riempimento non ottimale.
+  const totalBytes = migrations.reduce((sum, m) => sum + utf8Length(m.sql), 0);
+  const instances = Math.ceil((4 * totalBytes) / WASM_BYTES_BUDGET) + 2;
+  pool = await Promise.all(Array.from({ length: instances }, () => new PgQueryModule()));
 });
 
-// pg-query-emscripten gira su un heap WASM che non si libera fra una parse e
-// l'altra: oltre una certa quota di invocazioni ripetute il modulo va in crash
-// (`… is not a function`). Poiché le asserzioni parsano SPESSO lo stesso testo,
-// memoizziamo il risultato per stringa: ogni SQL distinto attraversa il WASM UNA
-// sola volta, e le decine di `parse` dei test diventano una manciata di
-// invocazioni reali. Il risultato è deterministico (stesso testo ⇒ stesso AST),
-// quindi la cache non altera il significato dei test.
+function wasmParse(sql: string): PgParseResult {
+  const bytes = utf8Length(sql);
+  if (usedBytes > 0 && usedBytes + bytes > WASM_BYTES_BUDGET) {
+    current++;
+    usedBytes = 0;
+  }
+  const pg = pool[current];
+  if (pg === undefined) throw new Error('pool di istanze pg-query esaurito: alzare il margine nel beforeAll');
+  usedBytes += bytes;
+  return pg.parse(sql);
+}
+
 const parseCache = new Map<string, PgParseResult>();
 function parseSql(sql: string): PgParseResult {
   const cached = parseCache.get(sql);
   if (cached !== undefined) return cached;
-  const res = pg.parse(sql);
+  const res = utf8Length(sql) > WASM_BYTES_BUDGET ? parseByStatement(sql) : wasmParse(sql);
   parseCache.set(sql, res);
   return res;
+}
+
+function parseByStatement(sql: string): PgParseResult {
+  const results = splitTopLevelStatements(sql).map((statement) => wasmParse(statement));
+  const failed = results.find((r) => r.error !== null);
+  if (failed !== undefined) return failed;
+  return {
+    ...results[0]!,
+    parse_tree: { ...results[0]!.parse_tree, stmts: results.flatMap((r) => r.parse_tree.stmts) },
+  };
+}
+
+/**
+ * Divide un file SQL nelle sue istruzioni di primo livello sul `;` che le chiude,
+ * ignorando quelli dentro stringhe ('…', con '' come escape), identificatori tra
+ * virgolette, blocchi dollar-quoted ($tag$…$tag$) e commenti di riga. Ogni pezzo
+ * conserva il proprio `;`. Uno split sbagliato non passa inosservato: produce SQL
+ * incompleto, e la parse lo segnala come errore.
+ */
+function splitTopLevelStatements(sql: string): string[] {
+  const out: string[] = [];
+  let start = 0;
+  let i = 0;
+  while (i < sql.length) {
+    const ch = sql[i]!;
+    if (ch === "'" || ch === '"') {
+      i = sql.indexOf(ch, i + 1);
+      while (i !== -1 && sql[i + 1] === ch) i = sql.indexOf(ch, i + 2);
+      i = i === -1 ? sql.length : i + 1;
+    } else if (ch === '-' && sql[i + 1] === '-') {
+      const end = sql.indexOf('\n', i);
+      i = end === -1 ? sql.length : end + 1;
+    } else if (ch === '$') {
+      const tag = /^\$[A-Za-z_]*\$/.exec(sql.slice(i))?.[0];
+      if (tag === undefined) {
+        i++;
+      } else {
+        const end = sql.indexOf(tag, i + tag.length);
+        i = end === -1 ? sql.length : end + tag.length;
+      }
+    } else if (ch === ';') {
+      out.push(sql.slice(start, i + 1));
+      start = i + 1;
+      i++;
+    } else {
+      i++;
+    }
+  }
+  if (sql.slice(start).trim() !== '') out.push(sql.slice(start));
+  return out;
 }
 
 describe('supabase/migrations — validazione sintattica offline (AC2)', () => {

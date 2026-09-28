@@ -134,20 +134,21 @@ export function buildSeedSql(lessons: readonly Lesson[]): string {
   parts.push('');
 
   // --- exercise ----------------------------------------------------------------
-  const exerciseRows: string[] = [];
+  // Un insert PER LEZIONE, non uno solo per tutto il contenuto: un'unica istruzione
+  // cresce con il corso intero, e oltre i 64 KiB il parser SQL con cui la CI valida
+  // le migrazioni (src/migrations.test.ts) va in crash. Divise per lezione, le
+  // istruzioni restano piccole qualunque sia la lunghezza del corso.
+  let anyExercise = false;
   for (const lesson of lessons) {
     const lid = lessonId(lesson);
-    for (const exercise of lesson.exercises) {
-      const id = deriveExerciseId(exercise);
-      exerciseRows.push(
-        `  (${sqlString(id)}, ${sqlString(lid)}, ${sqlString(exercise.kind)}, ` +
-          `${sqlString(exercisePayload(exercise))}::jsonb, ${sqlString(exercise.grammarPoint)}, ` +
-          `${sqlString(exercise.explanation.en)}, ${sqlNullableString(exercise.explanation.it)})`,
-      );
-    }
-  }
-
-  if (exerciseRows.length > 0) {
+    const exerciseRows = lesson.exercises.map(
+      (exercise) =>
+        `  (${sqlString(deriveExerciseId(exercise))}, ${sqlString(lid)}, ${sqlString(exercise.kind)}, ` +
+        `${sqlString(exercisePayload(exercise))}::jsonb, ${sqlString(exercise.grammarPoint)}, ` +
+        `${sqlString(exercise.explanation.en)}, ${sqlNullableString(exercise.explanation.it)})`,
+    );
+    if (exerciseRows.length === 0) continue;
+    anyExercise = true;
     parts.push(
       'insert into exercise (id, lesson_id, kind, payload, grammar_point, explanation_en, explanation_it) values',
     );
@@ -159,11 +160,13 @@ export function buildSeedSql(lessons: readonly Lesson[]): string {
     parts.push('  grammar_point = excluded.grammar_point,');
     parts.push('  explanation_en = excluded.explanation_en,');
     parts.push('  explanation_it = excluded.explanation_it;');
-  } else {
+    parts.push('');
+  }
+  if (!anyExercise) {
     // Nessun esercizio in tutto il contenuto: nessun insert su `exercise` (AC5).
     parts.push('-- Nessun esercizio nel contenuto: nessuna riga `exercise`.');
+    parts.push('');
   }
-  parts.push('');
 
   // --- riconciliazione ----------------------------------------------------------
   // L'upsert da solo AGGIORNA e AGGIUNGE, ma non rimuove: una riga che il contenuto
