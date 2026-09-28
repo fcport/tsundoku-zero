@@ -373,3 +373,11 @@ source_spec: `spec-7-3-due-licenze-perché-sono-due-cose-diverse.md`
 severity: low
 reason: Gli AC di 7.3 enumerano sette domande di progettazione e il brief dichiara «the README is not a feature list», quindi il getting-started è fuori dall'ambito imposto dall'intento; ma per un repository «destinato al deploy pubblico» è un'aggiunta utile prima del lancio (Epic 7).
 status: open
+
+### DW-47: Il test di cancellazione copre solo le quattro tabelle per-utente nominate; una futura nuova tabella per-utente non agganciata alla cascata non verrebbe colta.
+origin: spec-deferred cfc224e00be1
+location: e2e/account-deletion.spec.ts:43
+source_spec: `spec-7-5-la-cancellazione-verificata-tabella-per-tabella.md`
+severity: low
+reason: PER_USER_TABLES elenca staticamente review_state/review_log/lesson_progress/user_settings (e2e/account-deletion.spec.ts). L'intento della 7.5 nomina esattamente queste quattro tabelle; una tabella per-utente aggiunta in futuro senza `on delete cascade` lascerebbe righe orfane che questo test non interroga. Un guard più forte enumererebbe le tabelle per-utente da information_schema, o imporrebbe di aggiungere la nuova tabella qui.
+status: open
