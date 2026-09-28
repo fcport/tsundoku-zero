@@ -133,7 +133,31 @@ sono dovute all'**operatore** (la storia si finalizza a `awaiting-operator`).
 
 | Lezione | Autorata prima del controllo | Transcript disponibile | Esito | Azione |
 |---|---|---|---|---|
-| `content/lessons/01-la-particella-wo.json` | sì (storia 2.7) | no (privato, non nel working tree) | **da verificare** | operatore: eseguire `npm run check-contamination` contro il transcript privato della lezione campione; riscrivere le eventuali sovrapposizioni o motivarle nell'allowlist; registrare qui l'esito reale (data + verdetto) |
+| `content/lessons/01-il-soggetto-con-ga.json` | no, autorata dal transcript | sì | **28-09-2026: nessuna sovrapposizione** | nessuna; ma vedi il punto cieco più sotto |
+| `content/lessons/01-la-particella-wo.json` | sì (storia 2.7) | sì | **28-09-2026: nessuna sovrapposizione** | nessuna |
+
+Il confronto del 28-09-2026 è stato eseguito contro **99 transcript** — l'intero corso,
+non la sola lezione da cui il contenuto è stato autorato. È un controllo più forte di
+quello che la storia 6.3 chiedeva: copre anche la lezione campione, che era nata come
+fixture inventata e il cui transcript non era mai stato confrontato.
+
+### Punto cieco trovato eseguendo il controllo (28-09-2026)
+
+Il controllo confronta **testo con testo**. Il transcript della lezione 1 scrive gli
+esempi giapponesi in **caratteri latini** («pen ga akai»), mentre il contenuto li scrive
+in giapponese (`ペンが赤い`). Una sovrapproposizione fra i due non produce alcuna
+corrispondenza testuale: **il controllo è passato verde su un esempio che era davvero
+ripreso dalla fonte.**
+
+La sovrapposizione è stata trovata rileggendo a mano e rimossa (`ペンが赤い` →
+`水が冷たい`, che non compare nella fonte). Il verdetto verde qui sopra vale dopo quella
+correzione.
+
+Conseguenza operativa: **il verde di `check-contamination` non sostituisce la rilettura
+umana di `FR11.2`** per le fonti che romanizzano il giapponese. Chi rilegge deve
+confrontare gli esempi per *sostanza*, non fidarsi del confronto automatico. Una
+normalizzazione romaji↔kana renderebbe il controllo capace di vederlo, ed è lavoro
+differito, non risolto.
 
 Quando l'operatore esegue il controllo, sostituisce la riga «da verificare» con
 l'esito effettivo: **pulito** (nessuna sovrapposizione non motivata) oppure l'elenco

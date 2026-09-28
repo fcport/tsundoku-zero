@@ -30,8 +30,11 @@ describe('lezione campione — il CANCELLO reale resta verde (AC3)', () => {
 });
 
 describe('lezione campione — fixture caricata dal file reale (AC4)', () => {
-  it('sampleLesson carica: order 1 e ≥3 esercizi', () => {
-    expect(sampleLesson.order).toBe(1);
+  it('sampleLesson carica: order riservato (900+) e ≥3 esercizi', () => {
+    // La fixture vive nella fascia riservata 900+ (vedi docs/authoring-runbook.md):
+    // la sua posizione nel curriculum e' provvisoria, quindi il test non la fissa a
+    // un numero — verifica che sia FUORI dal curriculum, che e' cio' che conta.
+    expect(sampleLesson.order).toBeGreaterThanOrEqual(900);
     expect(sampleLesson.exercises.length).toBeGreaterThanOrEqual(3);
   });
 });

@@ -1,0 +1,50 @@
+{
+  "order": 1,
+  "title": {
+    "en": "The subject with が, and the three predicates",
+    "it": "Il soggetto con が, e i tre predicati"
+  },
+  "grammarPoints": ["「が」が示す主語", "述語の三つの形"],
+  "exercises": [
+    {
+      "kind": "assemble",
+      "grammarPoint": "「が」が示す主語",
+      "sentence": {
+        "kanji": "妹が毎朝歌います",
+        "kana": "いもうとがまいあさうたいます"
+      },
+      "answer": ["妹が", "毎朝", "歌います"],
+      "explanation": {
+        "en": "が marks the subject: it tells you which element the predicate is about. Here 妹 (younger sister) is the subject and 歌います (sings) is the predicate. 毎朝 (every morning) adds information but is not the subject, so it carries no が. A sentence has exactly one subject marked by が.",
+        "it": "が marca il soggetto: dice di quale elemento parla il predicato. Qui 妹 (sorella minore) è il soggetto e 歌います (canta) è il predicato. 毎朝 (ogni mattina) aggiunge informazione ma non è il soggetto, quindi non porta が. Una frase ha esattamente un soggetto marcato da が."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "述語の三つの形",
+      "sentence": {
+        "kanji": "妹が学生だ",
+        "kana": "いもうとががくせいだ"
+      },
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select the copula. だ states an identity between the subject and what precedes it: 妹 = 学生. The relation holds in one direction only — this sentence says the sister is a student, not that students are the sister. だ is one of the three things a predicate can end with; the other two are a verb and an い-adjective.",
+        "it": "Seleziona la copula. だ afferma un'identità fra il soggetto e ciò che la precede: 妹 = 学生. La relazione vale in una sola direzione — questa frase dice che la sorella è una studentessa, non che le studentesse siano la sorella. だ è una delle tre cose con cui un predicato può chiudersi; le altre due sono un verbo e un aggettivo in い."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "述語の三つの形",
+      "sentence": {
+        "kanji": "水が冷たい",
+        "kana": "みずがつめたい"
+      },
+      "answer": "冷たい",
+      "distractors": ["冷たいだ", "冷だ", "冷たくだ"],
+      "explanation": {
+        "en": "An い-adjective is already a complete predicate: 冷たい does not mean \"cold\", it means \"is cold\". The identity function that だ performs is built into the adjective, so だ is never added after an い-adjective. This is why a predicate can end in three ways — a verb, だ, or an い-adjective — and never in two of them at once.",
+        "it": "Un aggettivo in い è già un predicato completo: 冷たい non significa «freddo», significa «è freddo». La funzione di identità che svolge だ è incorporata nell'aggettivo, quindi だ non si aggiunge mai dopo un aggettivo in い. È la ragione per cui un predicato può chiudersi in tre modi — un verbo, だ, o un aggettivo in い — e mai in due insieme."
+      }
+    }
+  ]
+}

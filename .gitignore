@@ -63,6 +63,14 @@ transcripts/
 *.transcript.txt
 *.vtt
 *.srt
+# Le regole sopra coprono nomi ed estensioni da transcript. NON bastano: il
+# 28-09-2026 novantanove trascrizioni sono finite in `docs/lessons/` come file
+# `.md`, cioe' in una cartella TRACCIATA con un'estensione che nessuna regola
+# escludeva — a un `git add -A` dall'essere pubblicate. Sono state spostate in
+# `.authoring/transcripts/`. Le due righe seguenti chiudono quella maglia: una
+# cartella di lezioni sotto `docs/` non e' mai contenuto del repository, perche'
+# le lezioni AUTORATE vivono in `content/lessons/` e le FONTI non vivono qui.
+docs/lessons/
 
 # Scratch di autorazione (cartella di lavoro dell'autore):
 # transcript e appunti privati vivono qui, mai versionati.

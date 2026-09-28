@@ -87,11 +87,33 @@ quindi con una riga **da misurare**.
 
 | Lezione | Inizio (guardare la fonte) | Fine (esercizio giocabile/committato) | Tempo reale | Entro i 30 min? |
 |---|---|---|---|---|
-| _da misurare_ | — | — | — | operatore: eseguire il flusso end-to-end su una lezione, cronometrare visione→commit, registrare qui il tempo reale |
+| `01-il-soggetto-con-ga` (が + le tre forme del predicato) | 28-09-2026 15:00:55 | 28-09-2026 15:09:00 | **8 min 05 s** | sì, con ampio margine |
 
-Quando l'operatore misura, sostituisce la riga «da misurare» con la lezione, i due
-istanti e il tempo reale, e aggiunge una riga per ogni lezione successiva. Solo
-allora `M5` è confermata o va ritarata.
+**Cosa comprende questa misura, e cosa no.** Cronometro avviato all'apertura del
+transcript, fermato quando tutti i cancelli erano verdi: fatti estratti, tre esercizi
+autorati (uno per `kind`), span di `select-span` verificati sui segmenti reali di
+`alignFurigana`, `npm run validate-content` verde, seed rigenerato, suite verde.
+
+**NON comprende il passo 5**, la rilettura umana obbligatoria di `FR11.2`: quella non è
+delegabile e va cronometrata a parte dall'owner, che aggiunge il proprio tempo a questa
+riga. Gli 8 minuti sono quindi il costo *assistito*, non il costo totale — e vanno letti
+così, non spacciati per il tempo pieno.
+
+**Due costi incontrati che non erano previsti dal runbook**, e che vale la pena
+registrare perché li pagherà ogni lezione futura:
+
+1. `select-span` può selezionare **solo confini di segmento**, e `alignFurigana` riduce
+   una frase intera a due segmenti (nucleo con kanji + coda in kana). Isolare una parola
+   *dentro* la frase non è esprimibile: la frase va scelta perché il segmento 0 coincida
+   con ciò che si vuole far selezionare. Verificarlo richiede di calcolare i segmenti
+   prima di scrivere l'esercizio, non dopo.
+2. Cambiare il contenuto obbliga a rigenerare il seed e ad aggiornare la sentinella del
+   conteggio. Entrambi i passi sono già nel runbook (6 e 7) e sono **imposti da un test**,
+   quindi non si possono dimenticare — ma vanno contati nel tempo.
+
+Quando l'operatore misura le lezioni successive, aggiunge una riga per ciascuna. Solo
+con più righe si vede se `M5` regge o va ritarata: il punto di `NFR9` è che la decima
+riga non sia più lenta della seconda.
 
 ## Definition of Done (AC3)
 
@@ -99,14 +121,20 @@ La Definition of Done del PRD §11 chiede **almeno cinque** lezioni autorate,
 revisionate e giocabili; l'**obiettivo è undici**, pari a quelle già viste
 dall'owner. Questo è il traguardo dell'epica di contenuto.
 
-<!-- authored-lessons: 1 -->
+<!-- authored-lessons: 2 -->
 <!-- dod-status: below-target -->
 
-**Stato reale.** Il repository contiene al momento **1** lezione autorata sotto
-`content/lessons/`:
+**Stato reale.** Il repository contiene al momento **2** lezioni autorate sotto
+`content/lessons/`, entrambe **valide** contro il cancello di Epic 2
+(`validateLessons` → `[]`):
 
-- `content/lessons/01-la-particella-wo.json` — la lezione campione della storia 2.7,
-  che **valida** contro il cancello di Epic 2 (`validateLessons` → `[]`).
+- `content/lessons/01-il-soggetto-con-ga.json` — `order: 1`, la prima lezione **reale**
+  del curriculum: が come marcatore del soggetto e le tre forme del predicato (verbo,
+  copula だ, aggettivo in い). Tre esercizi, uno per `kind`.
+- `content/lessons/01-la-particella-wo.json` — `order: 900`, la lezione campione della
+  storia 2.7. Vive nella **fascia riservata 900+** perché nasce come fixture dei test e
+  la sua posizione nel curriculum è provvisoria: quando arriverà la lezione vera su を
+  va **sostituita**, non affiancata (avrebbero lo stesso `lessonId`).
 
 **Verdetto DoD:** lo stato attuale è **sotto il traguardo** — mancano lezioni per
 raggiungere le cinque (e altre ancora per l'obiettivo di undici). Il verdetto è tenuto

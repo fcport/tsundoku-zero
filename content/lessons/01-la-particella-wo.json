@@ -1,5 +1,5 @@
 {
-  "order": 1,
+  "order": 900,
   "title": {
     "en": "Marking the object with を",
     "it": "Marcare l'oggetto con を"
@@ -36,13 +36,13 @@
       "kind": "select-span",
       "grammarPoint": "「を」で示す目的語",
       "sentence": {
-        "kanji": "果物を買います",
-        "kana": "くだものをかいます"
+        "kanji": "果物をください",
+        "kana": "くだものをください"
       },
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the object marked by を. 果物 (fruit) is a jukujikun read くだもの as a single unit — 果 and 物 are not read separately — so it forms one furigana segment: the object at segment index 0.",
-        "it": "Seleziona l'oggetto marcato da を. 果物 (frutta) è un jukujikun letto くだもの come unità — 果 e 物 non si leggono separatamente — quindi forma un solo segmento di furigana: l'oggetto all'indice di segmento 0."
+        "en": "Select the object marked by を. 果物 (fruit) is a jukujikun read くだもの as a single unit — 果 and 物 are not read separately — so it forms one furigana segment, and here that segment is exactly the object: segment index 0, with をください as the following segment.",
+        "it": "Seleziona l'oggetto marcato da を. 果物 (frutta) è un jukujikun letto くだもの come unità — 果 e 物 non si leggono separatamente — quindi forma un solo segmento di furigana, e qui quel segmento è esattamente l'oggetto: indice 0, con をください come segmento successivo."
       }
     }
   ]

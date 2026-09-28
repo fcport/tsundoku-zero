@@ -219,15 +219,25 @@ cancello di Epic 2 come sarebbe effettivamente aggiunta (unicità cross-file
 inclusa). Serve da **template**, non è contenuto di corso (non vive sotto
 `content/lessons/` e non conta verso la Definition of Done della storia 6.4).
 
-`order: 99` è solo illustrativo — un valore-sentinella scelto per non collidere
-con le lezioni esistenti (`content/lessons/01-la-particella-wo.json` è `order: 1`).
-Nella tua lezione usa la **prossima posizione libera** del curriculum, perché
-`order` è **unico** fra tutte le lezioni (passo 6).
+`order: 901` è solo illustrativo. **Le posizioni da 900 in su sono riservate** a ciò
+che non fa parte del curriculum: esempi di documentazione e lezioni che servono da
+fixture ai test. Il corso supera le novanta lezioni, quindi un valore-sentinella a due
+cifre prima o poi collide con una lezione vera — e il cancello del passo 6 lo
+rifiuterebbe al momento peggiore, cioè quando stai autorando.
+
+Oggi in quella fascia c'è `content/lessons/01-la-particella-wo.json` (`order: 900`):
+nasce come fixture della storia 2.7 e la sua posizione nel curriculum è provvisoria.
+Quando arriverà la lezione vera su を, quel file va **sostituito**, non affiancato:
+i due avrebbero lo stesso `lessonId` (derivato da `grammarPoints[0]`) e il cancello
+lo segnalerebbe.
+
+Nella tua lezione usa la **prossima posizione libera** del curriculum, perché `order`
+è **unico** fra tutte le lezioni (passo 6).
 
 <!-- BEGIN worked-example -->
 ```json
 {
-  "order": 99,
+  "order": 901,
   "title": {
     "en": "Topic は versus subject が",
     "it": "Il tema は contro il soggetto が"
