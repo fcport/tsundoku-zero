@@ -29,22 +29,27 @@ export function LanguageOptions({ current, onSelect }: LanguageOptionsProps) {
     <div
       role="group"
       aria-labelledby="language-label"
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-3"
     >
-      <span id="language-label" className="text-label text-ink-primary">
+      <span id="language-label" className="font-mono text-label-caps uppercase text-ink-secondary">
         {t('settings.language.label')}
       </span>
-      {supportedLocales.map((locale) => (
-        <button
-          key={locale}
-          type="button"
-          aria-pressed={locale === current}
-          onClick={() => onSelect(locale)}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label aria-pressed:border-2 aria-pressed:border-accent aria-pressed:bg-accent-subtle aria-pressed:font-semibold"
-        >
-          {t(LOCALE_LABEL_KEY[locale])}
-        </button>
-      ))}
+      {/* Le opzioni come caselle affiancate di una tabella a filetti: la scelta
+          corrente si inverte in inchiostro pieno (lo stato lo porta `aria-pressed`,
+          il colore lo rinforza). */}
+      <div className="grid auto-cols-fr grid-flow-col border-[1.5px] border-border-strong">
+        {supportedLocales.map((locale) => (
+          <button
+            key={locale}
+            type="button"
+            aria-pressed={locale === current}
+            onClick={() => onSelect(locale)}
+            className="min-h-[56px] border-l-[1.5px] border-border-strong bg-surface-raised px-3 text-body font-semibold text-ink-primary first:border-l-0 hover:bg-surface-sunken aria-pressed:bg-ink-primary aria-pressed:text-surface-base"
+          >
+            {t(LOCALE_LABEL_KEY[locale])}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

@@ -42,19 +42,18 @@ describe('formula WCAG di contrastRatio', () => {
 describe('rapporti noti della I/O Matrix', () => {
   it('coppia testo conforme: ink-muted su surface-base (chiaro) ≥ 4.5', () => {
     const r = contrastRatio(colors['ink-muted'], colors['surface-base']);
-    expect(r).toBeCloseTo(4.5449, 3);
+    expect(r).toBeCloseTo(5.3585, 3);
     expect(r).toBeGreaterThanOrEqual(TEXT_THRESHOLD);
   });
 
-  it('coppia testo scura al limite: ink-muted-dark su surface-raised-dark ≥ 4.5', () => {
-    const r = contrastRatio(colors['ink-muted-dark'], colors['surface-raised-dark']);
-    expect(r).toBeCloseTo(4.524, 3);
+  it('sull\'inchiostro: accent-on-ink su ink-primary ≥ 4.5 (la dichiarazione dell\'opzione giusta)', () => {
+    const r = contrastRatio(colors['accent-on-ink'], colors['ink-primary']);
+    expect(r).toBeCloseTo(6.6651, 3);
     expect(r).toBeGreaterThanOrEqual(TEXT_THRESHOLD);
   });
 
-  it('coppia non-testo al limite: border-strong-dark su surface-raised-dark ≥ 3.0', () => {
-    const r = contrastRatio(colors['border-strong-dark'], colors['surface-raised-dark']);
-    expect(r).toBeCloseTo(3.0006, 4);
+  it('coppia non-testo: focus-ring su surface-base ≥ 3.0', () => {
+    const r = contrastRatio(colors['focus-ring'], colors['surface-base']);
     expect(r).toBeGreaterThanOrEqual(NON_TEXT_THRESHOLD);
   });
 
@@ -63,47 +62,42 @@ describe('rapporti noti della I/O Matrix', () => {
     expect(r).toBeGreaterThanOrEqual(NON_TEXT_THRESHOLD);
   });
 
-  it('bordo decorativo border-hairline sta a ~1.27:1 — sotto ogni soglia', () => {
+  it('bordo decorativo border-hairline sta a ~1.44:1 — sotto ogni soglia', () => {
     // Non è un fallimento: è la ragione per cui è ESENTE (WCAG 1.4.11).
     const r = contrastRatio(colors['border-hairline'], colors['surface-base']);
-    expect(r).toBeCloseTo(1.275, 2);
+    expect(r).toBeCloseTo(1.436, 2);
     expect(r).toBeLessThan(NON_TEXT_THRESHOLD);
   });
 });
 
 describe('border-hairline è decorativo esente, non un primo piano valutato', () => {
-  it('non compare fra i ruoli testo o non-testo di alcuna modalità', () => {
-    for (const mode of ['light', 'dark'] as const) {
+  it('non compare fra i ruoli testo o non-testo di alcun fondo', () => {
+    for (const mode of ['light', 'ink'] as const) {
       const roles = TOKEN_ROLES[mode];
-      expect(roles.text).not.toContain(mode === 'light' ? 'border-hairline' : 'border-hairline-dark');
-      expect(roles.nonText).not.toContain(
-        mode === 'light' ? 'border-hairline' : 'border-hairline-dark',
-      );
-      expect(roles.exempt).toContain(mode === 'light' ? 'border-hairline' : 'border-hairline-dark');
+      expect(roles.text).not.toContain('border-hairline');
+      expect(roles.nonText).not.toContain('border-hairline');
     }
+    expect(TOKEN_ROLES.light.exempt).toContain('border-hairline');
   });
 });
 
-describe('in scuro il focus-ring riusa accent-dark', () => {
-  it('accent-dark è il ruolo non-testo del focus in scuro (nessun focus-ring-dark)', () => {
-    expect(TOKEN_ROLES.dark.nonText).toContain('accent-dark');
-    expect(colors['focus-ring-dark']).toBeUndefined();
+describe('nessuna modalità scura (29-09-2026)', () => {
+  it('lo script non valuta alcun ruolo scuro', () => {
+    expect(Object.keys(TOKEN_ROLES)).toEqual(['light', 'ink']);
   });
 });
 
 describe('verifica completa sul theme.css reale', () => {
-  it('valuta ogni coppia su surface-base E surface-raised, chiaro E scuro', () => {
+  it('valuta ogni coppia su surface-base E surface-raised, più il fondo d\'inchiostro', () => {
     const { rows } = verifyContrast(colors);
-    // 6 testo + 2 non-testo = 8 primi piani per modalità, × 2 fondi = 16 righe.
+    // Carta: 6 testo + 2 non-testo = 8 primi piani × 2 fondi = 16 righe.
+    // Inchiostro: 2 testi (carta, accent-on-ink) × 1 fondo = 2 righe.
     const light = rows.filter((r: { mode: string }) => r.mode === 'light');
-    const dark = rows.filter((r: { mode: string }) => r.mode === 'dark');
+    const ink = rows.filter((r: { mode: string }) => r.mode === 'ink');
     expect(light).toHaveLength(16);
-    expect(dark).toHaveLength(16);
+    expect(ink).toHaveLength(2);
     const bgs = new Set(rows.map((r: { bg: string }) => r.bg));
-    expect(bgs).toContain('surface-base');
-    expect(bgs).toContain('surface-raised');
-    expect(bgs).toContain('surface-base-dark');
-    expect(bgs).toContain('surface-raised-dark');
+    expect(bgs).toEqual(new Set(['surface-base', 'surface-raised', 'ink-primary']));
   });
 
   it('non ha alcun fallimento (exit 0 dello script)', () => {

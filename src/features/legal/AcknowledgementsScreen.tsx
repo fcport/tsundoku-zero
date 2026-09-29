@@ -25,6 +25,8 @@
 // sistema di design (nessun colore letterale).
 import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { MagazineFrame } from '../../ui/MagazineFrame';
+import { SCREEN_TITLE } from '../../ui/magazine';
 
 export interface AcknowledgementsScreenProps {
   /**
@@ -38,10 +40,10 @@ export interface AcknowledgementsScreenProps {
 
 // ANELLO DI FOCUS visibile: lo STESSO token condiviso dagli interattivi delle altre
 // schermate-rotta (`PrivacyScreen`, `StatsScreen`). `focus-visible:` mostra l'anello
-// solo per navigazione da tastiera. Token `focus-ring` (in scuro `accent-dark`):
-// nessun colore letterale (UX-DR1).
+// solo per navigazione da tastiera. Token `focus-ring`: nessun colore
+// letterale (UX-DR1).
 const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
 
 // L'URL STABILE del canale della fonte, in forma channel-id (gli id-canale non
 // cambiano, gli handle si). Il nome della fonte vive nel CONTENUTO (via `t()`), non
@@ -55,21 +57,25 @@ export function AcknowledgementsScreen({
   const { t } = useTranslation();
 
   return (
-    <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-6 py-6`}>
-      <h2 className="text-display text-ink-primary">
+    // Direzione «rivista» (29-09-2026): il dorso col marchio, poi la colonna di lettura
+    // col titolo a testata e il primo paragrafo in corpo grande, come l'attacco di un
+    // articolo.
+    <MagazineFrame brandAsHeading>
+    <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-6 py-8 sm:py-14`}>
+      <h2 className={`${SCREEN_TITLE} text-ink-primary`}>
         {t('legal.acknowledgements.title')}
       </h2>
       {/* L'attribuzione della fonte + il collegamento REALE al canale. Il link e un
           vero `<a href>` (non una callback) perche punta FUORI dall'app; testo del
           link da t() (`channelLabel`), URL in forma channel-id per stabilita. */}
-      <p className="text-body text-ink-primary">
+      <p className="border-t-[1.5px] border-border-strong pt-4 text-[22px] font-medium leading-snug text-ink-primary">
         {t('legal.acknowledgements.method')}
       </p>
       <a
         href={CURE_DOLLY_CHANNEL_URL}
         target="_blank"
         rel="noreferrer"
-        className={`self-start text-body text-ink-primary underline ${FOCUS_RING}`}
+        className={`self-start text-body font-semibold text-ink-primary underline underline-offset-4 ${FOCUS_RING}`}
       >
         {t('legal.acknowledgements.channelLabel')}
       </a>
@@ -89,10 +95,11 @@ export function AcknowledgementsScreen({
       <button
         type="button"
         onClick={onExit}
-        className={`self-center rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 py-3 text-body ${FOCUS_RING}`}
+        className={`min-h-[56px] self-start border-[1.5px] border-border-strong bg-surface-raised px-6 text-label font-bold uppercase tracking-[0.04em] text-ink-primary hover:bg-surface-sunken ${FOCUS_RING}`}
       >
         {t('legal.acknowledgements.back')}
       </button>
     </main>
+    </MagazineFrame>
   );
 }

@@ -1,9 +1,10 @@
 {
   "order": 5,
   "title": {
-    "en": "The three verb groups and the te/ta forms",
-    "it": "I tre gruppi verbali e le forme in て/た"
+    "en": "The three verb groups and how to make the て and た forms",
+    "it": "I tre gruppi di verbi e come si fanno le forme in て e in た"
   },
+  "video": "GzEVLMDC8nw",
   "grammarPoints": ["動詞の三つのグループ", "て形・た形の作り方"],
   "exercises": [
     {
@@ -17,6 +18,16 @@
         "kanji": "朝ごはんを食べた",
         "kana": "あさごはんをたべた"
       },
+      "translation": {
+        "en": "I ate breakfast.",
+        "it": "Ho fatto colazione."
+      },
+      "glosses": [
+        { "text": "食べた", "reading": "たべた" },
+        { "text": "食べった", "reading": "たべった" },
+        { "text": "食べいた", "reading": "たべいた" },
+        { "text": "食んだ", "reading": "たんだ" }
+      ],
       "gap": {
         "kanji": "朝ごはんを＿",
         "kana": "あさごはんを＿"
@@ -24,8 +35,8 @@
       "answer": "食べた",
       "distractors": ["食べった", "食べいた", "食んだ"],
       "explanation": {
-        "en": "食べる is an ichidan verb (it ends in -eru and belongs to the simplest group): to attach anything, you remove る and add the ending. So the past is 食べ + た.",
-        "it": "食べる è un verbo ichidan (finisce in -eru e appartiene al gruppo più semplice): per attaccare qualunque cosa si toglie る e si aggiunge la desinenza. Quindi il passato è 食べ + た."
+        "en": "食べる is an ichidan verb (the group of verbs ending in -iru or -eru that simply drop る). To make the past, drop る and add た: 食べ + た = 食べた. Nothing else changes.",
+        "it": "食べる è un verbo ichidan (il gruppo di verbi in -iru o -eru che tolgono semplicemente る). Per fare il passato togli る e aggiungi た: 食べ + た = 食べた. Non cambia nient'altro."
       }
     },
     {
@@ -39,6 +50,16 @@
         "kanji": "毎朝公園を走っている",
         "kana": "まいあさこうえんをはしっている"
       },
+      "translation": {
+        "en": "I run in the park every morning.",
+        "it": "Ogni mattina corro al parco."
+      },
+      "glosses": [
+        { "text": "走って", "reading": "はしって" },
+        { "text": "走て", "reading": "はして" },
+        { "text": "走りて", "reading": "はしりて" },
+        { "text": "走んで", "reading": "はしんで" }
+      ],
       "gap": {
         "kanji": "毎朝公園を＿いる",
         "kana": "まいあさこうえんを＿いる"
@@ -46,8 +67,8 @@
       "answer": "走って",
       "distractors": ["走て", "走りて", "走んで"],
       "explanation": {
-        "en": "走る ends in -iru but is a godan verb, one of the minority that look like ichidan verbs. Godan verbs in る form the te-form with a small っ: 走る → 走って. Treating it as ichidan would give the wrong 走て.",
-        "it": "走る finisce in -iru ma è un verbo godan, uno della minoranza che somiglia agli ichidan. I verbi godan in る formano la forma in て con una piccola っ: 走る → 走って. Trattarlo come ichidan darebbe l'errato 走て."
+        "en": "走る ends in -iru, but it is a godan verb (the group of verbs whose last syllable changes, like 書く → 書いて). Godan verbs ending in る make the te-form (the form ending in て) with a small っ: 走る → 走って. 走て is wrong: that would treat it like 食べる.",
+        "it": "走る finisce in -iru, ma è un verbo godan (il gruppo di verbi che cambiano l'ultima sillaba, come 書く → 書いて). I godan in る fanno la forma in て (la forma che finisce in て) con una piccola っ: 走る → 走って. 走て è sbagliato: lo tratterebbe come 食べる."
       }
     },
     {
@@ -61,6 +82,16 @@
         "kanji": "弟が薬を飲んだ",
         "kana": "おとうとがくすりをのんだ"
       },
+      "translation": {
+        "en": "My younger brother took the medicine.",
+        "it": "Mio fratello minore ha preso la medicina."
+      },
+      "glosses": [
+        { "text": "飲んだ", "reading": "のんだ" },
+        { "text": "飲った", "reading": "のった" },
+        { "text": "飲いだ", "reading": "のいだ" },
+        { "text": "飲みた", "reading": "のみた" }
+      ],
       "gap": {
         "kanji": "弟が薬を＿",
         "kana": "おとうとがくすりを＿"
@@ -68,8 +99,8 @@
       "answer": "飲んだ",
       "distractors": ["飲った", "飲いだ", "飲みた"],
       "explanation": {
-        "en": "Godan verbs ending in む, ぶ or ぬ replace that syllable with ん and a voiced ending: んで for the te-form, んだ for the past. So 飲む (drink) → 飲んだ.",
-        "it": "I verbi godan in む, ぶ o ぬ sostituiscono quella sillaba con ん e una desinenza sonora: んで per la forma in て, んだ per il passato. Quindi 飲む (bere) → 飲んだ."
+        "en": "Verbs ending in む, ぶ or ぬ turn that syllable into ん, and て/た become で/だ. So 飲む (to drink) → 飲んで → 飲んだ.",
+        "it": "I verbi che finiscono in む, ぶ o ぬ cambiano quella sillaba in ん, e て/た diventano で/だ. Quindi 飲む (bere) → 飲んで → 飲んだ."
       }
     },
     {
@@ -83,6 +114,16 @@
         "kanji": "昨日プールで泳いだ",
         "kana": "きのうプールでおよいだ"
       },
+      "translation": {
+        "en": "I swam in the pool yesterday.",
+        "it": "Ieri ho nuotato in piscina."
+      },
+      "glosses": [
+        { "text": "泳いだ", "reading": "およいだ" },
+        { "text": "泳った", "reading": "およった" },
+        { "text": "泳んだ", "reading": "およんだ" },
+        { "text": "泳いた", "reading": "およいた" }
+      ],
       "gap": {
         "kanji": "昨日プールで＿",
         "kana": "きのうプールで＿"
@@ -90,8 +131,8 @@
       "answer": "泳いだ",
       "distractors": ["泳った", "泳んだ", "泳いた"],
       "explanation": {
-        "en": "Verbs in く become いて/いた; verbs in ぐ follow the same pattern with voicing, いで/いだ. 泳ぐ (swim) ends in ぐ, so its past is 泳いだ, not 泳いた.",
-        "it": "I verbi in く diventano いて/いた; i verbi in ぐ seguono lo stesso schema con la sonorizzazione, いで/いだ. 泳ぐ (nuotare) finisce in ぐ, quindi il passato è 泳いだ, non 泳いた."
+        "en": "Verbs ending in く become いて/いた (書く → 書いた). Verbs ending in ぐ do the same, but with で/だ: いで/いだ. 泳ぐ (to swim) ends in ぐ, so the past is 泳いだ, not 泳いた.",
+        "it": "I verbi che finiscono in く diventano いて/いた (書く → 書いた). Quelli in ぐ fanno lo stesso, ma con で/だ: いで/いだ. 泳ぐ (nuotare) finisce in ぐ, quindi il passato è 泳いだ, non 泳いた."
       }
     },
     {
@@ -105,10 +146,18 @@
         "kanji": "手紙を出した",
         "kana": "てがみをだした"
       },
+      "translation": {
+        "en": "I sent a letter.",
+        "it": "Ho spedito una lettera."
+      },
+      "glosses": [
+        { "text": "手紙を出", "reading": "てがみをだ", "meaning": { "en": "letter, send", "it": "lettera, spedire" } },
+        { "text": "した", "meaning": { "en": "past ending of 出す (sent)", "it": "desinenza del passato di 出す (spedito)" } }
+      ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select した. Verbs ending in す change it to し before て or た: 出す (send) → 出して → 出した. It is the same shift from the u-row to the i-row that other endings use.",
-        "it": "Seleziona した. I verbi in す la cambiano in し davanti a て o た: 出す (spedire) → 出して → 出した. È lo stesso passaggio dalla riga in u alla riga in i che usano altre desinenze."
+        "en": "Select した. Verbs ending in す change す into し, then add て or た: 出す (to send) → 出して → 出した.",
+        "it": "Seleziona した. I verbi che finiscono in す cambiano す in し, poi aggiungono て o た: 出す (spedire) → 出して → 出した."
       }
     },
     {
@@ -122,10 +171,19 @@
         "kanji": "歩いて学校に行った",
         "kana": "あるいてがっこうにいった"
       },
+      "translation": {
+        "en": "I walked to school.",
+        "it": "Sono andato a scuola a piedi."
+      },
+      "glosses": [
+        { "text": "歩いて", "reading": "あるいて", "meaning": { "en": "on foot, walking", "it": "a piedi, camminando" } },
+        { "text": "学校に", "reading": "がっこうに", "meaning": { "en": "to school", "it": "a scuola" } },
+        { "text": "行った", "reading": "いった", "meaning": { "en": "went", "it": "sono andato" } }
+      ],
       "answer": ["歩いて", "学校に", "行った"],
       "explanation": {
-        "en": "歩く (walk) follows the く rule: 歩いて. 行く (go) is the one exception to that rule: it becomes 行って/行った, never 行いた.",
-        "it": "歩く (camminare) segue la regola dei verbi in く: 歩いて. 行く (andare) è l'unica eccezione a quella regola: diventa 行って/行った, mai 行いた."
+        "en": "歩く (to walk) ends in く, so it becomes 歩いて (\"walking\"). 行く (to go) also ends in く, but it is the one exception: 行って / 行った, never 行いた. The te-form (the form ending in て) first says how you went.",
+        "it": "歩く (camminare) finisce in く, quindi diventa 歩いて («camminando»). Anche 行く (andare) finisce in く, ma è l'unica eccezione: 行って / 行った, mai 行いた. La forma in て (la forma che finisce in て) dice prima come sei andato."
       }
     },
     {
@@ -139,6 +197,16 @@
         "kanji": "日曜日に友達が来た",
         "kana": "にちようびにともだちがきた"
       },
+      "translation": {
+        "en": "A friend came on Sunday.",
+        "it": "Domenica è venuto un amico."
+      },
+      "glosses": [
+        { "text": "来た", "reading": "きた" },
+        { "text": "来った", "reading": "きった" },
+        { "text": "来いた", "reading": "きいた" },
+        { "text": "来んだ", "reading": "きんだ" }
+      ],
       "gap": {
         "kanji": "日曜日に友達が＿",
         "kana": "にちようびにともだちが＿"
@@ -146,8 +214,85 @@
       "answer": "来た",
       "distractors": ["来った", "来いた", "来んだ"],
       "explanation": {
-        "en": "Japanese has only two irregular verbs: 来る (come) and する (do). Their te/ta forms must be learned as they are: 来る → 来て/来た (read きて/きた), する → して/した.",
-        "it": "Il giapponese ha solo due verbi irregolari: 来る (venire) e する (fare). Le loro forme in て/た vanno imparate così come sono: 来る → 来て/来た (letti きて/きた), する → して/した."
+        "en": "Japanese has only two irregular verbs: 来る (to come) and する (to do). You just memorize their forms: 来る → 来て / 来た (read きて / きた), する → して / した.",
+        "it": "Il giapponese ha solo due verbi irregolari: 来る (venire) e する (fare). Le loro forme si imparano a memoria: 来る → 来て / 来た (si leggono きて / きた), する → して / した."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "て形・た形の作り方",
+      "prompt": {
+        "en": "Which part is the past ending of 待つ?",
+        "it": "Quale parte è la desinenza del passato di 待つ?"
+      },
+      "sentence": {
+        "kanji": "バスを待った",
+        "kana": "バスをまった"
+      },
+      "translation": {
+        "en": "I waited for the bus.",
+        "it": "Ho aspettato l'autobus."
+      },
+      "glosses": [
+        { "text": "バスを", "meaning": { "en": "the bus (what I waited for)", "it": "l'autobus (cosa ho aspettato)" } },
+        { "text": "待", "reading": "ま", "meaning": { "en": "wait", "it": "aspettare" } },
+        { "text": "った", "meaning": { "en": "past ending of 待つ (waited)", "it": "desinenza del passato di 待つ (aspettato)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select った. Godan verbs (the group whose last syllable changes) ending in つ, う or る replace that syllable with a small っ, then add て or た. So 待つ (to wait) → 待って → 待った.",
+        "it": "Seleziona った. I verbi godan (il gruppo che cambia l'ultima sillaba) che finiscono in つ, う o る sostituiscono quella sillaba con una piccola っ, poi aggiungono て o た. Quindi 待つ (aspettare) → 待って → 待った."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "Which part makes 寝る past?",
+        "it": "Quale parte mette 寝る al passato?"
+      },
+      "sentence": {
+        "kanji": "昨日は十時に寝た",
+        "kana": "きのうはじゅうじにねた"
+      },
+      "translation": {
+        "en": "Yesterday I went to bed at ten.",
+        "it": "Ieri sono andato a letto alle dieci."
+      },
+      "glosses": [
+        { "text": "昨日は十時に寝", "reading": "きのうはじゅうじにね", "meaning": { "en": "yesterday, at ten o'clock, go to bed", "it": "ieri, alle dieci, andare a letto" } },
+        { "text": "た", "meaning": { "en": "past ending", "it": "desinenza del passato" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select た. 寝る (to go to bed) is an ichidan verb (it ends in -eru and simply drops る). So you drop る and add た: 寝 + た = 寝た. No small っ is needed.",
+        "it": "Seleziona た. 寝る (andare a letto) è un verbo ichidan (finisce in -eru e toglie semplicemente る). Quindi togli る e aggiungi た: 寝 + た = 寝た. Non serve nessuna piccola っ."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "て形・た形の作り方",
+      "prompt": {
+        "en": "Build: \"I read a book and went to sleep.\"",
+        "it": "Componi: «Ho letto un libro e sono andato a dormire.»"
+      },
+      "sentence": {
+        "kanji": "本を読んで寝た",
+        "kana": "ほんをよんでねた"
+      },
+      "translation": {
+        "en": "I read a book and went to sleep.",
+        "it": "Ho letto un libro e sono andato a dormire."
+      },
+      "glosses": [
+        { "text": "本を", "reading": "ほんを", "meaning": { "en": "a book (what I read)", "it": "un libro (cosa ho letto)" } },
+        { "text": "読んで", "reading": "よんで", "meaning": { "en": "read, and then", "it": "ho letto, e poi" } },
+        { "text": "寝た", "reading": "ねた", "meaning": { "en": "went to sleep", "it": "sono andato a dormire" } }
+      ],
+      "answer": ["本を", "読んで", "寝た"],
+      "explanation": {
+        "en": "The te-form (the form ending in て or で) joins two actions: \"I did this, and then that\". 読む ends in む, so it becomes 読んで. Only the last verb, 寝た, says that everything is in the past.",
+        "it": "La forma in て (la forma che finisce in て o で) unisce due azioni: «ho fatto questo, e poi quello». 読む finisce in む, quindi diventa 読んで. Solo l'ultimo verbo, 寝た, dice che tutto è al passato."
       }
     }
   ]

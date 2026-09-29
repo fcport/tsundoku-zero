@@ -136,6 +136,20 @@ describe('buildSeedSql — l\'SQL di seed è valido, idempotente e derivato dal 
     expect(sql).toMatch(/'A lesson with no exercises yet', null,/);
   });
 
+  // Il video di riferimento è l'ULTIMA colonna della tupla `lesson`: presente ⇒
+  // il suo id citato, assente ⇒ null. E l'upsert lo aggiorna come le altre.
+  it("video_id è l'ultima colonna della riga lesson: l'id se presente", () => {
+    const sql = buildSeedSql([{ ...fullLesson, video: 'dwcTI9qvO-U' }]);
+    expect(sql).toMatch(/insert into lesson \(id, ordinal, title_en, title_it, grammar_points, video_id\) values/);
+    expect(sql).toMatch(/'熟字訓の読み'\], 'dwcTI9qvO-U'\)/);
+    expect(sql).toMatch(/video_id = excluded\.video_id;/);
+  });
+
+  it('video_id è null quando la lezione non ha un video', () => {
+    const sql = buildSeedSql([emptyLesson]);
+    expect(sql).toMatch(/'て形の導入'\], null\)/);
+  });
+
   // (e) Una lezione senza esercizi: riga `lesson`, nessuna riga `exercise` (AC5).
   it('una lezione senza esercizi produce la riga lesson e nessuna riga exercise', () => {
     const sql = buildSeedSql([emptyLesson]);

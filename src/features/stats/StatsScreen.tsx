@@ -61,6 +61,11 @@ import { grammarPointErrorRates } from '../../domain/grammarPointErrorRates';
 import { lessonsByGrammarPoint } from '../../domain/curriculum';
 import { resolveBilingual } from '../../domain/bilingual';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { MagazineFrame } from '../../ui/MagazineFrame';
+import { Furigana } from '../../ui/Furigana';
+import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
+import { Translation } from '../../ui/Translation';
+import { SCREEN_TITLE } from '../../ui/magazine';
 import { usePorts } from '../ports/PortsContext';
 import { resolveLocale, useTranslation } from '../../i18n';
 
@@ -82,10 +87,10 @@ export interface StatsScreenProps {
 // ANELLO DI FOCUS visibile: lo STESSO token condiviso dagli interattivi della
 // SESSIONE (`SessionScreen`, `ExerciseCard`), la schermata-rotta su cui questa è
 // modellata (`onExit` speculare a quello della sessione). `focus-visible:` mostra
-// l'anello solo per navigazione da tastiera. Token `focus-ring` (in scuro
-// `accent-dark`): nessun colore letterale (UX-DR1).
+// l'anello solo per navigazione da tastiera. Token `focus-ring`: nessun colore
+// letterale (UX-DR1).
 const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
 
 // Classe CONDIVISA del <main> fra scheletro e contenuto: la STESSA stringa nei due
 // rami evita salti di layout (stesso pattern della dashboard e della sessione).
@@ -93,9 +98,25 @@ const FOCUS_RING =
 // larghezza; l'altezza minima è condivisa. Compone il contenitore responsive di
 // `src/ui/layout.ts` (3.23): colonna singola centrata, `measure`, gutter 20/32px, mai
 // allargata a ≥1024px; il gutter orizzontale è del contenitore, qui resta `py-6`.
-const CONTAINER = `min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-stretch gap-6 py-6`;
+const CONTAINER = `min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-stretch gap-8 py-8 sm:py-12`;
 
-export function StatsScreen({ userId, onExit }: StatsScreenProps) {
+// Direzione «rivista» (29-09-2026): il dorso col marchio attorno a ogni stato della
+// vista; dentro, la colonna di lettura con il titolo a testata e le sezioni divise
+// da filetti. Gli stadi sono un istogramma a colonne, i tassi d'errore righe con la
+// percentuale grande e una barra rossa.
+export function StatsScreen(props: StatsScreenProps) {
+  return (
+    <MagazineFrame furiganaToggle>
+      <StatsContent {...props} />
+    </MagazineFrame>
+  );
+}
+
+// Il titolo di sezione (<h3>): maiuscolo condensato sotto un filetto.
+const SECTION_HEADING =
+  'border-t-[1.5px] border-border-strong pt-3 text-[22px] font-extrabold uppercase leading-tight font-stretch-condensed text-ink-primary';
+
+function StatsContent({ userId, onExit }: StatsScreenProps) {
   const { review, content, clock } = usePorts();
   const { t, i18n } = useTranslation();
   // La lingua CORRENTE per risolvere il titolo bilingue della lezione (FR8.5):
@@ -127,10 +148,10 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
   if (!userId || logQ.data === undefined || lessonsQ.data === undefined) {
     return (
       <main aria-busy="true" className={CONTAINER}>
-        <div className="h-[20px] w-40 rounded-md bg-surface-sunken" />
-        <div className="h-[16px] w-full rounded-md bg-surface-sunken" />
-        <div className="h-[16px] w-full rounded-md bg-surface-sunken" />
-        <div className="h-[16px] w-full rounded-md bg-surface-sunken" />
+        <div className="h-[56px] w-64 bg-surface-sunken" />
+        <div className="h-[180px] w-full bg-surface-sunken" />
+        <div className="h-[16px] w-full bg-surface-sunken" />
+        <div className="h-[16px] w-full bg-surface-sunken" />
       </main>
     );
   }
@@ -166,7 +187,9 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
       {/* Il titolo di livello schermata (`<h2>`, come ogni altra schermata): reso
           SOPRA lo split empty/dati così compare in ENTRAMBI gli stati. La sezione
           delle risposte nel tempo ha una propria intestazione subordinata (`<h3>`). */}
-      <h2 className="text-display text-ink-primary">{t('stats.title')}</h2>
+      <h2 className={`${SCREEN_TITLE} text-ink-primary`}>
+        {t('stats.title')}
+      </h2>
       {answerDays < MIN_ANSWER_DAYS ? (
         // Sotto soglia (5.4): un trend con meno di `MIN_ANSWER_DAYS` giorni distinti
         // non è un trend. Rende SOLO la dichiarazione quantificata (soglia + giorni
@@ -182,7 +205,7 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
         <>
           {/* L'intestazione della serie delle risposte nel tempo (subordinata al
               titolo di schermata: `<h3>`). */}
-          <h3 className="text-display text-ink-primary">
+          <h3 className={SECTION_HEADING}>
             {t('stats.answersOverTime.heading')}
           </h3>
           {/* La lista ordinata di barre per-giorno: ogni giorno porta il proprio
@@ -197,9 +220,9 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
                     answers: day.count,
                   })}
                 </span>
-                <div className="h-[4px] w-full overflow-hidden rounded-md bg-surface-sunken">
+                <div className="h-[8px] w-full overflow-hidden bg-surface-sunken">
                   <div
-                    className="h-full rounded-md bg-ink-secondary"
+                    className="h-full bg-ink-primary"
                     style={{ width: `${(day.count / max) * 100}%` }}
                   />
                 </div>
@@ -218,31 +241,42 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
       ) : (
         <>
           {/* L'intestazione della distribuzione (subordinata al titolo: `<h3>`). */}
-          <h3 className="text-display text-ink-primary">
+          <h3 className={SECTION_HEADING}>
             {t('stats.stageDistribution.heading')}
           </h3>
+          {/* Cosa sono i livelli: senza, «livello 1» non dice niente a chi studia. */}
+          <p className="-mt-4 text-body text-ink-secondary">{t('stats.stageDistribution.hint')}</p>
           {/* La lista ordinata di barre per-stadio: ogni stadio (0-5, contiguo,
               zeri inclusi — l'asse deriva da `LEITNER_INTERVALS_DAYS`) porta il
               proprio conteggio come TESTO (mai dal solo colore) più una barra
               proporzionale (larghezza = count/max, token neutri, nessun verde). */}
-          <ol className="flex flex-col gap-3">
+          <ol className="grid h-[200px] grid-cols-6 items-stretch gap-2 border-b-[1.5px] border-border-strong">
             {distribution.map((bucket) => (
-              <li key={bucket.stage} className="flex flex-col gap-1">
-                <span className="text-label text-ink-secondary">
+              <li key={bucket.stage} className="flex flex-col items-center gap-1">
+                <span className="sr-only">
                   {t('stats.stageDistribution.stageLabel', {
                     stage: bucket.stage,
                     exercises: bucket.count,
                   })}
                 </span>
-                <div className="h-[4px] w-full overflow-hidden rounded-md bg-surface-sunken">
+                <span aria-hidden="true" className="text-[22px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
+                  {bucket.count}
+                </span>
+                <div aria-hidden="true" className="flex w-full flex-1 items-end">
                   <div
-                    className="h-full rounded-md bg-ink-secondary"
-                    style={{ width: `${(bucket.count / stageMax) * 100}%` }}
+                    className="w-full bg-ink-primary"
+                    style={{ height: `${(bucket.count / stageMax) * 100}%` }}
                   />
                 </div>
               </li>
             ))}
           </ol>
+          {/* L'asse: il numero di ciascuno stadio sotto la sua colonna. */}
+          <div aria-hidden="true" className="-mt-6 grid grid-cols-6 gap-2 text-center font-mono text-label-caps text-ink-secondary">
+            {distribution.map((bucket) => (
+              <span key={bucket.stage}>{bucket.stage}</span>
+            ))}
+          </div>
         </>
       )}
       {/* La TERZA sezione (5.3): i tassi d'errore per punto grammaticale, derivati
@@ -256,7 +290,7 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
       ) : (
         <>
           {/* L'intestazione dei tassi d'errore (subordinata al titolo: `<h3>`). */}
-          <h3 className="text-display text-ink-primary">
+          <h3 className={SECTION_HEADING}>
             {t('stats.grammarPointErrorRates.heading')}
           </h3>
           {/* La lista ordinata di voci per-punto (tasso desc): ogni voce porta il
@@ -272,12 +306,27 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
                 ? resolveBilingual(lesson.title, locale)
                 : null;
               return (
-                <li key={entry.grammarPoint} className="flex flex-col gap-1">
+                <li key={entry.grammarPoint} className="flex flex-col gap-1 border-b-[1.5px] border-border-hairline pb-3">
                   {/* Il punto grammaticale: CONTENUTO giapponese, reso in lang="ja"
-                      (WCAG 3.1.2), mai da t(). */}
-                  <span className="text-label text-ink-primary" lang="ja">
-                    {entry.grammarPoint}
+                      (WCAG 3.1.2), mai da t(). Con la furigana della casella sul dorso,
+                      dalla tabella delle letture (testo semplice se manca). */}
+                  <span className="text-[20px] font-bold text-ink-primary" lang="ja">
+                    <Furigana
+                      segments={
+                        grammarPointSegments(entry.grammarPoint) ?? [
+                          { text: entry.grammarPoint, ruby: null },
+                        ]
+                      }
+                    />
                   </span>
+                  {/* Il significato del punto, con «Traduzioni» acceso. */}
+                  {GRAMMAR_POINT_MEANINGS[entry.grammarPoint] && (
+                    <Translation
+                      text={resolveBilingual(GRAMMAR_POINT_MEANINGS[entry.grammarPoint]!, locale).text}
+                      lang={resolveBilingual(GRAMMAR_POINT_MEANINGS[entry.grammarPoint]!, locale).language}
+                      className="block text-body italic text-ink-secondary"
+                    />
+                  )}
                   {/* Il tasso come TESTO (etichetta-valore, nessuna concordanza di
                       numero): errori su totale. */}
                   <span className="text-label text-ink-secondary">
@@ -304,9 +353,9 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
                       {t('stats.grammarPointErrorRates.unknownLesson')}
                     </span>
                   )}
-                  <div className="h-[4px] w-full overflow-hidden rounded-md bg-surface-sunken">
+                  <div className="h-[8px] w-full overflow-hidden bg-surface-sunken">
                     <div
-                      className="h-full rounded-md bg-ink-secondary"
+                      className="h-full bg-accent"
                       style={{ width: `${entry.errorRate * 100}%` }}
                     />
                   </div>
@@ -321,7 +370,7 @@ export function StatsScreen({ userId, onExit }: StatsScreenProps) {
       <button
         type="button"
         onClick={onExit}
-        className={`self-center rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 py-3 text-body ${FOCUS_RING}`}
+        className={`min-h-[56px] self-start border-[1.5px] border-border-strong bg-surface-raised px-6 text-label font-bold uppercase tracking-[0.04em] text-ink-primary hover:bg-surface-sunken ${FOCUS_RING}`}
       >
         {t('stats.back')}
       </button>

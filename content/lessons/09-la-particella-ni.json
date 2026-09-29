@@ -1,9 +1,10 @@
 {
   "order": 9,
   "title": {
-    "en": "The particle に: destination, purpose, location, change; and へ",
-    "it": "La particella に: destinazione, scopo, luogo, cambiamento; e へ"
+    "en": "The particle に (where you go, why, where something is, what it becomes) and へ",
+    "it": "La particella に (dove si va, per fare cosa, dove si trova, cosa diventa) e へ"
   },
+  "video": "uqlQYrE2oFM",
   "grammarPoints": ["目的地を示す「に」", "目的を示す「に」", "存在の場所を示す「に」", "変化の結果を示す「に」", "方向を示す「へ」"],
   "exercises": [
     {
@@ -17,23 +18,43 @@
         "kanji": "図書館に本を借りに行く",
         "kana": "としょかんにほんをかりにいく"
       },
+      "translation": {
+        "en": "I go to the library to borrow a book.",
+        "it": "Vado in biblioteca a prendere in prestito un libro."
+      },
+      "glosses": [
+        { "text": "図書館に", "reading": "としょかんに", "meaning": { "en": "to the library", "it": "in biblioteca" } },
+        { "text": "本を", "reading": "ほんを", "meaning": { "en": "a book (を: the object)", "it": "un libro (を: l'oggetto)" } },
+        { "text": "借りに", "reading": "かりに", "meaning": { "en": "to borrow (the purpose)", "it": "a prendere in prestito (lo scopo)" } },
+        { "text": "行く", "reading": "いく", "meaning": { "en": "go", "it": "vado" } }
+      ],
       "answer": ["図書館に", "本を", "借りに", "行く"],
       "explanation": {
-        "en": "The sentence has two に: 図書館に is the place you go to, 借りに is the purpose of going. The i-stem 借り works as a noun (\"borrowing\"), so it can take に: \"I go to the library to borrow a book\".",
-        "it": "La frase ha due に: 図書館に è il luogo in cui si va, 借りに è lo scopo dell'andare. Il radicale in i 借り funziona come un nome («il prendere in prestito»), quindi può prendere に: «vado in biblioteca a prendere in prestito un libro»."
+        "en": "There are two に here: 図書館に says where you go, 借りに says why you go. For the purpose, take the i-stem of the verb (the form used before ます: 借ります → 借り) and add に. Then comes a verb of movement, like 行く (\"to go\").",
+        "it": "Qui ci sono due に: 図書館に dice dove si va, 借りに dice perché si va. Per lo scopo si prende il radicale in i del verbo (la forma che si usa davanti a ます: 借ります → 借り) e si aggiunge に. Poi viene un verbo di movimento, come 行く («andare»)."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "目的を示す「に」",
       "prompt": {
-        "en": "\"I went to the sea to swim.\" How do you say \"to swim\" (purpose)?",
-        "it": "«Sono andato al mare a nuotare.» Come si dice «a nuotare» (scopo)?"
+        "en": "\"I went to the sea to swim.\" How do you say \"to swim\" (the purpose)?",
+        "it": "«Sono andato al mare a nuotare.» Come si dice «a nuotare» (lo scopo)?"
       },
       "sentence": {
         "kanji": "海に泳ぎに行った",
         "kana": "うみにおよぎにいった"
       },
+      "translation": {
+        "en": "I went to the sea to swim.",
+        "it": "Sono andato al mare a nuotare."
+      },
+      "glosses": [
+        { "text": "泳ぎに", "reading": "およぎに" },
+        { "text": "泳ぐに", "reading": "およぐに" },
+        { "text": "泳いに", "reading": "およいに" },
+        { "text": "泳ぎで", "reading": "およぎで" }
+      ],
       "gap": {
         "kanji": "海に＿行った",
         "kana": "うみに＿いった"
@@ -41,20 +62,24 @@
       "answer": "泳ぎに",
       "distractors": ["泳ぐに", "泳いに", "泳ぎで"],
       "explanation": {
-        "en": "Purpose with a verb of movement is the i-stem plus に: 泳ぐ → 泳ぎ + に. The purpose に attaches to a noun, and the i-stem is the noun form of the verb; the dictionary form 泳ぐ cannot take に here.",
-        "it": "Lo scopo con un verbo di movimento è il radicale in i più に: 泳ぐ → 泳ぎ + に. Il に di scopo si attacca a un nome, e il radicale in i è la forma nominale del verbo; la forma del dizionario 泳ぐ qui non può prendere に."
+        "en": "To say why you go somewhere, take the i-stem of the verb (the form used before ます: 泳ぎます → 泳ぎ), add に, then a verb like 行く: 泳ぎに行った = \"went to swim\". The dictionary form 泳ぐ cannot take に here.",
+        "it": "Per dire perché si va in un posto si prende il radicale in i del verbo (la forma che si usa davanti a ます: 泳ぎます → 泳ぎ), si aggiunge に e poi un verbo come 行く: 泳ぎに行った = «sono andato a nuotare». La forma base 泳ぐ qui non può prendere に."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "存在の場所を示す「に」",
       "prompt": {
-        "en": "\"The cat is in the garden.\" Which particle marks where the cat is?",
-        "it": "«Il gatto è in giardino.» Quale particella marca dove si trova il gatto?"
+        "en": "\"The cat is in the garden.\" Which particle says where the cat is?",
+        "it": "«Il gatto è in giardino.» Quale particella dice dove si trova il gatto?"
       },
       "sentence": {
         "kanji": "猫が庭にいる",
         "kana": "ねこがにわにいる"
+      },
+      "translation": {
+        "en": "The cat is in the garden.",
+        "it": "Il gatto è in giardino."
       },
       "gap": {
         "kanji": "猫が庭＿いる",
@@ -63,25 +88,34 @@
       "answer": "に",
       "distractors": ["で", "を"],
       "explanation": {
-        "en": "The place where someone or something is — with いる for living beings, ある for things — is marked by に. で is for the place where an action happens, and いる is not an action.",
-        "it": "Il luogo in cui qualcuno o qualcosa si trova — con いる per gli esseri viventi, ある per le cose — è marcato da に. で serve per il luogo in cui avviene un'azione, e いる non è un'azione."
+        "en": "With いる (\"to be there\", for people and animals) and ある (the same, for things), the place is marked by に. で is for the place where you do an action (\"eat at home\"), and just being somewhere is not an action.",
+        "it": "Con いる («esserci», per persone e animali) e ある (lo stesso, per le cose), il luogo si segna con に. で serve per il luogo dove si fa un'azione («mangiare a casa»), e il semplice trovarsi in un posto non è un'azione."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "存在の場所を示す「に」",
       "prompt": {
-        "en": "Which part says where the umbrella is?",
-        "it": "Quale parte dice dove si trova l'ombrello?"
+        "en": "\"There is an umbrella here.\" Which part says where the umbrella is?",
+        "it": "«Qui c'è un ombrello.» Quale parte dice dove si trova l'ombrello?"
       },
       "sentence": {
         "kanji": "ここに傘がある",
         "kana": "ここにかさがある"
       },
+      "translation": {
+        "en": "There is an umbrella here.",
+        "it": "Qui c'è un ombrello."
+      },
+      "glosses": [
+        { "text": "ここに", "meaning": { "en": "here (に: the place)", "it": "qui (に: il luogo)" } },
+        { "text": "傘", "reading": "かさ", "meaning": { "en": "umbrella", "it": "ombrello" } },
+        { "text": "がある", "meaning": { "en": "(が: the subject) + there is", "it": "(が: il soggetto) + c'è" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the location: ここに. The umbrella is the subject of ある (there is), and に marks where it is. When ある or いる say where something or someone is, the place is marked by に, not で.",
-        "it": "Seleziona il luogo: ここに. L'ombrello è il soggetto di ある (c'è), e に marca dove si trova. Quando ある o いる dicono dove si trova qualcosa o qualcuno, il luogo è marcato da に, non da で."
+        "en": "Select ここに (\"here\"). ある means \"there is\" (for things), and the place where the thing is takes に. The thing itself, 傘 (\"umbrella\"), takes が.",
+        "it": "Seleziona ここに («qui»). ある significa «c'è» (per le cose), e il luogo in cui si trova la cosa prende に. La cosa stessa, 傘 («ombrello»), prende が."
       }
     },
     {
@@ -89,11 +123,15 @@
       "grammarPoint": "変化の結果を示す「に」",
       "prompt": {
         "en": "\"My older brother became a doctor.\" Which particle marks what he became?",
-        "it": "«Mio fratello maggiore è diventato medico.» Quale particella marca ciò che è diventato?"
+        "it": "«Mio fratello maggiore è diventato medico.» Quale particella segna ciò che è diventato?"
       },
       "sentence": {
         "kanji": "兄は医者になった",
         "kana": "あにはいしゃになった"
+      },
+      "translation": {
+        "en": "My older brother became a doctor.",
+        "it": "Mio fratello maggiore è diventato medico."
       },
       "gap": {
         "kanji": "兄は医者＿なった",
@@ -102,21 +140,31 @@
       "answer": "に",
       "distractors": ["を", "で"],
       "explanation": {
-        "en": "なる means \"become\", and the result of the change is marked by に: 医者になった, \"became a doctor\". With a noun or a な-adjective, the result normally takes に.",
-        "it": "なる significa «diventare», e il risultato del cambiamento è marcato da に: 医者になった, «è diventato medico». Con un nome o un aggettivo in な, il risultato prende normalmente に."
+        "en": "なる means \"to become\". What someone or something becomes is marked by に: 医者になった = \"became a doctor\". This is how it works after a noun, such as 医者 (\"doctor\").",
+        "it": "なる significa «diventare». Ciò che qualcuno o qualcosa diventa si segna con に: 医者になった = «è diventato medico». Funziona così dopo un nome, come 医者 («medico»)."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "変化の結果を示す「に」",
       "prompt": {
-        "en": "\"The room became bright.\" Which form of 明るい goes before なる?",
-        "it": "«La stanza è diventata luminosa.» Quale forma di 明るい va davanti a なる?"
+        "en": "\"The room became bright.\" Which form of 明るい (\"bright\") goes before なる (\"to become\")?",
+        "it": "«La stanza è diventata luminosa.» Quale forma di 明るい («luminoso») va davanti a なる («diventare»)?"
       },
       "sentence": {
         "kanji": "部屋が明るくなった",
         "kana": "へやがあかるくなった"
       },
+      "translation": {
+        "en": "The room became bright.",
+        "it": "La stanza è diventata luminosa."
+      },
+      "glosses": [
+        { "text": "明るく", "reading": "あかるく" },
+        { "text": "明るに", "reading": "あかるに" },
+        { "text": "明るいに", "reading": "あかるいに" },
+        { "text": "明るいく", "reading": "あかるいく" }
+      ],
       "gap": {
         "kanji": "部屋が＿なった",
         "kana": "へやが＿なった"
@@ -124,8 +172,8 @@
       "answer": "明るく",
       "distractors": ["明るいに", "明るに", "明るいく"],
       "explanation": {
-        "en": "に attaches to nouns, and 明るい (bright) is an い-adjective. Before なる, an い-adjective changes its final い into く: 明るくなった, \"became bright\".",
-        "it": "に si attacca ai nomi, e 明るい (luminoso) è un aggettivo in い. Davanti a なる, un aggettivo in い cambia la い finale in く: 明るくなった, «è diventato luminoso»."
+        "en": "明るい is an い-adjective (a word that ends in い and already means \"is bright\"), and に goes after nouns, not after い-adjectives. Before なる, an い-adjective changes its final い into く: 明るくなった = \"became bright\".",
+        "it": "明るい è un aggettivo in い (una parola che finisce in い e significa già «è luminoso»), e に va dopo i nomi, non dopo gli aggettivi in い. Davanti a なる, un aggettivo in い cambia la い finale in く: 明るくなった = «è diventata luminosa»."
       }
     },
     {
@@ -133,11 +181,15 @@
       "grammarPoint": "方向を示す「へ」",
       "prompt": {
         "en": "\"Next month I'm going to Kyoto.\" Which particle marks the direction?",
-        "it": "«Il mese prossimo vado a Kyoto.» Quale particella marca la direzione?"
+        "it": "«Il mese prossimo vado a Kyoto.» Quale particella segna la direzione?"
       },
       "sentence": {
         "kanji": "来月京都へ行く",
         "kana": "らいげつきょうとへいく"
+      },
+      "translation": {
+        "en": "Next month I'm going to Kyoto.",
+        "it": "Il mese prossimo vado a Kyoto."
       },
       "gap": {
         "kanji": "来月京都＿行く",
@@ -146,8 +198,86 @@
       "answer": "へ",
       "distractors": ["が", "の"],
       "explanation": {
-        "en": "The particle へ, pronounced え, marks the direction of a movement. Of the uses of に in this lesson, it overlaps only with the destination, so here に would also be correct. へ cannot mark where something is: 庭へいる is wrong.",
-        "it": "La particella へ, pronunciata え, marca la direzione di un movimento. Tra gli usi di に visti in questa lezione, si sovrappone solo alla destinazione, quindi qui anche に sarebbe corretto. へ non può marcare dove si trova qualcosa: 庭へいる è sbagliato."
+        "en": "As a particle, へ is read え, and it marks the direction you move in: 京都へ行く = \"go to Kyoto\". Here に would also be correct, because both can mark where you go. But へ cannot mark where something is: 庭へいる is wrong.",
+        "it": "Quando è una particella, へ si legge え e indica la direzione in cui ci si muove: 京都へ行く = «andare a Kyoto». Qui andrebbe bene anche に, perché entrambe possono indicare dove si va. Ma へ non può indicare dove si trova qualcosa: 庭へいる è sbagliato."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "目的地を示す「に」",
+      "prompt": {
+        "en": "Build: \"Next year I will go to Japan.\"",
+        "it": "Componi: «L'anno prossimo andrò in Giappone.»"
+      },
+      "sentence": {
+        "kanji": "来年日本に行きます",
+        "kana": "らいねんにほんにいきます"
+      },
+      "translation": {
+        "en": "Next year I will go to Japan.",
+        "it": "L'anno prossimo andrò in Giappone."
+      },
+      "glosses": [
+        { "text": "来年", "reading": "らいねん", "meaning": { "en": "next year", "it": "l'anno prossimo" } },
+        { "text": "日本に", "reading": "にほんに", "meaning": { "en": "to Japan", "it": "in Giappone" } },
+        { "text": "行きます", "reading": "いきます", "meaning": { "en": "(will) go (polite)", "it": "andrò (cortese)" } }
+      ],
+      "answer": ["来年", "日本に", "行きます"],
+      "explanation": {
+        "en": "With a verb of movement such as 行く (\"to go\"), the place you go to is marked by に: 日本に行きます = \"go to Japan\". A time word like 来年 (\"next year\") needs no particle and usually comes first. The verb goes last.",
+        "it": "Con un verbo di movimento come 行く («andare»), il posto in cui si va si segna con に: 日本に行きます = «andare in Giappone». Una parola di tempo come 来年 («l'anno prossimo») non vuole particelle e di solito va all'inizio. Il verbo va alla fine."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "目的地を示す「に」",
+      "prompt": {
+        "en": "\"I want to go home.\" Which part says where you want to go?",
+        "it": "«Voglio tornare a casa.» Quale parte dice dove si vuole andare?"
+      },
+      "sentence": {
+        "kanji": "うちに帰りたい",
+        "kana": "うちにかえりたい"
+      },
+      "translation": {
+        "en": "I want to go home.",
+        "it": "Voglio tornare a casa."
+      },
+      "glosses": [
+        { "text": "うちに", "meaning": { "en": "(to) home", "it": "a casa" } },
+        { "text": "帰", "reading": "かえ", "meaning": { "en": "go back (first part of the verb)", "it": "tornare (prima parte del verbo)" } },
+        { "text": "りたい", "meaning": { "en": "(end of the verb) + want to", "it": "(fine del verbo) + voglio" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select うちに (\"home\"). 帰る means \"to go back\", and the place you go back to is the destination, marked by に. The same に marks where you go with 行く (\"to go\") and 来る (\"to come\").",
+        "it": "Seleziona うちに («a casa»). 帰る significa «tornare», e il posto in cui si torna è la destinazione, segnata da に. Lo stesso に indica dove si va anche con 行く («andare») e 来る («venire»)."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "方向を示す「へ」",
+      "prompt": {
+        "en": "\"Please come here.\" Which part shows the direction of the movement?",
+        "it": "«Vieni qui, per favore.» Quale parte indica la direzione del movimento?"
+      },
+      "sentence": {
+        "kanji": "ここへ来てください",
+        "kana": "ここへきてください"
+      },
+      "translation": {
+        "en": "Please come here.",
+        "it": "Vieni qui, per favore."
+      },
+      "glosses": [
+        { "text": "ここへ", "meaning": { "en": "(towards) here", "it": "(verso) qui" } },
+        { "text": "来", "reading": "き", "meaning": { "en": "come (first part of the verb)", "it": "venire (prima parte del verbo)" } },
+        { "text": "てください", "meaning": { "en": "please (do it)", "it": "per favore (fallo)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select ここへ (\"here\"). The particle へ, read え, marks the direction you move in; 来る (\"to come\") is a verb of movement, so it can take へ. に would also work: ここに来てください.",
+        "it": "Seleziona ここへ («qui»). La particella へ, che si legge え, indica la direzione in cui ci si muove; 来る («venire») è un verbo di movimento, quindi può prendere へ. Andrebbe bene anche に: ここに来てください."
       }
     }
   ]

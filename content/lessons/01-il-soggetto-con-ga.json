@@ -1,9 +1,10 @@
 {
   "order": 1,
   "title": {
-    "en": "The subject with が, and the three predicates",
-    "it": "Il soggetto con が, e i tre predicati"
+    "en": "The subject with が, and the three kinds of predicate",
+    "it": "Il soggetto con が e i tre tipi di predicato"
   },
+  "video": "pSvH9vH60Ig",
   "grammarPoints": ["「が」が示す主語", "述語の三つの形"],
   "exercises": [
     {
@@ -17,27 +18,44 @@
         "kanji": "妹が毎朝歌います",
         "kana": "いもうとがまいあさうたいます"
       },
+      "translation": {
+        "en": "My younger sister sings every morning.",
+        "it": "Mia sorella minore canta ogni mattina."
+      },
+      "glosses": [
+        { "text": "妹が", "reading": "いもうとが", "meaning": { "en": "younger sister (subject)", "it": "sorella minore (soggetto)" } },
+        { "text": "毎朝", "reading": "まいあさ", "meaning": { "en": "every morning", "it": "ogni mattina" } },
+        { "text": "歌います", "reading": "うたいます", "meaning": { "en": "sings", "it": "canta" } }
+      ],
       "answer": ["妹が", "毎朝", "歌います"],
       "explanation": {
-        "en": "が marks the subject: it tells you which element the predicate is about. Here 妹 (younger sister) is the subject and 歌います (sings) is the predicate. 毎朝 (every morning) adds information but is not the subject, so it carries no が. A sentence has exactly one subject marked by が.",
-        "it": "が marca il soggetto: dice di quale elemento parla il predicato. Qui 妹 (sorella minore) è il soggetto e 歌います (canta) è il predicato. 毎朝 (ogni mattina) aggiunge informazione ma non è il soggetto, quindi non porta が. Una frase ha esattamente un soggetto marcato da が."
+        "en": "が marks the subject: the one who does the action (here 妹, younger sister). The predicate, the part that says something about the subject, is 歌います (sings). 毎朝 (every morning) only says when, so it takes no が.",
+        "it": "が segna il soggetto: chi compie l'azione (qui 妹, la sorella minore). Il predicato, cioè la parte che dice qualcosa del soggetto, è 歌います (canta). 毎朝 (ogni mattina) dice solo quando, quindi non prende が."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "述語の三つの形",
       "prompt": {
-        "en": "Which part is the copula?",
-        "it": "Quale parte è la copula?"
+        "en": "Which part means \"is\"?",
+        "it": "Quale parte vuol dire «è»?"
       },
       "sentence": {
         "kanji": "妹が学生だ",
         "kana": "いもうとががくせいだ"
       },
+      "translation": {
+        "en": "My younger sister is a student.",
+        "it": "Mia sorella minore è una studentessa."
+      },
+      "glosses": [
+        { "text": "妹が学生", "meaning": { "en": "younger sister (subject) + student", "it": "sorella minore (soggetto) + studentessa" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select the copula. だ states an identity between the subject and what precedes it: 妹 = 学生. The relation holds in one direction only — this sentence says the sister is a student, not that students are the sister. だ is one of the three things a predicate can end with; the other two are a verb and an い-adjective.",
-        "it": "Seleziona la copula. だ afferma un'identità fra il soggetto e ciò che la precede: 妹 = 学生. La relazione vale in una sola direzione — questa frase dice che la sorella è una studentessa, non che le studentesse siano la sorella. だ è una delle tre cose con cui un predicato può chiudersi; le altre due sono un verbo e un aggettivo in い."
+        "en": "だ means \"is\". It works like \"is\" in \"my sister is a student\": it links the subject (妹) to a noun (学生, student). A predicate ends in one of three ways: a verb, a noun + だ, or an い-adjective.",
+        "it": "だ vuol dire «è». Funziona come «è» in «mia sorella è una studentessa»: collega il soggetto (妹) a un nome (学生, studentessa). Un predicato finisce in uno di tre modi: con un verbo, con un nome + だ, oppure con un aggettivo in い."
       }
     },
     {
@@ -45,12 +63,22 @@
       "grammarPoint": "述語の三つの形",
       "prompt": {
         "en": "\"The water is cold.\" Which predicate is correct?",
-        "it": "«L'acqua è fredda.» Qual è il predicato corretto?"
+        "it": "«L'acqua è fredda.» Qual è il predicato giusto?"
       },
       "sentence": {
         "kanji": "水が冷たい",
         "kana": "みずがつめたい"
       },
+      "translation": {
+        "en": "The water is cold.",
+        "it": "L'acqua è fredda."
+      },
+      "glosses": [
+        { "text": "冷たい", "reading": "つめたい" },
+        { "text": "冷たいだ", "reading": "つめたいだ" },
+        { "text": "冷だ", "reading": "つめだ" },
+        { "text": "冷たくだ", "reading": "つめたくだ" }
+      ],
       "gap": {
         "kanji": "水が＿",
         "kana": "みずが＿"
@@ -58,8 +86,196 @@
       "answer": "冷たい",
       "distractors": ["冷たいだ", "冷だ", "冷たくだ"],
       "explanation": {
-        "en": "An い-adjective is already a complete predicate: 冷たい does not mean \"cold\", it means \"is cold\". The identity function that だ performs is built into the adjective, so だ is never added after an い-adjective. This is why a predicate can end in three ways — a verb, だ, or an い-adjective — and never in two of them at once.",
-        "it": "Un aggettivo in い è già un predicato completo: 冷たい non significa «freddo», significa «è freddo». La funzione di identità che svolge だ è incorporata nell'aggettivo, quindi だ non si aggiunge mai dopo un aggettivo in い. È la ragione per cui un predicato può chiudersi in tre modi — un verbo, だ, o un aggettivo in い — e mai in due insieme."
+        "en": "An い-adjective (an adjective that ends in い, like 冷たい) already contains \"is\": 冷たい means \"is cold\". So you never add だ (\"is\") after it. 冷だ and 冷たくだ do not exist.",
+        "it": "Un aggettivo in い (un aggettivo che finisce in い, come 冷たい) contiene già «è»: 冷たい vuol dire «è freddo». Per questo dopo non si aggiunge mai だ («è»). 冷だ e 冷たくだ non esistono."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "\"The dog runs.\" Which particle marks who runs?",
+        "it": "«Il cane corre.» Quale particella segna chi corre?"
+      },
+      "sentence": {
+        "kanji": "犬が走る",
+        "kana": "いぬがはしる"
+      },
+      "translation": {
+        "en": "The dog runs.",
+        "it": "Il cane corre."
+      },
+      "gap": {
+        "kanji": "犬＿走る",
+        "kana": "いぬ＿はしる"
+      },
+      "answer": "が",
+      "distractors": ["を", "の"],
+      "explanation": {
+        "en": "A particle is a small word after a noun that shows its role in the sentence. The dog is the one who runs, so it is the subject and takes が. を would make the dog the thing something is done to, and の joins two nouns (\"the dog's …\"), but here a verb follows.",
+        "it": "Una particella è una piccola parola dopo un nome che ne indica il ruolo nella frase. Il cane è chi corre, quindi è il soggetto e prende が. を farebbe del cane la cosa su cui si agisce, e の unisce due nomi («il … del cane»), ma qui segue un verbo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "\"The bird flies.\" Which predicate is correct?",
+        "it": "«L'uccello vola.» Qual è il predicato giusto?"
+      },
+      "sentence": {
+        "kanji": "鳥が飛ぶ",
+        "kana": "とりがとぶ"
+      },
+      "translation": {
+        "en": "The bird flies.",
+        "it": "L'uccello vola."
+      },
+      "glosses": [
+        { "text": "飛ぶ", "reading": "とぶ" },
+        { "text": "飛ぶだ", "reading": "とぶだ" },
+        { "text": "飛びだ", "reading": "とびだ" }
+      ],
+      "gap": {
+        "kanji": "鳥が＿",
+        "kana": "とりが＿"
+      },
+      "answer": "飛ぶ",
+      "distractors": ["飛ぶだ", "飛びだ"],
+      "explanation": {
+        "en": "A verb (a word for an action, like 飛ぶ, \"to fly\") is a complete predicate on its own. だ (\"is\") goes after a noun, never after a verb. So the sentence simply ends with 飛ぶ.",
+        "it": "Un verbo (una parola che indica un'azione, come 飛ぶ, «volare») è da solo un predicato completo. だ («è») va dopo un nome, mai dopo un verbo. Quindi la frase finisce semplicemente con 飛ぶ."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "\"My mother is a teacher.\" What goes at the end?",
+        "it": "«Mia madre è un'insegnante.» Che cosa va alla fine?"
+      },
+      "sentence": {
+        "kanji": "母が先生だ",
+        "kana": "ははがせんせいだ"
+      },
+      "translation": {
+        "en": "My mother is a teacher.",
+        "it": "Mia madre è un'insegnante."
+      },
+      "gap": {
+        "kanji": "母が先生＿",
+        "kana": "ははがせんせい＿"
+      },
+      "answer": "だ",
+      "distractors": ["が", "を"],
+      "explanation": {
+        "en": "先生 (teacher) is a noun, and a noun needs だ (\"is\") to become a predicate: 先生だ means \"is a teacher\". が and を are particles: they mark the role of a noun and cannot end the sentence.",
+        "it": "先生 (insegnante) è un nome, e un nome ha bisogno di だ («è») per diventare un predicato: 先生だ vuol dire «è un'insegnante». が e を sono particelle: indicano il ruolo di un nome e non possono chiudere la frase."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "Which part is the subject?",
+        "it": "Quale parte è il soggetto?"
+      },
+      "sentence": {
+        "kanji": "バスが来た",
+        "kana": "バスがきた"
+      },
+      "translation": {
+        "en": "The bus came.",
+        "it": "L'autobus è arrivato."
+      },
+      "glosses": [
+        { "text": "バスが", "meaning": { "en": "the bus (subject)", "it": "l'autobus (soggetto)" } },
+        { "text": "来", "reading": "き", "meaning": { "en": "come (kanji of 来る)", "it": "venire (kanji di 来る)" } },
+        { "text": "た", "meaning": { "en": "past-tense ending", "it": "desinenza del passato" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The subject is バスが: the bus is what came. が comes right after the subject and marks it. 来た (came) is the predicate, the part that says what the subject did.",
+        "it": "Il soggetto è バスが: l'autobus è ciò che è arrivato. が viene subito dopo il soggetto e lo segna. 来た (è arrivato) è il predicato, la parte che dice che cosa ha fatto il soggetto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "What is hot? Select the subject.",
+        "it": "Che cosa è caldo? Seleziona il soggetto."
+      },
+      "sentence": {
+        "kanji": "スープが熱い",
+        "kana": "スープがあつい"
+      },
+      "translation": {
+        "en": "The soup is hot.",
+        "it": "La zuppa è calda."
+      },
+      "glosses": [
+        { "text": "スープが", "meaning": { "en": "the soup (subject)", "it": "la zuppa (soggetto)" } },
+        { "text": "熱", "reading": "あつ", "meaning": { "en": "hot (kanji of 熱い)", "it": "caldo (kanji di 熱い)" } },
+        { "text": "い", "meaning": { "en": "ending of the い-adjective", "it": "finale dell'aggettivo in い" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The subject is スープが: the soup is what is hot. Here the predicate is 熱い (\"is hot\"), an い-adjective (an adjective that ends in い). It takes its subject with が, just like a verb does.",
+        "it": "Il soggetto è スープが: la zuppa è ciò che è caldo. Qui il predicato è 熱い («è caldo»), un aggettivo in い (un aggettivo che finisce in い). Prende il soggetto con が, proprio come un verbo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "Build: \"My older brother is a doctor.\"",
+        "it": "Componi: «Mio fratello maggiore è medico.»"
+      },
+      "sentence": {
+        "kanji": "兄が医者だ",
+        "kana": "あにがいしゃだ"
+      },
+      "translation": {
+        "en": "My older brother is a doctor.",
+        "it": "Mio fratello maggiore è medico."
+      },
+      "glosses": [
+        { "text": "兄が", "reading": "あにが", "meaning": { "en": "older brother (subject)", "it": "fratello maggiore (soggetto)" } },
+        { "text": "医者", "reading": "いしゃ", "meaning": { "en": "doctor", "it": "medico" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
+      "answer": ["兄が", "医者", "だ"],
+      "explanation": {
+        "en": "The subject 兄 (older brother) comes first, with が. Then comes the noun 医者 (doctor) and だ, the word for \"is\" that links the subject to that noun. In Japanese the predicate always comes last.",
+        "it": "Il soggetto 兄 (fratello maggiore) viene per primo, con が. Poi il nome 医者 (medico) e だ, la parola per «è» che collega il soggetto a quel nome. In giapponese il predicato va sempre alla fine."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "Build: \"The ramen at this restaurant is delicious.\"",
+        "it": "Componi: «Il ramen di questo locale è buonissimo.»"
+      },
+      "sentence": {
+        "kanji": "この店のラーメンがおいしい",
+        "kana": "このみせのラーメンがおいしい"
+      },
+      "translation": {
+        "en": "The ramen at this restaurant is delicious.",
+        "it": "Il ramen di questo locale è buonissimo."
+      },
+      "glosses": [
+        { "text": "この", "meaning": { "en": "this", "it": "questo" } },
+        { "text": "店の", "reading": "みせの", "meaning": { "en": "of the restaurant", "it": "del locale" } },
+        { "text": "ラーメンが", "meaning": { "en": "ramen (subject)", "it": "ramen (soggetto)" } },
+        { "text": "おいしい", "meaning": { "en": "is delicious (い-adjective)", "it": "è buonissimo (aggettivo in い)" } }
+      ],
+      "answer": ["この", "店の", "ラーメンが", "おいしい"],
+      "explanation": {
+        "en": "The subject is ラーメン, marked by が; この店の (\"of this restaurant\") comes before it and describes it. The predicate is おいしい, an い-adjective (an adjective that ends in い) that already means \"is delicious\". So no だ follows it.",
+        "it": "Il soggetto è ラーメン, segnato da が; この店の («di questo locale») viene prima e lo descrive. Il predicato è おいしい, un aggettivo in い (un aggettivo che finisce in い) che vuol già dire «è buonissimo». Per questo dopo non c'è だ."
       }
     }
   ]

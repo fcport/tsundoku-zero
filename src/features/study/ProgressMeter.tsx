@@ -37,10 +37,10 @@ export function ProgressMeter({ completed, total }: ProgressMeterProps) {
       aria-valuenow={completed}
       aria-valuemin={0}
       aria-valuemax={total}
-      className="h-[4px] w-full overflow-hidden rounded-md bg-surface-sunken"
+      className="h-[10px] w-full overflow-hidden border-[1.5px] border-border-strong bg-surface-raised"
     >
       <div
-        className="h-full rounded-md bg-ink-secondary"
+        className="h-full bg-ink-primary"
         style={{ width: `${fraction * 100}%` }}
       />
     </div>

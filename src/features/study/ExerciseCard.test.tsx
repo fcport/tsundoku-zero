@@ -113,7 +113,7 @@ describe('AC1 — consegna + giapponese', () => {
     // guarderebbero la card. La stringa completa è unica dell'`<article>`, così se
     // la card perde `w-full`/`p-4`/`sm:p-6` il test fallisce davvero.
     expect(markup).toContain(
-      '<article class="w-full flex flex-col items-center gap-6 rounded-md bg-surface-raised p-4 sm:p-6">',
+      '<article class="w-full flex flex-col items-center gap-6 border-y-[1.5px] border-border-strong py-5 sm:py-6">',
     );
   });
 });

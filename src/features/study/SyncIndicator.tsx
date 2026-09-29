@@ -37,7 +37,7 @@ export function SyncIndicator() {
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-4 right-4 z-50 pointer-events-none rounded-full bg-accent-subtle dark:bg-accent-subtle-dark px-3 py-1 text-caption text-accent dark:text-accent-dark"
+      className="fixed bottom-4 right-4 z-50 pointer-events-none rounded-full bg-accent-subtle px-3 py-1 text-caption text-accent"
     >
       {t('sync.pending')}
     </div>

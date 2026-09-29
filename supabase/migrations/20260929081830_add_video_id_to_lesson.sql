@@ -1,0 +1,16 @@
+-- Il video di riferimento della lezione.
+--
+-- Ogni lezione rimanda al SUO video YouTube di riferimento: un semplice link che
+-- apre YouTube, mai un embed. La colonna video_id porta SOLO l'id (11 caratteri),
+-- il link lo compone l'app. Autorato nel campo facoltativo `video` di
+-- content/lessons/*.json e popolato dal seed generato (*_seed_content.sql).
+--
+-- Migrazione ADDITIVA: un solo ALTER TABLE ADD COLUMN, nient'altro. La colonna è
+-- NULLABLE (una lezione senza video resta valida) e senza default: le righe
+-- preesistenti restano a null finché il seed successivo non le aggiorna. La
+-- tabella `lesson` è GIÀ di sola lettura per gli autenticati via RLS (story 3.7):
+-- la colonna eredita quella policy, quindi NESSUNA policy nuova. Nessun check sulla
+-- forma dell'id: la valida lo schema del contenuto (lessonSchema), al confine.
+-- Si applica SOLO al merge su main via .github/workflows/migrate.yml (supabase db
+-- push); su una PR è validata sintatticamente offline in npm test (AD-12/AD-13).
+alter table lesson add column video_id text;

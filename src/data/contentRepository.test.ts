@@ -84,6 +84,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
           title_en: 'The te-form',
           title_it: 'La forma in te',
           grammar_points: ['te-form'],
+          video_id: 'dwcTI9qvO-U',
           exercise: [{ count: 3 }],
         },
         {
@@ -92,6 +93,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
           title_en: 'The particle wa',
           title_it: null,
           grammar_points: ['wa', 'topic'],
+          video_id: null,
           exercise: [{ count: 5 }],
         },
       ],
@@ -105,6 +107,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
     expect(calls.table).toBe('lesson');
     expect(calls.columns).toContain('ordinal');
     expect(calls.columns).toContain('exercise(count)');
+    expect(calls.columns).toContain('video_id');
     expect(calls.orderBy).toBe('ordinal');
 
     // Titolo bilingue: `it` PRESENTE quando la colonna ha un valore; `exerciseCount`
@@ -115,6 +118,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
       title: { en: 'The te-form', it: 'La forma in te' },
       grammarPoints: ['te-form'],
       exerciseCount: 3,
+      video: 'dwcTI9qvO-U',
     });
 
     // Forma d'oro: `it` OMESSO (non undefined esplicito) quando la colonna è null.
@@ -122,6 +126,8 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
     expect('it' in (lessons[1]?.title ?? {})).toBe(false);
     expect(lessons[1]?.grammarPoints).toEqual(['wa', 'topic']);
     expect(lessons[1]?.exerciseCount).toBe(5);
+    // Stessa forma d'oro per il video: `video` OMESSO quando `video_id` è null.
+    expect('video' in (lessons[1] ?? {})).toBe(false);
   });
 
   it('nessuna riga ⇒ array vuoto', async () => {
@@ -142,6 +148,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
           title_en: 'A concept',
           title_it: null,
           grammar_points: ['concept'],
+          video_id: null,
           exercise: [{ count: 0 }],
         },
       ],
@@ -164,6 +171,7 @@ describe('listLessons — happy path: mappa, ordina, omette it quando null', () 
           title_en: 'A concept',
           title_it: null,
           grammar_points: ['concept'],
+          video_id: null,
           exercise: [],
         },
       ],
@@ -223,6 +231,25 @@ describe('listLessons — fallimenti lanciano DataError (reject, non valore degr
           title_en: 'X',
           title_it: 42,
           grammar_points: ['g'],
+        },
+      ],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('riga malformata (video_id non-null non-stringa) ⇒ DataError', async () => {
+    const { client } = makeFakeClient({
+      rows: [
+        {
+          id: 'x',
+          ordinal: 1,
+          title_en: 'X',
+          title_it: null,
+          grammar_points: ['g'],
+          video_id: 42,
+          exercise: [{ count: 1 }],
         },
       ],
     });
@@ -514,5 +541,66 @@ describe('listExercisesByIds — fallimenti lanciano DataError (reject)', () => 
     await expect(repo.listExercisesByIds(['ex-ss'])).rejects.toBeInstanceOf(
       DataError,
     );
+  });
+});
+
+// La rete di sicurezza (29-09-2026): su un database senza la migrazione del video
+// la select con `video_id` fallisce con 42703 (colonna inesistente); l'adattatore
+// rilegge senza la colonna e le lezioni arrivano senza video, invece di bloccare
+// la dashboard sullo scheletro.
+describe('listLessons — colonna video_id assente (migrazione non applicata)', () => {
+  function clientWithoutVideoColumn(fallbackError: unknown = null) {
+    const selects: string[] = [];
+    const fake = {
+      from() {
+        return {
+          select(columns: string) {
+            selects.push(columns);
+            return {
+              order: async () =>
+                columns.includes('video_id')
+                  ? { data: null, error: { code: '42703', message: 'column lesson.video_id does not exist' } }
+                  : {
+                      data: fallbackError
+                        ? null
+                        : [
+                            {
+                              id: 'ga-subject',
+                              ordinal: 1,
+                              title_en: 'The subject',
+                              title_it: null,
+                              grammar_points: ['ga-subject'],
+                              exercise: [{ count: 3 }],
+                            },
+                          ],
+                      error: fallbackError,
+                    },
+            };
+          },
+        };
+      },
+    };
+    return { client: fake as unknown as SupabaseClient, selects };
+  }
+
+  it('rilegge senza video_id e restituisce le lezioni senza video', async () => {
+    const { client, selects } = clientWithoutVideoColumn();
+    const lessons = await createSupabaseContentRepository(client).listLessons();
+    expect(selects).toHaveLength(2);
+    expect(selects[1]).not.toContain('video_id');
+    expect(lessons).toHaveLength(1);
+    expect(lessons[0]).not.toHaveProperty('video');
+    expect(lessons[0]?.exerciseCount).toBe(3);
+  });
+
+  it('se fallisce anche la rilettura ⇒ DataError', async () => {
+    const { client } = clientWithoutVideoColumn({ code: '42501', message: 'rls denied' });
+    await expect(createSupabaseContentRepository(client).listLessons()).rejects.toBeInstanceOf(DataError);
+  });
+
+  it('un altro errore (non 42703) NON attiva la rilettura', async () => {
+    const { client, calls } = makeFakeClient({ error: { code: '42501', message: 'rls denied' } });
+    await expect(createSupabaseContentRepository(client).listLessons()).rejects.toBeInstanceOf(DataError);
+    expect(calls.columns).toContain('video_id');
   });
 });

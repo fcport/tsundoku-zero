@@ -55,7 +55,7 @@ export function DeleteAccountConfirm({
       <button
         type="button"
         onClick={onRequestDelete}
-        className="rounded-md border border-border-strong bg-surface-raised text-danger p-3 text-label"
+        className="min-h-[56px] self-start border-[1.5px] border-danger bg-surface-raised px-5 text-label font-bold uppercase tracking-[0.04em] text-danger hover:bg-danger-subtle"
       >
         {t('account.delete.trigger')}
       </button>
@@ -69,12 +69,12 @@ export function DeleteAccountConfirm({
       <p className="text-body text-ink-primary">
         {t('account.delete.consequence')}
       </p>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <button
           type="button"
           onClick={onConfirm}
           disabled={pending}
-          className="rounded-md border border-border-strong bg-danger text-surface-raised p-3 text-label"
+          className="min-h-[56px] border-[1.5px] border-danger bg-danger px-5 text-label font-bold uppercase tracking-[0.04em] text-surface-raised"
         >
           {t('account.delete.confirm')}
         </button>
@@ -82,7 +82,7 @@ export function DeleteAccountConfirm({
           type="button"
           onClick={onCancel}
           disabled={pending}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
+          className="min-h-[56px] border-[1.5px] border-border-strong bg-surface-raised px-5 text-label font-bold uppercase tracking-[0.04em] text-ink-primary hover:bg-surface-sunken"
         >
           {t('account.delete.cancel')}
         </button>

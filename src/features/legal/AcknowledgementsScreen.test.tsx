@@ -97,7 +97,9 @@ describe('AcknowledgementsScreen — attribuzione e confini (en)', () => {
 
   it('microcopy senza celebrazione: nessun `!`, ASCII (nessun code point >= U+2000)', () => {
     expect(markup).not.toContain('!');
-    const offending = [...markup].filter(
+    // Esclusi i nodi lang="ja": il marchio sul dorso della cornice è contenuto
+    // giapponese, non copy dell'interfaccia.
+    const offending = [...markup.replace(/<span lang="ja">[\s\S]*?<\/span>/g, '')].filter(
       (ch) => (ch.codePointAt(0) ?? 0) >= 0x2000,
     );
     expect(offending).toEqual([]);
@@ -147,7 +149,9 @@ describe('AcknowledgementsScreen — switch a runtime (integrazione i18next)', (
     await i18n.changeLanguage('it');
     const markup = render();
     expect(markup).not.toContain('!');
-    const offending = [...markup].filter(
+    // Esclusi i nodi lang="ja": il marchio sul dorso della cornice è contenuto
+    // giapponese, non copy dell'interfaccia.
+    const offending = [...markup.replace(/<span lang="ja">[\s\S]*?<\/span>/g, '')].filter(
       (ch) => (ch.codePointAt(0) ?? 0) >= 0x2000,
     );
     expect(offending).toEqual([]);

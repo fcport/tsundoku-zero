@@ -9,12 +9,17 @@ import {
   nonEmptyArray,
   nonEmptyString,
   object,
+  optional,
   refine,
+  string,
   type Infer,
   type ParseResult,
 } from './schema';
 import { exerciseSchema } from './exercise';
 import { bilingualText } from './bilingual';
+
+/** Forma di un id video YouTube: 11 caratteri fra lettere, cifre, `_` e `-`. */
+const YOUTUBE_VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 
 /**
  * Schema della lezione (AC2). Una lezione porta:
@@ -23,7 +28,8 @@ import { bilingualText } from './bilingual';
  *   stesso ripiego dichiarato della spiegazione (`./bilingual`);
  * - `grammarPoints`: almeno uno, ciascuno non vuoto (i punti che insegna);
  * - `exercises`: ZERO o più — l'array vuoto è valido (AC2). Una lezione senza
- *   esercizi resta parte del curriculum e dichiara comunque i punti grammaticali.
+ *   esercizi resta parte del curriculum e dichiara comunque i punti grammaticali;
+ * - `video`: facoltativo, l'id (11 caratteri) del video YouTube di riferimento.
  *
  * FR2.4 possiede questa coppia di scelte: `exercises` è `array(exerciseSchema)`
  * — chiave OBBLIGATORIA con array possibilmente VUOTO (mai `optional`, che
@@ -53,6 +59,13 @@ export const lessonSchema = object({
   // grammarPoints[0] con order/title diversi»). Così la scelta di AC5 è
   // documentata, non silenziosa.
   title: bilingualText,
+  // Il video YouTube di riferimento della lezione: SOLO l'id, mai l'URL — il link
+  // che apre YouTube lo compone l'app (nessun embed). Facoltativo: una lezione
+  // senza video resta valida. La forma è quella degli id YouTube (11 caratteri
+  // fra lettere, cifre, `_` e `-`), così un URL incollato per sbaglio è rifiutato.
+  video: optional(
+    refine(string(), (value) => YOUTUBE_VIDEO_ID.test(value), 'id video YouTube (11 caratteri) richiesto'),
+  ),
   grammarPoints: nonEmptyArray(nonEmptyString()),
   exercises: array(exerciseSchema),
 });

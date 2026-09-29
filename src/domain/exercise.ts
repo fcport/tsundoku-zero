@@ -90,6 +90,35 @@ export type SegmentSpan = Infer<typeof segmentSpan>;
 const prompt = optional(bilingualText);
 
 /**
+ * La TRADUZIONE della frase (29-09-2026), bilingue: mostrata SOTTO il giapponese
+ * quando l'interruttore «Traduzioni» del dorso è acceso. Facoltativa, fuori
+ * dall'identità (AD-23) come `prompt`.
+ */
+const translation = optional(bilingualText);
+
+/**
+ * Le GLOSSE delle opzioni (29-09-2026), per testo dell'opzione:
+ * - `reading`: la lettura in kana, per la furigana dove la frase non basta a
+ *   ricavarla (毎晩|日記を: kanji attaccati fra due tessere). Ammessa per ogni tipo:
+ *   la lettura non rivela la risposta.
+ * - `meaning`: il significato bilingue, mostrato con «Traduzioni». Ammesso solo
+ *   per tessere (`assemble`) e segmenti (`select-span`): nella scelta singola il
+ *   significato dei distrattori (冷たい / 冷たくだ, を / が) rivelerebbe la risposta.
+ * Che ogni `text` sia un'opzione vera, che `reading` si allinei al testo e il
+ * divieto di `meaning` nella scelta singola sono regole di `content-validation`.
+ * Fuori dall'identità (AD-23).
+ */
+const glosses = optional(
+  nonEmptyArray(
+    object({
+      text: nonEmptyString(),
+      reading: optional(nonEmptyString()),
+      meaning: optional(bilingualText),
+    }),
+  ),
+);
+
+/**
  * Il segnaposto dello spazio vuoto di `gap`: il carattere a tutta larghezza `＿`
  * (U+FF3F). Uno solo per frase, sia in `kanji` sia in `kana`.
  */
@@ -115,6 +144,8 @@ const singleSelect = object({
   explanation: bilingualText,
   showFurigana: optional(boolean()),
   prompt,
+  translation,
+  glosses,
   // La frase con la risposta sostituita da `GAP_MARK`, mostrata PRIMA della
   // risposta: senza, la risposta giusta è già scritta nella frase. Il legame con
   // `sentence`/`answer` (il segnaposto rimpiazzato dà la frase) è una regola di
@@ -136,6 +167,8 @@ const selectSpan = object({
   explanation: bilingualText,
   showFurigana: optional(boolean()),
   prompt,
+  translation,
+  glosses,
 });
 
 /**
@@ -152,6 +185,8 @@ const assemble = object({
   explanation: bilingualText,
   showFurigana: optional(boolean()),
   prompt,
+  translation,
+  glosses,
 });
 
 /**

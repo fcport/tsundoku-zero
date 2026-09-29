@@ -23,36 +23,25 @@ function parseColors(source: string): Record<string, string> {
 }
 
 // I 27 colori attesi = i letterali esatti di DESIGN.md, senza focus-ring-dark.
+// Direzione «rivista» (29-09-2026): carta, inchiostro, un solo rosso.
 const EXPECTED_COLORS: Record<string, string> = {
   // Chiari (14)
-  'surface-base': '#FAF7F0',
-  'surface-raised': '#FFFFFF',
-  'surface-sunken': '#F1ECE1',
-  'ink-primary': '#1C1A17',
-  'ink-secondary': '#6B6459',
-  'ink-muted': '#797065',
-  'border-hairline': '#E3DCCE',
-  'border-strong': '#9B8D7B',
-  accent: '#1F4A7A',
-  'accent-hover': '#173A61',
-  'accent-subtle': '#E8EEF6',
-  danger: '#9B3A2F',
-  'danger-subtle': '#F7E9E6',
-  'focus-ring': '#2F6FB0',
-  // Scuri (13) — nessun focus-ring-dark
-  'surface-base-dark': '#161513',
-  'surface-raised-dark': '#1F1E1B',
-  'surface-sunken-dark': '#100F0E',
-  'ink-primary-dark': '#F2EEE6',
-  'ink-secondary-dark': '#A8A196',
-  'ink-muted-dark': '#8D8477',
-  'border-hairline-dark': '#332F2A',
-  'border-strong-dark': '#70675B',
-  'accent-dark': '#7FB0DC',
-  'accent-hover-dark': '#9CC4E6',
-  'accent-subtle-dark': '#1B2A38',
-  'danger-dark': '#E08476',
-  'danger-subtle-dark': '#38211E',
+  'surface-base': '#ECE7DC',
+  'surface-raised': '#F5F1E9',
+  'surface-sunken': '#DCD5C7',
+  'ink-primary': '#121110',
+  'ink-secondary': '#4F4A44',
+  'ink-muted': '#625C54',
+  'border-hairline': '#C9C2B4',
+  'border-strong': '#121110',
+  accent: '#B8321B',
+  'accent-hover': '#9C2915',
+  'accent-subtle': '#F2DCD3',
+  danger: '#A82E19',
+  'danger-subtle': '#EFD6CC',
+  'focus-ring': '#B8321B',
+  // Il rosso acceso che si legge sull'inchiostro (barra d'azione, opzione giusta).
+  'accent-on-ink': '#FF6A4D',
 };
 
 const EXPECTED_TEXT_ROLES = [
@@ -73,31 +62,31 @@ const EXPECTED_TEXT_ROLES = [
   'attribution',
 ];
 
-describe('AC1 — i 27 token colore, i letterali esatti di DESIGN.md', () => {
+describe('AC1 — i 15 token colore, i letterali esatti di DESIGN.md', () => {
   const colors = parseColors(css);
 
-  it('sono esattamente 27 (14 chiari + 13 scuri)', () => {
-    expect(Object.keys(colors)).toHaveLength(27);
+  it('sono esattamente 15 (14 per la carta + accent-on-ink), nessuno scuro', () => {
+    expect(Object.keys(colors)).toHaveLength(15);
+    expect(Object.keys(colors).filter((k) => k.endsWith('-dark'))).toEqual([]);
   });
 
   it('ogni token ha il valore letterale di DESIGN.md', () => {
     expect(colors).toEqual(EXPECTED_COLORS);
   });
 
-  it('non contiene focus-ring-dark (piegato su accent-dark)', () => {
-    expect(colors['focus-ring-dark']).toBeUndefined();
-  });
-
-  it('focus-ring chiaro (#2F6FB0) resta un token distinto', () => {
-    expect(colors['focus-ring']).toBe('#2F6FB0');
-    // accent-dark porta lo stesso valore che avrebbe focus-ring-dark.
-    expect(colors['accent-dark']).toBe('#7FB0DC');
+  it('focus-ring (#B8321B) resta un token distinto', () => {
+    expect(colors['focus-ring']).toBe('#B8321B');
   });
 });
 
-describe('AC1 — nessun blocco prefers-color-scheme scritto a mano', () => {
+describe('nessuna modalità scura (29-09-2026)', () => {
   it('il sorgente non contiene "prefers-color-scheme"', () => {
     expect(css).not.toMatch(/prefers-color-scheme/);
+  });
+
+  it('dichiara color-scheme light e non usa varianti dark: nel body', () => {
+    expect(css).toMatch(/color-scheme\s*:\s*light\s*;/);
+    expect(css).not.toMatch(/dark:/);
   });
 
   it('non usa una strategia a classe per il dark (@custom-variant / darkMode)', () => {
@@ -172,10 +161,10 @@ describe('AC1 — scala di spaziatura e raggi coi valori di DESIGN.md', () => {
     expect(css).toMatch(/--spacing-thumb-zone\s*:\s*120px\s*;/);
   });
 
-  it('i quattro raggi sm/md/lg/full', () => {
-    expect(css).toMatch(/--radius-sm\s*:\s*4px\s*;/);
-    expect(css).toMatch(/--radius-md\s*:\s*8px\s*;/);
-    expect(css).toMatch(/--radius-lg\s*:\s*12px\s*;/);
+  it('i quattro raggi sm/md/lg/full (la rivista non arrotonda: sm e md a zero)', () => {
+    expect(css).toMatch(/--radius-sm\s*:\s*0px\s*;/);
+    expect(css).toMatch(/--radius-md\s*:\s*0px\s*;/);
+    expect(css).toMatch(/--radius-lg\s*:\s*2px\s*;/);
     expect(css).toMatch(/--radius-full\s*:\s*9999px\s*;/);
   });
 });
@@ -197,35 +186,43 @@ describe('AC6 — nessuna ombra nel sistema', () => {
   });
 });
 
-describe('AC2 — palette e famiglie vincolate; due famiglie caricate', () => {
+describe('AC2 — palette e famiglie vincolate; tre famiglie caricate', () => {
   it('azzera i default Tailwind prima dei token (--color-*/--font-* initial)', () => {
     expect(css).toMatch(/--color-\*\s*:\s*initial\s*;/);
     expect(css).toMatch(/--font-\*\s*:\s*initial\s*;/);
   });
 
-  it('--font-jp dichiara Noto Sans JP con stack di ripiego', () => {
+  it('--font-jp dichiara Shippori Mincho con stack di ripiego', () => {
     const m = css.match(/--font-jp\s*:\s*([^;]+);/);
     expect(m).not.toBeNull();
-    expect(m?.[1]).toMatch(/Noto Sans JP/);
+    expect(m?.[1]).toMatch(/Shippori Mincho/);
     // Uno stack: almeno un ripiego oltre alla famiglia primaria.
     expect((m?.[1].match(/,/g) ?? []).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('--font-sans dichiara Inter con stack di ripiego', () => {
+  it('--font-sans dichiara Archivo con stack di ripiego', () => {
     const m = css.match(/--font-sans\s*:\s*([^;]+);/);
     expect(m).not.toBeNull();
-    expect(m?.[1]).toMatch(/Inter/);
+    expect(m?.[1]).toMatch(/Archivo/);
+    expect((m?.[1].match(/,/g) ?? []).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('--font-mono dichiara IBM Plex Mono con stack di ripiego', () => {
+    const m = css.match(/--font-mono\s*:\s*([^;]+);/);
+    expect(m).not.toBeNull();
+    expect(m?.[1]).toMatch(/IBM Plex Mono/);
     expect((m?.[1].match(/,/g) ?? []).length).toBeGreaterThanOrEqual(1);
   });
 });
 
-describe('AC2 — index.html carica entrambe le famiglie da Google Fonts', () => {
+describe('AC2 — index.html carica le tre famiglie da Google Fonts', () => {
   const html = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
 
-  it('carica Inter e Noto Sans JP', () => {
+  it("carica Archivo (con l'asse di larghezza), Shippori Mincho e IBM Plex Mono", () => {
     expect(html).toMatch(/fonts\.googleapis\.com/);
-    expect(html).toMatch(/Inter/);
-    expect(html).toMatch(/Noto\+Sans\+JP/);
+    expect(html).toMatch(/family=Archivo:wdth,wght/);
+    expect(html).toMatch(/Shippori\+Mincho/);
+    expect(html).toMatch(/IBM\+Plex\+Mono/);
   });
 
   it('usa preconnect verso i domini dei font', () => {

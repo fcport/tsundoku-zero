@@ -10,8 +10,15 @@
 // inesistenti. Nessun carattere CJK: il giapponese è dato, non passa da t().
 export const en = {
   app: {
-    tagline: 'A Japanese grammar exercise generator',
+    tagline: 'Japanese grammar exercises, one lesson at a time',
     name: 'Tsundoku Zero',
+    // L'interruttore rapido della furigana, scritto in verticale sul dorso di ogni
+    // schermata: una parola sola, uguale nelle due lingue.
+    furiganaToggle: 'Furigana',
+    // Il secondo interruttore del dorso: la traduzione sotto il giapponese.
+    translationsToggle: 'Translations',
+    // La traduzione del marchio, sotto il marchio quando le traduzioni sono accese.
+    brandMeaning: 'The unread pile, at zero',
   },
   auth: {
     title: 'Sign up',
@@ -40,6 +47,9 @@ export const en = {
     // variabile è `days` (non `count`), per non innescare il pluralizzatore di
     // i18next che richiederebbe chiavi `_one`/`_other` fuori dalla parità.
     streakLabel: '{{days}} day streak',
+    // Gli occhielli della rivista sopra i due dati (streak e curriculum).
+    streakKicker: 'Streak',
+    curriculumKicker: 'Curriculum',
     // Progresso del curriculum: sbloccate su totale.
     curriculumLabel: '{{unlocked}} of {{total}} lessons',
     // L'UNICA azione primaria: verbale e concreta, mai "Continue".
@@ -52,7 +62,7 @@ export const en = {
     // è concettuale, nulla da rivedere, la pila resta a zero, non è un fallimento.
     // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
     noExercisesNotice:
-      'The lesson you just unlocked has no exercises. It is a concept to read, so nothing was added to review and the pile stays at zero.',
+      'The lesson you just unlocked is only for reading: it has no exercises, so there is nothing to review.',
     // Pila svuotata (3.16): resa SSE la pila è a zero, qualcosa è già sbloccato e
     // l'ultima sbloccata AVEVA esercizi (li hai risolti). Dichiara il perché la
     // pila è vuota — hai finito il ripasso di adesso, non un errore. Distinta da
@@ -60,19 +70,19 @@ export const en = {
     // da sbloccare). Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio
     // di lode; ASCII.
     clearedBody:
-      'Your review pile is empty. Everything due has been cleared for now, so there is nothing to review at the moment.',
+      'The pile is empty: everything is reviewed for now. Exercises come back here when it is time to see them again.',
     // Curriculum esaurito (3.16): resa SSE la pila è a zero e non c'è una lezione
     // successiva da sbloccare. Dichiara il perché non c'è azione — hai sbloccato
     // ogni lezione, non ce ne sono altre. È l'unico stato senza azione primaria.
     // Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
     curriculumCompleteBody:
-      'Every lesson is unlocked. There are no more lessons to unlock and nothing is due, so there is nothing left to do here for now.',
+      'Every lesson is unlocked and there is nothing to review. That is all for now.',
     // Primo avvio (3.15): reso SSE nulla è ancora sbloccato (unlocked === 0).
     // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
     // conteggio/streak/curriculum a zero. Copy neutra, ASCII: nessun `!`, nessuna
     // emoji, nessun avverbio di lode.
     firstRunBody:
-      'This app builds your Japanese grammar one lesson at a time. Unlock the first lesson to fill your review pile, then work through it exercise by exercise.',
+      'Here you learn Japanese grammar one lesson at a time. Unlock the first lesson: its exercises go into your review pile, and you empty it one exercise at a time.',
     // L'azione di primo avvio: significa *comincia*, distinta da unlockAction
     // («procedi» dalla pila svuotata). Verbale e concreta, mai "Continue"; nessun
     // `!`, nessuna emoji, nessun avverbio di lode.
@@ -84,13 +94,19 @@ export const en = {
     // posto del pulsante di sblocco, NESSUNA azione. Nessun conteggio da rivedere,
     // nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
     dailyLimitReachedBody:
-      'The daily unlock limit of {{limit}} has been reached for today. The limit resets at midnight, so the next lesson can be unlocked then. The limit can be changed in Settings.',
+      'The new lessons for today are all unlocked (limit: {{limit}}). The next one unlocks after midnight. The limit can be changed in Settings.',
     // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
     // della dashboard. Verbale e concreta, mai "Continue"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode; ASCII.
     viewStats: 'See your statistics',
     currentLesson: 'Lesson {{order}}: {{title}}',
     openSettings: 'Settings',
+    // La collocazione nella testata, prima della data ("Today · Tuesday 29 September").
+    today: 'Today',
+    // Il collegamento al video di riferimento della lezione in corso: apre YouTube
+    // in una scheda nuova, niente video incorporato. Nome della fonte assente di
+    // proposito: compare solo nei Riconoscimenti.
+    referenceVideo: 'Reference video',
   },
   // Le statistiche (Epic 5): la vista delle risposte nel tempo (5.1, FR7.1),
   // distribuzione per stadio (5.2), tassi d'errore per punto (5.3). Gli stati a dati
@@ -111,7 +127,7 @@ export const en = {
       heading: 'Answers over time',
       dayLabel: '{{date}} - answers: {{answers}}',
       insufficient:
-        'This chart needs at least {{needed}} days of answers. Days with answers so far: {{soFar}}.',
+        'The chart appears once you have answered on at least {{needed}} different days. Days so far: {{soFar}}.',
     },
     // Distribuzione per stadio (5.2, FR7.2): `heading` intitola la sezione;
     // `stageLabel` etichetta ogni stadio (`{{stage}}` = indice 0-5, `{{exercises}}`
@@ -122,9 +138,11 @@ export const en = {
     // numerica fabbricata). Nessuna etichetta mnemonica ne intervallo in giorni: l'AC
     // chiede «sei stadi, 0-5».
     stageDistribution: {
-      heading: 'Exercises by review stage',
-      stageLabel: 'Stage {{stage}} - exercises: {{exercises}}',
-      empty: 'This view needs at least one reviewed exercise. Review an exercise and its stage will appear here.',
+      heading: 'How well you know the exercises',
+      stageLabel: 'Level {{stage}} - exercises: {{exercises}}',
+      // Cosa sono i livelli (0-5): senza, «level 1» non dice niente.
+      hint: 'Each right answer moves an exercise up one level and brings it back later. A wrong answer sends it back to level 0.',
+      empty: 'After your first review you will see the level of each exercise here.',
     },
     // Tassi d'errore per punto grammaticale (5.3, FR7.3): `heading` intitola la
     // sezione; `entryLabel` etichetta ogni voce col tasso come TESTO (`{{errors}}` =
@@ -141,11 +159,11 @@ export const en = {
     // fabbricata). Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII (il
     // giapponese non passa da t()).
     grammarPointErrorRates: {
-      heading: 'Grammar points by error rate',
+      heading: 'The rules you miss most',
       entryLabel: 'errors: {{errors}} of {{total}}',
       lessonLabel: 'Lesson:',
-      unknownLesson: 'No lesson teaches this point anymore',
-      empty: 'This view needs at least one answer. Answer an exercise and how often you miss each rule will appear here.',
+      unknownLesson: 'No lesson teaches this rule anymore',
+      empty: 'After your first answer you will see how often you miss each rule here.',
     },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continue"/"Back" generico.
@@ -193,6 +211,13 @@ export const en = {
     // per-risposta), nessuna penalità. Nessun `!`, nessuna emoji, nessun avverbio di
     // lode; ASCII.
     exit: 'Leave the session',
+    // L'occhiello sopra il numero dell'esercizio ("QUESTION 01").
+    questionKicker: 'Question',
+    // La traduzione dei timbri dell'esito (sotto il timbro, con le traduzioni accese).
+    stampMeaning: {
+      correct: 'right',
+      incorrect: 'wrong',
+    },
     // La barra di avanzamento (3.19): l'`aria-label` che l'AT legge. Rappresenta il
     // completato; nessun conteggio interpolato (`{{count}}` innescherebbe il
     // pluralizzatore). Nessun `!`, nessuna emoji; ASCII.
@@ -230,7 +255,7 @@ export const en = {
     // innescherebbe il pluralizzatore i18next e romperebbe la parità en/it):
     // "1 per day"/"2 per day", grammaticale per ogni N. Nessun `!`, nessuna emoji.
     lessonsPerDay: {
-      label: 'Daily unlock limit',
+      label: 'New lessons per day',
       option: '{{value}} per day',
     },
   },
@@ -239,7 +264,7 @@ export const en = {
       title: 'Delete account',
       trigger: 'Delete account',
       consequence:
-        'Deleting your account destroys all of your study data. Your statistics do not survive it. This cannot be undone.',
+        'Deleting your account erases all of your study data, statistics included. This cannot be undone.',
       confirm: 'Delete permanently',
       cancel: 'Keep account',
       error: 'The account could not be deleted. Try again.',
@@ -252,7 +277,7 @@ export const en = {
   // ogni risposta. Non è un errore: nessun `!`, nessuna emoji, nessun allarme;
   // ASCII, terso.
   sync: {
-    pending: 'Sync pending',
+    pending: 'Answers not saved yet: retrying when you are online',
   },
   // La privacy policy (7.1): la pagina pubblica `/privacy` che dichiara, PRIMA
   // della registrazione, cosa il sistema memorizza, cosa NON raccoglie e come
@@ -270,11 +295,11 @@ export const en = {
       title: 'Privacy policy',
       linkLabel: 'Read the privacy policy',
       stored:
-        'This service stores only what it needs to teach you: your email, a hash of your password, which lessons you have unlocked, your review state, a log of your answers, and your preferences. Nothing else is kept.',
+        'We keep only what you need to study: your email, your password in encrypted form (nobody can read it), the lessons you unlocked, where you are with each exercise, the list of your answers, and your preferences. Nothing else.',
       notCollected:
-        'This service does not collect your name, your date of birth, or any analytics about you as an individual.',
+        'We do not collect your name, your date of birth, or any data to track you.',
       deletion:
-        'You can delete your account from Settings, through Delete account. Deletion also destroys the log of your answers, and it cannot be undone.',
+        'You can delete your account in Settings, with Delete account. The list of your answers is deleted too, and this cannot be undone.',
       back: 'Back',
     },
     // I riconoscimenti (7.2): la pagina pubblica `/riconoscimenti` che attribuisce

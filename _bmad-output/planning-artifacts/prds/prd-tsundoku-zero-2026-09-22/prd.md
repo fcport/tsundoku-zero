@@ -67,9 +67,11 @@ Regole operative, non negoziabili:
 | Insegnare il modello strutturale, con parole proprie | Riprodurre transcript, spiegazioni o frasi d'esempio originali |
 | Riconoscere Cure Dolly come origine dell'approccio, con collegamento al canale | Usare il nome nel prodotto, nel dominio o nel branding |
 | Usare i termini della **linguistica** — pronome zero, tema, soggetto, copula, ゼロ代名詞 | Riusare le sue **metafore didattiche** — il treno, il vagone, il motore, il gancio |
-| | Incorporare o rimandare ai video come contenuto dell'app |
+| Un collegamento, per lezione, al suo video di riferimento: apre YouTube in una scheda nuova (decisione dell'owner, 29-09-2026) | Incorporare i video nell'app come contenuto (player, embed, trascrizioni) |
 | Usare i transcript come **input privato** della sessione di autorazione | Versionare transcript, sottotitoli o trascrizioni nel repository |
 | Indicizzare il contenuto per punto grammaticale | Riprodurre titoli, numerazione o ordine delle lezioni della fonte |
+
+**Il collegamento al video (29-09-2026).** La prima stesura vietava anche di *rimandare* ai video. L'owner l'ha ammesso in forma ristretta: un solo link per lezione, verso il video su YouTube, senza titolo, numero o ordine della fonte accanto (il nome della fonte resta solo nei Riconoscimenti) e senza nulla di incorporato. Un link non riproduce l'opera; ciò che resta vietato è fare dell'app un indice del corso, e quello lo impedisce ancora l'ultima riga della tabella.
 
 Le ultime due righe meritano una nota, perché sono quelle su cui si sbaglia in buona fede.
 

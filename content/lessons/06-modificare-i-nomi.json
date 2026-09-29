@@ -1,26 +1,36 @@
 {
   "order": 6,
   "title": {
-    "en": "Describing a noun: predicates, な and の",
-    "it": "Descrivere un nome: predicati, な e の"
+    "en": "Describing a noun: adjectives, verbs, な and の",
+    "it": "Descrivere un nome: aggettivi, verbi, な e の"
   },
+  "video": "iyVZlaEqU24",
   "grammarPoints": ["名詞を修飾する述語", "名詞を修飾する「な」", "名詞を修飾する「の」"],
   "exercises": [
     {
       "kind": "select-span",
       "grammarPoint": "名詞を修飾する述語",
       "prompt": {
-        "en": "Which part describes the shop?",
+        "en": "Which part describes the restaurant?",
         "it": "Quale parte descrive il locale?"
       },
       "sentence": {
         "kanji": "おいしい店に行った",
         "kana": "おいしいみせにいった"
       },
+      "translation": {
+        "en": "I went to a restaurant with delicious food.",
+        "it": "Sono andato in un locale dove si mangia bene."
+      },
+      "glosses": [
+        { "text": "おいしい", "meaning": { "en": "delicious", "it": "buono, delizioso" } },
+        { "text": "店に行", "reading": "みせにい", "meaning": { "en": "to the restaurant, go", "it": "al locale, andare" } },
+        { "text": "った", "meaning": { "en": "past ending of 行く (went)", "it": "desinenza del passato di 行く (andato)" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the word that describes 店 (shop): おいしい. An い-adjective is a complete predicate on its own; placed directly before a noun, it describes that noun — \"a shop that is delicious\", a good place to eat.",
-        "it": "Seleziona la parola che descrive 店 (locale): おいしい. Un aggettivo in い è da solo un predicato completo; messo subito prima di un nome, descrive quel nome — «un locale che è buono», un posto dove si mangia bene."
+        "en": "Select おいしい (delicious). It is an い-adjective (an adjective ending in い). To describe a noun, just put it right before the noun: おいしい店, \"a restaurant with delicious food\".",
+        "it": "Seleziona おいしい (buono). È un aggettivo in い (un aggettivo che finisce in い). Per descrivere un nome basta metterlo subito prima del nome: おいしい店, «un locale dove si mangia bene»."
       }
     },
     {
@@ -34,10 +44,20 @@
         "kanji": "昨日買った傘が壊れた",
         "kana": "きのうかったかさがこわれた"
       },
+      "translation": {
+        "en": "The umbrella I bought yesterday broke.",
+        "it": "L'ombrello che ho comprato ieri si è rotto."
+      },
+      "glosses": [
+        { "text": "昨日", "reading": "きのう", "meaning": { "en": "yesterday", "it": "ieri" } },
+        { "text": "買った", "reading": "かった", "meaning": { "en": "bought (describes the umbrella)", "it": "comprato (descrive l'ombrello)" } },
+        { "text": "傘が", "reading": "かさが", "meaning": { "en": "the umbrella (what broke)", "it": "l'ombrello (cosa si è rotto)" } },
+        { "text": "壊れた", "reading": "こわれた", "meaning": { "en": "broke", "it": "si è rotto" } }
+      ],
       "answer": ["昨日", "買った", "傘が", "壊れた"],
       "explanation": {
-        "en": "A whole verb clause can describe a noun, just by standing in front of it. 昨日買った (bought yesterday) describes 傘 (umbrella): \"the umbrella I bought yesterday broke\". Japanese has no word for \"that\" or \"which\": position alone does the work.",
-        "it": "Un'intera proposizione verbale può descrivere un nome, semplicemente mettendosi davanti a esso. 昨日買った (comprato ieri) descrive 傘 (ombrello): «l'ombrello che ho comprato ieri si è rotto». Il giapponese non ha una parola per «che»: basta la posizione."
+        "en": "A verb can describe a noun too: put it right before the noun. 昨日買った傘 = \"the umbrella (I) bought yesterday\". Japanese needs no word for \"that\" or \"which\": the position is enough.",
+        "it": "Anche un verbo può descrivere un nome: basta metterlo subito prima del nome. 昨日買った傘 = «l'ombrello (che) ho comprato ieri». Il giapponese non ha bisogno di una parola per «che»: basta la posizione."
       }
     },
     {
@@ -51,6 +71,16 @@
         "kanji": "静かな町に住んでいる",
         "kana": "しずかなまちにすんでいる"
       },
+      "translation": {
+        "en": "I live in a quiet town.",
+        "it": "Vivo in una città tranquilla."
+      },
+      "glosses": [
+        { "text": "静かな", "reading": "しずかな" },
+        { "text": "静かだ", "reading": "しずかだ" },
+        { "text": "静かの", "reading": "しずかの" },
+        { "text": "静かい", "reading": "しずかい" }
+      ],
       "gap": {
         "kanji": "＿町に住んでいる",
         "kana": "＿まちにすんでいる"
@@ -58,8 +88,8 @@
       "answer": "静かな",
       "distractors": ["静かだ", "静かの", "静かい"],
       "explanation": {
-        "en": "静か (quiet) is a noun of the adjectival kind, the so-called な-adjective. At the end of a sentence it takes だ (町が静かだ); when it sits before a noun to describe it, だ becomes な: 静かな町.",
-        "it": "静か (tranquillo) è un nome di tipo aggettivale, il cosiddetto aggettivo in な. A fine frase prende だ (町が静かだ); quando sta davanti a un nome per descriverlo, だ diventa な: 静かな町."
+        "en": "静か (quiet) is a な-adjective (an adjective that needs な before a noun). At the end of a sentence it takes だ (\"is\"): 町が静かだ, \"the town is quiet\". Before a noun, だ becomes な: 静かな町, \"a quiet town\".",
+        "it": "静か (tranquillo) è un aggettivo in な (un aggettivo che vuole な davanti a un nome). A fine frase prende だ (cioè «è»): 町が静かだ, «la città è tranquilla». Davanti a un nome, だ diventa な: 静かな町, «una città tranquilla»."
       }
     },
     {
@@ -73,10 +103,19 @@
         "kanji": "有名な歌手が来た",
         "kana": "ゆうめいなかしゅがきた"
       },
+      "translation": {
+        "en": "A famous singer came.",
+        "it": "È venuto un cantante famoso."
+      },
+      "glosses": [
+        { "text": "有名な", "reading": "ゆうめいな", "meaning": { "en": "famous", "it": "famoso" } },
+        { "text": "歌手が", "reading": "かしゅが", "meaning": { "en": "a singer (the one who came)", "it": "un cantante (chi è venuto)" } },
+        { "text": "来た", "reading": "きた", "meaning": { "en": "came", "it": "è venuto" } }
+      ],
       "answer": ["有名な", "歌手が", "来た"],
       "explanation": {
-        "en": "有名 (famous) is a な-adjective: before the noun 歌手 (singer) it takes な. The phrase 有名な歌手 as a whole is then marked by が as the subject of 来た (came).",
-        "it": "有名 (famoso) è un aggettivo in な: davanti al nome 歌手 (cantante) prende な. L'intera espressione 有名な歌手 è poi marcata da が come soggetto di 来た (è venuto)."
+        "en": "有名 (famous) is a な-adjective (an adjective that needs な before a noun), so: 有名な歌手, \"a famous singer\". Then が marks who did the action, and the verb 来た (came) goes last.",
+        "it": "有名 (famoso) è un aggettivo in な (un aggettivo che vuole な davanti a un nome), quindi: 有名な歌手, «un cantante famoso». Poi が indica chi ha fatto l'azione, e il verbo 来た (è venuto) va in fondo."
       }
     },
     {
@@ -90,6 +129,15 @@
         "kanji": "木の机を買った",
         "kana": "きのつくえをかった"
       },
+      "translation": {
+        "en": "I bought a wooden desk.",
+        "it": "Ho comprato una scrivania di legno."
+      },
+      "glosses": [
+        { "text": "の" },
+        { "text": "な" },
+        { "text": "が" }
+      ],
       "gap": {
         "kanji": "木＿机を買った",
         "kana": "き＿つくえをかった"
@@ -97,8 +145,8 @@
       "answer": "の",
       "distractors": ["な", "が"],
       "explanation": {
-        "en": "木 (wood) is an ordinary noun, not a な-adjective, so it cannot take な. To let one noun describe another — its owner, its material, the kind it belongs to — Japanese uses の: 木の机, a wooden desk.",
-        "it": "木 (legno) è un nome ordinario, non un aggettivo in な, quindi non può prendere な. Per far descrivere un nome da un altro — il possessore, il materiale, il tipo a cui appartiene — il giapponese usa の: 木の机, una scrivania di legno."
+        "en": "木 (wood) is a normal noun, not an adjective, so it cannot take な. When a noun describes another noun (whose it is, what it is made of, what kind it is), Japanese puts の between them: 木の机, \"a desk of wood\".",
+        "it": "木 (legno) è un nome normale, non un aggettivo, quindi non può prendere な. Quando un nome descrive un altro nome (di chi è, di che materiale è, di che tipo è), il giapponese mette の fra i due: 木の机, «una scrivania di legno»."
       }
     },
     {
@@ -112,6 +160,15 @@
         "kanji": "日本語の先生が来た",
         "kana": "にほんごのせんせいがきた"
       },
+      "translation": {
+        "en": "The Japanese teacher came.",
+        "it": "È venuto l'insegnante di giapponese."
+      },
+      "glosses": [
+        { "text": "の" },
+        { "text": "な" },
+        { "text": "だ" }
+      ],
       "gap": {
         "kanji": "日本語＿先生が来た",
         "kana": "にほんご＿せんせいがきた"
@@ -119,8 +176,118 @@
       "answer": "の",
       "distractors": ["な", "だ"],
       "explanation": {
-        "en": "日本語の先生 is \"a teacher of Japanese\": の links the noun 日本語 to the noun 先生 and tells what kind of teacher it is. だ closes a sentence and cannot join two nouns; な belongs to the adjectival nouns only.",
-        "it": "日本語の先生 è «un insegnante di giapponese»: の collega il nome 日本語 al nome 先生 e dice di che tipo di insegnante si tratta. だ chiude una frase e non può unire due nomi; な appartiene solo ai nomi aggettivali."
+        "en": "日本語の先生 = \"teacher of Japanese\": の joins two nouns and says what kind of teacher. だ means \"is\" and goes at the end of a sentence, not between nouns. な is only for な-adjectives like 静か.",
+        "it": "日本語の先生 = «insegnante di giapponese»: の unisce due nomi e dice che tipo di insegnante è. だ vuol dire «è» e va a fine frase, non fra due nomi. な serve solo agli aggettivi in な come 静か."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞を修飾する「な」",
+      "prompt": {
+        "en": "Which part describes the flowers?",
+        "it": "Quale parte descrive i fiori?"
+      },
+      "sentence": {
+        "kanji": "きれいな花を買った",
+        "kana": "きれいなはなをかった"
+      },
+      "translation": {
+        "en": "I bought pretty flowers.",
+        "it": "Ho comprato dei bei fiori."
+      },
+      "glosses": [
+        { "text": "きれいな", "meaning": { "en": "pretty", "it": "belli" } },
+        { "text": "花を買", "reading": "はなをか", "meaning": { "en": "flowers, buy", "it": "fiori, comprare" } },
+        { "text": "った", "meaning": { "en": "past ending of 買う (bought)", "it": "desinenza del passato di 買う (comprato)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select きれいな (pretty). きれい ends in い, but it is a な-adjective (an adjective that needs な before a noun), not an い-adjective. So before 花 (flowers) it becomes きれいな.",
+        "it": "Seleziona きれいな (belli). きれい finisce in い, ma è un aggettivo in な (un aggettivo che vuole な davanti a un nome), non un aggettivo in い. Quindi davanti a 花 (fiori) diventa きれいな."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞を修飾する述語",
+      "prompt": {
+        "en": "Which part tells you which person we mean?",
+        "it": "Quale parte dice di quale persona si parla?"
+      },
+      "sentence": {
+        "kanji": "あそこにいる人は先生だ",
+        "kana": "あそこにいるひとはせんせいだ"
+      },
+      "translation": {
+        "en": "The person over there is a teacher.",
+        "it": "La persona laggiù è un insegnante."
+      },
+      "glosses": [
+        { "text": "あそこにいる", "meaning": { "en": "who is over there", "it": "che è laggiù" } },
+        { "text": "人は先生", "reading": "ひとはせんせい", "meaning": { "en": "person (the topic), teacher", "it": "persona (l'argomento), insegnante" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select あそこにいる (\"is over there\"). A verb placed right before a noun describes it: あそこにいる人 = \"the person who is over there\". At the end, だ is the word for \"is\": \"...is a teacher\".",
+        "it": "Seleziona あそこにいる («è laggiù»). Un verbo messo subito prima di un nome lo descrive: あそこにいる人 = «la persona che è laggiù». In fondo, だ è la parola per «è»: «...è un insegnante»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞を修飾する「の」",
+      "prompt": {
+        "en": "Build: \"My older sister's car is red.\"",
+        "it": "Componi: «La macchina di mia sorella maggiore è rossa.»"
+      },
+      "sentence": {
+        "kanji": "姉の車は赤い",
+        "kana": "あねのくるまはあかい"
+      },
+      "translation": {
+        "en": "My older sister's car is red.",
+        "it": "La macchina di mia sorella maggiore è rossa."
+      },
+      "glosses": [
+        { "text": "姉の", "reading": "あねの", "meaning": { "en": "my older sister's", "it": "di mia sorella maggiore" } },
+        { "text": "車は", "reading": "くるまは", "meaning": { "en": "the car (the topic)", "it": "la macchina (l'argomento)" } },
+        { "text": "赤い", "reading": "あかい", "meaning": { "en": "is red", "it": "è rossa" } }
+      ],
+      "answer": ["姉の", "車は", "赤い"],
+      "explanation": {
+        "en": "姉の車 = \"my older sister's car\": の goes after the owner, and the owner comes before the thing. Then は marks what we talk about, and 赤い (red) closes the sentence: an い-adjective alone already means \"is red\".",
+        "it": "姉の車 = «la macchina di mia sorella maggiore»: の va dopo chi possiede, e chi possiede viene prima della cosa. Poi は indica di cosa si parla, e 赤い (rosso) chiude la frase: un aggettivo in い da solo significa già «è rosso»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞を修飾する述語",
+      "prompt": {
+        "en": "\"I bought new clothes.\" Which form of 新しい goes before 服?",
+        "it": "«Ho comprato dei vestiti nuovi.» Quale forma di 新しい va davanti a 服?"
+      },
+      "sentence": {
+        "kanji": "新しい服を買った",
+        "kana": "あたらしいふくをかった"
+      },
+      "translation": {
+        "en": "I bought new clothes.",
+        "it": "Ho comprato dei vestiti nuovi."
+      },
+      "glosses": [
+        { "text": "新しい", "reading": "あたらしい" },
+        { "text": "新しいな", "reading": "あたらしいな" },
+        { "text": "新しいの", "reading": "あたらしいの" },
+        { "text": "新しいだ", "reading": "あたらしいだ" }
+      ],
+      "gap": {
+        "kanji": "＿服を買った",
+        "kana": "＿ふくをかった"
+      },
+      "answer": "新しい",
+      "distractors": ["新しいな", "新しいの", "新しいだ"],
+      "explanation": {
+        "en": "新しい (new) is an い-adjective (an adjective ending in い). It goes straight before the noun, with nothing in between: 新しい服, \"new clothes\". な is only for な-adjectives, and の only joins two nouns.",
+        "it": "新しい (nuovo) è un aggettivo in い (un aggettivo che finisce in い). Va direttamente davanti al nome, senza niente in mezzo: 新しい服, «vestiti nuovi». な serve solo agli aggettivi in な, e の unisce solo due nomi."
       }
     }
   ]

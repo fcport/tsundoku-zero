@@ -235,6 +235,29 @@ describe('validateLessons — unicità di order (d)', () => {
   });
 });
 
+describe('validateLessons — unicità del video (g)', () => {
+  it('due lezioni con lo STESSO video ⇒ issue sul path video che NOMINA i due file', () => {
+    const a = { ...validLesson, order: 1, video: 'pSvH9vH60Ig', grammarPoints: ['punto-a', '〜を読む'] };
+    const b = { ...validLesson, order: 2, video: 'pSvH9vH60Ig', grammarPoints: ['punto-b', '〜を読む'] };
+    const issues = validateLessons([file('a.json', a), file('b.json', b)]);
+    const dup = issues.filter((i) => i.message.includes('video duplicato'));
+    expect(dup).toHaveLength(1);
+    expect(dup[0].path.join('.')).toBe('video');
+    expect(dup[0].message).toContain('a.json');
+    expect(dup[0].message).toContain('b.json');
+  });
+
+  it('video DIVERSI, o assenti su più lezioni ⇒ nessun issue di video', () => {
+    const a = { ...validLesson, order: 1, video: 'pSvH9vH60Ig', grammarPoints: ['punto-a', '〜を読む'] };
+    const b = { ...validLesson, order: 2, video: 'P3n8n0u3LHA', grammarPoints: ['punto-b', '〜を読む'] };
+    const c = { ...validLesson, order: 3, grammarPoints: ['punto-c', '〜を読む'] };
+    const d = { ...validLesson, order: 4, grammarPoints: ['punto-d', '〜を読む'] };
+    // Gli esercizi condivisi collidono su exerciseId: qui conta solo il video.
+    const issues = validateLessons([file('a.json', a), file('b.json', b), file('c.json', c), file('d.json', d)]);
+    expect(issues.some((i) => i.message.includes('video duplicato'))).toBe(false);
+  });
+});
+
 describe('validateLessons — coerenza del punto grammaticale (e)', () => {
   it('esercizio con un punto NON dichiarato ⇒ issue sul path exercises.<i>.grammarPoint', () => {
     // FR7.3 aggrega le statistiche per punto grammaticale: un esercizio che porta

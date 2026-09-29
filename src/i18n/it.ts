@@ -4,8 +4,16 @@
 // giapponese è dato, non passa da t().
 export const it = {
   app: {
-    tagline: 'Un generatore di esercizi di grammatica giapponese',
+    tagline: 'Esercizi di grammatica giapponese, una lezione alla volta',
     name: 'Tsundoku Zero',
+    // L'interruttore rapido della furigana, scritto in verticale sul dorso di ogni
+    // schermata: una parola sola, uguale nelle due lingue.
+    furiganaToggle: 'Furigana',
+    // Il secondo interruttore del dorso: la traduzione sotto il giapponese.
+    translationsToggle: 'Traduzioni',
+    // La traduzione del marchio 積ん読ゼロ, sotto il marchio quando le traduzioni
+    // sono accese.
+    brandMeaning: 'La pila di libri non letti, a zero',
   },
   auth: {
     title: 'Registrazione',
@@ -30,10 +38,15 @@ export const it = {
     // ("23 da rivedere"), mai "hai 23". Nessun `!`, nessuna emoji, nessun
     // avverbio di lode (nessuna grammatica della celebrazione).
     dueLabel: 'da rivedere',
-    // Streak: i giorni PRECEDONO il sostantivo ("7 giorni di fila"), neutro. La
+    // Streak: forma etichetta-valore ("Giorni di fila: 7"), come `entryLabel` delle
+    // statistiche: nessuna concordanza di numero, quindi niente «1 giorni». La
     // variabile è `days` (non `count`), per non innescare il pluralizzatore di
     // i18next che richiederebbe chiavi `_one`/`_other` fuori dalla parità.
-    streakLabel: '{{days}} giorni di fila',
+    streakLabel: 'Giorni di fila: {{days}}',
+    // Gli occhielli della rivista sopra i due dati (streak e curriculum): parole
+    // sole, senza numero, quindi senza concordanza.
+    streakKicker: 'Di fila',
+    curriculumKicker: 'Curriculum',
     // Progresso del curriculum: sbloccate su totale.
     curriculumLabel: '{{unlocked}} di {{total}} lezioni',
     // L'UNICA azione primaria: verbale e concreta, mai "Continua".
@@ -46,7 +59,7 @@ export const it = {
     // è concettuale, nulla da rivedere, la pila resta a zero, non è un fallimento.
     // Nessun `!`, nessuna emoji, nessun avverbio di lode, nessun verde/rosso.
     noExercisesNotice:
-      'La lezione appena sbloccata non ha esercizi. È un concetto da leggere, quindi non è stato aggiunto nulla da rivedere e la pila resta a zero.',
+      'La lezione appena sbloccata è solo da leggere: non ha esercizi, quindi non resta niente da ripassare.',
     // Pila svuotata (3.16): resa SSE la pila è a zero, qualcosa è già sbloccato e
     // l'ultima sbloccata AVEVA esercizi (li hai risolti). Dichiara il perché la
     // pila è vuota — hai finito il ripasso di adesso, non un errore. Distinta da
@@ -54,19 +67,19 @@ export const it = {
     // da sbloccare). Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio
     // di lode.
     clearedBody:
-      'La pila di ripasso è vuota. Tutto quello che era dovuto è stato completato per ora, quindi non resta nulla da rivedere al momento.',
+      'La pila è vuota: per ora è tutto ripassato. Gli esercizi tornano qui quando è il momento di rivederli.',
     // Curriculum esaurito (3.16): resa SSE la pila è a zero e non c'è una lezione
     // successiva da sbloccare. Dichiara il perché non c'è azione — hai sbloccato
     // ogni lezione, non ce ne sono altre. È l'unico stato senza azione primaria.
     // Nessun conteggio, nessun `!`, nessuna emoji, nessun avverbio di lode.
     curriculumCompleteBody:
-      'Ogni lezione è sbloccata. Non ci sono altre lezioni da sbloccare e nulla risulta dovuto, quindi per ora non resta altro da fare qui.',
+      'Tutte le lezioni sono sbloccate e non resta niente da ripassare. Per ora è tutto.',
     // Primo avvio (3.15): reso SSE nulla è ancora sbloccato (unlocked === 0).
     // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
     // conteggio/streak/curriculum a zero. Copy neutra: nessun `!`, nessuna emoji,
     // nessun avverbio di lode.
     firstRunBody:
-      'Questa app costruisce la tua grammatica giapponese una lezione per volta. Sblocca la prima lezione per riempire la pila di ripasso, poi affrontala esercizio per esercizio.',
+      'Qui impari la grammatica giapponese una lezione alla volta. Sblocca la prima lezione: i suoi esercizi finiscono nella pila da ripassare, e tu la svuoti un esercizio alla volta.',
     // L'azione di primo avvio: significa *comincia*, distinta da unlockAction
     // («procedi» dalla pila svuotata). Verbale e concreta, mai "Continua"; nessun
     // `!`, nessuna emoji, nessun avverbio di lode.
@@ -78,13 +91,19 @@ export const it = {
     // posto del pulsante di sblocco, NESSUNA azione. Nessun conteggio da rivedere,
     // nessun `!`, nessuna emoji, nessun avverbio di lode.
     dailyLimitReachedBody:
-      'Il tetto giornaliero di sblocco di {{limit}} è stato raggiunto per oggi. Il tetto si azzera a mezzanotte, quindi la lezione successiva si potrà sbloccare allora. Il tetto si cambia dalle Impostazioni.',
+      'Le lezioni nuove di oggi sono tutte sbloccate (massimo: {{limit}}). La prossima si sblocca da mezzanotte. Il limite si cambia nelle Impostazioni.',
     // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
     // della dashboard. Verbale e concreta, mai "Continua"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode.
     viewStats: 'Vedi le tue statistiche',
     currentLesson: 'Lezione {{order}}: {{title}}',
     openSettings: 'Impostazioni',
+    // La collocazione nella testata, prima della data ("Oggi · martedì 29 settembre").
+    today: 'Oggi',
+    // Il collegamento al video di riferimento della lezione in corso: apre YouTube
+    // in una scheda nuova, niente video incorporato. Nome della fonte assente di
+    // proposito: compare solo nei Riconoscimenti.
+    referenceVideo: 'Video di riferimento',
   },
   // Le statistiche (Epic 5): STESSE chiavi di `en` (parità ricorsiva). Gli stati a
   // dati insufficienti DICHIARANO «cosa manca e quanto» (5.4, FR7.5): il grafico
@@ -102,7 +121,7 @@ export const it = {
       heading: 'Risposte nel tempo',
       dayLabel: '{{date}} - risposte: {{answers}}',
       insufficient:
-        'Servono almeno {{needed}} giorni di risposte per disegnare questo grafico. Giorni con risposte finora: {{soFar}}.',
+        'Il grafico compare quando avrai risposto in almeno {{needed}} giorni diversi. Giorni finora: {{soFar}}.',
     },
     // Distribuzione per stadio (5.2, FR7.2): STESSE chiavi di `en` (parita
     // ricorsiva). `heading` intitola la sezione; `stageLabel` etichetta ogni stadio
@@ -112,9 +131,11 @@ export const it = {
     // qualunque dato, quindi il minimo onesto e «almeno un esercizio ripassato».
     // Nessuna etichetta mnemonica ne intervallo in giorni: l'AC chiede «sei stadi, 0-5».
     stageDistribution: {
-      heading: 'Esercizi per stadio di ripasso',
-      stageLabel: 'Stadio {{stage}} - esercizi: {{exercises}}',
-      empty: 'Questa vista ha bisogno di almeno un esercizio ripassato. Ripassa un esercizio e il suo stadio comparira qui.',
+      heading: 'Quanto conosci gli esercizi',
+      stageLabel: 'Livello {{stage}} - esercizi: {{exercises}}',
+      // Cosa sono i livelli (0-5): senza, «livello 1» non dice niente.
+      hint: 'Ogni risposta giusta fa salire l\'esercizio di un livello, e lo fa tornare più avanti nel tempo. Una risposta sbagliata lo riporta al livello 0.',
+      empty: 'Qui vedrai a che livello è ogni esercizio, dopo il primo ripasso.',
     },
     // Tassi d'errore per punto grammaticale (5.3, FR7.3): STESSE chiavi di `en`
     // (parita ricorsiva). `heading` intitola la sezione; `entryLabel` etichetta ogni
@@ -128,11 +149,11 @@ export const it = {
     // meaningful con qualunque dato, quindi il minimo onesto e «almeno una risposta».
     // Nessun `!`, nessuna emoji, nessun avverbio di lode.
     grammarPointErrorRates: {
-      heading: 'Punti grammaticali per tasso di errore',
+      heading: 'Le regole su cui sbagli di più',
       entryLabel: 'errori: {{errors}} su {{total}}',
       lessonLabel: 'Lezione:',
-      unknownLesson: 'Nessuna lezione insegna piu questo punto',
-      empty: 'Questa vista ha bisogno di almeno una risposta. Rispondi a un esercizio e quanto spesso sbagli ogni regola comparira qui.',
+      unknownLesson: 'Nessuna lezione insegna più questa regola',
+      empty: 'Qui vedrai quanto spesso sbagli ogni regola, dopo la prima risposta.',
     },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continua"/"Indietro" generico.
@@ -184,6 +205,13 @@ export const it = {
     // per-risposta), nessuna penalità. Nessun `!`, nessuna emoji, nessun avverbio di
     // lode.
     exit: 'Esci dalla sessione',
+    // L'occhiello sopra il numero dell'esercizio ("DOMANDA 01").
+    questionKicker: 'Domanda',
+    // La traduzione dei timbri dell'esito (sotto il timbro, con le traduzioni accese).
+    stampMeaning: {
+      correct: 'giusto',
+      incorrect: 'sbagliato',
+    },
     // La barra di avanzamento (3.19): l'`aria-label` che l'AT legge. Rappresenta il
     // completato; nessun conteggio interpolato (`{{count}}` innescherebbe il
     // pluralizzatore). Nessun `!`, nessuna emoji.
@@ -204,7 +232,7 @@ export const it = {
     // mai "Continua". Nessun `!`, nessuna emoji, nessun avverbio di lode.
     complete: {
       body: 'La pila di ripasso è a zero. Hai completato ogni esercizio di questa sessione.',
-      streakLabel: '{{days}} giorni di fila',
+      streakLabel: 'Giorni di fila: {{days}}',
       dismiss: 'Torna alla dashboard',
     },
   },
@@ -221,7 +249,7 @@ export const it = {
     // innescherebbe il pluralizzatore i18next e romperebbe la parità en/it):
     // "1 al giorno"/"2 al giorno", grammaticale per ogni N. Nessun `!`, nessuna emoji.
     lessonsPerDay: {
-      label: 'Tetto di sblocco giornaliero',
+      label: 'Lezioni nuove al giorno',
       option: '{{value}} al giorno',
     },
   },
@@ -230,7 +258,7 @@ export const it = {
       title: 'Cancella account',
       trigger: 'Cancella account',
       consequence:
-        'Cancellare il tuo account distrugge tutti i tuoi dati di studio. Le tue statistiche non sopravvivono. Questa azione non si può annullare.',
+        'Cancellando l\'account perdi tutti i tuoi dati di studio, statistiche comprese. Non si può annullare.',
       confirm: 'Cancella definitivamente',
       cancel: 'Mantieni account',
       error: "L'account non è stato cancellato. Riprova.",
@@ -241,7 +269,7 @@ export const it = {
   // risposte non ancora sincronizzate. Non è un errore: nessun `!`, nessuna
   // emoji, nessun allarme.
   sync: {
-    pending: 'Sincronizzazione in sospeso',
+    pending: 'Risposte non ancora salvate: riprovo appena c\'è rete',
   },
   // La privacy policy (7.1): STESSE chiavi di `en` (parità ricorsiva). Dichiara
   // cosa il sistema memorizza, cosa NON raccoglie e come cancellare l'account.
@@ -256,11 +284,11 @@ export const it = {
       title: 'Informativa sulla privacy',
       linkLabel: "Leggi l'informativa sulla privacy",
       stored:
-        "Questo servizio memorizza soltanto ciò che gli serve per insegnarti: la tua email, un hash della tua password, le lezioni che hai sbloccato, il tuo stato di revisione, un log delle tue risposte e le tue preferenze. Nient'altro viene conservato.",
+        "Conserviamo solo ciò che serve per farti studiare: la tua email, la password in forma cifrata (nessuno può leggerla), le lezioni che hai sbloccato, a che punto sei con ogni esercizio, la lista delle tue risposte e le tue preferenze. Nient'altro.",
       notCollected:
-        'Questo servizio non raccoglie il tuo nome, la tua data di nascita, né alcuna analitica su di te come individuo.',
+        'Non raccogliamo il tuo nome, la tua data di nascita né dati per tracciarti.',
       deletion:
-        'Puoi cancellare il tuo account dalle Impostazioni, tramite Cancella account. La cancellazione distrugge anche il log delle tue risposte, e non si può annullare.',
+        'Puoi cancellare il tuo account dalle Impostazioni, con Cancella account. Si cancella anche la lista delle tue risposte, e non si può annullare.',
       back: 'Indietro',
     },
     // I riconoscimenti (7.2): STESSE chiavi di `en` (parità ricorsiva). Attribuisce

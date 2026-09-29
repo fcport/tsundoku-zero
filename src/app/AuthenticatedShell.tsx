@@ -26,13 +26,20 @@
 // così la feature del precarico non importa react-router né `src/data`. Una
 // guardia di re-entrancy (`useRef`) evita precarichi sovrapposti su doppio click;
 // la navigazione avviene SEMPRE dopo (anche su errore: degrado grazioso).
+//
+// Direzione «rivista» (29-09-2026): la shell è la CORNICE — il dorso verticale col
+// marchio (l'<h1> della pagina) e la testata con la data di oggi a sinistra e le
+// due azioni di servizio a destra. La dashboard vi compone il proprio <main>.
 import { useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from '../i18n';
+import { resolveLocale, useTranslation } from '../i18n';
 import { DashboardScreen } from '../features/dashboard/DashboardScreen';
 import { usePorts } from '../features/ports/PortsContext';
 import { prefetchDueStack } from '../features/study/prefetchDueStack';
+import { MagazineFrame } from '../ui/MagazineFrame';
+import { Masthead } from '../ui/Masthead';
+import { FOCUS_RING } from '../ui/magazine';
 import { SETTINGS_PATH, STATS_PATH, STUDY_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
@@ -52,9 +59,15 @@ export function AuthenticatedShell({
   onSignOut,
   signOutPending,
 }: AuthenticatedShellProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { review, content, clock } = usePorts();
+  // La data della testata, nella lingua dell'interfaccia e nel fuso del Clock
+  // iniettato (mai l'orologio del browser letto qui).
+  const today = new Intl.DateTimeFormat(
+    resolveLocale(i18n.language) === 'it' ? 'it-IT' : 'en-GB',
+    { weekday: 'long', day: 'numeric', month: 'long', timeZone: clock.timeZone() },
+  ).format(clock.now());
   const queryClient = useQueryClient();
 
   // Guardia di re-entrancy (4.1): un ref (non stato — nessun re-render) impedisce
@@ -78,38 +91,44 @@ export function AuthenticatedShell({
   // `['streak', userId]` già seminata dalla dashboard stessa.
   const onViewStats = () => navigate(STATS_PATH);
 
+  // Le azioni di servizio della testata: testo maiuscolo, nessun riempimento,
+  // bersaglio alto 44px. Chiaramente non la barra d'azione della dashboard.
+  const serviceAction = `min-h-[44px] px-2 uppercase hover:underline ${FOCUS_RING}`;
+
   return (
-    <>
-      {/* Intestazione: il nome dell'app (prima mancava del tutto) e le due azioni di
-          servizio, le impostazioni ora su una pagina propria. */}
-      <header className="flex items-center justify-between gap-3 p-4 sm:p-6">
-        <h1 className="text-label font-semibold text-ink-primary">
-          <span lang="ja">積ん読ゼロ</span> · {t('app.name')}
-        </h1>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => navigate(SETTINGS_PATH)}
-            className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
-          >
-            {t('dashboard.openSettings')}
-          </button>
-          <button
-            type="button"
-            onClick={onSignOut}
-            disabled={signOutPending}
-            className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label"
-          >
-            {t('auth.signOut')}
-          </button>
-        </div>
-      </header>
+    <MagazineFrame brandAsHeading furiganaToggle>
+      <Masthead
+        start={
+          <span>
+            {t('dashboard.today')} · {today}
+          </span>
+        }
+        end={
+          <>
+            <button
+              type="button"
+              onClick={() => navigate(SETTINGS_PATH)}
+              className={serviceAction}
+            >
+              {t('dashboard.openSettings')}
+            </button>
+            <button
+              type="button"
+              onClick={onSignOut}
+              disabled={signOutPending}
+              className={serviceAction}
+            >
+              {t('auth.signOut')}
+            </button>
+          </>
+        }
+      />
       <DashboardScreen
         userId={userId}
         settings={settings}
         onStartSession={onStartSession}
         onViewStats={onViewStats}
       />
-    </>
+    </MagazineFrame>
   );
 }

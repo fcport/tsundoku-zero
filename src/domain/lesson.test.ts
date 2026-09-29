@@ -124,6 +124,46 @@ describe('parseLesson — malformati con path localizzato (AC2)', () => {
   });
 });
 
+describe('parseLesson — il video YouTube di riferimento (facoltativo)', () => {
+  it('accetta un id video valido e lo conserva', () => {
+    const result = parseLesson({ ...validLesson, video: 'dwcTI9qvO-U' });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.video).toBe('dwcTI9qvO-U');
+    }
+  });
+
+  it('accetta la lezione SENZA video — la chiave resta assente', () => {
+    const result = parseLesson(validLesson);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect('video' in result.value).toBe(false);
+    }
+  });
+
+  it.each([
+    ['un URL intero', 'https://www.youtube.com/watch?v=dwcTI9qvO-U'],
+    ['un id troppo corto', 'dwcTI9qvO-'],
+    ['un id troppo lungo', 'dwcTI9qvO-UU'],
+    ['un carattere fuori alfabeto', 'dwcTI9qvO+U'],
+    ['la stringa vuota', ''],
+  ])('rifiuta %s col path video', (_label, video) => {
+    const bad = parseLesson({ ...validLesson, video });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.some((i) => i.path.join('.') === 'video')).toBe(true);
+    }
+  });
+
+  it('rifiuta un video non stringa col path video', () => {
+    const bad = parseLesson({ ...validLesson, video: 12345678901 });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.issues.some((i) => i.path.join('.') === 'video')).toBe(true);
+    }
+  });
+});
+
 describe('FR2.4 — una lezione può non avere esercizi', () => {
   // Una lezione che riorienta il pensiero, senza risposta giusta: zero esercizi,
   // ma dichiara comunque il punto grammaticale che insegna (AC1 + AC2). Contenuto

@@ -58,6 +58,9 @@ import { currentExerciseId, remainingCount } from '../../domain/session';
 import { streak } from '../../domain/streak';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { MagazineFrame } from '../../ui/MagazineFrame';
+import { ACTION_BAR, KICKER } from '../../ui/magazine';
+import { ArrowIcon } from '../../ui/icons';
 import { usePorts } from '../ports/PortsContext';
 import { exercisesQueryKey } from './exercisesQueryKey';
 import {
@@ -66,6 +69,7 @@ import {
   type ReviewMutationVars,
 } from './reviewMutation';
 import { useSessionStore } from './sessionStore';
+import { useFuriganaPreference, usePreferenceShown } from '../../ui/furiganaPreference';
 import { ExerciseCard } from './ExerciseCard';
 import { ProgressMeter } from './ProgressMeter';
 
@@ -107,10 +111,9 @@ const MAIN_CLASS = `${CONTAINER_HEIGHT} ${RESPONSIVE_CONTAINER} flex flex-col it
 // ANELLO DI FOCUS visibile (3.22, AC5): una sola definizione condivisa dagli
 // interattivi della SESSIONE (qui: «prossimo esercizio», «esci»; la card riusa lo
 // stesso token). `focus-visible:` mostra l'anello solo per navigazione da tastiera,
-// non al click. Il token è `focus-ring` (in scuro `accent-dark`, che porta lo stesso
-// valore di focus-ring-dark, cfr. `theme.css`). Nessun colore letterale (UX-DR1).
+// non al click. Il token è `focus-ring`. Nessun colore letterale (UX-DR1).
 const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
 
 // Riconosce un target INTERATTIVO nativo (`<button>`/`<a>`/input/textarea/select o
 // qualunque nodo `contenteditable`): sul quale `Enter` attiva GIÀ il controllo nativo
@@ -122,7 +125,18 @@ function isInteractiveTarget(target: EventTarget | null): boolean {
   return ['BUTTON', 'A', 'INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
 }
 
-export function SessionScreen({ userId, onExit }: SessionScreenProps) {
+// La CORNICE della rivista (29-09-2026): il dorso col marchio attorno a OGNI stato
+// della sessione (scheletro, card, completamento, vuoto), così la pagina non cambia
+// forma fra un esercizio e l'altro. Il <main> resta quello del contenuto.
+export function SessionScreen(props: SessionScreenProps) {
+  return (
+    <MagazineFrame furiganaToggle>
+      <SessionContent {...props} />
+    </MagazineFrame>
+  );
+}
+
+function SessionContent({ userId, onExit }: SessionScreenProps) {
   const { content, review, clock } = usePorts();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
@@ -135,6 +149,9 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
   // letture pure (`currentExerciseId`/`remainingCount`) rendono in SSR come vuole la
   // spec. Le azioni (`start`/`dispatch`) sono stabili.
   useSessionStore((s) => s.session);
+  // La preferenza rapida «mostra la furigana» (hook top-level, prima di ogni
+  // early-return): l'interruttore vive sul dorso della cornice, qui la si legge.
+  const showFurigana = usePreferenceShown(useFuriganaPreference);
   const { session, total, initialIds } = useSessionStore.getState();
   const startSession = useSessionStore.getState().start;
   const dispatch = useSessionStore.getState().dispatch;
@@ -416,8 +433,18 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
     if (sessionComplete) {
       return (
         <main className={MAIN_CLASS}>
+          {/* Lo ZERO del nome, a tutta pagina: la pila è a zero. Decorativo
+              (`aria-hidden`): la conferma la porta il testo subito sotto. */}
+          <p
+            aria-hidden="true"
+            className="self-start text-[200px] font-black leading-[0.8] font-stretch-extra-condensed text-ink-primary sm:text-[260px]"
+          >
+            0
+          </p>
           {/* La conferma sobria di aver finito (AC1/AC2): nessun `!`, nessun verde. */}
-          <p className="text-body text-ink-primary">{t('session.complete.body')}</p>
+          <p className="w-full border-t-[1.5px] border-border-strong pt-4 text-[22px] font-medium leading-snug text-ink-primary">
+            {t('session.complete.body')}
+          </p>
           {/* Lo streak AGGIORNATO (AC1/AC3): il numero dalla funzione PURA `streak`
               sul log fresco, ancorato a mezzanotte del fuso INIETTATO. Finché il log
               carica (cache fredda), un placeholder alla stessa altezza, nessuno
@@ -434,12 +461,9 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
           {/* L'affordance di ritorno alla dashboard (AC2): riusa `onExit` (già cablata
               a `ROOT_PATH` dalla 3.20). SECONDARIA — chiaramente non il button-primary
               (nessun fill, ink muto, nessun verde). Mai "Continua". */}
-          <button
-            type="button"
-            onClick={onExit}
-            className="min-h-[56px] rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 text-body"
-          >
-            {t('session.complete.dismiss')}
+          <button type="button" onClick={onExit} className={ACTION_BAR}>
+            <span>{t('session.complete.dismiss')}</span>
+            <ArrowIcon className="text-accent-on-ink" />
           </button>
         </main>
       );
@@ -476,6 +500,21 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
           contenuto in basso (zona del pollice): senza, la barra galleggiava a metà
           schermo e saltava su e giù a ogni esercizio, secondo l'altezza della card. */}
       <div className="mb-auto w-full sm:mb-0">
+        {/* L'intestazione della domanda, da rivista: l'occhiello e il numero
+            dell'esercizio in corso, enorme e condensato, poi la barra. Il numero è
+            decorativo (`aria-hidden`): l'avanzamento per l'AT lo portano la barra
+            (`role="progressbar"`) e la live region. */}
+        <div className="mb-3 flex items-end justify-between">
+          <p aria-hidden="true" className="leading-none">
+            <span className={`block ${KICKER}`}>{t('session.questionKicker')}</span>
+            <span className="text-[64px] font-black leading-[0.85] font-stretch-extra-condensed text-ink-primary">
+              {String(Math.max(1, Math.min(answered ? completed : completed + 1, total))).padStart(2, '0')}
+            </span>
+          </p>
+          <p aria-hidden="true" className="font-mono text-label-caps text-ink-secondary">
+            {completed}/{total}
+          </p>
+        </div>
         <ProgressMeter completed={completed} total={total} />
       </div>
       <ExerciseCard
@@ -487,16 +526,14 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
         revealed={usedExplanation}
         correct={answeredCorrect}
         locale={locale}
+        furigana={showFurigana}
       />
       {/* L'azione «prossimo esercizio» (mai "Continua"), visibile in spiegazione.
           Anello di focus visibile (3.22, AC5). */}
       {answered && (
-        <button
-          type="button"
-          onClick={onNext}
-          className={`min-h-[56px] rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 text-body ${FOCUS_RING}`}
-        >
-          {t('session.next')}
+        <button type="button" onClick={onNext} className={ACTION_BAR}>
+          <span>{t('session.next')}</span>
+          <ArrowIcon className="text-accent-on-ink" />
         </button>
       )}
       {/* L'affordance «esci» in-app (AC2, «potersene andare»): verbale e concreta,
@@ -507,7 +544,7 @@ export function SessionScreen({ userId, onExit }: SessionScreenProps) {
       <button
         type="button"
         onClick={onExit}
-        className={`text-caption text-ink-muted underline ${FOCUS_RING}`}
+        className={`min-h-[44px] text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
       >
         {t('session.exit')}
       </button>

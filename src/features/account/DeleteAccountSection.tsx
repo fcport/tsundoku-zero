@@ -41,9 +41,12 @@ export function DeleteAccountSection({
   return (
     <section
       aria-labelledby="account-delete-title"
-      className="flex flex-col gap-6 p-6"
+      className="flex flex-col gap-5 border-t-[3px] border-danger pt-5"
     >
-      <h2 id="account-delete-title" className="text-display">
+      <h2
+        id="account-delete-title"
+        className="text-[36px] font-extrabold uppercase leading-none font-stretch-condensed text-danger"
+      >
         {t('account.delete.title')}
       </h2>
       <DeleteAccountConfirm

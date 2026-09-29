@@ -1,22 +1,33 @@
 {
   "order": 12,
   "title": {
-    "en": "The potential form and できる",
-    "it": "La forma potenziale e できる"
+    "en": "The potential form (\"can do\") and できる",
+    "it": "La forma potenziale («posso fare») e できる"
   },
+  "video": "qcOhHmU0znI",
   "grammarPoints": ["可能形", "不規則動詞の可能形", "可能形と「が」"],
   "exercises": [
     {
       "kind": "single-select",
       "grammarPoint": "可能形",
       "prompt": {
-        "en": "\"You can swim in this river.\" What is the potential of 泳ぐ?",
-        "it": "«In questo fiume si può nuotare.» Qual è il potenziale di 泳ぐ?"
+        "en": "\"You can swim in this river.\" What is the potential form of 泳ぐ?",
+        "it": "«In questo fiume si può nuotare.» Qual è la forma potenziale di 泳ぐ?"
       },
       "sentence": {
         "kanji": "この川で泳げる",
         "kana": "このかわでおよげる"
       },
+      "translation": {
+        "en": "You can swim in this river.",
+        "it": "In questo fiume si può nuotare."
+      },
+      "glosses": [
+        { "text": "泳げる", "reading": "およげる" },
+        { "text": "泳げられる", "reading": "およげられる" },
+        { "text": "泳ぐれる", "reading": "およぐれる" },
+        { "text": "泳ぎる", "reading": "およぎる" }
+      ],
       "gap": {
         "kanji": "この川で＿",
         "kana": "このかわで＿"
@@ -24,21 +35,31 @@
       "answer": "泳げる",
       "distractors": ["泳ぎる", "泳ぐれる", "泳げられる"],
       "explanation": {
-        "en": "A godan verb forms the potential by moving its final kana to the e-row and adding る: 泳ぐ → 泳げ + る, \"can swim\". The result is an ordinary ichidan verb.",
-        "it": "Un verbo godan forma il potenziale spostando l'ultimo kana alla riga in e e aggiungendo る: 泳ぐ → 泳げ + る, «si può nuotare». Il risultato è un normale verbo ichidan."
+        "en": "The potential form is the verb form that means \"can do\": 泳げる = \"can swim\". 泳ぐ is a godan verb (a verb whose last kana changes, like 書く, 読む): the final u-sound becomes an e-sound, ぐ → げ, and る is added. The new verb 泳げる then works like 食べる.",
+        "it": "La forma potenziale è la forma del verbo che dice «posso fare»: 泳げる = «si può nuotare». 泳ぐ è un verbo godan (un verbo il cui ultimo kana cambia, come 書く, 読む): il suono finale in u diventa in e, ぐ → げ, e si aggiunge る. Il nuovo verbo 泳げる poi si comporta come 食べる."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "可能形",
       "prompt": {
-        "en": "\"This fish can be eaten raw.\" What is the potential of 食べる?",
-        "it": "«Questo pesce si può mangiare crudo.» Qual è il potenziale di 食べる?"
+        "en": "\"This fish can be eaten raw.\" What is the potential form of 食べる?",
+        "it": "«Questo pesce si può mangiare crudo.» Qual è la forma potenziale di 食べる?"
       },
       "sentence": {
         "kanji": "この魚は生で食べられる",
         "kana": "このさかなはなまでたべられる"
       },
+      "translation": {
+        "en": "This fish can be eaten raw.",
+        "it": "Questo pesce si può mangiare crudo."
+      },
+      "glosses": [
+        { "text": "食べられる", "reading": "たべられる" },
+        { "text": "食べされる", "reading": "たべされる" },
+        { "text": "食べらる", "reading": "たべらる" },
+        { "text": "食べえる", "reading": "たべえる" }
+      ],
       "gap": {
         "kanji": "この魚は生で＿",
         "kana": "このさかなはなまで＿"
@@ -46,20 +67,24 @@
       "answer": "食べられる",
       "distractors": ["食べえる", "食べらる", "食べされる"],
       "explanation": {
-        "en": "An ichidan verb removes る and adds られる: 食べる → 食べられる, \"can be eaten\". In casual speech you will also hear 食べれる, but 食べられる is the standard form.",
-        "it": "Un verbo ichidan toglie る e aggiunge られる: 食べる → 食べられる, «si può mangiare». Nel parlato informale si sente anche 食べれる, ma 食べられる è la forma standard."
+        "en": "The potential form means \"can do\". 食べる is an ichidan verb (a verb ending in -eru or -iru that simply drops る, like 見る, 寝る): remove る and add られる, 食べられる, \"can be eaten\". In casual speech you also hear 食べれる, but 食べられる is the standard form.",
+        "it": "La forma potenziale dice «posso fare». 食べる è un verbo ichidan (un verbo in -eru o -iru che perde semplicemente る, come 見る, 寝る): si toglie る e si aggiunge られる, 食べられる, «si può mangiare». Nel parlato informale si sente anche 食べれる, ma la forma standard è 食べられる."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "不規則動詞の可能形",
       "prompt": {
-        "en": "\"My older brother can speak Chinese.\" What is the potential of する?",
-        "it": "«Mio fratello maggiore sa il cinese.» Qual è il potenziale di する?"
+        "en": "\"My older brother can speak Chinese.\" What is the potential form of する (\"do\")?",
+        "it": "«Mio fratello maggiore sa il cinese.» Qual è la forma potenziale di する («fare»)?"
       },
       "sentence": {
         "kanji": "兄は中国語ができる",
         "kana": "あにはちゅうごくごができる"
+      },
+      "translation": {
+        "en": "My older brother can speak Chinese.",
+        "it": "Mio fratello maggiore sa il cinese."
       },
       "gap": {
         "kanji": "兄は中国語が＿",
@@ -68,8 +93,8 @@
       "answer": "できる",
       "distractors": ["するれる", "しれる", "すられる"],
       "explanation": {
-        "en": "する is irregular and its potential is a separate verb: できる. What is possible is marked by が: 中国語ができる, \"Chinese is within (his) ability\" — he can speak Chinese.",
-        "it": "する è irregolare e il suo potenziale è un verbo a sé: できる. Ciò che è possibile è marcato da が: 中国語ができる, «il cinese è alla sua portata» — sa parlare cinese."
+        "en": "する (\"to do\") is irregular: its potential form (\"can do\") is a different verb, できる. What someone can do takes が: 中国語ができる, \"Chinese is something he can do\", so \"he can speak Chinese\".",
+        "it": "する («fare») è irregolare: la sua forma potenziale («poter fare») è un verbo diverso, できる. Ciò che si sa o si può fare prende が: 中国語ができる, «il cinese è una cosa che sa fare», cioè «sa parlare cinese»."
       }
     },
     {
@@ -83,10 +108,19 @@
         "kanji": "ひらがなが読める",
         "kana": "ひらがながよめる"
       },
+      "translation": {
+        "en": "I can read hiragana.",
+        "it": "So leggere lo hiragana."
+      },
+      "glosses": [
+        { "text": "ひらがなが", "meaning": { "en": "hiragana + が (what can be read)", "it": "hiragana + が (ciò che si sa leggere)" } },
+        { "text": "読", "reading": "よ", "meaning": { "en": "read (kanji of 読む)", "it": "leggere (kanji di 読む)" } },
+        { "text": "める", "meaning": { "en": "end of 読める, \"can read\"", "it": "fine di 読める, «saper leggere»" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the phrase marked by が: ひらがなが. A potential verb describes a state — something is readable — so the thing that can be read usually takes が rather than を. The person who can read it stays unspoken or appears as the topic with は.",
-        "it": "Seleziona l'espressione marcata da が: ひらがなが. Un verbo potenziale descrive uno stato — qualcosa è leggibile — quindi la cosa che si può leggere di solito prende が invece di を. Chi sa leggere resta sottinteso o compare come tema con は."
+        "en": "Select ひらがなが. 読める (\"can read\") is the potential form of 読む: it describes an ability, a state, more than an action. So the thing you can read usually takes が instead of を.",
+        "it": "Seleziona ひらがなが. 読める («saper leggere») è la forma potenziale di 読む: descrive una capacità, uno stato, più che un'azione. Per questo ciò che si sa leggere di solito prende が invece di を."
       }
     },
     {
@@ -100,6 +134,16 @@
         "kanji": "昨日はよく眠れなかった",
         "kana": "きのうはよくねむれなかった"
       },
+      "translation": {
+        "en": "I couldn't sleep well yesterday.",
+        "it": "Ieri non sono riuscito a dormire bene."
+      },
+      "glosses": [
+        { "text": "眠れなかった", "reading": "ねむれなかった" },
+        { "text": "眠れないかった", "reading": "ねむれないかった" },
+        { "text": "眠りれなかった", "reading": "ねむりれなかった" },
+        { "text": "眠るなかった", "reading": "ねむるなかった" }
+      ],
       "gap": {
         "kanji": "昨日はよく＿",
         "kana": "きのうはよく＿"
@@ -107,8 +151,8 @@
       "answer": "眠れなかった",
       "distractors": ["眠りれなかった", "眠るなかった", "眠れないかった"],
       "explanation": {
-        "en": "Since the potential is an ichidan verb, it negates and goes into the past like one: 眠れる → 眠れない → 眠れなかった, \"(I) couldn't sleep well\".",
-        "it": "Poiché il potenziale è un verbo ichidan, si nega e va al passato come tale: 眠れる → 眠れない → 眠れなかった, «non sono riuscito a dormire bene»."
+        "en": "眠れる (\"can sleep\") is the potential form of 眠る. Every potential form works like 食べる: drop る and add ない for \"not\", then ない becomes なかった for the past. 眠れる → 眠れない → 眠れなかった, \"couldn't sleep\".",
+        "it": "眠れる («riuscire a dormire») è la forma potenziale di 眠る. Ogni forma potenziale si comporta come 食べる: si toglie る e si aggiunge ない per il «non», poi ない diventa なかった per il passato. 眠れる → 眠れない → 眠れなかった, «non sono riuscito a dormire»."
       }
     },
     {
@@ -122,23 +166,42 @@
         "kanji": "日曜日は友達に会えない",
         "kana": "にちようびはともだちにあえない"
       },
+      "translation": {
+        "en": "On Sunday I can't meet my friends.",
+        "it": "Domenica non posso vedere i miei amici."
+      },
+      "glosses": [
+        { "text": "日曜日は", "reading": "にちようびは", "meaning": { "en": "on Sunday (topic)", "it": "domenica (tema)" } },
+        { "text": "友達に", "reading": "ともだちに", "meaning": { "en": "friends (whom you meet)", "it": "gli amici (chi si vede)" } },
+        { "text": "会えない", "reading": "あえない", "meaning": { "en": "can't meet", "it": "non poter vedere" } }
+      ],
       "answer": ["日曜日は", "友達に", "会えない"],
       "explanation": {
-        "en": "会う (meet) → 会える (can meet) → 会えない (cannot meet). The person you meet is marked by に. 日曜日 is the topic here, so it takes は instead of に.",
-        "it": "会う (incontrare) → 会える (poter incontrare) → 会えない (non poter incontrare). La persona che si incontra è marcata da に. 日曜日 qui è il tema, quindi prende は invece di に."
+        "en": "会う (\"meet\") → 会える (\"can meet\", the potential form) → 会えない (\"can't meet\"). The person you meet takes に: 友達に会う. 日曜日 is the topic here (what we are talking about), so it takes は.",
+        "it": "会う («incontrare») → 会える («poter incontrare», la forma potenziale) → 会えない («non poter incontrare»). La persona che incontri prende に: 友達に会う. Qui 日曜日 è il tema (ciò di cui si parla), quindi prende は."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "不規則動詞の可能形",
       "prompt": {
-        "en": "\"I can come tomorrow.\" What is the potential of 来る?",
-        "it": "«Domani posso venire.» Qual è il potenziale di 来る?"
+        "en": "\"I can come tomorrow.\" What is the potential form of 来る (\"come\")?",
+        "it": "«Domani posso venire.» Qual è la forma potenziale di 来る («venire»)?"
       },
       "sentence": {
         "kanji": "明日は来られる",
         "kana": "あしたはこられる"
       },
+      "translation": {
+        "en": "I can come tomorrow.",
+        "it": "Domani posso venire."
+      },
+      "glosses": [
+        { "text": "来られる", "reading": "こられる" },
+        { "text": "来れられる", "reading": "これられる" },
+        { "text": "来られれる", "reading": "こられれる" },
+        { "text": "来えれる", "reading": "こえれる" }
+      ],
       "gap": {
         "kanji": "明日は＿",
         "kana": "あしたは＿"
@@ -146,8 +209,87 @@
       "answer": "来られる",
       "distractors": ["来えれる", "来れられる", "来られれる"],
       "explanation": {
-        "en": "The other irregular verb, 来る, has the potential 来られる (read こられる), \"can come\". Together with できる for する, these are the only two potentials that break the regular pattern.",
-        "it": "L'altro verbo irregolare, 来る, ha il potenziale 来られる (letto こられる), «poter venire». Insieme a できる per する, sono gli unici due potenziali che rompono lo schema regolare."
+        "en": "来る (\"to come\") is irregular. Its potential form (\"can come\") is 来られる, read こられる: the kanji stays the same, but its reading changes from く to こ. The only other irregular verb is する, whose potential is できる.",
+        "it": "来る («venire») è irregolare. La sua forma potenziale («poter venire») è 来られる, letto こられる: il kanji resta uguale, ma la lettura passa da く a こ. L'unico altro verbo irregolare è する, il cui potenziale è できる."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "可能形",
+      "prompt": {
+        "en": "Which part turns 書く (\"write\") into \"can write\"?",
+        "it": "Quale parte trasforma 書く («scrivere») in «saper scrivere»?"
+      },
+      "sentence": {
+        "kanji": "カタカナが書ける",
+        "kana": "カタカナがかける"
+      },
+      "translation": {
+        "en": "I can write katakana.",
+        "it": "So scrivere il katakana."
+      },
+      "glosses": [
+        { "text": "カタカナが", "meaning": { "en": "katakana + が (what you can write)", "it": "katakana + が (ciò che sai scrivere)" } },
+        { "text": "書", "reading": "か", "meaning": { "en": "write (kanji of 書く)", "it": "scrivere (kanji di 書く)" } },
+        { "text": "ける", "meaning": { "en": "end of the verb 書ける", "it": "fine del verbo 書ける" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ける. 書く is a godan verb (its last kana changes): the final く becomes け and る is added, 書ける, \"can write\". This ending is the potential form, the verb form that means \"can do\".",
+        "it": "Seleziona ける. 書く è un verbo godan (il suo ultimo kana cambia): la く finale diventa け e si aggiunge る, 書ける, «saper scrivere». Questa desinenza è la forma potenziale, la forma del verbo che dice «posso fare»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "可能形と「が」",
+      "prompt": {
+        "en": "Build: \"I still can't read kanji.\"",
+        "it": "Componi: «Non so ancora leggere i kanji.»"
+      },
+      "sentence": {
+        "kanji": "私は漢字がまだ読めない",
+        "kana": "わたしはかんじがまだよめない"
+      },
+      "translation": {
+        "en": "I still can't read kanji.",
+        "it": "Non so ancora leggere i kanji."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (topic)", "it": "io (tema)" } },
+        { "text": "漢字が", "reading": "かんじが", "meaning": { "en": "kanji + が (what you can't read)", "it": "kanji + が (ciò che non sai leggere)" } },
+        { "text": "まだ", "meaning": { "en": "still, not yet", "it": "ancora" } },
+        { "text": "読めない", "reading": "よめない", "meaning": { "en": "can't read", "it": "non saper leggere" } }
+      ],
+      "answer": ["私は", "漢字が", "まだ", "読めない"],
+      "explanation": {
+        "en": "読める is the potential form of 読む (\"can read\"), and 読めない is its negative, \"can't read\". A potential form describes an ability, so the thing read takes が: 漢字が. まだ with a negative means \"not yet\".",
+        "it": "読める è la forma potenziale di 読む («saper leggere»), e 読めない è la sua negazione, «non saper leggere». Una forma potenziale descrive una capacità, quindi la cosa letta prende が: 漢字が. まだ con una negazione significa «non ancora»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "不規則動詞の可能形",
+      "prompt": {
+        "en": "Build: \"My friends can come to the party too.\"",
+        "it": "Componi: «Anche i miei amici possono venire alla festa.»"
+      },
+      "sentence": {
+        "kanji": "友達もパーティーに来られる",
+        "kana": "ともだちもパーティーにこられる"
+      },
+      "translation": {
+        "en": "My friends can come to the party too.",
+        "it": "Anche i miei amici possono venire alla festa."
+      },
+      "glosses": [
+        { "text": "友達も", "reading": "ともだちも", "meaning": { "en": "friends too", "it": "anche gli amici" } },
+        { "text": "パーティーに", "meaning": { "en": "to the party", "it": "alla festa" } },
+        { "text": "来られる", "reading": "こられる", "meaning": { "en": "can come", "it": "poter venire" } }
+      ],
+      "answer": ["友達も", "パーティーに", "来られる"],
+      "explanation": {
+        "en": "来る (\"come\") is irregular: its potential form (\"can come\") is 来られる, read こられる. The place you come to takes に: パーティーに. も after 友達 means \"too\" and takes the place of が.",
+        "it": "来る («venire») è irregolare: la sua forma potenziale («poter venire») è 来られる, letto こられる. Il luogo dove si viene prende に: パーティーに. も dopo 友達 significa «anche» e prende il posto di が."
       }
     }
   ]

@@ -86,6 +86,7 @@ campo perché tu possa scrivere il file senza aprirli.
 |---|---|---|---|
 | `order` | intero ≥ 1 | sì | posizione nel curriculum; **unico** fra tutte le lezioni (passo 6) |
 | `title` | `{ "en": string, "it"?: string }` | sì (`en`) | testo bilingue; `en` non vuoto, `it` facoltativo. Prosa autorata dal concetto, mai dal titolo/numero della fonte |
+| `video` | stringa: id YouTube di **11 caratteri** (`A-Z a-z 0-9 _ -`) | no | l'id del video di riferimento della lezione, **mai l'URL** (`dwcTI9qvO-U`, non `https://youtu.be/dwcTI9qvO-U`). L'app ne fa un semplice link che apre YouTube: il video non è mai incorporato. Va subito dopo `title`; **unico** fra tutte le lezioni (passo 6) |
 | `grammarPoints` | array **non vuoto** di stringhe non vuote | sì | i punti grammaticali che la lezione insegna; il **primo** dà l'identità della lezione |
 | `exercises` | array (può essere **vuoto**) di esercizi | sì | zero o più; una lezione senza esercizi è valida (dichiara comunque i `grammarPoints`) |
 
@@ -126,6 +127,9 @@ oltre alla forma sopra:
 4. **Unicità cross-file degli identificatori**: `lessonId` (derivato da
    `grammarPoints[0]`) e l'identità di ogni esercizio sono unici fra tutti i
    file.
+5. **Unicità cross-file del `video`**: due lezioni non possono rimandare allo
+   stesso video (quasi sempre è un copia-incolla sbagliato). Le lezioni senza
+   `video` non concorrono al controllo.
 
 L'**identità di un esercizio** (`src/domain/exercise-identity.ts`) deriva da
 **tipo + frase (kanji e kana) + risposta corretta**, normalizzati NFKC; esclude

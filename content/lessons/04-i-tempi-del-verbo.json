@@ -1,9 +1,10 @@
 {
   "order": 4,
   "title": {
-    "en": "Non-past, ongoing and past; time words with or without に",
-    "it": "Non passato, in corso e passato; le espressioni di tempo con o senza に"
+    "en": "Verb tenses: future or habit, happening now, past; time words with or without に",
+    "it": "I tempi del verbo: futuro o abitudine, azione in corso, passato; le parole di tempo con o senza に"
   },
+  "video": "lU5rmrAORDY",
   "grammarPoints": ["非過去形", "「ている」の進行", "過去形の「た」", "時を示す「に」"],
   "exercises": [
     {
@@ -17,6 +18,15 @@
         "kanji": "明日は雨が降る",
         "kana": "あしたはあめがふる"
       },
+      "translation": {
+        "en": "It will rain tomorrow.",
+        "it": "Domani pioverà."
+      },
+      "glosses": [
+        { "text": "降る", "reading": "ふる" },
+        { "text": "降った", "reading": "ふった" },
+        { "text": "降っていた", "reading": "ふっていた" }
+      ],
       "gap": {
         "kanji": "明日は雨が＿",
         "kana": "あしたはあめが＿"
@@ -24,21 +34,31 @@
       "answer": "降る",
       "distractors": ["降った", "降っていた"],
       "explanation": {
-        "en": "The dictionary form is a non-past tense, not a present: most of the time it describes something that will happen. With 明日 (tomorrow), 降る means \"it will rain\". A past form cannot go with tomorrow.",
-        "it": "La forma del dizionario è un tempo non passato, non un presente: il più delle volte descrive qualcosa che accadrà. Con 明日 (domani), 降る significa «pioverà». Una forma al passato non può stare con domani."
+        "en": "降る is the dictionary form (the basic form of the verb, the one you find in a dictionary). It is a non-past tense: it covers the future and habits, not only \"now\". With 明日 (tomorrow) it means \"it will rain\"; a past form like 降った cannot go with tomorrow.",
+        "it": "降る è la forma del dizionario (la forma base del verbo, quella che trovi sul dizionario). È un tempo non passato: vale per il futuro e per le abitudini, non solo per «adesso». Con 明日 (domani) significa «pioverà»; un passato come 降った non può stare con domani."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "「ている」の進行",
       "prompt": {
-        "en": "\"My father is reading the newspaper.\" Which form says the action is in progress?",
-        "it": "«Mio padre sta leggendo il giornale.» Quale forma dice che l'azione è in corso?"
+        "en": "\"My father is reading the newspaper.\" Which form says the action is happening right now?",
+        "it": "«Mio padre sta leggendo il giornale.» Quale forma dice che l'azione sta succedendo adesso?"
       },
       "sentence": {
         "kanji": "父が新聞を読んでいる",
         "kana": "ちちがしんぶんをよんでいる"
       },
+      "translation": {
+        "en": "My father is reading the newspaper.",
+        "it": "Mio padre sta leggendo il giornale."
+      },
+      "glosses": [
+        { "text": "読んでいる", "reading": "よんでいる" },
+        { "text": "読むいる", "reading": "よむいる" },
+        { "text": "読みている", "reading": "よみている" },
+        { "text": "読んいる", "reading": "よんいる" }
+      ],
       "gap": {
         "kanji": "父が新聞を＿",
         "kana": "ちちがしんぶんを＿"
@@ -46,42 +66,58 @@
       "answer": "読んでいる",
       "distractors": ["読むいる", "読みている", "読んいる"],
       "explanation": {
-        "en": "An action in progress is the te-form of the verb followed by いる: \"is reading\". 読む ends in む, so its te-form is 読んで; いる cannot attach to the dictionary form or to the stem.",
-        "it": "Un'azione in corso è la forma in て del verbo seguita da いる: «sta leggendo». 読む finisce in む, quindi la sua forma in て è 読んで; いる non si attacca alla forma del dizionario né al radicale."
+        "en": "\"Is doing\" = te-form + いる. The te-form is the verb form ending in て or で (読む → 読んで). So 読んでいる means \"is reading\"; いる never attaches directly to 読む or 読み.",
+        "it": "«Sta facendo» = forma in て + いる. La forma in て è la forma del verbo che finisce in て o で (読む → 読んで). Quindi 読んでいる significa «sta leggendo»; いる non si attacca mai direttamente a 読む o a 読み."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "「ている」の進行",
       "prompt": {
-        "en": "Which part shows that the action is in progress?",
-        "it": "Quale parte indica che l'azione è in corso?"
+        "en": "Which part shows that the action is happening right now?",
+        "it": "Quale parte indica che l'azione sta succedendo adesso?"
       },
       "sentence": {
         "kanji": "妹がテレビを見ている",
         "kana": "いもうとがテレビをみている"
       },
+      "translation": {
+        "en": "My younger sister is watching TV.",
+        "it": "Mia sorella minore sta guardando la TV."
+      },
+      "glosses": [
+        { "text": "妹がテレビを見", "reading": "いもうとがテレビをみ", "meaning": { "en": "younger sister, TV, watch", "it": "sorella minore, TV, guardare" } },
+        { "text": "ている", "meaning": { "en": "is ...-ing (happening now)", "it": "sta ...-ndo (succede adesso)" } }
+      ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select ている. 見る (watch) is a verb that drops る before an ending, so its te-form is 見て; adding いる gives \"is watching\". The sentence describes what is happening right now.",
-        "it": "Seleziona ている. 見る (guardare) è un verbo che perde る davanti a una desinenza, quindi la sua forma in て è 見て; aggiungendo いる si ottiene «sta guardando». La frase descrive ciò che accade in questo momento."
+        "en": "Select ている. 見る (to watch) just drops る to make its te-form (the form ending in て): 見て. Add いる and you get 見ている, \"is watching\".",
+        "it": "Seleziona ている. 見る (guardare) toglie solo る per fare la forma in て (la forma che finisce in て): 見て. Aggiungi いる e ottieni 見ている, «sta guardando»."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "過去形の「た」",
       "prompt": {
-        "en": "Which part carries the past tense?",
-        "it": "Quale parte porta il passato?"
+        "en": "Which part makes the verb past?",
+        "it": "Quale parte mette il verbo al passato?"
       },
       "sentence": {
         "kanji": "昨日カレーを作った",
         "kana": "きのうカレーをつくった"
       },
+      "translation": {
+        "en": "(I) made curry yesterday.",
+        "it": "Ieri (io) ho preparato il curry."
+      },
+      "glosses": [
+        { "text": "昨日カレーを作", "reading": "きのうカレーをつく", "meaning": { "en": "yesterday, curry, make", "it": "ieri, curry, preparare" } },
+        { "text": "った", "meaning": { "en": "past ending", "it": "desinenza del passato" } }
+      ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select the part that carries the past: った. The past tense is formed exactly like the te-form, with た in place of て: 作る → 作って → 作った. 昨日 (yesterday) is relative to today, so it needs no particle.",
-        "it": "Seleziona la parte che porta il passato: った. Il passato si forma esattamente come la forma in て, con た al posto di て: 作る → 作って → 作った. 昨日 (ieri) è relativo a oggi, quindi non richiede particella."
+        "en": "Select った. The past is built like the te-form (the form ending in て), just with た instead of て: 作る → 作って → 作った. 昨日 (yesterday) needs no particle.",
+        "it": "Seleziona った. Il passato si costruisce come la forma in て (la forma che finisce in て), solo con た al posto di て: 作る → 作って → 作った. 昨日 (ieri) non vuole particella."
       }
     },
     {
@@ -95,10 +131,20 @@
         "kanji": "先週新しい靴を買った",
         "kana": "せんしゅうあたらしいくつをかった"
       },
+      "translation": {
+        "en": "I bought new shoes last week.",
+        "it": "La settimana scorsa ho comprato delle scarpe nuove."
+      },
+      "glosses": [
+        { "text": "先週", "reading": "せんしゅう", "meaning": { "en": "last week", "it": "la settimana scorsa" } },
+        { "text": "新しい", "reading": "あたらしい", "meaning": { "en": "new", "it": "nuove" } },
+        { "text": "靴を", "reading": "くつを", "meaning": { "en": "shoes (what I bought)", "it": "scarpe (cosa ho comprato)" } },
+        { "text": "買った", "reading": "かった", "meaning": { "en": "bought", "it": "ho comprato" } }
+      ],
       "answer": ["先週", "新しい", "靴を", "買った"],
       "explanation": {
-        "en": "先週 (last week) is measured from now, so it stands at the front with no particle and places the whole sentence in that time. 買う ends in う, so its past is 買った.",
-        "it": "先週 (la settimana scorsa) si misura a partire da adesso, quindi sta in testa senza particella e colloca tutta la frase in quel tempo. 買う finisce in う, quindi il suo passato è 買った."
+        "en": "The time word 先週 (last week) goes first, with no particle. Then \"new shoes\" + を (the particle that marks what you buy), then the verb at the end. 買う → 買った (bought).",
+        "it": "La parola di tempo 先週 (la settimana scorsa) va per prima, senza particella. Poi «scarpe nuove» + を (la particella che indica cosa compri), poi il verbo in fondo. 買う → 買った (ho comprato)."
       }
     },
     {
@@ -112,10 +158,19 @@
         "kanji": "七時に友達が来る",
         "kana": "しちじにともだちがくる"
       },
+      "translation": {
+        "en": "A friend is coming at seven.",
+        "it": "Alle sette viene un amico."
+      },
+      "glosses": [
+        { "text": "七時に", "reading": "しちじに", "meaning": { "en": "at seven o'clock", "it": "alle sette" } },
+        { "text": "友達が", "reading": "ともだちが", "meaning": { "en": "a friend (the one who comes)", "it": "un amico (chi viene)" } },
+        { "text": "来る", "reading": "くる", "meaning": { "en": "comes", "it": "viene" } }
+      ],
       "answer": ["七時に", "友達が", "来る"],
       "explanation": {
-        "en": "七時 (seven o'clock) is a fixed point on the clock, not a time measured from today, so it takes に. A quick test: if English needs \"at\", \"on\" or \"in\" before the time word, Japanese needs に. The non-past 来る refers to a future arrival.",
-        "it": "七時 (le sette) è un punto fisso dell'orologio, non un tempo misurato da oggi, quindi prende に. Una prova rapida: se in inglese serve «at», «on» o «in» davanti all'espressione di tempo, in giapponese serve に. Il non passato 来る indica un arrivo futuro."
+        "en": "A clock time like 七時 (seven o'clock) takes に, like English \"at\". Quick test: if English says \"at\", \"on\" or \"in\" before the time, Japanese uses に. 来る (comes) is non-past, so here it means a future arrival.",
+        "it": "Un orario come 七時 (le sette) prende に, come «alle» in italiano. Prova rapida: se in inglese davanti al tempo serve «at», «on» o «in», in giapponese serve に. 来る (viene) è non passato, quindi qui indica un arrivo futuro."
       }
     },
     {
@@ -129,6 +184,15 @@
         "kanji": "来年大学を卒業する",
         "kana": "らいねんだいがくをそつぎょうする"
       },
+      "translation": {
+        "en": "I will graduate from university next year.",
+        "it": "L'anno prossimo mi laureo."
+      },
+      "glosses": [
+        { "text": "来年", "reading": "らいねん" },
+        { "text": "来年を", "reading": "らいねんを" },
+        { "text": "来年が", "reading": "らいねんが" }
+      ],
       "gap": {
         "kanji": "＿大学を卒業する",
         "kana": "＿だいがくをそつぎょうする"
@@ -136,8 +200,87 @@
       "answer": "来年",
       "distractors": ["来年を", "来年が"],
       "explanation": {
-        "en": "来年 (next year) only makes sense relative to the present year, so it takes no particle: it simply opens the sentence. に is for absolute times such as a date, a weekday or an hour; を and が would turn 来年 into an object or a subject, which it is not.",
-        "it": "来年 (l'anno prossimo) ha senso solo rispetto all'anno in corso, quindi non prende particella: apre semplicemente la frase. に serve per i tempi assoluti, come una data, un giorno della settimana o un'ora; を e が farebbero di 来年 un oggetto o un soggetto, e non lo è."
+        "en": "来年 (next year) depends on when you are speaking, so it takes no particle. に is only for fixed times, like a date, a weekday or an hour. With を or が, 来年 would become the thing you finish, or the one who graduates.",
+        "it": "来年 (l'anno prossimo) dipende da quando parli, quindi non prende particella. に serve solo per i tempi fissi, come una data, un giorno della settimana o un'ora. Con を o が, 来年 diventerebbe la cosa che finisci, o chi si laurea."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "時を示す「に」",
+      "prompt": {
+        "en": "Which word says when it rained?",
+        "it": "Quale parola dice quando è piovuto?"
+      },
+      "sentence": {
+        "kanji": "きのう雨が降った",
+        "kana": "きのうあめがふった"
+      },
+      "translation": {
+        "en": "It rained yesterday.",
+        "it": "Ieri è piovuto."
+      },
+      "glosses": [
+        { "text": "きのう", "meaning": { "en": "yesterday", "it": "ieri" } },
+        { "text": "雨が降", "reading": "あめがふ", "meaning": { "en": "rain, fall", "it": "pioggia, cadere" } },
+        { "text": "った", "meaning": { "en": "past ending", "it": "desinenza del passato" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select きのう (yesterday). Words like yesterday, today, tomorrow or last week depend on when you are speaking, so they take no に. They simply sit at the start of the sentence.",
+        "it": "Seleziona きのう (ieri). Parole come ieri, oggi, domani o la settimana scorsa dipendono da quando parli, quindi non prendono に. Stanno semplicemente all'inizio della frase."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "非過去形",
+      "prompt": {
+        "en": "Build: \"I drink coffee every morning.\"",
+        "it": "Componi: «Ogni mattina bevo il caffè.»"
+      },
+      "sentence": {
+        "kanji": "毎朝コーヒーを飲む",
+        "kana": "まいあさコーヒーをのむ"
+      },
+      "translation": {
+        "en": "I drink coffee every morning.",
+        "it": "Ogni mattina bevo il caffè."
+      },
+      "glosses": [
+        { "text": "毎朝", "reading": "まいあさ", "meaning": { "en": "every morning", "it": "ogni mattina" } },
+        { "text": "コーヒーを", "meaning": { "en": "coffee (what I drink)", "it": "caffè (cosa bevo)" } },
+        { "text": "飲む", "reading": "のむ", "meaning": { "en": "drink", "it": "bevo" } }
+      ],
+      "answer": ["毎朝", "コーヒーを", "飲む"],
+      "explanation": {
+        "en": "For a habit, use the non-past: the verb exactly as a dictionary lists it, 飲む, \"I drink\". 毎朝 (every morning) takes no に and goes first; the verb always comes last.",
+        "it": "Per un'abitudine si usa il non passato: il verbo così come lo trovi sul dizionario, 飲む, «bevo». 毎朝 (ogni mattina) non prende に e va per primo; il verbo sta sempre in fondo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「ている」の進行",
+      "prompt": {
+        "en": "Build: \"My older sister is talking on the phone now.\"",
+        "it": "Componi: «Mia sorella maggiore adesso sta parlando al telefono.»"
+      },
+      "sentence": {
+        "kanji": "姉は今電話で話している",
+        "kana": "あねはいまでんわではなしている"
+      },
+      "translation": {
+        "en": "My older sister is talking on the phone now.",
+        "it": "Mia sorella maggiore adesso sta parlando al telefono."
+      },
+      "glosses": [
+        { "text": "姉は", "reading": "あねは", "meaning": { "en": "my older sister (the topic)", "it": "mia sorella maggiore (l'argomento)" } },
+        { "text": "今", "reading": "いま", "meaning": { "en": "now", "it": "adesso" } },
+        { "text": "電話で", "reading": "でんわで", "meaning": { "en": "on the phone", "it": "al telefono" } },
+        { "text": "話している", "reading": "はなしている", "meaning": { "en": "is talking", "it": "sta parlando" } }
+      ],
+      "answer": ["姉は", "今", "電話で", "話している"],
+      "explanation": {
+        "en": "話す (to talk) has the te-form (the form ending in て) 話して; adding いる gives 話している, \"is talking\". 今 (now) takes no particle. The verb goes last.",
+        "it": "話す (parlare) ha la forma in て (la forma che finisce in て) 話して; aggiungendo いる si ottiene 話している, «sta parlando». 今 (adesso) non prende particella. Il verbo va in fondo."
       }
     }
   ]

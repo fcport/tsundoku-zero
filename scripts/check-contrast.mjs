@@ -1,7 +1,8 @@
 // Verifica del contrasto in CI (storia 1.3, UX-DR7).
 //
-// Valuta OGNI coppia colore/fondo sui due fondi (surface-base E surface-raised),
-// in modalità chiara E scura, e fallisce con exit non-zero se una coppia di
+// Valuta OGNI coppia colore/fondo sui due fondi di carta (surface-base E
+// surface-raised) e sul fondo d'inchiostro (ink-primary, barra d'azione e opzione
+// giusta); nessuna modalità scura. Fallisce con exit non-zero se una coppia di
 // testo scende sotto 4.5:1 o una non-testo sotto 3:1. border-hairline è
 // decorativo (WCAG 1.4.11) ed è ESENTE: non viene mai valutato, non fa mai
 // fallire lo script.
@@ -21,7 +22,7 @@ const THEME_PATH = resolve(__dirname, '..', 'src', 'ui', 'theme.css');
 // -----------------------------------------------------------------------------
 // WCAG: luminanza relativa e rapporto di contrasto (Design Notes della spec).
 // Confrontiamo il valore GREZZO (>=), senza arrotondare a 2 decimali: i margini
-// sono voluti e sottili (border-strong-dark/surface-raised-dark = 3.0006).
+// sono voluti e sottili.
 // -----------------------------------------------------------------------------
 
 /** `#RRGGBB` (o `#RGB`) → `[r, g, b]` in 0..255. */
@@ -68,9 +69,10 @@ export const TEXT_THRESHOLD = 4.5;
 export const NON_TEXT_THRESHOLD = 3.0;
 
 /**
- * Ruoli per modalità. In scuro l'anello di focus NON è un token separato: riusa
- * `accent-dark` (il valore #7FB0DC è identico), l'unica riconciliazione del 27.
- * I fondi sono i due contro cui si valuta ogni primo piano.
+ * Ruoli per fondo. Nessuna modalità scura (29-09-2026): le due famiglie di fondi
+ * sono la CARTA (`surface-base`, `surface-raised`) e l'INCHIOSTRO (`ink-primary`,
+ * il fondo della barra d'azione e dell'opzione giusta), su cui si leggono la carta
+ * come testo e il rosso acceso `accent-on-ink`.
  */
 export const TOKEN_ROLES = {
   light: {
@@ -87,19 +89,11 @@ export const TOKEN_ROLES = {
     // Decorativo esente (WCAG 1.4.11): mai valutato, mai un fallimento.
     exempt: ['border-hairline'],
   },
-  dark: {
-    backgrounds: ['surface-base-dark', 'surface-raised-dark'],
-    text: [
-      'ink-primary-dark',
-      'ink-secondary-dark',
-      'ink-muted-dark',
-      'accent-dark',
-      'accent-hover-dark',
-      'danger-dark',
-    ],
-    // In scuro il focus-ring riusa accent-dark (nessun focus-ring-dark token).
-    nonText: ['border-strong-dark', 'accent-dark'],
-    exempt: ['border-hairline-dark'],
+  ink: {
+    backgrounds: ['ink-primary'],
+    text: ['surface-base', 'accent-on-ink'],
+    nonText: [],
+    exempt: [],
   },
 };
 
@@ -152,13 +146,13 @@ function evaluateMode(colors, roles) {
 }
 
 /**
- * Verifica completa su entrambe le modalità. Ritorna `{ rows, failures }`.
+ * Verifica completa sulla carta e sull'inchiostro. Ritorna `{ rows, failures }`.
  * `failures` vuoto ⇒ conformità totale. Puro: nessun I/O, nessun exit.
  */
 export function verifyContrast(colors) {
   const rows = [];
   const failures = [];
-  for (const mode of ['light', 'dark']) {
+  for (const mode of ['light', 'ink']) {
     const res = evaluateMode(colors, TOKEN_ROLES[mode]);
     for (const r of res.rows) rows.push({ mode, ...r });
     for (const f of res.failures) failures.push({ mode, ...f });

@@ -1,26 +1,36 @@
 {
   "order": 3,
   "title": {
-    "en": "The topic with は, and the target with に",
-    "it": "Il tema con は, e il destinatario con に"
+    "en": "The topic with は, and the destination with に",
+    "it": "Il tema con は e la destinazione con に"
   },
+  "video": "U9_T4eObNXg",
   "grammarPoints": ["「は」が示す主題", "到達点を示す「に」"],
   "exercises": [
     {
       "kind": "select-span",
       "grammarPoint": "「は」が示す主題",
       "prompt": {
-        "en": "Which part is the topic?",
-        "it": "Quale parte è il tema?"
+        "en": "Which part is the topic (what the sentence is about)?",
+        "it": "Quale parte è il tema (ciò di cui si parla)?"
       },
       "sentence": {
         "kanji": "これは私の傘だ",
         "kana": "これはわたしのかさだ"
       },
+      "translation": {
+        "en": "This is my umbrella.",
+        "it": "Questo è il mio ombrello."
+      },
+      "glosses": [
+        { "text": "これは", "meaning": { "en": "this (topic)", "it": "questo (tema)" } },
+        { "text": "私の傘", "reading": "わたしのかさ", "meaning": { "en": "my umbrella", "it": "il mio ombrello" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the topic: これは. は announces what the sentence is about — \"as for this\" — and then steps aside. It is not a case particle: it gives the noun no grammatical role (subject, object, target): the subject of 私の傘だ is left unspoken and is understood from the topic.",
-        "it": "Seleziona il tema: これは. は annuncia di che cosa parla la frase — «quanto a questo» — e poi si fa da parte. Non è una particella di caso: non assegna al nome alcun ruolo grammaticale (soggetto, oggetto, destinatario): il soggetto di 私の傘だ resta sottinteso e si ricava dal tema."
+        "en": "The topic is これは: は marks what the sentence is about, \"as for this…\". は does not say who does what; it only announces the topic. The rest, 私の傘だ, says something about it: \"is my umbrella\".",
+        "it": "Il tema è これは: は segna ciò di cui parla la frase, «quanto a questo…». は non dice chi fa che cosa: annuncia solo l'argomento. Il resto, 私の傘だ, dice qualcosa del tema: «è il mio ombrello»."
       }
     },
     {
@@ -28,11 +38,15 @@
       "grammarPoint": "「は」が示す主題",
       "prompt": {
         "en": "\"As for Tokyo, there are many people.\" Which particle marks Tokyo?",
-        "it": "«Quanto a Tokyo, ci sono molte persone.» Quale particella marca Tokyo?"
+        "it": "«Quanto a Tokyo, ci sono molte persone.» Quale particella segna Tokyo?"
       },
       "sentence": {
         "kanji": "東京は人が多い",
         "kana": "とうきょうはひとがおおい"
+      },
+      "translation": {
+        "en": "As for Tokyo, there are many people.",
+        "it": "Quanto a Tokyo, ci sono molte persone."
       },
       "gap": {
         "kanji": "東京＿人が多い",
@@ -41,8 +55,8 @@
       "answer": "は",
       "distractors": ["を", "へ"],
       "explanation": {
-        "en": "The subject of 多い (are many) is 人, already marked by が. 東京 has no grammatical role in the predicate: it only sets the scene, \"as for Tokyo\". Marking what the sentence is about, without a grammatical role, is exactly the job of は.",
-        "it": "Il soggetto di 多い (sono molti) è 人, già marcato da が. 東京 non ha alcun ruolo grammaticale nel predicato: fissa solo la scena, «quanto a Tokyo». Marcare ciò di cui si parla, senza un ruolo grammaticale, è esattamente il compito di は."
+        "en": "Tokyo is not the subject: what is \"many\" is the people, 人, already marked by が. Tokyo is the topic, what the sentence is about (\"as for Tokyo\"), and the topic takes は. を marks an object and へ a direction; neither fits here.",
+        "it": "Tokyo non è il soggetto: a essere molte sono le persone (人), già segnate da が. Tokyo è il tema, ciò di cui si parla («quanto a Tokyo»), e il tema prende は. を segna un oggetto e へ una direzione: qui non vanno bene."
       }
     },
     {
@@ -56,10 +70,20 @@
         "kanji": "私は毎日コーヒーを飲む",
         "kana": "わたしはまいにちコーヒーをのむ"
       },
+      "translation": {
+        "en": "I drink coffee every day.",
+        "it": "Bevo caffè ogni giorno."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (topic)", "it": "io (tema)" } },
+        { "text": "毎日", "reading": "まいにち", "meaning": { "en": "every day", "it": "ogni giorno" } },
+        { "text": "コーヒーを", "meaning": { "en": "coffee (object)", "it": "caffè (oggetto)" } },
+        { "text": "飲む", "reading": "のむ", "meaning": { "en": "drink", "it": "bevo" } }
+      ],
       "answer": ["私は", "毎日", "コーヒーを", "飲む"],
       "explanation": {
-        "en": "私は is the topic: \"as for me\". The one who drinks is an unspoken subject that the topic makes clear. Moving は onto another noun would change the emphasis — what the sentence is about — but never who does what; that is fixed by the case particles such as が and を.",
-        "it": "私は è il tema: «quanto a me». Chi beve è un soggetto sottinteso che il tema rende chiaro. Spostare は su un altro nome cambierebbe l'enfasi — ciò di cui si parla — ma mai chi fa cosa: quello lo fissano le particelle di caso come が e を."
+        "en": "私は is the topic: \"as for me\". は says what the sentence is about, not who does the action; here it is simply clear that I am the one who drinks. コーヒー (coffee) is the object, so it takes を.",
+        "it": "私は è il tema: «quanto a me». は dice di che cosa parla la frase, non chi compie l'azione; qui è semplicemente chiaro che sono io a bere. コーヒー (caffè) è l'oggetto, quindi prende を."
       }
     },
     {
@@ -73,22 +97,35 @@
         "kanji": "ポストに手紙を入れた",
         "kana": "ポストにてがみをいれた"
       },
+      "translation": {
+        "en": "(I) put the letter in the postbox.",
+        "it": "(Io) ho messo la lettera nella buca delle lettere."
+      },
+      "glosses": [
+        { "text": "ポストに", "meaning": { "en": "into the postbox (destination)", "it": "nella buca (destinazione)" } },
+        { "text": "手紙を入", "reading": "てがみをい", "meaning": { "en": "letter (object), 入 of 入れる", "it": "lettera (oggetto), 入 di 入れる" } },
+        { "text": "れた", "meaning": { "en": "rest of 入れた (past)", "it": "resto di 入れた (passato)" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the target of the action: ポストに. The letter is the object (を); the postbox is where the action ends up, so it is marked by に. The one who put the letter in is an unspoken subject.",
-        "it": "Seleziona il punto d'arrivo dell'azione: ポストに. La lettera è l'oggetto (を); la cassetta postale è dove l'azione va a finire, quindi è marcata da に. Chi ha imbucato la lettera è un soggetto sottinteso."
+        "en": "The answer is ポストに. に marks the destination: the place where the action ends up (here, inside the postbox). The letter is the object, with を.",
+        "it": "La risposta è ポストに. に segna la destinazione: il punto in cui l'azione va a finire (qui, dentro la buca delle lettere). La lettera è l'oggetto, con を."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "到達点を示す「に」",
       "prompt": {
-        "en": "\"I gave flowers to the teacher.\" Which particle marks the recipient?",
-        "it": "«Ho dato dei fiori all'insegnante.» Quale particella marca il destinatario?"
+        "en": "\"I gave flowers to the teacher.\" Which particle marks the person who receives them?",
+        "it": "«Ho dato dei fiori all'insegnante.» Quale particella segna chi li riceve?"
       },
       "sentence": {
         "kanji": "先生に花をあげた",
         "kana": "せんせいにはなをあげた"
+      },
+      "translation": {
+        "en": "I gave flowers to the teacher.",
+        "it": "Ho dato dei fiori all'insegnante."
       },
       "gap": {
         "kanji": "先生＿花をあげた",
@@ -97,8 +134,8 @@
       "answer": "に",
       "distractors": ["を", "で"],
       "explanation": {
-        "en": "花 (flowers) is what is given, so it takes を. The teacher is the recipient — the person the giving is aimed at — and a recipient is marked by に.",
-        "it": "花 (fiori) è ciò che viene dato, quindi prende を. L'insegnante è il destinatario — la persona a cui il dare è rivolto — e un destinatario è marcato da に."
+        "en": "The teacher is the person the flowers go to. に marks where something arrives, and that includes a person who receives it. 花 (flowers) is the thing given, so it already has を.",
+        "it": "L'insegnante è la persona a cui vanno i fiori. に segna dove arriva qualcosa, anche quando è una persona che lo riceve. 花 (fiori) è la cosa data, quindi ha già を."
       }
     },
     {
@@ -112,10 +149,124 @@
         "kanji": "姉が友達に手紙を送った",
         "kana": "あねがともだちにてがみをおくった"
       },
+      "translation": {
+        "en": "My older sister sent a letter to a friend.",
+        "it": "Mia sorella maggiore ha spedito una lettera a un amico."
+      },
+      "glosses": [
+        { "text": "姉が", "reading": "あねが", "meaning": { "en": "older sister (subject)", "it": "sorella maggiore (soggetto)" } },
+        { "text": "友達に", "reading": "ともだちに", "meaning": { "en": "to a friend", "it": "a un amico" } },
+        { "text": "手紙を", "reading": "てがみを", "meaning": { "en": "letter (object)", "it": "lettera (oggetto)" } },
+        { "text": "送った", "reading": "おくった", "meaning": { "en": "sent", "it": "ha spedito" } }
+      ],
       "answer": ["姉が", "友達に", "手紙を", "送った"],
       "explanation": {
-        "en": "が marks who sends (姉, older sister), に marks who the letter goes to (友達, a friend), を marks what is sent (手紙, a letter). The particles, not the word order, decide the roles: this is the most neutral order, but 手紙を could also come before 友達に without changing the meaning.",
-        "it": "が marca chi spedisce (姉, sorella maggiore), に marca a chi va la lettera (友達, un amico), を marca ciò che viene spedito (手紙, una lettera). Sono le particelle, non l'ordine delle parole, a decidere i ruoli: questo è l'ordine più neutro, ma 手紙を potrebbe venire prima di 友達に senza cambiare il significato."
+        "en": "Each particle shows a role: が who sends (姉, older sister), に who the letter goes to (友達, a friend), を what is sent (手紙, a letter). Because the particles show the roles, 手紙を could also come before 友達に with the same meaning; here we use the most common order.",
+        "it": "Ogni particella indica un ruolo: が chi spedisce (姉, la sorella maggiore), に a chi va la lettera (友達, un amico), を che cosa si spedisce (手紙, una lettera). Poiché i ruoli li danno le particelle, 手紙を potrebbe anche venire prima di 友達に con lo stesso significato; qui usiamo l'ordine più comune."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "\"This book is expensive.\" Which particle marks what the sentence is about?",
+        "it": "«Questo libro è caro.» Quale particella segna ciò di cui si parla?"
+      },
+      "sentence": {
+        "kanji": "この本は高い",
+        "kana": "このほんはたかい"
+      },
+      "translation": {
+        "en": "This book is expensive.",
+        "it": "Questo libro è caro."
+      },
+      "gap": {
+        "kanji": "この本＿高い",
+        "kana": "このほん＿たかい"
+      },
+      "answer": "は",
+      "distractors": ["を", "に"],
+      "explanation": {
+        "en": "The sentence is about this book, so この本 is the topic and takes は. The predicate 高い (\"is expensive\") then says something about it. を marks an object and に a destination: neither goes with an adjective like 高い.",
+        "it": "La frase parla di questo libro, quindi この本 è il tema e prende は. Il predicato 高い («è caro») dice poi qualcosa del tema. を segna un oggetto e に una destinazione: nessuna delle due va con un aggettivo come 高い."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "\"(I) arrived at the station.\" Which particle marks where (I) arrived?",
+        "it": "«(Io) sono arrivato alla stazione.» Quale particella segna dove sono arrivato?"
+      },
+      "sentence": {
+        "kanji": "駅に着いた",
+        "kana": "えきについた"
+      },
+      "translation": {
+        "en": "(I) arrived at the station.",
+        "it": "(Io) sono arrivato alla stazione."
+      },
+      "gap": {
+        "kanji": "駅＿着いた",
+        "kana": "えき＿ついた"
+      },
+      "answer": "に",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "The station is where the movement ends, its destination, so it takes に. With を the station would be the thing acted on. で marks where an action takes place, not where you arrive.",
+        "it": "La stazione è il punto in cui finisce lo spostamento, la destinazione, quindi prende に. Con を la stazione sarebbe la cosa su cui si agisce. で indica dove si svolge un'azione, non dove si arriva."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "Which part says what the sentence is about?",
+        "it": "Quale parte dice di che cosa parla la frase?"
+      },
+      "sentence": {
+        "kanji": "テストは明日だ",
+        "kana": "テストはあしただ"
+      },
+      "translation": {
+        "en": "The test is tomorrow.",
+        "it": "L'esame è domani."
+      },
+      "glosses": [
+        { "text": "テストは", "meaning": { "en": "the test (topic)", "it": "l'esame (tema)" } },
+        { "text": "明日", "reading": "あした", "meaning": { "en": "tomorrow", "it": "domani" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The topic is テストは: the sentence is about the test, and は marks it. The rest, 明日だ, says something about the topic: \"is tomorrow\". だ is the word for \"is\" that links the topic to a noun (明日, tomorrow).",
+        "it": "Il tema è テストは: la frase parla dell'esame, e は lo segna. Il resto, 明日だ, dice qualcosa del tema: «è domani». だ è la parola per «è» che collega il tema a un nome (明日, domani)."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "Build: \"The child went into the room.\"",
+        "it": "Componi: «Il bambino è entrato nella stanza.»"
+      },
+      "sentence": {
+        "kanji": "子どもが部屋に入った",
+        "kana": "こどもがへやにはいった"
+      },
+      "translation": {
+        "en": "The child went into the room.",
+        "it": "Il bambino è entrato nella stanza."
+      },
+      "glosses": [
+        { "text": "子どもが", "reading": "こどもが", "meaning": { "en": "the child (subject)", "it": "il bambino (soggetto)" } },
+        { "text": "部屋に", "reading": "へやに", "meaning": { "en": "into the room (destination)", "it": "nella stanza (destinazione)" } },
+        { "text": "入った", "reading": "はいった", "meaning": { "en": "went in", "it": "è entrato" } }
+      ],
+      "answer": ["子どもが", "部屋に", "入った"],
+      "explanation": {
+        "en": "が marks the subject, the one who moves (子ども, child). に marks the destination, the place where the movement ends (部屋, room). The verb 入った (went in) comes last.",
+        "it": "が segna il soggetto, chi si muove (子ども, il bambino). に segna la destinazione, il luogo in cui finisce lo spostamento (部屋, la stanza). Il verbo 入った (è entrato) va alla fine."
       }
     }
   ]

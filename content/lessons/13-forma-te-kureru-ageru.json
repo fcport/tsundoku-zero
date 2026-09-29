@@ -1,9 +1,10 @@
 {
   "order": 13,
   "title": {
-    "en": "Joining clauses with the te-form; てくれる and てあげる",
-    "it": "Unire proposizioni con la forma in て; てくれる e てあげる"
+    "en": "The te-form to join actions; favours with てくれる and てあげる",
+    "it": "La forma in て per unire le azioni; i favori con てくれる e てあげる"
   },
+  "video": "3X2ZCWazrDw",
   "grammarPoints": ["て形で節をつなぐ", "恩恵を受ける「てくれる」", "恩恵を与える「てあげる」"],
   "exercises": [
     {
@@ -17,23 +18,43 @@
         "kanji": "朝ごはんを食べて学校に行った",
         "kana": "あさごはんをたべてがっこうにいった"
       },
+      "translation": {
+        "en": "I ate breakfast and went to school.",
+        "it": "Ho fatto colazione e sono andato a scuola."
+      },
+      "glosses": [
+        { "text": "朝ごはんを", "reading": "あさごはんを", "meaning": { "en": "breakfast + を (what is eaten)", "it": "colazione + を (ciò che si mangia)" } },
+        { "text": "食べて", "reading": "たべて", "meaning": { "en": "eat, and then", "it": "mangiare, e poi" } },
+        { "text": "学校に", "reading": "がっこうに", "meaning": { "en": "to school", "it": "a scuola" } },
+        { "text": "行った", "reading": "いった", "meaning": { "en": "went", "it": "sono andato" } }
+      ],
       "answer": ["朝ごはんを", "食べて", "学校に", "行った"],
       "explanation": {
-        "en": "The te-form ends a clause and announces that another one follows: \"ate breakfast and went to school\". The te-form carries no tense of its own; the past た at the end of the sentence applies to both actions.",
-        "it": "La forma in て chiude una proposizione e annuncia che ne segue un'altra: «ho fatto colazione e sono andato a scuola». La forma in て non porta un tempo proprio; il passato た in fondo alla frase vale per entrambe le azioni."
+        "en": "食べて is the te-form of 食べる: the verb form ending in て/で that links one action to the next, like \"and then\". The te-form has no tense of its own: the past た at the end, 行った, makes both actions past.",
+        "it": "食べて è la forma in て di 食べる: la forma del verbo in て/で che collega un'azione alla successiva, come «e poi». La forma in て non ha un tempo suo: il passato た in fondo, 行った, rende passate entrambe le azioni."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "て形で節をつなぐ",
       "prompt": {
-        "en": "\"I opened the window and looked outside.\" Which form of 開ける joins the two actions?",
-        "it": "«Ho aperto la finestra e ho guardato fuori.» Quale forma di 開ける unisce le due azioni?"
+        "en": "\"I opened the window and looked outside.\" Which form of 開ける (\"open\") links the two actions?",
+        "it": "«Ho aperto la finestra e ho guardato fuori.» Quale forma di 開ける («aprire») collega le due azioni?"
       },
       "sentence": {
         "kanji": "窓を開けて外を見た",
         "kana": "まどをあけてそとをみた"
       },
+      "translation": {
+        "en": "I opened the window and looked outside.",
+        "it": "Ho aperto la finestra e ho guardato fuori."
+      },
+      "glosses": [
+        { "text": "開けて", "reading": "あけて" },
+        { "text": "開けるて", "reading": "あけるて" },
+        { "text": "開けって", "reading": "あけって" },
+        { "text": "開きて", "reading": "あきて" }
+      ],
       "gap": {
         "kanji": "窓を＿外を見た",
         "kana": "まどを＿そとをみた"
@@ -41,8 +62,8 @@
       "answer": "開けて",
       "distractors": ["開けって", "開きて", "開けるて"],
       "explanation": {
-        "en": "開ける (open) is ichidan: remove る and add て, 開けて. The first clause (opened the window) is joined to the second (looked outside); only the last verb, 見た, shows that both happened in the past.",
-        "it": "開ける (aprire) è ichidan: si toglie る e si aggiunge て, 開けて. La prima proposizione (ho aperto la finestra) si unisce alla seconda (ho guardato fuori); solo l'ultimo verbo, 見た, mostra che entrambe sono avvenute nel passato."
+        "en": "The te-form (the verb form in て/で) links one action to the next. 開ける is an ichidan verb (it ends in -eru and simply drops る), so 開ける → 開けて. Only the last verb, 見た, is in the past, and that covers both actions.",
+        "it": "La forma in て (la forma del verbo in て/で) collega un'azione alla successiva. 開ける è un verbo ichidan (finisce in -eru e perde semplicemente る), quindi 開ける → 開けて. Solo l'ultimo verbo, 見た, è al passato, e vale per entrambe le azioni."
       }
     },
     {
@@ -56,6 +77,10 @@
         "kanji": "友達が私の宿題を手伝ってくれた",
         "kana": "ともだちがわたしのしゅくだいをてつだってくれた"
       },
+      "translation": {
+        "en": "A friend helped me with my homework.",
+        "it": "Un amico mi ha aiutato con i compiti."
+      },
       "gap": {
         "kanji": "友達が私の宿題を手伝って＿",
         "kana": "ともだちがわたしのしゅくだいをてつだって＿"
@@ -63,8 +88,8 @@
       "answer": "くれた",
       "distractors": ["あげた"],
       "explanation": {
-        "en": "te-form + くれる means someone does something for the speaker or the speaker's side: the friend helped with my homework, as a favour to me. あげる points the other way, from the speaker's side to others, so it cannot be used when the benefit comes to me.",
-        "it": "forma in て + くれる significa che qualcuno fa qualcosa per chi parla o per la sua cerchia: l'amico mi ha aiutato con i compiti, come favore a me. あげる va nella direzione opposta, da chi parla verso gli altri, quindi non si può usare quando il beneficio arriva a me."
+        "en": "The te-form of a verb (here 手伝って, from 手伝う \"help\") + くれる means someone does something for me, or for my family or group: 手伝ってくれた, \"helped me\". あげる works the other way, from me to others, so it is wrong when the favour comes to me.",
+        "it": "La forma in て di un verbo (qui 手伝って, da 手伝う «aiutare») + くれる significa che qualcuno fa qualcosa per me, o per la mia famiglia o il mio gruppo: 手伝ってくれた, «mi ha aiutato». あげる va nell'altro senso, da me agli altri, quindi è sbagliato quando il favore arriva a me."
       }
     },
     {
@@ -78,10 +103,18 @@
         "kanji": "父が夕飯を作ってくれた",
         "kana": "ちちがゆうはんをつくってくれた"
       },
+      "translation": {
+        "en": "My father made dinner for me.",
+        "it": "Mio padre mi ha preparato la cena."
+      },
+      "glosses": [
+        { "text": "父が夕飯を作", "reading": "ちちがゆうはんをつく", "meaning": { "en": "father + が, dinner + を, first part of 作る, \"make\"", "it": "padre + が, cena + を, inizio di 作る, «preparare»" } },
+        { "text": "ってくれた", "meaning": { "en": "end of 作って + くれた, \"did for me\"", "it": "fine di 作って + くれた, «ha fatto per me»" } }
+      ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select ってくれた: the te-form ending of 作る followed by くれた. It tells you the dinner was made for the speaker's benefit — \"my father made dinner for me\" — without any word for \"for me\".",
-        "it": "Seleziona ってくれた: la desinenza in て di 作る seguita da くれた. Dice che la cena è stata preparata a beneficio di chi parla — «mio padre mi ha preparato la cena» — senza bisogno di una parola per «per me»."
+        "en": "Select ってくれた: 作って is the te-form of 作る (\"make\"), and くれた means \"did for me\". Together they say the dinner was made for the speaker, with no need for a word meaning \"for me\".",
+        "it": "Seleziona ってくれた: 作って è la forma in て di 作る («preparare»), e くれた significa «ha fatto per me». Insieme dicono che la cena è stata preparata per chi parla, senza bisogno di una parola per «per me»."
       }
     },
     {
@@ -95,6 +128,10 @@
         "kanji": "私は妹に絵本を読んであげた",
         "kana": "わたしはいもうとにえほんをよんであげた"
       },
+      "translation": {
+        "en": "I read a picture book to my younger sister.",
+        "it": "Ho letto un libro illustrato a mia sorella minore."
+      },
       "gap": {
         "kanji": "私は妹に絵本を読んで＿",
         "kana": "わたしはいもうとにえほんをよんで＿"
@@ -102,8 +139,8 @@
       "answer": "あげた",
       "distractors": ["くれた"],
       "explanation": {
-        "en": "te-form + あげる means the speaker (or someone) does something for another person: I read a picture book to my younger sister, for her sake. くれる is reserved for favours that come toward the speaker.",
-        "it": "forma in て + あげる significa che chi parla (o qualcuno) fa qualcosa per un'altra persona: ho letto un libro illustrato a mia sorella minore, per lei. くれる è riservato ai favori che arrivano verso chi parla."
+        "en": "The te-form of a verb (here 読んで, from 読む \"read\") + あげる means I, or someone, do something for another person: 読んであげた, \"read to her, for her sake\". くれる is only for favours that come toward me.",
+        "it": "La forma in て di un verbo (qui 読んで, da 読む «leggere») + あげる significa che io, o qualcuno, faccio qualcosa per un'altra persona: 読んであげた, «le ho letto, per lei». くれる è solo per i favori che arrivano a me."
       }
     },
     {
@@ -117,10 +154,128 @@
         "kanji": "兄は忙しくて手伝ってくれなかった",
         "kana": "あにはいそがしくててつだってくれなかった"
       },
+      "translation": {
+        "en": "My older brother was busy and didn't help me.",
+        "it": "Mio fratello maggiore era impegnato e non mi ha aiutato."
+      },
+      "glosses": [
+        { "text": "兄は", "reading": "あには", "meaning": { "en": "older brother (topic)", "it": "fratello maggiore (tema)" } },
+        { "text": "忙しくて", "reading": "いそがしくて", "meaning": { "en": "was busy, and so", "it": "era impegnato, e quindi" } },
+        { "text": "手伝ってくれなかった", "reading": "てつだってくれなかった", "meaning": { "en": "didn't help me", "it": "non mi ha aiutato" } }
+      ],
       "answer": ["兄は", "忙しくて", "手伝ってくれなかった"],
       "explanation": {
-        "en": "An い-adjective has a te-form too: 忙しい → 忙しくて, here giving the reason, \"was busy, and so…\". The second clause is the negative past of てくれる: my brother did not help me. The single tense marker at the end covers both clauses.",
-        "it": "Anche un aggettivo in い ha una forma in て: 忙しい → 忙しくて, qui a indicare il motivo, «era impegnato, e così…». La seconda proposizione è il passato negativo di てくれる: mio fratello non mi ha aiutato. L'unico segnale di tempo, in fondo, vale per entrambe le proposizioni."
+        "en": "い-adjectives (describing words ending in い) have a te-form too: 忙しい → 忙しくて, here meaning \"was busy, so…\". 手伝ってくれなかった is the negative past of てくれる: \"didn't help me\". The tense at the very end covers both parts.",
+        "it": "Anche gli aggettivi in い (parole che descrivono e finiscono in い) hanno una forma in て: 忙しい → 忙しくて, qui «era impegnato, quindi…». 手伝ってくれなかった è il passato negativo di てくれる: «non mi ha aiutato». Il tempo in fondo alla frase vale per entrambe le parti."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "て形で節をつなぐ",
+      "prompt": {
+        "en": "\"I walked to the station and got on the train.\" Which form of 歩く (\"walk\") links the two actions?",
+        "it": "«Sono andato a piedi alla stazione e ho preso il treno.» Quale forma di 歩く («camminare») collega le due azioni?"
+      },
+      "sentence": {
+        "kanji": "駅まで歩いて電車に乗った",
+        "kana": "えきまであるいてでんしゃにのった"
+      },
+      "translation": {
+        "en": "I walked to the station and got on the train.",
+        "it": "Sono andato a piedi alla stazione e ho preso il treno."
+      },
+      "glosses": [
+        { "text": "歩いて", "reading": "あるいて" },
+        { "text": "歩きて", "reading": "あるきて" },
+        { "text": "歩って", "reading": "あるって" },
+        { "text": "歩くて", "reading": "あるくて" }
+      ],
+      "gap": {
+        "kanji": "駅まで＿電車に乗った",
+        "kana": "えきまで＿でんしゃにのった"
+      },
+      "answer": "歩いて",
+      "distractors": ["歩きて", "歩って", "歩くて"],
+      "explanation": {
+        "en": "The te-form (the verb form in て/で) links one action to the next. 歩く is a godan verb (its last kana changes) ending in く, and these make the te-form with いて: 歩く → 歩いて. The past た of 乗った, at the end, makes both actions past.",
+        "it": "La forma in て (la forma del verbo in て/で) collega un'azione alla successiva. 歩く è un verbo godan (il suo ultimo kana cambia) che finisce in く, e questi fanno la forma in て con いて: 歩く → 歩いて. Il passato た di 乗った, in fondo, rende passate entrambe le azioni."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "て形で節をつなぐ",
+      "prompt": {
+        "en": "Which part is the first of the two actions?",
+        "it": "Quale parte è la prima delle due azioni?"
+      },
+      "sentence": {
+        "kanji": "シャワーをあびて寝た",
+        "kana": "シャワーをあびてねた"
+      },
+      "translation": {
+        "en": "I took a shower and went to bed.",
+        "it": "Ho fatto la doccia e sono andato a letto."
+      },
+      "glosses": [
+        { "text": "シャワーをあびて", "meaning": { "en": "take a shower, and then", "it": "fare la doccia, e poi" } },
+        { "text": "寝", "reading": "ね", "meaning": { "en": "sleep, go to bed (kanji of 寝る)", "it": "dormire, andare a letto (kanji di 寝る)" } },
+        { "text": "た", "meaning": { "en": "past ending: 寝た", "it": "desinenza del passato: 寝た" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select シャワーをあびて. あびて is the te-form of あびる (\"take a shower\"): the verb form in て that links one action to the next, \"and then\". The second action is 寝た, \"went to bed\", and its past た covers both.",
+        "it": "Seleziona シャワーをあびて. あびて è la forma in て di あびる («fare la doccia»): la forma del verbo in て che collega un'azione alla successiva, «e poi». La seconda azione è 寝た, «sono andato a letto», e il suo passato た vale per entrambe."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "恩恵を与える「てあげる」",
+      "prompt": {
+        "en": "Which part says I did it for someone else?",
+        "it": "Quale parte dice che l'ho fatto per qualcun altro?"
+      },
+      "sentence": {
+        "kanji": "母に花を買ってあげた",
+        "kana": "ははにはなをかってあげた"
+      },
+      "translation": {
+        "en": "I bought flowers for my mother.",
+        "it": "Ho comprato dei fiori per mia madre."
+      },
+      "glosses": [
+        { "text": "母に花を買", "reading": "ははにはなをか", "meaning": { "en": "mother + に (for whom), flowers + を, first part of 買う, \"buy\"", "it": "madre + に (per chi), fiori + を, inizio di 買う, «comprare»" } },
+        { "text": "ってあげた", "meaning": { "en": "end of 買って + あげた, \"did for someone\"", "it": "fine di 買って + あげた, «ho fatto per qualcuno»" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select ってあげた: 買って is the te-form of 買う (\"buy\"), and あげた means \"did for someone\". Together they say I bought the flowers for my mother's sake. The person who receives the favour takes に: 母に.",
+        "it": "Seleziona ってあげた: 買って è la forma in て di 買う («comprare»), e あげた significa «ho fatto per qualcuno». Insieme dicono che ho comprato i fiori per mia madre. La persona che riceve il favore prende に: 母に."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "恩恵を与える「てあげる」",
+      "prompt": {
+        "en": "Build: \"I lent my umbrella to my younger brother.\"",
+        "it": "Componi: «Ho prestato l'ombrello a mio fratello minore.»"
+      },
+      "sentence": {
+        "kanji": "弟に傘を貸してあげた",
+        "kana": "おとうとにかさをかしてあげた"
+      },
+      "translation": {
+        "en": "I lent my umbrella to my younger brother.",
+        "it": "Ho prestato l'ombrello a mio fratello minore."
+      },
+      "glosses": [
+        { "text": "弟に", "reading": "おとうとに", "meaning": { "en": "to my younger brother", "it": "a mio fratello minore" } },
+        { "text": "傘を", "reading": "かさを", "meaning": { "en": "umbrella + を (what is lent)", "it": "ombrello + を (ciò che si presta)" } },
+        { "text": "貸してあげた", "reading": "かしてあげた", "meaning": { "en": "lent (as a favour)", "it": "ho prestato (come favore)" } }
+      ],
+      "answer": ["弟に", "傘を", "貸してあげた"],
+      "explanation": {
+        "en": "貸して is the te-form of 貸す (\"lend\"), and あげた adds that I did it for him, as a favour. The person who receives it takes に: 弟に. The thing lent takes を, the particle for the object (the thing the action is done to).",
+        "it": "貸して è la forma in て di 貸す («prestare»), e あげた aggiunge che l'ho fatto per lui, come favore. Chi lo riceve prende に: 弟に. La cosa prestata prende を, la particella dell'oggetto (la cosa su cui cade l'azione)."
       }
     }
   ]

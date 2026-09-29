@@ -14,6 +14,14 @@ import { DEFAULT_LESSONS_PER_DAY } from '../../domain/unlockPace';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { DashboardScreen } from './DashboardScreen';
 
+// La copy dell'interfaccia, SENZA i nodi marcati `lang="ja"`: quelli sono contenuto
+// giapponese della pagina (la data in verticale della direzione «rivista»), non
+// interfaccia, e sono esclusi dal controllo «nessun carattere >= U+2000» come le
+// frasi degli esercizi. Nella dashboard sono solo <p> senza <p> annidati.
+function withoutJapanese(markup: string): string {
+  return markup.replace(/<p lang="ja"[^>]*>[\s\S]*?<\/p>/g, '');
+}
+
 // Righe della I/O & Edge-Case Matrix + gli AC della dashboard (storia 3.12).
 // Ambiente `node` (nessun jsdom): renderToStaticMarkup non esegue effetti né
 // timer. Con la cache SEMINATA (setQueryData) le query risolvono in modo
@@ -276,7 +284,7 @@ describe('AC4 — microcopy: conteggio prima del verbo, nessun !/emoji/"hai N"',
     // In `en` la copy è ASCII: nessun code point >= U+2000 (che coprirebbe
     // punteggiatura CJK, kana, kanji, forme fullwidth ed emoji). Scandendo i code
     // point evitiamo di scrivere CJK letterale nel sorgente (no-irregular-whitespace).
-    const offending = [...markup].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
+    const offending = [...withoutJapanese(markup)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
     expect(offending).toEqual([]);
   });
 });
@@ -564,7 +572,7 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(cleared).toContain(en.dashboard.clearedBody);
     expect(cleared).not.toContain('!');
     expect(
-      [...cleared].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000),
+      [...withoutJapanese(cleared)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000),
     ).toEqual([]);
 
     // curriculumCompleteBody (via curriculum esaurito).
@@ -575,7 +583,7 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(complete).toContain(en.dashboard.curriculumCompleteBody);
     expect(complete).not.toContain('!');
     expect(
-      [...complete].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000),
+      [...withoutJapanese(complete)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000),
     ).toEqual([]);
   });
 
@@ -647,7 +655,7 @@ describe('AC1/AC2/AC3/AC4 — stato di primo avvio (unlocked === 0)', () => {
   });
 
   it('nessun carattere >= U+2000 nel markup (en ASCII, AC5)', () => {
-    const offending = [...markup].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
+    const offending = [...withoutJapanese(markup)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
     expect(offending).toEqual([]);
   });
 });
@@ -842,7 +850,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     );
     expect(capped).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
     expect(capped).not.toContain('!');
-    expect([...capped].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000)).toEqual([]);
+    expect([...withoutJapanese(capped)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000)).toEqual([]);
     // Nessuna apertura possessiva.
     expect(capped.toLowerCase()).not.toContain('you have');
     expect(capped.toLowerCase()).not.toContain('hai ');
@@ -895,27 +903,30 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
   });
 });
 
-describe('3.23 — il <main> compone il contenitore responsive condiviso; count-hero-mobile', () => {
-  it('AC6 — il <main> è colonna singola centrata limitata a measure, gutter responsive', () => {
+// Direzione «rivista» (29-09-2026): la dashboard non è più la colonna stretta di
+// 3.23 ma l'intera pagina a destra del dorso, una griglia a filetti che riempie
+// l'altezza. Resta il vincolo di 3.23 AC8: scheletro e caricato condividono la
+// stessa classe del <main> e la stessa griglia, nessun ramo per dispositivo.
+describe('rivista — il <main> è la pagina a griglia; count-hero-mobile', () => {
+  it('il <main> riempie la pagina (flex-1) e contiene la griglia a tre colonne da 1024px', () => {
     const markup = render(
       seededClient({ dueCount: 23, log: [], unlocked: 1, total: 10 }),
       UID,
     );
-    expect(markup).toMatch(/<main[^>]*class="[^"]*max-w-measure[^"]*"/);
-    expect(markup).toMatch(/<main[^>]*class="[^"]*mx-auto[^"]*"/);
-    expect(markup).toMatch(/<main[^>]*class="[^"]*px-gutter-mobile[^"]*"/);
-    expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*flex-1[^"]*"/);
+    expect(markup).toContain('lg:grid-cols-[minmax(0,1fr)_150px_300px]');
   });
 
-  it('AC8 — scheletro e contenuto condividono la STESSA classe responsive (nessun ramo per dispositivo)', () => {
+  it('scheletro e contenuto condividono la STESSA classe del <main> e la stessa griglia', () => {
     const skeleton = render(freshClient(), null);
     const loaded = render(
       seededClient({ dueCount: 1, log: [], unlocked: 1, total: 1 }),
       UID,
     );
-    for (const klass of ['max-w-measure', 'px-gutter-mobile', 'sm:px-gutter-desktop']) {
-      expect(skeleton).toContain(klass);
-      expect(loaded).toContain(klass);
+    const mainClass = (m: string) => /<main[^>]*class="([^"]*)"/.exec(m)?.[1];
+    expect(mainClass(skeleton)).toBe(mainClass(loaded));
+    for (const m of [skeleton, loaded]) {
+      expect(m).toContain('lg:grid-cols-[minmax(0,1fr)_150px_300px]');
     }
   });
 
@@ -927,5 +938,39 @@ describe('3.23 — il <main> compone il contenitore responsive condiviso; count-
     // Base mobile-first 56px + variante 72px da 640px, entrambe già in theme.css.
     expect(markup).toContain('text-count-hero-mobile');
     expect(markup).toContain('sm:text-count-hero');
+  });
+});
+
+// Il video di riferimento (29-09-2026): la lezione in corso (l'ultima sbloccata)
+// porta l'id del suo video; la dashboard lo collega con un vero <a> che apre
+// YouTube in una scheda nuova. Mai un video incorporato.
+describe('video di riferimento della lezione in corso', () => {
+  function withVideos(videos: readonly (string | undefined)[]): QueryClient {
+    const qc = seededClient({ dueCount: 3, log: [], unlocked: videos.length, total: 10 });
+    const lessons = qc.getQueryData<Record<string, unknown>[]>(['lessons']) ?? [];
+    qc.setQueryData(
+      ['lessons'],
+      lessons.map((lesson, i) => (videos[i] ? { ...lesson, video: videos[i] } : lesson)),
+    );
+    return qc;
+  }
+
+  it("collega il video dell'ULTIMA lezione sbloccata, in una scheda nuova", () => {
+    const markup = render(withVideos(['aaaaaaaaaaa', 'bbbbbbbbbbb']), UID);
+    expect(markup).toContain('href="https://www.youtube.com/watch?v=bbbbbbbbbbb"');
+    expect(markup).not.toContain('watch?v=aaaaaaaaaaa');
+    expect(markup).toMatch(/<a[^>]*target="_blank"[^>]*rel="noreferrer"/);
+    expect(markup).toContain(en.dashboard.referenceVideo);
+  });
+
+  it('senza video sulla lezione in corso nessun collegamento', () => {
+    const markup = render(withVideos(['aaaaaaaaaaa', undefined]), UID);
+    expect(markup).not.toContain('youtube.com');
+    expect(markup).not.toContain(en.dashboard.referenceVideo);
+  });
+
+  it('nessun video incorporato: niente <iframe>', () => {
+    const markup = render(withVideos(['aaaaaaaaaaa']), UID);
+    expect(markup).not.toContain('<iframe');
   });
 });

@@ -4,18 +4,23 @@
     "en": "で for the place of an action and for the means; と to join nouns",
     "it": "で per il luogo di un'azione e per il mezzo; と per unire i nomi"
   },
+  "video": "dwcTI9qvO-U",
   "grammarPoints": ["動作の場所を示す「で」", "手段を示す「で」", "名詞をつなぐ「と」"],
   "exercises": [
     {
       "kind": "single-select",
       "grammarPoint": "動作の場所を示す「で」",
       "prompt": {
-        "en": "\"I study at the library.\" Which particle marks where the action happens?",
-        "it": "«Studio in biblioteca.» Quale particella marca dove avviene l'azione?"
+        "en": "\"I study at the library.\" Which particle says where the action happens?",
+        "it": "«Studio in biblioteca.» Quale particella dice dove avviene l'azione?"
       },
       "sentence": {
         "kanji": "図書館で勉強する",
         "kana": "としょかんでべんきょうする"
+      },
+      "translation": {
+        "en": "I study at the library.",
+        "it": "Studio in biblioteca."
       },
       "gap": {
         "kanji": "図書館＿勉強する",
@@ -24,20 +29,24 @@
       "answer": "で",
       "distractors": ["に", "を"],
       "explanation": {
-        "en": "Studying is an action, and the place where an action takes place is marked by で. に would name a place you go to or are at, not the scene of an activity.",
-        "it": "Studiare è un'azione, e il luogo in cui si svolge un'azione è marcato da で. に indicherebbe un luogo in cui si va o in cui ci si trova, non la scena di un'attività."
+        "en": "で is a particle (a small word after a noun that shows its role) that marks where an action happens. Studying is an action, so the library takes で. に would only say where you go or where something is.",
+        "it": "で è una particella (una piccola parola dopo un nome che ne indica il ruolo) che segna dove avviene un'azione. Studiare è un'azione, quindi la biblioteca prende で. に direbbe solo dove si va o dove si trova qualcosa."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "動作の場所を示す「で」",
       "prompt": {
-        "en": "\"My older sister is in the kitchen.\" Which particle marks where she is?",
-        "it": "«Mia sorella maggiore è in cucina.» Quale particella marca dove si trova?"
+        "en": "\"My older sister is in the kitchen.\" Which particle says where she is?",
+        "it": "«Mia sorella maggiore è in cucina.» Quale particella dice dove si trova?"
       },
       "sentence": {
         "kanji": "姉は台所にいる",
         "kana": "あねはだいどころにいる"
+      },
+      "translation": {
+        "en": "My older sister is in the kitchen.",
+        "it": "Mia sorella maggiore è in cucina."
       },
       "gap": {
         "kanji": "姉は台所＿いる",
@@ -46,8 +55,8 @@
       "answer": "に",
       "distractors": ["で", "を"],
       "explanation": {
-        "en": "Here nothing is being done: いる only says where the sister is, so the place takes に. Compare 台所で料理する, \"cooks in the kitchen\", where an action calls for で.",
-        "it": "Qui non si fa nulla: いる dice solo dove si trova la sorella, quindi il luogo prende に. Si confronti con 台所で料理する, «cucina in cucina», dove un'azione richiede で."
+        "en": "いる means \"to be (somewhere)\": nobody is doing anything, it only says where she is. For the place where someone simply is, Japanese uses に. Compare 台所で料理する, \"cooks in the kitchen\": that is an action, so で.",
+        "it": "いる significa «trovarsi»: nessuno sta facendo qualcosa, dice solo dove si trova la sorella. Per il luogo dove qualcuno semplicemente sta, il giapponese usa に. Confronta 台所で料理する, «cucina in cucina»: lì c'è un'azione, quindi で."
       }
     },
     {
@@ -61,10 +70,19 @@
         "kanji": "ペンで名前を書いた",
         "kana": "ペンでなまえをかいた"
       },
+      "translation": {
+        "en": "I wrote my name with a pen.",
+        "it": "Ho scritto il mio nome con una penna."
+      },
+      "glosses": [
+        { "text": "ペンで", "meaning": { "en": "with a pen", "it": "con una penna" } },
+        { "text": "名前を書", "reading": "なまえをか", "meaning": { "en": "name (what is written) + first part of 書く, \"write\"", "it": "nome (ciò che si scrive) + inizio di 書く, «scrivere»" } },
+        { "text": "いた", "meaning": { "en": "end of 書いた, \"wrote\"", "it": "fine di 書いた, «ho scritto»" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the means: ペンで. Besides the place of an action, で marks the tool or means used to do it: \"wrote the name with a pen\". The name is the object (を).",
-        "it": "Seleziona il mezzo: ペンで. Oltre al luogo di un'azione, で marca lo strumento o il mezzo con cui la si compie: «ha scritto il nome con la penna». Il nome è l'oggetto (を)."
+        "en": "Select ペンで, \"with a pen\". Besides the place of an action, で also marks the tool you use to do it. The name is what gets written, so it takes を, the particle for the object (the thing the action is done to).",
+        "it": "Seleziona ペンで, «con una penna». Oltre al luogo di un'azione, で segna anche lo strumento con cui la fai. Il nome è ciò che viene scritto, quindi prende を, la particella dell'oggetto (la cosa su cui cade l'azione)."
       }
     },
     {
@@ -78,22 +96,35 @@
         "kanji": "自転車で学校に通う",
         "kana": "じてんしゃでがっこうにかよう"
       },
+      "translation": {
+        "en": "I go to school by bicycle.",
+        "it": "Vado a scuola in bicicletta."
+      },
+      "glosses": [
+        { "text": "自転車で", "reading": "じてんしゃで", "meaning": { "en": "by bicycle", "it": "in bicicletta" } },
+        { "text": "学校に", "reading": "がっこうに", "meaning": { "en": "to school", "it": "a scuola" } },
+        { "text": "通う", "reading": "かよう", "meaning": { "en": "go regularly", "it": "andare abitualmente" } }
+      ],
       "answer": ["自転車で", "学校に", "通う"],
       "explanation": {
-        "en": "A means of transport is a means like any other, so it takes で: 自転車で, \"by bicycle\". The destination of the commute is marked by に.",
-        "it": "Un mezzo di trasporto è un mezzo come un altro, quindi prende で: 自転車で, «in bicicletta». La destinazione del tragitto è marcata da に."
+        "en": "A vehicle is a means, just like a pen or a language, so it takes the particle で: 自転車で, \"by bicycle\". The place you go to takes に: 学校に, \"to school\".",
+        "it": "Un veicolo è un mezzo, proprio come una penna o una lingua, quindi prende la particella で: 自転車で, «in bicicletta». Il luogo dove vai prende に: 学校に, «a scuola»."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "手段を示す「で」",
       "prompt": {
-        "en": "\"I wrote a letter in English.\" Which particle marks the language used?",
-        "it": "«Ho scritto una lettera in inglese.» Quale particella marca la lingua usata?"
+        "en": "\"I wrote a letter in English.\" Which particle goes after the language used?",
+        "it": "«Ho scritto una lettera in inglese.» Quale particella va dopo la lingua usata?"
       },
       "sentence": {
         "kanji": "英語で手紙を書いた",
         "kana": "えいごでてがみをかいた"
+      },
+      "translation": {
+        "en": "I wrote a letter in English.",
+        "it": "Ho scritto una lettera in inglese."
       },
       "gap": {
         "kanji": "英語＿手紙を書いた",
@@ -102,8 +133,8 @@
       "answer": "で",
       "distractors": ["を", "が"],
       "explanation": {
-        "en": "A language used to say or write something is a means, so it takes で: 英語で, \"in English\". The letter is already the object with を, and a verb has only one object.",
-        "it": "Una lingua usata per dire o scrivere qualcosa è un mezzo, quindi prende で: 英語で, «in inglese». La lettera è già l'oggetto con を, e un verbo ha un solo oggetto."
+        "en": "The language you speak or write in is a means too, so it takes で: 英語で, \"in English\". を is already used for the letter, the thing that gets written.",
+        "it": "Anche la lingua in cui parli o scrivi è un mezzo, quindi prende で: 英語で, «in inglese». を è già usato per la lettera, la cosa che viene scritta."
       }
     },
     {
@@ -117,6 +148,10 @@
         "kanji": "パンと牛乳を買った",
         "kana": "パンとぎゅうにゅうをかった"
       },
+      "translation": {
+        "en": "I bought bread and milk.",
+        "it": "Ho comprato pane e latte."
+      },
       "gap": {
         "kanji": "パン＿牛乳を買った",
         "kana": "パン＿ぎゅうにゅうをかった"
@@ -124,8 +159,8 @@
       "answer": "と",
       "distractors": ["を", "へ"],
       "explanation": {
-        "en": "と joins nouns into a list: パンと牛乳, \"bread and milk\". It says nothing about their role in the sentence; the を after the last noun makes the whole list the object of 買った.",
-        "it": "と unisce i nomi in un elenco: パンと牛乳, «pane e latte». Non dice nulla del loro ruolo nella frase; il を dopo l'ultimo nome rende l'intero elenco oggetto di 買った."
+        "en": "と between two nouns means \"and\": パンと牛乳, \"bread and milk\". It only makes a list. The を after the last noun makes the whole list the object of 買った (the things bought).",
+        "it": "と fra due nomi significa «e»: パンと牛乳, «pane e latte». Serve solo a fare un elenco. Il を dopo l'ultimo nome rende tutto l'elenco l'oggetto di 買った (le cose comprate)."
       }
     },
     {
@@ -139,10 +174,99 @@
         "kanji": "兄と弟が川で泳いでいる",
         "kana": "あにとおとうとがかわでおよいでいる"
       },
+      "translation": {
+        "en": "My older and younger brothers are swimming in the river.",
+        "it": "Il fratello maggiore e il minore stanno nuotando nel fiume."
+      },
+      "glosses": [
+        { "text": "兄と", "reading": "あにと", "meaning": { "en": "older brother and", "it": "fratello maggiore e" } },
+        { "text": "弟が", "reading": "おとうとが", "meaning": { "en": "younger brother + が (who does it)", "it": "fratello minore + が (chi lo fa)" } },
+        { "text": "川で", "reading": "かわで", "meaning": { "en": "in the river", "it": "nel fiume" } },
+        { "text": "泳いでいる", "reading": "およいでいる", "meaning": { "en": "are swimming", "it": "stanno nuotando" } }
+      ],
       "answer": ["兄と", "弟が", "川で", "泳いでいる"],
       "explanation": {
-        "en": "兄と弟 is one unit, \"older and younger brother\", and が after it marks both as the subject. 川で is where the swimming happens: an action, so で.",
-        "it": "兄と弟 è un'unica unità, «il fratello maggiore e il minore», e が dopo di essa li marca entrambi come soggetto. 川で è dove avviene il nuotare: un'azione, quindi で."
+        "en": "兄と弟 means \"older brother and younger brother\": と joins them into one group. が after the group marks both as the subject (who does the action). 川で says where they swim: it is an action, so で.",
+        "it": "兄と弟 significa «fratello maggiore e fratello minore»: と li unisce in un solo gruppo. が dopo il gruppo li segna entrambi come soggetto (chi fa l'azione). 川で dice dove nuotano: è un'azione, quindi で."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "動作の場所を示す「で」",
+      "prompt": {
+        "en": "Which part says where the action happened?",
+        "it": "Quale parte dice dove è avvenuta l'azione?"
+      },
+      "sentence": {
+        "kanji": "レストランで晩ご飯を食べた",
+        "kana": "レストランでばんごはんをたべた"
+      },
+      "translation": {
+        "en": "I ate dinner at a restaurant.",
+        "it": "Ho cenato al ristorante."
+      },
+      "glosses": [
+        { "text": "レストランで", "meaning": { "en": "at a restaurant", "it": "al ristorante" } },
+        { "text": "晩ご飯を食", "reading": "ばんごはんをた", "meaning": { "en": "dinner (what is eaten) + first part of 食べる, \"eat\"", "it": "cena (ciò che si mangia) + inizio di 食べる, «mangiare»" } },
+        { "text": "べた", "meaning": { "en": "end of 食べた, \"ate\"", "it": "fine di 食べた, «ho mangiato»" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select レストランで, \"at a restaurant\". Eating is an action, and the place where an action happens takes the particle で (a small word that marks where it happens). Without an action, for example with いる, \"to be there\", the place would take に.",
+        "it": "Seleziona レストランで, «al ristorante». Mangiare è un'azione, e il luogo dove avviene un'azione prende la particella で (una piccola parola che segna dove avviene). Senza un'azione, per esempio con いる, «trovarsi», il luogo prenderebbe に."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "手段を示す「で」",
+      "prompt": {
+        "en": "Which part says how I get there?",
+        "it": "Quale parte dice con che mezzo ci vado?"
+      },
+      "sentence": {
+        "kanji": "バスで学校に行く",
+        "kana": "バスでがっこうにいく"
+      },
+      "translation": {
+        "en": "I go to school by bus.",
+        "it": "Vado a scuola in autobus."
+      },
+      "glosses": [
+        { "text": "バスで", "meaning": { "en": "by bus", "it": "in autobus" } },
+        { "text": "学校に行", "reading": "がっこうにい", "meaning": { "en": "to school + first part of 行く, \"go\"", "it": "a scuola + inizio di 行く, «andare»" } },
+        { "text": "く", "meaning": { "en": "end of 行く", "it": "fine di 行く" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select バスで, \"by bus\". The particle で also marks the means you use: a tool, a language or, as here, a vehicle. The place you go to takes に: 学校に.",
+        "it": "Seleziona バスで, «in autobus». La particella で segna anche il mezzo che usi: uno strumento, una lingua o, come qui, un veicolo. Il luogo dove vai prende に: 学校に."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞をつなぐ「と」",
+      "prompt": {
+        "en": "Build: \"There are a book and a notebook on the desk.\"",
+        "it": "Componi: «Sulla scrivania ci sono un libro e un quaderno.»"
+      },
+      "sentence": {
+        "kanji": "机の上に本とノートがある",
+        "kana": "つくえのうえにほんとノートがある"
+      },
+      "translation": {
+        "en": "There are a book and a notebook on the desk.",
+        "it": "Sulla scrivania ci sono un libro e un quaderno."
+      },
+      "glosses": [
+        { "text": "机の上に", "reading": "つくえのうえに", "meaning": { "en": "on the desk", "it": "sulla scrivania" } },
+        { "text": "本と", "reading": "ほんと", "meaning": { "en": "a book and", "it": "un libro e" } },
+        { "text": "ノートが", "meaning": { "en": "notebook + が (what is there)", "it": "quaderno + が (ciò che c'è)" } },
+        { "text": "ある", "meaning": { "en": "there is, there are (for things)", "it": "c'è, ci sono (per le cose)" } }
+      ],
+      "answer": ["机の上に", "本と", "ノートが", "ある"],
+      "explanation": {
+        "en": "本とノート means \"a book and a notebook\": と joins two nouns into a list. が after the list marks what is there, and ある says that things are in a place. The place takes に, because ある is not an action.",
+        "it": "本とノート significa «un libro e un quaderno»: と unisce due nomi in un elenco. が dopo l'elenco segna ciò che c'è, e ある dice che delle cose si trovano in un luogo. Il luogo prende に, perché ある non è un'azione."
       }
     }
   ]

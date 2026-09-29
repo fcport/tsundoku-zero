@@ -18,6 +18,8 @@
 // da tastiera, modellata su quella di `StatsScreen`.
 import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { MagazineFrame } from '../../ui/MagazineFrame';
+import { SCREEN_TITLE } from '../../ui/magazine';
 
 export interface PrivacyScreenProps {
   /**
@@ -31,20 +33,28 @@ export interface PrivacyScreenProps {
 
 // ANELLO DI FOCUS visibile: lo STESSO token condiviso dagli interattivi delle
 // altre schermate-rotta (`StatsScreen`, `SessionScreen`). `focus-visible:` mostra
-// l'anello solo per navigazione da tastiera. Token `focus-ring` (in scuro
-// `accent-dark`): nessun colore letterale (UX-DR1).
+// l'anello solo per navigazione da tastiera. Token `focus-ring`: nessun colore
+// letterale (UX-DR1).
 const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
 
 export function PrivacyScreen({ onExit }: PrivacyScreenProps) {
   const { t } = useTranslation();
 
   return (
-    <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-6 py-6`}>
-      <h2 className="text-display text-ink-primary">{t('legal.privacy.title')}</h2>
+    // Direzione «rivista» (29-09-2026): il dorso col marchio, poi la colonna di lettura
+    // col titolo a testata e il primo paragrafo in corpo grande, come l'attacco di un
+    // articolo.
+    <MagazineFrame brandAsHeading>
+    <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-6 py-8 sm:py-14`}>
+      <h2 className={`${SCREEN_TITLE} text-ink-primary`}>
+        {t('legal.privacy.title')}
+      </h2>
       {/* Le tre dichiarazioni fattuali: cosa si memorizza, cosa non si raccoglie,
           come si cancella. Ognuna un paragrafo autonomo, tutta copy da t(). */}
-      <p className="text-body text-ink-primary">{t('legal.privacy.stored')}</p>
+      <p className="border-t-[1.5px] border-border-strong pt-4 text-[22px] font-medium leading-snug text-ink-primary">
+        {t('legal.privacy.stored')}
+      </p>
       <p className="text-body text-ink-primary">
         {t('legal.privacy.notCollected')}
       </p>
@@ -54,10 +64,11 @@ export function PrivacyScreen({ onExit }: PrivacyScreenProps) {
       <button
         type="button"
         onClick={onExit}
-        className={`self-center rounded-md border border-border-strong bg-surface-base text-ink-primary px-6 py-3 text-body ${FOCUS_RING}`}
+        className={`min-h-[56px] self-start border-[1.5px] border-border-strong bg-surface-raised px-6 text-label font-bold uppercase tracking-[0.04em] text-ink-primary hover:bg-surface-sunken ${FOCUS_RING}`}
       >
         {t('legal.privacy.back')}
       </button>
     </main>
+    </MagazineFrame>
   );
 }

@@ -1,22 +1,33 @@
 {
   "order": 8,
   "title": {
-    "en": "Verb stems and the auxiliaries that attach to them",
-    "it": "I radicali del verbo e gli ausiliari che vi si attaccano"
+    "en": "The verb stem and its auxiliaries (ます, たい, せる, れる, よう)",
+    "it": "Il radicale del verbo e i suoi ausiliari (ます, たい, せる, れる, よう)"
   },
+  "video": "FhyrskGBKHE",
   "grammarPoints": ["動詞の語幹と助動詞", "連用形につく「ます」「たい」", "未然形につく「せる」「れる」", "意向形"],
   "exercises": [
     {
       "kind": "single-select",
       "grammarPoint": "連用形につく「ます」「たい」",
       "prompt": {
-        "en": "\"I write a letter every week.\" What is the polite form of 書く?",
-        "it": "«Ogni settimana scrivo una lettera.» Qual è la forma cortese di 書く?"
+        "en": "\"I write a letter every week.\" How do you say \"write\" politely (from 書く)?",
+        "it": "«Ogni settimana scrivo una lettera.» Come si dice «scrivo» in modo cortese (da 書く)?"
       },
       "sentence": {
         "kanji": "毎週手紙を書きます",
         "kana": "まいしゅうてがみをかきます"
       },
+      "translation": {
+        "en": "I write a letter every week.",
+        "it": "Ogni settimana scrivo una lettera."
+      },
+      "glosses": [
+        { "text": "書きます", "reading": "かきます" },
+        { "text": "書くます", "reading": "かくます" },
+        { "text": "書かます", "reading": "かかます" },
+        { "text": "書こます", "reading": "かこます" }
+      ],
       "gap": {
         "kanji": "毎週手紙を＿",
         "kana": "まいしゅうてがみを＿"
@@ -24,21 +35,31 @@
       "answer": "書きます",
       "distractors": ["書くます", "書かます", "書こます"],
       "explanation": {
-        "en": "The polite auxiliary ます attaches to the i-stem: the final u-row kana moves to the i-row. 書く → 書き + ます. It changes the register, not the meaning.",
-        "it": "L'ausiliare cortese ます si attacca al radicale in i: l'ultimo kana della riga in u passa alla riga in i. 書く → 書き + ます. Cambia il registro, non il significato."
+        "en": "ます is an auxiliary (a piece added to a verb that changes its tone or meaning): it makes the verb polite. It attaches to the i-stem, the verb with its last kana changed to the i-sound: 書く → 書き + ます = 書きます. The meaning stays the same; only the tone becomes polite.",
+        "it": "ます è un ausiliare (un pezzo che si aggiunge al verbo e ne cambia il tono o il significato): rende il verbo cortese. Si attacca al radicale in i, cioè il verbo con l'ultimo kana cambiato nel suono i: 書く → 書き + ます = 書きます. Il significato resta lo stesso, cambia solo il tono."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "連用形につく「ます」「たい」",
       "prompt": {
-        "en": "\"I want to rest properly.\" How do you say \"want to rest\"?",
-        "it": "«Voglio riposarmi con calma.» Come si dice «voler riposare»?"
+        "en": "\"I want to rest properly.\" How do you say \"want to rest\" (from 休む)?",
+        "it": "«Voglio riposarmi con calma.» Come si dice «voglio riposarmi» (da 休む)?"
       },
       "sentence": {
         "kanji": "ゆっくり休みたい",
         "kana": "ゆっくりやすみたい"
       },
+      "translation": {
+        "en": "I want to rest properly.",
+        "it": "Voglio riposarmi con calma."
+      },
+      "glosses": [
+        { "text": "休みたい", "reading": "やすみたい" },
+        { "text": "休むたい", "reading": "やすむたい" },
+        { "text": "休またい", "reading": "やすまたい" },
+        { "text": "休みったい", "reading": "やすみったい" }
+      ],
       "gap": {
         "kanji": "ゆっくり＿",
         "kana": "ゆっくり＿"
@@ -46,8 +67,8 @@
       "answer": "休みたい",
       "distractors": ["休むたい", "休またい", "休みったい"],
       "explanation": {
-        "en": "たい (want to) also attaches to the i-stem: 休む → 休み + たい. Unlike ます it is an い-adjective, so it is negated and put in the past like one: 休みたくない, 休みたかった.",
-        "it": "Anche たい (voler fare) si attacca al radicale in i: 休む → 休み + たい. A differenza di ます è un aggettivo in い, quindi si nega e va al passato come tale: 休みたくない, 休みたかった."
+        "en": "To say \"want to\", add たい to the i-stem (the verb with its last kana changed to the i-sound): 休む → 休み + たい = 休みたい. 休みたい ends in い and works like an い-adjective (a word ending in い that already contains \"is\"), so \"don't want to rest\" is 休みたくない.",
+        "it": "Per dire «voglio», si aggiunge たい al radicale in i (il verbo con l'ultimo kana cambiato nel suono i): 休む → 休み + たい = 休みたい. 休みたい finisce in い e funziona come un aggettivo in い (una parola in い che contiene già il «è»), quindi «non voglio riposarmi» è 休みたくない."
       }
     },
     {
@@ -61,23 +82,42 @@
         "kanji": "一緒に昼ごはんを食べましょう",
         "kana": "いっしょにひるごはんをたべましょう"
       },
+      "translation": {
+        "en": "Let's have lunch together.",
+        "it": "Pranziamo insieme."
+      },
+      "glosses": [
+        { "text": "一緒に", "reading": "いっしょに", "meaning": { "en": "together", "it": "insieme" } },
+        { "text": "昼ごはんを", "reading": "ひるごはんを", "meaning": { "en": "lunch (を: the object)", "it": "il pranzo (を: l'oggetto)" } },
+        { "text": "食べましょう", "reading": "たべましょう", "meaning": { "en": "let's eat", "it": "mangiamo" } }
+      ],
       "answer": ["一緒に", "昼ごはんを", "食べましょう"],
       "explanation": {
-        "en": "ましょう is the volitional of ます, \"let's\" in the polite register. Like ます, it goes on the i-stem; for the ichidan verb 食べる, the stem is simply 食べ.",
-        "it": "ましょう è il volitivo di ます, «facciamo» nel registro cortese. Come ます, va sul radicale in i; per il verbo ichidan 食べる, il radicale è semplicemente 食べ."
+        "en": "ましょう means \"let's…\" in polite speech; it comes from ます and attaches in the same place. 食べる is an ichidan verb (a verb that simply drops る), so the stem is 食べ and \"let's eat\" is 食べましょう. The verb goes last, after \"together\" (一緒に) and the object (昼ごはんを).",
+        "it": "ましょう significa «facciamo…» nel registro cortese; deriva da ます e si attacca nello stesso punto. 食べる è un verbo ichidan (un verbo che perde solo る), quindi il radicale è 食べ e «mangiamo» è 食べましょう. Il verbo va alla fine, dopo «insieme» (一緒に) e l'oggetto (昼ごはんを)."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "未然形につく「せる」「れる」",
       "prompt": {
-        "en": "\"The teacher had the pupils read a book.\" What is the causative past of 読む?",
-        "it": "«L'insegnante ha fatto leggere un libro agli studenti.» Qual è il causativo passato di 読む?"
+        "en": "\"The teacher had the pupils read a book.\" How do you say \"made (them) read\" (from 読む)?",
+        "it": "«L'insegnante ha fatto leggere un libro agli studenti.» Come si dice «ha fatto leggere» (da 読む)?"
       },
       "sentence": {
         "kanji": "先生が生徒に本を読ませた",
         "kana": "せんせいがせいとにほんをよませた"
       },
+      "translation": {
+        "en": "The teacher had the pupils read a book.",
+        "it": "L'insegnante ha fatto leggere un libro agli studenti."
+      },
+      "glosses": [
+        { "text": "読ませた", "reading": "よませた" },
+        { "text": "読みせた", "reading": "よみせた" },
+        { "text": "読むさせた", "reading": "よむさせた" },
+        { "text": "読めさせた", "reading": "よめさせた" }
+      ],
       "gap": {
         "kanji": "先生が生徒に本を＿",
         "kana": "せんせいがせいとにほんを＿"
@@ -85,21 +125,31 @@
       "answer": "読ませた",
       "distractors": ["読みせた", "読むさせた", "読めさせた"],
       "explanation": {
-        "en": "The causative (make or let someone do) attaches せる to the a-stem of a godan verb: 読む → 読ま + せる. The person made to act is marked by に: the teacher had the pupils read a book.",
-        "it": "Il causativo (far fare o lasciar fare) attacca せる al radicale in a di un verbo godan: 読む → 読ま + せる. La persona fatta agire è marcata da に: l'insegnante ha fatto leggere un libro agli studenti."
+        "en": "The causative means \"make or let someone do\". For verbs like 読む, change the last kana to the a-sound and add せる: 読む → 読ま + せる = 読ませる; in the past, 読ませた. The person who is made to act takes に: 生徒に = \"the pupils\".",
+        "it": "Il causativo significa «far fare» o «lasciar fare». Per verbi come 読む si cambia l'ultimo kana nel suono a e si aggiunge せる: 読む → 読ま + せる = 読ませる; al passato, 読ませた. La persona a cui si fa fare l'azione prende に: 生徒に = «agli studenti»."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "未然形につく「せる」「れる」",
       "prompt": {
-        "en": "\"The mother made the child eat vegetables.\" What is the causative past of 食べる?",
-        "it": "«La madre ha fatto mangiare le verdure al bambino.» Qual è il causativo passato di 食べる?"
+        "en": "\"The mother made the child eat vegetables.\" How do you say \"made (him) eat\" (from 食べる)?",
+        "it": "«La madre ha fatto mangiare le verdure al bambino.» Come si dice «ha fatto mangiare» (da 食べる)?"
       },
       "sentence": {
         "kanji": "母が子供に野菜を食べさせた",
         "kana": "ははがこどもにやさいをたべさせた"
       },
+      "translation": {
+        "en": "The mother made the child eat vegetables.",
+        "it": "La madre ha fatto mangiare le verdure al bambino."
+      },
+      "glosses": [
+        { "text": "食べさせた", "reading": "たべさせた" },
+        { "text": "食べせた", "reading": "たべせた" },
+        { "text": "食べらせた", "reading": "たべらせた" },
+        { "text": "食べませた", "reading": "たべませた" }
+      ],
       "gap": {
         "kanji": "母が子供に野菜を＿",
         "kana": "ははがこどもにやさいを＿"
@@ -107,38 +157,56 @@
       "answer": "食べさせた",
       "distractors": ["食べせた", "食べらせた", "食べませた"],
       "explanation": {
-        "en": "An ichidan verb loses る and takes the longer form of the auxiliary, させる: 食べる → 食べさせる. Where an auxiliary has two forms, the longer one always goes on ichidan verbs.",
-        "it": "Un verbo ichidan perde る e prende la forma più lunga dell'ausiliare, させる: 食べる → 食べさせる. Quando un ausiliare ha due forme, la più lunga va sempre sui verbi ichidan."
+        "en": "食べる is an ichidan verb (a verb that simply drops る before an ending). Ichidan verbs take the longer form of the causative (\"make someone do\"), させる: 食べる → 食べ + させる = 食べさせる; in the past, 食べさせた. The same holds for every auxiliary with two forms: the longer one goes on ichidan verbs.",
+        "it": "食べる è un verbo ichidan (un verbo che perde solo る prima di una desinenza). I verbi ichidan prendono la forma lunga del causativo («far fare»), させる: 食べる → 食べ + させる = 食べさせる; al passato, 食べさせた. Vale per ogni ausiliare con due forme: quella lunga va sui verbi ichidan."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "未然形につく「せる」「れる」",
       "prompt": {
-        "en": "Which part turns 盗む into a passive past?",
-        "it": "Quale parte trasforma 盗む in un passivo al passato?"
+        "en": "\"My wallet was stolen.\" Which part makes 盗む (\"to steal\") passive and past?",
+        "it": "«Mi hanno rubato il portafoglio.» Quale parte rende 盗む («rubare») passivo e al passato?"
       },
       "sentence": {
         "kanji": "財布を盗まれた",
         "kana": "さいふをぬすまれた"
       },
+      "translation": {
+        "en": "My wallet was stolen.",
+        "it": "Mi hanno rubato il portafoglio."
+      },
+      "glosses": [
+        { "text": "財布を盗", "reading": "さいふをぬす", "meaning": { "en": "the wallet (を: the object) + steal (first part)", "it": "il portafoglio (を: l'oggetto) + rubare (prima parte)" } },
+        { "text": "まれた", "meaning": { "en": "was …-en (passive, past)", "it": "è stato … (passivo, passato)" } }
+      ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select まれた: the a-stem ま of 盗む (steal), the passive auxiliary れる, and the past た. The passive also attaches to the a-stem (ichidan verbs take られる): \"(my) wallet was stolen\", with the victim left as an unspoken subject.",
-        "it": "Seleziona まれた: il radicale in a ま di 盗む (rubare), l'ausiliare passivo れる e il passato た. Anche il passivo si attacca al radicale in a (i verbi ichidan prendono られる): «mi hanno rubato il portafoglio», con la vittima come soggetto sottinteso."
+        "en": "Select まれた. The passive (\"something is done to someone\") adds れる to the verb with its last kana changed to the a-sound: 盗む → 盗ま + れる; in the past, 盗まれた. The person it happened to (\"me\") is understood and not said.",
+        "it": "Seleziona まれた. Il passivo («qualcosa viene fatto a qualcuno») aggiunge れる al verbo con l'ultimo kana cambiato nel suono a: 盗む → 盗ま + れる; al passato, 盗まれた. Chi l'ha subito («io») è sottinteso e non si dice."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "意向形",
       "prompt": {
-        "en": "\"Let's go home together.\" What is the volitional of 帰る?",
-        "it": "«Torniamo a casa insieme.» Qual è il volitivo di 帰る?"
+        "en": "\"Let's go home together.\" How do you say \"let's go home\" (from 帰る)?",
+        "it": "«Torniamo a casa insieme.» Come si dice «torniamo a casa» (da 帰る)?"
       },
       "sentence": {
         "kanji": "一緒に帰ろう",
         "kana": "いっしょにかえろう"
       },
+      "translation": {
+        "en": "Let's go home together.",
+        "it": "Torniamo a casa insieme."
+      },
+      "glosses": [
+        { "text": "帰ろう", "reading": "かえろう" },
+        { "text": "帰りよう", "reading": "かえりよう" },
+        { "text": "帰るう", "reading": "かえるう" },
+        { "text": "帰よう", "reading": "かえよう" }
+      ],
       "gap": {
         "kanji": "一緒に＿",
         "kana": "いっしょに＿"
@@ -146,21 +214,31 @@
       "answer": "帰ろう",
       "distractors": ["帰りよう", "帰るう", "帰よう"],
       "explanation": {
-        "en": "The volitional (\"let's\") moves the final kana to the o-row and adds う, which lengthens the vowel: 帰る → 帰ろう. 帰る ends in -eru but is godan, so it does not take よう.",
-        "it": "Il volitivo («facciamo») sposta l'ultimo kana alla riga in o e aggiunge う, che allunga la vocale: 帰る → 帰ろう. 帰る finisce in -eru ma è godan, quindi non prende よう."
+        "en": "The volitional form means \"let's…\" (casual). For most verbs, change the last kana to the o-sound and add う: 帰る → 帰ろ + う = 帰ろう. 帰る ends in -eru but is not an ichidan verb (one that simply drops る), so it does not take よう.",
+        "it": "La forma volitiva significa «facciamo…!» (informale). Per la maggior parte dei verbi si cambia l'ultimo kana nel suono o e si aggiunge う: 帰る → 帰ろ + う = 帰ろう. 帰る finisce in -eru ma non è un verbo ichidan (uno che perde solo る), quindi non prende よう."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "意向形",
       "prompt": {
-        "en": "\"Let's get started.\" What is the volitional of 始める?",
-        "it": "«Cominciamo.» Qual è il volitivo di 始める?"
+        "en": "\"Let's get started.\" How do you say \"let's start\" (from 始める)?",
+        "it": "«Cominciamo.» Come si dice «cominciamo» (da 始める)?"
       },
       "sentence": {
         "kanji": "そろそろ始めよう",
         "kana": "そろそろはじめよう"
       },
+      "translation": {
+        "en": "Let's get started.",
+        "it": "Cominciamo."
+      },
+      "glosses": [
+        { "text": "始めよう", "reading": "はじめよう" },
+        { "text": "始めろう", "reading": "はじめろう" },
+        { "text": "始めおう", "reading": "はじめおう" },
+        { "text": "始まよう", "reading": "はじまよう" }
+      ],
       "gap": {
         "kanji": "そろそろ＿",
         "kana": "そろそろ＿"
@@ -168,8 +246,60 @@
       "answer": "始めよう",
       "distractors": ["始めろう", "始めおう", "始まよう"],
       "explanation": {
-        "en": "Ichidan verbs make the volitional by removing る and adding よう: 始める (begin) → 始めよう, \"let's get started\".",
-        "it": "I verbi ichidan formano il volitivo togliendo る e aggiungendo よう: 始める (cominciare) → 始めよう, «cominciamo»."
+        "en": "始める (\"to begin\") is an ichidan verb (a verb that simply drops る before an ending). Its volitional form (\"let's…\") drops る and adds よう: 始める → 始め + よう = 始めよう.",
+        "it": "始める («cominciare») è un verbo ichidan (un verbo che perde solo る prima di una desinenza). La sua forma volitiva («facciamo…!») toglie る e aggiunge よう: 始める → 始め + よう = 始めよう."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "動詞の語幹と助動詞",
+      "prompt": {
+        "en": "\"I want to sleep more.\" Which part is the auxiliary, the piece added to the verb?",
+        "it": "«Voglio dormire ancora.» Quale parte è l'ausiliare, il pezzo aggiunto al verbo?"
+      },
+      "sentence": {
+        "kanji": "もっと寝たい",
+        "kana": "もっとねたい"
+      },
+      "translation": {
+        "en": "I want to sleep more.",
+        "it": "Voglio dormire ancora."
+      },
+      "glosses": [
+        { "text": "もっと", "meaning": { "en": "more", "it": "di più, ancora" } },
+        { "text": "寝", "reading": "ね", "meaning": { "en": "sleep (the verb without る)", "it": "dormire (il verbo senza る)" } },
+        { "text": "たい", "meaning": { "en": "want to", "it": "voglio" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select たい. A Japanese verb is built from a stem (the part that stays fixed, here 寝 from 寝る) plus auxiliaries (pieces added after it that bring a meaning): たい adds \"want to\". 寝る simply drops る, so 寝 + たい = 寝たい.",
+        "it": "Seleziona たい. Un verbo giapponese si costruisce con il radicale (la parte che resta fissa, qui 寝 da 寝る) più gli ausiliari (pezzi aggiunti dopo, che portano un significato): たい aggiunge «voglio». 寝る perde solo る, quindi 寝 + たい = 寝たい."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "意向形",
+      "prompt": {
+        "en": "Build: \"Let's swim in the sea this weekend.\"",
+        "it": "Componi: «Questo fine settimana nuotiamo al mare.»"
+      },
+      "sentence": {
+        "kanji": "週末に海で泳ごう",
+        "kana": "しゅうまつにうみでおよごう"
+      },
+      "translation": {
+        "en": "Let's swim in the sea this weekend.",
+        "it": "Questo fine settimana nuotiamo al mare."
+      },
+      "glosses": [
+        { "text": "週末に", "reading": "しゅうまつに", "meaning": { "en": "at the weekend", "it": "nel fine settimana" } },
+        { "text": "海で", "reading": "うみで", "meaning": { "en": "in the sea", "it": "al mare" } },
+        { "text": "泳ごう", "reading": "およごう", "meaning": { "en": "let's swim", "it": "nuotiamo" } }
+      ],
+      "answer": ["週末に", "海で", "泳ごう"],
+      "explanation": {
+        "en": "泳ごう is the volitional form of 泳ぐ (\"to swim\"): it means \"let's swim\". The last kana changes to the o-sound and う is added: 泳ぐ → 泳ご + う. The verb goes last: first when (週末に), then where (海で).",
+        "it": "泳ごう è la forma volitiva di 泳ぐ («nuotare»): significa «nuotiamo». L'ultimo kana passa al suono o e si aggiunge う: 泳ぐ → 泳ご + う. Il verbo va alla fine: prima quando (週末に), poi dove (海で)."
       }
     }
   ]

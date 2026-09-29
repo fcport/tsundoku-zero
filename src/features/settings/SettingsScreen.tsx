@@ -31,12 +31,18 @@ import { LanguageOptions } from './LanguageOptions';
 import { changeLocale } from './changeLocale';
 import { LessonsPerDayOptions } from './LessonsPerDayOptions';
 import { changeLessonsPerDay } from './changeLessonsPerDay';
+import { SCREEN_TITLE } from '../../ui/magazine';
 
 // ANELLO DI FOCUS visibile: lo STESSO token degli interattivi delle schermate-rotta
 // (`StatsScreen`, `PrivacyScreen`). `focus-visible:` mostra l'anello solo per
 // navigazione da tastiera. Token `focus-ring`: nessun colore letterale (UX-DR1).
 const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
+
+// I collegamenti legali come righe d'indice della rivista: testo a sinistra, filetto
+// sotto, alte 56px.
+const LEGAL_ROW =
+  'flex min-h-[56px] w-full items-center border-b-[1.5px] border-border-strong text-left text-body font-medium text-ink-primary hover:underline';
 
 export interface SettingsScreenProps {
   readonly settings: SettingsRepository;
@@ -82,9 +88,12 @@ export function SettingsScreen({
   return (
     <section
       aria-labelledby="settings-title"
-      className="flex flex-col gap-6 p-6"
+      className="flex flex-col gap-8"
     >
-      <h2 id="settings-title" className="text-display">
+      <h2
+        id="settings-title"
+        className={`${SCREEN_TITLE} text-ink-primary`}
+      >
         {t('settings.title')}
       </h2>
       <LanguageOptions
@@ -110,10 +119,11 @@ export function SettingsScreen({
           (button, idioma del repo) DENTRO la <section> ma FUORI dai due
           `role="group"` (lingua e tetto), cosi il conteggio dei gruppi resta 2.
           -> `onViewPrivacy` (cablato in AuthenticatedShell). */}
+      <div className="flex flex-col border-t-[1.5px] border-border-strong">
       <button
         type="button"
         onClick={onViewPrivacy}
-        className={`self-start text-caption text-ink-secondary underline ${FOCUS_RING}`}
+        className={`${LEGAL_ROW} ${FOCUS_RING}`}
       >
         {t('legal.privacy.linkLabel')}
       </button>
@@ -124,10 +134,11 @@ export function SettingsScreen({
       <button
         type="button"
         onClick={onViewAcknowledgements}
-        className={`self-start text-caption text-ink-secondary underline ${FOCUS_RING}`}
+        className={`${LEGAL_ROW} ${FOCUS_RING}`}
       >
         {t('legal.acknowledgements.linkLabel')}
       </button>
+      </div>
     </section>
   );
 }

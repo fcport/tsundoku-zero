@@ -31,22 +31,29 @@ export function LessonsPerDayOptions({
     <div
       role="group"
       aria-labelledby="lessons-per-day-label"
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-3"
     >
-      <span id="lessons-per-day-label" className="text-label text-ink-primary">
+      <span id="lessons-per-day-label" className="font-mono text-label-caps uppercase text-ink-secondary">
         {t('settings.lessonsPerDay.label')}
       </span>
-      {LESSONS_PER_DAY_OPTIONS.map((value) => (
-        <button
-          key={value}
-          type="button"
-          aria-pressed={value === current}
-          onClick={() => onSelect(value)}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3 text-label aria-pressed:border-2 aria-pressed:border-accent aria-pressed:bg-accent-subtle aria-pressed:font-semibold"
-        >
-          {t('settings.lessonsPerDay.option', { value })}
-        </button>
-      ))}
+      {/* Cinque caselle col numero grande e condensato; la frase completa
+          («2 al giorno») resta il nome accessibile, fuori schermo. */}
+      <div className="grid auto-cols-fr grid-flow-col border-[1.5px] border-border-strong">
+        {LESSONS_PER_DAY_OPTIONS.map((value) => (
+          <button
+            key={value}
+            type="button"
+            aria-pressed={value === current}
+            onClick={() => onSelect(value)}
+            className="min-h-[64px] border-l-[1.5px] border-border-strong bg-surface-raised text-ink-primary first:border-l-0 hover:bg-surface-sunken aria-pressed:bg-ink-primary aria-pressed:text-surface-base"
+          >
+            <span aria-hidden="true" className="text-[32px] font-extrabold leading-none font-stretch-condensed">
+              {value}
+            </span>
+            <span className="sr-only">{t('settings.lessonsPerDay.option', { value })}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

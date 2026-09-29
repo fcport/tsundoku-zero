@@ -1,21 +1,26 @@
 {
   "order": 11,
   "title": {
-    "en": "が with 好き, 分かる, ほしい and たい; がる for other people",
-    "it": "が con 好き, 分かる, ほしい e たい; がる per gli altri"
+    "en": "Likes, understanding and wishes with が; がる for other people's feelings",
+    "it": "Gusti, capire e desideri con が; がる per i sentimenti degli altri"
   },
+  "video": "vk3aKqMQwhM",
   "grammarPoints": ["感情・理解の述語と「が」", "欲求の「ほしい」と「たい」", "他人の感情を示す「がる」"],
   "exercises": [
     {
       "kind": "single-select",
       "grammarPoint": "感情・理解の述語と「が」",
       "prompt": {
-        "en": "\"I like dogs.\" Which particle marks what is liked?",
-        "it": "«Mi piacciono i cani.» Quale particella marca ciò che piace?"
+        "en": "\"I like dogs.\" Which particle goes after what is liked?",
+        "it": "«Mi piacciono i cani.» Quale particella va dopo ciò che piace?"
       },
       "sentence": {
         "kanji": "私は犬が好きだ",
         "kana": "わたしはいぬがすきだ"
+      },
+      "translation": {
+        "en": "I like dogs.",
+        "it": "Mi piacciono i cani."
       },
       "gap": {
         "kanji": "私は犬＿好きだ",
@@ -24,20 +29,24 @@
       "answer": "が",
       "distractors": ["を", "で"],
       "explanation": {
-        "en": "好き is not a verb: it is a な-adjective, a noun that closes the sentence with だ. A verb takes its object with を, but 好きだ does not have an object, so what is liked is marked by が. The person who likes it is the topic, 私は.",
-        "it": "好き non è un verbo: è un aggettivo in な, un nome che chiude la frase con だ. Un verbo prende il suo oggetto con を, ma 好きだ non ha un oggetto, quindi ciò che piace è marcato da が. Chi prova il gusto è il tema, 私は."
+        "en": "好き (\"liked\") is not a verb but a な-adjective: a describing word that ends the sentence with だ, \"is\". を is only for the object of a verb (the thing an action is done to), so what is liked takes が: 犬が好きだ. 私は is the topic: who the sentence is about.",
+        "it": "好き («che piace») non è un verbo ma un aggettivo in な: una parola che descrive e chiude la frase con だ, cioè «è». を serve solo per l'oggetto di un verbo (la cosa su cui cade l'azione), quindi ciò che piace prende が: 犬が好きだ. 私は è il tema: la persona di cui parla la frase."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "感情・理解の述語と「が」",
       "prompt": {
-        "en": "\"My younger brother understands kanji.\" Which particle marks what is understood?",
-        "it": "«Mio fratello minore capisce i kanji.» Quale particella marca ciò che si capisce?"
+        "en": "\"My younger brother understands kanji.\" Which particle goes after what is understood?",
+        "it": "«Mio fratello minore capisce i kanji.» Quale particella va dopo ciò che si capisce?"
       },
       "sentence": {
         "kanji": "弟は漢字が分かる",
         "kana": "おとうとはかんじがわかる"
+      },
+      "translation": {
+        "en": "My younger brother understands kanji.",
+        "it": "Mio fratello minore capisce i kanji."
       },
       "gap": {
         "kanji": "弟は漢字＿分かる",
@@ -46,8 +55,8 @@
       "answer": "が",
       "distractors": ["を", "で"],
       "explanation": {
-        "en": "分かる describes a state — something is clear, understandable — not an action done to an object. What is understood is therefore marked by が, never by を: 漢字が分かる. The person is the topic, 弟は.",
-        "it": "分かる descrive uno stato — qualcosa è chiaro, comprensibile — non un'azione compiuta su un oggetto. Ciò che si capisce è quindi marcato da が, mai da を: 漢字が分かる. La persona è il tema, 弟は."
+        "en": "分かる means \"to be clear, understandable\": it describes a state, not an action done to something. So what is understood takes が, never を: 漢字が分かる. 弟は is the topic: who the sentence is about.",
+        "it": "分かる significa «essere chiaro, comprensibile»: descrive uno stato, non un'azione fatta su qualcosa. Per questo ciò che si capisce prende が, mai を: 漢字が分かる. 弟は è il tema: la persona di cui parla la frase."
       }
     },
     {
@@ -61,10 +70,19 @@
         "kanji": "新しい自転車がほしい",
         "kana": "あたらしいじてんしゃがほしい"
       },
+      "translation": {
+        "en": "I want a new bicycle.",
+        "it": "Voglio una bicicletta nuova."
+      },
+      "glosses": [
+        { "text": "新しい", "reading": "あたらしい", "meaning": { "en": "new", "it": "nuova" } },
+        { "text": "自転車が", "reading": "じてんしゃが", "meaning": { "en": "bicycle + が (what is wanted)", "it": "bicicletta + が (ciò che si vuole)" } },
+        { "text": "ほしい", "meaning": { "en": "wanted (I want)", "it": "desiderato (voglio)" } }
+      ],
       "answer": ["新しい", "自転車が", "ほしい"],
       "explanation": {
-        "en": "ほしい (wanted) ends in い: it is an adjective, not a verb. The thing wanted is marked by が. With no one else named, the feeling is the speaker's: \"I want a new bicycle\".",
-        "it": "ほしい (desiderato) finisce in い: è un aggettivo, non un verbo. La cosa desiderata è marcata da が. Se non si nomina nessun altro, il sentimento è di chi parla: «voglio una bicicletta nuova»."
+        "en": "ほしい (\"wanted\") ends in い: it is an い-adjective (a describing word ending in い), not a verb. So the thing you want takes が: 自転車がほしい. If no one else is named, the wish is the speaker's: \"I want\".",
+        "it": "ほしい («desiderato») finisce in い: è un aggettivo in い (una parola che descrive e finisce in い), non un verbo. Per questo la cosa che vuoi prende が: 自転車がほしい. Se non si nomina nessun altro, il desiderio è di chi parla: «voglio»."
       }
     },
     {
@@ -78,22 +96,35 @@
         "kanji": "ラーメンが食べたい",
         "kana": "ラーメンがたべたい"
       },
+      "translation": {
+        "en": "I want to eat ramen.",
+        "it": "Voglio mangiare il ramen."
+      },
+      "glosses": [
+        { "text": "ラーメンが", "meaning": { "en": "ramen + が (what is wanted)", "it": "ramen + が (ciò che si vuole)" } },
+        { "text": "食", "reading": "た", "meaning": { "en": "eat (kanji of 食べる)", "it": "mangiare (kanji di 食べる)" } },
+        { "text": "べたい", "meaning": { "en": "rest of 食べ + たい, \"want to\"", "it": "resto di 食べ + たい, «voler fare»" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select what is desired: ラーメンが. 食べたい is the i-stem 食べ plus the adjective たい, so, like any adjective, it takes が for the thing it is about. With を (ラーメンを食べたい) the sentence is also correct, but が is the more traditional choice.",
-        "it": "Seleziona ciò che si desidera: ラーメンが. 食べたい è il radicale in i 食べ più l'aggettivo たい, quindi, come ogni aggettivo, prende が per la cosa di cui parla. Anche con を (ラーメンを食べたい) la frase è corretta, ma が è la scelta più tradizionale."
+        "en": "Select ラーメンが, the thing you want. 食べたい is 食べ (from 食べる, \"eat\") + たい, \"want to\"; たい ends in い and works like an adjective, so what you want can take が. ラーメンを食べたい is also correct; が is the more traditional choice.",
+        "it": "Seleziona ラーメンが, ciò che si vuole. 食べたい è 食べ (da 食べる, «mangiare») + たい, «voler fare»; たい finisce in い e funziona come un aggettivo, quindi ciò che vuoi può prendere が. Anche ラーメンを食べたい è corretto; が è la scelta più tradizionale."
       }
     },
     {
       "kind": "single-select",
       "grammarPoint": "他人の感情を示す「がる」",
       "prompt": {
-        "en": "\"My younger sister wants a new game.\" How do you describe someone else's wish?",
-        "it": "«Mia sorella minore vuole un gioco nuovo.» Come si descrive il desiderio di un altro?"
+        "en": "\"My younger sister wants a new game.\" How do you say that someone else wants something?",
+        "it": "«Mia sorella minore vuole un gioco nuovo.» Come si dice che un'altra persona vuole qualcosa?"
       },
       "sentence": {
         "kanji": "妹が新しいゲームをほしがっている",
         "kana": "いもうとがあたらしいゲームをほしがっている"
+      },
+      "translation": {
+        "en": "My younger sister wants a new game.",
+        "it": "Mia sorella minore vuole un gioco nuovo."
       },
       "gap": {
         "kanji": "妹が新しいゲームを＿",
@@ -102,8 +133,8 @@
       "answer": "ほしがっている",
       "distractors": ["ほしい", "ほしいだ", "ほしくている"],
       "explanation": {
-        "en": "ほしい and たい state the speaker's own feelings: you cannot state someone else's inner feeling as a fact. For another person you drop the final い and add the verb がる, \"shows signs of\": ほしがる. As a verb, it takes its object with を.",
-        "it": "ほしい e たい esprimono i sentimenti di chi parla: il sentimento interiore di un altro non si può affermare come un fatto. Per un'altra persona si toglie la い finale e si aggiunge il verbo がる, «mostra segni di»: ほしがる. Essendo un verbo, prende l'oggetto con を."
+        "en": "ほしい and たい express only the speaker's own feelings: you can't know from the inside what another person feels. For someone else, drop the final い and add がる, \"to show signs of\": ほしい → ほしがる, here as ほしがっている, \"is wanting\". ほしがる is a verb, so the thing wanted takes を.",
+        "it": "ほしい e たい esprimono solo i sentimenti di chi parla: quello che prova un altro non lo puoi sapere da dentro. Per un'altra persona si toglie la い finale e si aggiunge がる, «mostrare segni di»: ほしい → ほしがる, qui ほしがっている, «sta desiderando». ほしがる è un verbo, quindi la cosa voluta prende を."
       }
     },
     {
@@ -117,6 +148,16 @@
         "kanji": "子供が外で遊びたがっている",
         "kana": "こどもがそとであそびたがっている"
       },
+      "translation": {
+        "en": "The child wants to play outside.",
+        "it": "Il bambino vuole giocare fuori."
+      },
+      "glosses": [
+        { "text": "遊びたがっている", "reading": "あそびたがっている" },
+        { "text": "遊びたい", "reading": "あそびたい" },
+        { "text": "遊びたいだ", "reading": "あそびたいだ" },
+        { "text": "遊ぶたがっている", "reading": "あそぶたがっている" }
+      ],
       "gap": {
         "kanji": "子供が外で＿",
         "kana": "こどもがそとで＿"
@@ -124,8 +165,113 @@
       "answer": "遊びたがっている",
       "distractors": ["遊びたい", "遊びたいだ", "遊ぶたがっている"],
       "explanation": {
-        "en": "The child is not the speaker, so 遊びたい cannot describe the child's wish directly. たい drops its い and takes がる: 遊びたがる, \"is showing that they want to play\", here in the ongoing form 遊びたがっている.",
-        "it": "Il bambino non è chi parla, quindi 遊びたい non può descrivere direttamente il suo desiderio. たい perde la い e prende がる: 遊びたがる, «mostra di voler giocare», qui nella forma in corso 遊びたがっている."
+        "en": "遊びたい (\"I want to play\") can only describe the speaker's wish. For the child, たい drops its い and takes がる: 遊びたがる, \"shows that they want to play\". Here it is in the ている form, which describes what is going on now: 遊びたがっている.",
+        "it": "遊びたい («voglio giocare») descrive solo il desiderio di chi parla. Per il bambino, たい perde la い e prende がる: 遊びたがる, «mostra di voler giocare». Qui è nella forma in ている, che descrive ciò che succede adesso: 遊びたがっている."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "感情・理解の述語と「が」",
+      "prompt": {
+        "en": "Which part is the thing that is liked?",
+        "it": "Quale parte è ciò che piace?"
+      },
+      "sentence": {
+        "kanji": "スポーツが好きです",
+        "kana": "スポーツがすきです"
+      },
+      "translation": {
+        "en": "I like sports.",
+        "it": "Mi piace lo sport."
+      },
+      "glosses": [
+        { "text": "スポーツが", "meaning": { "en": "sports + が (what is liked)", "it": "sport + が (ciò che piace)" } },
+        { "text": "好", "reading": "す", "meaning": { "en": "liked (kanji of 好き)", "it": "che piace (kanji di 好き)" } },
+        { "text": "きです", "meaning": { "en": "end of 好き + です, polite \"is\"", "it": "fine di 好き + です, «è» cortese" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select スポーツが. 好き (\"liked\") is a な-adjective, a describing word, not a verb, so it has no object with を. What is liked takes が: スポーツが好きです, where です is a polite \"is\".",
+        "it": "Seleziona スポーツが. 好き («che piace») è un aggettivo in な, una parola che descrive, non un verbo, quindi non ha un oggetto con を. Ciò che piace prende が: スポーツが好きです, dove です è «è» in forma cortese."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "他人の感情を示す「がる」",
+      "prompt": {
+        "en": "Which part shows that the wish belongs to someone else, not the speaker?",
+        "it": "Quale parte mostra che il desiderio è di qualcun altro, non di chi parla?"
+      },
+      "sentence": {
+        "kanji": "ねこが外に出たがっている",
+        "kana": "ねこがそとにでたがっている"
+      },
+      "translation": {
+        "en": "The cat wants to go outside.",
+        "it": "Il gatto vuole uscire."
+      },
+      "glosses": [
+        { "text": "ねこが", "meaning": { "en": "cat + が (who wants it)", "it": "gatto + が (chi lo vuole)" } },
+        { "text": "外に出", "reading": "そとにで", "meaning": { "en": "outside + first part of 出る, \"go out\"", "it": "fuori + inizio di 出る, «uscire»" } },
+        { "text": "たがっている", "meaning": { "en": "wants to (as seen from outside)", "it": "vuole (visto da fuori)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select たがっている. 出たい would mean \"I want to go out\", the speaker's own wish. For anyone else, even a cat, たい becomes たがる, \"shows that it wants to\", here as たがっている, \"is showing it now\".",
+        "it": "Seleziona たがっている. 出たい significherebbe «voglio uscire», il desiderio di chi parla. Per chiunque altro, anche un gatto, たい diventa たがる, «mostra di voler fare», qui たがっている, «lo sta mostrando adesso»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "感情・理解の述語と「が」",
+      "prompt": {
+        "en": "Build: \"I understand a little Japanese.\"",
+        "it": "Componi: «Capisco un po' di giapponese.»"
+      },
+      "sentence": {
+        "kanji": "私は日本語が少し分かる",
+        "kana": "わたしはにほんごがすこしわかる"
+      },
+      "translation": {
+        "en": "I understand a little Japanese.",
+        "it": "Capisco un po' di giapponese."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (topic)", "it": "io (tema)" } },
+        { "text": "日本語が", "reading": "にほんごが", "meaning": { "en": "Japanese + が (what is understood)", "it": "giapponese + が (ciò che si capisce)" } },
+        { "text": "少し", "reading": "すこし", "meaning": { "en": "a little", "it": "un po'" } },
+        { "text": "分かる", "reading": "わかる", "meaning": { "en": "understand", "it": "capire" } }
+      ],
+      "answer": ["私は", "日本語が", "少し", "分かる"],
+      "explanation": {
+        "en": "分かる (\"understand\") describes a state, so what is understood takes が, not を: 日本語が分かる. 私は is the topic, the person the sentence is about. 少し, \"a little\", goes right before the verb it describes.",
+        "it": "分かる («capire») descrive uno stato, quindi ciò che si capisce prende が, non を: 日本語が分かる. 私は è il tema, la persona di cui parla la frase. 少し, «un po'», va subito prima del verbo che descrive."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "欲求の「ほしい」と「たい」",
+      "prompt": {
+        "en": "Build: \"I want to go to Japan in the summer holidays.\"",
+        "it": "Componi: «Nelle vacanze estive voglio andare in Giappone.»"
+      },
+      "sentence": {
+        "kanji": "夏休みに日本へ行きたい",
+        "kana": "なつやすみににほんへいきたい"
+      },
+      "translation": {
+        "en": "I want to go to Japan in the summer holidays.",
+        "it": "Nelle vacanze estive voglio andare in Giappone."
+      },
+      "glosses": [
+        { "text": "夏休みに", "reading": "なつやすみに", "meaning": { "en": "in the summer holidays", "it": "nelle vacanze estive" } },
+        { "text": "日本へ", "reading": "にほんへ", "meaning": { "en": "to Japan", "it": "in Giappone" } },
+        { "text": "行きたい", "reading": "いきたい", "meaning": { "en": "want to go", "it": "voler andare" } }
+      ],
+      "answer": ["夏休みに", "日本へ", "行きたい"],
+      "explanation": {
+        "en": "To say \"want to do\", take the verb's i-stem (the part before ます: 行きます → 行き) and add たい: 行きたい, \"want to go\". In a statement, たい is always the speaker's own wish. The place you head to takes へ, \"towards\".",
+        "it": "Per dire «voglio fare», si prende il radicale in i del verbo (la parte davanti a ます: 行きます → 行き) e si aggiunge たい: 行きたい, «voglio andare». In un'affermazione, たい è sempre il desiderio di chi parla. Il luogo verso cui vai prende へ, «verso»."
       }
     }
   ]

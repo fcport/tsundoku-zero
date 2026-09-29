@@ -15,6 +15,7 @@
 // nessun colore letterale (regola ERROR su features).
 import { useTranslation } from '../../i18n';
 import type { AuthErrorMessage } from './authFailureMessage';
+import { ACTION_BAR, FOCUS_RING, SCREEN_TITLE } from '../../ui/magazine';
 
 /** Valori correnti dei campi (componente controllato dal container). */
 export interface AuthFormValues {
@@ -64,16 +65,18 @@ export function AuthForm({
 
   return (
     <form
-      className="flex flex-col gap-5 bg-surface-raised text-ink-primary rounded-lg border border-border-hairline p-6"
+      className="flex flex-col gap-6 text-ink-primary"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
       }}
     >
-      <h2 className="text-display">{t(titleKey)}</h2>
+      <h2 className={`${SCREEN_TITLE} text-ink-primary`}>
+        {t(titleKey)}
+      </h2>
 
       <div className="flex flex-col gap-2">
-        <label className="text-label" htmlFor="auth-email">
+        <label className="font-mono text-label-caps uppercase text-ink-secondary" htmlFor="auth-email">
           {t('auth.emailLabel')}
         </label>
         <input
@@ -84,7 +87,7 @@ export function AuthForm({
           onChange={(event) => onChange('email', event.target.value)}
           aria-invalid={emailError ? true : undefined}
           aria-describedby={emailError ? 'auth-email-error' : undefined}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3"
+          className={`border-0 border-b-[1.5px] border-border-strong bg-transparent px-0 py-3 text-[20px] text-ink-primary ${FOCUS_RING}`}
         />
         {emailError ? (
           <p id="auth-email-error" className="text-caption text-danger">
@@ -94,7 +97,7 @@ export function AuthForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-label" htmlFor="auth-password">
+        <label className="font-mono text-label-caps uppercase text-ink-secondary" htmlFor="auth-password">
           {t('auth.passwordLabel')}
         </label>
         <input
@@ -105,7 +108,7 @@ export function AuthForm({
           onChange={(event) => onChange('password', event.target.value)}
           aria-invalid={passwordError ? true : undefined}
           aria-describedby={passwordError ? 'auth-password-error' : undefined}
-          className="rounded-md border border-border-strong bg-surface-raised text-ink-primary p-3"
+          className={`border-0 border-b-[1.5px] border-border-strong bg-transparent px-0 py-3 text-[20px] text-ink-primary ${FOCUS_RING}`}
         />
         {passwordError ? (
           <p id="auth-password-error" className="text-caption text-danger">
@@ -117,7 +120,7 @@ export function AuthForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+        className={ACTION_BAR}
       >
         {t(submitKey)}
       </button>
@@ -131,7 +134,7 @@ export function AuthForm({
       <button
         type="button"
         onClick={onToggle}
-        className="text-caption text-ink-secondary underline"
+        className={`self-start text-label font-semibold text-ink-primary underline underline-offset-4 ${FOCUS_RING}`}
       >
         {t(toggleKey)}
       </button>

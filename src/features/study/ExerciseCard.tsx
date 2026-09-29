@@ -24,7 +24,6 @@
 // `danger`: il colore sottolinea, non porta da solo l'informazione. Con il solo
 // testo dell'esito, dalle opzioni non si capiva quale fosse quella giusta.
 // Ogni opzione `min-h-[56px]` (bersaglio ≥56px).
-// La card è l'UNICA superficie `surface-raised`.
 import { useTranslation } from '../../i18n';
 import {
   answerOptions,
@@ -35,14 +34,17 @@ import { furiganaVisible, resolveExplanation } from '../../domain/exercise';
 import type { Exercise } from '../../domain/exercise';
 import type { Locale } from '../../i18n';
 import { JapaneseText } from '../../ui/JapaneseText';
+import { knownReadings, optionFurigana } from '../../domain/option-furigana';
+import { WORD_READINGS } from '../../domain/fixed-readings';
+import { FOCUS_RING } from '../../ui/magazine';
+import { Translation } from '../../ui/Translation';
 import { ExplanationPanel } from './ExplanationPanel';
 
-// ANELLO DI FOCUS visibile (3.22, AC5): la stessa definizione della sessione
-// (`SessionScreen`), applicata qui alle opzioni e a «mostra la spiegazione». Il token
-// è `focus-ring` (in scuro `accent-dark`, cfr. `theme.css`); `focus-visible:` mostra
-// l'anello solo per navigazione da tastiera. Nessun colore letterale (UX-DR1).
-const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
+// Direzione «rivista» (29-09-2026): la card non è più una superficie sollevata ma una
+// sezione fra due filetti. Le opzioni sono caselle squadrate col numero del TASTO
+// (1–9, il contratto tastiera di 3.22 reso visibile) in Plex Mono; dopo la risposta
+// la giusta si inverte in inchiostro pieno e la scelta sbagliata prende la tinta
+// d'allarme, sempre con la dichiarazione in testo accanto.
 
 export interface ExerciseCardProps {
   /** L'esercizio da presentare (già validato/caricato, `Exercise` di dominio). */
@@ -79,6 +81,11 @@ export interface ExerciseCardProps {
   readonly correct: boolean | null;
   /** La lingua per risolvere la spiegazione bilingue (`resolveExplanation`, FR8.5). */
   readonly locale: Locale;
+  /**
+   * La preferenza rapida «mostra la furigana» (`furiganaPreference`). `false` ⇒
+   * nessuna furigana; `true` (predefinito) ⇒ decide il contenuto.
+   */
+  readonly furigana?: boolean;
 }
 
 // La consegna per `kind`: chiave i18n del namespace `session.prompt`. Un `Record`
@@ -101,13 +108,40 @@ export function ExerciseCard({
   revealed,
   correct,
   locale,
+  furigana = true,
 }: ExerciseCardProps) {
   const { t } = useTranslation();
   const options = answerOptions(exercise);
+  // La furigana delle opzioni, ricavata dalla frase solo quando è certa (dominio);
+  // `null` per un'opzione ⇒ testo semplice.
+  const optionRuby = optionFurigana(exercise);
+  // Le traduzioni (29-09-2026): della frase, e il significato di ogni tessera o
+  // segmento dalle glosse del contenuto. Rese solo con «Traduzioni» acceso.
+  const sentenceTranslation = exercise.translation
+    ? resolveExplanation(exercise.translation, locale)
+    : null;
+  // Nella selezione di una parte il significato del segmento («だ = è») è
+  // la risposta alla domanda («quale parte vuol dire "è"?»): lì compare solo DOPO aver
+  // risposto. Nel riordino no: il compito è l'ordine, non il significato.
+  const optionMeanings = new Map(
+    exercise.kind === 'single-select' || (exercise.kind === 'select-span' && !answered)
+      ? []
+      : (exercise.glosses ?? [])
+          .filter((g) => g.meaning !== undefined)
+          .map((g) => [g.text, resolveExplanation(g.meaning!, locale)] as const),
+  );
+  // Le letture per le parole giapponesi della spiegazione: quelle certe della frase
+  // dell'esercizio, più le poche parole a lettura unica della tabella fissa.
+  const explanationReadings = new Map([
+    ...WORD_READINGS,
+    ...knownReadings([exercise.sentence]),
+  ]);
   // Cosa mostrare della frase (dominio): prima della risposta mai la soluzione —
   // spazio vuoto per la scelta singola, nessuna frase per il riordino (è la risposta).
   const view = sentenceView(exercise, answered);
-  const showFurigana = furiganaVisible(exercise);
+  // La furigana la decide il contenuto (`furiganaVisible`); la preferenza rapida
+  // dell'utente può solo spegnerla.
+  const showFurigana = furigana && furiganaVisible(exercise);
   // La DOMANDA dell'esercizio, se il contenuto la porta; altrimenti resta la sola
   // consegna generica per tipo (contenuto precedente all'introduzione di `prompt`).
   const question = exercise.prompt ? resolveExplanation(exercise.prompt, locale).text : null;
@@ -124,12 +158,12 @@ export function ExerciseCard({
     // `w-full` sulla CARD (3.23): l'`<article>` è un figlio flex del `<main>`
     // `items-center`, che gli darebbe larghezza AUTO (max-content). `p-4 sm:p-6`:
     // padding ridotto sotto 640px perché la frase più lunga stia in ≤3 righe.
-    <article className="w-full flex flex-col items-center gap-6 rounded-md bg-surface-raised p-4 sm:p-6">
+    <article className="w-full flex flex-col items-center gap-6 border-y-[1.5px] border-border-strong py-5 sm:py-6">
       {/* La consegna (come si risponde, per tipo) sopra la domanda vera. */}
-      <div className="flex w-full flex-col gap-2 text-center">
+      <div className="flex w-full flex-col gap-2">
         <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
         {question !== null && (
-          <p className="text-body font-semibold text-ink-primary">{question}</p>
+          <p className="text-[20px] font-medium leading-snug text-ink-primary sm:text-[22px]">{question}</p>
         )}
       </div>
 
@@ -160,15 +194,24 @@ export function ExerciseCard({
           <span className="text-caption text-ink-muted">{t('session.assembled.label')}</span>
           <p
             lang="ja"
-            className="min-h-[3rem] w-full rounded-md border border-dashed border-border-strong bg-surface-base p-3 text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary"
+            className="min-h-[3rem] w-full border-[1.5px] border-dashed border-border-strong bg-surface-raised p-3 text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary"
           >
             {selected.length > 0 ? (
               selected.map((i) => options[i]).join('')
             ) : (
-              <span className="text-body text-ink-muted">{t('session.assembled.empty')}</span>
+              <span lang={locale} className="font-sans text-body text-ink-muted">{t('session.assembled.empty')}</span>
             )}
           </p>
         </div>
+      )}
+
+      {/* La traduzione della frase, sotto il giapponese, con «Traduzioni» acceso. */}
+      {sentenceTranslation && (
+        <Translation
+          text={sentenceTranslation.text}
+          lang={sentenceTranslation.language}
+          className="-mt-3 block w-full text-center text-body italic text-ink-secondary"
+        />
       )}
 
       {/* Un <button> per ciascuna opzione di answerOptions (numero e ordine dal
@@ -186,13 +229,15 @@ export function ExerciseCard({
           // locale: una sola fonte di verità sulla correttezza, `check()`.
           const isWrongChoice =
             answered && isChosen && correct === false && correctIndex !== null;
+          // Giusta ⇒ inchiostro pieno; sbagliata ⇒ tinta d'allarme; tessera già
+          // piazzata (prima della risposta) ⇒ incavata; le altre ⇒ carta chiara.
           const tone = isCorrectOption
-            ? 'border-2 border-accent bg-accent-subtle'
+            ? 'border-ink-primary bg-ink-primary text-surface-base'
             : isWrongChoice
-              ? 'border-2 border-danger bg-danger-subtle'
+              ? 'border-danger bg-danger-subtle text-ink-primary'
               : !answered && isChosen
-                ? 'border border-accent bg-accent-subtle'
-                : 'border border-border-strong bg-surface-base';
+                ? 'border-ink-primary bg-surface-sunken text-ink-primary'
+                : 'border-border-strong bg-surface-raised text-ink-primary enabled:hover:bg-surface-sunken';
           return (
             <li key={i}>
               <button
@@ -200,20 +245,58 @@ export function ExerciseCard({
                 aria-pressed={isChosen}
                 disabled={isDisabled}
                 onClick={isDisabled ? undefined : () => onSelect(i)}
-                className={`flex min-h-[56px] w-full flex-col items-center justify-center rounded-md ${tone} text-ink-primary p-3 text-body ${FOCUS_RING}`}
+                className={`flex min-h-[56px] w-full items-center gap-4 border-[1.5px] px-4 py-3 text-left ${tone} ${FOCUS_RING}`}
               >
-                <span>
-                  {exercise.kind === 'assemble' && isChosen && (
-                    <span className="text-label text-ink-secondary">{orderPosition}. </span>
-                  )}
-                  {option}
+                {/* Il numero del tasto (1–9): decorativo, fuori dal nome accessibile. */}
+                <span aria-hidden="true" className="font-mono text-label-caps opacity-60">
+                  {i + 1}
                 </span>
-                {isCorrectOption && (
-                  <span className="text-caption text-accent">{t('session.option.correct')}</span>
-                )}
-                {isWrongChoice && (
-                  <span className="text-caption text-danger">{t('session.option.yours')}</span>
-                )}
+                <span className="flex flex-1 flex-col gap-1">
+                  <span className="text-sentence-hero-mobile leading-snug sm:text-[26px]">
+                    {exercise.kind === 'assemble' && isChosen && (
+                      <span className="font-mono text-label text-ink-secondary">{orderPosition}. </span>
+                    )}
+                    <span lang="ja">
+                      {showFurigana && optionRuby[i]
+                        ? // La lettura sopra il kanji, fuori dal nome accessibile
+                          // (`aria-hidden`, niente <rp>): il bottone si chiama
+                          // ancora col testo dell'opzione.
+                          optionRuby[i]!.map((seg, k) =>
+                            seg.ruby ? (
+                              <ruby key={k}>
+                                {seg.text}
+                                <rt aria-hidden="true">
+                                  {seg.ruby}
+                                </rt>
+                              </ruby>
+                            ) : (
+                              seg.text
+                            ),
+                          )
+                        : option}
+                    </span>
+                  </span>
+                  {/* Il significato della tessera o del segmento, con «Traduzioni»
+                      acceso (mai nella scelta singola: vedi `glosses`). Il colore
+                      segue quello dell'opzione, anche quando è invertita. */}
+                  {optionMeanings.get(option) && (
+                    <Translation
+                      text={optionMeanings.get(option)!.text}
+                      lang={optionMeanings.get(option)!.language}
+                      className="block font-sans text-label italic opacity-80"
+                    />
+                  )}
+                  {isCorrectOption && (
+                    <span className="font-mono text-label-caps uppercase text-accent-on-ink">
+                      {t('session.option.correct')}
+                    </span>
+                  )}
+                  {isWrongChoice && (
+                    <span className="font-mono text-label-caps uppercase text-danger">
+                      {t('session.option.yours')}
+                    </span>
+                  )}
+                </span>
               </button>
             </li>
           );
@@ -226,7 +309,7 @@ export function ExerciseCard({
         <button
           type="button"
           onClick={onReveal}
-          className={`text-label text-ink-secondary underline ${FOCUS_RING}`}
+          className={`text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
         >
           {t('session.explanation.reveal')}
         </button>
@@ -235,7 +318,11 @@ export function ExerciseCard({
       {/* La spiegazione: consulto (correct null ⇒ solo spiegazione) o esito
           (correct non-null ⇒ dichiarazione testuale + spiegazione). */}
       {showExplanation && (
-        <ExplanationPanel explanation={explanation} correct={answered ? correct : null} />
+        <ExplanationPanel
+          explanation={explanation}
+          correct={answered ? correct : null}
+          readings={explanationReadings}
+        />
       )}
     </article>
   );

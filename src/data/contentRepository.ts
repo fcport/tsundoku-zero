@@ -20,13 +20,21 @@ import { DataError } from './dataError';
 
 // Il nome della tabella e le colonne vivono qui una sola volta: è l'unico
 // livello che conosce lo schema fisico (AD-2). Colonne di `lesson` (3.7):
-// id, ordinal, title_en, title_it (nullable), grammar_points (text[]). Il count
+// id, ordinal, title_en, title_it (nullable), grammar_points (text[]), video_id
+// (nullable, l'id del video YouTube di riferimento). Il count
 // aggregato PostgREST della risorsa embedded `exercise` (`exercise(count)`) legge
 // server-side il numero di esercizi in un solo giro, senza scaricarne i payload
 // (LessonSummary snello): arriva come `exercise: [{ count: n }]`.
 const LESSON_TABLE = 'lesson';
 const LESSON_COLUMNS =
+  'id, ordinal, title_en, title_it, grammar_points, video_id, exercise(count)';
+// Le stesse colonne SENZA `video_id`: la rete di sicurezza per un database su cui la
+// migrazione `add_video_id_to_lesson` non è ancora applicata (frontend pubblicato
+// prima della migrazione). Le lezioni arrivano comunque, solo senza video.
+const LESSON_COLUMNS_WITHOUT_VIDEO =
   'id, ordinal, title_en, title_it, grammar_points, exercise(count)';
+// Il codice Postgres «colonna inesistente», che PostgREST inoltra tale e quale.
+const UNDEFINED_COLUMN = '42703';
 
 // Colonne della tabella `exercise` (3.7): id (chiave di riga = chiave pila), kind
 // (discriminante), payload jsonb (`sentence`/`answer`/`distractors`), grammar_point,
@@ -37,7 +45,7 @@ const EXERCISE_COLUMNS =
   'id, kind, payload, grammar_point, explanation_en, explanation_it';
 
 // Forma GREZZA di una riga `lesson` come arriva da Supabase, prima della mappa in
-// LessonSummary. `title_it` è nullable; `grammar_points` è un array Postgres;
+// LessonSummary. `title_it` e `video_id` sono nullable; `grammar_points` è un array Postgres;
 // `exercise` è il count aggregato embedded (`[{ count: n }]`).
 interface LessonRow {
   readonly id: unknown;
@@ -45,6 +53,7 @@ interface LessonRow {
   readonly title_en: unknown;
   readonly title_it: unknown;
   readonly grammar_points: unknown;
+  readonly video_id: unknown;
   readonly exercise: unknown;
 }
 
@@ -89,10 +98,12 @@ function toExerciseCount(exercise: unknown): number {
  * Mappa PURA di una riga grezza in `LessonSummary`. La FORMA D'ORO del titolo:
  * `title = title_it != null ? { en, it } : { en }` — l'`it` è OMESSO (non
  * `undefined` esplicito) quando la colonna è `null`, riusando `BilingualText`
- * (FR8.5: nessuna forma bilingue parallela). `exerciseCount` deriva dal count
+ * (FR8.5: nessuna forma bilingue parallela). Stessa regola per il video: `video`
+ * è OMESSO quando `video_id` è `null`. `exerciseCount` deriva dal count
  * embedded (`exercise[0].count`, `0` = lezione concettuale). Su riga malformata
  * (id/title_en non stringa, ordinal non numero, grammar_points non array di
- * stringhe, `exercise` non array o `count` non numero) LANCIA un
+ * stringhe, title_it/video_id né null né stringa, `exercise` non array o `count`
+ * non numero) LANCIA un
  * `DataError('listLessons')`: una riga rotta è un fallimento, non un valore
  * degradato.
  */
@@ -103,13 +114,14 @@ function toLessonSummary(row: LessonRow): LessonSummary {
   if (row === null || typeof row !== 'object') {
     throw new DataError('listLessons', new Error('riga lesson non è un oggetto'));
   }
-  const { id, ordinal, title_en, title_it, grammar_points, exercise } = row;
+  const { id, ordinal, title_en, title_it, grammar_points, video_id, exercise } = row;
   if (
     typeof id !== 'string' ||
     typeof ordinal !== 'number' ||
     typeof title_en !== 'string' ||
     !isStringArray(grammar_points) ||
-    (title_it !== null && typeof title_it !== 'string')
+    (title_it !== null && typeof title_it !== 'string') ||
+    (video_id !== null && typeof video_id !== 'string')
   ) {
     throw new DataError('listLessons', new Error('riga lesson malformata'));
   }
@@ -119,7 +131,14 @@ function toLessonSummary(row: LessonRow): LessonSummary {
   const title: BilingualText =
     title_it !== null ? { en: title_en, it: title_it } : { en: title_en };
 
-  return { id, ordinal, title, grammarPoints: grammar_points, exerciseCount };
+  return {
+    id,
+    ordinal,
+    title,
+    grammarPoints: grammar_points,
+    exerciseCount,
+    ...(video_id !== null ? { video: video_id } : {}),
+  };
 }
 
 // Forma GREZZA di una riga `exercise` come arriva da Supabase, prima della mappa
@@ -209,6 +228,19 @@ export function createSupabaseContentRepository(
         .select(LESSON_COLUMNS)
         .order('ordinal');
 
+      if (error?.code === UNDEFINED_COLUMN) {
+        // Migrazione del video non ancora applicata: si rilegge senza la colonna e
+        // ogni lezione risulta senza video. Qualunque altro errore resta un errore.
+        const fallback = await client
+          .from(LESSON_TABLE)
+          .select(LESSON_COLUMNS_WITHOUT_VIDEO)
+          .order('ordinal');
+        if (fallback.error) {
+          throw new DataError('listLessons', fallback.error);
+        }
+        const rows = (fallback.data ?? []) as readonly Omit<LessonRow, 'video_id'>[];
+        return rows.map((row) => toLessonSummary({ ...row, video_id: null }));
+      }
       if (error) {
         throw new DataError('listLessons', error);
       }

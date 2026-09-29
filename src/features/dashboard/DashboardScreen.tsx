@@ -50,11 +50,14 @@ import {
   dailyUnlockLimitReached,
 } from '../../domain/unlockPace';
 import type { SettingsRepository } from '../../domain/ports/settingsRepository';
-import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { usePorts } from '../ports/PortsContext';
 import { resolveLocale, useTranslation } from '../../i18n';
-import { resolveBilingual } from '../../domain/bilingual';
 import { RESERVED_ORDER_START } from '../../domain/lesson';
+import { ACTION_BAR, KICKER, SERVICE_LINK } from '../../ui/magazine';
+import { kanjiDate } from '../../ui/kanjiDate';
+import { Furigana } from '../../ui/Furigana';
+import { Translation } from '../../ui/Translation';
+import { ArrowIcon, ExternalIcon } from '../../ui/icons';
 
 export interface DashboardScreenProps {
   /**
@@ -89,13 +92,40 @@ export interface DashboardScreenProps {
 // qui una sola volta, così i due rami non possono divergere.
 const CONTAINER_HEIGHT = 'min-h-[24rem]';
 
-// La classe CONDIVISA del <main> della dashboard (3.23): l'altezza condivisa PIÙ il
-// contenitore responsive di `src/ui/layout.ts` (colonna singola centrata, `measure`,
-// gutter 20/32px, mai allargata a ≥1024px) PIÙ il layout in colonna. Il gutter
-// orizzontale è di `RESPONSIVE_CONTAINER` (20px<640 / 32px≥640); qui resta solo il
-// padding verticale (`py-6`). Una sola definizione, composta in TUTTI i rami <main>
-// così non divergono (AC6/AC8).
-const MAIN_CLASS = `${CONTAINER_HEIGHT} ${RESPONSIVE_CONTAINER} flex flex-col items-center gap-6 py-6`;
+// La classe CONDIVISA del <main> della dashboard. Direzione «rivista» (29-09-2026):
+// non più la colonna stretta di 3.23 ma la pagina INTERA a destra del dorso, una
+// griglia a filetti che riempie l'altezza (`flex-1`) con la barra d'azione in fondo.
+// Una sola definizione, composta in TUTTI i rami <main> così non divergono.
+const MAIN_CLASS = `${CONTAINER_HEIGHT} flex flex-1 flex-col`;
+
+// La GRIGLIA della pagina: sotto 1024px il numero e la colonna della data, con i
+// dati a tutta larghezza sotto; da 1024px tre colonne affiancate (numero, data in
+// verticale, dati). I filetti sono i bordi delle celle.
+const GRID_CLASS =
+  'grid flex-1 grid-cols-[minmax(0,1fr)_64px] border-b-[1.5px] border-border-strong lg:grid-cols-[minmax(0,1fr)_150px_300px]';
+
+// Il riquadro del numero: alto abbastanza da far uscire il numero dal fondo.
+const HERO_CLASS = 'relative min-h-[300px] overflow-hidden sm:min-h-[400px]';
+
+// La dichiarazione che PRENDE IL POSTO del numero quando non c'è niente da contare
+// (primo avvio, pila svuotata, curriculum esaurito): corpo grande da editoriale.
+const DECLARATION_CLASS =
+  'p-5 text-[22px] font-medium leading-snug text-ink-primary sm:p-8 sm:text-[28px]';
+
+// Una fila di segmenti: `filled` pieni d'inchiostro su `count`. Decorativa: il dato
+// lo porta il testo accanto (numero visibile + frase per l'AT), mai il solo disegno.
+function Segments({ count, filled }: { readonly count: number; readonly filled: number }) {
+  return (
+    <span aria-hidden="true" className="mt-3 flex gap-[2px]">
+      {Array.from({ length: count }, (_, i) => (
+        <span
+          key={i}
+          className={`h-[6px] flex-1 ${i < filled ? 'bg-ink-primary' : 'bg-surface-sunken'}`}
+        />
+      ))}
+    </span>
+  );
+}
 
 export function DashboardScreen({
   userId,
@@ -170,17 +200,18 @@ export function DashboardScreen({
   ) {
     return (
       <main aria-busy="true" className={MAIN_CLASS}>
-        {/* Blocchi neutri alla stessa altezza dei corrispondenti finali:
-            conteggio + etichetta, streak, progresso, azione. Nessuno spinner.
-            L'altezza del blocco conteggio è RESPONSIVE come il ruolo del contatore
-            (3.23): 56px sotto 640px (`count-hero-mobile`), 72px da 640px
-            (`count-hero`), così lo scheletro combacia col caricato a ogni larghezza
-            (nessun salto di layout su mobile). */}
-        <div className="h-[56px] sm:h-[72px] w-32 rounded-md bg-surface-sunken" />
-        <div className="h-[20px] w-40 rounded-md bg-surface-sunken" />
-        <div className="h-[16px] w-36 rounded-md bg-surface-sunken" />
-        <div className="h-[16px] w-44 rounded-md bg-surface-sunken" />
-        <div className="h-12 w-48 rounded-md bg-surface-sunken" />
+        {/* La stessa griglia del caricato, con le celle vuote: il numero, la
+            colonna della data e i due dati. Nessuno spinner, nessun salto di
+            layout quando i dati arrivano (la barra d'azione è un blocco neutro alla
+            stessa altezza). */}
+        <div className={GRID_CLASS}>
+          <div className={HERO_CLASS}>
+            <div className="absolute bottom-6 left-5 h-[200px] w-[140px] bg-surface-sunken sm:h-[300px] sm:w-[200px]" />
+          </div>
+          <div className="border-l-[1.5px] border-border-strong" />
+          <div className="col-span-2 h-[132px] border-t-[1.5px] border-border-strong lg:col-span-1 lg:h-auto lg:border-l-[1.5px] lg:border-t-0" />
+        </div>
+        <div className="min-h-[72px] bg-surface-sunken sm:min-h-[88px]" />
       </main>
     );
   }
@@ -235,96 +266,156 @@ export function DashboardScreen({
   if (unlocked === 0) {
     return (
       <main className={MAIN_CLASS}>
-        <p className="text-body text-ink-primary">
-          {t('dashboard.firstRunBody')}
-        </p>
+        {/* La descrizione al posto del numero, poi la sola barra «comincia». */}
+        <div className="flex-1 border-b-[1.5px] border-border-strong">
+          <p className={`${DECLARATION_CLASS} max-w-[34rem]`}>
+            {t('dashboard.firstRunBody')}
+          </p>
+        </div>
         {next !== null ? (
           <button
             type="button"
             onClick={() => unlockMutation.mutate(next.id)}
             disabled={unlockMutation.isPending}
-            className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+            className={ACTION_BAR}
           >
-            {t('dashboard.startAction')}
+            <span>{t('dashboard.startAction')}</span>
+            <ArrowIcon className="text-accent-on-ink" />
           </button>
         ) : null}
       </main>
     );
   }
 
+  // La data di oggi in kanji per la colonna verticale (in chiaro è già nella
+  // testata della shell: qui è la sua controparte da impaginato, `aria-hidden`).
+  const jpToday = kanjiDate(clock.now(), clock.timeZone());
+  const locale = resolveLocale(i18n.language);
+  const localToday = new Intl.DateTimeFormat(locale === 'it' ? 'it-IT' : 'en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    timeZone: clock.timeZone(),
+  }).format(clock.now());
+
   return (
     <main className={MAIN_CLASS}>
-      {/* pile-counter che CAMBIA STATO a zero (3.16, AC1). A `count > 0` il
-          conteggio vive nel ruolo tipografico più grande con l'etichetta SOTTO
-          (3.12, AC1): il numero PRECEDE il verbo. A `count === 0` NON si rende «0»
-          né `dueLabel`, ma la DICHIARAZIONE del perché la pila è vuota, DERIVATA
-          dallo stato persistito (AD-5), mai memorizzata (sopravvive al refresh).
-          Le tre dichiarazioni hanno priorità e ortogonalità distinte (vedi sopra):
-          - `curriculumCompleteBody` SSE `next === null` (curriculum esaurito, AC2).
-          - `noExercisesNotice` (3.14, invariata) SSE l'ULTIMA sbloccata è
-            concettuale (`exerciseCount === 0`): mai `clearedBody`, la pila non si è
-            mai riempita.
-          - `clearedBody` («hai svuotato la pila») SSE l'ultima AVEVA esercizi.
-          «Esaurito» e «concettuale» convivono nel raro caso: entrambe vere, sempre
-          senza pulsante (il cancello 3.13 sotto rende NESSUNA azione a `next === null`).
-          Neutra, solo token del sistema di design, nessun conteggio nella copy. */}
-      {count > 0 ? (
-        <>
-          {/* pile-counter (3.12) col ruolo responsive (3.23): 56px sotto 640px
-              (`text-count-hero-mobile`, base mobile-first) che passa a 72px da 640px
-              (`sm:text-count-hero`), entrambe già in `theme.css`. */}
-          <p className="text-count-hero-mobile sm:text-count-hero text-ink-primary">
-            {count}
+      <div className={GRID_CLASS}>
+        {/* pile-counter che CAMBIA STATO a zero (3.16, AC1). A `count > 0` il
+            numero è l'evento della pagina: Archivo nerissimo condensato, così grande
+            da uscire dal fondo del riquadro, con l'etichetta DOPO nel DOM (3.12: il
+            numero PRECEDE il verbo) e in alto a destra sulla pagina. A `count === 0`
+            NON si rende «0» né `dueLabel`, ma la DICHIARAZIONE del perché la pila è
+            vuota, DERIVATA dallo stato persistito (AD-5), mai memorizzata:
+            - `curriculumCompleteBody` SSE `next === null` (curriculum esaurito, AC2).
+            - `noExercisesNotice` (3.14) SSE l'ULTIMA sbloccata è concettuale
+              (`exerciseCount === 0`): mai `clearedBody`, la pila non si è mai riempita.
+            - `clearedBody` («hai svuotato la pila») SSE l'ultima AVEVA esercizi.
+            «Esaurito» e «concettuale» convivono nel raro caso, sempre senza pulsante. */}
+        <div className={HERO_CLASS}>
+          {count > 0 ? (
+            <>
+              <p className="absolute bottom-0 left-3 translate-y-[14%] text-count-hero-mobile font-stretch-extra-condensed text-ink-primary sm:left-5 sm:text-count-hero">
+                {count}
+              </p>
+              <p className="absolute right-4 top-4 max-w-[9ch] text-right text-[17px] font-extrabold leading-tight text-accent sm:right-6 sm:top-6 sm:text-[22px]">
+                {t('dashboard.dueLabel')}
+              </p>
+            </>
+          ) : (
+            <div className="flex flex-col">
+              {next === null ? (
+                <p className={DECLARATION_CLASS}>{t('dashboard.curriculumCompleteBody')}</p>
+              ) : null}
+              {lastUnlocked?.exerciseCount === 0 ? (
+                <p className={DECLARATION_CLASS}>{t('dashboard.noExercisesNotice')}</p>
+              ) : next !== null ? (
+                <p className={DECLARATION_CLASS}>{t('dashboard.clearedBody')}</p>
+              ) : null}
+            </div>
+          )}
+        </div>
+
+        {/* La colonna centrale: la data di oggi scritta in verticale (縦書き), col
+            giorno della settimana in rosso in testa. Impaginato, non informazione
+            nuova: la data in chiaro è nella testata, quindi qui `aria-hidden`. */}
+        <div className="flex justify-center border-l-[1.5px] border-border-strong py-5 sm:py-8">
+          <p
+            lang="ja"
+            aria-hidden="true"
+            className="font-jp text-[22px] font-bold tracking-[0.14em] text-ink-primary [writing-mode:vertical-rl] sm:text-[32px]"
+          >
+            {/* Giorno e data con la furigana della casella sul dorso (in verticale
+                la lettura corre a destra dei kanji, come nei libri). */}
+            <span className="mb-4 text-[14px] font-bold tracking-normal text-accent sm:text-[16px]">
+              <Furigana segments={jpToday.weekdaySegments} />
+            </span>
+            <Furigana segments={jpToday.dateSegments} />
+            {/* La traduzione della data, con «Traduzioni» acceso. */}
+            <Translation
+              text={localToday}
+              lang={locale}
+              className="mt-3 block font-mono text-[12px] font-medium normal-case tracking-normal text-ink-secondary"
+            />
           </p>
-          <p className="text-label text-ink-secondary">
-            {t('dashboard.dueLabel')}
-          </p>
-        </>
-      ) : (
-        <>
-          {next === null ? (
-            <p className="text-body text-ink-primary">
-              {t('dashboard.curriculumCompleteBody')}
-            </p>
-          ) : null}
-          {lastUnlocked?.exerciseCount === 0 ? (
-            <p className="text-body text-ink-primary">
-              {t('dashboard.noExercisesNotice')}
-            </p>
-          ) : next !== null ? (
-            <p className="text-body text-ink-primary">
-              {t('dashboard.clearedBody')}
-            </p>
-          ) : null}
-        </>
-      )}
+        </div>
 
-      {/* La lezione su cui si sta lavorando: l'ultima sbloccata, per numero e titolo.
-          Senza, la dashboard non diceva mai che cosa si stesse studiando. */}
-      {lastUnlocked !== null ? (
-        <p className="text-body text-center text-ink-primary">
-          {t('dashboard.currentLesson', {
-            order: lastUnlocked.ordinal,
-            title: resolveBilingual(lastUnlocked.title, resolveLocale(i18n.language)).text,
-          })}
-        </p>
-      ) : null}
+        {/* La colonna dei DATI: sotto 1024px a tutta larghezza sotto il numero, da
+            1024px terza colonna. Ogni dato ha l'occhiello, il numero grande e una fila
+            di segmenti; la frase completa resta per l'AT (`sr-only`), perché il
+            numero da solo non dice di cosa è il numero. */}
+        <div className="col-span-2 flex flex-col border-t-[1.5px] border-border-strong lg:col-span-1 lg:border-l-[1.5px] lg:border-t-0">
+          <div className="grid grid-cols-2 lg:grid-cols-1">
+            {/* streak-badge: giorni consecutivi da `streak()` su review_log. */}
+            <div className="border-r-[1.5px] border-border-strong p-4 sm:p-6 lg:border-b-[1.5px] lg:border-r-0">
+              <p className={KICKER}>{t('dashboard.streakKicker')}</p>
+              <p aria-hidden="true" className="mt-2 text-[44px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
+                {days}
+              </p>
+              <Segments count={7} filled={Math.min(days, 7)} />
+              <p className="sr-only">{t('dashboard.streakLabel', { days })}</p>
+            </div>
+            {/* curriculum-progress: sbloccate su totale ("u di t lezioni"). */}
+            <div className="p-4 sm:p-6 lg:border-b-[1.5px] lg:border-border-strong">
+              <p className={KICKER}>{t('dashboard.curriculumKicker')}</p>
+              <p aria-hidden="true" className="mt-2 text-[44px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
+                {unlocked}
+                <span className="ml-1 text-[16px] font-medium font-stretch-normal text-ink-secondary">
+                  / {total}
+                </span>
+              </p>
+              <Segments count={total} filled={unlocked} />
+              <p className="sr-only">{t('dashboard.curriculumLabel', { unlocked, total })}</p>
+            </div>
+          </div>
 
-      {/* streak-badge: giorni consecutivi da `streak()` su review_log. */}
-      <p className="text-label text-ink-secondary">
-        {t('dashboard.streakLabel', { days })}
-      </p>
-
-      {/* curriculum-progress: sbloccate su totale ("u di t lezioni"). */}
-      <p className="text-label text-ink-secondary">
-        {t('dashboard.curriculumLabel', { unlocked, total })}
-      </p>
+          {/* I collegamenti di servizio: le statistiche (5.1, callback cablata dal
+              livello app, AD-1) e il video di riferimento della lezione in corso, un
+              vero <a> perché punta FUORI dall'app (apre YouTube, niente embed). */}
+          <div className="flex flex-wrap gap-x-5 gap-y-3 p-4 sm:p-6">
+            <button type="button" onClick={onViewStats} className={SERVICE_LINK}>
+              {t('dashboard.viewStats')}
+            </button>
+            {lastUnlocked?.video ? (
+              <a
+                href={`https://www.youtube.com/watch?v=${lastUnlocked.video}`}
+                target="_blank"
+                rel="noreferrer"
+                className={SERVICE_LINK}
+              >
+                {t('dashboard.referenceVideo')} <ExternalIcon />
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </div>
 
       {/* Il CANCELLO delle quest sequenziali (AC4/3.13) + il tetto giornaliero
-          (3.17): al più UNA sola azione, mai entrambe insieme.
-          - Pila NON vuota (count > 0) ⇒ SOLO svuota-pila (sola-copy, inerte come
-            in 3.12; l'azione di sblocco NON è presente, nemmeno disabilitata). Il
-            tetto NON è consultato qui.
+          (3.17): al più UNA sola azione, mai entrambe insieme, sempre la barra
+          d'inchiostro in fondo alla pagina.
+          - Pila NON vuota (count > 0) ⇒ SOLO svuota-pila, cablata all'avvio sessione
+            (3.18) via `onStartSession` (la shell naviga a /studia). Il tetto NON è
+            consultato qui.
           - Pila vuota (count === 0) con una lezione successiva e tetto NON
             raggiunto ⇒ SOLO sblocco, cablato a `unlockMutation.mutate(next.id)`.
           - Pila vuota, lezione successiva, ma tetto RAGGIUNTO ⇒ NESSUN pulsante,
@@ -333,44 +424,29 @@ export function DashboardScreen({
           - Pila vuota a curriculum esaurito (next === null) ⇒ NESSUNA azione (la
             schermata senza-azione è 3.16): non si rende alcun pulsante. */}
       {count > 0 ? (
-        // button-primary svuota-pila: verbale e concreto. Ora CABLATO all'avvio
-        // sessione (3.18) via `onStartSession` (la shell naviga a /studia).
-        <button
-          type="button"
-          onClick={onStartSession}
-          className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
-        >
-          {t('dashboard.primaryAction')}
+        <button type="button" onClick={onStartSession} className={ACTION_BAR}>
+          <span>{t('dashboard.primaryAction')}</span>
+          <ArrowIcon className="text-accent-on-ink" />
         </button>
       ) : next !== null ? (
         capReached ? (
           // Tetto raggiunto: nessun pulsante, la dichiarazione del limite.
-          <p className="text-body text-ink-primary">
+          <p className="p-4 text-body text-ink-primary sm:px-8 sm:py-6">
             {t('dashboard.dailyLimitReachedBody', { limit: cap })}
           </p>
         ) : (
-          // button-primary sblocco: materializza la lezione successiva via porta.
+          // Sblocco: materializza la lezione successiva via porta.
           <button
             type="button"
             onClick={() => unlockMutation.mutate(next.id)}
             disabled={unlockMutation.isPending}
-            className="rounded-md border border-border-strong bg-accent text-surface-raised p-3 text-label"
+            className={ACTION_BAR}
           >
-            {t('dashboard.unlockAction')}
+            <span>{t('dashboard.unlockAction')}</span>
+            <ArrowIcon className="text-accent-on-ink" />
           </button>
         )
       ) : null}
-
-      {/* Affordance di navigazione verso le statistiche (5.1): SECONDARIA —
-          chiaramente non il button-primary (nessun fill, ink muto, nessun verde).
-          La navigazione è una callback cablata dal livello app (AD-1). */}
-      <button
-        type="button"
-        onClick={onViewStats}
-        className="text-caption text-ink-muted underline"
-      >
-        {t('dashboard.viewStats')}
-      </button>
     </main>
   );
 }

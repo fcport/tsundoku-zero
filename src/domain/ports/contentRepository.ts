@@ -33,6 +33,13 @@ export interface LessonSummary {
    * lo usa; lo consuma `lastUnlockedLesson` per la dichiarazione «senza esercizi».
    */
   readonly exerciseCount: number;
+  /**
+   * L'id (11 caratteri) del video YouTube di riferimento della lezione, da cui la
+   * UI compone un semplice link che apre YouTube (nessun embed). FACOLTATIVO: la
+   * chiave è ASSENTE (non `undefined` esplicito) quando la lezione non ha un video,
+   * come `title.it`.
+   */
+  readonly video?: string;
 }
 
 /**

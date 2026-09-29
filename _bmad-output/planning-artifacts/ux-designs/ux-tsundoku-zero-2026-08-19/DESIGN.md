@@ -5,109 +5,106 @@ status: final
 sources:
   - '{planning_artifacts}/prds/prd-tsundoku-zero-2026-08-19/prd.md'
   - '{planning_artifacts}/architecture/architecture-tsundoku-zero-2026-08-19/ARCHITECTURE-SPINE.md'
-updated: 2026-08-19
+updated: 2026-09-29
 colors:
-  surface-base: '#FAF7F0'
-  surface-raised: '#FFFFFF'
-  surface-sunken: '#F1ECE1'
-  ink-primary: '#1C1A17'
-  ink-secondary: '#6B6459'
-  ink-muted: '#797065'
-  border-hairline: '#E3DCCE'
-  border-strong: '#9B8D7B'
-  accent: '#1F4A7A'
-  accent-hover: '#173A61'
-  accent-subtle: '#E8EEF6'
-  danger: '#9B3A2F'
-  danger-subtle: '#F7E9E6'
-  focus-ring: '#2F6FB0'
-  surface-base-dark: '#161513'
-  surface-raised-dark: '#1F1E1B'
-  surface-sunken-dark: '#100F0E'
-  ink-primary-dark: '#F2EEE6'
-  ink-secondary-dark: '#A8A196'
-  ink-muted-dark: '#8D8477'
-  border-hairline-dark: '#332F2A'
-  border-strong-dark: '#70675B'
-  accent-dark: '#7FB0DC'
-  accent-hover-dark: '#9CC4E6'
-  accent-subtle-dark: '#1B2A38'
-  danger-dark: '#E08476'
-  danger-subtle-dark: '#38211E'
-  focus-ring-dark: '#7FB0DC'
+  surface-base: '#ECE7DC'
+  surface-raised: '#F5F1E9'
+  surface-sunken: '#DCD5C7'
+  ink-primary: '#121110'
+  ink-secondary: '#4F4A44'
+  ink-muted: '#625C54'
+  border-hairline: '#C9C2B4'
+  border-strong: '#121110'
+  accent: '#B8321B'
+  accent-hover: '#9C2915'
+  accent-subtle: '#F2DCD3'
+  danger: '#A82E19'
+  danger-subtle: '#EFD6CC'
+  focus-ring: '#B8321B'
+  accent-on-ink: '#FF6A4D'
 typography:
   word-hero:
-    fontFamily: Noto Sans JP
+    fontFamily: Shippori Mincho
     fontSize: 64px
     fontWeight: '500'
     lineHeight: '1.75'
   word-hero-mobile:
-    fontFamily: Noto Sans JP
+    fontFamily: Shippori Mincho
     fontSize: 44px
     fontWeight: '500'
     lineHeight: '1.8'
   word-ruby:
-    fontFamily: Noto Sans JP
+    fontFamily: Shippori Mincho
     fontSize: 0.42em
     fontWeight: '400'
     letterSpacing: 0.04em
   reading:
-    fontFamily: Noto Sans JP
+    fontFamily: Shippori Mincho
     fontSize: 20px
     fontWeight: '400'
     lineHeight: '1.5'
   meaning:
-    fontFamily: Inter
+    fontFamily: Archivo
     fontSize: 22px
     fontWeight: '400'
     lineHeight: '1.45'
   count-hero:
-    fontFamily: Inter
-    fontSize: 72px
-    fontWeight: '600'
-    lineHeight: '1'
-    letterSpacing: -0.03em
+    fontFamily: Archivo
+    fontSize: 560px
+    fontWeight: '900'
+    fontStretch: 62.5%
+    lineHeight: '0.8'
+    letterSpacing: -0.04em
   count-hero-mobile:
-    fontFamily: Inter
-    fontSize: 56px
-    fontWeight: '600'
-    lineHeight: '1'
-    letterSpacing: -0.03em
+    fontFamily: Archivo
+    fontSize: 300px
+    fontWeight: '900'
+    fontStretch: 62.5%
+    lineHeight: '0.8'
+    letterSpacing: -0.04em
   display:
-    fontFamily: Inter
-    fontSize: 28px
-    fontWeight: '600'
-    lineHeight: '1.25'
+    fontFamily: Archivo
+    fontSize: 40px
+    fontWeight: '800'
+    fontStretch: 75%
+    lineHeight: '1'
+    letterSpacing: -0.01em
+  label-mono:
+    fontFamily: IBM Plex Mono
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: '1.4'
+    letterSpacing: 0.08em
   body:
-    fontFamily: Inter
+    fontFamily: Archivo
     fontSize: 16px
     fontWeight: '400'
     lineHeight: '1.6'
   label:
-    fontFamily: Inter
+    fontFamily: Archivo
     fontSize: 14px
     fontWeight: '500'
     lineHeight: '1.4'
   label-caps:
-    fontFamily: Inter
+    fontFamily: Archivo
     fontSize: 12px
     fontWeight: '500'
     lineHeight: '1.4'
     letterSpacing: 0.08em
   caption:
-    fontFamily: Inter
+    fontFamily: Archivo
     fontSize: 13px
     fontWeight: '400'
     lineHeight: '1.5'
   attribution:
-    fontFamily: Inter
+    fontFamily: Archivo
     fontSize: 11px
     fontWeight: '400'
     lineHeight: '1.4'
 rounded:
-  sm: 4px
-  md: 8px
-  lg: 12px
+  sm: 0px
+  md: 0px
+  lg: 2px
   full: 9999px
 spacing:
   '1': 4px
@@ -124,12 +121,13 @@ spacing:
   thumb-zone: 120px
 components:
   button-primary:
-    background: '{colors.accent}'
-    color: '{colors.surface-raised}'
+    background: '{colors.ink-primary}'
+    color: '{colors.surface-base}'
+    arrow: '{colors.accent-on-ink}'
     radius: '{rounded.md}'
-    paddingBlock: '{spacing.4}'
-    minHeight: 56px
-    typography: '{typography.label}'
+    width: 100%
+    minHeight: 72px
+    typography: '{typography.display}'
   rating-button:
     background: '{colors.surface-raised}'
     color: '{colors.ink-primary}'
@@ -153,10 +151,11 @@ components:
     typography: '{typography.count-hero}'
     color: '{colors.ink-primary}'
   progress-meter:
-    track: '{colors.surface-sunken}'
-    fill: '{colors.accent}'
-    height: 4px
-    radius: '{rounded.full}'
+    track: '{colors.surface-raised}'
+    fill: '{colors.ink-primary}'
+    border: '1.5px solid {colors.border-strong}'
+    height: 10px
+    radius: '{rounded.md}'
   attribution-bar:
     typography: '{typography.attribution}'
     color: '{colors.ink-muted}'
@@ -167,6 +166,20 @@ components:
     color: '{colors.ink-muted}'
     radius: '{rounded.full}'
 ---
+
+## Direzione «縦書き / rivista» (29-09-2026)
+
+La prima esecuzione di questo documento era corretta nei principi e spenta nella resa: paragrafi centrati tutti uguali, bottoni a colonna, un indaco che non diceva niente. Il redesign del 29-09-2026 tiene **ogni principio** qui sotto — carta e inchiostro, il giapponese protagonista, nessuna mascotte, nessun verde, nessuna celebrazione, un'azione primaria per schermata — e cambia la **forma** in quella di una rivista giapponese:
+
+- **Griglia a filetti invece di superfici.** Le sezioni sono separate da filetti d'inchiostro di 1.5px (`{colors.border-strong}`), non da card. Nessun raggio (`{rounded.md}` a zero), nessuna ombra.
+- **Un dorso verticale.** Ogni schermata ha a sinistra un dorso con il marchio 積ん読ゼロ scritto in verticale (縦書き) e un punto rosso, come il dorso di un numero da collezione. È l'`<h1>` delle pagine che non ne hanno un altro.
+- **Numeri enormi.** Il numero dei dovuti è Archivo 900 extra-condensato, abbastanza grande da uscire dal fondo del suo riquadro. Esce di proposito: è l'evento della pagina.
+- **Un solo rosso.** `{colors.accent}` non è più l'indaco dell'azione ma il **rosso** della rivista: l'etichetta «da rivedere», il giorno della settimana, la freccia della barra d'azione, il timbro dell'esito, il capolettera. L'azione primaria è una **barra d'inchiostro** a tutta larghezza, in fondo alla pagina.
+- **Tre famiglie.** Archivo con l'asse di larghezza per l'interfaccia e le testate, Shippori Mincho per il giapponese (applicato a ogni nodo `lang="ja"`), IBM Plex Mono per occhielli e numerazioni.
+- **L'esito è un timbro.** 正 per giusta, 誤 per sbagliata, nello **stesso** rosso: la differenza la portano il carattere e la dichiarazione in testo, mai la tinta.
+- **La data in verticale.** La colonna centrale della dashboard porta la data di oggi in kanji (九月二十九日), decorativa: in chiaro è nella testata.
+
+Dove il testo qui sotto parla di indaco, di card sollevata o di Inter/Noto Sans JP, vale questa sezione. I valori sono in `src/ui/theme.css`, che resta l'unica fonte.
 
 ## Brand & Style
 
@@ -194,15 +207,13 @@ Il sistema ha **una sola tinta d'accento** e **una sola tinta di allarme**. Non 
   Il valore è vincolato dal contrasto, non dal gusto: a `4.54:1` su `{colors.surface-base}` è il grigio **più chiaro** che superi ancora AA. La prima stesura usava `#9A9287`, che stava a `2.87:1` — visivamente più elegante e non conforme, sull'unico testo che una licenza obbliga a mostrare. La recessività qui la portano il corpo e il peso, non il colore.
 - **`{colors.border-hairline}`** — separazione **decorativa**: divisori, bordo della barra di attribuzione. A `1.27:1` non è conforme a un requisito di contrasto, e non deve esserlo: WCAG 1.4.11 esenta gli elementi puramente decorativi. **Non usarlo mai come unico confine di un componente interattivo.**
 - **`{colors.border-strong}`** — confine di componente interattivo: `rating-button`, campi di input. A `3.02:1` supera 1.4.11. La distinzione fra i due bordi esiste perché i quattro pulsanti di valutazione vanno colpiti a una mano su un treno in movimento, e un contorno che sparisce a piena luminosità è un bersaglio che sparisce.
-- **`{colors.accent}`** — 紺, indaco scuro. Significa **una sola cosa: "questo fa avanzare"**. L'azione primaria della dashboard, il riempimento della barra di avanzamento, il link attivo. Non usato per bordi decorativi, non per titoli, mai due volte nella stessa schermata come richiamo all'azione — `FR3.3` lo vieta di fatto.
+- **`{colors.accent}`** — dal 29-09-2026 il **rosso** della rivista (vedi la sezione in testa): segnala, non comanda; l'azione primaria è la barra d'inchiostro. Il testo che segue descrive l'indaco della prima esecuzione. 紺, indaco scuro. Significa **una sola cosa: "questo fa avanzare"**. L'azione primaria della dashboard, il riempimento della barra di avanzamento, il link attivo. Non usato per bordi decorativi, non per titoli, mai due volte nella stessa schermata come richiamo all'azione — `FR3.3` lo vieta di fatto.
 - **`{colors.accent-subtle}`** — tinta d'accento per fondali di stato informativo. L'unico uso ammesso dell'indaco che non sia un'azione.
 - **`{colors.danger}`** — 茜, robbia. Significa **una sola cosa: "questo ti riporta indietro"**. L'esito `again` e i messaggi di errore di `FR1.5`. Non è "male": `again` è una risposta onesta e legittima, e il colore deve dire *conseguenza*, non *colpa*.
 
 **Cosa non esiste in questo sistema, deliberatamente:** nessun verde. Lo stato di completamento — la pila a zero, `FR4.4` — usa l'accento e lo spazio bianco, non una spunta verde. Un verde di successo introdurrebbe la grammatica della celebrazione, che è esattamente ciò che è stato rifiutato scegliendo A e non B.
 
-**Modalità scura.** Ratificata: entra in v1 come **pari**, non come opzione secondaria, perché la persona di `§4` studia sul portatile la sera. I token `*-dark` sono l'insieme completo; nessun colore ha la sua unica definizione dentro un blocco scuro.
-
-Segue `prefers-color-scheme` e **non ha un interruttore**: le impostazioni restano due, e il tema non è la terza. Vale a una condizione, imposta da `UX-DR1`: **nessun componente scrive un colore letterale**. A quella condizione la modalità scura è uno scambio di variabili; senza, è una riscrittura per componente.
+**Nessuna modalità scura (29-09-2026).** La prima stesura la ratificava come pari, ma nell'app cambiava solo lo sfondo del body: i componenti non avevano varianti scure e restavano chiari. L'owner l'ha tolta: l'app è sempre carta e inchiostro, dichiarato al browser con `color-scheme: light`. Resta un solo colore pensato per un fondo scuro, `{colors.accent-on-ink}`: il rosso acceso che si legge **sull'inchiostro** della barra d'azione e dell'opzione giusta, dove `{colors.accent}` sarebbe troppo scuro. Resta anche la regola di `UX-DR1`: **nessun componente scrive un colore letterale**.
 
 ## Typography
 
@@ -210,8 +221,8 @@ Due famiglie, con confine netto e motivato.
 
 | Ruolo | Famiglia | Perché |
 |---|---|---|
-| Contenuto giapponese | **Noto Sans JP** | Copertura kanji/kana completa, licenza aperta, servita da Google Fonts. È l'unica famiglia gratuita con copertura piena che si possa servire senza self-hosting. Marcata `lang="ja"` per `AD-14` |
-| Interfaccia latina (en/it) | **Inter** | Neutra, altezza-x generosa, tiene bene agli 11px dell'attribuzione — il corpo più piccolo del sistema, e quello che una licenza obbliga a rendere leggibile |
+| Contenuto giapponese | **Shippori Mincho** (dal 29-09-2026; prima Noto Sans JP) | Copertura kanji/kana completa, licenza aperta, servita da Google Fonts. È l'unica famiglia gratuita con copertura piena che si possa servire senza self-hosting. Marcata `lang="ja"` per `AD-14` |
+| Interfaccia latina (en/it) | **Archivo** con asse di larghezza (dal 29-09-2026; prima Inter). Occhielli in **IBM Plex Mono** | Neutra, altezza-x generosa, tiene bene agli 11px dell'attribuzione — il corpo più piccolo del sistema, e quello che una licenza obbliga a rendere leggibile |
 
 **La scala del giapponese è l'evento della pagina.** `{typography.word-hero}` a 64px non è vanità: la card di studio contiene una parola sola, e quella parola è tutto il motivo per cui l'utente ha aperto l'app. Su mobile scende a `{typography.word-hero-mobile}`.
 
@@ -247,7 +258,7 @@ I bordi sono **due, e non sono intercambiabili**: `{colors.border-hairline}` sep
 
 ## Shapes
 
-Raggi contenuti: `{rounded.sm}` per i tag, `{rounded.md}` per pulsanti e campi, `{rounded.lg}` per la card di studio. `{rounded.full}` solo per la barra di avanzamento e la pastiglia dello streak.
+Dal 29-09-2026 la rivista **non arrotonda**: `{rounded.sm}` e `{rounded.md}` sono a zero (pulsanti, campi, tessere, caselle delle impostazioni), `{rounded.lg}` appena smussato. `{rounded.full}` solo per il punto rosso del dorso.
 
 La moderazione è deliberatamente in opposizione al riferimento: la forma-firma di Renshuu è il rettangolo molto stondato con bordo nero spesso, da fumetto. Ereditare quella forma reintrodurrebbe dalla porta di servizio l'identità che è stata rifiutata scegliendo A.
 
@@ -255,7 +266,7 @@ La moderazione è deliberatamente in opposizione al riferimento: la forma-firma 
 
 **`pile-counter`** — Il numero degli item dovuti in `{typography.count-hero}`, con l'etichetta in `{typography.label-caps}` **sotto**, non sopra. Il numero arriva per primo all'occhio. A zero il numero non diventa "0": la dashboard cambia stato (vedi `EXPERIENCE.md`, State Patterns).
 
-**`button-primary`** — Piena larghezza su mobile, `{colors.accent}` pieno. **Ne esiste al massimo uno per schermata**, imposto da `FR3.3`. Testo verbale e concreto, mai "Continua".
+**`button-primary`** — Dal 29-09-2026 la **barra d'azione**: fascia d'inchiostro a tutta larghezza, testo in testata maiuscola condensata, freccia rossa disegnata in SVG (decorativa). Prima: piena larghezza su mobile, `{colors.accent}` pieno. **Ne esiste al massimo uno per schermata**, imposto da `FR3.3`. Testo verbale e concreto, mai "Continua".
 
 **`rating-button`** — Quattro, in riga singola, ordine fisso `again` · `hard` · `good` · `easy` da sinistra a destra, coerente con i tasti `1`–`4` di `AD-15`. Tre sono neutri e identici; **solo `again` porta colore**, tramite `rating-button-again`.
 
@@ -273,7 +284,7 @@ Questa asimmetria è una decisione, e va difesa così: la tinta è il canale pi�
 
 | Do | Don't |
 |---|---|
-| Un solo `{colors.accent}` per schermata, sull'azione che fa avanzare | Accento su titoli, bordi, icone decorative |
+| Una sola barra d'azione per schermata; il rosso per segnalare (etichetta, data, timbro, freccia) | Il rosso come riempimento di un pulsante o di un'intera superficie |
 | Stato di completamento con spazio e accento | Verde, spunte, coriandoli, animazioni celebrative |
 | Giapponese in `{typography.word-hero}`, tutto il resto sotto i 28px | Titolo di schermata più grande del contenuto giapponese |
 | `lang="ja"` su ogni nodo che contiene giapponese (`AD-14`, `AD-15`) | Giapponese dentro le stringhe i18n — è dato, non interfaccia |
@@ -282,4 +293,4 @@ Questa asimmetria è una decisione, e va difesa così: la tinta è il canale pi�
 | Verificare il contrasto con un calcolo, sui **due** fondi (base e card) | Fidarsi dell'occhio: `{colors.ink-muted}` sembrava giusto a `2.87:1` |
 | Pulsanti di valutazione nella fascia bassa su mobile | Valutazione in cima allo schermo |
 | `again` è l'unico pulsante colorato | Quattro pulsanti in quattro tinte diverse |
-| Modalità scura come pari, definita per intero | Colori definiti solo dentro un blocco scuro |
+| Un solo tema, chiaro, con `color-scheme: light` | Una modalità scura a metà: sfondo scuro e componenti chiari |

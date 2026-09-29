@@ -1,9 +1,10 @@
 {
   "order": 2,
   "title": {
-    "en": "The zero pronoun, and the object with を",
-    "it": "Il pronome zero, e l'oggetto con を"
+    "en": "The unwritten subject (zero pronoun), and the object with を",
+    "it": "Il soggetto sottinteso (pronome zero) e l'oggetto con を"
   },
+  "video": "P3n8n0u3LHA",
   "grammarPoints": ["ゼロ代名詞", "「を」で示す目的語"],
   "exercises": [
     {
@@ -17,27 +18,45 @@
         "kanji": "弟がパンを焼く",
         "kana": "おとうとがパンをやく"
       },
+      "translation": {
+        "en": "My younger brother bakes bread.",
+        "it": "Mio fratello minore cuoce il pane."
+      },
+      "glosses": [
+        { "text": "弟が", "reading": "おとうとが", "meaning": { "en": "younger brother (subject)", "it": "fratello minore (soggetto)" } },
+        { "text": "パンを", "meaning": { "en": "bread (object)", "it": "pane (oggetto)" } },
+        { "text": "焼く", "reading": "やく", "meaning": { "en": "bakes", "it": "cuoce" } }
+      ],
       "answer": ["弟が", "パンを", "焼く"],
       "explanation": {
-        "en": "Two roles, two particles. が marks 弟 (younger brother) as the one who performs the action; を marks パン (bread) as what the action is applied to — the object. Each particle travels with its noun, and the verb 焼く (bake) closes the sentence.",
-        "it": "Due ruoli, due particelle. が marca 弟 (fratello minore) come chi compie l'azione; を marca パン (pane) come ciò su cui l'azione si esercita — l'oggetto. Ogni particella viaggia con il suo nome, e il verbo 焼く (cuocere) chiude la frase."
+        "en": "が marks the subject: who does the action (弟, younger brother). を marks the object: the thing the action is done to (パン, bread). The verb 焼く (bakes) comes last.",
+        "it": "が segna il soggetto: chi compie l'azione (弟, il fratello minore). を segna l'oggetto: la cosa su cui si compie l'azione (パン, il pane). Il verbo 焼く (cuoce) va alla fine."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "「を」で示す目的語",
       "prompt": {
-        "en": "Which part is the object of the verb?",
-        "it": "Quale parte è l'oggetto del verbo?"
+        "en": "Which part is the object (the thing the action is done to)?",
+        "it": "Quale parte è l'oggetto (la cosa su cui si compie l'azione)?"
       },
       "sentence": {
         "kanji": "ピザを焼いた",
         "kana": "ピザをやいた"
       },
+      "translation": {
+        "en": "(I) baked a pizza.",
+        "it": "(Io) ho cotto una pizza."
+      },
+      "glosses": [
+        { "text": "ピザを", "meaning": { "en": "pizza (object)", "it": "pizza (oggetto)" } },
+        { "text": "焼", "reading": "や", "meaning": { "en": "bake (kanji of 焼く)", "it": "cuocere (kanji di 焼く)" } },
+        { "text": "いた", "meaning": { "en": "past-tense ending of 焼く", "it": "desinenza del passato di 焼く" } }
+      ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
-        "en": "Select the object: ピザを. を marks the pizza as the thing that was baked. No subject is written, yet the sentence is complete: its subject is a zero pronoun, understood as the speaker unless the context points to someone else — \"I baked a pizza\".",
-        "it": "Seleziona l'oggetto: ピザを. を marca la pizza come la cosa che è stata cotta. Nessun soggetto è scritto, eppure la frase è completa: il suo soggetto è un pronome zero, inteso come chi parla a meno che il contesto indichi qualcun altro — «ho cotto una pizza»."
+        "en": "The object is ピザを: を marks the pizza as the thing that was baked. The subject is not written, yet the sentence is complete: it is a zero pronoun, a subject that is left out but understood. With no other context it is the speaker: \"I baked a pizza\".",
+        "it": "L'oggetto è ピザを: を segna la pizza come la cosa che è stata cotta. Il soggetto non è scritto, eppure la frase è completa: è un pronome zero, cioè un soggetto non scritto ma sottinteso. Senza altro contesto è chi parla: «ho cotto una pizza»."
       }
     },
     {
@@ -45,11 +64,15 @@
       "grammarPoint": "「を」で示す目的語",
       "prompt": {
         "en": "\"The cat ate the fish.\" Which particle marks what was eaten?",
-        "it": "«Il gatto ha mangiato il pesce.» Quale particella marca ciò che è stato mangiato?"
+        "it": "«Il gatto ha mangiato il pesce.» Quale particella segna ciò che è stato mangiato?"
       },
       "sentence": {
         "kanji": "猫が魚を食べた",
         "kana": "ねこがさかなをたべた"
+      },
+      "translation": {
+        "en": "The cat ate the fish.",
+        "it": "Il gatto ha mangiato il pesce."
       },
       "gap": {
         "kanji": "猫が魚＿食べた",
@@ -58,25 +81,34 @@
       "answer": "を",
       "distractors": ["が", "の"],
       "explanation": {
-        "en": "The fish is what gets eaten, so it takes the object particle を. が is already used by 猫 (cat), the one who eats; の would turn 魚 into a modifier of the next noun, but a verb follows, not a noun.",
-        "it": "Il pesce è ciò che viene mangiato, quindi prende la particella dell'oggetto を. が è già usata da 猫 (gatto), chi mangia; の farebbe di 魚 un modificatore del nome seguente, ma segue un verbo, non un nome."
+        "en": "The fish is what gets eaten, so it is the object and takes を. が is already on 猫 (cat), the one who eats. の joins two nouns (\"the fish's …\"), but here a verb follows.",
+        "it": "Il pesce è ciò che viene mangiato, quindi è l'oggetto e prende を. が è già su 猫 (il gatto), chi mangia. の unisce due nomi («il … del pesce»), ma qui segue un verbo."
       }
     },
     {
       "kind": "select-span",
       "grammarPoint": "ゼロ代名詞",
       "prompt": {
-        "en": "No subject is written. Which part is the copula?",
-        "it": "Il soggetto non è scritto. Quale parte è la copula?"
+        "en": "No subject is written. Which part means \"is\"?",
+        "it": "Il soggetto non è scritto. Quale parte vuol dire «è»?"
       },
       "sentence": {
         "kanji": "もう八時だ",
         "kana": "もうはちじだ"
       },
+      "translation": {
+        "en": "It's already eight o'clock.",
+        "it": "Sono già le otto."
+      },
+      "glosses": [
+        { "text": "もう", "meaning": { "en": "already", "it": "già" } },
+        { "text": "八時", "reading": "はちじ", "meaning": { "en": "eight o'clock", "it": "le otto" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
       "answer": { "start": 2, "end": 3 },
       "explanation": {
-        "en": "Select the copula だ. The sentence has a predicate (八時だ, \"is eight o'clock\") but no written subject. Japanese does not need one on the page: the subject is a zero pronoun whose value comes from the situation — here, the present time.",
-        "it": "Seleziona la copula だ. La frase ha un predicato (八時だ, «sono le otto») ma nessun soggetto scritto. Il giapponese non ha bisogno di scriverlo: il soggetto è un pronome zero il cui valore viene dalla situazione — qui, l'ora attuale."
+        "en": "だ means \"is\": 八時だ means \"(it) is eight o'clock\". No subject is written, and none is needed: the subject is a zero pronoun, left out but understood. Here the situation makes it clear: the current time.",
+        "it": "だ vuol dire «è»: 八時だ vuol dire «sono le otto». Il soggetto non è scritto, e non serve: è un pronome zero, cioè un soggetto sottinteso. Qui lo chiarisce la situazione: l'ora attuale."
       }
     },
     {
@@ -90,10 +122,19 @@
         "kanji": "毎晩日記を書く",
         "kana": "まいばんにっきをかく"
       },
+      "translation": {
+        "en": "(I) write in my diary every night.",
+        "it": "(Io) scrivo il diario ogni sera."
+      },
+      "glosses": [
+        { "text": "毎晩", "reading": "まいばん", "meaning": { "en": "every night", "it": "ogni sera" } },
+        { "text": "日記を", "reading": "にっきを", "meaning": { "en": "diary (object)", "it": "diario (oggetto)" } },
+        { "text": "書く", "reading": "かく", "meaning": { "en": "write", "it": "scrivo" } }
+      ],
       "answer": ["毎晩", "日記を", "書く"],
       "explanation": {
-        "en": "There is no が anywhere, but every action still has someone performing it. The subject of 書く (write) is a zero pronoun; with nothing else in the context, it defaults to the speaker: \"I write in my diary every night\".",
-        "it": "Non c'è nessun が, ma ogni azione ha comunque qualcuno che la compie. Il soggetto di 書く (scrivere) è un pronome zero; se il contesto non dice altro, vale chi parla: «ogni sera scrivo il diario»."
+        "en": "There is no が, yet someone is writing. The subject of 書く (write) is a zero pronoun: not written, but understood. With no other context it is the speaker: \"I write…\".",
+        "it": "Non c'è nessun が, eppure qualcuno scrive. Il soggetto di 書く (scrivere) è un pronome zero: non è scritto, ma è sottinteso. Senza altro contesto è chi parla: «(io) scrivo…»."
       }
     },
     {
@@ -101,11 +142,15 @@
       "grammarPoint": "ゼロ代名詞",
       "prompt": {
         "en": "\"(I) open the window.\" Which particle marks the window?",
-        "it": "«(Io) apro la finestra.» Quale particella marca la finestra?"
+        "it": "«(Io) apro la finestra.» Quale particella segna la finestra?"
       },
       "sentence": {
         "kanji": "窓を開ける",
         "kana": "まどをあける"
+      },
+      "translation": {
+        "en": "(I) open the window.",
+        "it": "(Io) apro la finestra."
       },
       "gap": {
         "kanji": "窓＿開ける",
@@ -114,8 +159,112 @@
       "answer": "を",
       "distractors": ["が", "で"],
       "explanation": {
-        "en": "窓 (window) is what gets opened, so it is the object and takes を. With が the window would become the subject, and the sentence would lose the person who opens it. That person is still there as a zero pronoun: \"(I) open the window\".",
-        "it": "窓 (finestra) è ciò che viene aperto, quindi è l'oggetto e prende を. Con が la finestra diventerebbe il soggetto, e la frase perderebbe chi la apre. Quella persona c'è comunque, come pronome zero: «(io) apro la finestra»."
+        "en": "窓 (window) is the thing being opened, so it is the object and takes を. With が the window would become the subject, the one doing the opening. The real subject, the person who opens it, is a zero pronoun: not written but understood (\"I\").",
+        "it": "窓 (finestra) è la cosa che viene aperta, quindi è l'oggetto e prende を. Con が la finestra diventerebbe il soggetto, cioè chi apre. Il vero soggetto, la persona che apre, è un pronome zero: non è scritto ma è sottinteso («io»)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "\"My mother read the letter.\" Which particle marks what was read?",
+        "it": "«Mia madre ha letto la lettera.» Quale particella segna ciò che è stato letto?"
+      },
+      "sentence": {
+        "kanji": "母が手紙を読んだ",
+        "kana": "ははがてがみをよんだ"
+      },
+      "translation": {
+        "en": "My mother read the letter.",
+        "it": "Mia madre ha letto la lettera."
+      },
+      "gap": {
+        "kanji": "母が手紙＿読んだ",
+        "kana": "ははがてがみ＿よんだ"
+      },
+      "answer": "を",
+      "distractors": ["が", "で"],
+      "explanation": {
+        "en": "The letter is the thing being read, so it is the object and takes を. が is already on 母 (mother), the one who reads. で marks the place or the means of an action (\"at\", \"with\"), not the thing that is read.",
+        "it": "La lettera è la cosa che viene letta, quindi è l'oggetto e prende を. が è già su 母 (la madre), chi legge. で indica il luogo o il mezzo dell'azione («in», «con»), non la cosa letta."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "\"(I) washed my face.\" Which particle goes after 顔 (face)?",
+        "it": "«(Io) mi sono lavato la faccia.» Quale particella va dopo 顔 (faccia)?"
+      },
+      "sentence": {
+        "kanji": "顔を洗った",
+        "kana": "かおをあらった"
+      },
+      "translation": {
+        "en": "(I) washed my face.",
+        "it": "(Io) mi sono lavato la faccia."
+      },
+      "gap": {
+        "kanji": "顔＿洗った",
+        "kana": "かお＿あらった"
+      },
+      "answer": "を",
+      "distractors": ["が", "に"],
+      "explanation": {
+        "en": "The face is the thing being washed, so it takes を, the particle of the object. The one who washes is not written: it is a zero pronoun, understood from the context (here, the speaker). With が, the face itself would be doing the washing, which makes no sense.",
+        "it": "La faccia è la cosa che viene lavata, quindi prende を, la particella dell'oggetto. Chi lava non è scritto: è un pronome zero, sottinteso dal contesto (qui, chi parla). Con が sarebbe la faccia stessa a lavare, e non ha senso."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "Which part is the object?",
+        "it": "Quale parte è l'oggetto?"
+      },
+      "sentence": {
+        "kanji": "このカメラを買った",
+        "kana": "このカメラをかった"
+      },
+      "translation": {
+        "en": "(I) bought this camera.",
+        "it": "(Io) ho comprato questa macchina fotografica."
+      },
+      "glosses": [
+        { "text": "このカメラを", "meaning": { "en": "this camera (object)", "it": "questa macchina fotografica (oggetto)" } },
+        { "text": "買", "reading": "か", "meaning": { "en": "buy (kanji of 買う)", "it": "comprare (kanji di 買う)" } },
+        { "text": "った", "meaning": { "en": "past-tense ending", "it": "desinenza del passato" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The object is このカメラを: the camera is the thing that was bought, and を comes right after it. The one who bought it is not written; with no other context it is the speaker: \"I bought this camera\".",
+        "it": "L'oggetto è このカメラを: la macchina fotografica è la cosa comprata, e を viene subito dopo. Chi l'ha comprata non è scritto; senza altro contesto è chi parla: «ho comprato questa macchina fotografica»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "Build: \"(I) always listen to the radio.\"",
+        "it": "Componi: «(Io) ascolto sempre la radio.»"
+      },
+      "sentence": {
+        "kanji": "いつもラジオを聞く",
+        "kana": "いつもラジオをきく"
+      },
+      "translation": {
+        "en": "(I) always listen to the radio.",
+        "it": "(Io) ascolto sempre la radio."
+      },
+      "glosses": [
+        { "text": "いつも", "meaning": { "en": "always", "it": "sempre" } },
+        { "text": "ラジオを", "meaning": { "en": "radio (object)", "it": "radio (oggetto)" } },
+        { "text": "聞く", "reading": "きく", "meaning": { "en": "listen", "it": "ascolto" } }
+      ],
+      "answer": ["いつも", "ラジオを", "聞く"],
+      "explanation": {
+        "en": "No subject is written: the one who listens is a zero pronoun, understood as the speaker. ラジオ (radio) is the object, so it takes を, and the verb 聞く (listen) comes last. いつも (always) only says how often.",
+        "it": "Il soggetto non è scritto: chi ascolta è un pronome zero, sottinteso come chi parla. ラジオ (radio) è l'oggetto, quindi prende を, e il verbo 聞く (ascoltare) va alla fine. いつも (sempre) dice solo quanto spesso."
       }
     }
   ]

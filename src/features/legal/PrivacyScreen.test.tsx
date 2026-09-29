@@ -54,26 +54,27 @@ describe('PrivacyScreen — dichiarazioni fattuali (en)', () => {
   });
 
   it('AC1 — `stored` nomina ESATTAMENTE i dati memorizzati', () => {
-    // Email, hash della password, lezioni sbloccate, stato di revisione, log delle
-    // risposte, preferenze: ciascun elemento dell'AC compare nella copy letta.
+    // Email, password (cifrata), lezioni sbloccate, a che punto è ogni esercizio,
+    // lista delle risposte, preferenze: ciascun elemento dell'AC compare nella copy
+    // letta (riscritta in lingua semplice il 29-09-2026: niente «hash», «log»).
     const stored = en.legal.privacy.stored.toLowerCase();
     expect(stored).toContain('only');
     expect(stored).toContain('nothing else');
     expect(stored).toContain('email');
     expect(stored).toContain('password');
     expect(stored).toContain('unlocked');
-    expect(stored).toContain('review');
+    expect(stored).toContain('each exercise');
     expect(stored).toContain('answer');
     expect(stored).toContain('preferences');
   });
 
   it('AC1 — `notCollected` nomina cio che NON si raccoglie', () => {
-    // Nome, data di nascita, analitica sul singolo individuo.
+    // Nome, data di nascita, dati per tracciare la persona.
     const notCollected = en.legal.privacy.notCollected.toLowerCase();
-    expect(notCollected).toContain('does not');
+    expect(notCollected).toContain('do not');
     expect(notCollected).toContain('name');
     expect(notCollected).toContain('date of birth');
-    expect(notCollected).toContain('analytics');
+    expect(notCollected).toContain('track');
   });
 
   it('AC2 — `deletion` spiega la cancellazione da Impostazioni e nomina il log', () => {
@@ -87,7 +88,9 @@ describe('PrivacyScreen — dichiarazioni fattuali (en)', () => {
 
   it('microcopy senza celebrazione: nessun `!`, ASCII (nessun code point >= U+2000)', () => {
     expect(markup).not.toContain('!');
-    const offending = [...markup].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
+    // Esclusi i nodi lang="ja": il marchio sul dorso della cornice è contenuto
+    // giapponese, non copy dell'interfaccia.
+    const offending = [...markup.replace(/<span lang="ja">[\s\S]*?<\/span>/g, '')].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
     expect(offending).toEqual([]);
   });
 });
@@ -112,18 +115,18 @@ describe('PrivacyScreen — switch a runtime (integrazione i18next)', () => {
   it('la copy it nomina ciascun elemento richiesto (parita di contenuto)', async () => {
     await i18n.changeLanguage('it');
     const stored = itCatalog.legal.privacy.stored.toLowerCase();
-    expect(stored).toContain('soltanto');
+    expect(stored).toContain('solo');
     expect(stored).toContain('email');
     expect(stored).toContain('password');
     expect(stored).toContain('sbloccat');
-    expect(stored).toContain('revisione');
+    expect(stored).toContain('a che punto');
     expect(stored).toContain('rispost');
     expect(stored).toContain('preferenze');
     const notCollected = itCatalog.legal.privacy.notCollected.toLowerCase();
-    expect(notCollected).toContain('non raccoglie');
+    expect(notCollected).toContain('non raccogliamo');
     expect(notCollected).toContain('nome');
     expect(notCollected).toContain('data di nascita');
-    expect(notCollected).toContain('analitica');
+    expect(notCollected).toContain('tracciarti');
     const deletion = itCatalog.legal.privacy.deletion.toLowerCase();
     expect(deletion).toContain('impostazioni');
     expect(deletion).toContain('cancella account');

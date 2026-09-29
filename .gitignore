@@ -92,3 +92,8 @@ _bmad/render/
 .gstack/
 # Playwright CLI output (may contain credentials)
 .playwright-cli/
+
+# Skill installate con `npx skills` (es. playwright-skill) e i loro screenshot: strumenti locali, non lavoro del progetto
+.agents/
+skills-lock.json
+_screenshots/

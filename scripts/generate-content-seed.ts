@@ -66,18 +66,24 @@ function exercisePayload(exercise: Exercise): string {
         distractors: exercise.distractors,
         ...(exercise.gap !== undefined ? { gap: exercise.gap } : {}),
         ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
+        ...(exercise.translation !== undefined ? { translation: exercise.translation } : {}),
+        ...(exercise.glosses !== undefined ? { glosses: exercise.glosses } : {}),
       });
     case 'select-span':
       return JSON.stringify({
         sentence: exercise.sentence,
         answer: exercise.answer,
         ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
+        ...(exercise.translation !== undefined ? { translation: exercise.translation } : {}),
+        ...(exercise.glosses !== undefined ? { glosses: exercise.glosses } : {}),
       });
     case 'assemble':
       return JSON.stringify({
         sentence: exercise.sentence,
         answer: exercise.answer,
         ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
+        ...(exercise.translation !== undefined ? { translation: exercise.translation } : {}),
+        ...(exercise.glosses !== undefined ? { glosses: exercise.glosses } : {}),
       });
     default: {
       // Registro chiuso (AD-22): un kind non gestito è errore di COMPILAZIONE.
@@ -96,7 +102,8 @@ type Exercise = Lesson['exercises'][number];
  * BUILDER PURO dell'SQL di seed (AC2/AC3/AC4/AC5). Emette due insert idempotenti:
  *
  *  - `insert into lesson … on conflict (id) do update set …` con id = lessonId,
- *    title_it → null se assente, grammar_points come array[…];
+ *    title_it → null se assente, grammar_points come array[…], video_id → null
+ *    se la lezione non ha un video di riferimento;
  *  - `insert into exercise … on conflict (id) do update set …` con id =
  *    deriveExerciseId, payload = '<json>'::jsonb, explanation_it → null se assente.
  *
@@ -124,17 +131,21 @@ export function buildSeedSql(allLessons: readonly Lesson[]): string {
     const id = lessonId(lesson);
     return (
       `  (${sqlString(id)}, ${lesson.order}, ${sqlString(lesson.title.en)}, ` +
-      `${sqlNullableString(lesson.title.it)}, ${sqlTextArray(lesson.grammarPoints)})`
+      `${sqlNullableString(lesson.title.it)}, ${sqlTextArray(lesson.grammarPoints)}, ` +
+      `${sqlNullableString(lesson.video)})`
     );
   });
   if (lessonRows.length > 0) {
-    parts.push('insert into lesson (id, ordinal, title_en, title_it, grammar_points) values');
+    // `video_id` è l'ULTIMA colonna: aggiunta dopo (migrazione *_add_video_id_to_lesson),
+    // in coda alla tupla così le posizioni delle altre restano quelle di prima.
+    parts.push('insert into lesson (id, ordinal, title_en, title_it, grammar_points, video_id) values');
     parts.push(lessonRows.join(',\n'));
     parts.push('on conflict (id) do update set');
     parts.push('  ordinal = excluded.ordinal,');
     parts.push('  title_en = excluded.title_en,');
     parts.push('  title_it = excluded.title_it,');
-    parts.push('  grammar_points = excluded.grammar_points;');
+    parts.push('  grammar_points = excluded.grammar_points,');
+    parts.push('  video_id = excluded.video_id;');
   } else {
     // Nessuna lezione nel contenuto: nessun insert su `lesson` (un `insert …
     // values` senza righe è SQL invalido). Simmetrico al ramo `exercise`.

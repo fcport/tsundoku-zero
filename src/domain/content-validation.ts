@@ -22,13 +22,19 @@
 //       esercizio che porta un punto che la sua lezione non dichiara sposta quella
 //       statistica fuori dal curriculum. Il contenimento è in UNA direzione sola —
 //       un punto dichiarato e non ancora esercitato NON è un errore, altrimenti una
-//       lezione senza esercizi (2.4) non potrebbe esistere.
+//       lezione senza esercizi (2.4) non potrebbe esistere;
+//   (g) unicità cross-file del `video` di riferimento: ogni lezione rimanda al
+//       SUO video, quindi lo stesso id YouTube su due lezioni è quasi certamente un
+//       copia-incolla sbagliato. Il video resta facoltativo: le lezioni senza non
+//       concorrono al controllo.
 //
 // `JSON.parse` è un builtin PURO del linguaggio (come `String.prototype.normalize`
 // in `lesson.ts`): usato in `try/catch`, non è né I/O né un global vietato.
 import { parseLesson, lessonId, type Lesson } from './lesson';
 import { deriveExerciseId } from './exercise-identity';
 import { GAP_MARK } from './exercise';
+import { answerOptions } from './exercise-presentation';
+import { readingSegments } from './option-furigana';
 
 /**
  * Un file di lezione da validare: il suo `path` (per localizzare l'issue in CI) e
@@ -87,6 +93,8 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
   // order → i file che lo rivendicano. Una posizione con più di un occupante rende
   // indefinita la progressione del curriculum.
   const orders = new Map<number, string[]>();
+  // video → i file che lo dichiarano (solo le lezioni che ne hanno uno).
+  const videos = new Map<string, string[]>();
 
   for (const { path: file, source } of files) {
     let data: unknown;
@@ -148,6 +156,44 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
       }
     });
 
+    // (h) Coerenza delle glosse (29-09-2026): ogni `text` è un'opzione vera
+    // dell'esercizio; la `reading` è solo kana e si allinea al testo (ricomponendo
+    // i segmenti si riottiene la lettura intera: nessun refuso, nessuna lettura
+    // incerta); nella scelta singola niente `meaning`, che rivelerebbe la risposta.
+    lesson.exercises.forEach((exercise, i) => {
+      if (exercise.glosses === undefined) return;
+      const options = new Set(answerOptions(exercise));
+      exercise.glosses.forEach((gloss, g) => {
+        const at = (field: string) => ['exercises', i, 'glosses', g, field];
+        if (!options.has(gloss.text)) {
+          issues.push({ file, path: at('text'), message: `glossa per "${gloss.text}", che non è un'opzione dell'esercizio` });
+        }
+        if (gloss.reading !== undefined) {
+          if (!/^[\p{Script=Hiragana}\p{Script=Katakana}ー・「」、。]+$/u.test(gloss.reading)) {
+            // Solo kana (e la punteggiatura giapponese): un kanji o una lettera latina
+            // (がっcoう) passerebbe l'allineamento, perché la corsa di kanji prende
+            // qualunque cosa stia fra due ancore.
+            issues.push({ file, path: at('reading'), message: `la lettura "${gloss.reading}" deve contenere solo kana` });
+          } else if (
+            readingSegments(gloss.text, gloss.reading).map((s) => s.ruby ?? s.text).join('') !== gloss.reading
+          ) {
+            issues.push({
+              file,
+              path: at('reading'),
+              message: `la lettura "${gloss.reading}" non si allinea con certezza a "${gloss.text}"`,
+            });
+          }
+        }
+        if (exercise.kind === 'single-select' && gloss.meaning !== undefined) {
+          issues.push({
+            file,
+            path: at('meaning'),
+            message: 'niente meaning nella scelta singola: il significato rivelerebbe la risposta',
+          });
+        }
+      });
+    });
+
     // (e) Coerenza del punto grammaticale: ogni esercizio porta un punto che la
     // sua lezione dichiara. Contenimento in una direzione sola (vedi l'intestazione).
     const declared = new Set<string>(lesson.grammarPoints);
@@ -169,6 +215,11 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
 
     // (d) Raccolta di `order` per l'unicità cross-file.
     (orders.get(lesson.order) ?? orders.set(lesson.order, []).get(lesson.order)!).push(file);
+
+    // (g) Raccolta del `video` per l'unicità cross-file.
+    if (lesson.video !== undefined) {
+      (videos.get(lesson.video) ?? videos.set(lesson.video, []).get(lesson.video)!).push(file);
+    }
 
     lesson.exercises.forEach((exercise, i) => {
       const eid = deriveExerciseId(exercise);
@@ -205,6 +256,15 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
         file: locations.join(', '),
         path: ['order'],
         message: `order duplicato ${order} fra le lezioni: ${locations.join(', ')}`,
+      });
+    }
+  }
+  for (const [video, locations] of videos) {
+    if (locations.length > 1) {
+      issues.push({
+        file: locations.join(', '),
+        path: ['video'],
+        message: `video duplicato "${video}" fra le lezioni: ${locations.join(', ')}`,
       });
     }
   }

@@ -16,17 +16,13 @@
 import { useState } from 'react';
 import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { MagazineFrame } from '../../ui/MagazineFrame';
+import { FOCUS_RING, KICKER } from '../../ui/magazine';
 import type { AuthGateway } from '../../domain/ports/authGateway';
 import { AuthForm, type AuthFormValues } from './AuthForm';
 import { applyAuthOutcome } from './authOutcome';
 import { AUTH_MODE_COPY, submitForMode, type AuthMode } from './authMode';
 import type { AuthErrorMessage } from './authFailureMessage';
-
-// ANELLO DI FOCUS visibile: lo STESSO token degli interattivi delle schermate-rotta
-// (`StatsScreen`, `PrivacyScreen`). `focus-visible:` mostra l'anello solo per
-// navigazione da tastiera. Token `focus-ring`: nessun colore letterale (UX-DR1).
-const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring dark:focus-visible:outline-accent-dark';
 
 export interface AuthScreenProps {
   readonly gateway: AuthGateway;
@@ -66,10 +62,15 @@ export function AuthScreen({
 
   const copy = AUTH_MODE_COPY[mode];
 
+  // Direzione «rivista» (29-09-2026): il dorso col marchio (l'<h1> della pagina), poi
+  // una colonna di lettura con l'occhiello del sottotitolo, il modulo senza cornice
+  // e i due collegamenti legali in fondo.
   return (
+    <MagazineFrame brandAsHeading>
     <main
-      className={`${RESPONSIVE_CONTAINER} flex flex-col items-center gap-6 py-6`}
+      className={`${RESPONSIVE_CONTAINER} flex flex-col gap-8 py-8 sm:py-14`}
     >
+      <p className={KICKER}>{t('app.tagline')}</p>
       <AuthForm
         values={values}
         error={error}
@@ -94,28 +95,32 @@ export function AuthScreen({
             .finally(() => setPending(false));
         }}
       />
-      {/* Il collegamento alla privacy policy (7.1): un'affordance SECONDARIA
-          (button, idioma del repo: `onExit`/`onViewStats` sono gia button), DENTRO
-          il `<main>`, DOPO il form. Cosi lo sconosciuto legge cosa si memorizza
-          PRIMA di registrarsi. -> `onViewPrivacy` (cablato in AppRoutes). */}
-      <button
-        type="button"
-        onClick={onViewPrivacy}
-        className={`text-caption text-ink-secondary underline ${FOCUS_RING}`}
-      >
-        {t('legal.privacy.linkLabel')}
-      </button>
-      {/* Il collegamento ai riconoscimenti (7.2): gemello di quello alla privacy,
-          un'affordance SECONDARIA (button, idioma del repo) DENTRO il `<main>`,
-          accanto ad esso. La pagina e PUBBLICA: lo sconosciuto puo leggere la fonte
-          del metodo PRIMA di registrarsi. -> `onViewAcknowledgements`. */}
-      <button
-        type="button"
-        onClick={onViewAcknowledgements}
-        className={`text-caption text-ink-secondary underline ${FOCUS_RING}`}
-      >
-        {t('legal.acknowledgements.linkLabel')}
-      </button>
+      {/* I due collegamenti legali, affiancati sotto un filetto. */}
+      <div className="flex flex-wrap gap-x-6 gap-y-2 border-t-[1.5px] border-border-strong pt-4">
+        {/* Il collegamento alla privacy policy (7.1): un'affordance SECONDARIA
+            (button, idioma del repo: `onExit`/`onViewStats` sono gia button), DENTRO
+            il `<main>`, DOPO il form. Cosi lo sconosciuto legge cosa si memorizza
+            PRIMA di registrarsi. -> `onViewPrivacy` (cablato in AppRoutes). */}
+        <button
+          type="button"
+          onClick={onViewPrivacy}
+          className={`min-h-[44px] text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
+        >
+          {t('legal.privacy.linkLabel')}
+        </button>
+        {/* Il collegamento ai riconoscimenti (7.2): gemello di quello alla privacy,
+            un'affordance SECONDARIA (button, idioma del repo) DENTRO il `<main>`,
+            accanto ad esso. La pagina e PUBBLICA: lo sconosciuto puo leggere la fonte
+            del metodo PRIMA di registrarsi. -> `onViewAcknowledgements`. */}
+        <button
+          type="button"
+          onClick={onViewAcknowledgements}
+          className={`min-h-[44px] text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
+        >
+          {t('legal.acknowledgements.linkLabel')}
+        </button>
+      </div>
     </main>
+    </MagazineFrame>
   );
 }

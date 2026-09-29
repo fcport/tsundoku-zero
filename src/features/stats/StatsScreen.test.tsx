@@ -239,8 +239,8 @@ describe('5.4 AC1 — temporale sotto soglia ⇒ dichiarazione quantificata, nes
 
   it('interpola soFar corretto (2) e la soglia dal dominio (nessun 3 letterale nel codice)', () => {
     // La copy nomina esattamente due giorni finora e la soglia MIN_ANSWER_DAYS.
-    expect(markup).toContain('Days with answers so far: 2.');
-    expect(markup).toContain(`at least ${MIN_ANSWER_DAYS} days`);
+    expect(markup).toContain('Days so far: 2.');
+    expect(markup).toContain(`at least ${MIN_ANSWER_DAYS} different days`);
   });
 });
 
@@ -311,8 +311,8 @@ describe('5.4 AC — indipendenza delle viste: 5 esercizi in UN giorno', () => {
   it('distribuzione resa coi dati reali (non e insufficiente)', () => {
     // Cinque esercizi: quattro allo stadio 1 (un `good`), uno allo stadio 0 (`again`).
     expect(markup).toContain(en.stats.stageDistribution.heading);
-    expect(markup).toContain('Stage 0 - exercises: 1');
-    expect(markup).toContain('Stage 1 - exercises: 4');
+    expect(markup).toContain('Level 0 - exercises: 1');
+    expect(markup).toContain('Level 1 - exercises: 4');
     expect(markup).not.toContain(en.stats.stageDistribution.empty);
   });
 
@@ -384,18 +384,18 @@ describe('5.2 AC — distribuzione per stadio: intestazione + sei stadi con cont
   });
 
   it('mostra ESATTAMENTE i sei stadi 0-5 col conteggio come TESTO', () => {
-    expect(markup).toContain('Stage 0 - exercises: 0');
-    expect(markup).toContain('Stage 1 - exercises: 1');
-    expect(markup).toContain('Stage 2 - exercises: 2');
-    expect(markup).toContain('Stage 3 - exercises: 0');
-    expect(markup).toContain('Stage 4 - exercises: 0');
-    expect(markup).toContain('Stage 5 - exercises: 0');
+    expect(markup).toContain('Level 0 - exercises: 0');
+    expect(markup).toContain('Level 1 - exercises: 1');
+    expect(markup).toContain('Level 2 - exercises: 2');
+    expect(markup).toContain('Level 3 - exercises: 0');
+    expect(markup).toContain('Level 4 - exercises: 0');
+    expect(markup).toContain('Level 5 - exercises: 0');
     // Nessun settimo stadio.
-    expect(markup).not.toContain('Stage 6 -');
+    expect(markup).not.toContain('Level 6 -');
   });
 
   it('include uno stadio a conteggio 0 come testo (asse contiguo, zeri inclusi)', () => {
-    expect(markup).toContain('Stage 0 - exercises: 0');
+    expect(markup).toContain('Level 0 - exercises: 0');
   });
 
   it('NON rende il placeholder della distribuzione (il log non è vuoto)', () => {
@@ -420,9 +420,9 @@ describe('5.2 AC — un esercizio con piu risposte conta UNA volta, allo stadio 
     ]);
     const markup = render(qc, UID);
     // L'unico esercizio cade nel bucket 0; ogni altro stadio a 0.
-    expect(markup).toContain('Stage 0 - exercises: 1');
-    expect(markup).toContain('Stage 1 - exercises: 0');
-    expect(markup).toContain('Stage 2 - exercises: 0');
+    expect(markup).toContain('Level 0 - exercises: 1');
+    expect(markup).toContain('Level 1 - exercises: 0');
+    expect(markup).toContain('Level 2 - exercises: 0');
   });
 });
 
@@ -451,7 +451,7 @@ describe('5.2 AC — la fonte è SOLO review.listReviewLog() (mai listDue/review
     const markup = render(qc, UID, spyPorts);
 
     // La distribuzione riflette il SOLO log seminato: un esercizio allo stadio 1.
-    expect(markup).toContain('Stage 1 - exercises: 1');
+    expect(markup).toContain('Level 1 - exercises: 1');
     expect(calls).not.toContain('listDue');
     expect(calls).not.toContain('applyReview');
   });
@@ -695,7 +695,10 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
       UID,
     );
     expect(markup).not.toContain('!');
-    const offending = [...markup].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
+    // Esclusi i nodi `lang="ja"`: sono contenuto giapponese (il marchio sul dorso
+    // della cornice «rivista»), non copy dell'interfaccia.
+    const copy = markup.replace(/<span lang="ja">[\s\S]*?<\/span>/g, '');
+    const offending = [...copy].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
     expect(offending).toEqual([]);
   });
 
@@ -730,7 +733,7 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     expect(markup).toContain('2026-09-25 - risposte: 1');
     // La distribuzione per stadio in italiano: intestazione ed etichette di stadio.
     expect(markup).toContain(itCatalog.stats.stageDistribution.heading);
-    expect(markup).toContain('Stadio 0 - esercizi: 1');
+    expect(markup).toContain('Livello 0 - esercizi: 1');
     // I tassi d'errore per punto in italiano: intestazione, tasso, titolo risolto (it).
     expect(markup).toContain(itCatalog.stats.grammarPointErrorRates.heading);
     expect(markup).toContain('errori: 3 su 3');

@@ -464,6 +464,79 @@ describe('migrazione lessons_per_day — additiva su user_settings (Story 3.17)'
 });
 
 // ---------------------------------------------------------------------------
+// Il video di riferimento della lezione: migrazione ADDITIVA su `lesson`. Il file è
+// un SOLO `alter table lesson add column video_id text` (nullable, senza default),
+// con timestamp 14 cifre > 20260928164452 (l'ultimo seed prima di lei), e
+// nient'altro. Stesso impianto del blocco lessons_per_day sopra. La CREATE di
+// `lesson` resta invariata (le sue colonne sono asserite dal suo describe sotto).
+// ---------------------------------------------------------------------------
+
+const addVideoId = migrations.find((m) => m.name.endsWith('_add_video_id_to_lesson.sql'));
+
+describe('migrazione video_id — additiva su lesson', () => {
+  it('la migrazione esiste e il timestamp a 14 cifre è > 20260928164452', () => {
+    expect(addVideoId, 'atteso un file *_add_video_id_to_lesson.sql').toBeDefined();
+    const version = addVideoId?.name.slice(0, 14) ?? '';
+    expect(version).toMatch(/^\d{14}$/);
+    expect(version > '20260928164452', `timestamp ${version} non è > 20260928164452`).toBe(true);
+  });
+
+  it("è un SOLO alter table lesson add column video_id text, nullable, nient'altro (via AST)", () => {
+    const res = parseSql(addVideoId?.sql ?? '');
+    expect(res.error).toBeNull();
+    expect(res.parse_tree.stmts.length).toBe(1);
+
+    type AlterTableCmd = {
+      readonly subtype?: string;
+      readonly def?: {
+        readonly ColumnDef?: {
+          readonly colname?: string;
+          readonly typeName?: {
+            readonly names?: readonly { readonly String?: { readonly sval?: string } }[];
+          };
+          readonly constraints?: readonly { readonly Constraint?: { readonly contype?: string } }[];
+        };
+      };
+    };
+    type AlterTableStmt = {
+      readonly relation?: { readonly relname?: string };
+      readonly cmds?: readonly { readonly AlterTableCmd?: AlterTableCmd }[];
+    };
+
+    const alter = (res.parse_tree.stmts[0]?.stmt as { AlterTableStmt?: AlterTableStmt })
+      .AlterTableStmt;
+    expect(alter, 'lo statement non è un ALTER TABLE').toBeDefined();
+    expect(alter?.relation?.relname).toBe('lesson');
+
+    const cmds = alter?.cmds ?? [];
+    expect(cmds.length).toBe(1);
+    const cmd = cmds[0]?.AlterTableCmd;
+    expect(cmd?.subtype).toBe('AT_AddColumn');
+
+    const col = cmd?.def?.ColumnDef;
+    expect(col?.colname).toBe('video_id');
+    const typeNames = (col?.typeName?.names ?? [])
+      .map((n) => n.String?.sval)
+      .filter((n): n is string => typeof n === 'string');
+    expect(typeNames[typeNames.length - 1]).toBe('text');
+
+    // Nullable e senza default: nessun vincolo sulla colonna.
+    const contypes = (col?.constraints ?? [])
+      .map((c) => c.Constraint?.contype)
+      .filter((c): c is string => typeof c === 'string');
+    expect(contypes).not.toContain('CONSTR_NOTNULL');
+    expect(contypes).not.toContain('CONSTR_DEFAULT');
+  });
+
+  it('nessun check, nessuna policy nuova (testo)', () => {
+    const sql = stripSqlComments(addVideoId?.sql ?? '').toLowerCase();
+    expect(sql).not.toMatch(/check\s*\(/);
+    expect(sql).not.toMatch(/create\s+policy/);
+    expect(sql).toMatch(/alter\s+table\s+lesson\s+add\s+column\s+video_id\s+text\s*;/);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Gate di config: l'apply solo su main, mai su PR (AC1 / AC2 «non su PR»).
 // ---------------------------------------------------------------------------
 
