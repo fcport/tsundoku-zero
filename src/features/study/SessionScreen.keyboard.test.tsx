@@ -226,6 +226,13 @@ describe('AC6 — sessione completa pilotata da SOLA TASTIERA fino a pila zero',
     // tessera completa la risposta ⇒ ex-2 è valutato good ⇒ la coda si SVUOTA. Il
     // riscontro di ex-2 resta però visibile (la card è ancorata all'esercizio appena
     // risposto): prima si saltava dritti al completamento, senza vedere l'esito.
+    // Prima, un ripensamento: la stessa cifra due volte toglie la tessera appena
+    // scelta (30-09-2026), e la frase composta torna vuota.
+    pressKey(keyForOption(secondExercise, '読む'));
+    expect(html()).not.toContain(en.session.assembled.empty);
+    pressKey(keyForOption(secondExercise, '読む'));
+    expect(html()).toContain(en.session.assembled.empty);
+    expect(html()).not.toContain(en.session.next);
     for (const tile of secondExercise.answer) {
       pressKey(keyForOption(secondExercise, tile));
     }

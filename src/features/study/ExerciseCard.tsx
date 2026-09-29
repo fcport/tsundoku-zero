@@ -34,7 +34,7 @@ import { furiganaVisible, resolveExplanation } from '../../domain/exercise';
 import type { Exercise } from '../../domain/exercise';
 import type { Locale } from '../../i18n';
 import { JapaneseText } from '../../ui/JapaneseText';
-import { knownReadings, optionFurigana } from '../../domain/option-furigana';
+import { knownReadings, optionFurigana, sentenceSegments } from '../../domain/option-furigana';
 import { WORD_READINGS } from '../../domain/fixed-readings';
 import { FOCUS_RING } from '../../ui/magazine';
 import { Translation } from '../../ui/Translation';
@@ -138,7 +138,7 @@ export function ExerciseCard({
   ]);
   // Cosa mostrare della frase (dominio): prima della risposta mai la soluzione —
   // spazio vuoto per la scelta singola, nessuna frase per il riordino (è la risposta).
-  const view = sentenceView(exercise, answered);
+  const view = sentenceView(exercise, answered, sentenceSegments);
   // La furigana la decide il contenuto (`furiganaVisible`); la preferenza rapida
   // dell'utente può solo spegnerla.
   const showFurigana = furigana && furiganaVisible(exercise);
@@ -223,7 +223,8 @@ export function ExerciseCard({
         {options.map((option, i) => {
           const orderPosition = selected.indexOf(i) + 1;
           const isChosen = orderPosition > 0;
-          const isDisabled = answered || isChosen;
+          // Una tessera del riordino già scelta resta attiva: toccarla la toglie.
+          const isDisabled = answered || (isChosen && exercise.kind !== 'assemble');
           const isCorrectOption = correctIndex === i;
           // La scelta sbagliata la dichiara l'esito (`correct`), non un confronto
           // locale: una sola fonte di verità sulla correttezza, `check()`.

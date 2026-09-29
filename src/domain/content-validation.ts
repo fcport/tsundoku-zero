@@ -23,6 +23,10 @@
 //       statistica fuori dal curriculum. Il contenimento è in UNA direzione sola —
 //       un punto dichiarato e non ancora esercitato NON è un errore, altrimenti una
 //       lezione senza esercizi (2.4) non potrebbe esistere;
+//   (i) ordini alternativi di `assemble` (`alsoAccepted`): ognuno usa ESATTAMENTE
+//       le tessere di `answer` (stesse tessere, stesso numero), è diverso da
+//       `answer` e non si ripete: un refuso renderebbe giusta una risposta sbagliata
+//       o un ordine impossibile da comporre;
 //   (g) unicità cross-file del `video` di riferimento: ogni lezione rimanda al
 //       SUO video, quindi lo stesso id YouTube su due lezioni è quasi certamente un
 //       copia-incolla sbagliato. Il video resta facoltativo: le lezioni senza non
@@ -191,6 +195,22 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
             message: 'niente meaning nella scelta singola: il significato rivelerebbe la risposta',
           });
         }
+      });
+    });
+
+    // (i) Ordini alternativi: stesse tessere di `answer`, diversi e senza doppioni.
+    lesson.exercises.forEach((exercise, i) => {
+      if (exercise.kind !== 'assemble' || exercise.alsoAccepted === undefined) return;
+      const canonical = [...exercise.answer].sort().join('\u0000');
+      const seen = new Set<string>([exercise.answer.join('\u0000')]);
+      exercise.alsoAccepted.forEach((order, a) => {
+        const at = ['exercises', i, 'alsoAccepted', a];
+        if ([...order].sort().join('\u0000') !== canonical) {
+          issues.push({ file, path: at, message: `l'ordine alternativo "${order.join(' ')}" non usa esattamente le tessere di answer` });
+        } else if (seen.has(order.join('\u0000'))) {
+          issues.push({ file, path: at, message: `l'ordine alternativo "${order.join(' ')}" ripete answer o un altro ordine` });
+        }
+        seen.add(order.join('\u0000'));
       });
     });
 

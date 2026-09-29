@@ -140,8 +140,11 @@ describe('AC2 — numero di opzioni DERIVATO dal tipo, ordine deterministico', (
 
   it('rende le opzioni nell ordine di answerOptions (dominio, non UI)', () => {
     const options = answerOptions(singleSelect);
+    // Solo dentro la lista delle opzioni: la frase, con la lettura per kanji, ha
+    // segmenti propri (私|は|学生|です) che contengono lo stesso testo.
     const markup = render(singleSelect);
-    const positions = options.map((o) => markup.indexOf(`>${o}<`));
+    const list = markup.slice(markup.indexOf('<ul'));
+    const positions = options.map((o) => list.indexOf(`>${o}<`));
     const sorted = [...positions].sort((a, b) => a - b);
     expect(positions).toEqual(sorted);
   });
@@ -193,12 +196,12 @@ describe('AC3 — azione «mostra la spiegazione» (consulto pre-risposta)', () 
 });
 
 describe('AC2 — composizione assemble (multi-tocco via props selected)', () => {
-  it('le tessere PIAZZATE sono disabled, le altre abilitate', () => {
-    // Due tessere piazzate (indici 0 e 2), la terza (indice 1) ancora libera.
+  it('le tessere PIAZZATE restano attive: toccarle le toglie (30-09-2026)', () => {
+    // Due tessere piazzate (indici 0 e 2), la terza (indice 1) ancora libera:
+    // nessuna è disabled, perché un tocco sbagliato si deve poter correggere.
     const markup = render(assemble, { selected: [0, 2] });
-    // Due opzioni disabled (le piazzate); l azione spiegazione non è disabled.
     const disabled = markup.match(/disabled/g) ?? [];
-    expect(disabled.length).toBe(2);
+    expect(disabled.length).toBe(0);
   });
 
   it('le tessere piazzate portano un BADGE d ordine (posizione dei tocchi)', () => {

@@ -148,6 +148,11 @@ export function selectionComplete(
  * - `select-span`, o `single-select` senza `gap` (contenuto precedente): la frase
  *   intera, perché la domanda riguarda una sua parte.
  * Dopo la risposta si mostra sempre la frase intera: è la soluzione.
+ *
+ * `align` allinea testo e lettura in segmenti di ruby: di serie `alignFurigana`
+ * (un solo gruppo per il nucleo della frase); la card passa `sentenceSegments`,
+ * che mette la lettura sopra OGNI corsa di kanji quando è certa (30-09-2026: su
+ * 子どもが部屋に入った il gruppo unico spalmava こどもがへやにはい su tutta la riga).
  */
 export type SentenceView =
   | { readonly kind: 'full'; readonly segments: readonly FuriganaSegment[] }
@@ -160,10 +165,14 @@ export type SentenceView =
 
 const nonEmpty = (segments: FuriganaSegment[]) => segments.filter((s) => s.text !== '');
 
-export function sentenceView(exercise: Exercise, answered: boolean): SentenceView {
+export function sentenceView(
+  exercise: Exercise,
+  answered: boolean,
+  align: (text: string, kana: string) => FuriganaSegment[] = alignFurigana,
+): SentenceView {
   const full: SentenceView = {
     kind: 'full',
-    segments: alignFurigana(exercise.sentence.kanji, exercise.sentence.kana),
+    segments: align(exercise.sentence.kanji, exercise.sentence.kana),
   };
   if (answered) return full;
   if (exercise.kind === 'assemble') return { kind: 'hidden' };
@@ -172,8 +181,8 @@ export function sentenceView(exercise: Exercise, answered: boolean): SentenceVie
     const [kanaBefore = '', kanaAfter = ''] = exercise.gap.kana.split(GAP_MARK);
     return {
       kind: 'gap',
-      before: nonEmpty(alignFurigana(kanjiBefore, kanaBefore)),
-      after: nonEmpty(alignFurigana(kanjiAfter, kanaAfter)),
+      before: nonEmpty(align(kanjiBefore, kanaBefore)),
+      after: nonEmpty(align(kanjiAfter, kanaAfter)),
     };
   }
   return full;

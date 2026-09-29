@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Exercise } from './exercise';
 import { answerOptions } from './exercise-presentation';
-import { optionFurigana } from './option-furigana';
+import { optionFurigana, sentenceSegments } from './option-furigana';
 
 const explanation = { en: 'x' };
 
@@ -154,5 +154,24 @@ describe('optionFurigana — la lettura esplicita delle glosse', () => {
       glosses: [{ text: '暑い', reading: 'あつい' }],
     } as Exercise;
     expect(byOption(ex)).toEqual({ '冷たい': '冷[つめ]たい', '暑い': '暑[あつ]い' });
+  });
+});
+
+describe('sentenceSegments — la lettura sopra ogni kanji della frase', () => {
+  it('lettura certa ⇒ una ruby per corsa di kanji, non un gruppo spalmato', () => {
+    expect(sentenceSegments('子どもが部屋に入った', 'こどもがへやにはいった')).toEqual([
+      { text: '子', ruby: 'こ' },
+      { text: 'どもが', ruby: null },
+      { text: '部屋', ruby: 'へや' },
+      { text: 'に', ruby: null },
+      { text: '入', ruby: 'はい' },
+      { text: 'った', ruby: null },
+    ]);
+  });
+
+  it('lettura ambigua ⇒ il gruppo unico, così nessun kanji resta scoperto', () => {
+    const segments = sentenceSegments('妹が学生だ', 'いもうとががくせいだ');
+    expect(segments.map((s) => s.ruby ?? s.text).join('')).toBe('いもうとががくせいだ');
+    expect(segments.some((s) => s.ruby !== null)).toBe(true);
   });
 });

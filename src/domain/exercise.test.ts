@@ -381,6 +381,15 @@ describe('check — assemble (AC5: dipende dall’ordine)', () => {
     });
   });
 
+  it('corretto anche con un ordine di alsoAccepted, sbagliato con gli altri', () => {
+    const withAlternative = exerciseSchema.parse({ ...validAssemble, alsoAccepted: [['B', 'A', 'C']] });
+    if (!withAlternative.ok) throw new Error('fixture assemble con alsoAccepted non valida');
+    expect(check(withAlternative.value, { kind: 'assemble', order: ['B', 'A', 'C'] })).toEqual({ correct: true });
+    expect(check(withAlternative.value, { kind: 'assemble', order: ['A', 'B', 'C'] })).toEqual({ correct: true });
+    expect(check(withAlternative.value, { kind: 'assemble', order: ['C', 'B', 'A'] })).toEqual({ correct: false });
+    expect(check(withAlternative.value, { kind: 'assemble', order: ['B', 'A'] })).toEqual({ correct: false });
+  });
+
   it('sbagliato se order è più lungo della answer (prefisso corretto)', () => {
     // Il controllo di lunghezza è l'unica guardia contro tessere in eccesso:
     // answer.every() itera solo sugli indici di answer e non vedrebbe la 'D'.

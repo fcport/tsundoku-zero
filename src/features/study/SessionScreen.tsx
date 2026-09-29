@@ -316,6 +316,13 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
     // pipeline. Senza card attiva (scheletro/vuoto) non c'e nulla da selezionare.
     if (answered || activeExercise === null || currentId === null) return;
 
+    // Riordino: toccare una tessera già scelta la TOGLIE dalla frase (30-09-2026:
+    // senza, un tocco sbagliato non si poteva correggere). Le successive scalano.
+    if (activeExercise.kind === 'assemble' && selected.includes(index)) {
+      setSelected(selected.filter((i) => i !== index));
+      return;
+    }
+
     const next = [...selected, index];
     setSelected(next);
     if (!selectionComplete(activeExercise, next)) return; // assemble: attende le tessere
@@ -376,7 +383,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   // dirottare le scorciatoie del browser (es. `Cmd+1`). `Esc` esce sempre (3.20).
   // In fase `consegna` (`activeExercise` e `!answered`): la cifra `1`-`9` seleziona
   // l'opzione alla posizione via `keyboardSelectionIndex` (dominio puro, agnostico al
-  // tipo) — saltata se la tessera assemble è già scelta (`selected.includes`) — poi
+  // tipo) — su una tessera assemble già scelta la toglie, come il tocco — poi
   // `preventDefault`. In fase `spiegazione` (`answered`): `Enter` con target NON
   // interattivo (`window`/`body`, non un `<button>`/`<a>`/input) avanza — sul bottone
   // focalizzato agisce l'attivazione nativa (nessun doppio avanzamento).
@@ -389,7 +396,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
 
     if (activeExercise !== null && !answered) {
       const index = keyboardSelectionIndex(e.key, activeOptions.length);
-      if (index !== null && !selected.includes(index)) {
+      if (index !== null) {
         e.preventDefault();
         onSelect(index);
       }

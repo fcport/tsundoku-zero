@@ -142,9 +142,10 @@
         { "text": "買った", "reading": "かった", "meaning": { "en": "bought", "it": "ho comprato" } }
       ],
       "answer": ["先週", "新しい", "靴を", "買った"],
+      "alsoAccepted": [["新しい", "靴を", "先週", "買った"]],
       "explanation": {
-        "en": "The time word 先週 (last week) goes first, with no particle. Then \"new shoes\" + を (the particle that marks what you buy), then the verb at the end. 買う → 買った (bought).",
-        "it": "La parola di tempo 先週 (la settimana scorsa) va per prima, senza particella. Poi «scarpe nuove» + を (la particella che indica cosa compri), poi il verbo in fondo. 買う → 買った (ho comprato)."
+        "en": "The time word 先週 (last week) goes first, with no particle. Then \"new shoes\" + を (the particle that marks what you buy), then the verb at the end. 買う → 買った (bought). \"新しい靴を先週買った\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "La parola di tempo 先週 (la settimana scorsa) va per prima, senza particella. Poi «scarpe nuove» + を (la particella che indica cosa compri), poi il verbo in fondo. 買う → 買った (ho comprato). Va bene anche «新しい靴を先週買った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -168,9 +169,10 @@
         { "text": "来る", "reading": "くる", "meaning": { "en": "comes", "it": "viene" } }
       ],
       "answer": ["七時に", "友達が", "来る"],
+      "alsoAccepted": [["友達が", "七時に", "来る"]],
       "explanation": {
-        "en": "A clock time like 七時 (seven o'clock) takes に, like English \"at\". Quick test: if English says \"at\", \"on\" or \"in\" before the time, Japanese uses に. 来る (comes) is non-past, so here it means a future arrival.",
-        "it": "Un orario come 七時 (le sette) prende に, come «alle» in italiano. Prova rapida: se in inglese davanti al tempo serve «at», «on» o «in», in giapponese serve に. 来る (viene) è non passato, quindi qui indica un arrivo futuro."
+        "en": "A clock time like 七時 (seven o'clock) takes に, like English \"at\". Quick test: if English says \"at\", \"on\" or \"in\" before the time, Japanese uses に. 来る (comes) is non-past, so here it means a future arrival. \"友達が七時に来る\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Un orario come 七時 (le sette) prende に, come «alle» in italiano. Prova rapida: se in inglese davanti al tempo serve «at», «on» o «in», in giapponese serve に. 来る (viene) è non passato, quindi qui indica un arrivo futuro. Va bene anche «友達が七時に来る»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -251,9 +253,10 @@
         { "text": "飲む", "reading": "のむ", "meaning": { "en": "drink", "it": "bevo" } }
       ],
       "answer": ["毎朝", "コーヒーを", "飲む"],
+      "alsoAccepted": [["コーヒーを", "毎朝", "飲む"]],
       "explanation": {
-        "en": "For a habit, use the non-past: the verb exactly as a dictionary lists it, 飲む, \"I drink\". 毎朝 (every morning) takes no に and goes first; the verb always comes last.",
-        "it": "Per un'abitudine si usa il non passato: il verbo così come lo trovi sul dizionario, 飲む, «bevo». 毎朝 (ogni mattina) non prende に e va per primo; il verbo sta sempre in fondo."
+        "en": "For a habit, use the non-past: the verb exactly as a dictionary lists it, 飲む, \"I drink\". 毎朝 (every morning) takes no に and goes first; the verb always comes last. \"コーヒーを毎朝飲む\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Per un'abitudine si usa il non passato: il verbo così come lo trovi sul dizionario, 飲む, «bevo». 毎朝 (ogni mattina) non prende に e va per primo; il verbo sta sempre in fondo. Va bene anche «コーヒーを毎朝飲む»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -278,9 +281,10 @@
         { "text": "話している", "reading": "はなしている", "meaning": { "en": "is talking", "it": "sta parlando" } }
       ],
       "answer": ["姉は", "今", "電話で", "話している"],
+      "alsoAccepted": [["今", "姉は", "電話で", "話している"]],
       "explanation": {
-        "en": "話す (to talk) has the te-form (the form ending in て) 話して; adding いる gives 話している, \"is talking\". 今 (now) takes no particle. The verb goes last.",
-        "it": "話す (parlare) ha la forma in て (la forma che finisce in て) 話して; aggiungendo いる si ottiene 話している, «sta parlando». 今 (adesso) non prende particella. Il verbo va in fondo."
+        "en": "話す (to talk) has the te-form (the form ending in て) 話して; adding いる gives 話している, \"is talking\". 今 (now) takes no particle. The verb goes last. \"今姉は電話で話している\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "話す (parlare) ha la forma in て (la forma che finisce in て) 話して; aggiungendo いる si ottiene 話している, «sta parlando». 今 (adesso) non prende particella. Il verbo va in fondo. Va bene anche «今姉は電話で話している»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     }
   ]

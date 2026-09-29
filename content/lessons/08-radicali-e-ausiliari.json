@@ -92,9 +92,10 @@
         { "text": "食べましょう", "reading": "たべましょう", "meaning": { "en": "let's eat", "it": "mangiamo" } }
       ],
       "answer": ["一緒に", "昼ごはんを", "食べましょう"],
+      "alsoAccepted": [["昼ごはんを", "一緒に", "食べましょう"]],
       "explanation": {
-        "en": "ましょう means \"let's…\" in polite speech; it comes from ます and attaches in the same place. 食べる is an ichidan verb (a verb that simply drops る), so the stem is 食べ and \"let's eat\" is 食べましょう. The verb goes last, after \"together\" (一緒に) and the object (昼ごはんを).",
-        "it": "ましょう significa «facciamo…» nel registro cortese; deriva da ます e si attacca nello stesso punto. 食べる è un verbo ichidan (un verbo che perde solo る), quindi il radicale è 食べ e «mangiamo» è 食べましょう. Il verbo va alla fine, dopo «insieme» (一緒に) e l'oggetto (昼ごはんを)."
+        "en": "ましょう means \"let's…\" in polite speech; it comes from ます and attaches in the same place. 食べる is an ichidan verb (a verb that simply drops る), so the stem is 食べ and \"let's eat\" is 食べましょう. The verb goes last, after \"together\" (一緒に) and the object (昼ごはんを). \"昼ごはんを一緒に食べましょう\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "ましょう significa «facciamo…» nel registro cortese; deriva da ます e si attacca nello stesso punto. 食べる è un verbo ichidan (un verbo che perde solo る), quindi il radicale è 食べ e «mangiamo» è 食べましょう. Il verbo va alla fine, dopo «insieme» (一緒に) e l'oggetto (昼ごはんを). Va bene anche «昼ごはんを一緒に食べましょう»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -297,9 +298,10 @@
         { "text": "泳ごう", "reading": "およごう", "meaning": { "en": "let's swim", "it": "nuotiamo" } }
       ],
       "answer": ["週末に", "海で", "泳ごう"],
+      "alsoAccepted": [["海で", "週末に", "泳ごう"]],
       "explanation": {
-        "en": "泳ごう is the volitional form of 泳ぐ (\"to swim\"): it means \"let's swim\". The last kana changes to the o-sound and う is added: 泳ぐ → 泳ご + う. The verb goes last: first when (週末に), then where (海で).",
-        "it": "泳ごう è la forma volitiva di 泳ぐ («nuotare»): significa «nuotiamo». L'ultimo kana passa al suono o e si aggiunge う: 泳ぐ → 泳ご + う. Il verbo va alla fine: prima quando (週末に), poi dove (海で)."
+        "en": "泳ごう is the volitional form of 泳ぐ (\"to swim\"): it means \"let's swim\". The last kana changes to the o-sound and う is added: 泳ぐ → 泳ご + う. The verb goes last: first when (週末に), then where (海で). \"海で週末に泳ごう\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "泳ごう è la forma volitiva di 泳ぐ («nuotare»): significa «nuotiamo». L'ultimo kana passa al suono o e si aggiunge う: 泳ぐ → 泳ご + う. Il verbo va alla fine: prima quando (週末に), poi dove (海で). Va bene anche «海で週末に泳ごう»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     }
   ]

@@ -81,6 +81,7 @@ function exercisePayload(exercise: Exercise): string {
       return JSON.stringify({
         sentence: exercise.sentence,
         answer: exercise.answer,
+        ...(exercise.alsoAccepted !== undefined ? { alsoAccepted: exercise.alsoAccepted } : {}),
         ...(exercise.prompt !== undefined ? { prompt: exercise.prompt } : {}),
         ...(exercise.translation !== undefined ? { translation: exercise.translation } : {}),
         ...(exercise.glosses !== undefined ? { glosses: exercise.glosses } : {}),

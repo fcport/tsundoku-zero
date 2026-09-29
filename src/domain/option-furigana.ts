@@ -164,6 +164,20 @@ export function readingSegments(text: string, kana: string): FuriganaSegment[] {
 }
 
 /**
+ * I segmenti di ruby di una FRASE da mostrare: la lettura sopra ogni corsa di
+ * kanji (`readingSegments`) quando è certa per TUTTE; se anche una sola resta
+ * scoperta (lettura ambigua, es. la が di がくせいだ), il gruppo unico di
+ * `alignFurigana`, che copre tutto anche se meno preciso. Misurato il 30-09-2026:
+ * 241 frasi su 249 prendono la lettura per kanji.
+ */
+export function sentenceSegments(text: string, kana: string): FuriganaSegment[] {
+  const segments = readingSegments(text, kana);
+  return segments.some((s) => s.ruby === null && /\p{Script=Han}/u.test(s.text))
+    ? alignFurigana(text, kana)
+    : segments;
+}
+
+/**
  * Le letture CERTE delle corse di kanji di un insieme di frasi (testo + lettura):
  * `corsa → lettura`. Una corsa che compare con due letture diverse è scartata.
  */

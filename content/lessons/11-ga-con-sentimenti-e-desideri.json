@@ -243,9 +243,10 @@
         { "text": "分かる", "reading": "わかる", "meaning": { "en": "understand", "it": "capire" } }
       ],
       "answer": ["私は", "日本語が", "少し", "分かる"],
+      "alsoAccepted": [["私は", "少し", "日本語が", "分かる"]],
       "explanation": {
-        "en": "分かる (\"understand\") describes a state, so what is understood takes が, not を: 日本語が分かる. 私は is the topic, the person the sentence is about. 少し, \"a little\", goes right before the verb it describes.",
-        "it": "分かる («capire») descrive uno stato, quindi ciò che si capisce prende が, non を: 日本語が分かる. 私は è il tema, la persona di cui parla la frase. 少し, «un po'», va subito prima del verbo che descrive."
+        "en": "分かる (\"understand\") describes a state, so what is understood takes が, not を: 日本語が分かる. 私は is the topic, the person the sentence is about. 少し, \"a little\", goes right before the verb it describes. \"私は少し日本語が分かる\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "分かる («capire») descrive uno stato, quindi ciò che si capisce prende が, non を: 日本語が分かる. 私は è il tema, la persona di cui parla la frase. 少し, «un po'», va subito prima del verbo che descrive. Va bene anche «私は少し日本語が分かる»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -269,9 +270,10 @@
         { "text": "行きたい", "reading": "いきたい", "meaning": { "en": "want to go", "it": "voler andare" } }
       ],
       "answer": ["夏休みに", "日本へ", "行きたい"],
+      "alsoAccepted": [["日本へ", "夏休みに", "行きたい"]],
       "explanation": {
-        "en": "To say \"want to do\", take the verb's i-stem (the part before ます: 行きます → 行き) and add たい: 行きたい, \"want to go\". In a statement, たい is always the speaker's own wish. The place you head to takes へ, \"towards\".",
-        "it": "Per dire «voglio fare», si prende il radicale in i del verbo (la parte davanti a ます: 行きます → 行き) e si aggiunge たい: 行きたい, «voglio andare». In un'affermazione, たい è sempre il desiderio di chi parla. Il luogo verso cui vai prende へ, «verso»."
+        "en": "To say \"want to do\", take the verb's i-stem (the part before ます: 行きます → 行き) and add たい: 行きたい, \"want to go\". In a statement, たい is always the speaker's own wish. The place you head to takes へ, \"towards\". \"日本へ夏休みに行きたい\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Per dire «voglio fare», si prende il radicale in i del verbo (la parte davanti a ます: 行きます → 行き) e si aggiunge たい: 行きたい, «voglio andare». In un'affermazione, たい è sempre il desiderio di chi parla. Il luogo verso cui vai prende へ, «verso». Va bene anche «日本へ夏休みに行きたい»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     }
   ]

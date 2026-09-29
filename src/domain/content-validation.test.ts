@@ -345,3 +345,31 @@ describe('validateLessons — lo spazio vuoto (`gap`) della scelta singola', () 
     ]);
   });
 });
+
+describe('validateLessons — gli ordini alternativi del riordino (i)', () => {
+  const alternativeIssues = (alsoAccepted: string[][]) =>
+    validateLessons([
+      file('01.json', {
+        ...validLesson,
+        exercises: [...validLesson.exercises.slice(0, 2), { ...validLesson.exercises[2], alsoAccepted }],
+      }),
+    ]).map((i) => `${i.path.join('.')}: ${i.message}`);
+
+  it('un altro ordine delle stesse tessere ⇒ nessun issue', () => {
+    expect(alternativeIssues([['を', '本', '読む']])).toEqual([]);
+  });
+
+  it('tessere diverse da answer (refuso o tessera in più) ⇒ issue localizzato', () => {
+    expect(alternativeIssues([['本', 'が', '読む']])).toEqual([
+      expect.stringContaining('exercises.2.alsoAccepted.0'),
+    ]);
+    expect(alternativeIssues([['本', 'を', '読む', '読む']])).toHaveLength(1);
+  });
+
+  it('answer stessa o un ordine ripetuto ⇒ issue', () => {
+    expect(alternativeIssues([['本', 'を', '読む']])).toHaveLength(1);
+    expect(alternativeIssues([['を', '本', '読む'], ['を', '本', '読む']])).toEqual([
+      expect.stringContaining('exercises.2.alsoAccepted.1'),
+    ]);
+  });
+});

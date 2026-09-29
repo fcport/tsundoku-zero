@@ -175,13 +175,20 @@ const selectSpan = object({
  * `assemble` — tessere da ordinare. `answer` è la SEQUENZA ORDINATA corretta di
  * tessere (array non vuoto di stringhe non vuote). Nessun `distractors`. `check`
  * è corretto se `response.order` coincide elemento per elemento e nell'ordine
- * (AC5).
+ * (AC5) con `answer` o con uno degli ordini di `alsoAccepted`.
+ *
+ * `alsoAccepted` (30-09-2026): gli ALTRI ordini giusti delle stesse tessere. In
+ * giapponese i pezzi prima del verbo spesso possono scambiarsi di posto (il ruolo
+ * lo dicono le particelle): 姉が手紙を友達に送った è giusto quanto 姉が友達に手紙を
+ * 送った. Non entra nell'identità dell'esercizio: `answer` resta la forma canonica,
+ * quella della frase mostrata.
  */
 const assemble = object({
   kind: literal('assemble'),
   grammarPoint: nonEmptyString(),
   sentence: japaneseSentence,
   answer: nonEmptyArray(nonEmptyString()),
+  alsoAccepted: optional(nonEmptyArray(nonEmptyArray(nonEmptyString()))),
   explanation: bilingualText,
   showFurigana: optional(boolean()),
   prompt,
@@ -256,8 +263,9 @@ export type ExerciseResponse =
  * - `single-select`: corretto sse `response.choice === exercise.answer`.
  * - `select-span`: corretto sse lo span combacia sui CONFINI dei segmenti
  *   (`start`/`end`), non su offset di carattere (AC4).
- * - `assemble`: corretto sse `response.order` coincide con `exercise.answer`
- *   elemento per elemento e nell'ordine (AC5).
+ * - `assemble`: corretto sse `response.order` coincide con `exercise.answer`, o
+ *   con uno degli ordini di `exercise.alsoAccepted`, elemento per elemento e
+ *   nell'ordine (AC5).
  */
 export function check(exercise: Exercise, response: ExerciseResponse): CheckOutcome {
   // Risposta di kind diverso dall'esercizio: totale, non lancia (AD-22).
@@ -275,13 +283,14 @@ export function check(exercise: Exercise, response: ExerciseResponse): CheckOutc
           response.span.start === exercise.answer.start &&
           response.span.end === exercise.answer.end,
       };
-    case 'assemble':
+    case 'assemble': {
+      if (response.kind !== 'assemble') return { correct: false };
+      const matches = (order: readonly string[]): boolean =>
+        order.length === response.order.length && order.every((tile, i) => tile === response.order[i]);
       return {
-        correct:
-          response.kind === 'assemble' &&
-          response.order.length === exercise.answer.length &&
-          exercise.answer.every((tile, i) => tile === response.order[i]),
+        correct: matches(exercise.answer) || (exercise.alsoAccepted ?? []).some(matches),
       };
+    }
     default: {
       // Registro chiuso (AD-22): un kind non gestito è errore di COMPILAZIONE.
       const _exhaustive: never = exercise;
