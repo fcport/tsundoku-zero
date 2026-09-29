@@ -19,16 +19,25 @@ import { resolve } from 'node:path';
 
 // Forma MINIMA del contenuto che ci interessa: le sole chiavi lette dallo helper
 // (non l'intero schema di dominio, che vive in `src/` e non va importato qui).
+// La domanda propria dell'esercizio (bilingue): identifica la card a schermo
+// quando la lezione ha più esercizi dello stesso `kind`.
+interface ExercisePrompt {
+  readonly en?: string;
+  readonly it?: string;
+}
 interface SingleSelectExercise {
   readonly kind: 'single-select';
+  readonly prompt?: ExercisePrompt;
   readonly answer: string;
 }
 interface AssembleExercise {
   readonly kind: 'assemble';
+  readonly prompt?: ExercisePrompt;
   readonly answer: readonly string[];
 }
 interface SelectSpanExercise {
   readonly kind: 'select-span';
+  readonly prompt?: ExercisePrompt;
   readonly answer: { readonly start: number; readonly end: number };
 }
 type LessonExercise =
@@ -39,11 +48,16 @@ interface Lesson {
   readonly exercises: readonly LessonExercise[];
 }
 
-/** Il gesto da eseguire su una card, derivato dal `kind` dell'esercizio. */
-export type ExerciseSolution =
+/**
+ * Il gesto da eseguire su una card, derivato dal `kind` dell'esercizio, più le
+ * sue domande (una per lingua) per riconoscere QUALE esercizio è a schermo: dal
+ * 29-09-2026 una lezione ha più esercizi per tipo, e il solo `kind` non basta.
+ */
+export type ExerciseSolution = { readonly prompts: readonly string[] } & (
   | { readonly kind: 'single-select'; readonly choiceText: string }
   | { readonly kind: 'assemble'; readonly tokensInOrder: readonly string[] }
-  | { readonly kind: 'select-span'; readonly optionIndex: number };
+  | { readonly kind: 'select-span'; readonly optionIndex: number }
+);
 
 const LESSONS_DIR = resolve(process.cwd(), 'content', 'lessons');
 
@@ -128,16 +142,19 @@ export function loadFirstLessonSolutions(): readonly ExerciseSolution[] {
   }
 
   return lesson.exercises.map((exercise): ExerciseSolution => {
+    const prompts = [exercise.prompt?.en, exercise.prompt?.it].filter(
+      (p): p is string => typeof p === 'string' && p.length > 0,
+    );
     switch (exercise.kind) {
       case 'single-select':
-        return { kind: 'single-select', choiceText: exercise.answer };
+        return { kind: 'single-select', prompts, choiceText: exercise.answer };
       case 'assemble':
-        return { kind: 'assemble', tokensInOrder: [...exercise.answer] };
+        return { kind: 'assemble', prompts, tokensInOrder: [...exercise.answer] };
       case 'select-span':
         // L'indice di OPZIONE è l'indice di segmento (ordine naturale): il
         // dominio (`composeResponse`) mappa 1:1 opzione→segmento, quindi cliccare
         // il bottone all'indice `answer.start` seleziona il segmento giusto.
-        return { kind: 'select-span', optionIndex: exercise.answer.start };
+        return { kind: 'select-span', prompts, optionIndex: exercise.answer.start };
       default: {
         const exhaustive: never = exercise;
         throw new Error(

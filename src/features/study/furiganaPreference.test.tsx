@@ -128,8 +128,10 @@ describe('ExerciseCard — la furigana anche sulle opzioni, con la stessa casell
 
   it('casella accesa ⇒ le tessere con kanji portano la lettura, fuori dal nome accessibile', () => {
     const markup = card(tiles, true);
-    expect(markup).toContain('<ruby>弟<rt aria-hidden="true"');
-    expect(markup).toContain('おとうと</rt></ruby>');
+    // Il ruby visibile è nascosto ai lettori di schermo; il nome del bottone lo
+    // porta la copia `sr-only` del testo dell'opzione (Chromium non dà nome a un
+    // bottone con <rt aria-hidden> dentro: e2e del 29-09-2026).
+    expect(markup).toContain('<span lang="ja" class="sr-only">弟が</span><span lang="ja" aria-hidden="true"><ruby>弟<rt>おとうと</rt></ruby>が</span>');
     expect(markup).toMatch(/<ruby>焼<rt[^>]*>や<\/rt><\/ruby>く/);
     expect(markup).not.toContain('<rp>');
   });

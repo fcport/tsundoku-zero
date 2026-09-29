@@ -256,25 +256,30 @@ export function ExerciseCard({
                     {exercise.kind === 'assemble' && isChosen && (
                       <span className="font-mono text-label text-ink-secondary">{orderPosition}. </span>
                     )}
-                    <span lang="ja">
-                      {showFurigana && optionRuby[i]
-                        ? // La lettura sopra il kanji, fuori dal nome accessibile
-                          // (`aria-hidden`, niente <rp>): il bottone si chiama
-                          // ancora col testo dell'opzione.
-                          optionRuby[i]!.map((seg, k) =>
+                    {showFurigana && optionRuby[i] ? (
+                      // La lettura sopra il kanji resta fuori dal nome accessibile.
+                      // Chromium non dà nome a un bottone il cui testo è in <ruby>
+                      // con <rt aria-hidden> (misurato dall'e2e, 29-09-2026): il
+                      // ruby visibile è `aria-hidden` e il testo dell'opzione lo
+                      // porta una copia `sr-only`.
+                      <>
+                        <span lang="ja" className="sr-only">{option}</span>
+                        <span lang="ja" aria-hidden="true">
+                          {optionRuby[i]!.map((seg, k) =>
                             seg.ruby ? (
                               <ruby key={k}>
                                 {seg.text}
-                                <rt aria-hidden="true">
-                                  {seg.ruby}
-                                </rt>
+                                <rt>{seg.ruby}</rt>
                               </ruby>
                             ) : (
                               seg.text
                             ),
-                          )
-                        : option}
-                    </span>
+                          )}
+                        </span>
+                      </>
+                    ) : (
+                      <span lang="ja">{option}</span>
+                    )}
                   </span>
                   {/* Il significato della tessera o del segmento, con «Traduzioni»
                       acceso (mai nella scelta singola: vedi `glosses`). Il colore

@@ -67,10 +67,10 @@ test.afterEach(async () => {
   }
 });
 
-// Risolve la card CORRENTE: legge la consegna per capire il `kind`, poi applica
-// la soluzione di quel tipo derivata dal contenuto. In questa lezione c'è
-// esattamente un esercizio per tipo, quindi il `kind` identifica la soluzione a
-// prescindere dall'ordine della pila (robusto a `listDue`).
+// Risolve la card CORRENTE: legge la consegna per capire il `kind`, poi la
+// DOMANDA propria dell'esercizio per capire quale, e applica la sua soluzione
+// derivata dal contenuto (robusto all'ordine della pila, `listDue`). La lezione
+// ha più esercizi per tipo: il solo `kind` sceglierebbe l'esercizio sbagliato.
 async function solveCurrentExercise(
   page: Page,
   solutions: readonly ExerciseSolution[],
@@ -78,11 +78,23 @@ async function solveCurrentExercise(
   const article = page.locator('article');
   await expect(article).toBeVisible();
 
-  const has = async (prompt: RegExp): Promise<boolean> =>
-    (await article.getByText(prompt).count()) > 0;
+  const has = async (prompt: RegExp | string): Promise<boolean> =>
+    (await article.getByText(prompt, { exact: true }).count()) > 0;
+
+  // Fra gli esercizi di quel `kind`, quello la cui domanda è a schermo (in una
+  // delle due lingue); senza domande nel contenuto, l'unico di quel tipo.
+  const pick = async (kind: ExerciseSolution['kind']): Promise<ExerciseSolution | undefined> => {
+    const ofKind = solutions.filter((s) => s.kind === kind);
+    for (const s of ofKind) {
+      for (const prompt of s.prompts) {
+        if (await has(prompt)) return s;
+      }
+    }
+    return ofKind.length === 1 ? ofKind[0] : undefined;
+  };
 
   if (await has(TEXT.promptSingleSelect)) {
-    const solution = solutions.find((s) => s.kind === 'single-select');
+    const solution = await pick('single-select');
     if (solution?.kind !== 'single-select') {
       throw new Error('Soluzione single-select assente dal contenuto.');
     }
@@ -94,7 +106,7 @@ async function solveCurrentExercise(
   }
 
   if (await has(TEXT.promptSelectSpan)) {
-    const solution = solutions.find((s) => s.kind === 'select-span');
+    const solution = await pick('select-span');
     if (solution?.kind !== 'select-span') {
       throw new Error('Soluzione select-span assente dal contenuto.');
     }
@@ -108,7 +120,7 @@ async function solveCurrentExercise(
   }
 
   if (await has(TEXT.promptAssemble)) {
-    const solution = solutions.find((s) => s.kind === 'assemble');
+    const solution = await pick('assemble');
     if (solution?.kind !== 'assemble') {
       throw new Error('Soluzione assemble assente dal contenuto.');
     }
@@ -172,7 +184,7 @@ test('percorso principale: registrazione, sblocco, esercizi, pila a zero', async
   const completeBody = page.getByText(TEXT.completeBody);
   const nextButton = page.getByRole('button', { name: TEXT.next });
 
-  // Al più tre esercizi (la prima lezione ne ha tre): le risposte sono sempre
+  // Al più tanti esercizi quanti ne ha la prima lezione: le risposte sono sempre
   // corrette ⇒ nessun re-accodamento, il limite `solutions.length` basta. Il
   // ciclo termina alla comparsa della schermata di completamento.
   for (let i = 0; i < solutions.length; i++) {
