@@ -13,6 +13,8 @@ import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { DEFAULT_LESSONS_PER_DAY } from '../../domain/unlockPace';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { DashboardScreen } from './DashboardScreen';
+import type { Exercise } from '../../domain/exercise';
+import { exercisesQueryKey } from '../study/exercisesQueryKey';
 
 // La copy dell'interfaccia, SENZA i nodi marcati `lang="ja"`: quelli sono contenuto
 // giapponese della pagina (la data in verticale della direzione «rivista»), non
@@ -972,5 +974,62 @@ describe('video di riferimento della lezione in corso', () => {
   it('nessun video incorporato: niente <iframe>', () => {
     const markup = render(withVideos(['aaaaaaaaaaa']), UID);
     expect(markup).not.toContain('<iframe');
+  });
+});
+
+// La pila come libri (30-09-2026): un dorso per esercizio dovuto, dal contenuto in
+// cache sotto la STESSA chiave della sessione.
+describe('la pila come dorsi di libri', () => {
+  const exercise = (grammarPoint: string): Exercise => ({
+    kind: 'single-select',
+    grammarPoint,
+    sentence: { kanji: '私は学生です', kana: 'わたしはがくせいです' },
+    answer: 'は',
+    distractors: ['が'],
+    explanation: { en: 'x' },
+  });
+
+  function withPile(dueCount: number, loaded: number): QueryClient {
+    const qc = seededClient({ dueCount, log: [], unlocked: 1, total: 2 });
+    qc.setQueryData(['lessons'], [
+      { id: 'lesson-0', ordinal: 1, title: { en: 'L1' }, grammarPoints: ['ゼロ代名詞'], exerciseCount: 1 },
+      { id: 'lesson-1', ordinal: 2, title: { en: 'L2' }, grammarPoints: ['非過去形'], exerciseCount: 1 },
+    ]);
+    const ids = Array.from({ length: dueCount }, (_, i) => `ex-${i}`);
+    qc.setQueryData(
+      exercisesQueryKey(ids),
+      ids.slice(0, loaded).map((id, i) => ({ id, exercise: exercise(i % 2 === 0 ? 'ゼロ代名詞' : '非過去形') })),
+    );
+    return qc;
+  }
+
+  it("un dorso per esercizio, nell'ordine della coda, con lezione e regola per l'AT", () => {
+    const markup = render(withPile(3, 3), UID);
+    expect(markup).toContain(`aria-label="${en.dashboard.pileLabel}"`);
+    expect(markup.match(/<li /g)).toHaveLength(3);
+    const first = markup.indexOf('Lesson 1: The zero pronoun (next)');
+    const second = markup.indexOf('Lesson 2: The non-past form');
+    expect(first).toBeGreaterThan(-1);
+    expect(second).toBeGreaterThan(first);
+  });
+
+  it('oltre i dorsi mostrati la pila dichiara «+N» (6 telefono, 8 tablet, 12 desktop)', () => {
+    const markup = render(withPile(20, 20), UID);
+    expect(markup.match(/<li /g)).toHaveLength(12);
+    expect(markup).toContain('+14 more');
+    expect(markup).toContain('+12 more');
+    expect(markup).toContain('+8 more');
+  });
+
+  it('senza contenuto in cache il numero resta e non ci sono dorsi', () => {
+    const markup = render(seededClient({ dueCount: 4, log: [], unlocked: 1, total: 2 }), UID);
+    expect(markup).toMatch(/text-count-hero[^>]*>4</);
+    expect(markup).not.toContain('<ol');
+  });
+
+  it('la copy della pila resta ASCII in inglese, fuori dal giapponese', () => {
+    const markup = render(withPile(3, 3), UID).replace(/<span[^>]*lang="ja"[^>]*>[\s\S]*?<\/span>/g, '');
+    const offending = [...withoutJapanese(markup)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
+    expect(offending).toEqual([]);
   });
 });

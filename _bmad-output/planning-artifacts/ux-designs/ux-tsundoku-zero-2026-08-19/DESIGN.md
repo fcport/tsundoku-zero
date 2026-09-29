@@ -177,6 +177,7 @@ La prima esecuzione di questo documento era corretta nei principi e spenta nella
 - **Un solo rosso.** `{colors.accent}` non è più l'indaco dell'azione ma il **rosso** della rivista: l'etichetta «da rivedere», il giorno della settimana, la freccia della barra d'azione, il timbro dell'esito, il capolettera. L'azione primaria è una **barra d'inchiostro** a tutta larghezza, in fondo alla pagina.
 - **Tre famiglie.** Archivo con l'asse di larghezza per l'interfaccia e le testate, Shippori Mincho per il giapponese (applicato a ogni nodo `lang="ja"`), IBM Plex Mono per occhielli e numerazioni.
 - **L'esito è un timbro.** 正 per giusta, 誤 per sbagliata, nello **stesso** rosso: la differenza la portano il carattere e la dichiarazione in testo, mai la tinta.
+- **La pila di libri.** (30-09-2026) Accanto al numero dei dovuti, 冊 (il contatore dei libri) e la pila vera: un dorso per esercizio dovuto su una mensola, nell'ordine della coda. Sul dorso la lezione (第一課) e la regola in giapponese, con furigana e traduzione secondo gli interruttori; il dorso in cima, rosso, è il prossimo. 6 dorsi sul telefono, 8 fino a 1024px, 12 oltre, poi «+N». Toni solo della carta e dell'inchiostro; il corpo del numero segue lo spazio del riquadro (`cqw`) e le sue cifre.
 - **La data in verticale.** La colonna centrale della dashboard porta la data di oggi in kanji (九月二十九日), decorativa: in chiaro è nella testata.
 
 Dove il testo qui sotto parla di indaco, di card sollevata o di Inter/Noto Sans JP, vale questa sezione. I valori sono in `src/ui/theme.css`, che resta l'unica fonte.

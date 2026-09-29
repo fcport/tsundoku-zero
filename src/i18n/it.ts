@@ -38,6 +38,14 @@ export const it = {
     // ("23 da rivedere"), mai "hai 23". Nessun `!`, nessuna emoji, nessun
     // avverbio di lode (nessuna grammatica della celebrazione).
     dueLabel: 'da rivedere',
+    // La pila come libri (30-09-2026): un dorso per esercizio dovuto, il prossimo in
+    // cima. 冊 è il contatore giapponese dei libri; `satsuMeaning` la sua traduzione.
+    // Le variabili non si chiamano `count` (pluralizzatore di i18next).
+    satsuMeaning: 'libri',
+    pileLabel: 'La pila da rivedere, dal prossimo esercizio',
+    pileBook: 'Lezione {{lesson}}: {{point}}',
+    pileNext: 'prossimo',
+    pileMore: '+{{extra}} nella pila',
     // Streak: forma etichetta-valore ("Giorni di fila: 7"), come `entryLabel` delle
     // statistiche: nessuna concordanza di numero, quindi niente «1 giorni». La
     // variabile è `days` (non `count`), per non innescare il pluralizzatore di

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { kanjiDate, kanjiNumeral } from './kanjiDate';
+import { kanjiDate, kanjiNumeral, lessonNumberSegments } from './kanjiDate';
 
 describe('kanjiNumeral — 1–99 con 十', () => {
   it.each([
@@ -55,5 +55,20 @@ describe('kanjiDate — le letture per la furigana', () => {
     ]);
     expect(kanjiDate(new Date('2026-07-20T10:00:00Z'), 'UTC').dateSegments[1]).toEqual({ text: '二十日', ruby: 'はつか' });
     expect(kanjiDate(new Date('2026-07-14T10:00:00Z'), 'UTC').dateSegments[1]).toEqual({ text: '十四日', ruby: 'じゅうよっか' });
+  });
+});
+
+describe('lessonNumberSegments — 第N課 con la lettura', () => {
+  const reading = (n: number) => lessonNumberSegments(n).map((s) => s.ruby).join('');
+  it('le letture irregolari del contatore 課', () => {
+    expect(lessonNumberSegments(1)).toEqual([
+      { text: '第', ruby: 'だい' },
+      { text: '一課', ruby: 'いっか' },
+    ]);
+    expect(reading(6)).toBe('だいろっか');
+    expect(reading(8)).toBe('だいはっか');
+    expect(reading(10)).toBe('だいじゅっか');
+    expect(reading(13)).toBe('だいじゅうさんか');
+    expect(reading(20)).toBe('だいにじゅっか');
   });
 });

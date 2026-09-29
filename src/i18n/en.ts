@@ -43,6 +43,12 @@ export const en = {
     // ("23 to review"), mai "you have 23". Nessun `!`, nessuna emoji, nessun
     // avverbio di lode (nessuna grammatica della celebrazione).
     dueLabel: 'to review',
+    // La pila come libri (30-09-2026): vedi it.ts.
+    satsuMeaning: 'books',
+    pileLabel: 'The pile to review, next exercise first',
+    pileBook: 'Lesson {{lesson}}: {{point}}',
+    pileNext: 'next',
+    pileMore: '+{{extra}} more',
     // Streak: i giorni PRECEDONO il sostantivo ("7 day streak"), neutro. La
     // variabile è `days` (non `count`), per non innescare il pluralizzatore di
     // i18next che richiederebbe chiavi `_one`/`_other` fuori dalla parità.

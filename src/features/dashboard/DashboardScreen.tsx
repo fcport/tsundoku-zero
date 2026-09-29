@@ -41,9 +41,11 @@
 // emoji): solo token del sistema di design (la regola colore vale anche qui). I
 // primitivi ui (pile-counter, streak-badge, curriculum-progress, button-primary)
 // sono composti INLINE: l'estrazione nasce col secondo consumatore.
+import type { CSSProperties } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
 import { dueQueryKey } from '../../domain/due';
+import { pileBooks } from '../../domain/pile';
 import { streak } from '../../domain/streak';
 import {
   DEFAULT_LESSONS_PER_DAY,
@@ -58,6 +60,8 @@ import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
 import { ArrowIcon, ExternalIcon } from '../../ui/icons';
+import { exercisesQueryKey } from '../study/exercisesQueryKey';
+import { PileOfBooks } from './PileOfBooks';
 
 export interface DashboardScreenProps {
   /**
@@ -112,6 +116,14 @@ const HERO_CLASS = 'relative min-h-[300px] overflow-hidden sm:min-h-[400px]';
 const DECLARATION_CLASS =
   'p-5 text-[22px] font-medium leading-snug text-ink-primary sm:p-8 sm:text-[28px]';
 
+// Il riquadro del numero quando c'è una pila: `@container` per il corpo del numero
+// in `cqw`; sul telefono l'altezza cresce coi dorsi (`--hero-min`, dal componente).
+const PILE_HERO_CLASS =
+  '@container relative min-h-[var(--hero-min)] overflow-hidden sm:min-h-[400px] lg:min-h-[560px]';
+
+// 冊, il contatore giapponese dei libri, con la sua lettura.
+const SATSU = [{ text: '冊', ruby: 'さつ' }] as const;
+
 // Una fila di segmenti: `filled` pieni d'inchiostro su `count`. Decorativa: il dato
 // lo porta il testo accanto (numero visibile + frase per l'AT), mai il solo disegno.
 function Segments({ count, filled }: { readonly count: number; readonly filled: number }) {
@@ -159,6 +171,16 @@ export function DashboardScreen({
   const lessonsQ = useQuery({
     queryKey: ['lessons'],
     queryFn: () => content.listLessons(),
+  });
+  // Il contenuto degli esercizi in pila, per i dorsi dei libri (30-09-2026): regola
+  // e lezione di ciascuno. La STESSA chiave del precarico e della sessione
+  // (`exercisesQueryKey(ids)`), così la sessione parte da cache calda. Non entra nel
+  // cancello scheletro: finché manca, il numero c'è e la pila arriva dopo.
+  const dueIds = dueQ.data?.map((s) => s.exerciseId) ?? [];
+  const pileQ = useQuery({
+    queryKey: exercisesQueryKey(dueIds),
+    enabled: !!userId && dueIds.length > 0,
+    queryFn: () => content.listExercisesByIds(dueIds),
   });
   // Il tetto giornaliero di sblocco (3.17): la STESSA chiave di Impostazioni, così
   // un cambio là si riflette qui subito (setQueryData ottimistico). `null`/assente
@@ -220,6 +242,8 @@ export function DashboardScreen({
   // mai memorizzati (AD-5/AD-18). `isDue`/`streak`/`nextLessonToUnlock` restano
   // l'autorità di dominio; orologio e fuso ENTRANO dal Clock (mai letti qui).
   const count = dueQ.data.length;
+  // I dorsi della pila, nell'ordine della coda; vuoti finché il contenuto non c'è.
+  const books = pileBooks(dueIds, pileQ.data ?? [], lessonsQ.data);
   const days = streak(logQ.data, clock.now(), clock.timeZone());
   // Il read-model UNICO del progresso (3.17): da `unlockedQ.data` (UnlockedLesson[])
   // derivano SIA gli id (sequenza del curriculum) SIA gli istanti (tetto), senza
@@ -312,12 +336,42 @@ export function DashboardScreen({
               (`exerciseCount === 0`): mai `clearedBody`, la pila non si è mai riempita.
             - `clearedBody` («hai svuotato la pila») SSE l'ultima AVEVA esercizi.
             «Esaurito» e «concettuale» convivono nel raro caso, sempre senza pulsante. */}
-        <div className={HERO_CLASS}>
+        <div
+          className={count > 0 ? PILE_HERO_CLASS : HERO_CLASS}
+          style={count > 0 ? ({ '--hero-min': `${280 + Math.min(books.length, 6) * 34}px` } as CSSProperties) : undefined}
+        >
           {count > 0 ? (
             <>
-              <p className="absolute bottom-0 left-3 translate-y-[14%] text-count-hero-mobile font-stretch-extra-condensed text-ink-primary sm:left-5 sm:text-count-hero">
-                {count}
-              </p>
+              {/* Il numero, 冊 (il contatore dei libri) e la pila sulla mensola. Sul
+                  telefono il numero sta in alto e la pila in fondo; da 640px il numero
+                  esce dal fondo a sinistra e la pila gli sta accanto. Il corpo del
+                  numero segue lo spazio del riquadro (`cqw`) e le sue cifre, così anche
+                  «24» lascia posto alla pila. */}
+              <div className="absolute inset-0 flex flex-col px-3 pb-6 pt-12 sm:flex-row sm:items-end sm:gap-4 sm:p-0 sm:pl-5 sm:pr-6">
+                <div className="flex items-end gap-2 sm:gap-4">
+                  <p
+                    className="text-count-hero-mobile font-stretch-extra-condensed text-ink-primary [--count-k:146cqw] [--count-max:220px] sm:translate-y-[14%] sm:text-count-hero sm:[--count-k:90cqw] sm:[--count-max:520px] lg:[--count-k:110cqw]"
+                    style={{ fontSize: `min(var(--count-max), calc(var(--count-k) / ${String(count).length}))` }}
+                  >
+                    {count}
+                  </p>
+                  <p lang="ja" aria-hidden="true" className="mb-1 text-center font-jp text-[34px] font-extrabold leading-none text-ink-primary sm:mb-[100px] sm:text-[64px] lg:mb-[118px]">
+                    <Furigana segments={SATSU} />
+                    <Translation
+                      text={t('dashboard.satsuMeaning')}
+                      lang={locale}
+                      className="mt-1 block font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-ink-secondary"
+                    />
+                  </p>
+                </div>
+                {books.length > 0 ? (
+                  <div className="mt-auto min-w-0 sm:mb-[100px] sm:mt-0 sm:flex-1 lg:mb-[118px]">
+                    <PileOfBooks books={books} total={count} roomy={books.length <= 4} />
+                  </div>
+                ) : null}
+              </div>
+              {/* L'etichetta DOPO il numero nel DOM (3.12: «23 da rivedere»), in alto a
+                  destra sulla pagina. */}
               <p className="absolute right-4 top-4 max-w-[9ch] text-right text-[17px] font-extrabold leading-tight text-accent sm:right-6 sm:top-6 sm:text-[22px]">
                 {t('dashboard.dueLabel')}
               </p>

@@ -72,3 +72,20 @@ export function kanjiDate(instant: Date, timeZone: string): KanjiDate {
     weekdaySegments: [{ text: weekday, ruby: WEEKDAY_READINGS[weekdayIndex]! }],
   };
 }
+
+// Il contatore 課 (lezione) raddoppia la consonante dopo 1, 6, 8 e 10: いっか, ろっか,
+// はっか, じゅっか. Le decine si leggono じゅう, にじゅう…; da sole diventano じゅっ.
+const UNIT_KA = ['', 'いっ', 'に', 'さん', 'よん', 'ご', 'ろっ', 'なな', 'はっ', 'きゅう'];
+const TENS = ['', 'じゅう', 'にじゅう', 'さんじゅう', 'よんじゅう', 'ごじゅう', 'ろくじゅう', 'ななじゅう', 'はちじゅう', 'きゅうじゅう'];
+
+/** «第N課» (lezione N, 1–99) a segmenti con la lettura: [第|だい, 十二課|じゅうにか]. */
+export function lessonNumberSegments(n: number): readonly RubySegment[] {
+  const tens = Math.floor(n / 10);
+  const units = n % 10;
+  const reading =
+    units === 0 ? `${TENS[tens]!.slice(0, -1)}っか` : `${TENS[tens]}${UNIT_KA[units]}か`;
+  return [
+    { text: '第', ruby: 'だい' },
+    { text: `${kanjiNumeral(n)}課`, ruby: reading },
+  ];
+}
