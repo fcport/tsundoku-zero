@@ -24,7 +24,7 @@ export const DEFAULT_LESSONS_PER_DAY = 1;
  * confine (nessun check SQL, coerente con la minimalità della tabella). L'ordine è
  * quello di presentazione dei bottoni.
  */
-export const LESSONS_PER_DAY_OPTIONS = [1, 2, 3, 4, 5] as const;
+export const LESSONS_PER_DAY_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 
 /**
  * Quante lezioni sono state sbloccate OGGI (nel giorno locale di `now`, nel

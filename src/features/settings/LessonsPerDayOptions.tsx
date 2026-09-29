@@ -36,16 +36,18 @@ export function LessonsPerDayOptions({
       <span id="lessons-per-day-label" className="font-mono text-label-caps uppercase text-ink-secondary">
         {t('settings.lessonsPerDay.label')}
       </span>
-      {/* Cinque caselle col numero grande e condensato; la frase completa
-          («2 al giorno») resta il nome accessibile, fuori schermo. */}
-      <div className="grid auto-cols-fr grid-flow-col border-[1.5px] border-border-strong">
+      {/* Dieci caselle su due righe da cinque (dal 30-09-2026: fino a 10 al
+          giorno), col numero grande e condensato; i filetti sono lo spazio fra le
+          celle sul fondo d'inchiostro. La frase completa («2 al giorno») resta il
+          nome accessibile, fuori schermo. */}
+      <div className="grid grid-cols-5 gap-[1.5px] border-[1.5px] border-border-strong bg-border-strong">
         {LESSONS_PER_DAY_OPTIONS.map((value) => (
           <button
             key={value}
             type="button"
             aria-pressed={value === current}
             onClick={() => onSelect(value)}
-            className="min-h-[64px] border-l-[1.5px] border-border-strong bg-surface-raised text-ink-primary first:border-l-0 hover:bg-surface-sunken aria-pressed:bg-ink-primary aria-pressed:text-surface-base"
+            className="min-h-[64px] bg-surface-raised text-ink-primary hover:bg-surface-sunken aria-pressed:bg-ink-primary aria-pressed:text-surface-base"
           >
             <span aria-hidden="true" className="text-[32px] font-extrabold leading-none font-stretch-condensed">
               {value}
