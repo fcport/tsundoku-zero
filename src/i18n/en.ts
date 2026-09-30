@@ -87,8 +87,11 @@ export const en = {
     // Dichiara cosa fa l'app — non c'è ancora niente da contare, quindi nessun
     // conteggio/streak/curriculum a zero. Copy neutra, ASCII: nessun `!`, nessuna
     // emoji, nessun avverbio di lode.
+    // Dal 30-09-2026 nomina Cure Dolly come origine del METODO (PRD §2: riconoscere
+    // l'origine dell'approccio è consentito), mai gli esercizi come derivati dalle sue
+    // lezioni: sono originali, come dichiarano i riconoscimenti.
     firstRunBody:
-      'Here you learn Japanese grammar one lesson at a time. Unlock the first lesson: its exercises go into your review pile, and you empty it one exercise at a time.',
+      'Here you learn Japanese grammar one lesson at a time, with the approach made popular by the lessons of Cure Dolly: each lesson links its reference video, while the exercises are written from scratch for this app. Unlock the first lesson: its exercises go into your review pile, and you empty it one exercise at a time.',
     // L'azione di primo avvio: significa *comincia*, distinta da unlockAction
     // («procedi» dalla pila svuotata). Verbale e concreta, mai "Continue"; nessun
     // `!`, nessuna emoji, nessun avverbio di lode.
