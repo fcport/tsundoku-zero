@@ -281,6 +281,538 @@
         "en": "Select ここへ (\"here\"). The particle へ, read え, marks the direction you move in; 来る (\"to come\") is a verb of movement, so it can take へ. に would also work: ここに来てください.",
         "it": "Seleziona ここへ («qui»). La particella へ, che si legge え, indica la direzione in cui ci si muove; 来る («venire») è un verbo di movimento, quindi può prendere へ. Andrebbe bene anche に: ここに来てください."
       }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "目的地を示す「に」",
+      "prompt": {
+        "en": "\"For New Year I go back to my parents' home.\" Which particle marks where you go back to?",
+        "it": "«Per Capodanno torno a casa dei miei.» Quale particella indica dove si torna?"
+      },
+      "sentence": {
+        "kanji": "お正月は実家に帰る",
+        "kana": "おしょうがつはじっかにかえる"
+      },
+      "translation": {
+        "en": "For New Year I go back to my parents' home.",
+        "it": "Per Capodanno torno a casa dei miei."
+      },
+      "gap": {
+        "kanji": "お正月は実家＿帰る",
+        "kana": "おしょうがつはじっか＿かえる"
+      },
+      "answer": "に",
+      "distractors": ["で", "を"],
+      "explanation": {
+        "en": "帰る (\"to go back home\") is a verb of movement, and the place you arrive at takes に: 実家に帰る. で marks where an action happens, and を with a verb of movement marks a place you go through, not where you end up.",
+        "it": "帰る («tornare») è un verbo di movimento, e il posto a cui si arriva prende に: 実家に帰る. で indica dove si svolge un'azione, e を con un verbo di movimento indica un posto che si attraversa, non quello dove si arriva."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "目的地を示す「に」",
+      "prompt": {
+        "en": "\"The bus has arrived at the station.\" Which particle marks where the bus arrived?",
+        "it": "«L'autobus è arrivato alla stazione.» Quale particella indica dove è arrivato l'autobus?"
+      },
+      "sentence": {
+        "kanji": "バスが駅に着きました",
+        "kana": "バスがえきにつきました"
+      },
+      "translation": {
+        "en": "The bus has arrived at the station.",
+        "it": "L'autobus è arrivato alla stazione."
+      },
+      "gap": {
+        "kanji": "バスが駅＿着きました",
+        "kana": "バスがえき＿つきました"
+      },
+      "answer": "に",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "着く (\"to arrive\") takes に for the place you arrive at: 駅に着きました = \"arrived at the station\". The place is the end point of the movement, and that is what に marks. 駅で would describe something happening at the station, not arriving there.",
+        "it": "着く («arrivare») prende に per il posto in cui si arriva: 駅に着きました = «è arrivato alla stazione». Il posto è il punto d'arrivo del movimento, ed è proprio questo che segna に. 駅で descriverebbe qualcosa che succede alla stazione, non l'arrivarci."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "目的地を示す「に」",
+      "prompt": {
+        "en": "Build: \"I hurried into the classroom.\"",
+        "it": "Componi: «Sono entrato in classe di corsa.»"
+      },
+      "sentence": {
+        "kanji": "急いで教室に入った",
+        "kana": "いそいできょうしつにはいった"
+      },
+      "translation": {
+        "en": "I hurried into the classroom.",
+        "it": "Sono entrato in classe di corsa."
+      },
+      "glosses": [
+        { "text": "急いで", "reading": "いそいで", "meaning": { "en": "in a hurry", "it": "di corsa" } },
+        { "text": "教室に", "reading": "きょうしつに", "meaning": { "en": "into the classroom", "it": "in classe" } },
+        { "text": "入った", "reading": "はいった", "meaning": { "en": "went in", "it": "sono entrato" } }
+      ],
+      "answer": ["急いで", "教室に", "入った"],
+      "alsoAccepted": [["教室に", "急いで", "入った"]],
+      "explanation": {
+        "en": "入る (\"to go in\") takes に for the place you go into: 教室に入った = \"went into the classroom\". The verb goes last. \"教室に急いで入った\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "入る («entrare») prende に per il posto in cui si entra: 教室に入った = «sono entrato in classe». Il verbo va alla fine. Va bene anche «教室に急いで入った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "目的地を示す「に」",
+      "prompt": {
+        "en": "\"Let's go back to the hotel.\" Which part says where you go?",
+        "it": "«Torniamo in albergo.» Quale parte dice dove si va?"
+      },
+      "sentence": {
+        "kanji": "ホテルに戻ろう",
+        "kana": "ホテルにもどろう"
+      },
+      "translation": {
+        "en": "Let's go back to the hotel.",
+        "it": "Torniamo in albergo."
+      },
+      "glosses": [
+        { "text": "ホテルに", "meaning": { "en": "to the hotel", "it": "in albergo" } },
+        { "text": "戻", "reading": "もど", "meaning": { "en": "go back (first part of the verb)", "it": "tornare (prima parte del verbo)" } },
+        { "text": "ろう", "meaning": { "en": "(end of the verb) + let's", "it": "(fine del verbo) + facciamo…!" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select ホテルに. 戻る (\"to go back\") is a verb of movement, and the place you go back to is marked by に. ろう is the end of 戻ろう (\"let's go back\").",
+        "it": "Seleziona ホテルに. 戻る («tornare») è un verbo di movimento, e il posto in cui si torna si segna con に. ろう è la fine di 戻ろう («torniamo»)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "目的を示す「に」",
+      "prompt": {
+        "en": "\"I'm going to the park to take photos.\" How do you say \"to take\" (the purpose)?",
+        "it": "«Vado al parco a fare foto.» Come si dice «a fare» (lo scopo)?"
+      },
+      "sentence": {
+        "kanji": "公園へ写真を撮りに行く",
+        "kana": "こうえんへしゃしんをとりにいく"
+      },
+      "translation": {
+        "en": "I'm going to the park to take photos.",
+        "it": "Vado al parco a fare foto."
+      },
+      "glosses": [
+        { "text": "撮りに", "reading": "とりに" },
+        { "text": "撮るに", "reading": "とるに" },
+        { "text": "撮りで", "reading": "とりで" },
+        { "text": "撮らに", "reading": "とらに" }
+      ],
+      "gap": {
+        "kanji": "公園へ写真を＿行く",
+        "kana": "こうえんへしゃしんを＿いく"
+      },
+      "answer": "撮りに",
+      "distractors": ["撮るに", "撮りで", "撮らに"],
+      "explanation": {
+        "en": "For the purpose of a movement, use the i-stem of the verb (the form used before ます: 撮ります → 撮り) + に, then a verb such as 行く (\"to go\"). The dictionary form 撮る cannot take this に, and で does not express a purpose.",
+        "it": "Per lo scopo di un movimento si usa il radicale in i del verbo (la forma usata davanti a ます: 撮ります → 撮り) + に, e poi un verbo come 行く («andare»). La forma base 撮る non può prendere questo に, e で non esprime uno scopo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "目的を示す「に」",
+      "prompt": {
+        "en": "Build: \"I went to the airport to pick up my grandfather.\"",
+        "it": "Componi: «Sono andato all'aeroporto a prendere mio nonno.»"
+      },
+      "sentence": {
+        "kanji": "空港まで祖父を迎えに行った",
+        "kana": "くうこうまでそふをむかえにいった"
+      },
+      "translation": {
+        "en": "I went to the airport to pick up my grandfather.",
+        "it": "Sono andato all'aeroporto a prendere mio nonno."
+      },
+      "glosses": [
+        { "text": "空港まで", "reading": "くうこうまで", "meaning": { "en": "(as far as) the airport", "it": "fino all'aeroporto" } },
+        { "text": "祖父を", "reading": "そふを", "meaning": { "en": "my grandfather (を: the object)", "it": "mio nonno (を: l'oggetto)" } },
+        { "text": "迎えに", "reading": "むかえに", "meaning": { "en": "to pick up (the purpose)", "it": "a prendere (lo scopo)" } },
+        { "text": "行った", "reading": "いった", "meaning": { "en": "went", "it": "sono andato" } }
+      ],
+      "answer": ["空港まで", "祖父を", "迎えに", "行った"],
+      "alsoAccepted": [["祖父を", "迎えに", "空港まで", "行った"], ["祖父を", "空港まで", "迎えに", "行った"]],
+      "explanation": {
+        "en": "迎えに gives the purpose, \"to pick up\": the i-stem of 迎える (the form used before ます: 迎えます → 迎え) + に. A verb of movement follows at the end: 迎えに行った = \"went to pick up\". \"祖父を迎えに空港まで行った\" and \"祖父を空港まで迎えに行った\" are also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "迎えに indica lo scopo, «a prendere»: il radicale in i di 迎える (la forma usata davanti a ます: 迎えます → 迎え) + に. Alla fine segue un verbo di movimento: 迎えに行った = «sono andato a prendere». Vanno bene anche «祖父を迎えに空港まで行った» e «祖父を空港まで迎えに行った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "目的を示す「に」",
+      "prompt": {
+        "en": "\"Come over and hang out!\" Which part says why you should come?",
+        "it": "«Passa a trovarmi, eh!» Quale parte dice perché venire?"
+      },
+      "sentence": {
+        "kanji": "あそびに来てね",
+        "kana": "あそびにきてね"
+      },
+      "translation": {
+        "en": "Come over and hang out!",
+        "it": "Passa a trovarmi, eh!"
+      },
+      "glosses": [
+        { "text": "あそびに", "meaning": { "en": "to hang out (the purpose)", "it": "a divertirsi, a trovarmi (lo scopo)" } },
+        { "text": "来", "reading": "き", "meaning": { "en": "come (first part of the verb)", "it": "venire (prima parte del verbo)" } },
+        { "text": "てね", "meaning": { "en": "(asking) + , OK?", "it": "(invito) + , eh?" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select あそびに. あそび is the i-stem of あそぶ (\"to play, to hang out\"; the form used before ます: あそびます), and with に it gives the purpose of coming: あそびに来て = \"come to hang out\". In friendly messages it is often written in kana like this.",
+        "it": "Seleziona あそびに. あそび è il radicale in i di あそぶ («giocare, divertirsi»; la forma usata davanti a ます: あそびます), e con に indica lo scopo del venire: あそびに来て = «vieni a divertirti», cioè «vieni a trovarmi». Nei messaggi tra amici si scrive spesso così, in kana."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "目的を示す「に」",
+      "prompt": {
+        "en": "\"I went out for lunch.\" Which part says what you went out for?",
+        "it": "«Sono uscito a pranzo.» Quale parte dice per cosa si è usciti?"
+      },
+      "sentence": {
+        "kanji": "ランチに出かけた",
+        "kana": "ランチにでかけた"
+      },
+      "translation": {
+        "en": "I went out for lunch.",
+        "it": "Sono uscito a pranzo."
+      },
+      "glosses": [
+        { "text": "ランチに", "meaning": { "en": "for lunch (the purpose)", "it": "a pranzo (lo scopo)" } },
+        { "text": "出", "reading": "で", "meaning": { "en": "go out (first part of the verb)", "it": "uscire (prima parte del verbo)" } },
+        { "text": "かけた", "meaning": { "en": "(end of the verb, past)", "it": "(fine del verbo, passato)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select ランチに. The purpose に can also follow a noun for an activity, such as ランチ (\"lunch\"), 買い物 (\"shopping\") or 散歩 (\"a walk\"): ランチに出かけた = \"went out for lunch\". The verb after it is still a verb of movement, 出かける (\"to go out\").",
+        "it": "Seleziona ランチに. Il に dello scopo può seguire anche un nome di attività, come ランチ («pranzo»), 買い物 («spesa») o 散歩 («passeggiata»): ランチに出かけた = «sono uscito a pranzo». Il verbo dopo resta un verbo di movimento, 出かける («uscire»)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "存在の場所を示す「に」",
+      "prompt": {
+        "en": "\"There's milk in the fridge.\" Which particle says where the milk is?",
+        "it": "«In frigo c'è del latte.» Quale particella dice dove si trova il latte?"
+      },
+      "sentence": {
+        "kanji": "冷蔵庫に牛乳がある",
+        "kana": "れいぞうこにぎゅうにゅうがある"
+      },
+      "translation": {
+        "en": "There's milk in the fridge.",
+        "it": "In frigo c'è del latte."
+      },
+      "gap": {
+        "kanji": "冷蔵庫＿牛乳がある",
+        "kana": "れいぞうこ＿ぎゅうにゅうがある"
+      },
+      "answer": "に",
+      "distractors": ["で", "へ"],
+      "explanation": {
+        "en": "ある (\"there is\", for things) marks the place with に: 冷蔵庫に = \"in the fridge\". へ only shows a direction you move in, and で is for the place where an action happens; simply being somewhere is not an action.",
+        "it": "ある («c'è», per le cose) segna il luogo con に: 冷蔵庫に = «in frigo». へ indica solo la direzione in cui ci si muove, e で è per il luogo dove si svolge un'azione; il semplice trovarsi in un posto non è un'azione."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "存在の場所を示す「に」",
+      "prompt": {
+        "en": "Build: \"There are fish in the river.\"",
+        "it": "Componi: «Nel fiume ci sono dei pesci.»"
+      },
+      "sentence": {
+        "kanji": "川に魚がいる",
+        "kana": "かわにさかながいる"
+      },
+      "translation": {
+        "en": "There are fish in the river.",
+        "it": "Nel fiume ci sono dei pesci."
+      },
+      "glosses": [
+        { "text": "川に", "reading": "かわに", "meaning": { "en": "in the river", "it": "nel fiume" } },
+        { "text": "魚が", "reading": "さかなが", "meaning": { "en": "fish (が: the subject)", "it": "i pesci (が: il soggetto)" } },
+        { "text": "いる", "meaning": { "en": "there are (for living things)", "it": "ci sono (per gli esseri viventi)" } }
+      ],
+      "answer": ["川に", "魚が", "いる"],
+      "alsoAccepted": [["魚が", "川に", "いる"]],
+      "explanation": {
+        "en": "Fish are living things, so \"there is\" is いる, not ある. The place where they are takes に: 川に = \"in the river\". The verb goes last. \"魚が川にいる\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "I pesci sono esseri viventi, quindi «c'è» si dice いる, non ある. Il luogo in cui si trovano prende に: 川に = «nel fiume». Il verbo va alla fine. Va bene anche «魚が川にいる»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "存在の場所を示す「に」",
+      "prompt": {
+        "en": "Build: \"The key is on the desk.\"",
+        "it": "Componi: «La chiave è sulla scrivania.»"
+      },
+      "sentence": {
+        "kanji": "鍵は机の上にある",
+        "kana": "かぎはつくえのうえにある"
+      },
+      "translation": {
+        "en": "The key is on the desk.",
+        "it": "La chiave è sulla scrivania."
+      },
+      "glosses": [
+        { "text": "鍵は", "reading": "かぎは", "meaning": { "en": "the key (は: the topic)", "it": "la chiave (は: il tema)" } },
+        { "text": "机の上に", "reading": "つくえのうえに", "meaning": { "en": "on the desk", "it": "sulla scrivania" } },
+        { "text": "ある", "meaning": { "en": "is (there)", "it": "c'è, si trova" } }
+      ],
+      "answer": ["鍵は", "机の上に", "ある"],
+      "explanation": {
+        "en": "When you say where a known thing is, the thing becomes the topic with は (鍵は), and the place takes に: 机の上に = \"on (top of) the desk\". ある (\"to be there\", for things) goes last.",
+        "it": "Quando si dice dove si trova una cosa già nota, la cosa diventa il tema con は (鍵は), e il luogo prende に: 机の上に = «sopra la scrivania». ある («esserci», per le cose) va alla fine."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "存在の場所を示す「に」",
+      "prompt": {
+        "en": "\"The toilet is upstairs.\" Which part is the place where the toilet is?",
+        "it": "«Il bagno è al piano di sopra.» Quale parte è il luogo in cui si trova il bagno?"
+      },
+      "sentence": {
+        "kanji": "トイレは二階にあります",
+        "kana": "トイレはにかいにあります"
+      },
+      "translation": {
+        "en": "The toilet is upstairs.",
+        "it": "Il bagno è al piano di sopra."
+      },
+      "glosses": [
+        { "text": "トイレは", "meaning": { "en": "the toilet (は: the topic)", "it": "il bagno (は: il tema)" } },
+        { "text": "二階", "reading": "にかい", "meaning": { "en": "the second floor (one floor up)", "it": "il primo piano (un piano sopra)" } },
+        { "text": "にあります", "meaning": { "en": "(に: the place) + is there (polite)", "it": "(に: il luogo) + si trova (cortese)" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 二階. Right after it comes に, which marks the place where something is; あります is the polite form of ある (\"to be there\", for things). In Japan the ground floor counts as the first floor, so 二階 is one floor up.",
+        "it": "Seleziona 二階. Subito dopo viene に, che indica il luogo in cui si trova qualcosa; あります è la forma cortese di ある («esserci», per le cose). In Giappone il piano terra conta come primo piano, quindi 二階 è un piano sopra."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "変化の結果を示す「に」",
+      "prompt": {
+        "en": "\"The town has become quiet.\" What goes between 静か (\"quiet\") and なった (\"became\")?",
+        "it": "«La città è diventata silenziosa.» Cosa va fra 静か («silenzioso») e なった («è diventata»)?"
+      },
+      "sentence": {
+        "kanji": "町が静かになった",
+        "kana": "まちがしずかになった"
+      },
+      "translation": {
+        "en": "The town has become quiet.",
+        "it": "La città è diventata silenziosa."
+      },
+      "gap": {
+        "kanji": "町が静か＿なった",
+        "kana": "まちがしずか＿なった"
+      },
+      "answer": "に",
+      "distractors": ["く", "で"],
+      "explanation": {
+        "en": "静か (\"quiet\") is a な-adjective: a describing word that behaves like a noun (静かな町 = \"a quiet town\"). Like a noun, it takes に before なる (\"to become\"): 静かになった. く is only for い-adjectives, the ones that end in い, like 明るい → 明るくなる.",
+        "it": "静か («tranquillo, silenzioso») è un aggettivo in な: una parola che descrive ma si comporta come un nome (静かな町 = «una città tranquilla»). Come un nome, davanti a なる («diventare») prende に: 静かになった. く è solo per gli aggettivi in い, quelli che finiscono in い, come 明るい → 明るくなる."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "変化の結果を示す「に」",
+      "prompt": {
+        "en": "Build: \"The traffic light turned green.\"",
+        "it": "Componi: «Il semaforo è diventato verde.»"
+      },
+      "sentence": {
+        "kanji": "信号が青になった",
+        "kana": "しんごうがあおになった"
+      },
+      "translation": {
+        "en": "The traffic light turned green.",
+        "it": "Il semaforo è diventato verde."
+      },
+      "glosses": [
+        { "text": "信号が", "reading": "しんごうが", "meaning": { "en": "the traffic light (が: the subject)", "it": "il semaforo (が: il soggetto)" } },
+        { "text": "青に", "reading": "あおに", "meaning": { "en": "(to) green", "it": "verde" } },
+        { "text": "なった", "meaning": { "en": "became", "it": "è diventato" } }
+      ],
+      "answer": ["信号が", "青に", "なった"],
+      "explanation": {
+        "en": "What something becomes takes に before なる (\"to become\"): 青になった = \"turned green\". Here 青 is used as a noun, the colour itself (in Japanese the green of a traffic light is called 青, \"blue\"). The subject (信号が) comes first and なった goes last.",
+        "it": "Ciò che una cosa diventa prende に davanti a なる («diventare»): 青になった = «è diventato verde». Qui 青 si usa come nome, il colore stesso (in giapponese il verde del semaforo si chiama 青, «blu»). Il soggetto (信号が) va all'inizio e なった alla fine."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "変化の結果を示す「に」",
+      "prompt": {
+        "en": "Build: \"My son turns ten next month.\"",
+        "it": "Componi: «Mio figlio compie dieci anni il mese prossimo.»"
+      },
+      "sentence": {
+        "kanji": "息子は来月十歳になる",
+        "kana": "むすこはらいげつじゅっさいになる"
+      },
+      "translation": {
+        "en": "My son turns ten next month.",
+        "it": "Mio figlio compie dieci anni il mese prossimo."
+      },
+      "glosses": [
+        { "text": "息子は", "reading": "むすこは", "meaning": { "en": "my son (は: the topic)", "it": "mio figlio (は: il tema)" } },
+        { "text": "来月", "reading": "らいげつ", "meaning": { "en": "next month", "it": "il mese prossimo" } },
+        { "text": "十歳に", "reading": "じゅっさいに", "meaning": { "en": "ten years old", "it": "dieci anni" } },
+        { "text": "なる", "meaning": { "en": "becomes, turns", "it": "diventa, compie" } }
+      ],
+      "answer": ["息子は", "来月", "十歳に", "なる"],
+      "alsoAccepted": [["来月", "息子は", "十歳に", "なる"]],
+      "explanation": {
+        "en": "In Japanese you \"become\" an age: 十歳になる = \"turn ten\", with に marking the result, as in every change with なる (\"to become\"). A time word such as 来月 (\"next month\") needs no particle. \"来月息子は十歳になる\" is also correct: a time word can also go before the topic.",
+        "it": "In giapponese un'età si «diventa»: 十歳になる = «compiere dieci anni», con に che segna il risultato, come in ogni cambiamento con なる («diventare»). Una parola di tempo come 来月 («il mese prossimo») non vuole particelle. Va bene anche «来月息子は十歳になる»: una parola di tempo può andare anche prima del tema."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "変化の結果を示す「に」",
+      "prompt": {
+        "en": "\"That panda is already grown up.\" Which part is what the panda became?",
+        "it": "«Quel panda ormai è diventato adulto.» Quale parte è ciò che il panda è diventato?"
+      },
+      "sentence": {
+        "kanji": "そのパンダはもう大人になった",
+        "kana": "そのパンダはもうおとなになった"
+      },
+      "translation": {
+        "en": "That panda is already grown up.",
+        "it": "Quel panda ormai è diventato adulto."
+      },
+      "glosses": [
+        { "text": "そのパンダはもう", "meaning": { "en": "that panda (は: the topic) + already", "it": "quel panda (は: il tema) + ormai" } },
+        { "text": "大人", "reading": "おとな", "meaning": { "en": "adult", "it": "adulto" } },
+        { "text": "になった", "meaning": { "en": "(に: the result) + became", "it": "(に: il risultato) + è diventato" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 大人 (\"adult\"). It is the result of the change: it comes right before に and なった (\"became\"). 大人 is a noun, and a noun takes に before なる (\"to become\").",
+        "it": "Seleziona 大人 («adulto»). È il risultato del cambiamento: viene subito prima di に e なった («è diventato»). 大人 è un nome, e un nome prende に davanti a なる («diventare»)."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "方向を示す「へ」",
+      "prompt": {
+        "en": "Build: \"The birds are flying off towards the south.\"",
+        "it": "Componi: «Gli uccelli volano via verso sud.»"
+      },
+      "sentence": {
+        "kanji": "鳥が南へ飛んでいく",
+        "kana": "とりがみなみへとんでいく"
+      },
+      "translation": {
+        "en": "The birds are flying off towards the south.",
+        "it": "Gli uccelli volano via verso sud."
+      },
+      "glosses": [
+        { "text": "鳥が", "reading": "とりが", "meaning": { "en": "the birds (が: the subject)", "it": "gli uccelli (が: il soggetto)" } },
+        { "text": "南へ", "reading": "みなみへ", "meaning": { "en": "towards the south", "it": "verso sud" } },
+        { "text": "飛んでいく", "reading": "とんでいく", "meaning": { "en": "fly away", "it": "volano via" } }
+      ],
+      "answer": ["鳥が", "南へ", "飛んでいく"],
+      "explanation": {
+        "en": "へ (read え) marks the direction of a movement: 南へ = \"towards the south\". It fits well here because the birds are heading that way, not arriving at a precise place. The subject (鳥が) comes first and the verb last.",
+        "it": "へ (si legge え) indica la direzione di un movimento: 南へ = «verso sud». Qui è adatta perché gli uccelli vanno in quella direzione, non arrivano in un posto preciso. Il soggetto (鳥が) va all'inizio e il verbo alla fine."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "方向を示す「へ」",
+      "prompt": {
+        "en": "Build: \"Please turn right at the next corner.\"",
+        "it": "Componi: «Al prossimo angolo giri a destra, per favore.»"
+      },
+      "sentence": {
+        "kanji": "次の角を右へ曲がってください",
+        "kana": "つぎのかどをみぎへまがってください"
+      },
+      "translation": {
+        "en": "Please turn right at the next corner.",
+        "it": "Al prossimo angolo giri a destra, per favore."
+      },
+      "glosses": [
+        { "text": "次の角を", "reading": "つぎのかどを", "meaning": { "en": "at the next corner (を: the point you pass)", "it": "al prossimo angolo (を: il punto da cui si passa)" } },
+        { "text": "右へ", "reading": "みぎへ", "meaning": { "en": "to the right", "it": "a destra" } },
+        { "text": "曲がってください", "reading": "まがってください", "meaning": { "en": "please turn", "it": "giri, per favore" } }
+      ],
+      "answer": ["次の角を", "右へ", "曲がってください"],
+      "explanation": {
+        "en": "右へ = \"to the right\": へ (read え) shows the direction you turn in. The corner takes を because it is the point you go past. The polite request 曲がってください (\"please turn\") goes last.",
+        "it": "右へ = «a destra»: へ (si legge え) indica la direzione in cui si gira. L'angolo prende を perché è il punto da cui si passa. La richiesta cortese 曲がってください («giri, per favore») va alla fine."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "方向を示す「へ」",
+      "prompt": {
+        "en": "\"This is a present for my grandmother.\" Which particle completes 祖母＿の (\"for my grandmother\")?",
+        "it": "«Questo è un regalo per mia nonna.» Quale particella completa 祖母＿の («per mia nonna»)?"
+      },
+      "sentence": {
+        "kanji": "これは祖母へのプレゼントです",
+        "kana": "これはそぼへのプレゼントです"
+      },
+      "translation": {
+        "en": "This is a present for my grandmother.",
+        "it": "Questo è un regalo per mia nonna."
+      },
+      "gap": {
+        "kanji": "これは祖母＿のプレゼントです",
+        "kana": "これはそぼ＿のプレゼントです"
+      },
+      "answer": "へ",
+      "distractors": ["に", "を"],
+      "explanation": {
+        "en": "へ (read え) shows where something is heading, so a present going \"to\" someone can use it. Before の, only へ works: 祖母へのプレゼント = \"a present for grandmother\". に cannot be followed by の, so 祖母にのプレゼント is wrong.",
+        "it": "へ (si legge え) indica dove va qualcosa, quindi un regalo diretto «a» qualcuno può usarla. Davanti a の funziona solo へ: 祖母へのプレゼント = «un regalo per la nonna». に non può essere seguita da の, quindi 祖母にのプレゼント è sbagliato."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "方向を示す「へ」",
+      "prompt": {
+        "en": "\"Please step back.\" Which part says which way to move?",
+        "it": "«Si sposti indietro, per favore.» Quale parte dice in che direzione muoversi?"
+      },
+      "sentence": {
+        "kanji": "うしろへ下がってください",
+        "kana": "うしろへさがってください"
+      },
+      "translation": {
+        "en": "Please step back.",
+        "it": "Si sposti indietro, per favore."
+      },
+      "glosses": [
+        { "text": "うしろへ", "meaning": { "en": "towards the back", "it": "verso dietro" } },
+        { "text": "下", "reading": "さ", "meaning": { "en": "move back (first part of the verb)", "it": "arretrare (prima parte del verbo)" } },
+        { "text": "がってください", "meaning": { "en": "(end of the verb) + please", "it": "(fine del verbo) + per favore" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select うしろへ. うしろ means \"behind\", and へ (read え) turns it into a direction: \"towards the back\". 下がる (\"to move back\") is a movement, so it can take へ.",
+        "it": "Seleziona うしろへ. うしろ significa «dietro», e へ (si legge え) lo trasforma in una direzione: «verso dietro». 下がる («arretrare») è un movimento, quindi può prendere へ."
+      }
     }
   ]
 }

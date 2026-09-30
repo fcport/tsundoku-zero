@@ -275,6 +275,221 @@
         "en": "To say \"want to do\", take the verb's i-stem (the part before ます: 行きます → 行き) and add たい: 行きたい, \"want to go\". In a statement, たい is always the speaker's own wish. The place you head to takes へ, \"towards\". \"日本へ夏休みに行きたい\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
         "it": "Per dire «voglio fare», si prende il radicale in i del verbo (la parte davanti a ます: 行きます → 行き) e si aggiunge たい: 行きたい, «voglio andare». In un'affermazione, たい è sempre il desiderio di chi parla. Il luogo verso cui vai prende へ, «verso». Va bene anche «日本へ夏休みに行きたい»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "感情・理解の述語と「が」",
+      "prompt": {
+        "en": "\"I don't like tomatoes.\" Which part is the thing that is disliked?",
+        "it": "«Non mi piacciono i pomodori.» Quale parte è ciò che non piace?"
+      },
+      "sentence": {
+        "kanji": "トマトが嫌いだ",
+        "kana": "トマトがきらいだ"
+      },
+      "translation": {
+        "en": "I don't like tomatoes.",
+        "it": "Non mi piacciono i pomodori."
+      },
+      "glosses": [
+        { "text": "トマトが", "meaning": { "en": "tomatoes + が (what is disliked)", "it": "pomodori + が (ciò che non piace)" } },
+        { "text": "嫌", "reading": "きら", "meaning": { "en": "disliked (kanji of 嫌い)", "it": "sgradito (kanji di 嫌い)" } },
+        { "text": "いだ", "meaning": { "en": "end of 嫌い + だ, \"is\"", "it": "fine di 嫌い + だ, «è»" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select トマトが. 嫌い (\"disliked\") ends in い but is a な-adjective: a describing word that ends the sentence with だ, \"is\". Like 好き, it is not a verb, so what you dislike takes が, not を.",
+        "it": "Seleziona トマトが. 嫌い («sgradito») finisce in い ma è un aggettivo in な: una parola che descrive e chiude la frase con だ, «è». Come 好き, non è un verbo, quindi ciò che non ti piace prende が, non を."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "感情・理解の述語と「が」",
+      "prompt": {
+        "en": "Build: \"Tanaka likes spicy food.\"",
+        "it": "Componi: «A Tanaka piace il cibo piccante.»"
+      },
+      "sentence": {
+        "kanji": "田中さんは辛い料理が好きだ",
+        "kana": "たなかさんはからいりょうりがすきだ"
+      },
+      "translation": {
+        "en": "Tanaka likes spicy food.",
+        "it": "A Tanaka piace il cibo piccante."
+      },
+      "glosses": [
+        { "text": "田中さんは", "reading": "たなかさんは", "meaning": { "en": "Tanaka (topic)", "it": "Tanaka (tema)" } },
+        { "text": "辛い", "reading": "からい", "meaning": { "en": "spicy", "it": "piccante" } },
+        { "text": "料理が", "reading": "りょうりが", "meaning": { "en": "food, dishes + が (what is liked)", "it": "piatti + が (ciò che piace)" } },
+        { "text": "好きだ", "reading": "すきだ", "meaning": { "en": "is liked (likes)", "it": "piace" } }
+      ],
+      "answer": ["田中さんは", "辛い", "料理が", "好きだ"],
+      "explanation": {
+        "en": "好き (\"liked\") is a な-adjective, not a verb, so what is liked takes が: 料理が好きだ. 田中さんは is the topic, the person the sentence is about. 辛い, \"spicy\", goes right before the noun it describes: 辛い料理, \"spicy food\".",
+        "it": "好き («che piace») è un aggettivo in な, non un verbo, quindi ciò che piace prende が: 料理が好きだ. 田中さんは è il tema, la persona di cui parla la frase. 辛い, «piccante», va subito prima del nome che descrive: 辛い料理, «cibo piccante»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "欲求の「ほしい」と「たい」",
+      "prompt": {
+        "en": "\"I want some cold water.\" Which word says that the speaker wants it?",
+        "it": "«Voglio dell'acqua fredda.» Quale parola dice che chi parla la vuole?"
+      },
+      "sentence": {
+        "kanji": "冷たい水がほしい",
+        "kana": "つめたいみずがほしい"
+      },
+      "translation": {
+        "en": "I want some cold water.",
+        "it": "Voglio dell'acqua fredda."
+      },
+      "gap": {
+        "kanji": "冷たい水が＿",
+        "kana": "つめたいみずが＿"
+      },
+      "answer": "ほしい",
+      "distractors": ["ほしがる", "ほしいだ"],
+      "explanation": {
+        "en": "ほしい (\"wanted\") is an い-adjective (a describing word ending in い) and says what the speaker wants: 水がほしい. It ends the sentence on its own: in plain speech an い-adjective does not take だ, so ほしいだ is wrong. ほしがる is for other people's wishes, seen from outside, and it takes を, not が.",
+        "it": "ほしい («desiderato») è un aggettivo in い (una parola che descrive e finisce in い) e dice ciò che vuole chi parla: 水がほしい. Chiude la frase da solo: nel parlato semplice un aggettivo in い non prende だ, quindi ほしいだ è sbagliato. ほしがる è per i desideri degli altri, visti da fuori, e prende を, non が."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "欲求の「ほしい」と「たい」",
+      "prompt": {
+        "en": "\"Someday I want to climb Mount Fuji.\" How do you say \"I want to climb\"?",
+        "it": "«Un giorno voglio scalare il monte Fuji.» Come si dice «voglio scalare»?"
+      },
+      "sentence": {
+        "kanji": "いつか富士山に登りたい",
+        "kana": "いつかふじさんにのぼりたい"
+      },
+      "translation": {
+        "en": "Someday I want to climb Mount Fuji.",
+        "it": "Un giorno voglio scalare il monte Fuji."
+      },
+      "glosses": [
+        { "text": "登りたい", "reading": "のぼりたい" },
+        { "text": "登るたい", "reading": "のぼるたい" },
+        { "text": "登りほしい", "reading": "のぼりほしい" },
+        { "text": "登りたがる", "reading": "のぼりたがる" }
+      ],
+      "gap": {
+        "kanji": "いつか富士山に＿",
+        "kana": "いつかふじさんに＿"
+      },
+      "answer": "登りたい",
+      "distractors": ["登るたい", "登りほしい", "登りたがる"],
+      "explanation": {
+        "en": "To say \"want to do\", take the verb's i-stem (the part before ます: 登ります → 登り) and add たい: 登りたい. たい never goes after the dictionary form, so 登るたい is wrong. ほしい is for things you want, not actions. 登りたがる would describe someone else's wish, not the speaker's.",
+        "it": "Per dire «voglio fare», si prende il radicale in i del verbo (la parte davanti a ます: 登ります → 登り) e si aggiunge たい: 登りたい. たい non va mai dopo la forma del dizionario, quindi 登るたい è sbagliato. ほしい è per le cose che vuoi, non per le azioni. 登りたがる descriverebbe il desiderio di un'altra persona, non di chi parla."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "欲求の「ほしい」と「たい」",
+      "prompt": {
+        "en": "\"I want to start playing tennis.\" Which part says that the speaker wants to do it?",
+        "it": "«Voglio cominciare a giocare a tennis.» Quale parte dice che chi parla vuole farlo?"
+      },
+      "sentence": {
+        "kanji": "テニスを始めたい",
+        "kana": "テニスをはじめたい"
+      },
+      "translation": {
+        "en": "I want to start playing tennis.",
+        "it": "Voglio cominciare a giocare a tennis."
+      },
+      "glosses": [
+        { "text": "テニスを", "meaning": { "en": "tennis + を (what you start)", "it": "tennis + を (ciò che inizi)" } },
+        { "text": "始", "reading": "はじ", "meaning": { "en": "start (kanji of 始める)", "it": "iniziare (kanji di 始める)" } },
+        { "text": "めたい", "meaning": { "en": "end of 始め + たい, \"want to\"", "it": "fine di 始め + たい, «voler fare»" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select めたい. 始める, \"start\", drops る and becomes 始め; adding たい gives 始めたい, \"I want to start\". In a statement, たい always says the speaker's own wish. Here the thing you want to start keeps を, the particle it has with 始める.",
+        "it": "Seleziona めたい. 始める, «iniziare», perde る e diventa 始め; aggiungendo たい si ottiene 始めたい, «voglio iniziare». In un'affermazione, たい dice sempre il desiderio di chi parla. Qui la cosa che vuoi iniziare tiene を, la particella che ha con 始める."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "他人の感情を示す「がる」",
+      "prompt": {
+        "en": "\"Grandma is feeling cold.\" Which part shows that we see her feeling from the outside?",
+        "it": "«La nonna ha freddo.» Quale parte mostra che vediamo ciò che prova da fuori?"
+      },
+      "sentence": {
+        "kanji": "おばあちゃんが寒がっている",
+        "kana": "おばあちゃんがさむがっている"
+      },
+      "translation": {
+        "en": "Grandma is feeling cold.",
+        "it": "La nonna ha freddo."
+      },
+      "glosses": [
+        { "text": "おばあちゃんが", "meaning": { "en": "grandma + が (who feels it)", "it": "la nonna + が (chi lo prova)" } },
+        { "text": "寒", "reading": "さむ", "meaning": { "en": "cold (kanji of 寒い)", "it": "freddo (kanji di 寒い)" } },
+        { "text": "がっている", "meaning": { "en": "shows signs of (as seen from outside)", "it": "mostra segni di (visto da fuori)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select がっている. 寒い, \"cold\", says how the speaker feels. For someone else, drop the final い and add がる, \"to show signs of\": 寒がる, here as 寒がっている, \"is showing that she feels cold\". がる works with feeling words like 寒い, not only with ほしい and たい.",
+        "it": "Seleziona がっている. 寒い, «freddo», dice come si sente chi parla. Per un'altra persona si toglie la い finale e si aggiunge がる, «mostrare segni di»: 寒がる, qui 寒がっている, «mostra di avere freddo». がる funziona con le parole che esprimono sensazioni come 寒い, non solo con ほしい e たい."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "他人の感情を示す「がる」",
+      "prompt": {
+        "en": "Build: \"The children want to get into the pool.\"",
+        "it": "Componi: «I bambini vogliono entrare in piscina.»"
+      },
+      "sentence": {
+        "kanji": "子どもたちがプールに入りたがっている",
+        "kana": "こどもたちがプールにはいりたがっている"
+      },
+      "translation": {
+        "en": "The children want to get into the pool.",
+        "it": "I bambini vogliono entrare in piscina."
+      },
+      "glosses": [
+        { "text": "子どもたちが", "reading": "こどもたちが", "meaning": { "en": "the children + が (who wants it)", "it": "i bambini + が (chi lo vuole)" } },
+        { "text": "プールに", "meaning": { "en": "into the pool", "it": "in piscina" } },
+        { "text": "入りたがっている", "reading": "はいりたがっている", "meaning": { "en": "want to get in (as seen from outside)", "it": "vogliono entrare (visto da fuori)" } }
+      ],
+      "answer": ["子どもたちが", "プールに", "入りたがっている"],
+      "explanation": {
+        "en": "入りたい would be the speaker's own wish, \"I want to get in\". For the children, たい drops its い and takes がる: 入りたがる, here as 入りたがっている, what they are showing right now. The place you enter takes に: プールに.",
+        "it": "入りたい sarebbe il desiderio di chi parla, «voglio entrare». Per i bambini, たい perde la い e prende がる: 入りたがる, qui 入りたがっている, ciò che stanno mostrando adesso. Il luogo in cui si entra prende に: プールに."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "他人の感情を示す「がる」",
+      "prompt": {
+        "en": "Build: \"My daughter wants to have a dog.\"",
+        "it": "Componi: «Mia figlia vuole prendere un cane.»"
+      },
+      "sentence": {
+        "kanji": "娘が犬を飼いたがっている",
+        "kana": "むすめがいぬをかいたがっている"
+      },
+      "translation": {
+        "en": "My daughter wants to have a dog.",
+        "it": "Mia figlia vuole prendere un cane."
+      },
+      "glosses": [
+        { "text": "娘が", "reading": "むすめが", "meaning": { "en": "my daughter + が (who wants it)", "it": "mia figlia + が (chi lo vuole)" } },
+        { "text": "犬を", "reading": "いぬを", "meaning": { "en": "dog + を (what she wants to keep)", "it": "cane + を (ciò che vuole tenere)" } },
+        { "text": "飼いたがっている", "reading": "かいたがっている", "meaning": { "en": "wants to keep (a pet), as seen from outside", "it": "vuole tenere (un animale), visto da fuori" } }
+      ],
+      "answer": ["娘が", "犬を", "飼いたがっている"],
+      "explanation": {
+        "en": "飼う means \"keep (a pet)\". 飼いたい would be the speaker's wish; for the daughter it becomes 飼いたがる, here as 飼いたがっている. たがる makes a verb, so the dog takes を, the particle for the object (the thing the action is done to).",
+        "it": "飼う significa «tenere (un animale)». 飼いたい sarebbe il desiderio di chi parla; per la figlia diventa 飼いたがる, qui 飼いたがっている. たがる forma un verbo, quindi il cane prende を, la particella dell'oggetto (la cosa su cui cade l'azione)."
+      }
     }
   ]
 }

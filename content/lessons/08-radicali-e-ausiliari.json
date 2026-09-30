@@ -303,6 +303,404 @@
         "en": "泳ごう is the volitional form of 泳ぐ (\"to swim\"): it means \"let's swim\". The last kana changes to the o-sound and う is added: 泳ぐ → 泳ご + う. The verb goes last: first when (週末に), then where (海で). \"海で週末に泳ごう\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
         "it": "泳ごう è la forma volitiva di 泳ぐ («nuotare»): significa «nuotiamo». L'ultimo kana passa al suono o e si aggiunge う: 泳ぐ → 泳ご + う. Il verbo va alla fine: prima quando (週末に), poi dove (海で). Va bene anche «海で週末に泳ごう»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "動詞の語幹と助動詞",
+      "prompt": {
+        "en": "\"I watched the news a little while ago.\" Which part is the stem, the part of the verb that stays fixed?",
+        "it": "«Poco fa ho guardato il telegiornale.» Quale parte è il radicale, la parte del verbo che resta fissa?"
+      },
+      "sentence": {
+        "kanji": "さっきニュースを見ました",
+        "kana": "さっきニュースをみました"
+      },
+      "translation": {
+        "en": "I watched the news a little while ago.",
+        "it": "Poco fa ho guardato il telegiornale."
+      },
+      "glosses": [
+        { "text": "さっきニュースを", "meaning": { "en": "a little while ago + the news (を: the object)", "it": "poco fa + il telegiornale (を: l'oggetto)" } },
+        { "text": "見", "reading": "み", "meaning": { "en": "watch (the stem of 見る)", "it": "guardare (il radicale di 見る)" } },
+        { "text": "ました", "meaning": { "en": "(polite, past)", "it": "(cortese, passato)" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 見. 見る (\"to watch\") is an ichidan verb (a verb that simply drops る), so its stem (the fixed part that the auxiliaries attach to) is 見. After it comes the auxiliary: ました is ます (polite) in the past. The same stem gives 見ない, 見たい, 見よう.",
+        "it": "Seleziona 見. 見る («guardare») è un verbo ichidan (un verbo che perde solo る), quindi il suo radicale (la parte fissa a cui si attaccano gli ausiliari) è 見. Dopo viene l'ausiliare: ました è ます (cortese) al passato. Dallo stesso radicale vengono 見ない, 見たい, 見よう."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "動詞の語幹と助動詞",
+      "prompt": {
+        "en": "\"Cars don't go along this road.\" Which form of 通る (\"to pass\") goes before ない?",
+        "it": "«Da questa strada non passano macchine.» Quale forma di 通る («passare») va davanti a ない?"
+      },
+      "sentence": {
+        "kanji": "この道は車が通らない",
+        "kana": "このみちはくるまがとおらない"
+      },
+      "translation": {
+        "en": "Cars don't go along this road.",
+        "it": "Da questa strada non passano macchine."
+      },
+      "glosses": [
+        { "text": "通らない", "reading": "とおらない" },
+        { "text": "通りない", "reading": "とおりない" },
+        { "text": "通るない", "reading": "とおるない" },
+        { "text": "通ろない", "reading": "とおろない" }
+      ],
+      "gap": {
+        "kanji": "この道は車が＿",
+        "kana": "このみちはくるまが＿"
+      },
+      "answer": "通らない",
+      "distractors": ["通りない", "通るない", "通ろない"],
+      "explanation": {
+        "en": "Verbs like 通る change their last kana depending on the auxiliary (the piece added after the verb): the a-sound before ない (通らない), the i-sound before ます (通ります), the o-sound before う (通ろう). So before ない it is 通ら.",
+        "it": "I verbi come 通る cambiano l'ultimo kana a seconda dell'ausiliare (il pezzo che si aggiunge dopo il verbo): suono a davanti a ない (通らない), suono i davanti a ます (通ります), suono o davanti a う (通ろう). Quindi davanti a ない è 通ら."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "動詞の語幹と助動詞",
+      "prompt": {
+        "en": "\"In the evening I close the window.\" Which form of 閉める (\"to close\") goes before ます?",
+        "it": "«La sera chiudo la finestra.» Quale forma di 閉める («chiudere») va davanti a ます?"
+      },
+      "sentence": {
+        "kanji": "夜は窓を閉めます",
+        "kana": "よるはまどをしめます"
+      },
+      "translation": {
+        "en": "In the evening I close the window.",
+        "it": "La sera chiudo la finestra."
+      },
+      "glosses": [
+        { "text": "閉めます", "reading": "しめます" },
+        { "text": "閉めります", "reading": "しめります" },
+        { "text": "閉まます", "reading": "しまます" },
+        { "text": "閉めるます", "reading": "しめるます" }
+      ],
+      "gap": {
+        "kanji": "夜は窓を＿",
+        "kana": "よるはまどを＿"
+      },
+      "answer": "閉めます",
+      "distractors": ["閉めります", "閉まます", "閉めるます"],
+      "explanation": {
+        "en": "閉める is an ichidan verb (a verb that simply drops る). Its stem, 閉め, never changes: whatever auxiliary (a piece added after the verb) comes next attaches straight to it: 閉めます, 閉めない, 閉めたい. An extra り, as in 閉めります, appears only in verbs that are not ichidan, like 帰る → 帰ります.",
+        "it": "閉める è un verbo ichidan (un verbo che perde solo る). Il suo radicale, 閉め, non cambia mai: qualunque ausiliare (un pezzo aggiunto dopo il verbo) venga dopo, si attacca direttamente: 閉めます, 閉めない, 閉めたい. Una り in più, come in 閉めります, compare solo nei verbi che non sono ichidan, come 帰る → 帰ります."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "動詞の語幹と助動詞",
+      "prompt": {
+        "en": "Build: \"I run in the park every morning.\"",
+        "it": "Componi: «Ogni mattina corro al parco.»"
+      },
+      "sentence": {
+        "kanji": "毎朝公園を走ります",
+        "kana": "まいあさこうえんをはしります"
+      },
+      "translation": {
+        "en": "I run in the park every morning.",
+        "it": "Ogni mattina corro al parco."
+      },
+      "glosses": [
+        { "text": "毎朝", "reading": "まいあさ", "meaning": { "en": "every morning", "it": "ogni mattina" } },
+        { "text": "公園を", "reading": "こうえんを", "meaning": { "en": "through the park (を: where you move)", "it": "nel parco (を: dove ci si muove)" } },
+        { "text": "走り", "reading": "はしり", "meaning": { "en": "run (the stem of 走る)", "it": "correre (il radicale di 走る)" } },
+        { "text": "ます", "meaning": { "en": "(polite ending)", "it": "(desinenza cortese)" } }
+      ],
+      "answer": ["毎朝", "公園を", "走り", "ます"],
+      "alsoAccepted": [["公園を", "毎朝", "走り", "ます"]],
+      "explanation": {
+        "en": "The verb is split into two tiles: the stem 走り (the form of 走る used before ます) and the auxiliary ます (a piece added after the stem, here to make it polite). The stem always comes first and the auxiliary right after it, at the end of the sentence. \"公園を毎朝走ります\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Il verbo è diviso in due tessere: il radicale 走り (la forma di 走る che si usa davanti a ます) e l'ausiliare ます (un pezzo che si aggiunge dopo il radicale, qui per renderlo cortese). Prima viene sempre il radicale, subito dopo l'ausiliare, in fondo alla frase. Va bene anche «公園を毎朝走ります»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "動詞の語幹と助動詞",
+      "prompt": {
+        "en": "Build: \"Today I'm not leaving the house.\"",
+        "it": "Componi: «Oggi non esco di casa.»"
+      },
+      "sentence": {
+        "kanji": "今日は家から出ない",
+        "kana": "きょうはいえからでない"
+      },
+      "translation": {
+        "en": "Today I'm not leaving the house.",
+        "it": "Oggi non esco di casa."
+      },
+      "glosses": [
+        { "text": "今日は", "reading": "きょうは", "meaning": { "en": "today (は: the topic)", "it": "oggi (は: il tema)" } },
+        { "text": "家から", "reading": "いえから", "meaning": { "en": "from the house", "it": "da casa" } },
+        { "text": "出", "reading": "で", "meaning": { "en": "go out (the stem of 出る)", "it": "uscire (il radicale di 出る)" } },
+        { "text": "ない", "meaning": { "en": "not", "it": "non" } }
+      ],
+      "answer": ["今日は", "家から", "出", "ない"],
+      "explanation": {
+        "en": "出る (\"to go out\") is an ichidan verb: it drops る, and its stem is just 出. The auxiliary ない (\"not\") attaches right after the stem: 出 + ない = 出ない. Stem and auxiliary stay together at the end; the time word (今日は) usually comes first.",
+        "it": "出る («uscire») è un verbo ichidan: perde る, e il suo radicale è solo 出. L'ausiliare ない («non») si attacca subito dopo il radicale: 出 + ない = 出ない. Radicale e ausiliare restano insieme in fondo; la parola di tempo (今日は) di solito va all'inizio."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "連用形につく「ます」「たい」",
+      "prompt": {
+        "en": "\"On work days I wear a suit.\" Which part makes the verb polite?",
+        "it": "«Nei giorni di lavoro metto il completo.» Quale parte rende cortese il verbo?"
+      },
+      "sentence": {
+        "kanji": "仕事の日はスーツを着ます",
+        "kana": "しごとのひはスーツをきます"
+      },
+      "translation": {
+        "en": "On work days I wear a suit.",
+        "it": "Nei giorni di lavoro metto il completo."
+      },
+      "glosses": [
+        { "text": "仕事の日はスーツを着", "reading": "しごとのひはスーツをき", "meaning": { "en": "on work days (は: the topic) + a suit (を) + wear (stem of 着る)", "it": "nei giorni di lavoro (は: il tema) + il completo (を) + indossare (radicale di 着る)" } },
+        { "text": "ます", "meaning": { "en": "(polite ending)", "it": "(desinenza cortese)" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select ます. ます makes the verb polite without changing its meaning. It attaches to the stem (the part of the verb that stays fixed); 着る (\"to wear\") simply drops る, so the stem is 着: 着 + ます = 着ます. The same stem takes たい for \"want to\": 着たい.",
+        "it": "Seleziona ます. ます rende cortese il verbo senza cambiarne il significato. Si attacca al radicale (la parte del verbo che resta fissa); 着る («indossare») perde solo る, quindi il radicale è 着: 着 + ます = 着ます. Lo stesso radicale prende たい per dire «voglio»: 着たい."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "連用形につく「ます」「たい」",
+      "prompt": {
+        "en": "Build: \"It's hot, so I want something cold to drink.\"",
+        "it": "Componi: «Fa caldo, quindi voglio bere qualcosa di freddo.»"
+      },
+      "sentence": {
+        "kanji": "暑いから冷たいものが飲みたい",
+        "kana": "あついからつめたいものがのみたい"
+      },
+      "translation": {
+        "en": "It's hot, so I want something cold to drink.",
+        "it": "Fa caldo, quindi voglio bere qualcosa di freddo."
+      },
+      "glosses": [
+        { "text": "暑いから", "reading": "あついから", "meaning": { "en": "because it's hot", "it": "visto che fa caldo" } },
+        { "text": "冷たいものが", "reading": "つめたいものが", "meaning": { "en": "something cold (が: what you want)", "it": "qualcosa di freddo (が: ciò che si vuole)" } },
+        { "text": "飲みたい", "reading": "のみたい", "meaning": { "en": "want to drink", "it": "voglio bere" } }
+      ],
+      "answer": ["暑いから", "冷たいものが", "飲みたい"],
+      "explanation": {
+        "en": "たい (\"want to\") attaches to the i-stem (the form of the verb used before ます): 飲む → 飲み + たい = 飲みたい. With たい, the thing you want can take が instead of を: 冷たいものが飲みたい. The reason (暑いから, \"because it's hot\") comes first and the verb last.",
+        "it": "たい («voglio») si attacca al radicale in i (la forma del verbo usata davanti a ます): 飲む → 飲み + たい = 飲みたい. Con たい, la cosa che si vuole può prendere が invece di を: 冷たいものが飲みたい. La ragione (暑いから, «visto che fa caldo») va all'inizio e il verbo alla fine."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "連用形につく「ます」「たい」",
+      "prompt": {
+        "en": "\"In the summer holidays I want to travel around Hokkaido.\" How do you say \"want to travel\" (from 旅行する)?",
+        "it": "«Durante le vacanze estive voglio girare l'Hokkaido.» Come si dice «voglio viaggiare» (da 旅行する)?"
+      },
+      "sentence": {
+        "kanji": "夏休みに北海道を旅行したい",
+        "kana": "なつやすみにほっかいどうをりょこうしたい"
+      },
+      "translation": {
+        "en": "In the summer holidays I want to travel around Hokkaido.",
+        "it": "Durante le vacanze estive voglio girare l'Hokkaido."
+      },
+      "glosses": [
+        { "text": "旅行したい", "reading": "りょこうしたい" },
+        { "text": "旅行するたい", "reading": "りょこうするたい" },
+        { "text": "旅行さたい", "reading": "りょこうさたい" },
+        { "text": "旅行しったい", "reading": "りょこうしったい" }
+      ],
+      "gap": {
+        "kanji": "夏休みに北海道を＿",
+        "kana": "なつやすみにほっかいどうを＿"
+      },
+      "answer": "旅行したい",
+      "distractors": ["旅行するたい", "旅行さたい", "旅行しったい"],
+      "explanation": {
+        "en": "旅行する is 旅行 (\"trip\") + する (\"to do\"). する is irregular: its i-stem (the form used before ます) is し, as in します. たい attaches there: し + たい = したい, so 旅行したい = \"want to travel\". The dictionary form する never comes before たい.",
+        "it": "旅行する è 旅行 («viaggio») + する («fare»). する è irregolare: il suo radicale in i (la forma usata davanti a ます) è し, come in します. たい si attacca lì: し + たい = したい, quindi 旅行したい = «voglio viaggiare». La forma base する non va mai davanti a たい."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "未然形につく「せる」「れる」",
+      "prompt": {
+        "en": "\"Someone stepped on my foot on the train.\" How do you say \"had (my foot) stepped on\" (the passive of 踏む)?",
+        "it": "«Sul treno mi hanno pestato un piede.» Come si dice «mi hanno pestato» (il passivo di 踏む)?"
+      },
+      "sentence": {
+        "kanji": "電車の中で足を踏まれた",
+        "kana": "でんしゃのなかであしをふまれた"
+      },
+      "translation": {
+        "en": "Someone stepped on my foot on the train.",
+        "it": "Sul treno mi hanno pestato un piede."
+      },
+      "glosses": [
+        { "text": "踏まれた", "reading": "ふまれた" },
+        { "text": "踏みれた", "reading": "ふみれた" },
+        { "text": "踏むれた", "reading": "ふむれた" },
+        { "text": "踏まられた", "reading": "ふまられた" }
+      ],
+      "gap": {
+        "kanji": "電車の中で足を＿",
+        "kana": "でんしゃのなかであしを＿"
+      },
+      "answer": "踏まれた",
+      "distractors": ["踏みれた", "踏むれた", "踏まられた"],
+      "explanation": {
+        "en": "The passive (\"something is done to someone\") of verbs like 踏む (\"to step on\") changes the last kana to the a-sound and adds れる: 踏む → 踏ま + れる = 踏まれる; in the past, 踏まれた. The longer られる is only for ichidan verbs (verbs that simply drop る), so 踏まられた is wrong.",
+        "it": "Il passivo («qualcosa viene fatto a qualcuno») dei verbi come 踏む («pestare») cambia l'ultimo kana nel suono a e aggiunge れる: 踏む → 踏ま + れる = 踏まれる; al passato, 踏まれた. La forma lunga られる è solo per i verbi ichidan (quelli che perdono solo る), quindi 踏まられた è sbagliato."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "未然形につく「せる」「れる」",
+      "prompt": {
+        "en": "Build: \"The manager had the part-timer clean the floor.\"",
+        "it": "Componi: «Il responsabile ha fatto pulire il pavimento al dipendente part-time.»"
+      },
+      "sentence": {
+        "kanji": "店長がアルバイトに床を掃除させた",
+        "kana": "てんちょうがアルバイトにゆかをそうじさせた"
+      },
+      "translation": {
+        "en": "The manager had the part-timer clean the floor.",
+        "it": "Il responsabile ha fatto pulire il pavimento al dipendente part-time."
+      },
+      "glosses": [
+        { "text": "店長が", "reading": "てんちょうが", "meaning": { "en": "the manager (が: the subject)", "it": "il responsabile (が: il soggetto)" } },
+        { "text": "アルバイトに", "meaning": { "en": "the part-timer (に: who is made to do it)", "it": "il dipendente part-time (に: chi deve farlo)" } },
+        { "text": "床を", "reading": "ゆかを", "meaning": { "en": "the floor (を: the object)", "it": "il pavimento (を: l'oggetto)" } },
+        { "text": "掃除させた", "reading": "そうじさせた", "meaning": { "en": "made (them) clean", "it": "ha fatto pulire" } }
+      ],
+      "answer": ["店長が", "アルバイトに", "床を", "掃除させた"],
+      "alsoAccepted": [["店長が", "床を", "アルバイトに", "掃除させた"]],
+      "explanation": {
+        "en": "掃除する (\"to clean\") ends in する, and the causative (\"make someone do\") of する is させる: 掃除させる; in the past, 掃除させた. The one who is made to do it takes に (アルバイトに), what gets cleaned takes を (床を), and the verb goes last. \"店長が床をアルバイトに掃除させた\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "掃除する («pulire») finisce in する, e il causativo («far fare») di する è させる: 掃除させる; al passato, 掃除させた. Chi deve fare l'azione prende に (アルバイトに), ciò che si pulisce prende を (床を), e il verbo va alla fine. Va bene anche «店長が床をアルバイトに掃除させた»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "未然形につく「せる」「れる」",
+      "prompt": {
+        "en": "Build: \"I got bitten on the hand by the neighbours' dog.\"",
+        "it": "Componi: «Il cane dei vicini mi ha morso la mano.»"
+      },
+      "sentence": {
+        "kanji": "隣の犬に手をかまれた",
+        "kana": "となりのいぬにてをかまれた"
+      },
+      "translation": {
+        "en": "I got bitten on the hand by the neighbours' dog.",
+        "it": "Il cane dei vicini mi ha morso la mano."
+      },
+      "glosses": [
+        { "text": "隣の犬に", "reading": "となりのいぬに", "meaning": { "en": "by the neighbours' dog", "it": "dal cane dei vicini" } },
+        { "text": "手を", "reading": "てを", "meaning": { "en": "(my) hand (を: the object)", "it": "la mano (を: l'oggetto)" } },
+        { "text": "かまれた", "meaning": { "en": "got bitten", "it": "è stata morsa" } }
+      ],
+      "answer": ["隣の犬に", "手を", "かまれた"],
+      "explanation": {
+        "en": "かまれた is the passive of かむ (\"to bite\"): the last kana changes to the a-sound and れる is added, かむ → かま + れる; in the past, かまれた. In a passive sentence the one who does the action takes に: 隣の犬に = \"by the neighbours' dog\". The person it happened to (\"me\") is understood.",
+        "it": "かまれた è il passivo di かむ («mordere»): l'ultimo kana passa al suono a e si aggiunge れる, かむ → かま + れる; al passato, かまれた. In una frase passiva chi fa l'azione prende に: 隣の犬に = «dal cane dei vicini». Chi l'ha subita («io») è sottinteso."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "意向形",
+      "prompt": {
+        "en": "\"That's enough for today, let's go to bed.\" Which part means \"let's\"?",
+        "it": "«Per oggi basta, andiamo a dormire.» Quale parte significa «facciamo…!»?"
+      },
+      "sentence": {
+        "kanji": "今日はもう寝よう",
+        "kana": "きょうはもうねよう"
+      },
+      "translation": {
+        "en": "That's enough for today, let's go to bed.",
+        "it": "Per oggi basta, andiamo a dormire."
+      },
+      "glosses": [
+        { "text": "今日はもう寝", "reading": "きょうはもうね", "meaning": { "en": "today (は: the topic) + now + sleep (stem of 寝る)", "it": "oggi (は: il tema) + ormai + dormire (radicale di 寝る)" } },
+        { "text": "よう", "meaning": { "en": "let's", "it": "facciamo…!" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select よう. 寝る (\"to sleep\") is an ichidan verb (a verb that simply drops る), and its volitional form (the \"let's…\" form) drops る and adds よう: 寝 + よう = 寝よう (\"let's sleep\").",
+        "it": "Seleziona よう. 寝る («dormire») è un verbo ichidan (un verbo che perde solo る), e la sua forma volitiva (la forma del «facciamo…!») toglie る e aggiunge よう: 寝 + よう = 寝よう («andiamo a dormire»)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "意向形",
+      "prompt": {
+        "en": "\"Let's call a taxi to take us to the station.\" How do you say \"let's call\" (from 呼ぶ)?",
+        "it": "«Chiamiamo un taxi per andare alla stazione.» Come si dice «chiamiamo» (da 呼ぶ)?"
+      },
+      "sentence": {
+        "kanji": "駅までタクシーを呼ぼう",
+        "kana": "えきまでタクシーをよぼう"
+      },
+      "translation": {
+        "en": "Let's call a taxi to take us to the station.",
+        "it": "Chiamiamo un taxi per andare alla stazione."
+      },
+      "glosses": [
+        { "text": "呼ぼう", "reading": "よぼう" },
+        { "text": "呼びよう", "reading": "よびよう" },
+        { "text": "呼ぶう", "reading": "よぶう" },
+        { "text": "呼ばう", "reading": "よばう" }
+      ],
+      "gap": {
+        "kanji": "駅までタクシーを＿",
+        "kana": "えきまでタクシーを＿"
+      },
+      "answer": "呼ぼう",
+      "distractors": ["呼びよう", "呼ぶう", "呼ばう"],
+      "explanation": {
+        "en": "呼ぶ (\"to call\") is not an ichidan verb (one that simply drops る), so for the volitional form (\"let's…\") its last kana changes to the o-sound and う is added: 呼ぶ → 呼ぼ + う = 呼ぼう. よう is only for ichidan verbs, so 呼びよう is wrong.",
+        "it": "呼ぶ («chiamare») non è un verbo ichidan (uno che perde solo る), quindi per la forma volitiva («facciamo…!») l'ultimo kana passa al suono o e si aggiunge う: 呼ぶ → 呼ぼ + う = 呼ぼう. よう è solo per i verbi ichidan, quindi 呼びよう è sbagliato."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "意向形",
+      "prompt": {
+        "en": "Build: \"This year I'm finally going to learn the guitar.\"",
+        "it": "Componi: «Quest'anno imparo la chitarra, finalmente.»"
+      },
+      "sentence": {
+        "kanji": "今年こそギターを習おう",
+        "kana": "ことしこそギターをならおう"
+      },
+      "translation": {
+        "en": "This year I'm finally going to learn the guitar.",
+        "it": "Quest'anno imparo la chitarra, finalmente."
+      },
+      "glosses": [
+        { "text": "今年こそ", "reading": "ことしこそ", "meaning": { "en": "this year, for sure", "it": "quest'anno, finalmente" } },
+        { "text": "ギターを", "meaning": { "en": "the guitar (を: the object)", "it": "la chitarra (を: l'oggetto)" } },
+        { "text": "習おう", "reading": "ならおう", "meaning": { "en": "I'll learn", "it": "imparo (ho deciso)" } }
+      ],
+      "answer": ["今年こそ", "ギターを", "習おう"],
+      "alsoAccepted": [["ギターを", "今年こそ", "習おう"]],
+      "explanation": {
+        "en": "The volitional form is not only \"let's…\": said to yourself, it means \"I'll…\", a decision. 習う (\"to learn\") ends in う, which becomes お before the added う: 習う → 習お + う = 習おう. The verb goes last. \"ギターを今年こそ習おう\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "La forma volitiva non vuol dire solo «facciamo…!»: detta a sé stessi significa «ora lo faccio», una decisione. 習う («imparare») finisce in う, che davanti alla う aggiunta diventa お: 習う → 習お + う = 習おう. Il verbo va alla fine. Va bene anche «ギターを今年こそ習おう»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
     }
   ]
 }

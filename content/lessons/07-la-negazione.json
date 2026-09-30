@@ -303,6 +303,407 @@
         "en": "After a noun, \"is not\" is ではない, the negative of だ (the word for \"is\" after nouns). It goes at the very end, right after the noun: 傘ではない = \"is not an umbrella\". The owner comes before the thing, joined by の: 私の傘 = \"my umbrella\".",
         "it": "Dopo un nome, «non è» si dice ではない, la forma negativa di だ (la parola che fa da «è» dopo i nomi). Va proprio alla fine, subito dopo il nome: 傘ではない = «non è un ombrello». Il possessore viene prima della cosa, unito da の: 私の傘 = «il mio ombrello»."
       }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "否定の「ない」",
+      "prompt": {
+        "en": "Build: \"This clock doesn't work at all.\"",
+        "it": "Componi: «Quest'orologio non funziona per niente.»"
+      },
+      "sentence": {
+        "kanji": "この時計はぜんぜん動かない",
+        "kana": "このとけいはぜんぜんうごかない"
+      },
+      "translation": {
+        "en": "This clock doesn't work at all.",
+        "it": "Quest'orologio non funziona per niente."
+      },
+      "glosses": [
+        { "text": "この時計は", "reading": "このとけいは", "meaning": { "en": "this clock (は: the topic)", "it": "quest'orologio (は: il tema)" } },
+        { "text": "ぜんぜん", "meaning": { "en": "(not) at all", "it": "(non) per niente" } },
+        { "text": "動かない", "reading": "うごかない", "meaning": { "en": "doesn't move, doesn't work", "it": "non si muove, non funziona" } }
+      ],
+      "answer": ["この時計は", "ぜんぜん", "動かない"],
+      "explanation": {
+        "en": "動く (\"to move, to work\") ends in く. For the negative, く changes to the a-sound, か, and ない is added: 動かない. ぜんぜん before a negative means \"not at all\". The topic comes first and the verb goes last.",
+        "it": "動く («muoversi, funzionare») finisce in く. Per la negazione, く passa al suono a, か, e si aggiunge ない: 動かない. ぜんぜん davanti a una negazione significa «per niente». Il tema va all'inizio e il verbo alla fine."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞文の否定「ではない」",
+      "prompt": {
+        "en": "\"Tomorrow is not a day off.\" How do you say \"is not\" after the noun 休み (\"day off\")?",
+        "it": "«Domani non è un giorno libero.» Come si dice «non è» dopo il nome 休み («giorno libero»)?"
+      },
+      "sentence": {
+        "kanji": "明日は休みではない",
+        "kana": "あしたはやすみではない"
+      },
+      "translation": {
+        "en": "Tomorrow is not a day off.",
+        "it": "Domani non è un giorno libero."
+      },
+      "glosses": [
+        { "text": "ではない" },
+        { "text": "くない" },
+        { "text": "だない" },
+        { "text": "ないだ" }
+      ],
+      "gap": {
+        "kanji": "明日は休み＿",
+        "kana": "あしたはやすみ＿"
+      },
+      "answer": "ではない",
+      "distractors": ["くない", "だない", "ないだ"],
+      "explanation": {
+        "en": "休み (\"day off\") is a noun. After a noun, \"is\" is だ, and \"is not\" is ではない: 休みではない. くない is only for い-adjectives (words that end in い, like 高い = \"is expensive\"). だ never takes ない directly, so だない does not exist, and nothing goes after ない: ないだ is wrong too.",
+        "it": "休み («giorno libero») è un nome. Dopo un nome, «è» si dice だ e «non è» si dice ではない: 休みではない. くない serve solo per gli aggettivi in い (parole che finiscono in い, come 高い = «è caro»). だ non prende mai ない direttamente, quindi だない non esiste, e dopo ない non va niente: anche ないだ è sbagliato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞文の否定「ではない」",
+      "prompt": {
+        "en": "\"That person was not Japanese.\" How do you say \"was not\" after a noun?",
+        "it": "«Quella persona non era giapponese.» Come si dice «non era» dopo un nome?"
+      },
+      "sentence": {
+        "kanji": "あの人は日本人ではなかった",
+        "kana": "あのひとはにほんじんではなかった"
+      },
+      "translation": {
+        "en": "That person was not Japanese.",
+        "it": "Quella persona non era giapponese."
+      },
+      "glosses": [
+        { "text": "ではなかった" },
+        { "text": "ではないだった" },
+        { "text": "だなかった" },
+        { "text": "ではなかっただ" }
+      ],
+      "gap": {
+        "kanji": "あの人は日本人＿",
+        "kana": "あのひとはにほんじん＿"
+      },
+      "answer": "ではなかった",
+      "distractors": ["ではないだった", "だなかった", "ではなかっただ"],
+      "explanation": {
+        "en": "The past of ではない (\"is not\") is ではなかった (\"was not\"): the final い of ない becomes かった, as in every い-adjective. だった is the past of だ (\"is\"), but it cannot come after ない: ではないだった is wrong.",
+        "it": "Il passato di ではない («non è») è ではなかった («non era»): la い finale di ない diventa かった, come in ogni aggettivo in い. だった è il passato di だ («è»), ma non può venire dopo ない: ではないだった è sbagliato."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞文の否定「ではない」",
+      "prompt": {
+        "en": "\"This isn't sugar.\" Which part is the casual \"is not\"?",
+        "it": "«Questo non è zucchero.» Quale parte è il «non è» informale?"
+      },
+      "sentence": {
+        "kanji": "これは砂糖じゃない",
+        "kana": "これはさとうじゃない"
+      },
+      "translation": {
+        "en": "This isn't sugar.",
+        "it": "Questo non è zucchero."
+      },
+      "glosses": [
+        { "text": "これは", "meaning": { "en": "this (は: the topic)", "it": "questo (は: il tema)" } },
+        { "text": "砂糖", "reading": "さとう", "meaning": { "en": "sugar", "it": "zucchero" } },
+        { "text": "じゃない", "meaning": { "en": "is not (casual)", "it": "non è (informale)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select じゃない. After a noun, \"is not\" is ではない; in everyday speech では shrinks to じゃ, so people say じゃない: 砂糖じゃない = \"it isn't sugar\". The meaning is the same, only more casual.",
+        "it": "Seleziona じゃない. Dopo un nome, «non è» si dice ではない; nel parlato di tutti i giorni では si accorcia in じゃ, quindi si dice じゃない: 砂糖じゃない = «non è zucchero». Il significato è lo stesso, solo più informale."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞文の否定「ではない」",
+      "prompt": {
+        "en": "Build: \"The shop in front of the station is no longer a bakery.\"",
+        "it": "Componi: «Il negozio davanti alla stazione non è più una panetteria.»"
+      },
+      "sentence": {
+        "kanji": "駅前の店はもうパン屋ではない",
+        "kana": "えきまえのみせはもうパンやではない"
+      },
+      "translation": {
+        "en": "The shop in front of the station is no longer a bakery.",
+        "it": "Il negozio davanti alla stazione non è più una panetteria."
+      },
+      "glosses": [
+        { "text": "駅前の店は", "reading": "えきまえのみせは", "meaning": { "en": "the shop in front of the station (は: the topic)", "it": "il negozio davanti alla stazione (は: il tema)" } },
+        { "text": "もう", "meaning": { "en": "anymore (with a negative)", "it": "più (con una negazione)" } },
+        { "text": "パン屋", "reading": "パンや", "meaning": { "en": "bakery", "it": "panetteria" } },
+        { "text": "ではない", "meaning": { "en": "is not", "it": "non è" } }
+      ],
+      "answer": ["駅前の店は", "もう", "パン屋", "ではない"],
+      "explanation": {
+        "en": "パン屋 (\"bakery\") is a noun, so \"is not\" after it is ではない, at the very end. もう with a negative means \"no longer\": もうパン屋ではない = \"is no longer a bakery\". The topic, 駅前の店は, comes first.",
+        "it": "パン屋 («panetteria») è un nome, quindi dopo di lui «non è» si dice ではない, proprio alla fine. もう con una negazione significa «non più»: もうパン屋ではない = «non è più una panetteria». Il tema, 駅前の店は, va all'inizio."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "形容詞の否定「くない」",
+      "prompt": {
+        "en": "\"This curry is not spicy.\" Which part makes 辛い (\"spicy\") negative?",
+        "it": "«Questo curry non è piccante.» Quale parte rende negativo 辛い («piccante»)?"
+      },
+      "sentence": {
+        "kanji": "このカレーは辛くない",
+        "kana": "このカレーはからくない"
+      },
+      "translation": {
+        "en": "This curry is not spicy.",
+        "it": "Questo curry non è piccante."
+      },
+      "glosses": [
+        { "text": "このカレーは", "meaning": { "en": "this curry (は: the topic)", "it": "questo curry (は: il tema)" } },
+        { "text": "辛", "reading": "から", "meaning": { "en": "spicy (the adjective without い)", "it": "piccante (l'aggettivo senza い)" } },
+        { "text": "くない", "meaning": { "en": "is not", "it": "non è" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select くない. 辛い (\"is spicy\") is an い-adjective (a word that ends in い and already contains \"is\"). To negate it, the final い becomes く and ない is added: 辛い → 辛くない.",
+        "it": "Seleziona くない. 辛い («è piccante») è un aggettivo in い (una parola che finisce in い e contiene già il «è»). Per negarlo, la い finale diventa く e si aggiunge ない: 辛い → 辛くない."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "形容詞の否定「くない」",
+      "prompt": {
+        "en": "Build: \"My house is not far from the station.\"",
+        "it": "Componi: «Casa mia non è lontana dalla stazione.»"
+      },
+      "sentence": {
+        "kanji": "家は駅から遠くない",
+        "kana": "いえはえきからとおくない"
+      },
+      "translation": {
+        "en": "My house is not far from the station.",
+        "it": "Casa mia non è lontana dalla stazione."
+      },
+      "glosses": [
+        { "text": "家は", "reading": "いえは", "meaning": { "en": "(my) house (は: the topic)", "it": "casa (mia) (は: il tema)" } },
+        { "text": "駅から", "reading": "えきから", "meaning": { "en": "from the station", "it": "dalla stazione" } },
+        { "text": "遠くない", "reading": "とおくない", "meaning": { "en": "is not far", "it": "non è lontana" } }
+      ],
+      "answer": ["家は", "駅から", "遠くない"],
+      "explanation": {
+        "en": "遠い (\"is far\") is an い-adjective: its negative is 遠くない (\"is not far\"), with い changed to く before ない. Like a verb, it goes at the end: first the topic (家は), then \"from the station\" (駅から).",
+        "it": "遠い («è lontano») è un aggettivo in い: la sua negazione è 遠くない («non è lontano»), con la い cambiata in く davanti a ない. Come un verbo, va alla fine: prima il tema (家は), poi «dalla stazione» (駅から)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "形容詞の否定「くない」",
+      "prompt": {
+        "en": "\"Yesterday's exam was not difficult.\" How do you say \"was not difficult\" (from 難しい)?",
+        "it": "«L'esame di ieri non era difficile.» Come si dice «non era difficile» (da 難しい)?"
+      },
+      "sentence": {
+        "kanji": "昨日のテストは難しくなかった",
+        "kana": "きのうのテストはむずかしくなかった"
+      },
+      "translation": {
+        "en": "Yesterday's exam was not difficult.",
+        "it": "L'esame di ieri non era difficile."
+      },
+      "glosses": [
+        { "text": "難しくなかった", "reading": "むずかしくなかった" },
+        { "text": "難しいなかった", "reading": "むずかしいなかった" },
+        { "text": "難しくないだった", "reading": "むずかしくないだった" },
+        { "text": "難しいではなかった", "reading": "むずかしいではなかった" }
+      ],
+      "gap": {
+        "kanji": "昨日のテストは＿",
+        "kana": "きのうのテストは＿"
+      },
+      "answer": "難しくなかった",
+      "distractors": ["難しいなかった", "難しくないだった", "難しいではなかった"],
+      "explanation": {
+        "en": "First make the negative: 難しい → 難しくない (\"is not difficult\"). ない ends in い, so its past works like any い-adjective: い becomes かった, giving 難しくなかった. だった (the past of だ, \"is\") never goes after an い-adjective, and ではなかった is only for nouns.",
+        "it": "Prima si fa la negazione: 難しい → 難しくない («non è difficile»). ない finisce in い, quindi il suo passato funziona come in ogni aggettivo in い: la い diventa かった, e si ottiene 難しくなかった. だった (il passato di だ, «è») non va mai dopo un aggettivo in い, e ではなかった è solo per i nomi."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "形容詞の否定「くない」",
+      "prompt": {
+        "en": "Build: \"This restaurant is not very expensive.\"",
+        "it": "Componi: «Questo ristorante non è molto caro.»"
+      },
+      "sentence": {
+        "kanji": "このレストランはあまり高くない",
+        "kana": "このレストランはあまりたかくない"
+      },
+      "translation": {
+        "en": "This restaurant is not very expensive.",
+        "it": "Questo ristorante non è molto caro."
+      },
+      "glosses": [
+        { "text": "このレストランは", "meaning": { "en": "this restaurant (は: the topic)", "it": "questo ristorante (は: il tema)" } },
+        { "text": "あまり", "meaning": { "en": "(not) very", "it": "(non) molto" } },
+        { "text": "高くない", "reading": "たかくない", "meaning": { "en": "is not expensive", "it": "non è caro" } }
+      ],
+      "answer": ["このレストランは", "あまり", "高くない"],
+      "explanation": {
+        "en": "高い (\"is expensive\") is an い-adjective, so \"is not expensive\" is 高くない: the final い becomes く before ない. あまり before a negative softens it: あまり高くない = \"not very expensive\". The adjective goes last, like a verb.",
+        "it": "高い («è caro») è un aggettivo in い, quindi «non è caro» è 高くない: la い finale diventa く davanti a ない. あまり davanti a una negazione la attenua: あまり高くない = «non molto caro». L'aggettivo va alla fine, come un verbo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧な否定「ません」",
+      "prompt": {
+        "en": "\"At the weekend I don't set the alarm.\" How do you say \"don't set\" politely (from かける)?",
+        "it": "«Nel fine settimana non metto la sveglia.» Come si dice «non metto» in modo cortese (da かける)?"
+      },
+      "sentence": {
+        "kanji": "週末は目覚ましをかけません",
+        "kana": "しゅうまつはめざましをかけません"
+      },
+      "translation": {
+        "en": "At the weekend I don't set the alarm.",
+        "it": "Nel fine settimana non metto la sveglia."
+      },
+      "glosses": [
+        { "text": "かけません" },
+        { "text": "かけりません" },
+        { "text": "かけるません" },
+        { "text": "かけまさない" }
+      ],
+      "gap": {
+        "kanji": "週末は目覚ましを＿",
+        "kana": "しゅうまつはめざましを＿"
+      },
+      "answer": "かけません",
+      "distractors": ["かけりません", "かけるません", "かけまさない"],
+      "explanation": {
+        "en": "かける (\"to set\", here an alarm) is an ichidan verb (a verb that simply drops る before an ending). The polite \"not\" is ません, and it goes where ます goes: かけ + ません = かけません. The dictionary form never comes before ません: かけるません is wrong.",
+        "it": "かける («mettere», qui la sveglia) è un verbo ichidan (un verbo che perde solo る prima di una desinenza). Il «non» cortese è ません, e va dove va ます: かけ + ません = かけません. La forma base non va mai davanti a ません: かけるません è sbagliato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧な否定「ません」",
+      "prompt": {
+        "en": "\"Yesterday I didn't see anyone.\" How do you say \"didn't see\" politely (from 会う, \"to meet\")?",
+        "it": "«Ieri non ho visto nessuno.» Come si dice «non ho visto» in modo cortese (da 会う, «incontrare»)?"
+      },
+      "sentence": {
+        "kanji": "昨日は誰にも会いませんでした",
+        "kana": "きのうはだれにもあいませんでした"
+      },
+      "translation": {
+        "en": "Yesterday I didn't see anyone.",
+        "it": "Ieri non ho visto nessuno."
+      },
+      "glosses": [
+        { "text": "会いませんでした", "reading": "あいませんでした" },
+        { "text": "会いませんだった", "reading": "あいませんだった" },
+        { "text": "会わませんでした", "reading": "あわませんでした" },
+        { "text": "会いますでした", "reading": "あいますでした" }
+      ],
+      "gap": {
+        "kanji": "昨日は誰にも＿",
+        "kana": "きのうはだれにも＿"
+      },
+      "answer": "会いませんでした",
+      "distractors": ["会いませんだった", "会わませんでした", "会いますでした"],
+      "explanation": {
+        "en": "The polite past of \"not\" is ません + でした: 会いません (\"I don't meet\") → 会いませんでした (\"I didn't meet\"). ません is not an い-adjective, so it does not take だった. Like ます, it follows the i-stem (the verb with its last kana changed to the i-sound): 会う → 会い, not 会わ. 誰にも with a negative means \"nobody\".",
+        "it": "Il passato cortese del «non» è ません + でした: 会いません («non incontro») → 会いませんでした («non ho incontrato»). ません non è un aggettivo in い, quindi non prende だった. Come ます, si attacca al radicale in i (il verbo con l'ultimo kana cambiato nel suono i): 会う → 会い, non 会わ. 誰にも con una negazione significa «nessuno»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧な否定「ません」",
+      "prompt": {
+        "en": "\"I don't work on Sundays.\" How do you say \"don't do\" politely (from する)?",
+        "it": "«La domenica non lavoro.» Come si dice «non faccio» in modo cortese (da する)?"
+      },
+      "sentence": {
+        "kanji": "日曜日は仕事をしません",
+        "kana": "にちようびはしごとをしません"
+      },
+      "translation": {
+        "en": "I don't work on Sundays.",
+        "it": "La domenica non lavoro."
+      },
+      "glosses": [
+        { "text": "しません" },
+        { "text": "さません" },
+        { "text": "すません" },
+        { "text": "しないません" }
+      ],
+      "gap": {
+        "kanji": "日曜日は仕事を＿",
+        "kana": "にちようびはしごとを＿"
+      },
+      "answer": "しません",
+      "distractors": ["さません", "すません", "しないません"],
+      "explanation": {
+        "en": "する (\"to do\") is irregular: before ます and ません it becomes し. So します (\"I do\") becomes しません (\"I don't do\"); 仕事をしません = \"I don't work\". ません already contains \"not\": adding ない as well, as in しないません, is wrong.",
+        "it": "する («fare») è irregolare: davanti a ます e ません diventa し. Quindi します («faccio») diventa しません («non faccio»); 仕事をしません = «non lavoro». ません contiene già il «non»: aggiungere anche ない, come in しないません, è sbagliato."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "丁寧な否定「ません」",
+      "prompt": {
+        "en": "\"I don't wear this shirt anymore.\" Which part is the polite \"not\"?",
+        "it": "«Questa camicia non la metto più.» Quale parte è il «non» cortese?"
+      },
+      "sentence": {
+        "kanji": "このシャツはもう着ません",
+        "kana": "このシャツはもうきません"
+      },
+      "translation": {
+        "en": "I don't wear this shirt anymore.",
+        "it": "Questa camicia non la metto più."
+      },
+      "glosses": [
+        { "text": "このシャツはもう", "meaning": { "en": "this shirt (は: the topic) + anymore", "it": "questa camicia (は: il tema) + più" } },
+        { "text": "着", "reading": "き", "meaning": { "en": "wear (the verb without る)", "it": "indossare (il verbo senza る)" } },
+        { "text": "ません", "meaning": { "en": "do not (polite)", "it": "non (cortese)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ません. 着る (\"to wear\") is an ichidan verb (it simply drops る), so 着 + ます = 着ます (\"I wear\") and 着 + ません = 着ません (\"I don't wear\"). With もう, the negative means \"not anymore\".",
+        "it": "Seleziona ません. 着る («indossare») è un verbo ichidan (perde solo る), quindi 着 + ます = 着ます («indosso») e 着 + ません = 着ません («non indosso»). Con もう, la negazione significa «non più»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "丁寧な否定「ません」",
+      "prompt": {
+        "en": "Build: \"It doesn't snow in this town.\"",
+        "it": "Componi: «In questa città non nevica.»"
+      },
+      "sentence": {
+        "kanji": "この町は雪が降りません",
+        "kana": "このまちはゆきがふりません"
+      },
+      "translation": {
+        "en": "It doesn't snow in this town.",
+        "it": "In questa città non nevica."
+      },
+      "glosses": [
+        { "text": "この町は", "reading": "このまちは", "meaning": { "en": "this town (は: the topic)", "it": "questa città (は: il tema)" } },
+        { "text": "雪が", "reading": "ゆきが", "meaning": { "en": "snow (が: the subject)", "it": "la neve (が: il soggetto)" } },
+        { "text": "降りません", "reading": "ふりません", "meaning": { "en": "does not fall (polite)", "it": "non cade (cortese)" } }
+      ],
+      "answer": ["この町は", "雪が", "降りません"],
+      "explanation": {
+        "en": "降りません is the polite negative of 降る (\"to fall\", for rain and snow): 降る → 降り (the i-stem, the form used before ます) + ません. The topic (この町は) comes first, then what falls (雪が), and the verb goes last.",
+        "it": "降りません è la negazione cortese di 降る («cadere», per pioggia e neve): 降る → 降り (il radicale in i, la forma che si usa davanti a ます) + ません. Prima il tema (この町は), poi ciò che cade (雪が), e il verbo alla fine."
+      }
     }
   ]
 }

@@ -270,6 +270,163 @@
         "en": "が marks the subject, the one who moves (子ども, child). に marks the destination, the place where the movement ends (部屋, room). The verb 入った (went in) comes last.",
         "it": "が segna il soggetto, chi si muove (子ども, il bambino). に segna la destinazione, il luogo in cui finisce lo spostamento (部屋, la stanza). Il verbo 入った (è entrato) va alla fine."
       }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "Build: \"In this town, winter is long.\" Start with the topic.",
+        "it": "Componi: «In questa città l'inverno è lungo.» Comincia dal tema."
+      },
+      "sentence": {
+        "kanji": "この町は冬が長い",
+        "kana": "このまちはふゆがながい"
+      },
+      "translation": {
+        "en": "In this town, winter is long.",
+        "it": "In questa città l'inverno è lungo."
+      },
+      "glosses": [
+        { "text": "この町は", "reading": "このまちは", "meaning": { "en": "this town (topic)", "it": "questa città (tema)" } },
+        { "text": "冬が", "reading": "ふゆが", "meaning": { "en": "winter (subject)", "it": "l'inverno (soggetto)" } },
+        { "text": "長い", "reading": "ながい", "meaning": { "en": "is long", "it": "è lungo" } }
+      ],
+      "answer": ["この町は", "冬が", "長い"],
+      "explanation": {
+        "en": "この町は is the topic, what the sentence is about: \"as for this town\". What is long is the winter, so 冬 (winter) is the subject and takes が. 長い (\"is long\") is the predicate, the part that says something about the subject. は sets the scene first; が then points to what the predicate describes.",
+        "it": "この町は è il tema, ciò di cui parla la frase: «quanto a questa città». A essere lungo è l'inverno, quindi 冬 (inverno) è il soggetto e prende が. 長い («è lungo») è il predicato, la parte che dice qualcosa del soggetto. は prepara prima la scena; が poi indica di che cosa parla il predicato."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "Build: \"On Sundays, the library is closed.\"",
+        "it": "Componi: «La domenica la biblioteca è chiusa.»"
+      },
+      "sentence": {
+        "kanji": "日曜日は図書館が休みだ",
+        "kana": "にちようびはとしょかんがやすみだ"
+      },
+      "translation": {
+        "en": "On Sundays, the library is closed.",
+        "it": "La domenica la biblioteca è chiusa."
+      },
+      "glosses": [
+        { "text": "日曜日は", "reading": "にちようびは", "meaning": { "en": "Sundays (topic)", "it": "la domenica (tema)" } },
+        { "text": "図書館が", "reading": "としょかんが", "meaning": { "en": "the library (subject)", "it": "la biblioteca (soggetto)" } },
+        { "text": "休み", "reading": "やすみ", "meaning": { "en": "a day off, closed", "it": "giorno di chiusura, chiuso" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
+      "answer": ["日曜日は", "図書館が", "休み", "だ"],
+      "explanation": {
+        "en": "日曜日は is the topic: \"as for Sundays\". は announces what we are talking about, even though Sunday itself does nothing. The subject is 図書館 (the library), with が: it is the library that is closed. 休み (a day off) is a noun, so it needs だ, the word for \"is\", at the end.",
+        "it": "日曜日は è il tema: «quanto alla domenica». は annuncia di che cosa si parla, anche se la domenica di per sé non fa niente. Il soggetto è 図書館 (la biblioteca), con が: è la biblioteca a essere chiusa. 休み (giorno di chiusura) è un nome, quindi alla fine ha bisogno di だ, la parola per «è»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「は」が示す主題",
+      "prompt": {
+        "en": "\"This room has big windows.\" Which particle marks what the sentence is about?",
+        "it": "«Questa stanza ha finestre grandi.» Quale particella segna ciò di cui si parla?"
+      },
+      "sentence": {
+        "kanji": "この部屋は窓が大きい",
+        "kana": "このへやはまどがおおきい"
+      },
+      "translation": {
+        "en": "This room has big windows.",
+        "it": "Questa stanza ha finestre grandi."
+      },
+      "gap": {
+        "kanji": "この部屋＿窓が大きい",
+        "kana": "このへや＿まどがおおきい"
+      },
+      "answer": "は",
+      "distractors": ["を", "に"],
+      "explanation": {
+        "en": "The sentence is about this room, so この部屋 is the topic and takes は: \"as for this room\". What is big is the windows, 窓, already marked by が. を marks the thing an action is done to, but 大きい (\"is big\") is not an action. に marks where something ends up, and nothing is moving here.",
+        "it": "La frase parla di questa stanza, quindi この部屋 è il tema e prende は: «quanto a questa stanza». A essere grandi sono le finestre, 窓, già segnate da が. を segna la cosa su cui si compie un'azione, ma 大きい («è grande») non è un'azione. に indica dove va a finire qualcosa, e qui niente si sposta."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "\"The cat got onto the bed.\" Which part says where the cat ended up?",
+        "it": "«Il gatto è salito sul letto.» Quale parte dice dove è finito il gatto?"
+      },
+      "sentence": {
+        "kanji": "ベッドに猫が乗った",
+        "kana": "ベッドにねこがのった"
+      },
+      "translation": {
+        "en": "The cat got onto the bed.",
+        "it": "Il gatto è salito sul letto."
+      },
+      "glosses": [
+        { "text": "ベッドに", "meaning": { "en": "onto the bed (destination)", "it": "sul letto (destinazione)" } },
+        { "text": "猫が乗", "reading": "ねこがの", "meaning": { "en": "the cat (subject), 乗 of 乗る", "it": "il gatto (soggetto), 乗 di 乗る" } },
+        { "text": "った", "meaning": { "en": "rest of 乗った (past)", "it": "resto di 乗った (passato)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The answer is ベッドに. に marks the destination, the point where a movement ends: the cat climbed up and ended up on the bed. 猫が is the subject, the one who moves. The place with に can come first in the sentence: it is the particle, not the position, that shows its role.",
+        "it": "La risposta è ベッドに. に segna la destinazione, il punto in cui finisce un movimento: il gatto è salito ed è finito sul letto. 猫が è il soggetto, chi si muove. Il luogo con に può stare all'inizio della frase: il ruolo lo indica la particella, non la posizione."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "\"(I) wrote the appointment on the calendar.\" Which part says where the writing ends up?",
+        "it": "«(Io) ho scritto l'impegno sul calendario.» Quale parte dice dove finisce ciò che ho scritto?"
+      },
+      "sentence": {
+        "kanji": "カレンダーに予定を書いた",
+        "kana": "カレンダーによていをかいた"
+      },
+      "translation": {
+        "en": "(I) wrote the appointment on the calendar.",
+        "it": "(Io) ho scritto l'impegno sul calendario."
+      },
+      "glosses": [
+        { "text": "カレンダーに", "meaning": { "en": "on the calendar (destination)", "it": "sul calendario (destinazione)" } },
+        { "text": "予定を書", "reading": "よていをか", "meaning": { "en": "appointment (object), 書 of 書く", "it": "impegno (oggetto), 書 di 書く" } },
+        { "text": "いた", "meaning": { "en": "rest of 書いた (past)", "it": "resto di 書いた (passato)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The answer is カレンダーに. に marks the destination, the place where the action ends up: what I wrote lands on the calendar. 予定 (the appointment) is the thing written, so it takes を. The one who writes is not mentioned; with no other context it is the speaker.",
+        "it": "La risposta è カレンダーに. に segna la destinazione, il punto in cui va a finire l'azione: ciò che ho scritto finisce sul calendario. 予定 (l'impegno) è la cosa scritta, quindi prende を. Chi scrive non è nominato; senza altro contesto è chi parla."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "到達点を示す「に」",
+      "prompt": {
+        "en": "\"A bird landed on the roof.\" Which particle marks where the bird landed?",
+        "it": "«Un uccello si è posato sul tetto.» Quale particella segna dove si è posato l'uccello?"
+      },
+      "sentence": {
+        "kanji": "鳥が屋根に止まった",
+        "kana": "とりがやねにとまった"
+      },
+      "translation": {
+        "en": "A bird landed on the roof.",
+        "it": "Un uccello si è posato sul tetto."
+      },
+      "gap": {
+        "kanji": "鳥が屋根＿止まった",
+        "kana": "とりがやね＿とまった"
+      },
+      "answer": "に",
+      "distractors": ["を", "が"],
+      "explanation": {
+        "en": "The roof is where the bird's flight ends, its destination, so it takes に. With を the roof would be the thing acted on, as if the bird were doing something to the roof. が is already on 鳥 (bird), the one who lands; with 屋根が the roof would also become a subject, which makes no sense here.",
+        "it": "Il tetto è il punto in cui finisce il volo dell'uccello, la destinazione, quindi prende に. Con を il tetto sarebbe la cosa su cui si agisce, come se l'uccello facesse qualcosa al tetto. が è già su 鳥 (uccello), chi si posa; con 屋根が anche il tetto diventerebbe un soggetto, e qui non ha senso."
+      }
     }
   ]
 }

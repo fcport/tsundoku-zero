@@ -286,6 +286,401 @@
         "en": "話す (to talk) has the te-form (the form ending in て) 話して; adding いる gives 話している, \"is talking\". 今 (now) takes no particle. The verb goes last. \"今姉は電話で話している\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
         "it": "話す (parlare) ha la forma in て (la forma che finisce in て) 話して; aggiungendo いる si ottiene 話している, «sta parlando». 今 (adesso) non prende particella. Il verbo va in fondo. Va bene anche «今姉は電話で話している»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "非過去形",
+      "prompt": {
+        "en": "\"There is a meeting in Tokyo next week.\" Which verb form fits?",
+        "it": "«La settimana prossima c'è una riunione a Tokyo.» Quale forma del verbo è giusta?"
+      },
+      "sentence": {
+        "kanji": "来週東京で会議がある",
+        "kana": "らいしゅうとうきょうでかいぎがある"
+      },
+      "translation": {
+        "en": "There is a meeting in Tokyo next week.",
+        "it": "La settimana prossima c'è una riunione a Tokyo."
+      },
+      "glosses": [
+        { "text": "ある" },
+        { "text": "あった" },
+        { "text": "あるだ" }
+      ],
+      "gap": {
+        "kanji": "来週東京で会議が＿",
+        "kana": "らいしゅうとうきょうでかいぎが＿"
+      },
+      "answer": "ある",
+      "distractors": ["あった", "あるだ"],
+      "explanation": {
+        "en": "ある (there is) here is in the non-past: the verb exactly as you find it in a dictionary. The non-past is used for things that have not happened yet, so with 来週 (next week) it means \"there will be\". あった is the past and cannot go with next week; あるだ does not exist, because だ (the word for \"is\") never goes after a verb.",
+        "it": "ある (c'è) qui è al non passato: il verbo così come lo trovi sul dizionario. Il non passato si usa per le cose che non sono ancora successe, quindi con 来週 (la settimana prossima) significa «ci sarà». あった è il passato e non può stare con la settimana prossima; あるだ non esiste, perché だ (la parola per «è») non va mai dopo un verbo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "非過去形",
+      "prompt": {
+        "en": "\"I often run in the park.\" Which part shows that the verb is not in the past?",
+        "it": "«Corro spesso al parco.» Quale parte mostra che il verbo non è al passato?"
+      },
+      "sentence": {
+        "kanji": "よく公園で走る",
+        "kana": "よくこうえんではしる"
+      },
+      "translation": {
+        "en": "I often run in the park.",
+        "it": "Corro spesso al parco."
+      },
+      "glosses": [
+        { "text": "よく", "meaning": { "en": "often", "it": "spesso" } },
+        { "text": "公園で走", "reading": "こうえんではし", "meaning": { "en": "in the park, run", "it": "al parco, correre" } },
+        { "text": "る", "meaning": { "en": "dictionary-form ending (not past)", "it": "finale della forma del dizionario (non passato)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select る. 走る (to run) ends in る, just as you find it in a dictionary: this is the non-past, used for habits and for the future. In the past it would be 走った. よく (often) tells you how often, but it is the verb ending that says \"not past\".",
+        "it": "Seleziona る. 走る (correre) finisce in る, così come lo trovi sul dizionario: è il non passato, che si usa per le abitudini e per il futuro. Al passato sarebbe 走った. よく (spesso) dice quanto spesso, ma è il finale del verbo a dire «non passato»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "非過去形",
+      "prompt": {
+        "en": "\"The parcel arrives the day after tomorrow.\" 届く is non-past. Which part tells you it is about the future?",
+        "it": "«Il pacco arriva dopodomani.» 届く è al non passato. Quale parte dice che si parla del futuro?"
+      },
+      "sentence": {
+        "kanji": "あさって荷物が届く",
+        "kana": "あさってにもつがとどく"
+      },
+      "translation": {
+        "en": "The parcel arrives the day after tomorrow.",
+        "it": "Il pacco arriva dopodomani."
+      },
+      "glosses": [
+        { "text": "あさって", "meaning": { "en": "the day after tomorrow", "it": "dopodomani" } },
+        { "text": "荷物が届", "reading": "にもつがとど", "meaning": { "en": "the parcel, arrive", "it": "il pacco, arrivare" } },
+        { "text": "く", "meaning": { "en": "dictionary-form ending (not past)", "it": "finale della forma del dizionario (non passato)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select あさって (the day after tomorrow). The non-past form 届く only says \"not past\": it can be a habit or something still to come. Here the time word あさって makes it clearly future: \"it will arrive\". Without it, 荷物が届く could also mean \"parcels arrive\" as a general fact.",
+        "it": "Seleziona あさって (dopodomani). La forma non passata 届く dice solo «non passato»: può essere un'abitudine o qualcosa che deve ancora succedere. Qui la parola di tempo あさって la rende chiaramente futura: «arriverà». Senza, 荷物が届く potrebbe anche voler dire «i pacchi arrivano» in generale."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "非過去形",
+      "prompt": {
+        "en": "Build: \"This shop opens at ten.\"",
+        "it": "Componi: «Questo negozio apre alle dieci.»"
+      },
+      "sentence": {
+        "kanji": "この店は十時に開く",
+        "kana": "このみせはじゅうじにあく"
+      },
+      "translation": {
+        "en": "This shop opens at ten.",
+        "it": "Questo negozio apre alle dieci."
+      },
+      "glosses": [
+        { "text": "この店は", "reading": "このみせは", "meaning": { "en": "this shop (the topic)", "it": "questo negozio (l'argomento)" } },
+        { "text": "十時に", "reading": "じゅうじに", "meaning": { "en": "at ten o'clock", "it": "alle dieci" } },
+        { "text": "開く", "reading": "あく", "meaning": { "en": "opens", "it": "apre" } }
+      ],
+      "answer": ["この店は", "十時に", "開く"],
+      "explanation": {
+        "en": "A fixed schedule that repeats every day uses the non-past: 開く (opens), the verb as you find it in a dictionary. First the topic この店は (this shop), then the time 十時に (at ten), and the verb at the end.",
+        "it": "Un orario fisso che si ripete ogni giorno usa il non passato: 開く (apre), il verbo così come lo trovi sul dizionario. Prima l'argomento この店は (questo negozio), poi l'ora 十時に (alle dieci), e il verbo in fondo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「ている」の進行",
+      "prompt": {
+        "en": "\"The children are playing in the garden.\" Which form says they are playing right now?",
+        "it": "«I bambini stanno giocando in giardino.» Quale forma dice che stanno giocando adesso?"
+      },
+      "sentence": {
+        "kanji": "子どもたちが庭で遊んでいる",
+        "kana": "こどもたちがにわであそんでいる"
+      },
+      "translation": {
+        "en": "The children are playing in the garden.",
+        "it": "I bambini stanno giocando in giardino."
+      },
+      "glosses": [
+        { "text": "遊んでいる", "reading": "あそんでいる" },
+        { "text": "遊びている", "reading": "あそびている" },
+        { "text": "遊ぶいる", "reading": "あそぶいる" },
+        { "text": "遊んている", "reading": "あそんている" }
+      ],
+      "gap": {
+        "kanji": "子どもたちが庭で＿",
+        "kana": "こどもたちがにわで＿"
+      },
+      "answer": "遊んでいる",
+      "distractors": ["遊びている", "遊ぶいる", "遊んている"],
+      "explanation": {
+        "en": "\"Is doing\" = te-form + いる. The te-form is the verb form ending in て or で. 遊ぶ (to play) ends in ぶ, so ぶ becomes ん and て becomes で: 遊んで. Add いる: 遊んでいる, \"are playing\". 遊んている is wrong because after ん you always get で, not て.",
+        "it": "«Sta facendo» = forma in て + いる. La forma in て è la forma del verbo che finisce in て o で. 遊ぶ (giocare) finisce in ぶ, quindi ぶ diventa ん e て diventa で: 遊んで. Aggiungi いる: 遊んでいる, «stanno giocando». 遊んている è sbagliato perché dopo ん viene sempre で, non て."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「ている」の進行",
+      "prompt": {
+        "en": "\"Our cat is sleeping on the sofa.\" Which part says it is happening right now?",
+        "it": "«Il nostro gatto sta dormendo sul divano.» Quale parte dice che sta succedendo adesso?"
+      },
+      "sentence": {
+        "kanji": "うちの猫がソファで寝ている",
+        "kana": "うちのねこがソファでねている"
+      },
+      "translation": {
+        "en": "Our cat is sleeping on the sofa.",
+        "it": "Il nostro gatto sta dormendo sul divano."
+      },
+      "glosses": [
+        { "text": "うちの", "meaning": { "en": "our", "it": "nostro" } },
+        { "text": "猫がソファで寝", "reading": "ねこがソファでね", "meaning": { "en": "the cat, on the sofa, sleep", "it": "il gatto, sul divano, dormire" } },
+        { "text": "ている", "meaning": { "en": "is ...-ing (happening now)", "it": "sta ...-ndo (succede adesso)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ている. 寝る (to sleep) just drops る to make its te-form (the form ending in て): 寝て. Adding いる gives 寝ている, \"is sleeping\". うちの (our) only tells you whose cat it is.",
+        "it": "Seleziona ている. 寝る (dormire) toglie solo る per fare la forma in て (la forma che finisce in て): 寝て. Aggiungendo いる si ottiene 寝ている, «sta dormendo». うちの (nostro) dice solo di chi è il gatto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「ている」の進行",
+      "prompt": {
+        "en": "Build: \"The chef is grilling fish in the kitchen.\"",
+        "it": "Componi: «Lo chef sta cuocendo il pesce alla griglia in cucina.»"
+      },
+      "sentence": {
+        "kanji": "シェフが台所で魚を焼いている",
+        "kana": "シェフがだいどころでさかなをやいている"
+      },
+      "translation": {
+        "en": "The chef is grilling fish in the kitchen.",
+        "it": "Lo chef sta cuocendo il pesce alla griglia in cucina."
+      },
+      "glosses": [
+        { "text": "シェフが", "meaning": { "en": "the chef (the one doing it)", "it": "lo chef (chi lo fa)" } },
+        { "text": "台所で", "reading": "だいどころで", "meaning": { "en": "in the kitchen", "it": "in cucina" } },
+        { "text": "魚を", "reading": "さかなを", "meaning": { "en": "fish (what is being grilled)", "it": "il pesce (cosa cuoce)" } },
+        { "text": "焼いている", "reading": "やいている", "meaning": { "en": "is grilling", "it": "sta cuocendo alla griglia" } }
+      ],
+      "answer": ["シェフが", "台所で", "魚を", "焼いている"],
+      "alsoAccepted": [["シェフが", "魚を", "台所で", "焼いている"]],
+      "explanation": {
+        "en": "焼く (to grill) ends in く, so its te-form (the form ending in て) is 焼いて; adding いる gives 焼いている, \"is grilling\". The one doing it comes first with が, the verb goes last. \"シェフが魚を台所で焼いている\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "焼く (cuocere alla griglia) finisce in く, quindi la sua forma in て (la forma che finisce in て) è 焼いて; aggiungendo いる si ottiene 焼いている, «sta cuocendo». Chi lo fa viene per primo con が, il verbo va in fondo. Va bene anche «シェフが魚を台所で焼いている»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "過去形の「た」",
+      "prompt": {
+        "en": "\"Last month I travelled around Hokkaido.\" Which form of する fits?",
+        "it": "«Il mese scorso ho fatto un viaggio in Hokkaido.» Quale forma di する è giusta?"
+      },
+      "sentence": {
+        "kanji": "先月北海道を旅行した",
+        "kana": "せんげつほっかいどうをりょこうした"
+      },
+      "translation": {
+        "en": "Last month I travelled around Hokkaido.",
+        "it": "Il mese scorso ho fatto un viaggio in Hokkaido."
+      },
+      "glosses": [
+        { "text": "した" },
+        { "text": "する" },
+        { "text": "しった" }
+      ],
+      "gap": {
+        "kanji": "先月北海道を旅行＿",
+        "kana": "せんげつほっかいどうをりょこう＿"
+      },
+      "answer": "した",
+      "distractors": ["する", "しった"],
+      "explanation": {
+        "en": "先月 (last month) is in the past, so the verb must be past too. 旅行する means \"to travel\", and the past of する is した: 旅行した, \"I travelled\". する is non-past and cannot go with last month; しった does not exist.",
+        "it": "先月 (il mese scorso) è nel passato, quindi anche il verbo deve essere al passato. 旅行する vuol dire «viaggiare», e il passato di する è した: 旅行した, «ho viaggiato». する è non passato e non può stare con il mese scorso; しった non esiste."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "過去形の「た」",
+      "prompt": {
+        "en": "\"The bus was late this morning.\" Which form of 遅れる fits?",
+        "it": "«Stamattina l'autobus era in ritardo.» Quale forma di 遅れる è giusta?"
+      },
+      "sentence": {
+        "kanji": "今朝バスが遅れた",
+        "kana": "けさバスがおくれた"
+      },
+      "translation": {
+        "en": "The bus was late this morning.",
+        "it": "Stamattina l'autobus era in ritardo."
+      },
+      "glosses": [
+        { "text": "遅れた", "reading": "おくれた" },
+        { "text": "遅れる", "reading": "おくれる" },
+        { "text": "遅れった", "reading": "おくれった" }
+      ],
+      "gap": {
+        "kanji": "今朝バスが＿",
+        "kana": "けさバスが＿"
+      },
+      "answer": "遅れた",
+      "distractors": ["遅れる", "遅れった"],
+      "explanation": {
+        "en": "The bus was late: it already happened, so the verb goes in the past. 遅れる (to be late) ends in -eru and simply drops る, then adds た: 遅れ + た = 遅れた. No small っ is needed, so 遅れった is wrong. 遅れる is non-past: \"will be late\".",
+        "it": "L'autobus era in ritardo: è già successo, quindi il verbo va al passato. 遅れる (essere in ritardo) finisce in -eru e toglie semplicemente る, poi aggiunge た: 遅れ + た = 遅れた. Non serve nessuna piccola っ, quindi 遅れった è sbagliato. 遅れる è non passato: «sarà in ritardo»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "過去形の「た」",
+      "prompt": {
+        "en": "\"The train arrived a moment ago.\" Which part makes 着く past?",
+        "it": "«Il treno è arrivato poco fa.» Quale parte mette 着く al passato?"
+      },
+      "sentence": {
+        "kanji": "さっき電車が着いた",
+        "kana": "さっきでんしゃがついた"
+      },
+      "translation": {
+        "en": "The train arrived a moment ago.",
+        "it": "Il treno è arrivato poco fa."
+      },
+      "glosses": [
+        { "text": "さっき", "meaning": { "en": "a moment ago", "it": "poco fa" } },
+        { "text": "電車が着", "reading": "でんしゃがつ", "meaning": { "en": "the train, arrive", "it": "il treno, arrivare" } },
+        { "text": "いた", "meaning": { "en": "past ending of 着く (arrived)", "it": "desinenza del passato di 着く (arrivato)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select いた. 着く (to arrive) ends in く: く becomes い, then た is added: 着く → 着いた. さっき (a moment ago) says when, but it does not make the verb past: that is the job of the ending.",
+        "it": "Seleziona いた. 着く (arrivare) finisce in く: く diventa い, poi si aggiunge た: 着く → 着いた. さっき (poco fa) dice quando, ma non mette il verbo al passato: quello è il compito del finale."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "過去形の「た」",
+      "prompt": {
+        "en": "Build: \"The day before yesterday I took photos at the sea.\"",
+        "it": "Componi: «L'altro ieri ho fatto delle foto al mare.»"
+      },
+      "sentence": {
+        "kanji": "おととい海で写真を撮った",
+        "kana": "おとというみでしゃしんをとった"
+      },
+      "translation": {
+        "en": "The day before yesterday I took photos at the sea.",
+        "it": "L'altro ieri ho fatto delle foto al mare."
+      },
+      "glosses": [
+        { "text": "おととい", "meaning": { "en": "the day before yesterday", "it": "l'altro ieri" } },
+        { "text": "海で", "reading": "うみで", "meaning": { "en": "at the sea", "it": "al mare" } },
+        { "text": "写真を", "reading": "しゃしんを", "meaning": { "en": "photos (what I took)", "it": "foto (cosa ho fatto)" } },
+        { "text": "撮った", "reading": "とった", "meaning": { "en": "took (a photo)", "it": "ho fatto (una foto)" } }
+      ],
+      "answer": ["おととい", "海で", "写真を", "撮った"],
+      "alsoAccepted": [["おととい", "写真を", "海で", "撮った"]],
+      "explanation": {
+        "en": "撮る (to take a photo) ends in る and makes its past with a small っ: 撮る → 撮った. The time word おととい (the day before yesterday) goes first with no particle, and the verb goes last. \"おととい写真を海で撮った\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "撮る (fotografare) finisce in る e fa il passato con una piccola っ: 撮る → 撮った. La parola di tempo おととい (l'altro ieri) va per prima senza particella, e il verbo va in fondo. Va bene anche «おととい写真を海で撮った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "時を示す「に」",
+      "prompt": {
+        "en": "\"I am moving house on May 3rd.\" How is \"on May 3rd\" written here?",
+        "it": "«Il 3 maggio trasloco.» Come si scrive qui «il 3 maggio»?"
+      },
+      "sentence": {
+        "kanji": "五月三日に引っ越す",
+        "kana": "ごがつみっかにひっこす"
+      },
+      "translation": {
+        "en": "I am moving house on May 3rd.",
+        "it": "Il 3 maggio trasloco."
+      },
+      "glosses": [
+        { "text": "五月三日に", "reading": "ごがつみっかに" },
+        { "text": "五月三日", "reading": "ごがつみっか" },
+        { "text": "五月三日を", "reading": "ごがつみっかを" }
+      ],
+      "gap": {
+        "kanji": "＿引っ越す",
+        "kana": "＿ひっこす"
+      },
+      "answer": "五月三日に",
+      "distractors": ["五月三日", "五月三日を"],
+      "explanation": {
+        "en": "A date like 五月三日 (May 3rd) is a fixed point in the calendar: it does not change depending on when you speak. Fixed times take に, like English \"on\". Only words like today, tomorrow or next year go without に. With を, the date would become the thing you move.",
+        "it": "Una data come 五月三日 (il 3 maggio) è un punto fisso del calendario: non cambia a seconda di quando parli. I tempi fissi prendono に. Solo parole come oggi, domani o l'anno prossimo vanno senza に. Con を, la data diventerebbe la cosa che traslochi."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "時を示す「に」",
+      "prompt": {
+        "en": "\"At Christmas the family gets together.\" Which part says when?",
+        "it": "«A Natale la famiglia si riunisce.» Quale parte dice quando?"
+      },
+      "sentence": {
+        "kanji": "クリスマスに家族が集まる",
+        "kana": "クリスマスにかぞくがあつまる"
+      },
+      "translation": {
+        "en": "At Christmas the family gets together.",
+        "it": "A Natale la famiglia si riunisce."
+      },
+      "glosses": [
+        { "text": "クリスマスに", "meaning": { "en": "at Christmas", "it": "a Natale" } },
+        { "text": "家族が集", "reading": "かぞくがあつ", "meaning": { "en": "the family, gather", "it": "la famiglia, riunirsi" } },
+        { "text": "まる", "meaning": { "en": "end of the verb 集まる (gets together)", "it": "fine del verbo 集まる (si riunisce)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select クリスマスに (at Christmas). Christmas is a fixed day of the year, so it takes に, which marks the moment when something happens. Compare with あした (tomorrow), which depends on when you speak and takes no に.",
+        "it": "Seleziona クリスマスに (a Natale). Natale è un giorno fisso dell'anno, quindi prende に, che indica il momento in cui succede qualcosa. Confronta con あした (domani), che dipende da quando parli e non prende に."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "時を示す「に」",
+      "prompt": {
+        "en": "Build: \"The cherry trees bloom in April.\"",
+        "it": "Componi: «I ciliegi fioriscono ad aprile.»"
+      },
+      "sentence": {
+        "kanji": "四月に桜が咲く",
+        "kana": "しがつにさくらがさく"
+      },
+      "translation": {
+        "en": "The cherry trees bloom in April.",
+        "it": "I ciliegi fioriscono ad aprile."
+      },
+      "glosses": [
+        { "text": "四月に", "reading": "しがつに", "meaning": { "en": "in April", "it": "ad aprile" } },
+        { "text": "桜が", "reading": "さくらが", "meaning": { "en": "the cherry trees (what blooms)", "it": "i ciliegi (cosa fiorisce)" } },
+        { "text": "咲く", "reading": "さく", "meaning": { "en": "bloom", "it": "fioriscono" } }
+      ],
+      "answer": ["四月に", "桜が", "咲く"],
+      "alsoAccepted": [["桜が", "四月に", "咲く"]],
+      "explanation": {
+        "en": "A month like 四月 (April) is a fixed time, so it takes に, like English \"in\". 咲く (bloom) is non-past: it happens every year. \"桜が四月に咲く\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Un mese come 四月 (aprile) è un tempo fisso, quindi prende に, come «ad» in italiano. 咲く (fioriscono) è non passato: succede ogni anno. Va bene anche «桜が四月に咲く»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
     }
   ]
 }

@@ -278,6 +278,190 @@
         "en": "The subject is ラーメン, marked by が; この店の (\"of this restaurant\") comes before it and describes it. The predicate is おいしい, an い-adjective (an adjective that ends in い) that already means \"is delicious\". So no だ follows it.",
         "it": "Il soggetto è ラーメン, segnato da が; この店の («di questo locale») viene prima e lo descrive. Il predicato è おいしい, un aggettivo in い (un aggettivo che finisce in い) che vuol già dire «è buonissimo». Per questo dopo non c'è だ."
       }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "\"The wind is strong.\" Which particle marks what is strong?",
+        "it": "«Il vento è forte.» Quale particella segna ciò che è forte?"
+      },
+      "sentence": {
+        "kanji": "風が強い",
+        "kana": "かぜがつよい"
+      },
+      "translation": {
+        "en": "The wind is strong.",
+        "it": "Il vento è forte."
+      },
+      "gap": {
+        "kanji": "風＿強い",
+        "kana": "かぜ＿つよい"
+      },
+      "answer": "が",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "The wind is what is strong, so 風 (wind) is the subject and takes が. The predicate, the part that says something about the subject, is 強い (\"is strong\"): an い-adjective (an adjective that ends in い), and it takes its subject with が just like a verb. を marks the thing an action is done to, but 強い is not an action. で marks a place or a means (\"at\", \"with\"), which makes no sense here.",
+        "it": "Il vento è ciò che è forte, quindi 風 (vento) è il soggetto e prende が. Il predicato, cioè la parte che dice qualcosa del soggetto, è 強い («è forte»): un aggettivo in い (un aggettivo che finisce in い), e prende il soggetto con が proprio come un verbo. を segna la cosa su cui si compie un'azione, ma 強い non è un'azione. で indica un luogo o un mezzo («in», «con»), e qui non ha senso."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "\"The kitten is meowing.\" Which particle marks who is meowing?",
+        "it": "«Il gattino sta miagolando.» Quale particella segna chi miagola?"
+      },
+      "sentence": {
+        "kanji": "子猫が鳴いている",
+        "kana": "こねこがないている"
+      },
+      "translation": {
+        "en": "The kitten is meowing.",
+        "it": "Il gattino sta miagolando."
+      },
+      "gap": {
+        "kanji": "子猫＿鳴いている",
+        "kana": "こねこ＿ないている"
+      },
+      "answer": "が",
+      "distractors": ["を", "の"],
+      "explanation": {
+        "en": "Who is meowing? The kitten: it is the subject, so it takes が. 鳴いている means \"is meowing\" (an action going on right now). With を the kitten would become the thing being acted on, as if someone were \"meowing the kitten\". の links a noun to another noun (\"the kitten's ...\"), but no noun follows here, only a verb.",
+        "it": "Chi miagola? Il gattino: è il soggetto, quindi prende が. 鳴いている vuol dire «sta miagolando» (un'azione in corso adesso). Con を il gattino diventerebbe la cosa su cui si agisce, come se qualcuno «miagolasse il gattino». の lega un nome a un altro nome («il … del gattino»), ma qui non segue un nome: segue un verbo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "Build: \"It has been raining since this morning.\"",
+        "it": "Componi: «Piove da stamattina.»"
+      },
+      "sentence": {
+        "kanji": "朝から雨が降っている",
+        "kana": "あさからあめがふっている"
+      },
+      "translation": {
+        "en": "It has been raining since this morning.",
+        "it": "Piove da stamattina."
+      },
+      "glosses": [
+        { "text": "朝から", "reading": "あさから", "meaning": { "en": "since the morning", "it": "da stamattina" } },
+        { "text": "雨が", "reading": "あめが", "meaning": { "en": "rain (subject)", "it": "pioggia (soggetto)" } },
+        { "text": "降っている", "reading": "ふっている", "meaning": { "en": "is falling", "it": "sta cadendo" } }
+      ],
+      "answer": ["朝から", "雨が", "降っている"],
+      "alsoAccepted": [["雨が", "朝から", "降っている"]],
+      "explanation": {
+        "en": "In Japanese it is the rain itself that falls: 雨 (rain) is the subject, so it takes が, and 降っている (is falling) is the predicate, the part that says what the subject does. 朝から (since the morning) only says since when, so it takes no が. \"雨が朝から降っている\" is also correct: the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "In giapponese è la pioggia stessa che cade: 雨 (pioggia) è il soggetto, quindi prende が, e 降っている (sta cadendo) è il predicato, la parte che dice che cosa fa il soggetto. 朝から (da stamattina) dice solo da quando, quindi non prende が. Va bene anche «雨が朝から降っている»: il verbo deve restare in fondo, ma prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「が」が示す主語",
+      "prompt": {
+        "en": "Build: \"Suddenly the phone rang.\"",
+        "it": "Componi: «All'improvviso il telefono ha squillato.»"
+      },
+      "sentence": {
+        "kanji": "急に電話が鳴った",
+        "kana": "きゅうにでんわがなった"
+      },
+      "translation": {
+        "en": "Suddenly the phone rang.",
+        "it": "All'improvviso il telefono ha squillato."
+      },
+      "glosses": [
+        { "text": "急に", "reading": "きゅうに", "meaning": { "en": "suddenly", "it": "all'improvviso" } },
+        { "text": "電話が", "reading": "でんわが", "meaning": { "en": "the phone (subject)", "it": "il telefono (soggetto)" } },
+        { "text": "鳴った", "reading": "なった", "meaning": { "en": "rang", "it": "ha squillato" } }
+      ],
+      "answer": ["急に", "電話が", "鳴った"],
+      "alsoAccepted": [["電話が", "急に", "鳴った"]],
+      "explanation": {
+        "en": "The phone is what rang, so 電話 (phone) is the subject and takes が. The verb 鳴った (rang) is the predicate, the part that says what the subject did, and it goes last. 急に (suddenly) only says how it happened, so it takes no が. \"電話が急に鳴った\" is also correct: the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Il telefono è ciò che ha squillato, quindi 電話 (telefono) è il soggetto e prende が. Il verbo 鳴った (ha squillato) è il predicato, la parte che dice che cosa ha fatto il soggetto, e va alla fine. 急に (all'improvviso) dice solo come è successo, quindi non prende が. Va bene anche «電話が急に鳴った»: il verbo deve restare in fondo, ma prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "\"That is Mount Fuji.\" Which part is the noun that says what \"that\" is?",
+        "it": "«Quello è il monte Fuji.» Quale parte è il nome che dice che cos'è «quello»?"
+      },
+      "sentence": {
+        "kanji": "あれが富士山だ",
+        "kana": "あれがふじさんだ"
+      },
+      "translation": {
+        "en": "That is Mount Fuji.",
+        "it": "Quello è il monte Fuji."
+      },
+      "glosses": [
+        { "text": "あれが", "meaning": { "en": "that one over there (subject)", "it": "quello laggiù (soggetto)" } },
+        { "text": "富士山", "reading": "ふじさん", "meaning": { "en": "Mount Fuji", "it": "il monte Fuji" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "The answer is 富士山 (Mount Fuji). It is a noun, and a noun alone cannot close the sentence: it needs だ, the word for \"is\". Together, 富士山だ means \"is Mount Fuji\". This is one of the three ways a predicate (the part that says something about the subject) can end: noun + だ. あれが is the subject, \"that one over there\", marked by が.",
+        "it": "La risposta è 富士山 (il monte Fuji). È un nome, e un nome da solo non può chiudere la frase: ha bisogno di だ, la parola per «è». Insieme, 富士山だ vuol dire «è il monte Fuji». È uno dei tre modi in cui può finire un predicato (la parte che dice qualcosa del soggetto): nome + だ. あれが è il soggetto, «quello laggiù», segnato da が."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "\"The mandarins are sweet.\" Which part shows that 甘い is an い-adjective (an adjective that ends in い)?",
+        "it": "«I mandarini sono dolci.» Quale parte mostra che 甘い è un aggettivo in い (un aggettivo che finisce in い)?"
+      },
+      "sentence": {
+        "kanji": "みかんが甘い",
+        "kana": "みかんがあまい"
+      },
+      "translation": {
+        "en": "The mandarins are sweet.",
+        "it": "I mandarini sono dolci."
+      },
+      "glosses": [
+        { "text": "みかんが", "meaning": { "en": "the mandarins (subject)", "it": "i mandarini (soggetto)" } },
+        { "text": "甘", "reading": "あま", "meaning": { "en": "sweet (kanji of 甘い)", "it": "dolce (kanji di 甘い)" } },
+        { "text": "い", "meaning": { "en": "ending of the い-adjective", "it": "finale dell'aggettivo in い" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "The final い tells you that 甘い (\"is sweet\") is an い-adjective, one of the three ways a predicate (the part that says something about the subject) can end. An い-adjective already contains \"is\", so no だ follows it: 甘いだ would be wrong. みかんが is the subject, and 甘 is only the kanji at the start of the adjective.",
+        "it": "La い finale ti dice che 甘い («è dolce») è un aggettivo in い, uno dei tre modi in cui può finire un predicato (la parte che dice qualcosa del soggetto). Un aggettivo in い contiene già «è», quindi dopo non va だ: 甘いだ sarebbe sbagliato. みかんが è il soggetto, e 甘 è solo il kanji all'inizio dell'aggettivo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "述語の三つの形",
+      "prompt": {
+        "en": "Build: \"The cherry tree in the garden has bloomed.\"",
+        "it": "Componi: «Il ciliegio del giardino è fiorito.»"
+      },
+      "sentence": {
+        "kanji": "庭の桜が咲いた",
+        "kana": "にわのさくらがさいた"
+      },
+      "translation": {
+        "en": "The cherry tree in the garden has bloomed.",
+        "it": "Il ciliegio del giardino è fiorito."
+      },
+      "glosses": [
+        { "text": "庭の", "reading": "にわの", "meaning": { "en": "of the garden", "it": "del giardino" } },
+        { "text": "桜が", "reading": "さくらが", "meaning": { "en": "cherry tree (subject)", "it": "ciliegio (soggetto)" } },
+        { "text": "咲いた", "reading": "さいた", "meaning": { "en": "bloomed", "it": "è fiorito" } }
+      ],
+      "answer": ["庭の", "桜が", "咲いた"],
+      "explanation": {
+        "en": "The subject is 桜 (cherry tree), marked by が; 庭の (\"of the garden\") comes right before it and says which tree. The predicate, the part that says something about the subject, is 咲いた (bloomed): a verb, one of the three ways a predicate can end. A verb is complete on its own, so no だ follows it.",
+        "it": "Il soggetto è 桜 (ciliegio), segnato da が; 庭の («del giardino») viene subito prima e dice quale albero. Il predicato, cioè la parte che dice qualcosa del soggetto, è 咲いた (è fiorito): un verbo, uno dei tre modi in cui può finire un predicato. Un verbo è completo da solo, quindi dopo non va だ."
+      }
     }
   ]
 }

@@ -295,6 +295,84 @@
         "en": "The te-form (the form ending in て or で) joins two actions: \"I did this, and then that\". 読む ends in む, so it becomes 読んで. Only the last verb, 寝た, says that everything is in the past.",
         "it": "La forma in て (la forma che finisce in て o で) unisce due azioni: «ho fatto questo, e poi quello». 読む finisce in む, quindi diventa 読んで. Solo l'ultimo verbo, 寝た, dice che tutto è al passato."
       }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "\"I went home at six.\" 帰る ends in -eru, but which part shows it is not an ichidan verb?",
+        "it": "«Sono tornato a casa alle sei.» 帰る finisce in -eru, ma quale parte mostra che non è un verbo ichidan?"
+      },
+      "sentence": {
+        "kanji": "六時に家へ帰った",
+        "kana": "ろくじにいえへかえった"
+      },
+      "translation": {
+        "en": "I went home at six.",
+        "it": "Sono tornato a casa alle sei."
+      },
+      "glosses": [
+        { "text": "六時に家へ帰", "reading": "ろくじにいえへかえ", "meaning": { "en": "at six o'clock, home, go back", "it": "alle sei, a casa, tornare" } },
+        { "text": "った", "meaning": { "en": "past ending of 帰る (went back)", "it": "desinenza del passato di 帰る (tornato)" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select った. An ichidan verb (one that simply drops る) would give 帰た, but the right past is 帰った, with a small っ. That small っ shows 帰る is a godan verb (the group whose last syllable changes), even though it ends in -eru like 食べる.",
+        "it": "Seleziona った. Un verbo ichidan (che toglie semplicemente る) darebbe 帰た, ma il passato giusto è 帰った, con una piccola っ. Quella piccola っ mostra che 帰る è un verbo godan (il gruppo che cambia l'ultima sillaba), anche se finisce in -eru come 食べる."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "Build: \"In the morning I got up and washed my face.\"",
+        "it": "Componi: «La mattina mi sono alzato e mi sono lavato la faccia.»"
+      },
+      "sentence": {
+        "kanji": "朝起きて顔を洗った",
+        "kana": "あさおきてかおをあらった"
+      },
+      "translation": {
+        "en": "In the morning I got up and washed my face.",
+        "it": "La mattina mi sono alzato e mi sono lavato la faccia."
+      },
+      "glosses": [
+        { "text": "朝", "reading": "あさ", "meaning": { "en": "in the morning", "it": "la mattina" } },
+        { "text": "起きて", "reading": "おきて", "meaning": { "en": "got up, and then", "it": "mi sono alzato, e poi" } },
+        { "text": "顔を", "reading": "かおを", "meaning": { "en": "my face (what I washed)", "it": "la faccia (cosa ho lavato)" } },
+        { "text": "洗った", "reading": "あらった", "meaning": { "en": "washed", "it": "ho lavato" } }
+      ],
+      "answer": ["朝", "起きて", "顔を", "洗った"],
+      "explanation": {
+        "en": "Two verbs from two different groups. 起きる (to get up) is ichidan (it simply drops る): 起きて. 洗う (to wash) is godan (its last syllable changes): う becomes a small っ, so 洗った. The te-form (the form ending in て) 起きて says \"I got up, and then\", so it comes before 顔を洗った.",
+        "it": "Due verbi di due gruppi diversi. 起きる (alzarsi) è ichidan (toglie semplicemente る): 起きて. 洗う (lavare) è godan (cambia l'ultima sillaba): う diventa una piccola っ, quindi 洗った. La forma in て (la forma che finisce in て) 起きて dice «mi sono alzato, e poi», quindi viene prima di 顔を洗った."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "動詞の三つのグループ",
+      "prompt": {
+        "en": "Build: \"In the evening I walked the dog.\"",
+        "it": "Componi: «Nel tardo pomeriggio ho portato a spasso il cane.»"
+      },
+      "sentence": {
+        "kanji": "夕方犬の散歩をした",
+        "kana": "ゆうがたいぬのさんぽをした"
+      },
+      "translation": {
+        "en": "In the evening I walked the dog.",
+        "it": "Nel tardo pomeriggio ho portato a spasso il cane."
+      },
+      "glosses": [
+        { "text": "夕方", "reading": "ゆうがた", "meaning": { "en": "in the evening", "it": "nel tardo pomeriggio" } },
+        { "text": "犬の散歩を", "reading": "いぬのさんぽを", "meaning": { "en": "the dog's walk", "it": "la passeggiata del cane" } },
+        { "text": "した", "meaning": { "en": "did", "it": "ho fatto" } }
+      ],
+      "answer": ["夕方", "犬の散歩を", "した"],
+      "explanation": {
+        "en": "する (to do) is one of the only two irregular verbs, together with 来る: its past is simply した. 犬の散歩をする literally means \"to do the dog's walk\". The time word 夕方 (evening) goes first with no particle, and した goes last.",
+        "it": "する (fare) è uno dei soli due verbi irregolari, insieme a 来る: il suo passato è semplicemente した. 犬の散歩をする vuol dire alla lettera «fare la passeggiata del cane». La parola di tempo 夕方 (tardo pomeriggio) va per prima senza particella, e した va in fondo."
+      }
     }
   ]
 }

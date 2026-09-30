@@ -26,25 +26,25 @@ con il contenuto reale. -->
 
 | Order | File | Transcript | single-select | select-span | assemble | Totale |
 |---:|---|---|---:|---:|---:|---:|
-| 1 | `01-il-soggetto-con-ga.json` | `lezione-01` | 4 | 3 | 3 | 10 |
-| 2 | `02-il-pronome-zero.json` | `lezione-02` | 4 | 3 | 3 | 10 |
-| 3 | `03-il-tema-con-wa.json` | `lezione-03` | 4 | 3 | 3 | 10 |
-| 4 | `04-i-tempi-del-verbo.json` | `lezione-04` | 3 | 3 | 4 | 10 |
-| 5 | `05-gruppi-verbali-e-forma-te.json` | `lezione-05` | 5 | 3 | 2 | 10 |
-| 6 | `06-modificare-i-nomi.json` | `lezione-06` | 4 | 3 | 3 | 10 |
-| 7 | `07-la-negazione.json` | `lezione-07` | 6 | 2 | 2 | 10 |
-| 8 | `08-radicali-e-ausiliari.json` | `lezione-08` | 6 | 2 | 2 | 10 |
-| 9 | `09-la-particella-ni.json` | `lezione-09` | 5 | 3 | 2 | 10 |
-| 10 | `10-la-particella-de-e-to.json` | `lezione-10` | 4 | 3 | 3 | 10 |
-| 11 | `11-ga-con-sentimenti-e-desideri.json` | `lezione-11` | 4 | 3 | 3 | 10 |
-| 12 | `12-la-forma-potenziale.json` | `lezione-12` | 5 | 2 | 3 | 10 |
-| 13 | `13-forma-te-kureru-ageru.json` | `lezione-13` | 4 | 3 | 3 | 10 |
+| 1 | `01-il-soggetto-con-ga.json` | `lezione-01` | 6 | 5 | 6 | 17 |
+| 2 | `02-il-pronome-zero.json` | `lezione-02` | 6 | 5 | 5 | 16 |
+| 3 | `03-il-tema-con-wa.json` | `lezione-03` | 6 | 5 | 5 | 16 |
+| 4 | `04-i-tempi-del-verbo.json` | `lezione-04` | 8 | 8 | 8 | 24 |
+| 5 | `05-gruppi-verbali-e-forma-te.json` | `lezione-05` | 5 | 4 | 4 | 13 |
+| 6 | `06-modificare-i-nomi.json` | `lezione-06` | 6 | 6 | 6 | 18 |
+| 7 | `07-la-negazione.json` | `lezione-07` | 12 | 5 | 7 | 24 |
+| 8 | `08-radicali-e-ausiliari.json` | `lezione-08` | 11 | 5 | 8 | 24 |
+| 9 | `09-la-particella-ni.json` | `lezione-09` | 11 | 9 | 10 | 30 |
+| 10 | `10-la-particella-de-e-to.json` | `lezione-10` | 6 | 6 | 6 | 18 |
+| 11 | `11-ga-con-sentimenti-e-desideri.json` | `lezione-11` | 6 | 6 | 6 | 18 |
+| 12 | `12-la-forma-potenziale.json` | `lezione-12` | 7 | 6 | 6 | 19 |
+| 13 | `13-forma-te-kureru-ageru.json` | `lezione-13` | 6 | 6 | 6 | 18 |
 | 900 | `01-la-particella-wo.json` | — (fixture dei test) | 1 | 1 | 1 | 3 |
 
-<!-- inventory-total: 133 -->
+<!-- inventory-total: 258 -->
 
-**Totale: 133 esercizi** in 14 file — 59 `single-select`, 37 `select-span`,
-37 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
+**Totale: 258 esercizi** in 14 file — 97 `single-select`, 77 `select-span`,
+84 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
 curriculum (fascia riservata 900+, `docs/authoring-runbook.md`).
 
 ## Transcript ancora da lavorare

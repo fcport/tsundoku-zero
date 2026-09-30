@@ -270,6 +270,218 @@
         "en": "本とノート means \"a book and a notebook\": と joins two nouns into a list. が after the list marks what is there, and ある says that things are in a place. The place takes に, because ある is not an action. \"本とノートが机の上にある\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
         "it": "本とノート significa «un libro e un quaderno»: と unisce due nomi in un elenco. が dopo l'elenco segna ciò che c'è, e ある dice che delle cose si trovano in un luogo. Il luogo prende に, perché ある non è un'azione. Va bene anche «本とノートが机の上にある»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "動作の場所を示す「で」",
+      "prompt": {
+        "en": "\"I work at a convenience store.\" Which part says where the work happens?",
+        "it": "«Lavoro in un minimarket.» Quale parte dice dove si svolge il lavoro?"
+      },
+      "sentence": {
+        "kanji": "コンビニで働いている",
+        "kana": "コンビニではたらいている"
+      },
+      "translation": {
+        "en": "I work at a convenience store.",
+        "it": "Lavoro in un minimarket."
+      },
+      "glosses": [
+        { "text": "コンビニで", "meaning": { "en": "at a convenience store", "it": "in un minimarket" } },
+        { "text": "働", "reading": "はたら", "meaning": { "en": "work (kanji of 働く)", "it": "lavorare (kanji di 働く)" } },
+        { "text": "いている", "meaning": { "en": "end of 働いている, \"work (as a job)\"", "it": "fine di 働いている, «lavoro (come impiego)»" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select コンビニで, \"at a convenience store\". Working is an action, so the place where it happens takes で. 働いている is in the ている form (the form for what is going on), and here it means a job you have now.",
+        "it": "Seleziona コンビニで, «in un minimarket». Lavorare è un'azione, quindi il luogo dove si svolge prende で. 働いている è nella forma in ている (quella per ciò che è in corso), e qui indica un lavoro che hai adesso."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "動作の場所を示す「で」",
+      "prompt": {
+        "en": "Build: \"I took a photo in front of the station.\"",
+        "it": "Componi: «Ho fatto una foto davanti alla stazione.»"
+      },
+      "sentence": {
+        "kanji": "駅の前で写真を撮った",
+        "kana": "えきのまえでしゃしんをとった"
+      },
+      "translation": {
+        "en": "I took a photo in front of the station.",
+        "it": "Ho fatto una foto davanti alla stazione."
+      },
+      "glosses": [
+        { "text": "駅の前で", "reading": "えきのまえで", "meaning": { "en": "in front of the station", "it": "davanti alla stazione" } },
+        { "text": "写真を", "reading": "しゃしんを", "meaning": { "en": "photo + を (what is taken)", "it": "foto + を (ciò che si scatta)" } },
+        { "text": "撮った", "reading": "とった", "meaning": { "en": "took (a photo)", "it": "ho scattato" } }
+      ],
+      "answer": ["駅の前で", "写真を", "撮った"],
+      "alsoAccepted": [["写真を", "駅の前で", "撮った"]],
+      "explanation": {
+        "en": "Taking a photo is an action, so the place where you do it takes で: 駅の前で, \"in front of the station\". The photo is the object (the thing the action is done to), so it takes を. \"写真を駅の前で撮った\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Fare una foto è un'azione, quindi il luogo dove la fai prende で: 駅の前で, «davanti alla stazione». La foto è l'oggetto (la cosa su cui cade l'azione), quindi prende を. Va bene anche «写真を駅の前で撮った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "動作の場所を示す「で」",
+      "prompt": {
+        "en": "Build: \"My father grows vegetables in the garden.\"",
+        "it": "Componi: «Mio padre coltiva verdure in giardino.»"
+      },
+      "sentence": {
+        "kanji": "父は庭で野菜を育てている",
+        "kana": "ちちはにわでやさいをそだてている"
+      },
+      "translation": {
+        "en": "My father grows vegetables in the garden.",
+        "it": "Mio padre coltiva verdure in giardino."
+      },
+      "glosses": [
+        { "text": "父は", "reading": "ちちは", "meaning": { "en": "my father (topic)", "it": "mio padre (tema)" } },
+        { "text": "庭で", "reading": "にわで", "meaning": { "en": "in the garden", "it": "in giardino" } },
+        { "text": "野菜を", "reading": "やさいを", "meaning": { "en": "vegetables + を (what is grown)", "it": "verdure + を (ciò che si coltiva)" } },
+        { "text": "育てている", "reading": "そだてている", "meaning": { "en": "grows, is growing", "it": "coltiva" } }
+      ],
+      "answer": ["父は", "庭で", "野菜を", "育てている"],
+      "alsoAccepted": [["父は", "野菜を", "庭で", "育てている"]],
+      "explanation": {
+        "en": "Growing vegetables is an action that happens in the garden, so the garden takes で: 庭で. 父は is the topic, the person the sentence is about, and it stays first. If the sentence only said where the vegetables are, with ある, the garden would take に. \"父は野菜を庭で育てている\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Coltivare verdure è un'azione che avviene in giardino, quindi il giardino prende で: 庭で. 父は è il tema, la persona di cui parla la frase, e resta all'inizio. Se la frase dicesse solo dove si trovano le verdure, con ある, il giardino prenderebbe に. Va bene anche «父は野菜を庭で育てている»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "手段を示す「で」",
+      "prompt": {
+        "en": "\"I heated the rice in the microwave.\" Which particle goes after the tool used?",
+        "it": "«Ho scaldato il riso nel microonde.» Quale particella va dopo lo strumento usato?"
+      },
+      "sentence": {
+        "kanji": "電子レンジでご飯を温めた",
+        "kana": "でんしレンジでごはんをあたためた"
+      },
+      "translation": {
+        "en": "I heated the rice in the microwave.",
+        "it": "Ho scaldato il riso nel microonde."
+      },
+      "gap": {
+        "kanji": "電子レンジ＿ご飯を温めた",
+        "kana": "でんしレンジ＿ごはんをあたためた"
+      },
+      "answer": "で",
+      "distractors": ["に", "を"],
+      "explanation": {
+        "en": "The microwave is the tool you use to heat the rice, and a tool takes で: 電子レンジで. を is already taken by ご飯, the thing that gets heated. 電子レンジに would fit with 入れる, \"put into\", not with 温める, \"heat\".",
+        "it": "Il microonde è lo strumento con cui scaldi il riso, e uno strumento prende で: 電子レンジで. を è già preso da ご飯, la cosa che viene scaldata. 電子レンジに andrebbe con 入れる, «mettere dentro», non con 温める, «scaldare»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "手段を示す「で」",
+      "prompt": {
+        "en": "Build: \"I checked the weather on my phone.\"",
+        "it": "Componi: «Ho controllato il meteo con il telefono.»"
+      },
+      "sentence": {
+        "kanji": "スマホで天気を調べた",
+        "kana": "スマホでてんきをしらべた"
+      },
+      "translation": {
+        "en": "I checked the weather on my phone.",
+        "it": "Ho controllato il meteo con il telefono."
+      },
+      "glosses": [
+        { "text": "スマホで", "meaning": { "en": "with my smartphone", "it": "con lo smartphone" } },
+        { "text": "天気を", "reading": "てんきを", "meaning": { "en": "weather + を (what is checked)", "it": "meteo + を (ciò che si controlla)" } },
+        { "text": "調べた", "reading": "しらべた", "meaning": { "en": "checked, looked up", "it": "ho controllato" } }
+      ],
+      "answer": ["スマホで", "天気を", "調べた"],
+      "alsoAccepted": [["天気を", "スマホで", "調べた"]],
+      "explanation": {
+        "en": "スマホ, \"smartphone\", is the tool you use to look things up, so it takes で: スマホで, \"with my phone\". The weather is the thing checked, so it takes を. \"天気をスマホで調べた\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "スマホ, «smartphone», è lo strumento con cui cerchi le informazioni, quindi prende で: スマホで, «con il telefono». Il meteo è la cosa controllata, quindi prende を. Va bene anche «天気をスマホで調べた»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞をつなぐ「と」",
+      "prompt": {
+        "en": "\"I ordered coffee and cake.\" Which part lists what was ordered?",
+        "it": "«Ho ordinato caffè e torta.» Quale parte elenca ciò che è stato ordinato?"
+      },
+      "sentence": {
+        "kanji": "コーヒーとケーキを注文した",
+        "kana": "コーヒーとケーキをちゅうもんした"
+      },
+      "translation": {
+        "en": "I ordered coffee and cake.",
+        "it": "Ho ordinato caffè e torta."
+      },
+      "glosses": [
+        { "text": "コーヒーとケーキを", "meaning": { "en": "coffee and cake + を (what is ordered)", "it": "caffè e torta + を (ciò che si ordina)" } },
+        { "text": "注文", "reading": "ちゅうもん", "meaning": { "en": "order (the kanji of 注文する)", "it": "ordinazione (i kanji di 注文する)" } },
+        { "text": "した", "meaning": { "en": "did: 注文した, \"ordered\"", "it": "ha fatto: 注文した, «ho ordinato»" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select コーヒーとケーキを. と between two nouns means \"and\" and joins them into one list: コーヒーとケーキ, \"coffee and cake\". The を after the list makes both things the object of 注文した, \"ordered\".",
+        "it": "Seleziona コーヒーとケーキを. と fra due nomi significa «e» e li unisce in un solo elenco: コーヒーとケーキ, «caffè e torta». Il を dopo l'elenco rende entrambe le cose l'oggetto di 注文した, «ho ordinato»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞をつなぐ「と」",
+      "prompt": {
+        "en": "\"The cat and the dog are playing in the garden.\" Which part says who is playing?",
+        "it": "«Il gatto e il cane giocano in giardino.» Quale parte dice chi sta giocando?"
+      },
+      "sentence": {
+        "kanji": "ねこといぬが庭で遊んでいる",
+        "kana": "ねこといぬがにわであそんでいる"
+      },
+      "translation": {
+        "en": "The cat and the dog are playing in the garden.",
+        "it": "Il gatto e il cane giocano in giardino."
+      },
+      "glosses": [
+        { "text": "ねこといぬが", "meaning": { "en": "the cat and the dog + が (who does it)", "it": "il gatto e il cane + が (chi lo fa)" } },
+        { "text": "庭で遊", "reading": "にわであそ", "meaning": { "en": "in the garden + first part of 遊ぶ, \"play\"", "it": "in giardino + inizio di 遊ぶ, «giocare»" } },
+        { "text": "んでいる", "meaning": { "en": "end of 遊んでいる, \"are playing\"", "it": "fine di 遊んでいる, «stanno giocando»" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select ねこといぬが. と joins ねこ, \"cat\", and いぬ, \"dog\", into one group, and が after the group marks both as the subject (who does the action). 庭で says where they play: playing is an action, so で.",
+        "it": "Seleziona ねこといぬが. と unisce ねこ, «gatto», e いぬ, «cane», in un solo gruppo, e が dopo il gruppo li segna entrambi come soggetto (chi fa l'azione). 庭で dice dove giocano: giocare è un'azione, quindi で."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞をつなぐ「と」",
+      "prompt": {
+        "en": "\"I travelled around Hokkaido and Okinawa.\" Which particle joins the two places?",
+        "it": "«Ho viaggiato in Hokkaido e a Okinawa.» Quale particella unisce i due luoghi?"
+      },
+      "sentence": {
+        "kanji": "北海道と沖縄を旅行した",
+        "kana": "ほっかいどうとおきなわをりょこうした"
+      },
+      "translation": {
+        "en": "I travelled around Hokkaido and Okinawa.",
+        "it": "Ho viaggiato in Hokkaido e a Okinawa."
+      },
+      "gap": {
+        "kanji": "北海道＿沖縄を旅行した",
+        "kana": "ほっかいどう＿おきなわをりょこうした"
+      },
+      "answer": "と",
+      "distractors": ["で", "を"],
+      "explanation": {
+        "en": "Hokkaido and Okinawa are both places you travelled around, so と joins them into one list: 北海道と沖縄, \"Hokkaido and Okinawa\". The を after the list marks both as the places travelled. を after 北海道 would not join the two nouns, and で would say that the trip to Okinawa happened in Hokkaido, which makes no sense.",
+        "it": "Hokkaido e Okinawa sono entrambi luoghi che hai girato, quindi と li unisce in un solo elenco: 北海道と沖縄, «Hokkaido e Okinawa». Il を dopo l'elenco li segna entrambi come luoghi del viaggio. を dopo 北海道 non unirebbe i due nomi, e で direbbe che il viaggio a Okinawa si è svolto in Hokkaido, che non ha senso."
+      }
     }
   ]
 }

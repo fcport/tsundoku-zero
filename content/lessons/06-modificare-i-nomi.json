@@ -289,6 +289,226 @@
         "en": "新しい (new) is an い-adjective (an adjective ending in い). It goes straight before the noun, with nothing in between: 新しい服, \"new clothes\". な is only for な-adjectives, and の only joins two nouns.",
         "it": "新しい (nuovo) è un aggettivo in い (un aggettivo che finisce in い). Va direttamente davanti al nome, senza niente in mezzo: 新しい服, «vestiti nuovi». な serve solo agli aggettivi in な, e の unisce solo due nomi."
       }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞を修飾する述語",
+      "prompt": {
+        "en": "\"This is the sweater my grandmother knitted.\" What goes before セーター?",
+        "it": "«Questo è il maglione che ha fatto a maglia mia nonna.» Cosa va davanti a セーター?"
+      },
+      "sentence": {
+        "kanji": "これは祖母が編んだセーターだ",
+        "kana": "これはそぼがあんだセーターだ"
+      },
+      "translation": {
+        "en": "This is the sweater my grandmother knitted.",
+        "it": "Questo è il maglione che ha fatto a maglia mia nonna."
+      },
+      "glosses": [
+        { "text": "編んだ", "reading": "あんだ" },
+        { "text": "編んだの", "reading": "あんだの" },
+        { "text": "編んだな", "reading": "あんだな" }
+      ],
+      "gap": {
+        "kanji": "これは祖母が＿セーターだ",
+        "kana": "これはそぼが＿セーターだ"
+      },
+      "answer": "編んだ",
+      "distractors": ["編んだの", "編んだな"],
+      "explanation": {
+        "en": "A verb can describe a noun by standing right before it, with nothing in between: 祖母が編んだセーター, \"the sweater (that) my grandmother knitted\". の only joins two nouns, and な is only for な-adjectives (adjectives that need な before a noun), so neither goes after a verb.",
+        "it": "Un verbo può descrivere un nome mettendosi subito prima, senza niente in mezzo: 祖母が編んだセーター, «il maglione (che) ha fatto a maglia mia nonna». の unisce solo due nomi, e な serve solo agli aggettivi in な (gli aggettivi che vogliono な davanti a un nome), quindi nessuno dei due va dopo un verbo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞を修飾する述語",
+      "prompt": {
+        "en": "Build: \"The mountain you can see from the window is beautiful.\"",
+        "it": "Componi: «La montagna che si vede dalla finestra è bella.»"
+      },
+      "sentence": {
+        "kanji": "窓から見える山はきれいだ",
+        "kana": "まどからみえるやまはきれいだ"
+      },
+      "translation": {
+        "en": "The mountain you can see from the window is beautiful.",
+        "it": "La montagna che si vede dalla finestra è bella."
+      },
+      "glosses": [
+        { "text": "窓から", "reading": "まどから", "meaning": { "en": "from the window", "it": "dalla finestra" } },
+        { "text": "見える", "reading": "みえる", "meaning": { "en": "can be seen (describes the mountain)", "it": "si vede (descrive la montagna)" } },
+        { "text": "山は", "reading": "やまは", "meaning": { "en": "the mountain (the topic)", "it": "la montagna (l'argomento)" } },
+        { "text": "きれいだ", "meaning": { "en": "is beautiful", "it": "è bella" } }
+      ],
+      "answer": ["窓から", "見える", "山は", "きれいだ"],
+      "explanation": {
+        "en": "窓から見える (can be seen from the window) is a whole little sentence placed before 山 (mountain) to describe it: \"the mountain that can be seen from the window\". Then は marks what we talk about, and きれいだ (is beautiful) closes the sentence.",
+        "it": "窓から見える (si vede dalla finestra) è una piccola frase intera messa davanti a 山 (montagna) per descriverla: «la montagna che si vede dalla finestra». Poi は indica di cosa si parla, e きれいだ (è bella) chiude la frase."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞を修飾する「な」",
+      "prompt": {
+        "en": "\"There is a handy shop near the station.\" Which word links 便利 to 店?",
+        "it": "«Vicino alla stazione c'è un negozio comodo.» Quale parola collega 便利 a 店?"
+      },
+      "sentence": {
+        "kanji": "駅の近くに便利な店がある",
+        "kana": "えきのちかくにべんりなみせがある"
+      },
+      "translation": {
+        "en": "There is a handy shop near the station.",
+        "it": "Vicino alla stazione c'è un negozio comodo."
+      },
+      "glosses": [
+        { "text": "な" },
+        { "text": "の" },
+        { "text": "だ" }
+      ],
+      "gap": {
+        "kanji": "駅の近くに便利＿店がある",
+        "kana": "えきのちかくにべんり＿みせがある"
+      },
+      "answer": "な",
+      "distractors": ["の", "だ"],
+      "explanation": {
+        "en": "便利 (handy, convenient) is a な-adjective (an adjective that needs な before a noun): 便利な店, \"a handy shop\". だ means \"is\" and only goes at the end: 店が便利だ, \"the shop is handy\". の joins two nouns, but 便利 is an adjective.",
+        "it": "便利 (comodo) è un aggettivo in な (un aggettivo che vuole な davanti a un nome): 便利な店, «un negozio comodo». だ vuol dire «è» e va solo a fine frase: 店が便利だ, «il negozio è comodo». の unisce due nomi, ma 便利 è un aggettivo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞を修飾する「な」",
+      "prompt": {
+        "en": "\"I got a lovely hat.\" Which part describes the hat?",
+        "it": "«Ho ricevuto un bel cappello.» Quale parte descrive il cappello?"
+      },
+      "sentence": {
+        "kanji": "すてきな帽子をもらった",
+        "kana": "すてきなぼうしをもらった"
+      },
+      "translation": {
+        "en": "I got a lovely hat.",
+        "it": "Ho ricevuto un bel cappello."
+      },
+      "glosses": [
+        { "text": "すてきな", "meaning": { "en": "lovely", "it": "bello" } },
+        { "text": "帽子", "reading": "ぼうし", "meaning": { "en": "hat", "it": "cappello" } },
+        { "text": "をもらった", "meaning": { "en": "received (it)", "it": "ho ricevuto" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select すてきな (lovely). すてき is a な-adjective (an adjective that needs な before a noun), so before 帽子 (hat) it becomes すてきな. The describing word always comes before the noun it describes.",
+        "it": "Seleziona すてきな (bello). すてき è un aggettivo in な (un aggettivo che vuole な davanti a un nome), quindi davanti a 帽子 (cappello) diventa すてきな. La parola che descrive viene sempre prima del nome che descrive."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞を修飾する「な」",
+      "prompt": {
+        "en": "Build: \"A lively puppy is running around the garden.\"",
+        "it": "Componi: «Un cucciolo vivace sta correndo in giardino.»"
+      },
+      "sentence": {
+        "kanji": "元気な子犬が庭を走っている",
+        "kana": "げんきなこいぬがにわをはしっている"
+      },
+      "translation": {
+        "en": "A lively puppy is running around the garden.",
+        "it": "Un cucciolo vivace sta correndo in giardino."
+      },
+      "glosses": [
+        { "text": "元気な", "reading": "げんきな", "meaning": { "en": "lively", "it": "vivace" } },
+        { "text": "子犬が", "reading": "こいぬが", "meaning": { "en": "a puppy (the one running)", "it": "un cucciolo (chi corre)" } },
+        { "text": "庭を", "reading": "にわを", "meaning": { "en": "around the garden", "it": "per il giardino" } },
+        { "text": "走っている", "reading": "はしっている", "meaning": { "en": "is running", "it": "sta correndo" } }
+      ],
+      "answer": ["元気な", "子犬が", "庭を", "走っている"],
+      "explanation": {
+        "en": "元気 (lively, full of energy) is a な-adjective (an adjective that needs な before a noun), so: 元気な子犬, \"a lively puppy\". 元気な must stay right before 子犬. Then 庭を (around the garden) and the verb 走っている (is running) at the end.",
+        "it": "元気 (vivace, pieno di energia) è un aggettivo in な (un aggettivo che vuole な davanti a un nome), quindi: 元気な子犬, «un cucciolo vivace». 元気な deve stare subito prima di 子犬. Poi 庭を (per il giardino) e il verbo 走っている (sta correndo) in fondo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞を修飾する「の」",
+      "prompt": {
+        "en": "\"I like Italian cars.\" Which part says what kind of car?",
+        "it": "«Mi piacciono le macchine italiane.» Quale parte dice che tipo di macchina?"
+      },
+      "sentence": {
+        "kanji": "イタリアの車が好きだ",
+        "kana": "イタリアのくるまがすきだ"
+      },
+      "translation": {
+        "en": "I like Italian cars.",
+        "it": "Mi piacciono le macchine italiane."
+      },
+      "glosses": [
+        { "text": "イタリアの", "meaning": { "en": "from Italy, Italian", "it": "dell'Italia, italiana" } },
+        { "text": "車が好", "reading": "くるまがす", "meaning": { "en": "cars, liked", "it": "macchine, piacere" } },
+        { "text": "きだ", "meaning": { "en": "end of 好き + だ (is liked)", "it": "fine di 好き + だ (piace)" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select イタリアの. イタリア (Italy) is a noun: to describe another noun it needs の in between. イタリアの車 = \"car of Italy\", that is \"Italian car\". The noun that describes always comes first.",
+        "it": "Seleziona イタリアの. イタリア (Italia) è un nome: per descrivere un altro nome vuole の in mezzo. イタリアの車 = «macchina dell'Italia», cioè «macchina italiana». Il nome che descrive viene sempre per primo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞を修飾する「の」",
+      "prompt": {
+        "en": "\"I watched a football match.\" Which part says what kind of match?",
+        "it": "«Ho guardato una partita di calcio.» Quale parte dice che tipo di partita?"
+      },
+      "sentence": {
+        "kanji": "サッカーの試合を見た",
+        "kana": "サッカーのしあいをみた"
+      },
+      "translation": {
+        "en": "I watched a football match.",
+        "it": "Ho guardato una partita di calcio."
+      },
+      "glosses": [
+        { "text": "サッカーの", "meaning": { "en": "of football", "it": "di calcio" } },
+        { "text": "試合を見", "reading": "しあいをみ", "meaning": { "en": "match, watch", "it": "partita, guardare" } },
+        { "text": "た", "meaning": { "en": "past ending", "it": "desinenza del passato" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select サッカーの (of football). サッカー and 試合 (match) are both nouns, so の goes between them: サッカーの試合, \"a football match\". The first noun says what kind the second one is.",
+        "it": "Seleziona サッカーの (di calcio). サッカー e 試合 (partita) sono due nomi, quindi fra loro va の: サッカーの試合, «una partita di calcio». Il primo nome dice di che tipo è il secondo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞を修飾する「の」",
+      "prompt": {
+        "en": "Build: \"The spring wind feels nice.\"",
+        "it": "Componi: «Il vento di primavera è piacevole.»"
+      },
+      "sentence": {
+        "kanji": "春の風は気持ちいい",
+        "kana": "はるのかぜはきもちいい"
+      },
+      "translation": {
+        "en": "The spring wind feels nice.",
+        "it": "Il vento di primavera è piacevole."
+      },
+      "glosses": [
+        { "text": "春の", "reading": "はるの", "meaning": { "en": "of spring", "it": "di primavera" } },
+        { "text": "風は", "reading": "かぜは", "meaning": { "en": "the wind (the topic)", "it": "il vento (l'argomento)" } },
+        { "text": "気持ちいい", "reading": "きもちいい", "meaning": { "en": "feels nice", "it": "è piacevole" } }
+      ],
+      "answer": ["春の", "風は", "気持ちいい"],
+      "explanation": {
+        "en": "春 (spring) is a noun, so to describe 風 (wind) it takes の: 春の風, \"the spring wind\". Then は marks what we talk about, and 気持ちいい (feels nice), an adjective ending in い, closes the sentence on its own.",
+        "it": "春 (primavera) è un nome, quindi per descrivere 風 (vento) prende の: 春の風, «il vento di primavera». Poi は indica di cosa si parla, e 気持ちいい (è piacevole), un aggettivo che finisce in い, chiude la frase da solo."
+      }
     }
   ]
 }

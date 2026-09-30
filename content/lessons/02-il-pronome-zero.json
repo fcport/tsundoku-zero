@@ -268,6 +268,164 @@
         "en": "No subject is written: the one who listens is a zero pronoun, understood as the speaker. ラジオ (radio) is the object, so it takes を, and the verb 聞く (listen) comes last. いつも (always) only says how often. \"ラジオをいつも聞く\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
         "it": "Il soggetto non è scritto: chi ascolta è un pronome zero, sottinteso come chi parla. ラジオ (radio) è l'oggetto, quindi prende を, e il verbo 聞く (ascoltare) va alla fine. いつも (sempre) dice solo quanto spesso. Va bene anche «ラジオをいつも聞く»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "\"It's still Tuesday.\" No subject is written. Which part says what day it is?",
+        "it": "«È ancora martedì.» Il soggetto non è scritto. Quale parte dice che giorno è?"
+      },
+      "sentence": {
+        "kanji": "まだ火曜日だ",
+        "kana": "まだかようびだ"
+      },
+      "translation": {
+        "en": "It's still Tuesday.",
+        "it": "È ancora martedì."
+      },
+      "glosses": [
+        { "text": "まだ", "meaning": { "en": "still", "it": "ancora" } },
+        { "text": "火曜日", "reading": "かようび", "meaning": { "en": "Tuesday", "it": "martedì" } },
+        { "text": "だ", "meaning": { "en": "is", "it": "è" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "The answer is 火曜日 (Tuesday): with だ, the word for \"is\", it becomes 火曜日だ, \"(it) is Tuesday\". No word says what is Tuesday, and none is needed: the subject is a zero pronoun, a subject that is left out but understood. From the situation, it is today. まだ only adds \"still\".",
+        "it": "La risposta è 火曜日 (martedì): con だ, la parola per «è», diventa 火曜日だ, «è martedì». Nessuna parola dice che cosa è martedì, e non serve: il soggetto è un pronome zero, cioè un soggetto non scritto ma sottinteso. Dalla situazione si capisce che è oggi. まだ aggiunge solo «ancora»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "\"(I'm) a bit sleepy.\" No subject is written. Which part means \"a bit\"?",
+        "it": "«Ho un po' sonno.» Il soggetto non è scritto. Quale parte vuol dire «un po'»?"
+      },
+      "sentence": {
+        "kanji": "ちょっと眠い",
+        "kana": "ちょっとねむい"
+      },
+      "translation": {
+        "en": "(I'm) a bit sleepy.",
+        "it": "(Io) ho un po' sonno."
+      },
+      "glosses": [
+        { "text": "ちょっと", "meaning": { "en": "a bit", "it": "un po'" } },
+        { "text": "眠", "reading": "ねむ", "meaning": { "en": "sleepy (kanji of 眠い)", "it": "assonnato (kanji di 眠い)" } },
+        { "text": "い", "meaning": { "en": "ending of the い-adjective", "it": "finale dell'aggettivo in い" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "The answer is ちょっと (a bit). The rest, 眠い, means \"is sleepy\", and it is a complete sentence even without a subject. Who is sleepy? It is not written: it is a zero pronoun, a subject that is left out but understood. Here it is the speaker: said like this, on its own, 眠い is about yourself, because only you can feel your own sleepiness directly.",
+        "it": "La risposta è ちょっと (un po'). Il resto, 眠い, vuol dire «è assonnato», ed è una frase completa anche senza soggetto. Chi ha sonno? Non è scritto: è un pronome zero, cioè un soggetto non scritto ma sottinteso. Qui è chi parla: detto così, da solo, 眠い si dice di sé stessi, perché solo tu senti direttamente il tuo sonno."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "ゼロ代名詞",
+      "prompt": {
+        "en": "\"It's nice weather.\" What goes at the end?",
+        "it": "«È bel tempo.» Che cosa va alla fine?"
+      },
+      "sentence": {
+        "kanji": "いい天気だ",
+        "kana": "いいてんきだ"
+      },
+      "translation": {
+        "en": "It's nice weather.",
+        "it": "È bel tempo."
+      },
+      "gap": {
+        "kanji": "いい天気＿",
+        "kana": "いいてんき＿"
+      },
+      "answer": "だ",
+      "distractors": ["が", "を"],
+      "explanation": {
+        "en": "天気 (weather) is a noun, and a noun needs だ, the word for \"is\", to close the sentence: いい天気だ, \"(it) is nice weather\". No subject is needed: it is a zero pronoun, left out but understood (the weather right now). が and を are particles that mark the role of a noun; they cannot end the sentence, and with が the weather would become a subject with nothing said about it.",
+        "it": "天気 (il tempo atmosferico) è un nome, e un nome ha bisogno di だ, la parola per «è», per chiudere la frase: いい天気だ, «è bel tempo». Il soggetto non serve: è un pronome zero, cioè non scritto ma sottinteso (il tempo di adesso). が e を sono particelle che indicano il ruolo di un nome: non possono chiudere la frase, e con が il tempo diventerebbe un soggetto di cui poi non si dice niente."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "Build: \"My father is washing the car.\"",
+        "it": "Componi: «Mio padre sta lavando la macchina.»"
+      },
+      "sentence": {
+        "kanji": "父が車を洗っている",
+        "kana": "ちちがくるまをあらっている"
+      },
+      "translation": {
+        "en": "My father is washing the car.",
+        "it": "Mio padre sta lavando la macchina."
+      },
+      "glosses": [
+        { "text": "父が", "reading": "ちちが", "meaning": { "en": "my father (subject)", "it": "mio padre (soggetto)" } },
+        { "text": "車を", "reading": "くるまを", "meaning": { "en": "the car (object)", "it": "la macchina (oggetto)" } },
+        { "text": "洗っている", "reading": "あらっている", "meaning": { "en": "is washing", "it": "sta lavando" } }
+      ],
+      "answer": ["父が", "車を", "洗っている"],
+      "explanation": {
+        "en": "Each particle shows a role. が marks the subject, the one doing the action (父, my father). を marks the object, the thing the action is done to (車, the car). The verb 洗っている (is washing) comes last. If you swapped the particles (車が, 父を), it would be the car washing my father.",
+        "it": "Ogni particella indica un ruolo. が segna il soggetto, chi compie l'azione (父, mio padre). を segna l'oggetto, la cosa su cui si compie l'azione (車, la macchina). Il verbo 洗っている (sta lavando) va alla fine. Se scambiassi le particelle (車が, 父を), sarebbe la macchina a lavare mio padre."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "Build: \"My grandmother makes miso soup every evening.\"",
+        "it": "Componi: «Mia nonna prepara la zuppa di miso ogni sera.»"
+      },
+      "sentence": {
+        "kanji": "祖母が毎晩みそ汁を作る",
+        "kana": "そぼがまいばんみそしるをつくる"
+      },
+      "translation": {
+        "en": "My grandmother makes miso soup every evening.",
+        "it": "Mia nonna prepara la zuppa di miso ogni sera."
+      },
+      "glosses": [
+        { "text": "祖母が", "reading": "そぼが", "meaning": { "en": "my grandmother (subject)", "it": "mia nonna (soggetto)" } },
+        { "text": "毎晩", "reading": "まいばん", "meaning": { "en": "every evening", "it": "ogni sera" } },
+        { "text": "みそ汁を", "reading": "みそしるを", "meaning": { "en": "miso soup (object)", "it": "zuppa di miso (oggetto)" } },
+        { "text": "作る", "reading": "つくる", "meaning": { "en": "makes", "it": "prepara" } }
+      ],
+      "answer": ["祖母が", "毎晩", "みそ汁を", "作る"],
+      "alsoAccepted": [["毎晩", "祖母が", "みそ汁を", "作る"], ["祖母が", "みそ汁を", "毎晩", "作る"]],
+      "explanation": {
+        "en": "みそ汁 (miso soup) is the thing being made, so it is the object and takes を. The one who makes it, 祖母 (my grandmother), is the subject and takes が. 毎晩 (every evening) only says when, so it takes no particle. \"毎晩祖母がみそ汁を作る\" and \"祖母がみそ汁を毎晩作る\" are also correct: the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "みそ汁 (zuppa di miso) è la cosa che viene preparata, quindi è l'oggetto e prende を. Chi la prepara, 祖母 (mia nonna), è il soggetto e prende が. 毎晩 (ogni sera) dice solo quando, quindi non prende particelle. Vanno bene anche «毎晩祖母がみそ汁を作る» e «祖母がみそ汁を毎晩作る»: il verbo deve restare in fondo, ma prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「を」で示す目的語",
+      "prompt": {
+        "en": "\"The shop assistant closed the door.\" Which particle marks what was closed?",
+        "it": "«Il commesso ha chiuso la porta.» Quale particella segna ciò che è stato chiuso?"
+      },
+      "sentence": {
+        "kanji": "店員がドアを閉めた",
+        "kana": "てんいんがドアをしめた"
+      },
+      "translation": {
+        "en": "The shop assistant closed the door.",
+        "it": "Il commesso ha chiuso la porta."
+      },
+      "gap": {
+        "kanji": "店員がドア＿閉めた",
+        "kana": "てんいんがドア＿しめた"
+      },
+      "answer": "を",
+      "distractors": ["が", "に"],
+      "explanation": {
+        "en": "The door is the thing being closed, so it is the object and takes を. が is already on 店員 (the shop assistant), the one who does the closing; with ドアが the door would also look like someone doing the closing. に marks where something ends up (\"to\", \"into\"), not the thing you act on.",
+        "it": "La porta è la cosa che viene chiusa, quindi è l'oggetto e prende を. が è già su 店員 (il commesso), chi chiude; con ドアが anche la porta sembrerebbe qualcuno che chiude. に indica dove va a finire qualcosa («a», «in»), non la cosa su cui si agisce."
+      }
     }
   ]
 }

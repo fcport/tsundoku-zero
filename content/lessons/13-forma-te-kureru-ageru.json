@@ -278,6 +278,229 @@
         "en": "貸して is the te-form of 貸す (\"lend\"), and あげた adds that I did it for him, as a favour. The person who receives it takes に: 弟に. The thing lent takes を, the particle for the object (the thing the action is done to). \"傘を弟に貸してあげた\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
         "it": "貸して è la forma in て di 貸す («prestare»), e あげた aggiunge che l'ho fatto per lui, come favore. Chi lo riceve prende に: 弟に. La cosa prestata prende を, la particella dell'oggetto (la cosa su cui cade l'azione). Va bene anche «傘を弟に貸してあげた»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "て形で節をつなぐ",
+      "prompt": {
+        "en": "\"I took off my coat and sat down.\" Which part is the first of the two actions?",
+        "it": "«Mi sono tolto il cappotto e mi sono seduto.» Quale parte è la prima delle due azioni?"
+      },
+      "sentence": {
+        "kanji": "コートをぬいで座った",
+        "kana": "コートをぬいですわった"
+      },
+      "translation": {
+        "en": "I took off my coat and sat down.",
+        "it": "Mi sono tolto il cappotto e mi sono seduto."
+      },
+      "glosses": [
+        { "text": "コートをぬいで", "meaning": { "en": "take off the coat, and then", "it": "togliere il cappotto, e poi" } },
+        { "text": "座", "reading": "すわ", "meaning": { "en": "sit (kanji of 座る)", "it": "sedersi (kanji di 座る)" } },
+        { "text": "った", "meaning": { "en": "past ending: 座った", "it": "desinenza del passato: 座った" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select コートをぬいで. ぬいで is the te-form of ぬぐ, \"take off (clothes)\": verbs ending in ぐ make it with いで, so with で instead of て. The te-form links this action to the next one, 座った, \"sat down\", and its past た covers both.",
+        "it": "Seleziona コートをぬいで. ぬいで è la forma in て di ぬぐ, «togliersi (un vestito)»: i verbi in ぐ la fanno con いで, quindi con で invece di て. La forma in て collega questa azione alla successiva, 座った, «mi sono seduto», e il suo passato た vale per entrambe."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "て形で節をつなぐ",
+      "prompt": {
+        "en": "Build: \"I washed my face and brushed my teeth.\"",
+        "it": "Componi: «Mi sono lavato il viso e mi sono spazzolato i denti.»"
+      },
+      "sentence": {
+        "kanji": "顔を洗って歯をみがいた",
+        "kana": "かおをあらってはをみがいた"
+      },
+      "translation": {
+        "en": "I washed my face and brushed my teeth.",
+        "it": "Mi sono lavato il viso e mi sono spazzolato i denti."
+      },
+      "glosses": [
+        { "text": "顔を", "reading": "かおを", "meaning": { "en": "face + を (what is washed)", "it": "viso + を (ciò che si lava)" } },
+        { "text": "洗って", "reading": "あらって", "meaning": { "en": "wash, and then", "it": "lavare, e poi" } },
+        { "text": "歯を", "reading": "はを", "meaning": { "en": "teeth + を (what is brushed)", "it": "denti + を (ciò che si spazzola)" } },
+        { "text": "みがいた", "meaning": { "en": "brushed", "it": "ho spazzolato" } }
+      ],
+      "answer": ["顔を", "洗って", "歯を", "みがいた"],
+      "explanation": {
+        "en": "洗って is the te-form of 洗う, \"wash\": verbs ending in う make it with って. It links the first action to the second, like \"and then\". Only the last verb, みがいた, \"brushed\", is in the past, and its た covers both actions.",
+        "it": "洗って è la forma in て di 洗う, «lavare»: i verbi in う la fanno con って. Collega la prima azione alla seconda, come «e poi». Solo l'ultimo verbo, みがいた, «ho spazzolato», è al passato, e il suo た vale per entrambe le azioni."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "恩恵を受ける「てくれる」",
+      "prompt": {
+        "en": "\"A station worker showed me the way.\" Which form says it was done for me?",
+        "it": "«Un addetto della stazione mi ha indicato la strada.» Quale forma dice che è stato fatto per me?"
+      },
+      "sentence": {
+        "kanji": "駅員さんが道を教えてくれた",
+        "kana": "えきいんさんがみちをおしえてくれた"
+      },
+      "translation": {
+        "en": "A station worker showed me the way.",
+        "it": "Un addetto della stazione mi ha indicato la strada."
+      },
+      "glosses": [
+        { "text": "教えてくれた", "reading": "おしえてくれた" },
+        { "text": "教えてあげた", "reading": "おしえてあげた" },
+        { "text": "教えくれた", "reading": "おしえくれた" },
+        { "text": "教えるくれた", "reading": "おしえるくれた" }
+      ],
+      "gap": {
+        "kanji": "駅員さんが道を＿",
+        "kana": "えきいんさんがみちを＿"
+      },
+      "answer": "教えてくれた",
+      "distractors": ["教えてあげた", "教えくれた", "教えるくれた"],
+      "explanation": {
+        "en": "くれる goes after the te-form of a verb (the form in て: 教えて, from 教える, \"tell, show\"): 教えてくれた, \"showed me, for my sake\". Without て, 教えくれた and 教えるくれた are not possible. 教えてあげた would mean the favour went from him to someone else, not to me.",
+        "it": "くれる va dopo la forma in て di un verbo (教えて, da 教える, «insegnare, indicare»): 教えてくれた, «mi ha indicato, per me». Senza て, 教えくれた e 教えるくれた non sono possibili. 教えてあげた vorrebbe dire che il favore è andato da lui a qualcun altro, non a me."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "恩恵を受ける「てくれる」",
+      "prompt": {
+        "en": "\"The lady next door shared some apples with me.\" Which part says she did it for the speaker?",
+        "it": "«La signora della porta accanto mi ha dato un po' delle sue mele.» Quale parte dice che l'ha fatto per chi parla?"
+      },
+      "sentence": {
+        "kanji": "となりのおばさんがりんごを分けてくれた",
+        "kana": "となりのおばさんがりんごをわけてくれた"
+      },
+      "translation": {
+        "en": "The lady next door shared some apples with me.",
+        "it": "La signora della porta accanto mi ha dato un po' delle sue mele."
+      },
+      "glosses": [
+        { "text": "となりのおばさんがりんごを", "meaning": { "en": "the lady next door + が (who does it), apples + を", "it": "la signora accanto + が (chi lo fa), mele + を" } },
+        { "text": "分", "reading": "わ", "meaning": { "en": "share, divide (kanji of 分ける)", "it": "dividere (kanji di 分ける)" } },
+        { "text": "けてくれた", "meaning": { "en": "end of 分けて + くれた, \"did for me\"", "it": "fine di 分けて + くれた, «ha fatto per me»" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select けてくれた: 分けて is the te-form of 分ける, \"share\", and くれた means \"did for me\". So the favour comes toward the speaker, even though no word in the sentence says \"me\".",
+        "it": "Seleziona けてくれた: 分けて è la forma in て di 分ける, «dividere, condividere», e くれた significa «ha fatto per me». Quindi il favore arriva a chi parla, anche se nessuna parola della frase dice «me»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "恩恵を受ける「てくれる」",
+      "prompt": {
+        "en": "Build: \"Yamada gave me a lift to the station by car.\"",
+        "it": "Componi: «Yamada mi ha accompagnato in macchina fino alla stazione.»"
+      },
+      "sentence": {
+        "kanji": "山田さんが駅まで車で送ってくれた",
+        "kana": "やまださんがえきまでくるまでおくってくれた"
+      },
+      "translation": {
+        "en": "Yamada gave me a lift to the station by car.",
+        "it": "Yamada mi ha accompagnato in macchina fino alla stazione."
+      },
+      "glosses": [
+        { "text": "山田さんが", "reading": "やまださんが", "meaning": { "en": "Yamada + が (who does it)", "it": "Yamada + が (chi lo fa)" } },
+        { "text": "駅まで", "reading": "えきまで", "meaning": { "en": "as far as the station", "it": "fino alla stazione" } },
+        { "text": "車で", "reading": "くるまで", "meaning": { "en": "by car", "it": "in macchina" } },
+        { "text": "送ってくれた", "reading": "おくってくれた", "meaning": { "en": "took me there (for me)", "it": "mi ha accompagnato (per me)" } }
+      ],
+      "answer": ["山田さんが", "駅まで", "車で", "送ってくれた"],
+      "alsoAccepted": [["山田さんが", "車で", "駅まで", "送ってくれた"]],
+      "explanation": {
+        "en": "送る here means \"take someone somewhere\". 送ってくれた is its te-form + くれた: Yamada did it for me. The car is the means, so it takes で; まで means \"as far as\". \"山田さんが車で駅まで送ってくれた\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "送る qui significa «accompagnare qualcuno». 送ってくれた è la sua forma in て + くれた: Yamada l'ha fatto per me. La macchina è il mezzo, quindi prende で; まで significa «fino a». Va bene anche «山田さんが車で駅まで送ってくれた»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "恩恵を与える「てあげる」",
+      "prompt": {
+        "en": "\"I carried the child's bag for them.\" Which form says I did it for someone else?",
+        "it": "«Ho portato la borsa al bambino.» Quale forma dice che l'ho fatto per qualcun altro?"
+      },
+      "sentence": {
+        "kanji": "子どもの荷物を持ってあげた",
+        "kana": "こどものにもつをもってあげた"
+      },
+      "translation": {
+        "en": "I carried the child's bag for them.",
+        "it": "Ho portato la borsa al bambino."
+      },
+      "glosses": [
+        { "text": "持ってあげた", "reading": "もってあげた" },
+        { "text": "持ってくれた", "reading": "もってくれた" },
+        { "text": "持つあげた", "reading": "もつあげた" }
+      ],
+      "gap": {
+        "kanji": "子どもの荷物を＿",
+        "kana": "こどものにもつを＿"
+      },
+      "answer": "持ってあげた",
+      "distractors": ["持ってくれた", "持つあげた"],
+      "explanation": {
+        "en": "あげる goes after the te-form of a verb (持って, from 持つ, \"hold, carry\"): 持ってあげた, \"carried it for them\". The favour goes from me to someone else. 持ってくれた would mean someone did it for me, and 持つあげた is wrong because あげる needs the te-form.",
+        "it": "あげる va dopo la forma in て di un verbo (持って, da 持つ, «tenere, portare»): 持ってあげた, «l'ho portata per lui». Il favore va da me a un'altra persona. 持ってくれた vorrebbe dire che qualcuno l'ha fatto per me, e 持つあげた è sbagliato perché あげる vuole la forma in て."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "恩恵を与える「てあげる」",
+      "prompt": {
+        "en": "\"I cooked for my roommate.\" Which part says the speaker did it for someone else?",
+        "it": "«Ho cucinato per il mio coinquilino.» Quale parte dice che chi parla l'ha fatto per qualcun altro?"
+      },
+      "sentence": {
+        "kanji": "ルームメイトに料理を作ってあげた",
+        "kana": "ルームメイトにりょうりをつくってあげた"
+      },
+      "translation": {
+        "en": "I cooked for my roommate.",
+        "it": "Ho cucinato per il mio coinquilino."
+      },
+      "glosses": [
+        { "text": "ルームメイトに", "meaning": { "en": "to my roommate (who receives it)", "it": "al coinquilino (chi lo riceve)" } },
+        { "text": "料理を作", "reading": "りょうりをつく", "meaning": { "en": "food + を, first part of 作る, \"make\"", "it": "cibo + を, inizio di 作る, «preparare»" } },
+        { "text": "ってあげた", "meaning": { "en": "end of 作って + あげた, \"did for someone\"", "it": "fine di 作って + あげた, «ho fatto per qualcuno»" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ってあげた: 作って is the te-form of 作る, \"make\", and あげた means \"did for someone\". The person who receives the favour takes に: ルームメイトに.",
+        "it": "Seleziona ってあげた: 作って è la forma in て di 作る, «preparare», e あげた significa «ho fatto per qualcuno». La persona che riceve il favore prende に: ルームメイトに."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "恩恵を与える「てあげる」",
+      "prompt": {
+        "en": "Build: \"I made coffee for my colleague.\"",
+        "it": "Componi: «Ho preparato il caffè per il mio collega.»"
+      },
+      "sentence": {
+        "kanji": "同僚にコーヒーをいれてあげた",
+        "kana": "どうりょうにコーヒーをいれてあげた"
+      },
+      "translation": {
+        "en": "I made coffee for my colleague.",
+        "it": "Ho preparato il caffè per il mio collega."
+      },
+      "glosses": [
+        { "text": "同僚に", "reading": "どうりょうに", "meaning": { "en": "to my colleague (who receives it)", "it": "al collega (chi lo riceve)" } },
+        { "text": "コーヒーを", "meaning": { "en": "coffee + を (what is made)", "it": "caffè + を (ciò che si prepara)" } },
+        { "text": "いれてあげた", "meaning": { "en": "made (coffee) for them", "it": "ho preparato (per lui)" } }
+      ],
+      "answer": ["同僚に", "コーヒーを", "いれてあげた"],
+      "alsoAccepted": [["コーヒーを", "同僚に", "いれてあげた"]],
+      "explanation": {
+        "en": "コーヒーをいれる means \"make coffee\". いれて is its te-form, and あげた adds that I did it for my colleague. The person who receives the favour takes に: 同僚に. \"コーヒーを同僚にいれてあげた\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "コーヒーをいれる significa «preparare il caffè». いれて è la sua forma in て, e あげた aggiunge che l'ho fatto per il collega. La persona che riceve il favore prende に: 同僚に. Va bene anche «コーヒーを同僚にいれてあげた»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+      }
     }
   ]
 }

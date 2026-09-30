@@ -292,6 +292,246 @@
         "en": "来る (\"come\") is irregular: its potential form (\"can come\") is 来られる, read こられる. The place you come to takes に: パーティーに. も after 友達 means \"too\" and takes the place of が.",
         "it": "来る («venire») è irregolare: la sua forma potenziale («poter venire») è 来られる, letto こられる. Il luogo dove si viene prende に: パーティーに. も dopo 友達 significa «anche» e prende il posto di が."
       }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "可能形",
+      "prompt": {
+        "en": "Build: \"You can't ride a bicycle in this park.\"",
+        "it": "Componi: «In questo parco non si può andare in bicicletta.»"
+      },
+      "sentence": {
+        "kanji": "この公園では自転車に乗れない",
+        "kana": "このこうえんではじてんしゃにのれない"
+      },
+      "translation": {
+        "en": "You can't ride a bicycle in this park.",
+        "it": "In questo parco non si può andare in bicicletta."
+      },
+      "glosses": [
+        { "text": "この公園では", "reading": "このこうえんでは", "meaning": { "en": "in this park (topic)", "it": "in questo parco (tema)" } },
+        { "text": "自転車に", "reading": "じてんしゃに", "meaning": { "en": "bicycle + に (what you get on)", "it": "bicicletta + に (ciò su cui sali)" } },
+        { "text": "乗れない", "reading": "のれない", "meaning": { "en": "can't ride", "it": "non si può andare" } }
+      ],
+      "answer": ["この公園では", "自転車に", "乗れない"],
+      "explanation": {
+        "en": "乗る (\"ride, get on\") is a godan verb (its last kana changes): る becomes れ and る is added, 乗れる, the potential form (the form that means \"can do\"). Its negative is 乗れない, \"can't ride\". What you ride takes に: 自転車に乗る.",
+        "it": "乗る («salire, andare su») è un verbo godan (il suo ultimo kana cambia): る diventa れ e si aggiunge る, 乗れる, la forma potenziale (la forma che dice «posso fare»). La sua negazione è 乗れない, «non poter andare». Ciò su cui sali prende に: 自転車に乗る."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "可能形",
+      "prompt": {
+        "en": "\"With this app you can listen to songs.\" Which part turns 聞く (\"listen\") into \"can listen\"?",
+        "it": "«Con questa app si possono ascoltare canzoni.» Quale parte trasforma 聞く («ascoltare») in «poter ascoltare»?"
+      },
+      "sentence": {
+        "kanji": "このアプリで曲が聞ける",
+        "kana": "このアプリできょくがきける"
+      },
+      "translation": {
+        "en": "With this app you can listen to songs.",
+        "it": "Con questa app si possono ascoltare canzoni."
+      },
+      "glosses": [
+        { "text": "このアプリで", "meaning": { "en": "with this app", "it": "con questa app" } },
+        { "text": "曲が聞", "reading": "きょくがき", "meaning": { "en": "songs + が (what you can listen to) + first part of 聞く", "it": "canzoni + が (ciò che si può ascoltare) + inizio di 聞く" } },
+        { "text": "ける", "meaning": { "en": "end of 聞ける, \"can listen\"", "it": "fine di 聞ける, «poter ascoltare»" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ける. 聞く is a godan verb (its last kana changes): the final く becomes け and る is added, 聞ける, \"can listen\". This ending is the potential form, the form that means \"can do\". The app is the tool you use, so it takes で.",
+        "it": "Seleziona ける. 聞く è un verbo godan (il suo ultimo kana cambia): la く finale diventa け e si aggiunge る, 聞ける, «poter ascoltare». Questa desinenza è la forma potenziale, la forma che dice «posso fare». La app è lo strumento che usi, quindi prende で."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "不規則動詞の可能形",
+      "prompt": {
+        "en": "\"Ron can drive.\" Which part says that he is able to do it?",
+        "it": "«Ron sa guidare.» Quale parte dice che è capace di farlo?"
+      },
+      "sentence": {
+        "kanji": "ロンさんは運転ができる",
+        "kana": "ロンさんはうんてんができる"
+      },
+      "translation": {
+        "en": "Ron can drive.",
+        "it": "Ron sa guidare."
+      },
+      "glosses": [
+        { "text": "ロンさんは", "meaning": { "en": "Ron (topic)", "it": "Ron (tema)" } },
+        { "text": "運転", "reading": "うんてん", "meaning": { "en": "driving", "it": "la guida" } },
+        { "text": "ができる", "meaning": { "en": "が + できる, \"can do\"", "it": "が + できる, «saper fare»" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ができる. 運転する means \"drive\" (運転, \"driving\", + する, \"do\"). する is irregular: its potential form (the form that means \"can do\") is a different verb, できる. What someone can do takes が: 運転ができる.",
+        "it": "Seleziona ができる. 運転する significa «guidare» (運転, «la guida», + する, «fare»). する è irregolare: la sua forma potenziale (la forma che dice «posso fare») è un verbo diverso, できる. Ciò che qualcuno sa fare prende が: 運転ができる."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "不規則動詞の可能形",
+      "prompt": {
+        "en": "\"I can't come to tomorrow's practice.\" Which part turns 来る (\"come\") into \"can't come\"?",
+        "it": "«Non posso venire all'allenamento di domani.» Quale parte trasforma 来る («venire») in «non poter venire»?"
+      },
+      "sentence": {
+        "kanji": "あしたの練習には来られない",
+        "kana": "あしたのれんしゅうにはこられない"
+      },
+      "translation": {
+        "en": "I can't come to tomorrow's practice.",
+        "it": "Non posso venire all'allenamento di domani."
+      },
+      "glosses": [
+        { "text": "あしたの", "meaning": { "en": "tomorrow's", "it": "di domani" } },
+        { "text": "練習には来", "reading": "れんしゅうにはこ", "meaning": { "en": "practice + には (there, as the topic) + 来, read こ here", "it": "allenamento + には (lì, come tema) + 来, qui letto こ" } },
+        { "text": "られない", "meaning": { "en": "can't (end of 来られない)", "it": "non poter (fine di 来られない)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select られない. 来る is irregular: its potential form (\"can come\") is 来られる, and the kanji is read こ instead of く. Like every potential form, it drops る and adds ない for \"not\": 来られない, \"can't come\".",
+        "it": "Seleziona られない. 来る è irregolare: la sua forma potenziale («poter venire») è 来られる, e il kanji si legge こ invece di く. Come ogni forma potenziale, perde る e aggiunge ない per il «non»: 来られない, «non poter venire»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "不規則動詞の可能形",
+      "prompt": {
+        "en": "Build: \"You can't make phone calls in the library.\"",
+        "it": "Componi: «In biblioteca non si può telefonare.»"
+      },
+      "sentence": {
+        "kanji": "図書館では電話ができない",
+        "kana": "としょかんではでんわができない"
+      },
+      "translation": {
+        "en": "You can't make phone calls in the library.",
+        "it": "In biblioteca non si può telefonare."
+      },
+      "glosses": [
+        { "text": "図書館では", "reading": "としょかんでは", "meaning": { "en": "in the library (topic)", "it": "in biblioteca (tema)" } },
+        { "text": "電話が", "reading": "でんわが", "meaning": { "en": "phone call + が (what can't be done)", "it": "telefonata + が (ciò che non si può fare)" } },
+        { "text": "できない", "meaning": { "en": "can't do", "it": "non si può fare" } }
+      ],
+      "answer": ["図書館では", "電話が", "できない"],
+      "explanation": {
+        "en": "電話する means \"make a phone call\". する is irregular: its potential form (\"can do\") is a different verb, できる, and its negative is できない, \"can't do\". What can or can't be done takes が: 電話ができない.",
+        "it": "電話する significa «telefonare». する è irregolare: la sua forma potenziale («poter fare») è un verbo diverso, できる, e la sua negazione è できない, «non poter fare». Ciò che si può o non si può fare prende が: 電話ができない."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "可能形と「が」",
+      "prompt": {
+        "en": "\"Ken can play the guitar.\" Which verb form fits after ギターが?",
+        "it": "«Ken sa suonare la chitarra.» Quale forma del verbo va dopo ギターが?"
+      },
+      "sentence": {
+        "kanji": "ケンさんはギターが弾ける",
+        "kana": "ケンさんはギターがひける"
+      },
+      "translation": {
+        "en": "Ken can play the guitar.",
+        "it": "Ken sa suonare la chitarra."
+      },
+      "glosses": [
+        { "text": "弾ける", "reading": "ひける" },
+        { "text": "弾く", "reading": "ひく" },
+        { "text": "弾きる", "reading": "ひきる" }
+      ],
+      "gap": {
+        "kanji": "ケンさんはギターが＿",
+        "kana": "ケンさんはギターが＿"
+      },
+      "answer": "弾ける",
+      "distractors": ["弾く", "弾きる"],
+      "explanation": {
+        "en": "弾ける is the potential form of 弾く, \"play (an instrument)\": く becomes け and る is added. A potential form describes an ability, a state, so what you can play can take が: ギターが弾ける. The plain verb 弾く is an action and needs を, ギターを弾く, so after が it is wrong. 弾きる is not a real form.",
+        "it": "弾ける è la forma potenziale di 弾く, «suonare (uno strumento)»: く diventa け e si aggiunge る. Una forma potenziale descrive una capacità, uno stato, quindi ciò che sai suonare può prendere が: ギターが弾ける. Il verbo semplice 弾く è un'azione e vuole を, ギターを弾く, quindi dopo が è sbagliato. 弾きる non è una forma che esiste."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "可能形と「が」",
+      "prompt": {
+        "en": "\"Yui can already write her own name.\" Which particle goes after what she can write?",
+        "it": "«Yui sa già scrivere il suo nome.» Quale particella va dopo ciò che sa scrivere?"
+      },
+      "sentence": {
+        "kanji": "ゆいちゃんはもう自分の名前が書ける",
+        "kana": "ゆいちゃんはもうじぶんのなまえがかける"
+      },
+      "translation": {
+        "en": "Yui can already write her own name.",
+        "it": "Yui sa già scrivere il suo nome."
+      },
+      "gap": {
+        "kanji": "ゆいちゃんはもう自分の名前＿書ける",
+        "kana": "ゆいちゃんはもうじぶんのなまえ＿かける"
+      },
+      "answer": "が",
+      "distractors": ["で", "に"],
+      "explanation": {
+        "en": "書ける (\"can write\") is the potential form of 書く. It describes an ability, so what you can write usually takes が: 名前が書ける. You will also hear 名前を書ける, which is correct too. で would make the name the tool you write with, and に the place you write on.",
+        "it": "書ける («saper scrivere») è la forma potenziale di 書く. Descrive una capacità, quindi ciò che sai scrivere di solito prende が: 名前が書ける. Si sente anche 名前を書ける, che è corretto lo stesso. で farebbe del nome lo strumento con cui scrivi, e に il posto su cui scrivi."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "可能形と「が」",
+      "prompt": {
+        "en": "\"I can make an omelette.\" Which part is the thing I can make?",
+        "it": "«So fare l'omelette.» Quale parte è ciò che so fare?"
+      },
+      "sentence": {
+        "kanji": "オムレツが作れる",
+        "kana": "オムレツがつくれる"
+      },
+      "translation": {
+        "en": "I can make an omelette.",
+        "it": "So fare l'omelette."
+      },
+      "glosses": [
+        { "text": "オムレツが", "meaning": { "en": "omelette + が (what I can make)", "it": "omelette + が (ciò che so fare)" } },
+        { "text": "作", "reading": "つく", "meaning": { "en": "make (kanji of 作る)", "it": "fare, preparare (kanji di 作る)" } },
+        { "text": "れる", "meaning": { "en": "end of 作れる, \"can make\"", "it": "fine di 作れる, «saper fare»" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select オムレツが. 作れる is the potential form of 作る, \"make\": it describes an ability more than an action. So the thing you can make usually takes が instead of を.",
+        "it": "Seleziona オムレツが. 作れる è la forma potenziale di 作る, «fare, preparare»: descrive una capacità più che un'azione. Per questo ciò che sai fare di solito prende が invece di を."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "可能形と「が」",
+      "prompt": {
+        "en": "Build: \"On the mountain top you can see beautiful stars.\"",
+        "it": "Componi: «In cima alla montagna si possono vedere stelle bellissime.»"
+      },
+      "sentence": {
+        "kanji": "山の上ではきれいな星が見られる",
+        "kana": "やまのうえではきれいなほしがみられる"
+      },
+      "translation": {
+        "en": "On the mountain top you can see beautiful stars.",
+        "it": "In cima alla montagna si possono vedere stelle bellissime."
+      },
+      "glosses": [
+        { "text": "山の上では", "reading": "やまのうえでは", "meaning": { "en": "on the mountain top (topic)", "it": "in cima alla montagna (tema)" } },
+        { "text": "きれいな", "meaning": { "en": "beautiful", "it": "bellissime" } },
+        { "text": "星が", "reading": "ほしが", "meaning": { "en": "stars + が (what can be seen)", "it": "stelle + が (ciò che si può vedere)" } },
+        { "text": "見られる", "reading": "みられる", "meaning": { "en": "can see", "it": "si possono vedere" } }
+      ],
+      "answer": ["山の上では", "きれいな", "星が", "見られる"],
+      "explanation": {
+        "en": "見られる is the potential form of 見る, \"see\". 見る is an ichidan verb (it ends in -iru or -eru and simply drops る), so it adds られる. With a potential form, what can be seen takes が: 星が見られる. きれいな, \"beautiful\", goes right before the noun it describes.",
+        "it": "見られる è la forma potenziale di 見る, «vedere». 見る è un verbo ichidan (finisce in -iru o -eru e perde semplicemente る), quindi aggiunge られる. Con una forma potenziale, ciò che si può vedere prende が: 星が見られる. きれいな, «bellissime», va subito prima del nome che descrive."
+      }
     }
   ]
 }
