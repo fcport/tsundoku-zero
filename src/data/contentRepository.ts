@@ -273,5 +273,24 @@ export function createSupabaseContentRepository(
       const rows = (data ?? []) as readonly ExerciseRow[];
       return rows.map(toExerciseContent);
     },
+
+    async listExercisesByLesson(
+      lessonId: string,
+    ): Promise<readonly ExerciseContent[]> {
+      // Filtro sulla chiave esterna `lesson_id`; ordinato per `id` così il ripasso
+      // non cambia ordine da un caricamento all'altro. Stesso contratto d'errore.
+      const { data, error } = await client
+        .from(EXERCISE_TABLE)
+        .select(EXERCISE_COLUMNS)
+        .eq('lesson_id', lessonId)
+        .order('id');
+
+      if (error) {
+        throw new DataError('listExercisesByLesson', error);
+      }
+
+      const rows = (data ?? []) as readonly ExerciseRow[];
+      return rows.map(toExerciseContent);
+    },
   };
 }

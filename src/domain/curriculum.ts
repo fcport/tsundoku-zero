@@ -97,3 +97,47 @@ export function lessonsByGrammarPoint(
   }
   return byPoint;
 }
+
+/**
+ * Dove sta una lezione per chi studia (la pagina Lezioni):
+ * - `current`: l'ultima sbloccata, quella in corso;
+ * - `unlocked`: sbloccata prima, si può ripassare;
+ * - `next`: la successiva, si sblocca dalla dashboard svuotando la pila;
+ * - `locked`: più avanti.
+ */
+export type LessonStatus = 'current' | 'unlocked' | 'next' | 'locked';
+
+/** Una voce dello scaffale: la lezione e il suo stato. */
+export interface ShelfEntry {
+  readonly lesson: LessonSummary;
+  readonly status: LessonStatus;
+}
+
+/**
+ * Lo SCAFFALE delle lezioni: tutte, in ordine di `ordinal`, ciascuna col suo stato.
+ * Deriva dalle stesse autorità di sblocco (`nextLessonToUnlock`/`lastUnlockedLesson`),
+ * così la pagina Lezioni e la dashboard non possono dire cose diverse.
+ *
+ * PURA, sincrona, TOTALE e senza mutazione, senza tempo.
+ */
+export function lessonShelf(
+  lessons: readonly LessonSummary[],
+  unlockedIds: readonly string[],
+): ShelfEntry[] {
+  const unlocked = new Set(unlockedIds);
+  const current = lastUnlockedLesson(lessons, unlockedIds);
+  const next = nextLessonToUnlock(lessons, unlockedIds);
+  return [...lessons]
+    .sort((a, b) => a.ordinal - b.ordinal)
+    .map((lesson) => ({
+      lesson,
+      status:
+        lesson.id === current?.id
+          ? 'current'
+          : unlocked.has(lesson.id)
+            ? 'unlocked'
+            : lesson.id === next?.id
+              ? 'next'
+              : 'locked',
+    }));
+}

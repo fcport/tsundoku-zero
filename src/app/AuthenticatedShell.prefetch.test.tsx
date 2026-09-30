@@ -91,6 +91,7 @@ function spyPorts(): Ports {
       listLessons: async () => [],
       listExercisesByIds:
         listExercisesByIds as unknown as Ports['content']['listExercisesByIds'],
+      listExercisesByLesson: async () => [],
     },
   };
 }
@@ -248,6 +249,7 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
         listExercisesByIds: async () => {
           throw new Error('network');
         },
+        listExercisesByLesson: async () => [],
       },
     };
     mount(seededClient(), failing);

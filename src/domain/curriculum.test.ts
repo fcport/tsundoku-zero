@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { LessonSummary } from './ports/contentRepository';
 import {
   lastUnlockedLesson,
+  lessonShelf,
   lessonsByGrammarPoint,
   nextLessonToUnlock,
 } from './curriculum';
@@ -138,5 +139,42 @@ describe('lessonsByGrammarPoint — join puro punto -> lezione (5.3)', () => {
   it('una lezione senza punti ⇒ non contribuisce alla mappa', () => {
     const map = lessonsByGrammarPoint([lessonWithPoints('l1', 1, [])]);
     expect(map.size).toBe(0);
+  });
+});
+
+describe('lessonShelf — lo stato di ogni lezione per la pagina Lezioni', () => {
+  const lessons = [lesson('l3', 3), lesson('l1', 1), lesson('l4', 4), lesson('l2', 2)];
+
+  it('in ordine di ordinal: sbloccate, in corso (ultima sbloccata), prossima, bloccate', () => {
+    expect(lessonShelf(lessons, ['l1', 'l2']).map((e) => [e.lesson.id, e.status])).toEqual([
+      ['l1', 'unlocked'],
+      ['l2', 'current'],
+      ['l3', 'next'],
+      ['l4', 'locked'],
+    ]);
+  });
+
+  it('nulla sbloccato ⇒ la prima è la prossima, le altre bloccate', () => {
+    expect(lessonShelf(lessons, []).map((e) => e.status)).toEqual([
+      'next',
+      'locked',
+      'locked',
+      'locked',
+    ]);
+  });
+
+  it('curriculum esaurito ⇒ nessuna prossima, l ultima è in corso', () => {
+    expect(lessonShelf(lessons, ['l1', 'l2', 'l3', 'l4']).map((e) => e.status)).toEqual([
+      'unlocked',
+      'unlocked',
+      'unlocked',
+      'current',
+    ]);
+  });
+
+  it('non muta l input', () => {
+    const copy = [...lessons];
+    lessonShelf(lessons, ['l1']);
+    expect(lessons).toEqual(copy);
   });
 });

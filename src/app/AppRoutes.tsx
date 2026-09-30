@@ -14,10 +14,13 @@
 // react-router è importato SOLO nel livello app. Le schermate (features) non
 // contengono controlli di auth (AC2) né stringhe di path: l'autorizzazione e il
 // routing sono tutti qui.
-import { Route, Routes, useNavigate } from 'react-router';
+import { Route, Routes, useNavigate, useParams } from 'react-router';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
 import { StatsScreen } from '../features/stats/StatsScreen';
+import { DrillScreen } from '../features/drill/DrillScreen';
+import { LessonsScreen } from '../features/lessons/LessonsScreen';
+import { LessonPracticeScreen } from '../features/lessons/LessonPracticeScreen';
 import { PrivacyScreen } from '../features/legal/PrivacyScreen';
 import { AcknowledgementsScreen } from '../features/legal/AcknowledgementsScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
@@ -25,12 +28,16 @@ import { SettingsPage } from './SettingsPage';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
 import {
   ACKNOWLEDGEMENTS_PATH,
+  DRILL_PATH,
+  LESSON_PRACTICE_PATH,
+  LESSONS_PATH,
   LOGIN_PATH,
   PRIVACY_PATH,
   ROOT_PATH,
   STATS_PATH,
   SETTINGS_PATH,
   STUDY_PATH,
+  lessonPracticePath,
 } from './routes';
 import type { AuthGateway } from '../domain/ports/authGateway';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
@@ -134,6 +141,31 @@ export function AppRoutes({
             />
           }
         />
+        {/* L'allenamento libero: fuori dalla pila, `onExit`→ROOT_PATH come le altre. */}
+        <Route
+          path={DRILL_PATH}
+          element={<DrillScreen onExit={() => navigate(ROOT_PATH)} />}
+        />
+        {/* Le lezioni e il ripasso libero di una lezione: fuori dalla pila. */}
+        <Route
+          path={LESSONS_PATH}
+          element={
+            <LessonsScreen
+              userId={userId}
+              onExit={() => navigate(ROOT_PATH)}
+              onPractice={(lessonId) => navigate(lessonPracticePath(lessonId))}
+            />
+          }
+        />
+        <Route
+          path={LESSON_PRACTICE_PATH}
+          element={
+            <LessonPracticeRoute
+              userId={userId}
+              onExit={() => navigate(LESSONS_PATH)}
+            />
+          }
+        />
         <Route
           path={SETTINGS_PATH}
           element={
@@ -158,5 +190,21 @@ export function AppRoutes({
         />
       </Route>
     </Routes>
+  );
+}
+
+// Il ripasso di una lezione legge l'id dal path (react-router resta nel livello app)
+// e lo passa alla feature. `key` rimonta la schermata cambiando lezione, così il
+// giro e il punteggio ripartono da zero.
+function LessonPracticeRoute({
+  userId,
+  onExit,
+}: {
+  readonly userId: string | null;
+  readonly onExit: () => void;
+}) {
+  const { lessonId = '' } = useParams();
+  return (
+    <LessonPracticeScreen key={lessonId} userId={userId} lessonId={lessonId} onExit={onExit} />
   );
 }

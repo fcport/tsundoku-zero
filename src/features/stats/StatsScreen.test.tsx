@@ -32,7 +32,7 @@ const inMemoryPorts: Ports = {
     applyReview: async () => {},
   },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-  content: { listLessons: async () => [], listExercisesByIds: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
 };
 
 // Una voce di log COMPLETA (`ReviewLogRecord`): `answersOverTime` legge solo
@@ -445,7 +445,7 @@ describe('5.2 AC — la fonte è SOLO review.listReviewLog() (mai listDue/review
         },
       },
       progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-      content: { listLessons: async () => [], listExercisesByIds: async () => [] },
+      content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
     };
     const qc = seededClient([logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'good')]);
     const markup = render(qc, UID, spyPorts);
@@ -525,7 +525,7 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
         },
       },
       progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-      content: { listLessons: async () => [], listExercisesByIds: async () => [] },
+      content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
     };
   }
 
@@ -663,6 +663,7 @@ describe('5.3 AC — la fonte e SOLO review.listReviewLog() + content.listLesson
           return [];
         },
         listExercisesByIds: async () => [],
+        listExercisesByLesson: async () => [],
       },
     };
     const lessons: readonly LessonSummary[] = [

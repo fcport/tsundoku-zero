@@ -68,6 +68,7 @@ const sampleExercises: readonly ExerciseContent[] = [
 const inMemoryContent: ContentRepository = {
   listLessons: async () => sampleLessons,
   listExercisesByIds: async () => sampleExercises,
+  listExercisesByLesson: async () => sampleExercises,
 };
 const sampleLog = [
   { exerciseId: 'ex-1', outcome: 'good', reviewedAt: FIXED_NOW, grammarPoint: 'te-form' },

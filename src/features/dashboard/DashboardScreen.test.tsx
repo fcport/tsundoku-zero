@@ -48,7 +48,7 @@ const inMemoryPorts: Ports = {
     applyReview: async () => {},
   },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
-  content: { listLessons: async () => [], listExercisesByIds: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
 };
 
 // Porta impostazioni finta inerte (nuova prop 3.17): con la cache seminata la
@@ -159,6 +159,8 @@ function render(qc: QueryClient, userId: string | null): string {
           settings={inertSettings}
           onStartSession={() => {}}
           onViewStats={() => {}}
+          onPractice={() => {}}
+          onViewLessons={() => {}}
         />
       </PortsProvider>
     </QueryClientProvider>
@@ -206,11 +208,13 @@ describe('AC1/AC2 — dashboard popolata: conteggio grande, etichetta sotto, str
 
   it('contiene ESATTAMENTE una azione primaria (button-primary, AC2)', () => {
     expect(markup).toContain(en.dashboard.primaryAction);
+    // Nel ramo contenuto anche i blocchi Lezioni e Allenamento sono <button>: due in
+    // più in ogni conteggio qui sotto.
     // Due <button> nel ramo contenuto: l'azione primaria (svuota-pila) PIÙ
     // l'affordance secondaria «vedi statistiche» (5.1), sempre presente nel
     // contenuto. Nessun doppione, nessuna variante disabilitata dell'azione.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -332,7 +336,7 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
     expect(markup).not.toContain(en.dashboard.unlockAction);
     // Due <button>: la quest svuota-pila PIÙ l'affordance «vedi statistiche» (5.1).
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -346,7 +350,7 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
     expect(markup).not.toContain(en.dashboard.primaryAction);
     // Due <button>: la quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1).
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -365,7 +369,7 @@ describe('AC4 — il cancello: al più una quest, mai entrambe (3.13)', () => {
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
     // Nessuna quest: resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(3);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 });
@@ -483,7 +487,7 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).toContain(en.dashboard.unlockAction);
     expect(markup).not.toContain(en.dashboard.primaryAction);
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
     // Streak e curriculum portano informazione reale a chi è di ritorno: restano.
     expect(markup).toContain('1 day streak');
@@ -503,7 +507,7 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).not.toContain(en.dashboard.noExercisesNotice);
     // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(3);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -526,7 +530,7 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).toContain(en.dashboard.unlockAction);
     // La quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -548,7 +552,7 @@ describe('Storia 3.16 — il pile-counter a zero CAMBIA STATO (AC1/AC2/AC3)', ()
     expect(markup).not.toContain('text-count-hero');
     // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(3);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -730,7 +734,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
     // La quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -751,7 +755,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).not.toContain(en.dashboard.unlockAction);
     // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(3);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -774,7 +778,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     );
     // La quest di sblocco PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -792,7 +796,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '2'));
     // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(3);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -812,7 +816,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
     // La quest svuota-pila PIÙ l'affordance «vedi statistiche» (5.1): due <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -834,7 +838,7 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
     expect(markup).not.toContain(en.dashboard.dailyLimitReachedBody.replace('{{limit}}', '1'));
     // Nessuna quest; resta SOLO l'affordance «vedi statistiche» (5.1), un <button>.
     const buttons = markup.match(/<button/g) ?? [];
-    expect(buttons.length).toBe(1);
+    expect(buttons.length).toBe(3);
     expect(markup).toContain(en.dashboard.viewStats);
   });
 
@@ -896,6 +900,8 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
             settings={inertSettings}
             onStartSession={() => {}}
             onViewStats={() => {}}
+            onPractice={() => {}}
+            onViewLessons={() => {}}
           />
         </PortsProvider>
       </QueryClientProvider>,
@@ -1031,5 +1037,28 @@ describe('la pila come dorsi di libri', () => {
     const markup = render(withPile(3, 3), UID).replace(/<span[^>]*lang="ja"[^>]*>[\s\S]*?<\/span>/g, '');
     const offending = [...withoutJapanese(markup)].filter((ch) => (ch.codePointAt(0) ?? 0) >= 0x2000);
     expect(offending).toEqual([]);
+  });
+});
+
+// Il blocco Lezioni: la lezione in corso (numero e titolo) e l'ingresso alla pagina
+// Lezioni, dove si riapre una lezione passata.
+describe('il blocco Lezioni', () => {
+  it('nomina la lezione in corso (l ultima sbloccata) col suo titolo', () => {
+    const markup = render(seededClient({ dueCount: 3, log: [], unlocked: 3, total: 10 }), UID);
+    expect(markup).toContain(en.dashboard.lessonsKicker);
+    expect(markup).toContain('Lesson 2');
+    expect(markup).toContain('>L2<');
+    expect(markup).toContain(en.dashboard.lessonsOpen);
+  });
+
+  it('c è anche a pila vuota, accanto allo sblocco', () => {
+    const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 1, total: 10 }), UID);
+    expect(markup).toContain(en.dashboard.unlockAction);
+    expect(markup).toContain(en.dashboard.lessonsOpen);
+  });
+
+  it('al primo avvio no: non c è ancora una lezione in corso', () => {
+    const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 0, total: 10 }), UID);
+    expect(markup).not.toContain(en.dashboard.lessonsOpen);
   });
 });

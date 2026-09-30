@@ -91,6 +91,7 @@ function inMemoryPorts(): Ports {
     content: {
       listLessons: async () => [],
       listExercisesByIds: async () => EXERCISES,
+      listExercisesByLesson: async () => [],
     },
   };
 }

@@ -61,3 +61,26 @@ export const ACKNOWLEDGEMENTS_PATH = '/riconoscimenti';
  * porta solo un collegamento. Protetta, cablata dal livello app come le altre.
  */
 export const SETTINGS_PATH = '/impostazioni';
+
+/**
+ * La rotta dell'ALLENAMENTO LIBERO sulle forme del verbo: fuori dalla pila, senza
+ * progresso salvato. Protetta come le altre, raggiunta dalla dashboard.
+ */
+export const DRILL_PATH = '/allenamento';
+
+/**
+ * La rotta delle LEZIONI: tutto il curriculum con lo stato di ciascuna lezione, il
+ * video e l'ingresso al ripasso libero. Protetta, raggiunta dalla dashboard.
+ */
+export const LESSONS_PATH = '/lezioni';
+
+/**
+ * Il ripasso libero di UNA lezione, fuori dalla pila: `/lezioni/:lessonId`. L'id è
+ * uno slug che può contenere kana e kanji, quindi va codificato nel path.
+ */
+export const LESSON_PRACTICE_PATH = `${LESSONS_PATH}/:lessonId`;
+
+/** Il path concreto del ripasso libero di una lezione. */
+export function lessonPracticePath(lessonId: string): string {
+  return `${LESSONS_PATH}/${encodeURIComponent(lessonId)}`;
+}

@@ -29,6 +29,15 @@ export interface AnswerEvaluation {
 }
 
 /**
+ * Solo la CORRETTEZZA di una risposta, dagli indici toccati: la prima metà di
+ * `evaluateAnswer`, senza esito SRS né scheduling. Serve al ripasso libero di una
+ * lezione, che non tocca la pila. PURA e TOTALE.
+ */
+export function isAnswerCorrect(exercise: Exercise, selected: readonly number[]): boolean {
+  return check(exercise, composeResponse(exercise, selected)).correct;
+}
+
+/**
  * Valuta una risposta INTERAMENTE sul client (AD-24, AC4): compone la risposta
  * dagli indici toccati, la verifica, ne deriva l'esito SRS e schedula il prossimo
  * stato. PURA e TOTALE — stessa quintupla ⇒ stesso risultato, sempre — e non muta
@@ -46,8 +55,7 @@ export function evaluateAnswer(
   currentState: ReviewState,
   now: Date,
 ): AnswerEvaluation {
-  const response = composeResponse(exercise, selected);
-  const correct = check(exercise, response).correct;
+  const correct = isAnswerCorrect(exercise, selected);
   // declaredEasy sempre false in Epic 3 (nessun controllo «facile»).
   const outcome = outcomeOf({ correct }, usedExplanation, false);
   const result = schedule(currentState, outcome, now);

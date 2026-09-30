@@ -76,4 +76,11 @@ export interface ContentRepository {
    * filtro per-utente (il contenuto è lo stesso per tutti).
    */
   listExercisesByIds(ids: readonly string[]): Promise<readonly ExerciseContent[]>;
+  /**
+   * Legge TUTTI gli esercizi di una lezione, per il ripasso libero fuori dalla pila
+   * (la pagina Lezioni). Stessa forma e stessa validazione di `listExercisesByIds`;
+   * l'ordine è quello di caricamento (id crescente), il consumatore non ne dipende.
+   * Una lezione concettuale (o un id sconosciuto) ⇒ `[]`.
+   */
+  listExercisesByLesson(lessonId: string): Promise<readonly ExerciseContent[]>;
 }

@@ -43,6 +43,7 @@
 // sono composti INLINE: l'estrazione nasce col secondo consumatore.
 import type { CSSProperties } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { resolveBilingual } from '../../domain/bilingual';
 import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
 import { dueQueryKey } from '../../domain/due';
 import { pileBooks } from '../../domain/pile';
@@ -55,7 +56,7 @@ import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { usePorts } from '../ports/PortsContext';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { RESERVED_ORDER_START } from '../../domain/lesson';
-import { ACTION_BAR, KICKER, SERVICE_LINK } from '../../ui/magazine';
+import { ACTION_BAR, FOCUS_RING, HEADLINE, KICKER, SERVICE_LINK } from '../../ui/magazine';
 import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
@@ -89,6 +90,16 @@ export interface DashboardScreenProps {
    * `useNavigate` verso `STATS_PATH`.
    */
   readonly onViewStats: () => void;
+  /**
+   * Apre l'allenamento libero sulle forme del verbo, fuori dalla pila. Callback
+   * cablata dalla shell, come `onViewStats`.
+   */
+  readonly onPractice: () => void;
+  /**
+   * Apre la pagina Lezioni (tutto il curriculum, il ripasso libero di una lezione).
+   * Callback cablata dalla shell, come `onViewStats`.
+   */
+  readonly onViewLessons: () => void;
 }
 
 // Altezza CONDIVISA fra scheletro e contenuto finale: la stessa classe sul
@@ -144,6 +155,8 @@ export function DashboardScreen({
   settings,
   onStartSession,
   onViewStats,
+  onPractice,
+  onViewLessons,
 }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t, i18n } = useTranslation();
@@ -442,6 +455,50 @@ export function DashboardScreen({
               <p className="sr-only">{t('dashboard.curriculumLabel', { unlocked, total })}</p>
             </div>
           </div>
+
+          {/* Le LEZIONI: un blocco intero come l'allenamento, con la lezione in corso
+              (numero e titolo), così si sa a che punto si è e si trova la strada per
+              riaprire una lezione passata. */}
+          {lastUnlocked !== null ? (
+            <button
+              type="button"
+              onClick={onViewLessons}
+              className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 text-left hover:bg-surface-sunken lg:border-b-[1.5px] lg:border-t-0 sm:p-6 ${FOCUS_RING}`}
+            >
+              <span className="flex min-w-0 flex-col gap-1">
+                <span className={KICKER}>{t('dashboard.lessonsKicker')}</span>
+                <span className={`text-[34px] leading-none text-ink-primary ${HEADLINE}`}>
+                  {t('lessons.lessonNumber', { order: lastUnlocked.ordinal })}
+                </span>
+                <span
+                  lang={resolveBilingual(lastUnlocked.title, locale).language}
+                  className="text-label text-ink-secondary"
+                >
+                  {resolveBilingual(lastUnlocked.title, locale).text}
+                </span>
+                <span className="sr-only">{t('dashboard.lessonsOpen')}</span>
+              </span>
+              <ArrowIcon className="shrink-0 text-accent transition-transform group-hover:translate-x-1.5" />
+            </button>
+          ) : null}
+
+          {/* L'ALLENAMENTO LIBERO: un blocco intero della colonna dei dati, non un
+              link di servizio, così si trova. Occhiello, parola a testata, freccia;
+              tutto il blocco è il bersaglio. Non è la barra d'azione (resta una sola):
+              fondo carta, inchiostro, freccia rossa. */}
+          <button
+            type="button"
+            onClick={onPractice}
+            className={`group flex items-center justify-between gap-4 border-y-[1.5px] border-border-strong p-4 lg:border-t-0 text-left hover:bg-surface-sunken sm:p-6 ${FOCUS_RING}`}
+          >
+            <span className="flex flex-col gap-1">
+              <span className={KICKER}>{t('dashboard.practiceKicker')}</span>
+              <span className={`text-[34px] leading-none text-ink-primary ${HEADLINE}`}>
+                {t('dashboard.practice')}
+              </span>
+            </span>
+            <ArrowIcon className="shrink-0 text-accent transition-transform group-hover:translate-x-1.5" />
+          </button>
 
           {/* I collegamenti di servizio: le statistiche (5.1, callback cablata dal
               livello app, AD-1) e il video di riferimento della lezione in corso, un

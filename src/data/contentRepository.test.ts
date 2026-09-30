@@ -26,6 +26,9 @@ interface FakeCalls {
   inValues: readonly unknown[] | null;
   /** Vero se il filtro `.in` è stato eseguito (per provare il corto-circuito ids vuoti). */
   inQueried: boolean;
+  /** Colonna e valore passati a `.eq(column, value)` (null se non invocato). */
+  eqColumn: string | null;
+  eqValue: unknown;
 }
 
 /** Costruisce un finto SupabaseClient + gli spione delle chiamate. */
@@ -40,6 +43,8 @@ function makeFakeClient(options: FakeContentOptions = {}): {
     inColumn: null,
     inValues: null,
     inQueried: false,
+    eqColumn: null,
+    eqValue: null,
   };
 
   const fake = {
@@ -63,6 +68,19 @@ function makeFakeClient(options: FakeContentOptions = {}): {
               return {
                 data: options.rows ?? null,
                 error: options.error ?? null,
+              };
+            },
+            eq: (column: string, value: unknown) => {
+              calls.eqColumn = column;
+              calls.eqValue = value;
+              return {
+                order: async (orderColumn: string) => {
+                  calls.orderBy = orderColumn;
+                  return {
+                    data: options.rows ?? null,
+                    error: options.error ?? null,
+                  };
+                },
               };
             },
           };
@@ -602,5 +620,42 @@ describe('listLessons — colonna video_id assente (migrazione non applicata)', 
     const { client, calls } = makeFakeClient({ error: { code: '42501', message: 'rls denied' } });
     await expect(createSupabaseContentRepository(client).listLessons()).rejects.toBeInstanceOf(DataError);
     expect(calls.columns).toContain('video_id');
+  });
+});
+
+describe('listExercisesByLesson — tutti gli esercizi di una lezione, per il ripasso libero', () => {
+  it('filtra .eq(lesson_id) sulla tabella exercise, ordina per id e mappa via exerciseSchema', async () => {
+    const { client, calls } = makeFakeClient({
+      rows: [singleSelectRow(), assembleRow()],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    const result = await repo.listExercisesByLesson('wa-particle');
+
+    expect(calls.table).toBe('exercise');
+    expect(calls.eqColumn).toBe('lesson_id');
+    expect(calls.eqValue).toBe('wa-particle');
+    expect(calls.orderBy).toBe('id');
+    expect(result.map((r) => r.id)).toEqual(['ex-ss', 'ex-asm']);
+    expect(result[1]?.exercise.kind).toBe('assemble');
+  });
+
+  it('nessuna riga (lezione concettuale) ⇒ array vuoto', async () => {
+    const { client } = makeFakeClient({ rows: [] });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listExercisesByLesson('concettuale')).resolves.toEqual([]);
+  });
+
+  it("errore Supabase ⇒ DataError('listExercisesByLesson') con causa preservata", async () => {
+    const supabaseError = { message: 'rls denied', code: '42501' };
+    const { client } = makeFakeClient({ error: supabaseError });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listExercisesByLesson('wa-particle')).rejects.toMatchObject({
+      name: 'DataError',
+      operation: 'listExercisesByLesson',
+      cause: supabaseError,
+    });
   });
 });
