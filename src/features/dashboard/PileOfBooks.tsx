@@ -27,6 +27,11 @@ const SHOWN = { base: 6, sm: 8, lg: 12 } as const;
 // Larghezza (percento della colonna) e rientro di ciascun dorso, dal mockup.
 const WIDTHS = [94, 86, 90, 82, 92, 88, 84, 96, 87, 91, 85, 89];
 const OFFSETS = [0, 4, 1, 6, 2, 3, 5, 0, 4, 2, 6, 3];
+// L'inclinazione con cui ciascun dorso cade (gradi): piccola e varia, come libri
+// lasciati andare a mano. Si raddrizzano all'appoggio.
+const TILTS = [-2.5, 3, -1.5, 2, -3, 1.5, -2, 2.5, -1, 3, -2.5, 1];
+// Fra un dorso e il successivo: prima atterra quello in fondo, per ultimo il prossimo.
+const FALL_STEP_MS = 85;
 // I toni dei dorsi dopo il primo (rosso): carta, inchiostro, carta incavata.
 const TONES = [
   'bg-ink-primary text-surface-base border-ink-primary',
@@ -74,9 +79,18 @@ export function PileOfBooks({ books, total, roomy }: PileOfBooksProps) {
           ) : null,
         )}
       </p>
+      {/* `--n`: quanti dorsi si vedono a questa larghezza, così la caduta parte
+          dal dorso più basso VISIBILE senza aspettare quelli nascosti. */}
       <ol
         aria-label={t('dashboard.pileLabel')}
-        className="flex flex-col gap-[3px] border-b-[3px] border-ink-primary pb-[3px]"
+        style={
+          {
+            '--n-base': Math.min(SHOWN.base, shown.length),
+            '--n-sm': Math.min(SHOWN.sm, shown.length),
+            '--n-lg': shown.length,
+          } as CSSProperties
+        }
+        className="flex flex-col gap-[3px] border-b-[3px] border-ink-primary pb-[3px] [--n:var(--n-base)] sm:[--n:var(--n-sm)] lg:[--n:var(--n-lg)]"
       >
         {shown.map((book, i) => {
           const meaning = GRAMMAR_POINT_MEANINGS[book.grammarPoint];
@@ -92,9 +106,11 @@ export function PileOfBooks({ books, total, roomy }: PileOfBooksProps) {
                   '--o': `${OFFSETS[i]}%`,
                   '--w-m': `${100 - OFFSETS[i]! / 2}%`,
                   '--o-m': `${OFFSETS[i]! / 2}%`,
+                  '--tilt': `${TILTS[i]}deg`,
+                  animationDelay: `calc((var(--n) - 1 - ${i}) * ${FALL_STEP_MS}ms)`,
                 } as CSSProperties
               }
-              className={`${visibility(i)} ml-[var(--o-m)] w-[var(--w-m)] items-center gap-2 overflow-hidden border-[1.5px] sm:ml-[var(--o)] sm:w-[var(--w)] sm:gap-3 ${
+              className={`${visibility(i)} motion-safe:animate-book-fall ml-[var(--o-m)] w-[var(--w-m)] items-center gap-2 overflow-hidden border-[1.5px] sm:ml-[var(--o)] sm:w-[var(--w)] sm:gap-3 ${
                 i === 0 ? NEXT_TONE : TONES[(i - 1) % TONES.length]
               } ${roomy ? 'min-h-[32px] sm:min-h-[44px]' : 'min-h-[28px] sm:min-h-[36px]'}`}
             >

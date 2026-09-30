@@ -176,6 +176,33 @@
   --radius-md: 0px;
   --radius-lg: 2px;
   --radius-full: 9999px;
+
+  /* --------------------------------------------------------------------------
+   * Movimento — uno solo: i libri che CADONO sulla pila (30-09-2026). Non è una
+   * celebrazione (quelle restano vietate): è la pila che si forma, un dorso sopra
+   * l'altro. Caduta accelerata, un piccolo rimbalzo all'appoggio. L'inclinazione
+   * di partenza (`--tilt`) e il ritardo li dà ciascun dorso. Chi chiede meno
+   * movimento al sistema non la vede (`motion-safe:`).
+   * ------------------------------------------------------------------------ */
+  --animate-book-fall: book-fall 620ms both;
+
+  @keyframes book-fall {
+    0% {
+      transform: translateY(-110vh) rotate(var(--tilt, 0deg));
+      animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
+    74% {
+      transform: translateY(0) rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    }
+    86% {
+      transform: translateY(-6px) rotate(calc(var(--tilt, 0deg) * -0.2));
+      animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+  }
 }
 
 /*
