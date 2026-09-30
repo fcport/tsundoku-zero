@@ -81,13 +81,23 @@ async function solveCurrentExercise(
   const has = async (prompt: RegExp | string): Promise<boolean> =>
     (await article.getByText(prompt, { exact: true }).count()) > 0;
 
+  // Le frasi della card SENZA le letture: la domanda porta la furigana sulle parole
+  // giapponesi (出す ⇒ 出<rt>だ</rt>す), e il testo grezzo sarebbe «出だす».
+  const paragraphs = await article.locator('p').evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const clone = node.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll('rt').forEach((rt) => rt.remove());
+      return (clone.textContent ?? '').trim();
+    }),
+  );
+
   // Fra gli esercizi di quel `kind`, quello la cui domanda è a schermo (in una
   // delle due lingue); senza domande nel contenuto, l'unico di quel tipo.
   const pick = async (kind: ExerciseSolution['kind']): Promise<ExerciseSolution | undefined> => {
     const ofKind = solutions.filter((s) => s.kind === kind);
     for (const s of ofKind) {
       for (const prompt of s.prompts) {
-        if (await has(prompt)) return s;
+        if (paragraphs.includes(prompt)) return s;
       }
     }
     return ofKind.length === 1 ? ofKind[0] : undefined;
