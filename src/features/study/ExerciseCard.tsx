@@ -39,6 +39,7 @@ import { WORD_READINGS } from '../../domain/fixed-readings';
 import { FOCUS_RING } from '../../ui/magazine';
 import { Translation } from '../../ui/Translation';
 import { ExplanationPanel } from './ExplanationPanel';
+import { ProseWithFurigana } from './ProseWithFurigana';
 
 // Direzione «rivista» (29-09-2026): la card non è più una superficie sollevata ma una
 // sezione fra due filetti. Le opzioni sono caselle squadrate col numero del TASTO
@@ -130,8 +131,9 @@ export function ExerciseCard({
           .filter((g) => g.meaning !== undefined)
           .map((g) => [g.text, resolveExplanation(g.meaning!, locale)] as const),
   );
-  // Le letture per le parole giapponesi della spiegazione: quelle certe della frase
-  // dell'esercizio, più le poche parole a lettura unica della tabella fissa.
+  // Le letture per le parole giapponesi della domanda e della spiegazione: quelle
+  // certe della frase dell'esercizio, più le poche parole a lettura unica della
+  // tabella fissa.
   const explanationReadings = new Map([
     ...WORD_READINGS,
     ...knownReadings([exercise.sentence]),
@@ -163,7 +165,14 @@ export function ExerciseCard({
       <div className="flex w-full flex-col gap-2">
         <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
         {question !== null && (
-          <p className="text-[20px] font-medium leading-snug text-ink-primary sm:text-[22px]">{question}</p>
+          <p className="text-[20px] font-medium leading-snug text-ink-primary sm:text-[22px]">
+            {/* Le parole giapponesi della domanda (出す, 来る…) prendono la furigana
+                come nella spiegazione, salvo dove il contenuto la spegne. */}
+            <ProseWithFurigana
+              text={question}
+              readings={furiganaVisible(exercise) ? explanationReadings : undefined}
+            />
+          </p>
         )}
       </div>
 

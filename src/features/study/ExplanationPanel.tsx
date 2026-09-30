@@ -18,7 +18,7 @@ import { resolveLocale, useTranslation } from '../../i18n';
 import { Translation } from '../../ui/Translation';
 import type { ResolvedExplanation } from '../../domain/exercise';
 import { Furigana } from '../../ui/Furigana';
-import { annotateKnownKanji } from '../../domain/option-furigana';
+import { ProseWithFurigana } from './ProseWithFurigana';
 
 export interface ExplanationPanelProps {
   /**
@@ -90,19 +90,8 @@ export function ExplanationPanel({ explanation, correct, readings }: Explanation
         className="text-body text-ink-primary first-letter:float-left first-letter:mr-2 first-letter:mt-1 first-letter:text-[46px] first-letter:font-black first-letter:leading-[0.8] first-letter:text-accent"
         lang={explanation.language}
       >
-        {readings
-          ? // Le parole in kanji con una lettura nota prendono la furigana (in un
-            // nodo lang="ja"); il resto del testo resta com'è.
-            annotateKnownKanji(explanation.text, readings).map((seg, i) =>
-              seg.ruby ? (
-                <span key={i} lang="ja">
-                  <Furigana segments={[seg]} />
-                </span>
-              ) : (
-                seg.text
-              ),
-            )
-          : explanation.text}
+        {/* Le parole in kanji con una lettura nota prendono la furigana. */}
+        <ProseWithFurigana text={explanation.text} readings={readings} />
       </p>
 
       {/* Ripiego DICHIARATO (FR8.5): «non ancora tradotta», invece di far passare

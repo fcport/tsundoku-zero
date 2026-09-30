@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { Exercise } from './exercise';
 import { answerOptions } from './exercise-presentation';
-import { optionFurigana, sentenceSegments } from './option-furigana';
+import {
+  annotateKnownKanji,
+  knownReadings,
+  optionFurigana,
+  sentenceSegments,
+} from './option-furigana';
 
 const explanation = { en: 'x' };
 
@@ -173,5 +178,36 @@ describe('sentenceSegments — la lettura sopra ogni kanji della frase', () => {
     const segments = sentenceSegments('妹が学生だ', 'いもうとががくせいだ');
     expect(segments.map((s) => s.ruby ?? s.text).join('')).toBe('いもうとががくせいだ');
     expect(segments.some((s) => s.ruby !== null)).toBe(true);
+  });
+});
+
+describe('annotateKnownKanji — le parole giapponesi dentro un testo in prosa', () => {
+  /** In forma leggibile: "出[だ]す". */
+  const show = (text: string, known: ReadonlyMap<string, string>) =>
+    annotateKnownKanji(text, known)
+      .map((s) => (s.ruby ? `${s.text}[${s.ruby}]` : s.text))
+      .join('');
+
+  it('le corse di kanji note dalla frase prendono la lettura, il resto resta com è', () => {
+    const known = knownReadings([{ kanji: '手紙を出した', kana: 'てがみをだした' }]);
+    expect(show('Which part is the past ending of 出す?', known)).toBe(
+      'Which part is the past ending of 出[だ]す?',
+    );
+    expect(show('Un 手紙, e un 本.', known)).toBe('Un 手紙[てがみ], e un 本.');
+  });
+
+  it('来 prende la lettura della sua forma, non quella della frase', () => {
+    const known = knownReadings([{ kanji: '友達が来た', kana: 'ともだちがきた' }]);
+    expect(known.get('来')).toBe('き');
+    expect(show('What is the past of 来る?', known)).toBe('What is the past of 来[く]る?');
+    expect(show('来た, 来て, 来ます', known)).toBe('来[き]た, 来[き]て, 来[き]ます');
+    expect(show('来ない, 来られる, 来よう, 来させる, 来い', known)).toBe(
+      '来[こ]ない, 来[こ]られる, 来[こ]よう, 来[こ]させる, 来[こ]い',
+    );
+  });
+
+  it('来 senza una sillaba che decida resta senza furigana; 来年 è un altra parola', () => {
+    const known = new Map([['来年', 'らいねん']]);
+    expect(show('(来) e 来年', known)).toBe('(来) e 来年[らいねん]');
   });
 });

@@ -265,3 +265,26 @@ describe('AC1/AC2 — stato spiegazione: dichiarazione TESTUALE dell esito, ness
     expect(markup).not.toContain('!');
   });
 });
+
+// La domanda porta la furigana sulle parole giapponesi, come la spiegazione: prima
+// «Which part is the past ending of 出す?» usciva senza lettura.
+describe('la domanda con parole giapponesi', () => {
+  const sendLetter: Exercise = {
+    kind: 'select-span',
+    grammarPoint: 'te-form',
+    prompt: { en: 'Which part is the past ending of 出す?', it: 'Quale parte è la desinenza del passato di 出す?' },
+    sentence: { kanji: '手紙を出した', kana: 'てがみをだした' },
+    answer: { start: 1, end: 2 },
+    explanation: { en: 'Select した.' },
+  };
+
+  it('i kanji della domanda prendono la lettura certa dalla frase, in un nodo lang="ja"', () => {
+    const html = render(sendLetter);
+    expect(html).toContain('Which part is the past ending of <span lang="ja"><ruby>出<rt aria-hidden="true">だ</rt></ruby></span>す?');
+  });
+
+  it('dove il contenuto spegne la furigana, la domanda resta testo semplice', () => {
+    const html = render({ ...sendLetter, showFurigana: false });
+    expect(html).toContain('Which part is the past ending of 出す?');
+  });
+});

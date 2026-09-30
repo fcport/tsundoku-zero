@@ -208,10 +208,37 @@ export function annotateKnownKanji(
   text: string,
   known: ReadonlyMap<string, string>,
 ): FuriganaSegment[] {
-  return toRuns(text).map((run) => ({
+  const runs = toRuns(text);
+  return runs.map((run, i) => ({
     text: run.text,
-    ruby: run.literal ? null : (known.get(run.text) ?? null),
+    ruby: run.literal
+      ? null
+      : run.text === '来'
+        ? kuruReading(runs[i + 1]?.text ?? '')
+        : (known.get(run.text) ?? null),
   }));
+}
+
+// 来 da solo è sempre il verbo 来る, l'unico kanji che cambia lettura con la forma:
+// la frase dell'esercizio (来た, き) non dice come si legge nella spiegazione o nella
+// domanda (来る, く; 来られる, こ). La decide la sillaba che segue.
+const KURU_READINGS: Readonly<Record<string, string>> = {
+  る: 'く',
+  ら: 'こ',
+  れ: 'こ',
+  な: 'こ',
+  よ: 'こ',
+  さ: 'こ',
+  い: 'こ',
+  ず: 'こ',
+  た: 'き',
+  て: 'き',
+  ま: 'き',
+};
+
+/** La lettura di 来 dalla sillaba che lo segue; `null` se non basta a deciderla. */
+function kuruReading(following: string): string | null {
+  return KURU_READINGS[following.charAt(0)] ?? null;
 }
 
 /**
