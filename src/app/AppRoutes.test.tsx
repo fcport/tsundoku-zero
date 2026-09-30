@@ -217,6 +217,20 @@ describe('AppRoutes — rotta di Accesso, anonimo', () => {
     // l'affordance verso `/riconoscimenti` e sul login prima della registrazione.
     expect(markup).toContain(en.legal.acknowledgements.linkLabel);
   });
+
+  it('contiene il collegamento a «Come funziona?» (raggiungibile PRIMA della registrazione)', () => {
+    expect(markup).toContain(en.about.linkLabel);
+  });
+});
+
+describe('AppRoutes — rotta /come-funziona, in entrambi gli stati', () => {
+  it.each([false, true])('autenticato=%s ⇒ rende la pagina, non la dashboard', (authenticated) => {
+    const markup = renderAt('/come-funziona', authenticated);
+    expect(markup).toContain(en.about.who);
+    expect(markup).toContain(en.about.back);
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+    expect(markup.match(/<main/g) ?? []).toHaveLength(1);
+  });
 });
 
 describe('AppRoutes — rotta /privacy, anonimo (7.1)', () => {

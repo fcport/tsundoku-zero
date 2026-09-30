@@ -100,6 +100,8 @@ export interface DashboardScreenProps {
    * Callback cablata dalla shell, come `onViewStats`.
    */
   readonly onViewLessons: () => void;
+  /** Apre la pagina «Come funziona?». Callback cablata dalla shell. */
+  readonly onViewAbout: () => void;
 }
 
 // Altezza CONDIVISA fra scheletro e contenuto finale: la stessa classe sul
@@ -157,6 +159,7 @@ export function DashboardScreen({
   onViewStats,
   onPractice,
   onViewLessons,
+  onViewAbout,
 }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t, i18n } = useTranslation();
@@ -506,6 +509,9 @@ export function DashboardScreen({
           <div className="flex flex-wrap gap-x-5 gap-y-3 p-4 sm:p-6">
             <button type="button" onClick={onViewStats} className={SERVICE_LINK}>
               {t('dashboard.viewStats')}
+            </button>
+            <button type="button" onClick={onViewAbout} className={SERVICE_LINK}>
+              {t('about.linkLabel')}
             </button>
             {lastUnlocked?.video ? (
               <a

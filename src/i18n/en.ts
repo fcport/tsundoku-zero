@@ -441,4 +441,31 @@ export const en = {
       back: 'Back',
     },
   },
+  // La pagina «Come funziona?»: chi scrive il sito, perché esiste e come si usa, in
+  // prima persona. Pubblica come privacy e riconoscimenti. `guideLabel` è il testo
+  // del link alla guida di TheMoeWay. Nessun `!`, nessuna emoji; ASCII.
+  about: {
+    title: 'How does this work?',
+    linkLabel: 'How does this work?',
+    whoKicker: 'Who I am',
+    who:
+      'I am a student of Japanese. I am following 30 Day Japanese, the study plan by TheMoeWay, which recommends the lessons of Cure Dolly for grammar.',
+    guideLabel: '30 Day Japanese on TheMoeWay',
+    whyKicker: 'Why this site',
+    lessons:
+      'I find those lessons fantastic, but there are very few exercises to go with them. And as you move on, whatever you do not practise tends to be forgotten.',
+    idea:
+      'So I built this platform. As I go through the lessons I add them here and write their exercises, so that anyone, now or in the future, can use it to practise what they learned with Cure Dolly.',
+    howKicker: 'How to use it',
+    how:
+      'Each lesson matches a video. When you unlock a lesson, its exercises go onto your pile. An exercise you get right comes back after a longer and longer gap; one you get wrong comes back sooner. Clear the pile every day, and when it is empty, unlock the next lesson.',
+    lessonsPage:
+      'On the Lessons page you can watch the video again and practise any lesson you have unlocked, whenever you like.',
+    passionKicker: 'Why I do it',
+    passion:
+      'This project comes only from my passion for Japan, where I would love to live one day. I hope it can be useful to you too.',
+    independent:
+      'This site is not affiliated with Cure Dolly or TheMoeWay: I write the exercises myself.',
+    back: 'Back',
+  },
 } as const;

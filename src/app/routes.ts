@@ -55,6 +55,13 @@ export const PRIVACY_PATH = '/privacy';
 export const ACKNOWLEDGEMENTS_PATH = '/riconoscimenti';
 
 /**
+ * La pagina «Come funziona?»: chi scrive il sito, perché esiste e come si usa.
+ * Pubblica in ENTRAMBI gli stati come `/privacy` e `/riconoscimenti`: chi arriva
+ * da fuori la legge prima di registrarsi.
+ */
+export const ABOUT_PATH = '/come-funziona';
+
+/**
  * La rotta delle IMPOSTAZIONI: lingua, tetto giornaliero di sblocco, collegamenti
  * legali e cancellazione dell'account. Prima vivevano in coda alla dashboard, dove
  * sommergevano l'unica cosa che conta lì (la pila da svuotare); ora la dashboard

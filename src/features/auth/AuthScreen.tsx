@@ -43,6 +43,8 @@ export interface AuthScreenProps {
    * Obbligatoria.
    */
   readonly onViewAcknowledgements: () => void;
+  /** Apre «Come funziona?» (cablata in `AppRoutes`), per chi arriva da fuori. */
+  readonly onViewAbout: () => void;
 }
 
 export function AuthScreen({
@@ -50,6 +52,7 @@ export function AuthScreen({
   onAuthenticated,
   onViewPrivacy,
   onViewAcknowledgements,
+  onViewAbout,
 }: AuthScreenProps) {
   const { t } = useTranslation();
   const [values, setValues] = useState<AuthFormValues>({
@@ -97,6 +100,14 @@ export function AuthScreen({
       />
       {/* I due collegamenti legali, affiancati sotto un filetto. */}
       <div className="flex flex-wrap gap-x-6 gap-y-2 border-t-[1.5px] border-border-strong pt-4">
+        {/* «Come funziona?» per primo: è la domanda di chi non conosce il sito. */}
+        <button
+          type="button"
+          onClick={onViewAbout}
+          className={`min-h-[44px] text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
+        >
+          {t('about.linkLabel')}
+        </button>
         {/* Il collegamento alla privacy policy (7.1): un'affordance SECONDARIA
             (button, idioma del repo: `onExit`/`onViewStats` sono gia button), DENTRO
             il `<main>`, DOPO il form. Cosi lo sconosciuto legge cosa si memorizza

@@ -28,6 +28,7 @@ function render(): string {
       onAuthenticated={NOOP}
       onViewPrivacy={NOOP}
       onViewAcknowledgements={NOOP}
+      onViewAbout={NOOP}
     />,
   );
 }

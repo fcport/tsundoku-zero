@@ -23,10 +23,12 @@ import { LessonsScreen } from '../features/lessons/LessonsScreen';
 import { LessonPracticeScreen } from '../features/lessons/LessonPracticeScreen';
 import { PrivacyScreen } from '../features/legal/PrivacyScreen';
 import { AcknowledgementsScreen } from '../features/legal/AcknowledgementsScreen';
+import { AboutScreen } from '../features/about/AboutScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { SettingsPage } from './SettingsPage';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
 import {
+  ABOUT_PATH,
   ACKNOWLEDGEMENTS_PATH,
   DRILL_PATH,
   LESSON_PRACTICE_PATH,
@@ -104,6 +106,15 @@ export function AppRoutes({
           />
         }
       />
+      {/* «Come funziona?»: pubblica in entrambi gli stati, gemella di `/privacy`. */}
+      <Route
+        path={ABOUT_PATH}
+        element={
+          <AboutScreen
+            onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+          />
+        }
+      />
       <Route element={<RedirectIfAuthenticated authenticated={authenticated} />}>
         <Route
           path={LOGIN_PATH}
@@ -113,6 +124,7 @@ export function AppRoutes({
               onAuthenticated={onAuthenticated}
               onViewPrivacy={() => navigate(PRIVACY_PATH)}
               onViewAcknowledgements={() => navigate(ACKNOWLEDGEMENTS_PATH)}
+              onViewAbout={() => navigate(ABOUT_PATH)}
             />
           }
         />
