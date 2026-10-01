@@ -195,9 +195,14 @@ test('percorso principale: registrazione, sblocco, esercizi, pila a zero', async
   const nextButton = page.getByRole('button', { name: TEXT.next });
 
   // Al più tanti esercizi quanti ne ha la prima lezione: le risposte sono sempre
-  // corrette ⇒ nessun re-accodamento, il limite `solutions.length` basta. Il
-  // ciclo termina alla comparsa della schermata di completamento.
+  // corrette ⇒ nessun re-accodamento, il limite `solutions.length` basta. Lo
+  // sblocco ne mette in pila solo una parte (i primi 12), quindi il ciclo non conta
+  // sul totale: a ogni giro attende la card O la schermata di completamento, e
+  // termina a quest'ultima.
+  const article = page.locator('article');
   for (let i = 0; i < solutions.length; i++) {
+    await expect(article.or(completeBody)).toBeVisible();
+    if (await completeBody.isVisible()) break;
     await solveCurrentExercise(page, solutions);
     // Attesa DETERMINISTICA dello stato post-risposta: o `session.next` (risposta
     // NON finale) o `session.complete.body` (coda drenata dopo l'ultima). Se
