@@ -56,7 +56,7 @@ describe('purezza temporale di schedule.ts (AC4, AD-1)', () => {
     expect(/Math\s*\.\s*random/.test(code)).toBe(false);
   });
 
-  it('now è un parametro esplicito: schedule.length === 3', () => {
-    expect(schedule.length).toBe(3);
+  it('now e timeZone sono parametri espliciti: schedule.length === 4', () => {
+    expect(schedule.length).toBe(4);
   });
 });

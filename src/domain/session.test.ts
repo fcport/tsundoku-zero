@@ -20,8 +20,8 @@ const NOW = new Date('2026-09-24T12:00:00.000Z');
 
 /**
  * Costruisce uno stato di ripasso FRESCO a stadio 0 per l'id dato. È lo stato di
- * uno «sblocco fresco»: `schedule(stage0, 'again'|'hard', NOW)` produce intervallo
- * 0 (resta in sessione), `schedule(stage0, 'good'|'easy', NOW)` intervallo > 0
+ * uno «sblocco fresco»: `schedule(stage0, 'again'|'hard', NOW, 'Europe/Rome')` produce intervallo
+ * 0 (resta in sessione), `schedule(stage0, 'good'|'easy', NOW, 'Europe/Rome')` intervallo > 0
  * (esce). I campi inerti non influenzano né `schedule` né la coda.
  */
 function stage0(exerciseId: string): ReviewState {
@@ -37,7 +37,7 @@ function stage0(exerciseId: string): ReviewState {
 
 /** Un evento `reviewed` con il `result` prodotto da `schedule()` reale. */
 function reviewed(exerciseId: string, outcome: ReviewOutcome): SessionEvent {
-  return { type: 'reviewed', result: schedule(stage0(exerciseId), outcome, NOW), now: NOW };
+  return { type: 'reviewed', result: schedule(stage0(exerciseId), outcome, NOW, 'Europe/Rome'), now: NOW };
 }
 
 describe('createSession: costruzione della coda iniziale', () => {

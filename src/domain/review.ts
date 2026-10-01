@@ -40,7 +40,7 @@ export function isAnswerCorrect(exercise: Exercise, selected: readonly number[])
 /**
  * Valuta una risposta INTERAMENTE sul client (AD-24, AC4): compone la risposta
  * dagli indici toccati, la verifica, ne deriva l'esito SRS e schedula il prossimo
- * stato. PURA e TOTALE — stessa quintupla ⇒ stesso risultato, sempre — e non muta
+ * stato. PURA e TOTALE — stessi argomenti ⇒ stesso risultato, sempre — e non muta
  * l'input (`schedule` ritorna un nuovo stato).
  *
  * `declaredEasy` è HARD-WIRED `false`: nessun AC di Epic 3 introduce un controllo
@@ -54,10 +54,11 @@ export function evaluateAnswer(
   usedExplanation: boolean,
   currentState: ReviewState,
   now: Date,
+  timeZone: string,
 ): AnswerEvaluation {
   const correct = isAnswerCorrect(exercise, selected);
   // declaredEasy sempre false in Epic 3 (nessun controllo «facile»).
   const outcome = outcomeOf({ correct }, usedExplanation, false);
-  const result = schedule(currentState, outcome, now);
+  const result = schedule(currentState, outcome, now, timeZone);
   return { correct, outcome, result };
 }

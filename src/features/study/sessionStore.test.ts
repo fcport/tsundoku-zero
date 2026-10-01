@@ -27,7 +27,7 @@ function stage0(exerciseId: string): ReviewState {
 }
 
 function reviewed(exerciseId: string, outcome: ReviewOutcome): SessionEvent {
-  return { type: 'reviewed', result: schedule(stage0(exerciseId), outcome, NOW), now: NOW };
+  return { type: 'reviewed', result: schedule(stage0(exerciseId), outcome, NOW, 'Europe/Rome'), now: NOW };
 }
 
 // Reset: lo store è un singleton di modulo condiviso fra i test. Lo riportiamo a

@@ -16,6 +16,7 @@
 // definizioni che un giorno divergerebbero.
 
 import { fnv1a } from './hash';
+import { studyDayOrdinal, studyDayStart } from './calendarDay';
 
 /**
  * L'UNICA costante degli esiti SRS (AC4 di 3.8): l'insieme dei quattro gradini
@@ -64,14 +65,12 @@ export const LEITNER_INTERVALS_DAYS = [0, 1, 3, 7, 16, 35] as const;
 /** Stadio massimo, DERIVATO dalla scala (5), non una seconda costante. */
 const MAX_STAGE = LEITNER_INTERVALS_DAYS.length - 1;
 
-/** Millisecondi in un giorno: la scala è in giorni, `dueAt` è una `Date` in ms. */
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
-
 /**
  * Frazione dell'intervallo usata come AMPIEZZA MASSIMA della dispersione: la
- * finestra di jitter è `[base, base × (1 + DISPERSION_FRACTION))`. È PROPORZIONALE
- * all'intervallo, così un intervallo `0` produce jitter `0` senza casi speciali e
- * la dispersione non riordina mai le scadenze rispetto allo stadio.
+ * finestra di jitter è `[base, base × (1 + DISPERSION_FRACTION))` giorni, poi
+ * arrotondata al giorno intero (la scadenza cade sempre all'inizio di una giornata
+ * di studio). È PROPORZIONALE all'intervallo, così un intervallo `0` produce jitter
+ * `0` senza casi speciali; sugli intervalli lunghi sparge i ripassi su più giorni.
  */
 const DISPERSION_FRACTION = 0.25;
 
@@ -132,29 +131,39 @@ function fraction(exerciseId: string, stage: number): number {
 }
 
 /**
- * Il MOTORE: dato uno stato, un esito e l'istante `now`, restituisce il PROSSIMO
- * stato di ripasso. PURO e TOTALE — stessa terna `(state, outcome, now)` ⇒ stesso
- * risultato, sempre — e NON MUTA l'input (ritorna un nuovo oggetto). `now` è
- * SEMPRE un parametro esplicito (il modulo non legge l'orologio, AD-1).
+ * Il MOTORE: dato uno stato, un esito, l'istante `now` e il fuso dello studente,
+ * restituisce il PROSSIMO stato di ripasso. PURO e TOTALE — stessa quaterna ⇒
+ * stesso risultato, sempre — e NON MUTA l'input (ritorna un nuovo oggetto). `now` e
+ * `timeZone` sono SEMPRE parametri espliciti (il modulo non legge l'orologio, AD-1).
  *
- * Logica senza rami per gli estremi:
  * - `s = clamp(nextStageFor(stage, outcome))` in `[0, MAX_STAGE]`;
- * - `intervalMs = scala[s] × fattoreEsito × MS_PER_DAY` (stadio 0 ⇒ 0 ms);
- * - `jitter = fraction(exerciseId, s) × intervalMs × DISPERSION_FRACTION` (0 se
- *   l'intervallo è 0, quindi `dueAt === now` esatto agli estremi bassi);
- * - `dueAt = now + intervalMs + jitter`.
+ * - `giorni = scala[s] × fattoreEsito`, più il jitter
+ *   `fraction(exerciseId, s) × giorni × DISPERSION_FRACTION`, arrotondato al giorno
+ *   intero e mai sotto 1 (un intervallo positivo non torna nella stessa giornata);
+ * - intervallo 0 (stadio 0) ⇒ `dueAt === now`: l'esercizio resta in sessione;
+ * - altrimenti `dueAt` = l'INIZIO di quella giornata di studio (le 2 locali, vedi
+ *   `studyDayStart`), così la pila si riempie tutta insieme invece di gocciolare
+ *   durante il giorno.
  * Contatori: `reviewCount += 1`, `lapseCount += (outcome === 'again' ? 1 : 0)`,
  * `lastReviewedAt = now`.
  */
-export function schedule(state: ReviewState, outcome: ReviewOutcome, now: Date): ReviewState {
+export function schedule(
+  state: ReviewState,
+  outcome: ReviewOutcome,
+  now: Date,
+  timeZone: string,
+): ReviewState {
   const s = nextStage(state.stage, outcome);
-  const intervalMs = LEITNER_INTERVALS_DAYS[s] * OUTCOME_FACTOR[outcome] * MS_PER_DAY;
-  const jitter = fraction(state.exerciseId, s) * intervalMs * DISPERSION_FRACTION;
+  const intervalDays = LEITNER_INTERVALS_DAYS[s] * OUTCOME_FACTOR[outcome];
+  const jitterDays = fraction(state.exerciseId, s) * intervalDays * DISPERSION_FRACTION;
+  const days = intervalDays > 0 ? Math.max(1, Math.round(intervalDays + jitterDays)) : 0;
+  const dueAt =
+    days === 0 ? now : studyDayStart(studyDayOrdinal(now, timeZone) + days, timeZone);
 
   return {
     exerciseId: state.exerciseId,
     stage: s,
-    dueAt: new Date(now.getTime() + intervalMs + jitter),
+    dueAt,
     reviewCount: state.reviewCount + 1,
     lapseCount: state.lapseCount + (outcome === 'again' ? 1 : 0),
     lastReviewedAt: now,

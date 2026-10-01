@@ -103,7 +103,7 @@ describe('applyResultToDue: rimpiazza e rifiltra con isDue (3.19)', () => {
 
   /** Il `result` prodotto da `schedule()` reale per (id, outcome). */
   function resultOf(exerciseId: string, outcome: ReviewOutcome): ReviewState {
-    return schedule(stage0(exerciseId), outcome, NOW);
+    return schedule(stage0(exerciseId), outcome, NOW, 'Europe/Rome');
   }
 
   it('good (dueAt > now) FA USCIRE l esercizio dalla pila', () => {

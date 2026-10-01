@@ -51,6 +51,7 @@ describe('evaluateAnswer: corretta senza consulto ⇒ good, stadio avanzato', ()
       false,
       current,
       NOW,
+      'Europe/Rome',
     );
     expect(evaluation.correct).toBe(true);
     expect(evaluation.outcome).toBe('good');
@@ -70,6 +71,7 @@ describe('evaluateAnswer: corretta con consulto ⇒ hard', () => {
       true,
       stage0('ex-1'),
       NOW,
+      'Europe/Rome',
     );
     expect(evaluation.correct).toBe(true);
     expect(evaluation.outcome).toBe('hard');
@@ -84,6 +86,7 @@ describe('evaluateAnswer: errata ⇒ again, stadio 0, riaccodo', () => {
       false,
       stage0('ex-1'),
       NOW,
+      'Europe/Rome',
     );
     expect(evaluation.correct).toBe(false);
     expect(evaluation.outcome).toBe('again');
@@ -97,12 +100,12 @@ describe('evaluateAnswer: purezza e determinismo', () => {
   it('non muta lo stato corrente passato', () => {
     const current = stage0('ex-1');
     const snapshotStage = current.stage;
-    evaluateAnswer(singleSelect, [correctIndex(singleSelect)], false, current, NOW);
+    evaluateAnswer(singleSelect, [correctIndex(singleSelect)], false, current, NOW, 'Europe/Rome');
     expect(current.stage).toBe(snapshotStage);
   });
 
-  it('stessa quintupla ⇒ stesso risultato per valore', () => {
-    const args = [singleSelect, [correctIndex(singleSelect)], false, stage0('ex-1'), NOW] as const;
+  it('stessi argomenti ⇒ stesso risultato per valore', () => {
+    const args = [singleSelect, [correctIndex(singleSelect)], false, stage0('ex-1'), NOW, 'Europe/Rome'] as const;
     const a = evaluateAnswer(...args);
     const b = evaluateAnswer(...args);
     expect(a.correct).toBe(b.correct);

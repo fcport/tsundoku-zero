@@ -345,6 +345,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
       usedExplanation,
       currentState,
       now,
+      clock.timeZone(),
     );
     const reviewId = crypto.randomUUID(); // glue di feature: `src/domain` vieta `crypto`
 
