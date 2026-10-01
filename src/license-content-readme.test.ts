@@ -91,16 +91,16 @@ describe('storia 7.3 — il README risponde alle sette domande della traccia', (
   const readme = read('README.md');
 
   it.each([
-    ['cos\'è il progetto', /grammatica giapponese/i],
+    ['cos\'è il progetto', /Japanese grammar/i],
     ['Leitner', /Leitner/],
     ['SM-2', /SM-2/],
     ['FSRS', /FSRS/],
     ['Vite', /Vite/],
     ['Next', /Next/],
     ['Supabase', /Supabase/],
-    ['dominio', /dominio/i],
+    ['dominio', /domain/i],
     ['framework', /framework/i],
-    ['cosa lasciato fuori', /lasciato fuori/i],
+    ['cosa lasciato fuori', /left out/i],
   ])('porta l\'ancora %s', (_label, pattern) => {
     expect(readme).toMatch(pattern);
   });
@@ -110,9 +110,9 @@ describe('storia 7.3 — la settima risposta nomina il controllo e il suo limite
   const readme = read('README.md');
 
   it('nomina il controllo anti-contaminazione e il limite non-CI', () => {
-    expect(readme).toMatch(/anti-contaminazione/i);
+    expect(readme).toMatch(/anti-contamination/i);
     // Il limite dichiarato: è l'unico anello che NON è un cancello di CI. Una
     // sottostringa stabile ancora l'affermazione senza legarsi alla frase esatta.
-    expect(readme).toMatch(/non è un cancello di CI/i);
+    expect(readme).toMatch(/it is not a CI gate/i);
   });
 });
