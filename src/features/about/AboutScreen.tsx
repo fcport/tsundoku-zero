@@ -18,6 +18,13 @@ export interface AboutScreenProps {
 
 const MOE_GUIDE_URL = 'https://learnjapanese.moe/routine/';
 
+// Chi scrive il sito: il sito personale, il profilo GitHub e il codice del progetto.
+const AUTHOR_LINKS = [
+  ['siteLabel', 'https://federicocasadei.dev'],
+  ['githubLabel', 'https://github.com/fcport'],
+  ['repoLabel', 'https://github.com/fcport/tsundoku-zero'],
+] as const;
+
 // Ogni sezione si apre con un filetto e un occhiello, come le colonne della rivista.
 const SECTION = 'flex flex-col gap-3 border-t-[1.5px] border-border-strong pt-4';
 
@@ -60,6 +67,21 @@ export function AboutScreen({ onExit }: AboutScreenProps) {
         <p className={KICKER}>{t('about.passionKicker')}</p>
         <p className="text-body text-ink-primary">{t('about.passion')}</p>
         <p className="text-body text-ink-secondary">{t('about.independent')}</p>
+      </section>
+
+      <section className={SECTION}>
+        <p className={KICKER}>{t('about.linksKicker')}</p>
+        {AUTHOR_LINKS.map(([label, href]) => (
+          <a
+            key={href}
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className={`self-start text-body font-semibold text-ink-primary underline underline-offset-4 ${FOCUS_RING}`}
+          >
+            {t(`about.${label}`)}
+          </a>
+        ))}
       </section>
 
       <button

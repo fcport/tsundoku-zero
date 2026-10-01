@@ -52,6 +52,7 @@ describe('evaluateAnswer: corretta senza consulto ⇒ good, stadio avanzato', ()
       current,
       NOW,
       'Europe/Rome',
+      false,
     );
     expect(evaluation.correct).toBe(true);
     expect(evaluation.outcome).toBe('good');
@@ -72,6 +73,7 @@ describe('evaluateAnswer: corretta con consulto ⇒ hard', () => {
       stage0('ex-1'),
       NOW,
       'Europe/Rome',
+      false,
     );
     expect(evaluation.correct).toBe(true);
     expect(evaluation.outcome).toBe('hard');
@@ -87,6 +89,7 @@ describe('evaluateAnswer: errata ⇒ again, stadio 0, riaccodo', () => {
       stage0('ex-1'),
       NOW,
       'Europe/Rome',
+      false,
     );
     expect(evaluation.correct).toBe(false);
     expect(evaluation.outcome).toBe('again');
@@ -100,16 +103,39 @@ describe('evaluateAnswer: purezza e determinismo', () => {
   it('non muta lo stato corrente passato', () => {
     const current = stage0('ex-1');
     const snapshotStage = current.stage;
-    evaluateAnswer(singleSelect, [correctIndex(singleSelect)], false, current, NOW, 'Europe/Rome');
+    evaluateAnswer(singleSelect, [correctIndex(singleSelect)], false, current, NOW, 'Europe/Rome', false);
     expect(current.stage).toBe(snapshotStage);
   });
 
   it('stessi argomenti ⇒ stesso risultato per valore', () => {
-    const args = [singleSelect, [correctIndex(singleSelect)], false, stage0('ex-1'), NOW, 'Europe/Rome'] as const;
+    const args = [singleSelect, [correctIndex(singleSelect)], false, stage0('ex-1'), NOW, 'Europe/Rome', false] as const;
     const a = evaluateAnswer(...args);
     const b = evaluateAnswer(...args);
     expect(a.correct).toBe(b.correct);
     expect(a.outcome).toBe(b.outcome);
     expect(a.result).toEqual(b.result);
+  });
+});
+
+describe('evaluateAnswer: «Facile»', () => {
+  it('giusta senza spiegazione + Facile ⇒ easy, sale di due livelli', () => {
+    const evaluation = evaluateAnswer(
+      singleSelect,
+      [correctIndex(singleSelect)],
+      false,
+      stage0('ex-1'),
+      NOW,
+      'Europe/Rome',
+      true,
+    );
+    expect(evaluation.outcome).toBe('easy');
+    expect(evaluation.result.stage).toBe(2);
+  });
+
+  it('Facile non salva una risposta sbagliata né una data con la spiegazione', () => {
+    const wrong = evaluateAnswer(singleSelect, [wrongIndex(singleSelect)], false, stage0('ex-1'), NOW, 'Europe/Rome', true);
+    expect(wrong.outcome).toBe('again');
+    const helped = evaluateAnswer(singleSelect, [correctIndex(singleSelect)], true, stage0('ex-1'), NOW, 'Europe/Rome', true);
+    expect(helped.outcome).toBe('hard');
   });
 });

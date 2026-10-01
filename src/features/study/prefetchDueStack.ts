@@ -8,7 +8,7 @@
 // Se il campo cade nella finestra fra i due passi la sessione resta a scheletro.
 // Qui il precarico carica in UN colpo l'intera pila dovuta PIÙ il contenuto (e le
 // spiegazioni, già dentro `ExerciseContent.exercise`) PRIMA di navigare a
-// `/studia`: la sessione poi legge solo cache calda, avanzare non tocca la rete.
+// `/study`: la sessione poi legge solo cache calda, avanzare non tocca la rete.
 //
 // SOLA AUTORITÀ della pila (AD-5): la pila si interroga con `dueQueryKey(userId)`
 // importata verbatim dal dominio — MAI un letterale `['due'` (sonda

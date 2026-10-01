@@ -215,6 +215,12 @@ export const it = {
     // L'azione di avanzamento al prossimo esercizio (3.19): verbale e concreta,
     // mai "Continua". Nessun `!`, nessuna emoji, nessun avverbio di lode.
     next: 'Prossimo esercizio',
+    // «Facile» (dopo una risposta giusta senza spiegazione): sale di due livelli.
+    // `easyHint*` dice in concreto fra quanti giorni torna l'esercizio. `{{easy}}` è
+    // sempre almeno 3; con `good` = 1 si dice «domani» (niente «1 giorni»).
+    easy: 'Facile',
+    easyHint: 'Ti è venuta senza pensarci? Con Facile la rivedi tra {{easy}} giorni invece che tra {{good}}.',
+    easyHintTomorrow: 'Ti è venuta senza pensarci? Con Facile la rivedi tra {{easy}} giorni invece che domani.',
     // L'affordance di ABBANDONO della sessione (3.20): verbale e concreta, mai
     // "Continua"/"Indietro" generico. L'esito già dato resta acquisito (persistenza
     // per-risposta), nessuna penalità. Nessun `!`, nessuna emoji, nessun avverbio di
@@ -457,6 +463,10 @@ export const it = {
       "Il progetto nasce solo dalla mia passione per il Giappone, dove un giorno mi piacerebbe trasferirmi. Spero che possa essere utile anche a te.",
     independent:
       "Questo sito non è affiliato a Cure Dolly né a TheMoeWay: gli esercizi li scrivo io.",
+    linksKicker: 'Link',
+    siteLabel: 'Il mio sito: federicocasadei.dev',
+    githubLabel: 'Il mio profilo GitHub',
+    repoLabel: 'Il codice di questo sito su GitHub',
     back: 'Indietro',
   },
 } as const;

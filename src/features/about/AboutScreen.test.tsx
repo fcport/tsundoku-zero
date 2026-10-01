@@ -56,6 +56,14 @@ describe('AboutScreen', () => {
     expect(markup).toContain(en.about.guideLabel);
   });
 
+  it("collega il sito dell'autore, il profilo GitHub e la repo", () => {
+    const markup = render();
+    expect(markup).toContain('href="https://federicocasadei.dev"');
+    expect(markup).toContain('href="https://github.com/fcport"');
+    expect(markup).toContain('href="https://github.com/fcport/tsundoku-zero"');
+    expect(markup).toContain(en.about.repoLabel);
+  });
+
   it('nomina la fonte e la guida, e dichiara che il sito è indipendente', () => {
     for (const catalog of [en, itCatalog]) {
       expect(catalog.about.who).toContain('Cure Dolly');

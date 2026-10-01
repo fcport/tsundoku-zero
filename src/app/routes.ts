@@ -18,17 +18,17 @@ export const ROOT_PATH = '/';
  * l'avvio; `AppRoutes` per l'uscita `onExit`→`ROOT_PATH`); le features non portano
  * stringhe di path.
  */
-export const STUDY_PATH = '/studia';
+export const STUDY_PATH = '/study';
 
 /**
  * La rotta delle STATISTICHE (5.1): la prima vista di Epic 5 (FR7.1), una rotta
- * protetta VERA che affianca `/studia` prima del catch-all. Mostra le risposte per
+ * protetta VERA che affianca `/study` prima del catch-all. Mostra le risposte per
  * giorno derivate dal solo `review_log`. La navigazione la cabla il livello app
  * (`AuthenticatedShell` via `useNavigate` per l'ingresso dalla dashboard;
  * `AppRoutes` per l'uscita `onExit`→`ROOT_PATH`, speculare alla sessione); le
  * features non portano stringhe di path.
  */
-export const STATS_PATH = '/statistiche';
+export const STATS_PATH = '/stats';
 
 /**
  * La rotta della PRIVACY POLICY (7.1): l'UNICA rotta pubblica raggiungibile in
@@ -45,21 +45,21 @@ export const PRIVACY_PATH = '/privacy';
  * La rotta dei RICONOSCIMENTI (7.2): la SECONDA rotta pubblica raggiungibile in
  * ENTRAMBI gli stati (anonimo e autenticato), gemella di `/privacy`. Vive fuori da
  * entrambe le guardie in `AppRoutes`, dichiarata come figlio DIRETTO di `<Routes>`
- * così il match statico `/riconoscimenti` batte il catch-all `*`. Il percorso NON
- * porta il nome della fonte (è `/riconoscimenti`, non `/cure-dolly`): il nome della
+ * così il match statico `/acknowledgements` batte il catch-all `*`. Il percorso NON
+ * porta il nome della fonte (è `/acknowledgements`, non `/cure-dolly`): il nome della
  * fonte resta confinato al CONTENUTO della pagina, mai nell'identità/URL. La
  * navigazione la cabla il livello app (`AppRoutes` per il collegamento sul login e
  * per l'uscita `onExit`; `AuthenticatedShell` per il collegamento nelle
  * Impostazioni); le features non portano stringhe di path.
  */
-export const ACKNOWLEDGEMENTS_PATH = '/riconoscimenti';
+export const ACKNOWLEDGEMENTS_PATH = '/acknowledgements';
 
 /**
  * La pagina «Come funziona?»: chi scrive il sito, perché esiste e come si usa.
- * Pubblica in ENTRAMBI gli stati come `/privacy` e `/riconoscimenti`: chi arriva
+ * Pubblica in ENTRAMBI gli stati come `/privacy` e `/acknowledgements`: chi arriva
  * da fuori la legge prima di registrarsi.
  */
-export const ABOUT_PATH = '/come-funziona';
+export const ABOUT_PATH = '/how-it-works';
 
 /**
  * La rotta delle IMPOSTAZIONI: lingua, tetto giornaliero di sblocco, collegamenti
@@ -67,22 +67,22 @@ export const ABOUT_PATH = '/come-funziona';
  * sommergevano l'unica cosa che conta lì (la pila da svuotare); ora la dashboard
  * porta solo un collegamento. Protetta, cablata dal livello app come le altre.
  */
-export const SETTINGS_PATH = '/impostazioni';
+export const SETTINGS_PATH = '/settings';
 
 /**
  * La rotta dell'ALLENAMENTO LIBERO sulle forme del verbo: fuori dalla pila, senza
  * progresso salvato. Protetta come le altre, raggiunta dalla dashboard.
  */
-export const DRILL_PATH = '/allenamento';
+export const DRILL_PATH = '/practice';
 
 /**
  * La rotta delle LEZIONI: tutto il curriculum con lo stato di ciascuna lezione, il
  * video e l'ingresso al ripasso libero. Protetta, raggiunta dalla dashboard.
  */
-export const LESSONS_PATH = '/lezioni';
+export const LESSONS_PATH = '/lessons';
 
 /**
- * Il ripasso libero di UNA lezione, fuori dalla pila: `/lezioni/:lessonId`. L'id è
+ * Il ripasso libero di UNA lezione, fuori dalla pila: `/lessons/:lessonId`. L'id è
  * uno slug che può contenere kana e kanji, quindi va codificato nel path.
  */
 export const LESSON_PRACTICE_PATH = `${LESSONS_PATH}/:lessonId`;
@@ -91,3 +91,17 @@ export const LESSON_PRACTICE_PATH = `${LESSONS_PATH}/:lessonId`;
 export function lessonPracticePath(lessonId: string): string {
   return `${LESSONS_PATH}/${encodeURIComponent(lessonId)}`;
 }
+
+/**
+ * I vecchi percorsi in italiano, ciascuno col percorso che lo sostituisce: restano
+ * solo come reindirizzamenti, così segnalibri e link già salvati non si rompono.
+ */
+export const LEGACY_PATH_REDIRECTS: ReadonlyArray<readonly [string, string]> = [
+  ['/studia', STUDY_PATH],
+  ['/statistiche', STATS_PATH],
+  ['/riconoscimenti', ACKNOWLEDGEMENTS_PATH],
+  ['/come-funziona', ABOUT_PATH],
+  ['/impostazioni', SETTINGS_PATH],
+  ['/allenamento', DRILL_PATH],
+  ['/lezioni', LESSONS_PATH],
+];

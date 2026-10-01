@@ -7,14 +7,14 @@
 //
 // Il catch-all dietro il guard protegge OGNI path non-/login (dashboard,
 // statistiche, impostazioni: non esistono ancora come rotte, arrivano in Epic
-// 3/5). La sessione (3.18) è la PRIMA rotta VERA (`/studia`) che affianca il
+// 3/5). La sessione (3.18) è la PRIMA rotta VERA (`/study`) che affianca il
 // catch-all: dichiarata PRIMA di `path="*"` così ha precedenza, il resto ricade
 // sulla shell. Coerente con «nessuna rotta prima della storia che la usa».
 //
 // react-router è importato SOLO nel livello app. Le schermate (features) non
 // contengono controlli di auth (AC2) né stringhe di path: l'autorizzazione e il
 // routing sono tutti qui.
-import { Route, Routes, useNavigate, useParams } from 'react-router';
+import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
 import { StatsScreen } from '../features/stats/StatsScreen';
@@ -31,6 +31,7 @@ import {
   ABOUT_PATH,
   ACKNOWLEDGEMENTS_PATH,
   DRILL_PATH,
+  LEGACY_PATH_REDIRECTS,
   LESSON_PRACTICE_PATH,
   LESSONS_PATH,
   LOGIN_PATH,
@@ -78,6 +79,12 @@ export function AppRoutes({
   const navigate = useNavigate();
   return (
     <Routes>
+      {/* I vecchi percorsi in italiano: solo reindirizzamenti verso i nuovi, fuori
+          dalle guardie (la destinazione applica la sua). */}
+      {LEGACY_PATH_REDIRECTS.map(([from, to]) => (
+        <Route key={from} path={from} element={<Navigate to={to} replace />} />
+      ))}
+      <Route path="/lezioni/:lessonId" element={<LegacyLessonRedirect />} />
       {/* La privacy policy (7.1): l'UNICA rotta pubblica in ENTRAMBI gli stati —
           raggiungibile da anonimo (prima della registrazione) e da autenticato.
           Dichiarata come figlio DIRETTO di <Routes>, FUORI da entrambe le guardie,
@@ -95,7 +102,7 @@ export function AppRoutes({
       />
       {/* I riconoscimenti (7.2): la SECONDA rotta pubblica in ENTRAMBI gli stati,
           gemella di `/privacy`. Figlio DIRETTO di <Routes>, FUORI da entrambe le
-          guardie, cosi il match statico `/riconoscimenti` batte il catch-all `*`.
+          guardie, cosi il match statico `/acknowledgements` batte il catch-all `*`.
           `onExit` DETERMINISTICO dal livello app (niente navigate(-1), vicolo cieco
           su deep-link diretto): autenticato -> ROOT_PATH, anonimo -> LOGIN_PATH. */}
       <Route
@@ -131,7 +138,7 @@ export function AppRoutes({
       </Route>
       <Route element={<RequireAuth authenticated={authenticated} />}>
         {/* La sessione di esercizi (3.18): rotta VERA sotto il guard, PRIMA del
-            catch-all così `/studia` ha precedenza. `userId` è già una prop di
+            catch-all così `/study` ha precedenza. `userId` è già una prop di
             AppRoutes (chiave per-utente della pila, AD-5). */}
         <Route
           path={STUDY_PATH}
@@ -143,7 +150,7 @@ export function AppRoutes({
           }
         />
         {/* Le statistiche (5.1): rotta VERA sotto il guard, PRIMA del catch-all così
-            `/statistiche` ha precedenza. `onExit`→ROOT_PATH, speculare alla sessione. */}
+            `/stats` ha precedenza. `onExit`→ROOT_PATH, speculare alla sessione. */}
         <Route
           path={STATS_PATH}
           element={
@@ -219,4 +226,10 @@ function LessonPracticeRoute({
   return (
     <LessonPracticeScreen key={lessonId} userId={userId} lessonId={lessonId} onExit={onExit} />
   );
+}
+
+// Il vecchio `/lezioni/:lessonId` porta al ripasso della stessa lezione sul percorso nuovo.
+function LegacyLessonRedirect() {
+  const { lessonId = '' } = useParams();
+  return <Navigate to={lessonPracticePath(lessonId)} replace />;
 }

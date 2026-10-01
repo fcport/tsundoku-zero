@@ -101,7 +101,7 @@ describe('AC3 — giapponese come dato con lang="ja"; interfaccia da t()', () =>
 describe('7.2 — il nome della fonte non compare nell identita del prodotto', () => {
   // Il nome della fonte ("Dolly") e confinato al CONTENUTO della pagina dei
   // riconoscimenti: MAI nel namespace `app` di branding (nome prodotto/tagline) ne
-  // nel percorso della rotta (`/riconoscimenti`, non `/cure-dolly`). L'assert
+  // nel percorso della rotta (`/acknowledgements`, non `/cure-dolly`). L'assert
   // positivo su `method` prova che il confine e chirurgico, non una svista che
   // svuoterebbe il test (se la copy non nominasse la fonte, la negativa passerebbe
   // per la ragione sbagliata).

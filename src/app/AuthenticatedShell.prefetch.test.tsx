@@ -2,7 +2,7 @@
 //
 // AC4 — il PRECARICO della sessione osservato dalla SUPERFICIE ESTERNA (4.1): un
 // click sull'azione primaria «svuota pila» esegue il precarico dell'INTERA pila
-// (contenuto+spiegazioni) e SOLO dopo la sua conclusione naviga a `/studia`. È
+// (contenuto+spiegazioni) e SOLO dopo la sua conclusione naviga a `/study`. È
 // l'unica prova che richiede di GUIDARE la componente resa (un click, non una
 // funzione pura): `renderToStaticMarkup` (env `node`, il resto della suite) non
 // esegue eventi né effetti, quindi questo file marca l'ambiente `jsdom` SOLO per
@@ -198,7 +198,7 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
     expect(currentPath).toBe('/');
   });
 
-  it('un click su «svuota pila» precarica il contenuto dovuto e naviga a /studia', async () => {
+  it('un click su «svuota pila» precarica il contenuto dovuto e naviga a /study', async () => {
     mount(seededClient(), spyPorts());
 
     act(() => {
@@ -212,7 +212,7 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
     expect(listExercisesByIds).toHaveBeenCalledTimes(1);
     expect(listExercisesByIds).toHaveBeenCalledWith(['ex-1']);
     // La navigazione avviene DOPO il precarico.
-    expect(currentPath).toBe('/studia');
+    expect(currentPath).toBe('/study');
   });
 
   it('un doppio click non avvia due precarichi sovrapposti (guardia di re-entrancy)', async () => {
@@ -228,10 +228,10 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
     // La guardia `useRef` blocca il secondo click finché il primo precarico è in
     // volo: il contenuto è caricato UNA sola volta.
     expect(listExercisesByIds).toHaveBeenCalledTimes(1);
-    expect(currentPath).toBe('/studia');
+    expect(currentPath).toBe('/study');
   });
 
-  it('un errore nel precarico NON blocca la navigazione: naviga COMUNQUE a /studia (degrado grazioso, AC5)', async () => {
+  it('un errore nel precarico NON blocca la navigazione: naviga COMUNQUE a /study (degrado grazioso, AC5)', async () => {
     // `['due']` è seminata (il bottone richiede conteggio > 0) ⇒ il precarico la
     // RIUSA e fallisce al passo contenuto: `listExercisesByIds` rigetta. La `.catch`
     // del wiring inghiotte il reject (nessuna unhandled rejection) e `.finally`
@@ -259,17 +259,17 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
     });
     await flush();
 
-    expect(currentPath).toBe('/studia');
+    expect(currentPath).toBe('/study');
   });
 });
 
 describe('AuthenticatedShell — navigazione alle statistiche (5.1)', () => {
   // La SOLA porta di ingresso alla StatsScreen dalla dashboard: un click su «vedi
-  // statistiche» deve portare a `/statistiche`. La navigazione è una callback
+  // statistiche» deve portare a `/stats`. La navigazione è una callback
   // cablata dalla shell (AD-1) — osservata qui dalla superficie esterna (un click,
   // il pathname della sonda), non da un'asserzione statica sul markup. Nessun
   // precarico: l'affordance naviga e basta.
-  it('un click su «vedi statistiche» naviga a /statistiche', () => {
+  it('un click su «vedi statistiche» naviga a /stats', () => {
     mount(seededClient(), spyPorts());
     expect(currentPath).toBe('/');
 

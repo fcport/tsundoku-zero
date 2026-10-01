@@ -92,3 +92,11 @@ export function studyDayStart(dayOrdinal: number, timeZone: string): Date {
   instant = wall - zoneOffsetMs(instant, timeZone);
   return new Date(instant);
 }
+
+/**
+ * Fra quante giornate di studio torna una scadenza: `0` se cade in quella di `now`.
+ * Serve a dire allo studente «la rivedi tra N giorni».
+ */
+export function studyDaysUntil(dueAt: Date, now: Date, timeZone: string): number {
+  return studyDayOrdinal(dueAt, timeZone) - studyDayOrdinal(now, timeZone);
+}

@@ -219,6 +219,12 @@ export const en = {
     // L'azione di avanzamento al prossimo esercizio (3.19): verbale e concreta,
     // mai "Continue". Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
     next: 'Next exercise',
+    // «Facile» (after a correct answer without the explanation): up two levels.
+    // `easyHint*` says when the exercise comes back. `{{easy}}` is always at least 3;
+    // with `good` = 1 it says «tomorrow».
+    easy: 'Easy',
+    easyHint: 'Knew it without thinking? With Easy you see it again in {{easy}} days instead of {{good}}.',
+    easyHintTomorrow: 'Knew it without thinking? With Easy you see it again in {{easy}} days instead of tomorrow.',
     // L'affordance di ABBANDONO della sessione (3.20): verbale e concreta, mai
     // "Continue"/"Back" generico. L'esito già dato resta acquisito (persistenza
     // per-risposta), nessuna penalità. Nessun `!`, nessuna emoji, nessun avverbio di
@@ -415,7 +421,7 @@ export const en = {
         'You can delete your account in Settings, with Delete account. The list of your answers is deleted too, and this cannot be undone.',
       back: 'Back',
     },
-    // I riconoscimenti (7.2): la pagina pubblica `/riconoscimenti` che attribuisce
+    // I riconoscimenti (7.2): la pagina pubblica `/acknowledgements` che attribuisce
     // la FONTE del metodo e ne delimita i confini. `method` attribuisce a Cure
     // Dolly la divulgazione del modello strutturale (il nome della fonte compare
     // SOLO qui, MAI nel namespace `app` di branding ne nel percorso di rotta);
@@ -466,6 +472,10 @@ export const en = {
       'This project comes only from my passion for Japan, where I would love to live one day. I hope it can be useful to you too.',
     independent:
       'This site is not affiliated with Cure Dolly or TheMoeWay: I write the exercises myself.',
+    linksKicker: 'Links',
+    siteLabel: 'My site: federicocasadei.dev',
+    githubLabel: 'My GitHub profile',
+    repoLabel: 'The code of this site on GitHub',
     back: 'Back',
   },
 } as const;

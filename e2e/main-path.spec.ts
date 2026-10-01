@@ -33,7 +33,7 @@ const TEXT = {
   authSubmit: /^(Crea account|Create account)$/,
   // dashboard.startAction — sblocca la PRIMA lezione (primo avvio, unlocked===0).
   startAction: /^(Comincia dalla prima lezione|Start with the first lesson)$/,
-  // dashboard.primaryAction — «svuota la pila» (pila piena ⇒ naviga a /studia).
+  // dashboard.primaryAction — «svuota la pila» (pila piena ⇒ naviga a /study).
   primaryAction: /^(Svuota la pila|Empty the pile)$/,
   // session.prompt.* — la CONSEGNA, distingue il `kind` della card corrente.
   promptSingleSelect: /^(Scegli l'opzione che completa la frase\.|Choose the option that completes the sentence\.)$/,
@@ -176,11 +176,11 @@ test('percorso principale: registrazione, sblocco, esercizi, pila a zero', async
   await startAction.click();
 
   // 4) Pila piena ⇒ il cancello mostra SOLO `primaryAction` («svuota la pila»),
-  //    che naviga a /studia (precarico + useNavigate lato app).
+  //    che naviga a /study (precarico + useNavigate lato app).
   const primaryAction = page.getByRole('button', { name: TEXT.primaryAction });
   await expect(primaryAction).toBeVisible();
   await primaryAction.click();
-  await expect(page).toHaveURL(/\/studia$/);
+  await expect(page).toHaveURL(/\/study$/);
 
   // 5) Risolve i TRE esercizi. Dopo ogni risposta, ULTIMA COMPRESA, il riscontro
   //    appare con `session.next`; dopo l'ultima, `next` porta alla schermata di

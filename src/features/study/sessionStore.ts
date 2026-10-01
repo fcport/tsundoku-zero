@@ -10,7 +10,7 @@
 //
 // La sessione si RICOSTRUISCE all'ingresso (3.20, deferred #1 di 3.19): lo store è
 // un singleton di modulo che sopravvive allo smontaggio di `SessionScreen`, quindi
-// `reset()` lo riporta alla forma iniziale all'USCITA da `/studia`. La prossima
+// `reset()` lo riporta alla forma iniziale all'USCITA da `/study`. La prossima
 // entrata rientra così nell'effetto `start` guardato (`initialIds.length === 0`) e
 // riparte dalla pila FRESCA `['due']` — mai dalla coda precedente («riprendi dove
 // eri» non esiste). `reset` DELEGA al dominio (`createSession([])`), come `start`.
@@ -51,7 +51,7 @@ export interface SessionStore {
   /**
    * Azzera lo stato alla forma INIZIALE (coda vuota, `total` 0, `initialIds` `[]`):
    * la ricostruzione all'ingresso della 3.20 (deferred #1 di 3.19). Chiamata
-   * all'USCITA da `/studia` (cleanup di `SessionScreen`) così la prossima entrata
+   * all'USCITA da `/study` (cleanup di `SessionScreen`) così la prossima entrata
    * riparte dalla pila fresca. DELEGA al dominio (`createSession([])`); tocca SOLO la
    * coda in memoria, mai la porta/DB (le risposte sono già persistite per-risposta).
    */

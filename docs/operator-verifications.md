@@ -19,8 +19,8 @@ Verificata il 28-09-2026 sul deploy pubblico `tsundoku-zero.vercel.app`.
 | Criterio | Come | Esito |
 |---|---|---|
 | Il nome della fonte non compare nel dominio | ispezione del dominio reale | `tsundoku-zero.vercel.app` — nessuna occorrenza di «Cure»/«Dolly» |
-| `/riconoscimenti` in inglese | browser sul deploy | attribuzione presente, esercizi dichiarati originali, affiliazione negata esplicitamente, fondamento accademico citato (Kuno 1973) |
-| `/riconoscimenti` in italiano | browser sul deploy, dopo cambio lingua | stesso contenuto, tradotto |
+| `/acknowledgements` in inglese | browser sul deploy | attribuzione presente, esercizi dichiarati originali, affiliazione negata esplicitamente, fondamento accademico citato (Kuno 1973) |
+| `/acknowledgements` in italiano | browser sul deploy, dopo cambio lingua | stesso contenuto, tradotto |
 | Il collegamento apre il canale corretto in una nuova scheda | attributi del DOM + richiesta all'URL | `href` = `https://www.youtube.com/channel/UCkdmU8hGK4Fg3LghTVtKltQ`, `target="_blank"`, `rel="noreferrer"`; l'URL risponde HTTP 200 con titolo «Organic Japanese with Cure Dolly» |
 
 ## 7.5 — La cancellazione verificata tabella per tabella

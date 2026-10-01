@@ -43,10 +43,8 @@ export function isAnswerCorrect(exercise: Exercise, selected: readonly number[])
  * stato. PURA e TOTALE — stessi argomenti ⇒ stesso risultato, sempre — e non muta
  * l'input (`schedule` ritorna un nuovo stato).
  *
- * `declaredEasy` è HARD-WIRED `false`: nessun AC di Epic 3 introduce un controllo
- * «facile», quindi l'esito appartiene a `{again, hard, good}` (il ramo `easy`
- * resta nel dominio per completezza ma non è raggiungibile dalla UI). Non
- * aggiungere alcun controllo «facile».
+ * `declaredEasy` è il pulsante «Facile» della sessione: conta SOLO su una risposta
+ * giusta data senza la spiegazione (`outcomeOf` fa prevalere errore e aiuto).
  */
 export function evaluateAnswer(
   exercise: Exercise,
@@ -55,10 +53,10 @@ export function evaluateAnswer(
   currentState: ReviewState,
   now: Date,
   timeZone: string,
+  declaredEasy: boolean,
 ): AnswerEvaluation {
   const correct = isAnswerCorrect(exercise, selected);
-  // declaredEasy sempre false in Epic 3 (nessun controllo «facile»).
-  const outcome = outcomeOf({ correct }, usedExplanation, false);
+  const outcome = outcomeOf({ correct }, usedExplanation, declaredEasy);
   const result = schedule(currentState, outcome, now, timeZone);
   return { correct, outcome, result };
 }

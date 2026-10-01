@@ -52,7 +52,7 @@ const inertPorts: Ports = {
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
 };
 
-// L'esercizio corrente seminato per la rotta /studia: single-select, la cui chiave
+// L'esercizio corrente seminato per la rotta /study: single-select, la cui chiave
 // di riga combacia con l'unico dovuto seminato (exerciseId 'a', dueIds = ['a']).
 const STUDY_EXERCISE = {
   id: 'a',
@@ -77,7 +77,7 @@ function seededClient(): QueryClient {
   qc.setQueryData(dueQueryKey(UID), [
     { exerciseId: 'a', stage: 0, dueAt: new Date(0), reviewCount: 0, lapseCount: 0, lastReviewedAt: null },
   ]);
-  // La rotta /studia (3.18) legge la STESSA pila (dueIds = ['a']) e carica gli
+  // La rotta /study (3.18) legge la STESSA pila (dueIds = ['a']) e carica gli
   // esercizi sotto ['exercises', dueIds]: seminata così la SessionScreen rende la
   // card sincrona invece dello scheletro.
   qc.setQueryData(['exercises', ['a']], [STUDY_EXERCISE]);
@@ -164,7 +164,7 @@ describe('AppRoutes — radice protetta, anonimo', () => {
 });
 
 describe('AppRoutes — deep link protetto, anonimo', () => {
-  const markup = renderAt('/statistiche', false);
+  const markup = renderAt('/stats', false);
 
   it('il guard blocca: nessuna dashboard', () => {
     expect(markup).not.toContain(en.dashboard.primaryAction);
@@ -172,16 +172,16 @@ describe('AppRoutes — deep link protetto, anonimo', () => {
   });
 });
 
-describe('AppRoutes — rotta /statistiche, autenticato (5.1)', () => {
+describe('AppRoutes — rotta /stats, autenticato (5.1)', () => {
   // `seededClient()` semina `['streak', UID] = []`, quindi la StatsScreen rende il
   // ramo a log vuoto (placeholder + affordance di ritorno). Il render riuscito con
   // una stringa specifica della StatsScreen prova che la rotta è montata sotto il
   // guard, PRIMA del catch-all.
-  const markup = renderAt('/statistiche', true);
+  const markup = renderAt('/stats', true);
 
   it('rende la StatsScreen (affordance di ritorno da t())', () => {
     expect(markup).toContain(en.stats.back);
-    // NON la dashboard: /statistiche ha precedenza sul catch-all.
+    // NON la dashboard: /stats ha precedenza sul catch-all.
     expect(markup).not.toContain(en.dashboard.primaryAction);
   });
 
@@ -214,7 +214,7 @@ describe('AppRoutes — rotta di Accesso, anonimo', () => {
 
   it('7.2 — contiene il collegamento ai riconoscimenti (raggiungibile PRIMA della registrazione)', () => {
     // Gemello del collegamento privacy: la pagina dei riconoscimenti e PUBBLICA,
-    // l'affordance verso `/riconoscimenti` e sul login prima della registrazione.
+    // l'affordance verso `/acknowledgements` e sul login prima della registrazione.
     expect(markup).toContain(en.legal.acknowledgements.linkLabel);
   });
 
@@ -223,9 +223,9 @@ describe('AppRoutes — rotta di Accesso, anonimo', () => {
   });
 });
 
-describe('AppRoutes — rotta /come-funziona, in entrambi gli stati', () => {
+describe('AppRoutes — rotta /how-it-works, in entrambi gli stati', () => {
   it.each([false, true])('autenticato=%s ⇒ rende la pagina, non la dashboard', (authenticated) => {
-    const markup = renderAt('/come-funziona', authenticated);
+    const markup = renderAt('/how-it-works', authenticated);
     expect(markup).toContain(en.about.who);
     expect(markup).toContain(en.about.back);
     expect(markup).not.toContain(en.dashboard.primaryAction);
@@ -274,12 +274,12 @@ describe('AppRoutes — rotta /privacy, autenticato (7.1)', () => {
   });
 });
 
-describe('AppRoutes — rotta /riconoscimenti, anonimo (7.2)', () => {
+describe('AppRoutes — rotta /acknowledgements, anonimo (7.2)', () => {
   // La rotta pubblica ungated, gemella di `/privacy`: raggiungibile con
   // `authenticated=false`, PRIMA della registrazione. Il match statico
-  // `/riconoscimenti` batte il catch-all `*`, e la pagina non e rediretta (nessuna
+  // `/acknowledgements` batte il catch-all `*`, e la pagina non e rediretta (nessuna
   // guardia): rende l'AcknowledgementsScreen.
-  const markup = renderAt('/riconoscimenti', false);
+  const markup = renderAt('/acknowledgements', false);
 
   it('rende l AcknowledgementsScreen (attribuzione + confini + ritorno), NON rediretta', () => {
     expect(markup).toContain(en.legal.acknowledgements.method);
@@ -287,7 +287,7 @@ describe('AppRoutes — rotta /riconoscimenti, anonimo (7.2)', () => {
     expect(markup).toContain(en.legal.acknowledgements.noAffiliation);
     expect(markup).toContain(en.legal.acknowledgements.scholarship);
     expect(markup).toContain(en.legal.acknowledgements.back);
-    // NON la dashboard: `/riconoscimenti` non ricade sul catch-all protetto.
+    // NON la dashboard: `/acknowledgements` non ricade sul catch-all protetto.
     expect(markup).not.toContain(en.dashboard.primaryAction);
   });
 
@@ -297,11 +297,11 @@ describe('AppRoutes — rotta /riconoscimenti, anonimo (7.2)', () => {
   });
 });
 
-describe('AppRoutes — rotta /riconoscimenti, autenticato (7.2)', () => {
+describe('AppRoutes — rotta /acknowledgements, autenticato (7.2)', () => {
   // La stessa rotta ungated, raggiungibile anche da autenticato: vive fuori da
   // RequireAuth E da RedirectIfAuthenticated, quindi rende l'AcknowledgementsScreen
   // in entrambi gli stati.
-  const markup = renderAt('/riconoscimenti', true);
+  const markup = renderAt('/acknowledgements', true);
 
   it('rende l AcknowledgementsScreen (attribuzione + confini + ritorno)', () => {
     expect(markup).toContain(en.legal.acknowledgements.method);
@@ -327,16 +327,16 @@ describe('AppRoutes — rotta di Accesso, autenticato', () => {
   });
 });
 
-describe('AppRoutes — rotta /studia, autenticato (3.18/3.19)', () => {
+describe('AppRoutes — rotta /study, autenticato (3.18/3.19)', () => {
   // La SessionScreen (3.19) legge la corrente dallo store SEMINATO (l `start` di
   // produzione è un effetto, non eseguito da renderToStaticMarkup): lo semino con
   // l unico id dovuto ('a'), coerente con la pila e gli esercizi seminati in cache.
   useSessionStore.getState().start(['a']);
-  const markup = renderAt('/studia', true);
+  const markup = renderAt('/study', true);
 
   it('rende la SessionScreen: la consegna dell esercizio corrente', () => {
     expect(markup).toContain(en.session.prompt.singleSelect);
-    // NON la dashboard: /studia ha precedenza sul catch-all.
+    // NON la dashboard: /study ha precedenza sul catch-all.
     expect(markup).not.toContain(en.dashboard.primaryAction);
   });
 
@@ -352,8 +352,8 @@ describe('AppRoutes — rotta /studia, autenticato (3.18/3.19)', () => {
   });
 });
 
-describe('AppRoutes — rotta /studia, anonimo (3.18)', () => {
-  const markup = renderAt('/studia', false);
+describe('AppRoutes — rotta /study, anonimo (3.18)', () => {
+  const markup = renderAt('/study', false);
 
   it('il guard blocca: nessuna SessionScreen (Navigate→null in SSR)', () => {
     expect(markup).not.toContain(en.session.prompt.singleSelect);

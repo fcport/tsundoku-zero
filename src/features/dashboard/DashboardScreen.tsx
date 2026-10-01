@@ -531,7 +531,7 @@ export function DashboardScreen({
           (3.17): al più UNA sola azione, mai entrambe insieme, sempre la barra
           d'inchiostro in fondo alla pagina.
           - Pila NON vuota (count > 0) ⇒ SOLO svuota-pila, cablata all'avvio sessione
-            (3.18) via `onStartSession` (la shell naviga a /studia). Il tetto NON è
+            (3.18) via `onStartSession` (la shell naviga a /study). Il tetto NON è
             consultato qui.
           - Pila vuota (count === 0) con una lezione successiva e tetto NON
             raggiunto ⇒ SOLO sblocco, cablato a `unlockMutation.mutate(next.id)`.

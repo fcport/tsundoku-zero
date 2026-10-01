@@ -1,5 +1,5 @@
 // Livello features/legal (7.2): la schermata-rotta dei RICONOSCIMENTI. Una pagina
-// PUBBLICA `/riconoscimenti` che, PRIMA o DOPO l'autenticazione, attribuisce la
+// PUBBLICA `/acknowledgements` che, PRIMA o DOPO l'autenticazione, attribuisce la
 // FONTE del metodo (Cure Dolly ha divulgato il modello strutturale) e ne delimita
 // i confini: gli esercizi sono ORIGINALI e non riproducono materiale della fonte
 // (`originalContent`); il progetto NON e affiliato, approvato ne una continuazione
@@ -19,7 +19,7 @@
 //
 // Il nome della fonte compare SOLO nel contenuto di questa pagina (via `t()`): mai
 // nel nome del prodotto, nella copy di branding (namespace `app`) ne nel percorso di
-// rotta (`/riconoscimenti`, non `/cure-dolly`). Nessuna grammatica della
+// rotta (`/acknowledgements`, non `/cure-dolly`). Nessuna grammatica della
 // celebrazione (nessun `!`, nessuna emoji, nessun avverbio di lode) e nessuna
 // formulazione che suggerisca affiliazione/approvazione/continuita: solo token del
 // sistema di design (nessun colore letterale).

@@ -1,5 +1,5 @@
 // Livello features/study (3.19): l'ORCHESTRAZIONE della sessione. Possiede l'UNICO
-// `<main>` di `/studia`, la fase locale (`consegna`↔`spiegazione`), `selected`/
+// `<main>` di `/study`, la fase locale (`consegna`↔`spiegazione`), `selected`/
 // `usedExplanation`, la mutation di persistenza, lo store e la barra. AD-1: importa
 // domain/ui/i18n/@tanstack/react-query/zustand, MAI data — le porte arrivano da
 // `usePorts()`; l'`userId` è una prop; `crypto.randomUUID` vive SOLO qui (glue di
@@ -52,7 +52,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { applyResultToDue, dueQueryKey } from '../../domain/due';
 import { answerOptions, selectionComplete } from '../../domain/exercise-presentation';
 import { keyboardSelectionIndex } from '../../domain/keyboard';
-import { evaluateAnswer } from '../../domain/review';
+import { studyDaysUntil } from '../../domain/calendarDay';
+import type { Exercise } from '../../domain/exercise';
+import { evaluateAnswer, type AnswerEvaluation } from '../../domain/review';
 import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
 import { streak } from '../../domain/streak';
@@ -185,7 +187,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
 
   // RICOSTRUZIONE all'ingresso (AC4): lo store è un singleton di modulo che
   // sopravvive allo smontaggio. Un effetto con cleanup su UNMOUNT azzera lo store
-  // all'USCITA da `/studia` (Esc, «esci», «indietro», completamento), così la
+  // all'USCITA da `/study` (Esc, «esci», «indietro», completamento), così la
   // prossima entrata rientra nell'effetto `start` guardato e riparte dalla pila
   // fresca — nessun «riprendi dove eri». `reset` è un'azione stabile dello store.
   const resetSession = useSessionStore.getState().reset;
@@ -198,6 +200,10 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   const [selected, setSelected] = useState<number[]>([]);
   const [answered, setAnswered] = useState(false);
   const [answeredCorrect, setAnsweredCorrect] = useState<boolean | null>(null);
+  // «Facile»: fra quanti giorni torna l'esercizio con «Prossimo» e con «Facile».
+  // Presente solo mentre una risposta giusta, data senza spiegazione, aspetta la
+  // scelta; `null` altrimenti (il pulsante non si mostra).
+  const [easyChoice, setEasyChoice] = useState<{ good: number; easy: number } | null>(null);
   const [usedExplanation, setUsedExplanation] = useState(false);
   // L'esercizio a cui si è APPENA risposto. La coda avanza subito alla risposta
   // (`dispatch({ type: 'reviewed' })`, barra ottimistica), quindi `currentId` punta
@@ -310,6 +316,61 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   // l'esercizio è, alla ripresentazione, un NUOVO tentativo (nuovo `review_id`).
   // SOLLEVATO a top-level (3.22): la STESSA pipeline del click serve il tasto numerico
   // (nessuna seconda strada). Guarda `activeExercise`/`currentId` nulli (nessuna card).
+  const persist = (
+    exerciseId: string,
+    reviewId: string,
+    now: Date,
+    used: boolean,
+    { outcome, result }: AnswerEvaluation,
+  ) => {
+    applyMutation.mutate({
+      input: {
+        reviewId,
+        exerciseId,
+        outcome,
+        stage: result.stage,
+        dueAt: result.dueAt,
+        reviewedAt: now,
+        usedExplanation: used,
+      },
+      result,
+    });
+  };
+
+  // Una risposta GIUSTA data SENZA spiegazione non si salva subito: aspetta la
+  // scelta fra «Prossimo» (giusta) e «Facile» (sale di due livelli). Resta comunque
+  // UNA sola risposta nel registro. Se si esce senza scegliere, vale «Prossimo».
+  const pendingRef = useRef<{
+    readonly exercise: Exercise;
+    readonly selected: readonly number[];
+    readonly currentState: ReviewState;
+    readonly now: Date;
+    readonly reviewId: string;
+    readonly exerciseId: string;
+  } | null>(null);
+  const commitPending = (declaredEasy: boolean) => {
+    const pending = pendingRef.current;
+    if (pending === null) return;
+    pendingRef.current = null;
+    const evaluation = evaluateAnswer(
+      pending.exercise,
+      pending.selected,
+      false,
+      pending.currentState,
+      pending.now,
+      clock.timeZone(),
+      declaredEasy,
+    );
+    persist(pending.exerciseId, pending.reviewId, pending.now, false, evaluation);
+  };
+  // All'uscita dalla schermata (Esc, «esci», indietro del browser) una risposta in
+  // attesa si salva come «Prossimo». Ref «ultimo valore», come `sessionKeyRef`.
+  const commitPendingRef = useRef(commitPending);
+  useEffect(() => {
+    commitPendingRef.current = commitPending;
+  });
+  useEffect(() => () => commitPendingRef.current(false), []);
+
   const onSelect = (index: number) => {
     // Guardia di re-entrancy (cintura+bretelle): i bottoni sono già `disabled` dopo
     // la risposta, ma un tocco/tasto spurio dopo il commit non deve ri-eseguire la
@@ -339,30 +400,46 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
 
     // La pipeline di valutazione vive nel dominio (`evaluateAnswer`): compose→check→
     // outcomeOf→schedule, PURA e testata. Qui resta solo il montaggio sottile.
-    const { correct, outcome, result } = evaluateAnswer(
+    const evaluation = evaluateAnswer(
       activeExercise,
       next,
       usedExplanation,
       currentState,
       now,
       clock.timeZone(),
+      false,
     );
+    const { correct, outcome, result } = evaluation;
     const reviewId = crypto.randomUUID(); // glue di feature: `src/domain` vieta `crypto`
 
     setAnsweredId(currentId); // la card resta su questo esercizio fino a «Prossimo»
     dispatch({ type: 'reviewed', result, now }); // avanza la coda (barra ottimistica)
-    applyMutation.mutate({
-      input: {
+    if (outcome === 'good') {
+      // Giusta senza spiegazione: il salvataggio aspetta «Prossimo» o «Facile».
+      pendingRef.current = {
+        exercise: activeExercise,
+        selected: next,
+        currentState,
+        now,
         reviewId,
         exerciseId: currentId,
-        outcome,
-        stage: result.stage,
-        dueAt: result.dueAt,
-        reviewedAt: now,
-        usedExplanation,
-      },
-      result,
-    });
+      };
+      const easy = evaluateAnswer(
+        activeExercise,
+        next,
+        false,
+        currentState,
+        now,
+        clock.timeZone(),
+        true,
+      );
+      setEasyChoice({
+        good: studyDaysUntil(result.dueAt, now, clock.timeZone()),
+        easy: studyDaysUntil(easy.result.dueAt, now, clock.timeZone()),
+      });
+    } else {
+      persist(currentId, reviewId, now, usedExplanation, evaluation);
+    }
 
     setAnswered(true);
     setAnsweredCorrect(correct);
@@ -371,7 +448,14 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   // Avanzamento al prossimo esercizio: azzera fase/selezione/consulto e mostra il
   // nuovo `currentExerciseId` (lo store è GIÀ avanzato dal dispatch). SOLLEVATO a
   // top-level (3.22): serve sia il bottone che il tasto `Enter` del contratto.
+  const onEasy = () => {
+    commitPending(true);
+    onNext();
+  };
+
   const onNext = () => {
+    commitPending(false);
+    setEasyChoice(null);
     setAnsweredId(null);
     setSelected([]);
     setAnswered(false);
@@ -538,6 +622,24 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
       />
       {/* L'azione «prossimo esercizio» (mai "Continua"), visibile in spiegazione.
           Anello di focus visibile (3.22, AC5). */}
+      {/* «Facile»: solo dopo una risposta giusta data senza spiegazione. Dice in
+          concreto cosa cambia (fra quanti giorni torna l'esercizio), poi avanza. */}
+      {answered && easyChoice !== null && (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <button
+            type="button"
+            onClick={onEasy}
+            className={`min-h-[52px] shrink-0 self-start border-[1.5px] border-border-strong bg-surface-raised px-6 text-label font-bold uppercase tracking-[0.04em] text-ink-primary hover:bg-surface-sunken sm:self-auto ${FOCUS_RING}`}
+          >
+            {t('session.easy')}
+          </button>
+          <p className="text-label text-ink-secondary">
+            {easyChoice.good === 1
+              ? t('session.easyHintTomorrow', { easy: easyChoice.easy })
+              : t('session.easyHint', { easy: easyChoice.easy, good: easyChoice.good })}
+          </p>
+        </div>
+      )}
       {answered && (
         <button type="button" onClick={onNext} className={ACTION_BAR}>
           <span>{t('session.next')}</span>

@@ -2,168 +2,211 @@
 
 積ん読ゼロ — svuotare la pila.
 
-Un'app di ripetizione dilazionata per lo studio della grammatica giapponese N5,
-open source e destinata al deploy pubblico. Il nome dichiara la metrica del
-prodotto: gli esercizi in attesa di ripasso sono «la pila», e l'obiettivo
-quotidiano è portarla a zero.
+**[tsundokuzero.federicocasadei.dev](https://tsundokuzero.federicocasadei.dev)**
 
-Il progetto ha due scopi, in ordine di priorità: uno strumento che l'autore usi
-ogni giorno per studiare, e una base di codice React/TypeScript difendibile riga
-per riga. Dopo il pivot dal vocabolario alla grammatica strutturale, l'unità di
-studio non è più la parola ma l'esercizio grammaticale: una lezione dichiara i
-propri punti grammaticali e porta zero o più esercizi di tre tipi di interazione
-(`single-select`, `select-span`, `assemble`). Il resto dell'impianto — il motore
-di scheduling puro, l'isolamento dei dati per utente, il confine architetturale —
-è sopravvissuto intero al pivot.
+Esercizi di grammatica giapponese per accompagnare, lezione per lezione, le
+lezioni video di [Cure Dolly](https://www.youtube.com/channel/UCkdmU8hGK4Fg3LghTVtKltQ).
+Sto studiando giapponese con [30 Day Japanese](https://learnjapanese.moe/routine/)
+di TheMoeWay, che per la grammatica consiglia proprio quelle lezioni: sono
+ottime, ma di esercizi per accompagnarle ce ne sono pochissimi, e quello che
+non si esercita si dimentica. Così, man mano che vado avanti, aggiungo qui le
+lezioni e ne scrivo gli esercizi, perché chiunque possa usarli.
 
-Lo stack reale, dal `package.json`: React 19 + TypeScript in strict mode, Vite,
-React Router, Zustand per lo stato UI, TanStack Query per lo stato server,
-Supabase (Postgres, Auth, RLS), i18next per l'interfaccia bilingue, Vitest per i
-test. La documentazione di dettaglio vive sotto `docs/`.
+Il nome è la metrica del prodotto: gli esercizi da ripassare sono «la pila», e
+l'obiettivo di ogni giorno è portarla a zero. Il progetto è indipendente: non è
+affiliato a Cure Dolly né a TheMoeWay, e gli esercizi sono originali.
+
+## Come funziona
+
+- **Lezioni.** Ogni lezione corrisponde a un video e dichiara i suoi punti
+  grammaticali. Gli esercizi sono di tre tipi: scegliere la risposta giusta
+  (`single-select`), indicare una parte della frase (`select-span`), comporre una
+  frase con delle tessere (`assemble`). Ogni risposta ha la sua spiegazione.
+- **La pila.** Quando sblocchi una lezione, i suoi esercizi entrano nella pila.
+  La lezione successiva si sblocca solo a pila vuota, con un tetto giornaliero
+  regolabile nelle impostazioni.
+- **Ripetizione dilazionata.** Ogni esercizio ha un livello, e il livello decide
+  fra quanti giorni torna:
+
+  | Livello    | 0      | 1        | 2        | 3        | 4         | 5         |
+  | ---------- | ------ | -------- | -------- | -------- | --------- | --------- |
+  | Torna dopo | subito | 1 giorno | 3 giorni | 7 giorni | 16 giorni | 35 giorni |
+
+  Una risposta giusta sale di un livello. Giusta ma con la spiegazione aperta
+  resta al suo livello, con un intervallo più corto. Una risposta sbagliata
+  torna a zero e si rifà subito. Dopo una risposta giusta data senza spiegazione
+  c'è anche **Facile**, che sale di due livelli: è per le cose che vengono senza
+  pensarci.
+- **Alle 2 di notte.** Le scadenze cadono all'inizio della giornata di studio,
+  le 2 locali: la pila si riempie tutta insieme e non cresce durante il giorno.
+- **Fuori dalla pila.** Dalla pagina Lezioni si rivede il video e si ripassa
+  liberamente una lezione già sbloccata; c'è anche un allenamento sulle forme del
+  verbo. Nessuno dei due tocca la pila.
+- Furigana e traduzioni si accendono e spengono dal dorso della pagina;
+  l'interfaccia è in italiano e in inglese.
+
+## Lo stack
+
+React 19 e TypeScript in strict mode, Vite, React Router, Zustand per lo stato
+dell'interfaccia, TanStack Query per lo stato server (con una coda di risposte
+che sopravvive alla chiusura dell'app e alla rete assente), Supabase (Postgres,
+Auth, Row Level Security), i18next, Tailwind. Test con Vitest e Playwright.
+Deploy su Vercel.
+
+```
+src/domain/     la logica di studio, pura: scheduling, «dovuto», esito, furigana, streak
+src/data/       gli adattatori verso Supabase, dietro le porte del dominio
+src/ui/         i primitivi di interfaccia e il sistema di design
+src/features/   le schermate
+src/app/        il montaggio: rotte, guardie, porte
+content/lessons/  le lezioni e i loro esercizi, un file JSON per lezione
+supabase/       migrazioni e la Edge Function di cancellazione dell'account
+docs/           la documentazione di dettaglio
+```
+
+## Sviluppo in locale
+
+Serve Node 20.19 o più recente e un progetto Supabase.
+
+```sh
+npm ci
+cp .env.example .env   # poi riempi VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
+npm run dev
+```
+
+| Comando                       | Cosa fa                                                                 |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `npm test`                    | i test unitari e di integrazione (Vitest)                               |
+| `npm run lint`                | ESLint, compresi i confini fra i livelli                                |
+| `npm run typecheck`           | TypeScript senza emettere                                               |
+| `npm run validate-content`    | valida le lezioni sotto `content/lessons/` contro lo schema             |
+| `npm run generate-content-seed` | genera la migrazione di seed del contenuto                            |
+| `npm run check-contamination` | confronta gli esercizi con il transcript della fonte (solo in locale)   |
+| `npm run test:e2e`            | il percorso completo in un browser vero, contro Supabase                |
+
+Le migrazioni non si applicano a mano: le applica la CI al merge su `main`
+(`.github/workflows/migrate.yml`), e su una pull request vengono solo validate.
 
 ## Le due licenze
 
 Il repository porta **due licenze distinte**, in due file separati:
 
 - **`LICENSE`** — il **codice** dell'applicazione, sotto licenza **MIT**.
-- **`LICENSE-CONTENT`** — il **contenuto** delle lezioni (i file dati sotto
+- **`LICENSE-CONTENT`** — il **contenuto** delle lezioni (i file sotto
   `content/lessons/`), sotto **Creative Commons Attribution-ShareAlike 4.0
   International** (`CC-BY-SA-4.0`).
 
-Sono **separate**, e la separazione è deliberata. Codice e contenuto sono due
-tipi di opera diversi, governati da famiglie di licenze diverse. La MIT è scritta
-per il software — parla esplicitamente di «the Software» — e applicarla alle
-lezioni sarebbe un errore di categoria: le lezioni sono opera creativa e
-didattica, non codice. La CC BY-SA è scritta per le opere creative: impone
-l'attribuzione (BY) e, con lo *share-alike* (SA), mantiene aperti i derivati.
-
-La separazione è la conseguenza diretta del principio che governa l'autorazione
-del contenuto: **il contenuto è aperto, la forma è chiusa** (vedi
-`docs/authoring-pipeline.md`). Tenere le due licenze in due file distinti lascia
-riusare il codice o il contenuto in modo indipendente, ciascuno alle proprie
-condizioni, senza confondere quali termini valgono su cosa. Un solo file
-mescolerebbe due regimi giuridici diversi.
+Sono separate di proposito. La MIT è scritta per il software, e applicarla alle
+lezioni sarebbe un errore di categoria: le lezioni sono opera didattica, non
+codice. La CC BY-SA è scritta per le opere creative: chiede l'attribuzione e,
+con lo *share-alike*, mantiene aperti i derivati. Due file distinti permettono di
+riusare il codice o il contenuto in modo indipendente, ciascuno alle sue
+condizioni. È la conseguenza del principio che governa la scrittura degli
+esercizi: **il contenuto è aperto, la forma è chiusa** (vedi
+`docs/authoring-pipeline.md`).
 
 ## Perché Leitner e non SM-2 o FSRS
 
-Il motore di scheduling parte da un sistema di Leitner modificato — stadi con
-intervalli crescenti, `again` che riporta allo stadio 0, `good` che avanza di
-uno, `easy` di due, `hard` che tiene lo stadio e riaccorcia l'intervallo — con un
-jitter deterministico per evitare che gli esercizi scadano tutti insieme.
+Lo scheduling è un sistema di Leitner modificato: sei livelli con intervalli
+crescenti, `again` che riporta a zero, `good` che sale di uno, `easy` di due,
+`hard` che tiene il livello e accorcia l'intervallo. Le scadenze cadono alle 2
+di notte nel fuso dello studente, con una dispersione deterministica di qualche
+giorno sugli intervalli lunghi, così i ripassi non si ammucchiano tutti nello
+stesso giorno.
 
-La scelta è **più semplice di SM-2 e più difendibile**, e adeguata alla scala del
-progetto. SM-2 e FSRS ottimizzano la curva di dimenticamento su grandi volumi con
-parametri stimati statisticamente; qui il valore non è nell'ottimizzazione ma in
-un algoritmo che si legge, si spiega e si testa fino ai casi limite. Il confine
-architetturale (sotto) rende la scelta reversibile: se un domani servisse SM-2 o
-FSRS, cambierebbe **solo** il modulo di dominio, non il resto del sistema.
+È **più semplice di SM-2 e più difendibile**, e adeguato alla scala del progetto.
+SM-2 e FSRS ottimizzano la curva dell'oblio su grandi volumi con parametri
+stimati statisticamente; qui il valore sta in un algoritmo che si legge, si
+spiega e si testa fino ai casi limite, cambio dell'ora compreso. Il confine
+architetturale rende la scelta reversibile: passare a SM-2 o FSRS cambierebbe
+**solo** il modulo di dominio.
 
-## Perché il livello di dominio non dipende dal framework
+## Perché il dominio non dipende dal framework
 
-`src/domain/` contiene il motore di scheduling, la definizione di «dovuto», il
-calcolo della serie (streak), il registro chiuso dei tipi di esercizio e il
-calcolo dell'esito. Non conosce React, non conosce la rete, non conosce Supabase,
-non legge l'orologio: il tempo è **iniettato come parametro**. Tutto il resto
-dipende dal dominio; il dominio non dipende da nulla.
+`src/domain/` contiene lo scheduling, la definizione di «dovuto», la serie di
+giorni di studio, il registro dei tipi di esercizio e il calcolo dell'esito. Non
+conosce React, la rete o Supabase, e non legge l'orologio: il tempo e il fuso
+orario **entrano come parametri**. Tutto il resto dipende dal dominio; il
+dominio non dipende da nulla.
 
-Questo è l'invariante più importante del progetto (AD-1), e non è affidato alla
-disciplina: è **imposto dal lint**. `eslint-plugin-boundaries` dichiara i livelli
-`domain → data → ui → features → app` e vieta ogni arco non ammesso; il dominio
-non può importare alcun pacchetto esterno né toccare i global di piattaforma
-(`fetch`, `localStorage`). Una violazione è un errore di lint, quindi CI rossa, e
-`src/boundaries.test.ts` la verifica. La conseguenza pratica: la logica di
-studio è pura e testabile senza mock, e swap dell'algoritmo o della UI restano
-locali.
+L'invariante non è affidata alla disciplina: è **imposta dal lint**.
+`eslint-plugin-boundaries` dichiara i livelli `domain → data → ui → features →
+app` e vieta ogni arco non ammesso; il dominio non può importare pacchetti
+esterni né toccare `fetch` o `localStorage`. Una violazione è CI rossa, e
+`src/boundaries.test.ts` la verifica. Così la logica di studio si testa senza
+mock, e cambiare algoritmo o interfaccia resta una modifica locale.
 
 ## Perché Supabase, e cosa cambierebbe a scala maggiore
 
-Supabase (Postgres, Auth, Row Level Security) offre autenticazione e dati per
-utente senza scrivere un server. L'app è un frontend statico: l'unico codice
-server del progetto è una Edge Function per la cancellazione dell'account (AD-11).
-L'isolamento dei dati è imposto da RLS su ogni tabella per utente ed è verificato
-da un test, non assunto.
+Supabase dà autenticazione e dati per utente senza scrivere un server. L'app è
+un frontend statico: l'unico codice server è la Edge Function che cancella
+l'account. L'isolamento dei dati è imposto dalla Row Level Security su ogni
+tabella per utente, e un test lo verifica.
 
-Il progetto usa **un solo progetto Supabase, quello reale**: sviluppo, CI ed e2e
-girano tutti contro lo stesso database. Il vantaggio è che i test esercitano la
-configurazione vera — le policy RLS come sono realmente applicate, le impostazioni
-di Auth, i limiti del piano gratuito. Il costo, e cosa cambierebbe a scala
-maggiore: i dati di studio reali vivono nello stesso database dei test, quindi le
-migrazioni si applicano solo al merge su `main` e l'isolamento dei run di test
-(email univoca per run, teardown via Edge Function) diventa una difesa portante
-invece di semplice igiene. Con più utenti servirebbero ambienti separati
-(staging e un database di test dedicato), un keep-alive o un piano a pagamento
-contro la pausa del piano gratuito, e un percorso di migrazione che non tocchi i
-dati di produzione da un ramo.
+C'è **un solo progetto Supabase, quello reale**: sviluppo, CI ed e2e girano
+contro lo stesso database. Il vantaggio è che i test esercitano la
+configurazione vera. Il costo è che i dati di studio reali stanno accanto a
+quelli dei test: le migrazioni si applicano solo al merge su `main`, e ogni run
+di test usa un utente con email univoca che cancella alla fine. Con più utenti
+servirebbero un ambiente di staging e un database di test separato, un piano
+che non vada in pausa, e un percorso di migrazione che non tocchi i dati di
+produzione da un ramo.
 
 ## Perché Vite e non Next
 
-Il framework resta Vite più React, e Next è stato **valutato e scartato
-esplicitamente**. Tre motivi, in ordine di peso:
+Next è stato **valutato e scartato**, per tre motivi:
 
-1. **Non c'è niente da renderizzare sul server.** Ogni schermata sta dietro
-   autenticazione e mostra dati personali: nessun guadagno di SEO su contenuto
-   privato e nessun guadagno di primo paint, perché la sessione va comunque
-   risolta prima di mostrare qualcosa. Le sole pagine pubbliche sono login,
-   privacy e riconoscimenti.
-2. **Introdurrebbe un secondo confine ortogonale al primo.** L'App Router separa
-   server component da client component; AD-1 separa `domain → data → ui →
-   features → app`. Due sistemi di confini incrociati, con strumenti di verifica
-   diversi, su un progetto il cui valore dimostrativo sta nell'averne **uno** solo,
-   netto e imposto dal lint.
-3. **Le API route sarebbero una porta aperta su AD-11**, che dichiara la Edge
-   Function di cancellazione come unico codice server del progetto.
+1. **Non c'è niente da renderizzare sul server.** Quasi tutto sta dietro
+   l'accesso e mostra dati personali; le uniche pagine pubbliche sono l'accesso,
+   «Come funziona?», la privacy e i riconoscimenti.
+2. **Aggiungerebbe un secondo sistema di confini.** Server e client component si
+   incrocerebbero con i livelli del dominio, con strumenti di verifica diversi,
+   in un progetto che vale proprio per averne **uno** solo, imposto dal lint.
+3. **Le API route aprirebbero una seconda porta sul server**, dove oggi c'è solo
+   la Edge Function di cancellazione.
 
-La decisione si riapre solo con un cambio di prodotto: se i punti grammaticali
-diventassero pagine pubbliche indicizzabili, la generazione statica di Next
-sarebbe la scelta corretta. È una decisione che passa dal PRD, non una preferenza
-di infrastruttura.
+La decisione si riapre solo se cambia il prodotto: se i punti grammaticali
+diventassero pagine pubbliche da indicizzare, la generazione statica di Next
+sarebbe la scelta giusta.
 
 ## Cosa è stato lasciato fuori, e perché
 
-Il progetto è a scopo singolo e non punta a competere con Anki, WaniKani o
-Bunpro. Sono stati esclusi in modo esplicito, per evitare che l'ambito si
-gonfiasse: audio e text-to-speech, la pratica dell'ordine dei tratti dei kanji,
-i mazzi creati dall'utente e l'import CSV, le funzioni sociali e le classifiche,
-il login social/OAuth, le app mobile native, i livelli oltre l'N5.
+Il progetto ha uno scopo solo e non vuole competere con Anki, WaniKani o Bunpro.
+Sono esclusi di proposito: audio e sintesi vocale, l'ordine dei tratti dei
+kanji, i mazzi creati dall'utente e l'import CSV, le funzioni social e le
+classifiche, l'accesso con account esterni, le app native, e il **vocabolario**
+come unità di studio (il progetto è partito da lì e ha cambiato strada verso la
+grammatica). Se qualcosa diventasse davvero necessario, entra con una
+giustificazione scritta, non di soppiatto.
 
-Il pivot ha lasciato fuori anche il **vocabolario** come unità: sono spariti la
-tabella `vocabulary`, la dipendenza da JMdict e con essa il vincolo di
-attribuzione EDRDG su ogni schermata (diventato una pagina di riconoscimenti).
-Tutto ciò che diventasse davvero necessario va a una v2 con una giustificazione
-scritta, non aggiunto di soppiatto.
+## Come è stata usata l'AI
 
-## Come è stato usato il flusso assistito da AI
+L'AI è usata **per scrivere il contenuto, mai a runtime**: l'app serve esercizi
+statici già validati e non genera nulla al momento. La **pipeline di
+scrittura** parte dal transcript di una lezione e arriva a un file di esercizi
+conforme allo schema. Il confine che la governa è quello fra **fatto e
+formulazione**: dal transcript si prende il fatto grammaticale e lo si riscrive
+da zero; le frasi, gli esempi e le metafore della fonte non passano. Il dettaglio
+è in `docs/authoring-pipeline.md` e `docs/authoring-runbook.md`.
 
-L'AI è stata usata **in autorazione, mai a runtime**: l'app serve contenuto
-statico già validato e non genera nulla in tempo reale. Il caso concreto è la
-**pipeline di autorazione** (Epic 6), che trasforma il materiale della fonte —
-transcript, sottotitoli — in file di esercizi conformi allo schema. Il confine
-che la governa è quello fra **fatto e formulazione**: dal transcript si estrae il
-fatto grammaticale e si riscrive da zero; la forma — le formulazioni, gli esempi,
-le metafore didattiche della fonte — non attraversa la linea. Il dettaglio è in
-`docs/authoring-pipeline.md` e nel runbook `docs/authoring-runbook.md`.
+- **Delegato:** estrarre i fatti dal transcript e bozzare frasi e spiegazioni a
+  partire da quei fatti.
+- **Rifiutato:** riusare le formulazioni della fonte (una parafrasi coi sinonimi
+  resta opera derivata) e le sue metafore didattiche, anche solo come etichette;
+  e qualsiasi modello linguistico dentro il prodotto.
+- **Dove costa più tempo di quanto ne risparmi:** la **rilettura umana
+  obbligatoria** prima di ogni commit e il **controllo anti-contaminazione**
+  (`npm run check-contamination`), che segnala le sovrapposizioni letterali fra
+  gli esercizi e il transcript (vedi `docs/contamination-check.md`).
 
-- **Cosa è stato delegato:** estrarre i fatti dal transcript e bozzare le frasi e
-  le spiegazioni degli esercizi a partire da quei fatti, con l'LLM come assistente
-  della sessione di autorazione.
-- **Cosa è stato rifiutato:** riusare le formulazioni della fonte (parafrasare con
-  i sinonimi resta opera derivata) e le sue metafore didattiche, anche solo come
-  etichette; e l'LLM a runtime nel prodotto. Il progetto stesso ci era caduto una
-  volta, correggendo una metafora con la terminologia linguistica standard, ed è
-  documentato in `docs/authoring-pipeline.md`.
-- **Dove è costato più tempo di quanto ne abbia risparmiato:** la **rilettura
-  umana obbligatoria** prima di ogni commit, più il **controllo
-  anti-contaminazione** (`npm run check-contamination`), che confronta ogni frase
-  e spiegazione prodotta con il transcript e segnala le sovrapposizioni verbatim
-  non banali (vedi `docs/contamination-check.md`).
+Il limite dichiarato del controllo anti-contaminazione è che
+**non è un cancello di CI**: il transcript resta fuori dal repository (`.gitignore`, `.authoring/`),
+quindi in CI non ci sarebbe niente con cui confrontare, e un controllo lì
+sarebbe un verde vuoto. Vive in locale, dentro la rilettura umana. Tutti gli
+altri controlli (validazione del contenuto, confini, tipi, test) bloccano il
+merge in CI; questo no, per costruzione.
 
-Il **limite dichiarato** del controllo anti-contaminazione è la ragione per cui
-questo flusso costa tempo umano: è l'unico anello della catena di qualità che
-**non è un cancello di CI**. Il transcript della fonte è tenuto fuori dal
-repository (`.gitignore`, `.authoring/` — Epic 6.1), quindi in CI non c'è nulla
-con cui confrontare: aggiungerlo alla CI sarebbe un verde vuoto. Il controllo
-vive perciò **in locale**, dentro la rilettura umana obbligatoria del runbook.
-Ogni altro cancello — validazione del contenuto (`npm run validate-content`), lint
-dei confini, typecheck, test — è imposto in CI e blocca il merge; questo no, per
-costruzione. Il dettaglio, le soglie e come rispondere a una segnalazione sono in
-`docs/contamination-check.md`.
+## Autore
+
+Federico Casadei — [federicocasadei.dev](https://federicocasadei.dev) ·
+[GitHub](https://github.com/fcport)
