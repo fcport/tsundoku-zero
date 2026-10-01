@@ -228,9 +228,12 @@ Ogni frase degli esercizi ha il suo audio, che lo studente ascolta dopo aver
 risposto. Una lezione nuova, o una frase cambiata, va quindi sempre accompagnata
 dal suo audio, generato così:
 
-1. Apri **VOICEVOX** (gratuito, https://voicevox.hiroshiba.jp/): il motore
-   ascolta su `http://127.0.0.1:50021`. Serve anche `ffmpeg` nel PATH
-   (`winget install ffmpeg`).
+1. Serve **VOICEVOX** installato (gratuito, https://voicevox.hiroshiba.jp/) e
+   `ffmpeg` nel PATH (`winget install ffmpeg`). Non serve aprirlo: se il motore
+   non risponde su `http://127.0.0.1:50021`, lo script lo avvia da solo (senza
+   finestra) e a fine giro lo richiude. Se VOICEVOX non è nella cartella
+   predefinita (`%LOCALAPPDATA%\Programs\VOICEVOX`), indica il motore in
+   `.env.local`: `VOICEVOX_ENGINE_PATH=D:/programs/voicevox/vv-engine/run.exe`.
 2. Esegui:
 
    ```

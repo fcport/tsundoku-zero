@@ -8,13 +8,17 @@
 // おりません, 日本 letto にっぽん), riparte dalla frase in kana; se anche così non
 // coincide, la frase è segnalata e il comando esce con errore.
 //
-// Prerequisiti: VOICEVOX aperto (motore su http://127.0.0.1:50021) e `ffmpeg` nel
-// PATH. Licenza della voce: «VOICEVOX:No.7», uso non commerciale (LICENSE-CONTENT).
+// Prerequisiti: VOICEVOX installato e `ffmpeg` nel PATH. Se il motore non risponde
+// su http://127.0.0.1:50021, lo script lo avvia da solo (`vv-engine/run.exe`, senza
+// finestra) e a fine giro lo chiude. Il percorso viene da `VOICEVOX_ENGINE_PATH` (anche
+// in `.env.local`), altrimenti dall'installazione predefinita in
+// `%LOCALAPPDATA%\Programs\VOICEVOX`. Licenza della voce: «VOICEVOX:No.7», uso non
+// commerciale (LICENSE-CONTENT).
 //
 // Uso: `npm run generate-audio -- [--force] [--lesson <pezzo del nome file>]
 //        [--speaker <id stile>] [--out <dir>]`
 // Senza `--lesson`, cancella anche gli audio di frasi che non esistono più.
-import { spawn } from 'node:child_process';
+import { spawn, type ChildProcess } from 'node:child_process';
 import { mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -38,6 +42,48 @@ async function engine(path: string, init: RequestInit): Promise<Response> {
   const res = await fetch(`${ENGINE}${path}`, init);
   if (!res.ok) throw new Error(`VOICEVOX ${path}: HTTP ${res.status} ${await res.text()}`);
   return res;
+}
+
+async function engineUp(): Promise<boolean> {
+  try {
+    return (await fetch(`${ENGINE}/version`)).ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Il motore se è già acceso; altrimenti lo avvia e aspetta che risponda. Restituisce
+ * il processo avviato (da chiudere a fine giro) o `null` se era già acceso.
+ */
+async function ensureEngine(): Promise<ChildProcess | null> {
+  if (await engineUp()) return null;
+
+  try {
+    process.loadEnvFile('.env.local');
+  } catch {
+    // Nessun `.env.local`: resta il percorso predefinito.
+  }
+  const enginePath =
+    process.env.VOICEVOX_ENGINE_PATH ??
+    join(process.env.LOCALAPPDATA ?? '', 'Programs', 'VOICEVOX', 'vv-engine', 'run.exe');
+  if (!existsSync(enginePath)) {
+    throw new Error(
+      `VOICEVOX non è acceso e il motore non è in ${enginePath}. ` +
+        'Imposta VOICEVOX_ENGINE_PATH in .env.local (es. D:\\programs\\voicevox\\vv-engine\\run.exe).',
+    );
+  }
+
+  console.log(`Avvio VOICEVOX (${enginePath})…`);
+  const child = spawn(enginePath, [], { stdio: 'ignore', windowsHide: true });
+  const deadline = Date.now() + 120_000;
+  while (Date.now() < deadline) {
+    if (child.exitCode !== null) throw new Error(`VOICEVOX si è chiuso subito (exit ${child.exitCode}).`);
+    if (await engineUp()) return child;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  child.kill();
+  throw new Error('VOICEVOX non ha risposto entro 2 minuti.');
 }
 
 async function audioQuery(text: string, speaker: number): Promise<AudioQuery> {
@@ -84,6 +130,19 @@ async function main(): Promise<void> {
 
   const sentences = await loadSentences(lessonFilter);
   await mkdir(outDir, { recursive: true });
+  const engineProcess = await ensureEngine();
+  try {
+    await generate(sentences, { lessonFilter, speaker, outDir, force });
+  } finally {
+    // Chiuso solo se l'ha aperto lo script: un VOICEVOX già aperto resta com'è.
+    engineProcess?.kill();
+  }
+}
+
+async function generate(
+  sentences: Map<string, string>,
+  { lessonFilter, speaker, outDir, force }: { lessonFilter?: string; speaker: number; outDir: string; force: boolean },
+): Promise<void> {
 
   const fixed: string[] = [];
   const wrong: string[] = [];
