@@ -3,7 +3,7 @@
 Questo documento è il **flusso operativo** che trasforma una lezione appena
 studiata dalla fonte in un file di esercizi conforme allo schema di Epic 2. È
 scritto per essere **eseguito leggendolo**: chi non l'ha mai fatto — un terzo, o
-l'owner fra sei mesi — segue i sette passi qui sotto e produce una lezione valida
+l'owner fra sei mesi — segue gli otto passi qui sotto e produce una lezione valida
 senza chiedere aiuto. Sul precedente durevole di `docs/authoring-pipeline.md` e
 `docs/i18n-boundary.md`, è un documento con un test (`src/authoring-runbook.test.ts`)
 che ne verifica meccanicamente le dichiarazioni obbligatorie e che l'esempio
@@ -21,11 +21,13 @@ passo 5 lo cabla nella revisione umana, che resta comunque obbligatoria.
 Dai **fatti** estratti dal transcript, si autorano gli esercizi **assistiti da un
 LLM** (solo in autorazione, mai a runtime), si compone `content/lessons/NN-<concetto>.json`,
 si fa una **revisione umana obbligatoria** prima del commit, e si passa il
-**cancello** `npm run validate-content`. Aggiungere una lezione **non tocca il
-codice**: si crea o si edita solo un JSON sotto `content/lessons/`, mai `src/` né
+**cancello** `npm run validate-content`, poi si genera l'audio delle frasi con
+`npm run generate-audio`. Aggiungere una lezione **non tocca il
+codice**: si crea o si edita solo un JSON sotto `content/lessons/` (più il suo audio in
+`public/audio/`), mai `src/` né
 lo schema.
 
-## I sette passi
+## Gli otto passi
 
 ### 1. Prerequisiti e cartella di lavoro
 
@@ -219,6 +221,44 @@ fallisce e non genera nulla.
 > accumulano: ciascuno è un upsert idempotente, quindi applicarli in sequenza converge
 > sullo stato dell'ultimo. Il controllo anti-deriva confronta il contenuto con il seed
 > **più recente**, non con «l'unico».
+
+### 8. Generare l'audio delle frasi
+
+Ogni frase degli esercizi ha il suo audio, che lo studente ascolta dopo aver
+risposto. Una lezione nuova, o una frase cambiata, va quindi sempre accompagnata
+dal suo audio, generato così:
+
+1. Apri **VOICEVOX** (gratuito, https://voicevox.hiroshiba.jp/): il motore
+   ascolta su `http://127.0.0.1:50021`. Serve anche `ffmpeg` nel PATH
+   (`winget install ffmpeg`).
+2. Esegui:
+
+   ```
+   npm run generate-audio
+   ```
+
+   Genera un MP3 per ogni frase in `public/audio/` con la voce **No.7, stile
+   アナウンス** (id 30), sempre la stessa per tutto il corso. Salta le frasi che
+   hanno già l'audio e cancella quello delle frasi che non esistono più. Il nome
+   del file è l'hash della frase in kanji (`src/domain/sentence-audio.ts`):
+   cambiare una frase cambia il file.
+3. Leggi il resoconto finale. Per ogni frase lo script confronta la lettura che
+   VOICEVOX userebbe con il `kana` scritto a mano: se non coincidono (降りません
+   letto おりません, 日本 letto にっぽん), rifà l'audio partendo dai kana e lo
+   elenca fra le **letture corrette**. Se nemmeno dai kana la lettura coincide, la
+   frase è elencata come **ANCORA SBAGLIATA**, il suo audio non viene generato e il
+   comando esce con errore: si corregge il `kana` se era sbagliato, altrimenti si
+   riformula la frase.
+4. Ascolta almeno le frasi nuove e quelle corrette, poi committa `public/audio/`
+   insieme alla lezione.
+
+Il test `src/sentence-audio-files.test.ts` (in CI) fallisce se una frase non ha
+il suo audio o se resta l'audio di una frase tolta: dimenticare questo passo
+blocca il merge.
+
+L'audio **non** è coperto dalla CC BY-SA del contenuto: segue le condizioni della
+voce No.7 (uso non commerciale, credito «VOICEVOX:No.7»), come dichiarato in
+`LICENSE-CONTENT`. Non cambiare voce senza aggiornare il credito e la licenza.
 
 ## Esempio completo
 

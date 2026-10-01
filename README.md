@@ -106,6 +106,13 @@ or the content independently, each on its own terms. It follows from the
 principle behind how exercises are written: **the content is open, the wording
 is closed** (see `docs/authoring-pipeline.md`).
 
+One exception to both: the sentence audio under `public/audio/` is generated
+with [VOICEVOX](https://voicevox.hiroshiba.jp/) using the voice **No.7**, and it
+follows that voice's terms, not MIT or CC BY-SA: non-commercial use, credited as
+«VOICEVOX:No.7». It is regenerated with `npm run generate-audio` (VOICEVOX open,
+`ffmpeg` on the PATH), which also checks every reading against the hand-written
+kana of the sentence.
+
 ## Why Leitner and not SM-2 or FSRS
 
 Scheduling is a modified Leitner system: six levels with growing intervals,

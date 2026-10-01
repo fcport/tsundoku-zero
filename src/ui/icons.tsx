@@ -34,3 +34,21 @@ export function ExternalIcon({ className = '' }: { readonly className?: string }
     </svg>
   );
 }
+
+/** L'altoparlante del pulsante che fa ascoltare la frase. */
+export function SpeakerIcon({ className = '' }: { readonly className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinejoin="round"
+      className={`size-[1em] shrink-0 ${className}`}
+    >
+      <path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor" />
+      <path d="M11.5 5.5a3.5 3.5 0 0 1 0 5M13.5 3.5a6.5 6.5 0 0 1 0 9" strokeLinecap="round" />
+    </svg>
+  );
+}

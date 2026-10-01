@@ -61,3 +61,13 @@ Nel riusare il contenuto, attribuisci: «Tsundoku Zero — contenuto delle lezio
 di Federico Casadei, CC BY-SA 4.0» con un link alla licenza
 (https://creativecommons.org/licenses/by-sa/4.0/) e l'indicazione di eventuali
 modifiche.
+
+Esclusione: l'audio delle frasi
+-------------------------------
+
+I file audio sotto `public/audio/` NON sono coperti da questa licenza, né dalla
+licenza MIT del codice. Sono generati con il software VOICEVOX usando la voce
+«No.7» e seguono le condizioni d'uso di quella voce: uso non commerciale, con la
+menzione «VOICEVOX:No.7». Ogni uso commerciale richiede il consenso preventivo
+del No.7製作委員会 (https://voiceseven.com/). Condizioni complete:
+https://voiceseven.com/#j0200

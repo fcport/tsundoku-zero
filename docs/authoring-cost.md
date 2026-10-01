@@ -24,7 +24,7 @@ indipendente dal totale delle lezioni, che **non è noto** e continuerà a cresc
 la verifica è quindi contro un corso di **lunghezza non fissata**, non contro un
 totale prestabilito.
 
-Esaminiamo la procedura **reale** — i sette passi di `docs/authoring-runbook.md` —
+Esaminiamo la procedura **reale** — gli otto passi di `docs/authoring-runbook.md` —
 uno per uno. Per ciascuno: è fatica **manuale** dell'autore o **calcolo
 automatico** di un comando? E come cresce il suo costo al crescere di `N`?
 
@@ -43,13 +43,14 @@ aggiorna questa tabella per tenere i due formati in sincrono. -->
 | 5 — Revisione umana obbligatoria (prima del commit) | manuale + automatico | O(1) manuale; O(N) automatico | L'autore rilegge **la lezione appena scritta**, non le N precedenti: O(1). `npm run check-contamination` confronta il **contenuto** con il transcript e ri-processa tutte le lezioni, ma è **calcolo automatico** su contenuto minuscolo. |
 | 6 — Cancello di validazione | automatico | O(N) automatico | `npm run validate-content` valida **tutte** le N lezioni (le regole di unicità di `order`/`lessonId`/identità sono cross-file, quindi devono vederle tutte). È calcolo automatico: l'unicità la **impone il cancello**, non l'autore. |
 | 7 — Rendere la lezione disponibile all'app | automatico | O(N) automatico | `npm run generate-content-seed` rigenera il seed da tutte le N lezioni. Automatico: un comando, nessuna fatica manuale che cresca. |
+| 8 — Generare l'audio delle frasi | automatico + manuale | O(N) automatico; O(1) manuale | `npm run generate-audio` scorre tutte le frasi ma salta quelle che hanno già l'audio: genera solo le nuove. L'autore ascolta **le frasi nuove** e quelle con la lettura corretta dai kana, non le N lezioni precedenti: O(1). |
 
 **Verdetto NFR9.** **Nessun passaggio manuale** ha un costo che cresce col numero
 di lezioni già autorate: la fatica dell'autore per aggiungere una lezione resta
 **O(1)** — estrarre i fatti da una fonte, autorare da quei fatti, comporre un file,
 rileggerlo — verificato contro un corso di **lunghezza non nota / non fissata**. I
 passi che scalano con `N` (`npm test`, `npm run check-contamination`,
-`npm run validate-content`, `npm run generate-content-seed`) ri-processano tutte
+`npm run validate-content`, `npm run generate-content-seed`, `npm run generate-audio`) ri-processano tutte
 le `N` lezioni a ogni esecuzione — è **calcolo automatico** O(N) su contenuto
 minuscolo, **non** fatica manuale, e **non** viola `NFR9`.
 

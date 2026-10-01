@@ -75,7 +75,7 @@ describe('storia 6.4 — sostenibilità della pipeline (documentazione)', () => 
   it('AC1 — l\'analisi NFR9 copre OGNI passo del runbook (accoppiamento load-bearing)', () => {
     const doc = readFileSync(docPath, 'utf-8');
     const steps = runbookStepNumbers();
-    // Il runbook ha i suoi sette passi: se non li estraiamo, il test qui sotto è
+    // Il runbook ha i suoi otto passi: se non li estraiamo, il test qui sotto è
     // vacuo. Ci assicuriamo che ce ne sia almeno uno da coprire.
     expect(steps.length).toBeGreaterThan(0);
 

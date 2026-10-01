@@ -90,6 +90,11 @@ export function AcknowledgementsScreen({
       <p className="text-body text-ink-primary">
         {t('legal.acknowledgements.scholarship')}
       </p>
+      {/* Il credito della voce dell'audio, come chiedono le sue condizioni d'uso:
+          «VOICEVOX:No.7», scritto così. */}
+      <p className="text-body text-ink-primary">
+        {t('legal.acknowledgements.voice')}
+      </p>
       {/* L'affordance di ritorno (gemella di 7.1): SECONDARIA — chiaramente non il
           button-primary (nessun fill accent, ink muto, nessun verde). -> `onExit`. */}
       <button

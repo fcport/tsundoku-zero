@@ -40,6 +40,7 @@ import { FOCUS_RING } from '../../ui/magazine';
 import { Translation } from '../../ui/Translation';
 import { ExplanationPanel } from './ExplanationPanel';
 import { ProseWithFurigana } from './ProseWithFurigana';
+import { SentenceAudioButton } from './SentenceAudioButton';
 
 // Direzione «rivista» (29-09-2026): la card non è più una superficie sollevata ma una
 // sezione fra due filetti. Le opzioni sono caselle squadrate col numero del TASTO
@@ -222,6 +223,9 @@ export function ExerciseCard({
           className="-mt-3 block w-full text-center text-body italic text-ink-secondary"
         />
       )}
+
+      {/* L'audio della frase, solo a risposta data: prima direbbe la risposta. */}
+      {answered && <SentenceAudioButton kanji={exercise.sentence.kanji} />}
 
       {/* Un <button> per ciascuna opzione di answerOptions (numero e ordine dal
           dominio, AC2). Consegna: abilitati; una tessera già scelta (assemble) è

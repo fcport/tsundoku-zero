@@ -216,6 +216,8 @@ export const en = {
       heading: 'Explanation',
       fallbackNotice: 'This explanation has not been translated yet.',
     },
+    // Il pulsante che fa ascoltare la frase, a risposta data.
+    listen: 'Listen to the sentence',
     // L'azione di avanzamento al prossimo esercizio (3.19): verbale e concreta,
     // mai "Continue". Nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
     next: 'Next exercise',
@@ -444,6 +446,8 @@ export const en = {
         'This project is independent. It is not affiliated with, endorsed by, or a continuation of that channel.',
       scholarship:
         'The grammar taught here is established linguistics, not a private theory. This structural description of Japanese is documented in the academic literature, for example in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
+      voice:
+        'The audio of the Japanese sentences is generated with VOICEVOX:No.7, a synthetic voice that is free for non-commercial use.',
       back: 'Back',
     },
   },
