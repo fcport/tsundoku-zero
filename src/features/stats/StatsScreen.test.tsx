@@ -31,7 +31,7 @@ const inMemoryPorts: Ports = {
     listReviewLog: async () => [],
     applyReview: async () => {},
   },
-  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
 };
 
@@ -444,7 +444,7 @@ describe('5.2 AC — la fonte è SOLO review.listReviewLog() (mai listDue/review
           calls.push('applyReview');
         },
       },
-      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
       content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
     };
     const qc = seededClient([logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'good')]);
@@ -524,7 +524,7 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
           calls.push('applyReview');
         },
       },
-      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
       content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
     };
   }
@@ -656,7 +656,7 @@ describe('5.3 AC — la fonte e SOLO review.listReviewLog() + content.listLesson
           calls.push('applyReview');
         },
       },
-      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+      progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
       content: {
         listLessons: async () => {
           calls.push('listLessons');

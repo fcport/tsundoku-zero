@@ -17,7 +17,7 @@ const NOW = new Date('2026-09-30T10:00:00.000Z');
 const ports: Ports = {
   clock: { now: () => NOW, timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
-  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: {
     listLessons: async () => [],
     listExercisesByIds: async () => [],
@@ -37,9 +37,14 @@ function lesson(ordinal: number, extra: Partial<LessonSummary> = {}): LessonSumm
   };
 }
 
-function render(lessons: readonly LessonSummary[], unlocked: readonly string[]): string {
+function render(
+  lessons: readonly LessonSummary[],
+  unlocked: readonly string[],
+  active?: ReadonlyMap<string, number>,
+): string {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   qc.setQueryData(['lessons'], lessons);
+  if (active !== undefined) qc.setQueryData(['activeExercises', UID], active);
   qc.setQueryData(
     ['unlocked', UID],
     unlocked.map((lessonId) => ({ lessonId, unlockedAt: NOW })),
@@ -86,6 +91,30 @@ describe('LessonsScreen', () => {
     const html = render([lesson(1, { exerciseCount: 0 })], ['l1']);
     expect(html).toContain('Solo da leggere, senza esercizi.');
     expect(html).not.toContain('Ripassa gli esercizi: Lezione 1');
+  });
+
+  it('una lezione aperta con esercizi in riserva dice quanti ne ha in pila e offre «Esercitati di più»', () => {
+    const html = render(
+      [lesson(1, { exerciseCount: 24 }), lesson(2, { exerciseCount: 12 }), lesson(3, { exerciseCount: 30 })],
+      ['l1', 'l2'],
+      new Map([
+        ['l1', 12],
+        ['l2', 12],
+      ]),
+    );
+    expect(html).toContain('Nella pila 12 esercizi su 24');
+    expect(html).toContain('Esercitati di più: Lezione 1');
+    // Tutti già in pila: nessuna riserva, nessuna offerta.
+    expect(html).toContain('Esercizi: 12');
+    expect(html).not.toContain('Esercitati di più: Lezione 2');
+    // Bloccata: niente offerta anche se ha più di 12 esercizi.
+    expect(html).not.toContain('Esercitati di più: Lezione 3');
+  });
+
+  it('finché i conteggi non ci sono, nessuna offerta: solo il totale', () => {
+    const html = render([lesson(1, { exerciseCount: 24 })], ['l1']);
+    expect(html).toContain('Esercizi: 24');
+    expect(html).not.toContain('Esercitati di più: Lezione');
   });
 
   it('senza dati: scheletro occupato, nessuna lezione', () => {

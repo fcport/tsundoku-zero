@@ -87,7 +87,7 @@ function inMemoryPorts(): Ports {
       listReviewLog: async () => [],
       applyReview: async () => {},
     },
-    progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+    progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
     content: {
       listLessons: async () => [],
       listExercisesByIds: async () => EXERCISES,

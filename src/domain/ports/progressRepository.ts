@@ -41,8 +41,9 @@ export interface ProgressRepository {
   /**
    * SBLOCCA una lezione per l'utente corrente: scrittura ATOMICA e IDEMPOTENTE
    * via la RPC `unlock_lesson` (storia 3.13). Materializza in un colpo solo la
-   * riga `lesson_progress` e una riga `review_state` per ciascun esercizio della
-   * lezione (`stage = 0`, `due_at` = istante di sblocco), tutte lette server-side.
+   * riga `lesson_progress` e una riga `review_state` per ciascuno dei primi
+   * `FIRST_EXERCISES_BATCH` esercizi della lezione (`stage = 0`, `due_at` =
+   * istante di sblocco), letti server-side; gli altri restano in riserva.
    * Ri-invocarla NON duplica righe (`on conflict do nothing`).
    *
    * `now` è INIETTATO dal Clock (AD-1): il dominio non legge l'orologio, e
@@ -52,4 +53,22 @@ export interface ProgressRepository {
    * (`nextLessonToUnlock`): questa porta materializza solo l'`id` ricevuto.
    */
   unlockLesson(lessonId: string, now: Date): Promise<void>;
+
+  /**
+   * «Esercitati di più»: porta nella pila i prossimi esercizi IN RISERVA di una
+   * lezione già sbloccata (RPC `add_lesson_exercises`, al più
+   * `EXTRA_EXERCISES_BATCH` per volta, dovuti subito). Ritorna quanti ne ha
+   * aggiunti: 0 se la riserva è finita o la lezione non è sbloccata. `now` dal
+   * Clock (AD-1). Su fallimento RIFIUTA con un `DataError`.
+   */
+  addLessonExercises(lessonId: string, now: Date): Promise<number>;
+
+  /**
+   * Per ciascuna lezione, quanti dei suoi esercizi sono già nella pila
+   * dell'utente corrente (dovuti o no): la differenza con `exerciseCount` è la
+   * riserva. Una lezione assente dalla mappa ne ha zero. Su fallimento RIFIUTA con
+   * un `DataError`.
+   */
+  listActiveExerciseCounts(): Promise<ReadonlyMap<string, number>>;
 }
+

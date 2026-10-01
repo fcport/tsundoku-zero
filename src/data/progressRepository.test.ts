@@ -14,6 +14,8 @@ interface FakeProgressOptions {
   readonly error?: unknown;
   /** Errore ritornato dalla RPC `unlock_lesson` (assente ⇒ successo). */
   readonly rpcError?: unknown;
+  /** Dati ritornati dalla RPC (assente ⇒ `null`, come `unlock_lesson` che è void). */
+  readonly rpcData?: unknown;
 }
 
 /** Registra la chiamata a `.rpc` per l'ispezione (mirror del fake invoke di accountGateway.test). */
@@ -45,7 +47,7 @@ function makeFakeClient(options: FakeProgressOptions = {}): {
     },
     rpc: async (name: string, params: unknown) => {
       rpcs.push({ name, params });
-      return { data: null, error: options.rpcError ?? null };
+      return { data: options.rpcData ?? null, error: options.rpcError ?? null };
     },
   };
 
@@ -171,5 +173,59 @@ describe('unlockLesson — SCRITTURA via RPC atomica/idempotente unlock_lesson (
       operation: 'unlockLesson',
       cause: rpcError,
     });
+  });
+});
+
+describe('addLessonExercises — «Esercitati di più» via RPC add_lesson_exercises', () => {
+  it('happy: invoca la RPC con lesson_id e added_at ISO e ritorna quanti ne ha aggiunti', async () => {
+    const { client, rpcs } = makeFakeClient({ rpcData: 6 });
+    const repo = createSupabaseProgressRepository(client);
+    const now = new Date('2026-10-01T09:00:00.000Z');
+
+    await expect(repo.addLessonExercises('te-form', now)).resolves.toBe(6);
+    expect(rpcs[0]).toEqual({
+      name: 'add_lesson_exercises',
+      params: { lesson_id: 'te-form', added_at: '2026-10-01T09:00:00.000Z' },
+    });
+  });
+
+  it("errore RPC o risposta non numerica ⇒ DataError('addLessonExercises')", async () => {
+    const now = new Date('2026-10-01T09:00:00.000Z');
+    const failing = createSupabaseProgressRepository(makeFakeClient({ rpcError: { message: 'x' } }).client);
+    await expect(failing.addLessonExercises('te-form', now)).rejects.toMatchObject({
+      operation: 'addLessonExercises',
+    });
+    const odd = createSupabaseProgressRepository(makeFakeClient({ rpcData: 'sei' }).client);
+    await expect(odd.addLessonExercises('te-form', now)).rejects.toBeInstanceOf(DataError);
+  });
+});
+
+describe('listActiveExerciseCounts — esercizi in pila per lezione via RPC active_exercise_counts', () => {
+  it('happy: una voce per lezione', async () => {
+    const { client, rpcs } = makeFakeClient({
+      rpcData: [
+        { lesson_id: 'a', active: 12 },
+        { lesson_id: 'b', active: 18 },
+      ],
+    });
+    const repo = createSupabaseProgressRepository(client);
+
+    const counts = await repo.listActiveExerciseCounts();
+    expect(rpcs[0]?.name).toBe('active_exercise_counts');
+    expect([...counts]).toEqual([
+      ['a', 12],
+      ['b', 18],
+    ]);
+  });
+
+  it("riga malformata o errore ⇒ DataError('listActiveExerciseCounts')", async () => {
+    const bad = createSupabaseProgressRepository(
+      makeFakeClient({ rpcData: [{ lesson_id: 'a', active: '12' }] }).client,
+    );
+    await expect(bad.listActiveExerciseCounts()).rejects.toMatchObject({
+      operation: 'listActiveExerciseCounts',
+    });
+    const failing = createSupabaseProgressRepository(makeFakeClient({ rpcError: { message: 'x' } }).client);
+    await expect(failing.listActiveExerciseCounts()).rejects.toBeInstanceOf(DataError);
   });
 });

@@ -48,7 +48,7 @@ const inertAccount: AccountGateway = {
 const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
-  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
 };
 

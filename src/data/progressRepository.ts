@@ -31,6 +31,11 @@ const LESSON_PROGRESS_COLUMNS = 'lesson_id, unlocked_at';
 // `20260925150000_create_unlock_lesson.sql`).
 const UNLOCK_LESSON_RPC = 'unlock_lesson';
 
+// «Esercitati di più» e il conteggio per lezione degli esercizi in pila (migrazione
+// `20261001150000_unlock_lesson_in_batches.sql`).
+const ADD_LESSON_EXERCISES_RPC = 'add_lesson_exercises';
+const ACTIVE_EXERCISE_COUNTS_RPC = 'active_exercise_counts';
+
 // Forma GREZZA di una riga `lesson_progress`: `lesson_id` (text) e `unlocked_at`
 // (timestamptz, serializzato ISO da PostgREST). Entrambi ci servono per il
 // read-model unico (3.17).
@@ -104,6 +109,52 @@ export function createSupabaseProgressRepository(
       if (error) {
         throw new DataError('unlockLesson', error);
       }
+    },
+
+    async addLessonExercises(lessonId: string, now: Date): Promise<number> {
+      // La RPC sceglie server-side quali esercizi della riserva entrano (ordine di
+      // `exercise_rotation`) e ritorna quanti ne ha inseriti.
+      const { data, error } = await client.rpc(ADD_LESSON_EXERCISES_RPC, {
+        lesson_id: lessonId,
+        added_at: now.toISOString(),
+      });
+
+      if (error) {
+        throw new DataError('addLessonExercises', error);
+      }
+      if (typeof data !== 'number') {
+        throw new DataError(
+          'addLessonExercises',
+          new Error('add_lesson_exercises non ha ritornato un numero'),
+        );
+      }
+      return data;
+    },
+
+    async listActiveExerciseCounts(): Promise<ReadonlyMap<string, number>> {
+      const { data, error } = await client.rpc(ACTIVE_EXERCISE_COUNTS_RPC);
+
+      if (error) {
+        throw new DataError('listActiveExerciseCounts', error);
+      }
+
+      const counts = new Map<string, number>();
+      for (const row of (data ?? []) as readonly unknown[]) {
+        if (
+          row === null ||
+          typeof row !== 'object' ||
+          typeof (row as { lesson_id?: unknown }).lesson_id !== 'string' ||
+          typeof (row as { active?: unknown }).active !== 'number'
+        ) {
+          throw new DataError(
+            'listActiveExerciseCounts',
+            new Error('riga active_exercise_counts malformata'),
+          );
+        }
+        const { lesson_id, active } = row as { lesson_id: string; active: number };
+        counts.set(lesson_id, active);
+      }
+      return counts;
     },
   };
 }

@@ -55,13 +55,18 @@ import {
 import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { usePorts } from '../ports/PortsContext';
 import { resolveLocale, useTranslation } from '../../i18n';
-import { RESERVED_ORDER_START } from '../../domain/lesson';
+import { RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
 import { ACTION_BAR, FOCUS_RING, HEADLINE, KICKER, SERVICE_LINK } from '../../ui/magazine';
 import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
 import { ArrowIcon, ExternalIcon } from '../../ui/icons';
 import { exercisesQueryKey } from '../study/exercisesQueryKey';
+import {
+  activeExercisesQueryKey,
+  useActiveExerciseCounts,
+  useAddLessonExercises,
+} from '../lessons/useAddLessonExercises';
 import { PileOfBooks } from './PileOfBooks';
 
 export interface DashboardScreenProps {
@@ -206,6 +211,11 @@ export function DashboardScreen({
     enabled: !!userId,
     queryFn: () => settings.loadLessonsPerDay(),
   });
+  // Quanti esercizi di ciascuna lezione sono già in pila: a pila vuota, se la lezione
+  // in corso ne ha ancora in riserva, si offre «Esercitati di più». Fuori dal
+  // cancello scheletro: finché manca, l'offerta semplicemente non compare.
+  const activeQ = useActiveExerciseCounts(userId);
+  const moreMutation = useAddLessonExercises(userId);
 
   // L'azione di SBLOCCO (3.13): materializza la lezione via porta
   // (`progress.unlockLesson`, scrittura atomica/idempotente), MAI da `data`
@@ -220,6 +230,7 @@ export function DashboardScreen({
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: dueQueryKey(userId ?? '') });
       void queryClient.invalidateQueries({ queryKey: ['unlocked', userId] });
+      void queryClient.invalidateQueries({ queryKey: activeExercisesQueryKey(userId) });
     },
   });
 
@@ -279,6 +290,12 @@ export function DashboardScreen({
   // stato persistito (`['lessons']` + `['unlocked']` + pila), mai memorizzata
   // (AD-5): sopravvive al refresh.
   const lastUnlocked = lastUnlockedLesson(curriculum, unlockedIds);
+  // Gli esercizi della lezione in corso ancora in riserva (0 finché i conteggi non
+  // ci sono): a pila vuota li offre «Esercitati di più».
+  const reserve =
+    lastUnlocked === null
+      ? 0
+      : exerciseReserve(lastUnlocked.exerciseCount, activeQ.data?.get(lastUnlocked.id));
   // Il tetto giornaliero: `null`/assente degrada al DEFAULT del dominio. `capReached`
   // è DERIVATO puro dagli istanti di sblocco (mai memorizzato); orologio e fuso
   // ENTRANO dal Clock. Il confine di giornata è mezzanotte nel fuso (coerente con
@@ -401,6 +418,25 @@ export function DashboardScreen({
                 <p className={DECLARATION_CLASS}>{t('dashboard.noExercisesNotice')}</p>
               ) : next !== null ? (
                 <p className={DECLARATION_CLASS}>{t('dashboard.clearedBody')}</p>
+              ) : null}
+              {/* «Esercitati di più»: la lezione in corso ha ancora esercizi in
+                  riserva. Un'azione SECONDARIA (bordo, niente fondo d'inchiostro):
+                  la barra in fondo resta l'unica azione primaria. */}
+              {lastUnlocked !== null && reserve > 0 ? (
+                <div className="flex flex-col items-start gap-3 px-5 pb-5 sm:px-8 sm:pb-8">
+                  <p className="text-body text-ink-secondary">
+                    {t('dashboard.moreReserve', { value: reserve })}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => moreMutation.mutate(lastUnlocked.id)}
+                    disabled={moreMutation.isPending}
+                    className={`group flex min-h-[44px] items-center gap-3 border-[1.5px] border-ink-primary px-4 text-[15px] font-extrabold uppercase font-stretch-condensed text-ink-primary hover:bg-surface-sunken disabled:opacity-60 ${FOCUS_RING}`}
+                  >
+                    {t('dashboard.moreAction', { order: lastUnlocked.ordinal })}
+                    <ArrowIcon className="text-accent transition-transform group-hover:translate-x-1" />
+                  </button>
+                </div>
               ) : null}
             </div>
           )}

@@ -62,6 +62,9 @@ export const it = {
     // L'azione di SBLOCCO (3.13): resa SOLO a pila vuota (il cancello). Verbale e
     // concreta, mai "Continua"; nessun `!`, nessuna emoji, nessun avverbio di lode.
     unlockAction: 'Sblocca la lezione successiva',
+    // «Esercitati di più» a pila vuota: altri esercizi della lezione in corso.
+    moreAction: 'Esercitati di più sulla lezione {{order}}',
+    moreReserve: 'Altri {{value}} esercizi aspettano in riserva.',
     // Dichiarazione della lezione CONCETTUALE (3.14): resa SSE la pila è a zero e
     // l'ultima lezione sbloccata non ha esercizi. Dichiara il fatto E il perché —
     // è concettuale, nulla da rivedere, la pila resta a zero, non è un fallimento.
@@ -267,7 +270,7 @@ export const it = {
     kicker: 'Curriculum',
     title: 'Le lezioni',
     intro:
-      'Tutte le lezioni del corso, in ordine. Quelle sbloccate si ripassano quando vuoi: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
+      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 12 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate si possono anche ripassare liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
     lessonNumber: 'Lezione {{order}}',
     status: {
       current: 'In corso',
@@ -277,6 +280,10 @@ export const it = {
     },
     nextHint: 'Si sblocca dalla dashboard, quando la pila è vuota.',
     exercises: 'Esercizi: {{value}}',
+    exercisesInPile: 'Nella pila {{active}} esercizi su {{total}}',
+    more: 'Esercitati di più',
+    moreDone: 'Aggiunti {{value}} esercizi alla pila.',
+    moreNone: 'Non ci sono altri esercizi da aggiungere.',
     noExercises: 'Solo da leggere, senza esercizi.',
     rules: 'Cosa insegna',
     practice: 'Ripassa gli esercizi',
@@ -459,7 +466,7 @@ export const it = {
       'Per questo ho creato questa piattaforma. Man mano che vado avanti con le lezioni le aggiungo qui e ne scrivo gli esercizi, così che chiunque, anche in futuro, possa usarla per esercitarsi su quello che ha imparato con Cure Dolly.',
     howKicker: 'Come si usa',
     how:
-      "Ogni lezione corrisponde a un video. Quando sblocchi una lezione, i suoi esercizi entrano nella tua pila. Un esercizio a cui rispondi bene torna dopo un intervallo sempre più lungo; uno che sbagli torna prima. Ogni giorno svuoti la pila e, quando è vuota, sblocchi la lezione successiva.",
+      "Ogni lezione corrisponde a un video. Quando sblocchi una lezione, 12 dei suoi esercizi entrano nella tua pila; se ne vuoi altri, li aggiungi con «Esercitati di più». Un esercizio a cui rispondi bene torna dopo un intervallo sempre più lungo; uno che sbagli torna prima. Ogni giorno svuoti la pila e, quando è vuota, sblocchi la lezione successiva.",
     lessonsPage:
       'Dalla pagina Lezioni puoi rivedere il video e ripassare quando vuoi qualsiasi lezione che hai sbloccato.',
     passionKicker: 'Perché lo faccio',

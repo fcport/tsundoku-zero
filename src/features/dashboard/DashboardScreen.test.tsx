@@ -47,7 +47,7 @@ const inMemoryPorts: Ports = {
     listReviewLog: async () => [],
     applyReview: async () => {},
   },
-  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {} },
+  progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
 };
 
@@ -1062,5 +1062,37 @@ describe('il blocco Lezioni', () => {
   it('al primo avvio no: non c è ancora una lezione in corso', () => {
     const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 0, total: 10 }), UID);
     expect(markup).not.toContain(en.dashboard.lessonsOpen);
+  });
+});
+
+describe('«Esercitati di più» a pila vuota — la lezione in corso ha esercizi in riserva', () => {
+  it('pila vuota, lezione in corso con 12 in pila su 24 ⇒ offerta secondaria accanto allo sblocco', () => {
+    const qc = seededClient({
+      dueCount: 0,
+      log: [],
+      unlocked: 2,
+      total: 10,
+      lessonExerciseCounts: [17, 24],
+    });
+    qc.setQueryData(['activeExercises', UID], new Map([['lesson-0', 17], ['lesson-1', 12]]));
+    const markup = render(qc, UID);
+
+    expect(markup).toContain('12 more exercises are waiting in reserve.');
+    expect(markup).toContain('Practise more on lesson 1');
+    // La barra primaria resta lo sblocco.
+    expect(markup).toContain(en.dashboard.unlockAction);
+  });
+
+  it('nessuna riserva, o conteggi non ancora letti, o pila piena ⇒ nessuna offerta', () => {
+    const none = seededClient({ dueCount: 0, log: [], unlocked: 2, total: 10, lessonExerciseCounts: [17, 12] });
+    none.setQueryData(['activeExercises', UID], new Map([['lesson-1', 12]]));
+    expect(render(none, UID)).not.toContain('Practise more');
+
+    const unknown = seededClient({ dueCount: 0, log: [], unlocked: 2, total: 10, lessonExerciseCounts: [17, 24] });
+    expect(render(unknown, UID)).not.toContain('Practise more');
+
+    const busy = seededClient({ dueCount: 3, log: [], unlocked: 2, total: 10, lessonExerciseCounts: [17, 24] });
+    busy.setQueryData(['activeExercises', UID], new Map([['lesson-1', 12]]));
+    expect(render(busy, UID)).not.toContain('Practise more');
   });
 });

@@ -1944,3 +1944,56 @@ describe('migrazione unlock_lesson — sbloccare la lezione successiva (Story 3.
     expect(strippedParse.parse_tree.stmts.length).toBe(rawParse.parse_tree.stmts.length);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Lo sblocco a gruppi: 12 esercizi alla lezione nuova, gli altri in riserva.
+// L'effetto dal vivo (12 su 30, copertura di regole e tipi, +6 per volta, pulizia
+// delle pile esistenti) è stato provato su Postgres reale (PGlite) all'autorazione;
+// qui si fissano la forma e le soglie.
+// ---------------------------------------------------------------------------
+
+const batches = migrations.find((m) => m.name.endsWith('_unlock_lesson_in_batches.sql'));
+
+describe('migrazione unlock_lesson_in_batches — 12 alla lezione nuova, 6 per volta dopo', () => {
+  const code = stripSqlComments(batches?.sql ?? '').toLowerCase();
+
+  it('esiste, viene dopo lo sblocco originale e parsa', () => {
+    expect(batches, 'atteso un file *_unlock_lesson_in_batches.sql').toBeDefined();
+    expect((batches?.name ?? '') > (unlockLesson?.name ?? '')).toBe(true);
+    expect(parseSql(batches?.sql ?? '').error).toBeNull();
+  });
+
+  it("l'ordine di ingresso è una vista security_invoker su exercise", () => {
+    expect(code).toMatch(/create view public\.exercise_rotation\s+with \(security_invoker = true\)/);
+    expect(code).toContain('from public.exercise');
+  });
+
+  it('lo sblocco materializza solo le prime 12 posizioni, idempotente', () => {
+    expect(code).toMatch(/create or replace function public\.unlock_lesson\(/);
+    expect(code).toContain('r.position <= 12');
+    expect(code).toContain('on conflict (user_id, lesson_id) do nothing');
+  });
+
+  it('«Esercitati di più» aggiunge al più 6, solo su lezioni sbloccate, e ritorna quanti', () => {
+    expect(code).toMatch(/create function public\.add_lesson_exercises\(\s*lesson_id text,\s*added_at timestamptz\s*\)\s*returns int/);
+    expect(code).toContain('limit 6');
+    expect(code).toContain('join public.lesson_progress p');
+  });
+
+  it('tutte le funzioni sono language sql, security invoker, search_path vuoto', () => {
+    const fns = code.match(/create (or replace )?function[\s\S]*?\$\$/g) ?? [];
+    expect(fns).toHaveLength(3);
+    for (const fn of fns) {
+      expect(fn).toContain('language sql');
+      expect(fn).toContain('security invoker');
+      expect(fn).toContain("set search_path = ''");
+    }
+  });
+
+  it('la pulizia toglie solo esercizi mai fatti oltre il dodicesimo', () => {
+    expect(code).toContain('delete from public.review_state');
+    expect(code).toContain('k.review_count = 0');
+    expect(code).toContain('s.last_reviewed_at is null');
+    expect(code).toContain('k.slot > 12');
+  });
+});

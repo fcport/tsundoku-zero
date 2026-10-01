@@ -4,14 +4,19 @@
 // ripasso libero. Prima una lezione passata non si poteva più riaprire: gli esercizi
 // tornavano solo quando la pila li rimetteva in coda.
 //
+// Una lezione sbloccata mette nella pila solo i primi esercizi (`FIRST_EXERCISES_BATCH`);
+// il resto è in RISERVA. Ogni lezione aperta con una riserva dice quanti esercizi ha
+// in pila su quanti, e offre «Esercitati di più» (`useAddLessonExercises`).
+//
 // Legge le STESSE chiavi della dashboard (`['lessons']`, `['unlocked', userId]`), così
 // arriva da cache calda; lo stato di ciascuna lezione è DERIVATO (`lessonShelf`), mai
 // memorizzato. Le porte arrivano da `usePorts()`, la navigazione come callback (AD-1).
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { resolveBilingual } from '../../domain/bilingual';
 import { lessonShelf, type LessonStatus } from '../../domain/curriculum';
 import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
-import { RESERVED_ORDER_START } from '../../domain/lesson';
+import { RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { Furigana } from '../../ui/Furigana';
 import { MagazineFrame } from '../../ui/MagazineFrame';
@@ -21,6 +26,7 @@ import { ArrowIcon, ExternalIcon } from '../../ui/icons';
 import { lessonNumberSegments } from '../../ui/kanjiDate';
 import { FOCUS_RING, KICKER, SCREEN_TITLE, SERVICE_LINK } from '../../ui/magazine';
 import { usePorts } from '../ports/PortsContext';
+import { useActiveExerciseCounts, useAddLessonExercises } from './useAddLessonExercises';
 
 export interface LessonsScreenProps {
   /** L'id dell'utente corrente, o `null` finché non è risolto (scheletro). */
@@ -72,6 +78,11 @@ function LessonsContent({
     queryKey: ['lessons'],
     queryFn: () => content.listLessons(),
   });
+  // Non entra nello scheletro: finché manca, ogni lezione mostra il suo totale.
+  const activeQ = useActiveExerciseCounts(userId);
+  const more = useAddLessonExercises(userId);
+  // L'esito dell'ultimo «Esercitati di più», sotto la lezione che l'ha chiesto.
+  const [added, setAdded] = useState<{ lessonId: string; value: number } | null>(null);
 
   const header = (
     <div className="flex flex-col gap-3 border-b-[1.5px] border-border-strong p-5 sm:p-8">
@@ -105,6 +116,8 @@ function LessonsContent({
         {shelf.map(({ lesson, status }) => {
           const title = resolveBilingual(lesson.title, locale);
           const open = OPEN.has(status);
+          const active = open ? activeQ.data?.get(lesson.id) : undefined;
+          const reserve = exerciseReserve(lesson.exerciseCount, active);
           return (
             <li
               key={lesson.id}
@@ -174,9 +187,11 @@ function LessonsContent({
                 </div>
 
                 <p className="text-label text-ink-secondary">
-                  {lesson.exerciseCount > 0
-                    ? t('lessons.exercises', { value: lesson.exerciseCount })
-                    : t('lessons.noExercises')}
+                  {lesson.exerciseCount === 0
+                    ? t('lessons.noExercises')
+                    : reserve > 0 && active !== undefined
+                      ? t('lessons.exercisesInPile', { active, total: lesson.exerciseCount })
+                      : t('lessons.exercises', { value: lesson.exerciseCount })}
                 </p>
                 {status === 'next' ? (
                   <p className="text-label font-semibold text-ink-primary">{t('lessons.nextHint')}</p>
@@ -195,6 +210,22 @@ function LessonsContent({
                         <ArrowIcon className="text-accent-on-ink transition-transform group-hover:translate-x-1" />
                       </button>
                     ) : null}
+                    {reserve > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          more.mutate(lesson.id, {
+                            onSuccess: (value) => setAdded({ lessonId: lesson.id, value }),
+                          })
+                        }
+                        disabled={more.isPending}
+                        aria-label={`${t('lessons.more')}: ${t('lessons.lessonNumber', { order: lesson.ordinal })}`}
+                        className={`group flex min-h-[44px] items-center gap-3 border-[1.5px] border-ink-primary px-4 text-[15px] font-extrabold uppercase font-stretch-condensed text-ink-primary hover:bg-surface-sunken disabled:opacity-60 ${FOCUS_RING}`}
+                      >
+                        {t('lessons.more')}
+                        <span aria-hidden="true" className="text-accent">+</span>
+                      </button>
+                    ) : null}
                     {lesson.video ? (
                       <a
                         href={`https://www.youtube.com/watch?v=${lesson.video}`}
@@ -206,6 +237,13 @@ function LessonsContent({
                       </a>
                     ) : null}
                   </div>
+                ) : null}
+                {added?.lessonId === lesson.id ? (
+                  <p role="status" className="text-label font-semibold text-ink-primary">
+                    {added.value > 0
+                      ? t('lessons.moreDone', { value: added.value })
+                      : t('lessons.moreNone')}
+                  </p>
                 ) : null}
               </div>
             </li>

@@ -61,6 +61,8 @@ function ports(): Ports {
     progress: {
       listUnlockedLessons: async () => [{ lessonId: 'l1', unlockedAt: NOW }],
       unlockLesson,
+      addLessonExercises: async () => 0,
+      listActiveExerciseCounts: async () => new Map(),
     },
     content: {
       listLessons: async () => LESSONS,

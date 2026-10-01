@@ -81,6 +81,8 @@ const inMemoryReview: ReviewRepository = {
 const inMemoryProgress: ProgressRepository = {
   listUnlockedLessons: async () => sampleUnlocked,
   unlockLesson: async () => {},
+  addLessonExercises: async () => 0,
+  listActiveExerciseCounts: async () => new Map(),
 };
 
 const inMemoryPorts: Ports = {

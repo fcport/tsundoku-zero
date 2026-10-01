@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { deriveLessonId, lessonId, parseLesson, type Lesson } from './lesson';
+import {
+  EXTRA_EXERCISES_BATCH,
+  FIRST_EXERCISES_BATCH,
+  deriveLessonId,
+  exerciseReserve,
+  lessonId,
+  parseLesson,
+  type Lesson,
+} from './lesson';
 
 // Test di parseLesson (AC2) e della derivazione dell'identificatore (AC5). Le
 // fixture sono inline: nessun file reale in content/lessons/ (è storia 2.7).
@@ -271,5 +279,23 @@ describe('deriveLessonId / lessonId (AC5, FR2.1a)', () => {
     expect(deriveLessonId('---')).not.toBe(deriveLessonId('!!!'));
     expect(deriveLessonId('・・・')).not.toBe(deriveLessonId('！！！'));
     expect(deriveLessonId('!!!')).not.toBe(deriveLessonId('!!'));
+  });
+});
+
+describe('exerciseReserve — gli esercizi di una lezione ancora fuori dalla pila', () => {
+  it('totale meno quelli in pila; mai negativo', () => {
+    expect(exerciseReserve(24, 12)).toBe(12);
+    expect(exerciseReserve(12, 12)).toBe(0);
+    expect(exerciseReserve(10, 14)).toBe(0);
+  });
+
+  it('conteggio sconosciuto o zero ⇒ nessuna riserva nota', () => {
+    expect(exerciseReserve(24, undefined)).toBe(0);
+    expect(exerciseReserve(24, 0)).toBe(0);
+  });
+
+  it('le costanti dello sblocco a gruppi', () => {
+    expect(FIRST_EXERCISES_BATCH).toBe(12);
+    expect(EXTRA_EXERCISES_BATCH).toBe(6);
   });
 });

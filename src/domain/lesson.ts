@@ -141,3 +141,24 @@ export const RESERVED_ORDER_START = 900;
 export function isCurriculumLesson(lesson: { readonly order: number }): boolean {
   return lesson.order < RESERVED_ORDER_START;
 }
+
+/**
+ * Quanti esercizi una lezione appena sbloccata porta nella pila (il resto resta in
+ * riserva). Specchio documentale della costante nella RPC `unlock_lesson`
+ * (migrazione `20261001150000_unlock_lesson_in_batches.sql`): l'autorità è l'SQL.
+ */
+export const FIRST_EXERCISES_BATCH = 12;
+
+/** Quanti esercizi in riserva aggiunge ogni «Esercitati di più» (RPC `add_lesson_exercises`). */
+export const EXTRA_EXERCISES_BATCH = 6;
+
+/**
+ * Quanti esercizi di una lezione restano in riserva, fuori dalla pila. `active` è
+ * quanti ne sono già in pila (`listActiveExerciseCounts`); `undefined` (conteggio
+ * non ancora letto, o lezione mai materializzata) vale «nessuna riserva nota»: il
+ * pulsante «Esercitati di più» compare solo quando il numero è certo.
+ */
+export function exerciseReserve(exerciseCount: number, active: number | undefined): number {
+  if (active === undefined || active <= 0) return 0;
+  return Math.max(0, exerciseCount - active);
+}
