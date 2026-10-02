@@ -285,6 +285,18 @@ export const en = {
     more: 'Practise more',
     moreDone: 'Added {{value}} exercises to your pile.',
     moreNone: 'There are no more exercises to add.',
+    // «Da ripassare»: le lezioni dove sbagli di più (sbagliata = «di nuovo»).
+    weak: {
+      kicker: 'To review · last {{days}} days',
+      title: 'Where you slip most',
+      note: 'Only lessons with at least {{min}} answers count.',
+      rank: '#{{value}}',
+      worstRule: 'Weak spot',
+      ruleErrors: '{{value}} mistakes',
+      ruleErrorsOne: '1 mistake',
+      wrong: 'wrong',
+      answers: '{{errors}} of {{total}} answers',
+    },
     noExercises: 'Reading only, no exercises.',
     rules: 'What it teaches',
     practice: 'Review the exercises',

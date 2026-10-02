@@ -284,6 +284,18 @@ export const it = {
     more: 'Esercitati di più',
     moreDone: 'Aggiunti {{value}} esercizi alla pila.',
     moreNone: 'Non ci sono altri esercizi da aggiungere.',
+    // «Da ripassare»: le lezioni dove sbagli di più (sbagliata = «di nuovo»).
+    weak: {
+      kicker: 'Da ripassare · ultimi {{days}} giorni',
+      title: 'Dove sbagli di più',
+      note: 'Contano le lezioni con almeno {{min}} risposte.',
+      rank: '{{value}}°',
+      worstRule: 'Il punto debole',
+      ruleErrors: '{{value}} errori',
+      ruleErrorsOne: '1 errore',
+      wrong: 'sbagliate',
+      answers: '{{errors}} su {{total}} risposte',
+    },
     noExercises: 'Solo da leggere, senza esercizi.',
     rules: 'Cosa insegna',
     practice: 'Ripassa gli esercizi',

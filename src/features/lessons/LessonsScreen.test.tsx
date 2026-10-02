@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { i18n } from '../../i18n';
 import type { LessonSummary } from '../../domain/ports/contentRepository';
+import type { ReviewLogRecord } from '../../domain/streak';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { LessonsScreen } from './LessonsScreen';
 
@@ -41,10 +42,12 @@ function render(
   lessons: readonly LessonSummary[],
   unlocked: readonly string[],
   active?: ReadonlyMap<string, number>,
+  log?: readonly ReviewLogRecord[],
 ): string {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   qc.setQueryData(['lessons'], lessons);
   if (active !== undefined) qc.setQueryData(['activeExercises', UID], active);
+  if (log !== undefined) qc.setQueryData(['streak', UID], log);
   qc.setQueryData(
     ['unlocked', UID],
     unlocked.map((lessonId) => ({ lessonId, unlockedAt: NOW })),
@@ -115,6 +118,35 @@ describe('LessonsScreen', () => {
     const html = render([lesson(1, { exerciseCount: 24 })], ['l1']);
     expect(html).toContain('Esercizi: 24');
     expect(html).not.toContain('Esercitati di più: Lezione');
+  });
+
+  it('«Da ripassare»: le lezioni aperte dove sbagli di più, con la regola peggiore', () => {
+    const answers = (point: string, n: number, wrong: number): ReviewLogRecord[] =>
+      Array.from({ length: n }, (_, i) => ({
+        exerciseId: `${point}-${i}`,
+        grammarPoint: point,
+        outcome: i < wrong ? 'again' : 'good',
+        reviewedAt: NOW,
+      }));
+    const html = render(
+      [lesson(1, { exerciseCount: 24 }), lesson(2), lesson(3)],
+      ['l1', 'l2'],
+      new Map([['l1', 12]]),
+      [...answers('point-1', 10, 4), ...answers('point-2', 3, 3)],
+    );
+    expect(html).toContain('Dove sbagli di più');
+    expect(html).toContain('40%');
+    expect(html).toContain('4 su 10 risposte');
+    expect(html).toContain('Il punto debole');
+    // La lezione 2 ha troppe poche risposte: fuori classifica.
+    expect(html).not.toContain('100%');
+    // Le azioni: ripasso libero ed «Esercitati di più» (ha una riserva), anche nel riquadro.
+    expect(html.match(/Esercitati di più: Lezione 1/g)).toHaveLength(2);
+  });
+
+  it('senza errori recenti il riquadro non c’è', () => {
+    const html = render([lesson(1)], ['l1'], undefined, []);
+    expect(html).not.toContain('Dove sbagli di più');
   });
 
   it('senza dati: scheletro occupato, nessuna lezione', () => {

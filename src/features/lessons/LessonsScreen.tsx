@@ -17,6 +17,7 @@ import { resolveBilingual } from '../../domain/bilingual';
 import { lessonShelf, type LessonStatus } from '../../domain/curriculum';
 import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
 import { RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
+import { weakLessons } from '../../domain/weakLessons';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { Furigana } from '../../ui/Furigana';
 import { MagazineFrame } from '../../ui/MagazineFrame';
@@ -27,6 +28,7 @@ import { lessonNumberSegments } from '../../ui/kanjiDate';
 import { FOCUS_RING, KICKER, SCREEN_TITLE, SERVICE_LINK } from '../../ui/magazine';
 import { usePorts } from '../ports/PortsContext';
 import { useActiveExerciseCounts, useAddLessonExercises } from './useAddLessonExercises';
+import { WeakLessons } from './WeakLessons';
 
 export interface LessonsScreenProps {
   /** L'id dell'utente corrente, o `null` finché non è risolto (scheletro). */
@@ -65,7 +67,7 @@ function LessonsContent({
   userId,
   onPractice,
 }: Pick<LessonsScreenProps, 'userId' | 'onPractice'>) {
-  const { progress, content } = usePorts();
+  const { progress, content, review, clock } = usePorts();
   const { t, i18n } = useTranslation();
   const locale = resolveLocale(i18n.language);
 
@@ -78,11 +80,18 @@ function LessonsContent({
     queryKey: ['lessons'],
     queryFn: () => content.listLessons(),
   });
+  // Il registro delle risposte, per «Da ripassare»: la STESSA chiave della dashboard
+  // e delle statistiche. Non entra nello scheletro: finché manca, il riquadro non c'è.
+  const logQ = useQuery({
+    queryKey: ['streak', userId],
+    enabled: !!userId,
+    queryFn: () => review.listReviewLog(),
+  });
   // Non entra nello scheletro: finché manca, ogni lezione mostra il suo totale.
   const activeQ = useActiveExerciseCounts(userId);
   const more = useAddLessonExercises(userId);
   // L'esito dell'ultimo «Esercitati di più», sotto la lezione che l'ha chiesto.
-  const [added, setAdded] = useState<{ lessonId: string; value: number } | null>(null);
+  const [added, setAdded] = useState<{ lessonId: string; value: number; where: 'weak' | 'list' } | null>(null);
 
   const header = (
     <div className="flex flex-col gap-3 border-b-[1.5px] border-border-strong p-5 sm:p-8">
@@ -109,9 +118,28 @@ function LessonsContent({
     unlockedQ.data.map((u) => u.lessonId),
   );
 
+  // Solo le lezioni aperte possono essere in classifica: le risposte arrivano da lì.
+  const unlockedIds = new Set(unlockedQ.data.map((u) => u.lessonId));
+  const weak = weakLessons(
+    logQ.data ?? [],
+    curriculum.filter((l) => unlockedIds.has(l.id)),
+    clock.now(),
+  );
+  // L'esito compare sotto il pulsante premuto: nel riquadro o nell'elenco.
+  const addMore = (lessonId: string, where: 'weak' | 'list') =>
+    more.mutate(lessonId, { onSuccess: (value) => setAdded({ lessonId, value, where }) });
+
   return (
     <main className="flex min-h-[24rem] flex-1 flex-col">
       {header}
+      <WeakLessons
+        weak={weak}
+        active={activeQ.data}
+        onPractice={onPractice}
+        onMore={(lessonId) => addMore(lessonId, 'weak')}
+        morePending={more.isPending}
+        added={added?.where === 'weak' ? added : null}
+      />
       <ol>
         {shelf.map(({ lesson, status }) => {
           const title = resolveBilingual(lesson.title, locale);
@@ -213,11 +241,7 @@ function LessonsContent({
                     {reserve > 0 ? (
                       <button
                         type="button"
-                        onClick={() =>
-                          more.mutate(lesson.id, {
-                            onSuccess: (value) => setAdded({ lessonId: lesson.id, value }),
-                          })
-                        }
+                        onClick={() => addMore(lesson.id, 'list')}
                         disabled={more.isPending}
                         aria-label={`${t('lessons.more')}: ${t('lessons.lessonNumber', { order: lesson.ordinal })}`}
                         className={`group flex min-h-[44px] items-center gap-3 border-[1.5px] border-ink-primary px-4 text-[15px] font-extrabold uppercase font-stretch-condensed text-ink-primary hover:bg-surface-sunken disabled:opacity-60 ${FOCUS_RING}`}
@@ -238,7 +262,7 @@ function LessonsContent({
                     ) : null}
                   </div>
                 ) : null}
-                {added?.lessonId === lesson.id ? (
+                {added?.where === 'list' && added.lessonId === lesson.id ? (
                   <p role="status" className="text-label font-semibold text-ink-primary">
                     {added.value > 0
                       ? t('lessons.moreDone', { value: added.value })
