@@ -198,7 +198,7 @@ function LessonsContent({
                       const resolved = meaning ? resolveBilingual(meaning, locale) : null;
                       return (
                         <li key={point} className="flex items-baseline gap-2">
-                          <span lang="ja" className={`font-jp text-[16px] font-bold ${open ? 'text-ink-primary' : 'text-ink-secondary'}`}>
+                          <span lang="ja" className={`font-jp-read text-[16px] font-bold ${open ? 'text-ink-primary' : 'text-ink-secondary'}`}>
                             <Furigana segments={grammarPointSegments(point) ?? [{ text: point, ruby: null }]} />
                           </span>
                           {resolved ? (

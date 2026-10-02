@@ -101,7 +101,7 @@ export function WeakLessons({ weak, active, onPractice, onMore, morePending, add
                 <div className="flex flex-col gap-1">
                   <p className={KICKER}>{t('lessons.weak.worstRule')}</p>
                   <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <span lang="ja" className="font-jp text-[18px] font-bold text-ink-primary">
+                    <span lang="ja" className="font-jp-read text-[18px] font-bold text-ink-primary">
                       <Furigana segments={grammarPointSegments(worstRule.grammarPoint) ?? [{ text: worstRule.grammarPoint, ruby: null }]} />
                     </span>
                     {resolvedMeaning ? (

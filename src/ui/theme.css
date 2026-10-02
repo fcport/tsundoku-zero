@@ -140,11 +140,18 @@
   /* --------------------------------------------------------------------------
    * Famiglie — tre, con confine netto. Tutte caricate da Google Fonts in
    * index.html (nessun self-hosting del font giapponese, come da DESIGN.md).
-   * --font-jp = Shippori Mincho: il giapponese è un mincho da rivista.
+   * --font-jp = Shippori Mincho: il giapponese DA VEDERE (marchio, 第N課, data,
+   *   dorsi della pila), un mincho da rivista.
+   * --font-jp-read = BIZ UDPMincho: il giapponese DA LEGGERE (esercizi, furigana,
+   *   spiegazioni, regole). Ancora un mincho, ma «universal design»: tratti
+   *   orizzontali robusti e kana leggibili anche a 16–22px e nella furigana, dove
+   *   Shippori a schermo si leggeva a fatica (02-10-2026).
    * --font-sans = Archivo, con l'asse di larghezza: le testate lo condensano.
    * --font-mono = IBM Plex Mono, per etichette e numerazioni piccole.
    * ------------------------------------------------------------------------ */
   --font-jp: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho",
+    "Noto Serif JP", serif;
+  --font-jp-read: "BIZ UDPMincho", "Hiragino Mincho ProN", "Yu Mincho",
     "Noto Serif JP", serif;
   --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -228,10 +235,11 @@
   }
 
   /* Il confine fra le famiglie passa dall'attributo `lang` che il contenuto porta
-   * già (AD-14): ogni nodo giapponese è in Shippori Mincho, senza che ciascun
-   * componente debba ricordarsi la classe. */
+   * già (AD-14): ogni nodo giapponese è nel font DA LEGGERE, senza che ciascun
+   * componente debba ricordarsi la classe. Le parti decorative chiedono Shippori
+   * con la classe `font-jp`. */
   :lang(ja) {
-    font-family: var(--font-jp);
+    font-family: var(--font-jp-read);
   }
 
   /* La furigana, UNA regola per tutta l'app (frasi, opzioni, marchio, data, timbri,

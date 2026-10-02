@@ -230,7 +230,7 @@ function Chooser({
                     />
                     <span className="flex flex-1 items-baseline justify-between gap-2">
                       {t(`drill.forms.${form}`)}
-                      <span lang="ja" className="whitespace-nowrap font-jp text-ink-secondary">
+                      <span lang="ja" className="whitespace-nowrap font-jp-read text-ink-secondary">
                         {FORM_MARKERS[form]}
                       </span>
                     </span>
@@ -307,7 +307,7 @@ export function Training({
             <div>
               <p
                 lang="ja"
-                className="font-jp text-[56px] font-extrabold leading-[1.15] text-ink-primary sm:text-[88px]"
+                className="font-jp-read text-[56px] font-extrabold leading-[1.15] text-ink-primary sm:text-[88px]"
               >
                 <Furigana segments={alignFurigana(drill.verb.kanji, drill.verb.kana)} />
               </p>
@@ -322,7 +322,7 @@ export function Training({
               <p className={KICKER}>{t('drill.askKicker')}</p>
               <h2 className="mt-1 flex flex-wrap items-baseline gap-x-3 text-[30px] font-extrabold uppercase leading-tight font-stretch-condensed text-ink-primary sm:text-[38px]">
                 {t(`drill.forms.${drill.form}`)}
-                <span lang="ja" className="font-jp text-[24px] font-bold normal-case text-accent sm:text-[28px]">
+                <span lang="ja" className="font-jp-read text-[24px] font-bold normal-case text-accent sm:text-[28px]">
                   {FORM_MARKERS[drill.form]}
                 </span>
               </h2>
@@ -352,7 +352,7 @@ export function Training({
                 onChange={(e) =>
                   setValue(composing.current ? e.target.value : romajiToKana(e.target.value))
                 }
-                className={`min-h-[64px] w-full border-[1.5px] border-border-strong bg-surface-raised px-4 font-jp text-[28px] text-ink-primary read-only:bg-surface-sunken sm:text-[34px] ${FOCUS_RING}`}
+                className={`min-h-[64px] w-full border-[1.5px] border-border-strong bg-surface-raised px-4 font-jp-read text-[28px] text-ink-primary read-only:bg-surface-sunken sm:text-[34px] ${FOCUS_RING}`}
               />
               <span id="drill-hint" className="text-label text-ink-secondary">
                 {t('drill.inputHint')}
@@ -392,11 +392,11 @@ function Feedback({ answer, drill }: { readonly answer: Answer; readonly drill: 
       {answer.correct ? null : (
         <dl className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2">
           <dt className="text-label">{t('drill.yourAnswer')}</dt>
-          <dd lang="ja" className="font-jp text-[24px] line-through">
+          <dd lang="ja" className="font-jp-read text-[24px] line-through">
             {answer.given}
           </dd>
           <dt className="text-label">{t('drill.rightAnswer')}</dt>
-          <dd lang="ja" className="font-jp text-[30px] font-bold">
+          <dd lang="ja" className="font-jp-read text-[30px] font-bold">
             <Furigana segments={alignFurigana(c.result.kanji, c.result.kana)} />
           </dd>
         </dl>
@@ -406,7 +406,7 @@ function Feedback({ answer, drill }: { readonly answer: Answer; readonly drill: 
           {t('drill.steps')}
         </p>
         {/* I passaggi: base → radicale ＋ terminazione → forma. */}
-        <p lang="ja" className="font-jp text-[22px] leading-relaxed sm:text-[26px]">
+        <p lang="ja" className="font-jp-read text-[22px] leading-relaxed sm:text-[26px]">
           <Furigana segments={alignFurigana(drill.verb.kanji, drill.verb.kana)} />
           {' → '}
           {c.stem ? (

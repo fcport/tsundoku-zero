@@ -126,7 +126,7 @@ export function PileOfBooks({ books, total, roomy }: PileOfBooksProps) {
               ) : null}
               {/* A cedere spazio è prima la traduzione, poi il giapponese; «next» mai. */}
               <span className="flex min-w-0 flex-1 items-baseline gap-2 pr-2 sm:pr-3">
-                <span aria-hidden="true" lang="ja" className="min-w-0 truncate font-jp text-[12px] font-bold sm:text-[17px]">
+                <span aria-hidden="true" lang="ja" className="min-w-0 truncate font-jp-read text-[12px] font-bold sm:text-[17px]">
                   <Furigana
                     segments={grammarPointSegments(book.grammarPoint) ?? [{ text: book.grammarPoint, ruby: null }]}
                   />

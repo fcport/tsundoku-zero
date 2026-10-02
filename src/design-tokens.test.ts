@@ -200,6 +200,14 @@ describe('AC2 — palette e famiglie vincolate; tre famiglie caricate', () => {
     expect((m?.[1].match(/,/g) ?? []).length).toBeGreaterThanOrEqual(1);
   });
 
+  it('--font-jp-read dichiara BIZ UDPMincho, ed è il font di ogni nodo giapponese', () => {
+    const m = css.match(/--font-jp-read\s*:\s*([^;]+);/);
+    expect(m).not.toBeNull();
+    expect(m?.[1]).toMatch(/BIZ UDPMincho/);
+    expect((m?.[1].match(/,/g) ?? []).length).toBeGreaterThanOrEqual(1);
+    expect(css).toMatch(/:lang\(ja\)\s*\{\s*font-family:\s*var\(--font-jp-read\)/);
+  });
+
   it('--font-sans dichiara Archivo con stack di ripiego', () => {
     const m = css.match(/--font-sans\s*:\s*([^;]+);/);
     expect(m).not.toBeNull();
@@ -222,6 +230,7 @@ describe('AC2 — index.html carica le tre famiglie da Google Fonts', () => {
     expect(html).toMatch(/fonts\.googleapis\.com/);
     expect(html).toMatch(/family=Archivo:wdth,wght/);
     expect(html).toMatch(/Shippori\+Mincho/);
+    expect(html).toMatch(/BIZ\+UDPMincho/);
     expect(html).toMatch(/IBM\+Plex\+Mono/);
   });
 
