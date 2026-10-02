@@ -680,8 +680,8 @@
       "answer": ["息子は", "来月", "十歳に", "なる"],
       "alsoAccepted": [["来月", "息子は", "十歳に", "なる"]],
       "explanation": {
-        "en": "In Japanese you \"become\" an age: 十歳になる = \"turn ten\", with に marking the result, as in every change with なる (\"to become\"). A time word such as 来月 (\"next month\") needs no particle. \"来月息子は十歳になる\" is also correct: a time word can also go before the topic.",
-        "it": "In giapponese un'età si «diventa»: 十歳になる = «compiere dieci anni», con に che segna il risultato, come in ogni cambiamento con なる («diventare»). Una parola di tempo come 来月 («il mese prossimo») non vuole particelle. Va bene anche «来月息子は十歳になる»: una parola di tempo può andare anche prima del tema."
+        "en": "In Japanese you \"become\" an age: 十歳になる = \"turn ten\", with に marking the result, as in every change with なる (\"to become\"). A time word such as 来月 (\"next month\") needs no particle. \"来月息子は十歳になる\" is also correct: a time word can also go before the topic. It cannot go in between, though: 十歳に and なる stay together, because に marks the result that なる leads to.",
+        "it": "In giapponese un'età si «diventa»: 十歳になる = «compiere dieci anni», con に che segna il risultato, come in ogni cambiamento con なる («diventare»). Una parola di tempo come 来月 («il mese prossimo») non vuole particelle. Va bene anche «来月息子は十歳になる»: una parola di tempo può andare anche prima del tema. In mezzo invece no: 十歳に e なる stanno sempre attaccati, perché に indica il risultato a cui porta なる."
       }
     },
     {
@@ -758,8 +758,8 @@
       ],
       "answer": ["次の角を", "右へ", "曲がってください"],
       "explanation": {
-        "en": "右へ = \"to the right\": へ (read え) shows the direction you turn in. The corner takes を because it is the point you go past. The polite request 曲がってください (\"please turn\") goes last.",
-        "it": "右へ = «a destra»: へ (si legge え) indica la direzione in cui si gira. L'angolo prende を perché è il punto da cui si passa. La richiesta cortese 曲がってください («giri, per favore») va alla fine."
+        "en": "右へ = \"to the right\": へ (read え) shows the direction you turn in, so it goes right before the verb. The corner takes を because it is the point you go past, and it comes first: 次の角を → 右へ → 曲がってください. The polite request 曲がってください (\"please turn\") goes last.",
+        "it": "右へ = «a destra»: へ (si legge え) indica la direzione in cui si gira, e per questo sta subito prima del verbo. L'angolo prende を perché è il punto da cui si passa, e viene prima: 次の角を → 右へ → 曲がってください. La richiesta cortese 曲がってください («giri, per favore») va alla fine."
       }
     },
     {
