@@ -16,7 +16,7 @@
 // commerciale (LICENSE-CONTENT).
 //
 // Uso: `npm run generate-audio -- [--force] [--lesson <pezzo del nome file>]
-//        [--speaker <id stile>] [--out <dir>]`
+//        [--speaker <id stile>] [--speed <0.5–2>] [--out <dir>]`
 // Senza `--lesson`, cancella anche gli audio di frasi che non esistono più.
 import { spawn, type ChildProcess } from 'node:child_process';
 import { mkdir, readdir, readFile, rm } from 'node:fs/promises';
@@ -28,6 +28,8 @@ const ENGINE = 'http://127.0.0.1:50021';
 const LESSONS_DIR = join('content', 'lessons');
 /** No.7, stile アナウンス. */
 const DEFAULT_SPEAKER = 30;
+/** Velocità di lettura (`speedScale` di VOICEVOX): 1 = normale, < 1 = più lenta. */
+const DEFAULT_SPEED = 0.8;
 
 interface AudioQuery {
   readonly accent_phrases: ReadonlyArray<{ readonly moras: ReadonlyArray<{ readonly text: string }> }>;
@@ -127,12 +129,13 @@ async function main(): Promise<void> {
   const speaker = Number(arg('speaker') ?? DEFAULT_SPEAKER);
   const outDir = arg('out') ?? join('public', 'audio');
   const force = process.argv.includes('--force');
+  const speed = Number(arg('speed') ?? DEFAULT_SPEED);
 
   const sentences = await loadSentences(lessonFilter);
   await mkdir(outDir, { recursive: true });
   const engineProcess = await ensureEngine();
   try {
-    await generate(sentences, { lessonFilter, speaker, outDir, force });
+    await generate(sentences, { lessonFilter, speaker, speed, outDir, force });
   } finally {
     // Chiuso solo se l'ha aperto lo script: un VOICEVOX già aperto resta com'è.
     engineProcess?.kill();
@@ -141,7 +144,7 @@ async function main(): Promise<void> {
 
 async function generate(
   sentences: Map<string, string>,
-  { lessonFilter, speaker, outDir, force }: { lessonFilter?: string; speaker: number; outDir: string; force: boolean },
+  { lessonFilter, speaker, speed, outDir, force }: { lessonFilter?: string; speaker: number; speed: number; outDir: string; force: boolean },
 ): Promise<void> {
 
   const fixed: string[] = [];
@@ -167,7 +170,7 @@ async function generate(
     const res = await engine(`/synthesis?speaker=${speaker}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(query),
+      body: JSON.stringify({ ...query, speedScale: speed }),
     });
     await toMp3(new Uint8Array(await res.arrayBuffer()), outPath);
     generated += 1;

@@ -241,7 +241,8 @@ dal suo audio, generato così:
    ```
 
    Genera un MP3 per ogni frase in `public/audio/` con la voce **No.7, stile
-   アナウンス** (id 30), sempre la stessa per tutto il corso. Salta le frasi che
+   アナウンス** (id 30) a **velocità 0.8** (un po' più lenta del normale, per chi
+   studia), sempre le stesse per tutto il corso. Salta le frasi che
    hanno già l'audio e cancella quello delle frasi che non esistono più. Il nome
    del file è l'hash della frase in kanji (`src/domain/sentence-audio.ts`):
    cambiare una frase cambia il file.
