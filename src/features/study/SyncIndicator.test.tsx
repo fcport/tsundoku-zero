@@ -1,5 +1,5 @@
 // Ambiente `node` (l'env globale della suite): il componente DERIVATO dalla coda
-// (4.4) è testabile SENZA browser né IndexedDB reale. `useIsMutating` legge la
+// (4.4) è testabile SENZA browser né IndexedDB reale. `useMutationState` legge la
 // `MutationCache` via `useSyncExternalStore` con lo snapshot calcolato in modo
 // SINCRONO (server snapshot = stato corrente): `renderToStaticMarkup` in env
 // `node` riflette quindi la coda seminata. La coda è seminata con la STESSA
@@ -7,7 +7,7 @@
 // così il test esercita la coda REALE e non un finto stato del componente.
 //
 // AC1 — coda con una mutation `['review']` `paused` ⇒ pastiglia con `role="status"`,
-//        `aria-live="polite"`, testo `t('sync.pending')`, derivata da `useIsMutating`.
+//        `aria-live="polite"`, testo `t('sync.pending')`, derivata dalla coda.
 // AC2 — coda senza mutation `['review']` `pending` ⇒ markup vuoto (indicatore ASSENTE).
 // AC3 — la pastiglia NON è un modale né un allarme (niente `danger`/`dialog`/`alert`/
 //        `aria-live="assertive"`) ed è `pointer-events-none` (non bloccante).
@@ -215,7 +215,7 @@ describe('4.4 — un indicatore che non spaventa (derivato dalla coda, non blocc
     void observer.mutate();
     await Promise.resolve();
 
-    // `useIsMutating` filtra per la `REVIEW_MUTATION_KEY`: una chiave diversa non
+    // Il filtro è per la `REVIEW_MUTATION_KEY`: una chiave diversa non
     // conta, l'indicatore è assente.
     const markup = render(qc);
     expect(markup).toBe('');
@@ -223,12 +223,11 @@ describe('4.4 — un indicatore che non spaventa (derivato dalla coda, non blocc
     qc.clear();
   });
 
-  it('Matrix (metà in volo) — mutation ["review"] ONLINE in volo (pending, non paused) ⇒ indicatore PRESENTE', async () => {
+  it('Matrix (in volo) — salvataggio ["review"] ONLINE al primo tentativo ⇒ indicatore ASSENTE', async () => {
     const qc = makeClient();
-    // Sovrascrive il default della `REVIEW_MUTATION_KEY` con una `mutationFn` che
-    // NON risolve mai: online la mutation resta `pending` IN VOLO (non `paused`).
-    // `useIsMutating` conta `status: 'pending'`, che copre sia l'in-volo sia la
-    // pausa offline — questo test asserisce direttamente la metà «in volo».
+    // Una `mutationFn` che NON risolve mai: online la mutation resta `pending` IN VOLO
+    // (non `paused`, nessun fallimento). È il salvataggio normale che parte a ogni
+    // «Prossimo esercizio»: non deve far lampeggiare la scritta.
     qc.setMutationDefaults([...REVIEW_MUTATION_KEY], {
       mutationFn: () => new Promise<void>(() => {}),
     });
@@ -240,8 +239,34 @@ describe('4.4 — un indicatore che non spaventa (derivato dalla coda, non blocc
     void observer.mutate(makeVars());
     await Promise.resolve();
 
-    const markup = render(qc);
-    expect(markup).toContain(en.sync.pending);
+    expect(render(qc)).toBe('');
+
+    qc.clear();
+  });
+
+  it('Matrix (ritentativo) — invio ["review"] fallito che si sta ritentando ⇒ indicatore PRESENTE', async () => {
+    const qc = makeClient();
+    // L'invio fallisce: col ritentativo automatico (backoff di 2 s) la mutation resta
+    // `pending` con `failureCount` 1 fino al prossimo tentativo.
+    qc.setMutationDefaults([...REVIEW_MUTATION_KEY], {
+      mutationFn: () => Promise.reject(new Error('rete instabile')),
+      retry: 3,
+      retryDelay: 60_000,
+    });
+    onlineManager.setOnline(true);
+    const observer = new MutationObserver<unknown, Error, ReviewMutationVars>(qc, {
+      mutationKey: [...REVIEW_MUTATION_KEY],
+      scope: REVIEW_SYNC_SCOPE,
+    });
+    void observer.mutate(makeVars()).catch(() => {});
+    const mutation = () => qc.getMutationCache().getAll()[0];
+    for (let i = 0; i < 20 && (mutation()?.state.failureCount ?? 0) === 0; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    expect(mutation()?.state.failureCount).toBe(1);
+    expect(mutation()?.state.status).toBe('pending');
+
+    expect(render(qc)).toContain(en.sync.pending);
 
     qc.clear();
   });
