@@ -288,9 +288,10 @@
         { "text": "来られる", "reading": "こられる", "meaning": { "en": "can come", "it": "poter venire" } }
       ],
       "answer": ["友達も", "パーティーに", "来られる"],
+      "alsoAccepted": [["パーティーに", "友達も", "来られる"]],
       "explanation": {
-        "en": "来る (\"come\") is irregular: its potential form (\"can come\") is 来られる, read こられる. The place you come to takes に: パーティーに. も after 友達 means \"too\" and takes the place of が.",
-        "it": "来る («venire») è irregolare: la sua forma potenziale («poter venire») è 来られる, letto こられる. Il luogo dove si viene prende に: パーティーに. も dopo 友達 significa «anche» e prende il posto di が."
+        "en": "来る (\"come\") is irregular: its potential form (\"can come\") is 来られる, read こられる. The place you come to takes に: パーティーに. も after 友達 means \"too\" and takes the place of が. \"パーティーに友達も来られる\" is also correct: before the verb, these two pieces can change places.",
+        "it": "来る («venire») è irregolare: la sua forma potenziale («poter venire») è 来られる, letto こられる. Il luogo dove si viene prende に: パーティーに. も dopo 友達 significa «anche» e prende il posto di が. Va bene anche «パーティーに友達も来られる»: prima del verbo questi due pezzi possono scambiarsi di posto."
       }
     },
     {
