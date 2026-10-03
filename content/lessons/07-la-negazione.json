@@ -326,8 +326,8 @@
       ],
       "answer": ["この時計は", "ぜんぜん", "動かない"],
       "explanation": {
-        "en": "動く (\"to move, to work\") ends in く. For the negative, く changes to the a-sound, か, and ない is added: 動かない. ぜんぜん before a negative means \"not at all\". The topic comes first and the verb goes last.",
-        "it": "動く («muoversi, funzionare») finisce in く. Per la negazione, く passa al suono a, か, e si aggiunge ない: 動かない. ぜんぜん davanti a una negazione significa «per niente». Il tema va all'inizio e il verbo alla fine."
+        "en": "動く (\"to move, to work\") ends in く. For the negative, く changes to the a-sound, か, and ない is added: 動かない. ぜんぜん before a negative means \"not at all\", and it goes right before the verb it negates. The topic comes first and the verb goes last.",
+        "it": "動く («muoversi, funzionare») finisce in く. Per la negazione, く passa al suono a, か, e si aggiunge ない: 動かない. ぜんぜん davanti a una negazione significa «per niente», e va subito prima del verbo che nega. Il tema va all'inizio e il verbo alla fine."
       }
     },
     {
@@ -442,9 +442,10 @@
         { "text": "ではない", "meaning": { "en": "is not", "it": "non è" } }
       ],
       "answer": ["駅前の店は", "もう", "パン屋", "ではない"],
+      "alsoAccepted": [["もう", "駅前の店は", "パン屋", "ではない"]],
       "explanation": {
-        "en": "パン屋 (\"bakery\") is a noun, so \"is not\" after it is ではない, at the very end. もう with a negative means \"no longer\": もうパン屋ではない = \"is no longer a bakery\". The topic, 駅前の店は, comes first.",
-        "it": "パン屋 («panetteria») è un nome, quindi dopo di lui «non è» si dice ではない, proprio alla fine. もう con una negazione significa «non più»: もうパン屋ではない = «non è più una panetteria». Il tema, 駅前の店は, va all'inizio."
+        "en": "パン屋 (\"bakery\") is a noun, so \"is not\" after it is ではない, at the very end. もう with a negative means \"no longer\": もうパン屋ではない = \"is no longer a bakery\". The topic, 駅前の店は, comes first. \"もう駅前の店はパン屋ではない\" is also correct: like a time word, もう can also open the sentence. パン屋ではない always stays together at the end.",
+        "it": "パン屋 («panetteria») è un nome, quindi dopo di lui «non è» si dice ではない, proprio alla fine. もう con una negazione significa «non più»: もうパン屋ではない = «non è più una panetteria». Il tema, 駅前の店は, va all'inizio. Va bene anche «もう駅前の店はパン屋ではない»: come una parola di tempo, もう può anche aprire la frase. パン屋ではない resta sempre unito, in fondo."
       }
     },
     {
@@ -553,8 +554,8 @@
       ],
       "answer": ["このレストランは", "あまり", "高くない"],
       "explanation": {
-        "en": "高い (\"is expensive\") is an い-adjective, so \"is not expensive\" is 高くない: the final い becomes く before ない. あまり before a negative softens it: あまり高くない = \"not very expensive\". The adjective goes last, like a verb.",
-        "it": "高い («è caro») è un aggettivo in い, quindi «non è caro» è 高くない: la い finale diventa く davanti a ない. あまり davanti a una negazione la attenua: あまり高くない = «non molto caro». L'aggettivo va alla fine, come un verbo."
+        "en": "高い (\"is expensive\") is an い-adjective, so \"is not expensive\" is 高くない: the final い becomes く before ない. あまり goes right before a negative and softens it: あまり高くない = \"not very expensive\". The adjective goes last, like a verb.",
+        "it": "高い («è caro») è un aggettivo in い, quindi «non è caro» è 高くない: la い finale diventa く davanti a ない. あまり si mette subito prima di una negazione e la attenua: あまり高くない = «non molto caro». L'aggettivo va alla fine, come un verbo."
       }
     },
     {

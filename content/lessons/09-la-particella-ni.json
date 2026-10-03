@@ -29,10 +29,10 @@
         { "text": "行く", "reading": "いく", "meaning": { "en": "go", "it": "vado" } }
       ],
       "answer": ["図書館に", "本を", "借りに", "行く"],
-      "alsoAccepted": [["本を", "借りに", "図書館に", "行く"]],
+      "alsoAccepted": [["本を", "借りに", "図書館に", "行く"], ["本を", "図書館に", "借りに", "行く"]],
       "explanation": {
-        "en": "There are two に here: 図書館に says where you go, 借りに says why you go. For the purpose, take the i-stem of the verb (the form used before ます: 借ります → 借り) and add に. Then comes a verb of movement, like 行く (\"to go\"). \"本を借りに図書館に行く\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places. 本を moves together with 借りに, though: it is the book you borrow, so it goes right before 借りに.",
-        "it": "Qui ci sono due に: 図書館に dice dove si va, 借りに dice perché si va. Per lo scopo si prende il radicale in i del verbo (la forma che si usa davanti a ます: 借ります → 借り) e si aggiunge に. Poi viene un verbo di movimento, come 行く («andare»). Va bene anche «本を借りに図書館に行く»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto. 本を però si sposta insieme a 借りに: è il libro che prendi in prestito, quindi sta subito prima di 借りに."
+        "en": "There are two に here: 図書館に says where you go, 借りに says why you go. For the purpose, take the i-stem of the verb (the form used before ます: 借ります → 借り) and add に. Then comes a verb of movement, like 行く (\"to go\"). \"本を借りに図書館に行く\" and \"本を図書館に借りに行く\" are also correct: the verb has to stay at the end, and before it these pieces can change places. Only 本を must come before 借りに, never after it: it is the book you borrow.",
+        "it": "Qui ci sono due に: 図書館に dice dove si va, 借りに dice perché si va. Per lo scopo si prende il radicale in i del verbo (la forma che si usa davanti a ます: 借ります → 借り) e si aggiunge に. Poi viene un verbo di movimento, come 行く («andare»). Vanno bene anche «本を借りに図書館に行く» e «本を図書館に借りに行く»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto. Solo 本を deve venire prima di 借りに, mai dopo: è il libro che prendi in prestito."
       }
     },
     {
@@ -443,8 +443,8 @@
       "answer": ["空港まで", "祖父を", "迎えに", "行った"],
       "alsoAccepted": [["祖父を", "迎えに", "空港まで", "行った"], ["祖父を", "空港まで", "迎えに", "行った"]],
       "explanation": {
-        "en": "迎えに gives the purpose, \"to pick up\": the i-stem of 迎える (the form used before ます: 迎えます → 迎え) + に. A verb of movement follows at the end: 迎えに行った = \"went to pick up\". \"祖父を迎えに空港まで行った\" and \"祖父を空港まで迎えに行った\" are also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
-        "it": "迎えに indica lo scopo, «a prendere»: il radicale in i di 迎える (la forma usata davanti a ます: 迎えます → 迎え) + に. Alla fine segue un verbo di movimento: 迎えに行った = «sono andato a prendere». Vanno bene anche «祖父を迎えに空港まで行った» e «祖父を空港まで迎えに行った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+        "en": "迎えに gives the purpose, \"to pick up\": the i-stem of 迎える (the form used before ます: 迎えます → 迎え) + に. A verb of movement follows at the end: 迎えに行った = \"went to pick up\". \"祖父を迎えに空港まで行った\" and \"祖父を空港まで迎えに行った\" are also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places. 祖父を, though, always comes before 迎えに: he is the person you go to pick up.",
+        "it": "迎えに indica lo scopo, «a prendere»: il radicale in i di 迎える (la forma usata davanti a ます: 迎えます → 迎え) + に. Alla fine segue un verbo di movimento: 迎えに行った = «sono andato a prendere». Vanno bene anche «祖父を迎えに空港まで行った» e «祖父を空港まで迎えに行った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto. 祖父を però viene sempre prima di 迎えに: è la persona che vai a prendere."
       }
     },
     {
@@ -652,8 +652,8 @@
       ],
       "answer": ["信号が", "青に", "なった"],
       "explanation": {
-        "en": "What something becomes takes に before なる (\"to become\"): 青になった = \"turned green\". Here 青 is used as a noun, the colour itself (in Japanese the green of a traffic light is called 青, \"blue\"). The subject (信号が) comes first and なった goes last.",
-        "it": "Ciò che una cosa diventa prende に davanti a なる («diventare»): 青になった = «è diventato verde». Qui 青 si usa come nome, il colore stesso (in giapponese il verde del semaforo si chiama 青, «blu»). Il soggetto (信号が) va all'inizio e なった alla fine."
+        "en": "What something becomes takes に before なる (\"to become\"): 青になった = \"turned green\". Here 青 is used as a noun, the colour itself (in Japanese the green of a traffic light is called 青, \"blue\"). The subject (信号が) comes first and なった goes last. 青に stays right before なった, because it is what the light becomes.",
+        "it": "Ciò che una cosa diventa prende に davanti a なる («diventare»): 青になった = «è diventato verde». Qui 青 si usa come nome, il colore stesso (in giapponese il verde del semaforo si chiama 青, «blu»). Il soggetto (信号が) va all'inizio e なった alla fine. 青に sta subito prima di なった, perché è ciò che diventa il semaforo."
       }
     },
     {
@@ -731,9 +731,10 @@
         { "text": "飛んでいく", "reading": "とんでいく", "meaning": { "en": "fly away", "it": "volano via" } }
       ],
       "answer": ["鳥が", "南へ", "飛んでいく"],
+      "alsoAccepted": [["南へ", "鳥が", "飛んでいく"]],
       "explanation": {
-        "en": "へ (read え) marks the direction of a movement: 南へ = \"towards the south\". It fits well here because the birds are heading that way, not arriving at a precise place. The subject (鳥が) comes first and the verb last.",
-        "it": "へ (si legge え) indica la direzione di un movimento: 南へ = «verso sud». Qui è adatta perché gli uccelli vanno in quella direzione, non arrivano in un posto preciso. Il soggetto (鳥が) va all'inizio e il verbo alla fine."
+        "en": "へ (read え) marks the direction of a movement: 南へ = \"towards the south\". It fits well here because the birds are heading that way, not arriving at a precise place. The verb goes last. \"南へ鳥が飛んでいく\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "へ (si legge え) indica la direzione di un movimento: 南へ = «verso sud». Qui è adatta perché gli uccelli vanno in quella direzione, non arrivano in un posto preciso. Il verbo va alla fine. Va bene anche «南へ鳥が飛んでいく»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {

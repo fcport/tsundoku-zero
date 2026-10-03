@@ -160,8 +160,8 @@
       "answer": "を",
       "distractors": ["が", "で"],
       "explanation": {
-        "en": "窓 (window) is the thing being opened, so it is the object and takes を. With が the window would become the subject, the one doing the opening. The real subject, the person who opens it, is a zero pronoun: not written but understood (\"I\").",
-        "it": "窓 (finestra) è la cosa che viene aperta, quindi è l'oggetto e prende を. Con が la finestra diventerebbe il soggetto, cioè chi apre. Il vero soggetto, la persona che apre, è un pronome zero: non è scritto ma è sottinteso («io»)."
+        "en": "窓 (window) is the thing being opened, so it is the object and takes を. With が the window would become the subject, the one doing the opening. で marks a place or a means (\"at\", \"with\"), not the thing being opened. The real subject, the person who opens it, is a zero pronoun: not written but understood (\"I\").",
+        "it": "窓 (finestra) è la cosa che viene aperta, quindi è l'oggetto e prende を. Con が la finestra diventerebbe il soggetto, cioè chi apre. で indica un luogo o un mezzo («in», «con»), non la cosa che si apre. Il vero soggetto, la persona che apre, è un pronome zero: non è scritto ma è sottinteso («io»)."
       }
     },
     {
@@ -212,8 +212,8 @@
       "answer": "を",
       "distractors": ["が", "に"],
       "explanation": {
-        "en": "The face is the thing being washed, so it takes を, the particle of the object. The one who washes is not written: it is a zero pronoun, understood from the context (here, the speaker). With が, the face itself would be doing the washing, which makes no sense.",
-        "it": "La faccia è la cosa che viene lavata, quindi prende を, la particella dell'oggetto. Chi lava non è scritto: è un pronome zero, sottinteso dal contesto (qui, chi parla). Con が sarebbe la faccia stessa a lavare, e non ha senso."
+        "en": "The face is the thing being washed, so it takes を, the particle of the object. The one who washes is not written: it is a zero pronoun, understood from the context (here, the speaker). With が, the face itself would be doing the washing, which makes no sense. に marks where something ends up (\"to\", \"into\"), not the thing you wash.",
+        "it": "La faccia è la cosa che viene lavata, quindi prende を, la particella dell'oggetto. Chi lava non è scritto: è un pronome zero, sottinteso dal contesto (qui, chi parla). Con が sarebbe la faccia stessa a lavare, e non ha senso. に indica dove va a finire qualcosa («a», «in»), non la cosa che si lava."
       }
     },
     {

@@ -56,8 +56,8 @@
       ],
       "answer": ["昨日", "買った", "傘が", "壊れた"],
       "explanation": {
-        "en": "A verb can describe a noun too: put it right before the noun. 昨日買った傘 = \"the umbrella (I) bought yesterday\". Japanese needs no word for \"that\" or \"which\": the position is enough.",
-        "it": "Anche un verbo può descrivere un nome: basta metterlo subito prima del nome. 昨日買った傘 = «l'ombrello (che) ho comprato ieri». Il giapponese non ha bisogno di una parola per «che»: basta la posizione."
+        "en": "A verb can describe a noun too: put it right before the noun. 昨日買った傘 = \"the umbrella (I) bought yesterday\". Japanese needs no word for \"that\" or \"which\": the position is enough. 昨日 stays right before 買った because it says when you bought it: before 壊れた it would mean the umbrella broke yesterday.",
+        "it": "Anche un verbo può descrivere un nome: basta metterlo subito prima del nome. 昨日買った傘 = «l'ombrello (che) ho comprato ieri». Il giapponese non ha bisogno di una parola per «che»: basta la posizione. 昨日 sta subito prima di 買った perché dice quando l'hai comprato: prima di 壊れた vorrebbe dire che si è rotto ieri."
       }
     },
     {
@@ -344,8 +344,8 @@
       ],
       "answer": ["窓から", "見える", "山は", "きれいだ"],
       "explanation": {
-        "en": "窓から見える (can be seen from the window) is a whole little sentence placed before 山 (mountain) to describe it: \"the mountain that can be seen from the window\". Then は marks what we talk about, and きれいだ (is beautiful) closes the sentence.",
-        "it": "窓から見える (si vede dalla finestra) è una piccola frase intera messa davanti a 山 (montagna) per descriverla: «la montagna che si vede dalla finestra». Poi は indica di cosa si parla, e きれいだ (è bella) chiude la frase."
+        "en": "窓から見える (can be seen from the window) is a whole little sentence placed before 山 (mountain) to describe it: \"the mountain that can be seen from the window\". 窓から stays right before 見える: it is from the window that you see it. Then は marks what we talk about, and きれいだ (is beautiful) closes the sentence.",
+        "it": "窓から見える (si vede dalla finestra) è una piccola frase intera messa davanti a 山 (montagna) per descriverla: «la montagna che si vede dalla finestra». 窓から sta subito prima di 見える: è dalla finestra che la vedi. Poi は indica di cosa si parla, e きれいだ (è bella) chiude la frase."
       }
     },
     {
@@ -427,9 +427,10 @@
         { "text": "走っている", "reading": "はしっている", "meaning": { "en": "is running", "it": "sta correndo" } }
       ],
       "answer": ["元気な", "子犬が", "庭を", "走っている"],
+      "alsoAccepted": [["庭を", "元気な", "子犬が", "走っている"]],
       "explanation": {
-        "en": "元気 (lively, full of energy) is a な-adjective (an adjective that needs な before a noun), so: 元気な子犬, \"a lively puppy\". 元気な must stay right before 子犬. Then 庭を (around the garden) and the verb 走っている (is running) at the end.",
-        "it": "元気 (vivace, pieno di energia) è un aggettivo in な (un aggettivo che vuole な davanti a un nome), quindi: 元気な子犬, «un cucciolo vivace». 元気な deve stare subito prima di 子犬. Poi 庭を (per il giardino) e il verbo 走っている (sta correndo) in fondo."
+        "en": "元気 (lively, full of energy) is a な-adjective (an adjective that needs な before a noun), so: 元気な子犬, \"a lively puppy\". 元気な must stay right before 子犬. Then 庭を (around the garden) and the verb 走っている (is running) at the end. \"庭を元気な子犬が走っている\" is also correct: 庭を can come first, as long as 元気な子犬 stays together.",
+        "it": "元気 (vivace, pieno di energia) è un aggettivo in な (un aggettivo che vuole な davanti a un nome), quindi: 元気な子犬, «un cucciolo vivace». 元気な deve stare subito prima di 子犬. Poi 庭を (per il giardino) e il verbo 走っている (sta correndo) in fondo. Va bene anche «庭を元気な子犬が走っている»: 庭を può venire per primo, basta che 元気な子犬 resti unito."
       }
     },
     {

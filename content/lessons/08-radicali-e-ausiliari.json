@@ -183,8 +183,8 @@
       ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select まれた. The passive (\"something is done to someone\") adds れる to the verb with its last kana changed to the a-sound: 盗む → 盗ま + れる; in the past, 盗まれた. The person it happened to (\"me\") is understood and not said.",
-        "it": "Seleziona まれた. Il passivo («qualcosa viene fatto a qualcuno») aggiunge れる al verbo con l'ultimo kana cambiato nel suono a: 盗む → 盗ま + れる; al passato, 盗まれた. Chi l'ha subito («io») è sottinteso e non si dice."
+        "en": "Select まれた. The passive (\"something is done to someone\") adds れる to the verb with its last kana changed to the a-sound: 盗む → 盗ま + れる; in the past, 盗まれた. So the part you select starts with ま, the changed last kana of 盗む, followed by れた. The person it happened to (\"me\") is understood and not said.",
+        "it": "Seleziona まれた. Il passivo («qualcosa viene fatto a qualcuno») aggiunge れる al verbo con l'ultimo kana cambiato nel suono a: 盗む → 盗ま + れる; al passato, 盗まれた. Per questo la parte da selezionare comincia con ま, l'ultimo kana di 盗む cambiato, seguito da れた. Chi l'ha subito («io») è sottinteso e non si dice."
       }
     },
     {
@@ -613,9 +613,10 @@
         { "text": "かまれた", "meaning": { "en": "got bitten", "it": "è stata morsa" } }
       ],
       "answer": ["隣の犬に", "手を", "かまれた"],
+      "alsoAccepted": [["手を", "隣の犬に", "かまれた"]],
       "explanation": {
-        "en": "かまれた is the passive of かむ (\"to bite\"): the last kana changes to the a-sound and れる is added, かむ → かま + れる; in the past, かまれた. In a passive sentence the one who does the action takes に: 隣の犬に = \"by the neighbours' dog\". The person it happened to (\"me\") is understood.",
-        "it": "かまれた è il passivo di かむ («mordere»): l'ultimo kana passa al suono a e si aggiunge れる, かむ → かま + れる; al passato, かまれた. In una frase passiva chi fa l'azione prende に: 隣の犬に = «dal cane dei vicini». Chi l'ha subita («io») è sottinteso."
+        "en": "かまれた is the passive of かむ (\"to bite\"): the last kana changes to the a-sound and れる is added, かむ → かま + れる; in the past, かまれた. In a passive sentence the one who does the action takes に: 隣の犬に = \"by the neighbours' dog\". The person it happened to (\"me\") is understood. \"手を隣の犬にかまれた\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "かまれた è il passivo di かむ («mordere»): l'ultimo kana passa al suono a e si aggiunge れる, かむ → かま + れる; al passato, かまれた. In una frase passiva chi fa l'azione prende に: 隣の犬に = «dal cane dei vicini». Chi l'ha subita («io») è sottinteso. Va bene anche «手を隣の犬にかまれた»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {

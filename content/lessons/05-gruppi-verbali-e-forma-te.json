@@ -292,8 +292,8 @@
       ],
       "answer": ["本を", "読んで", "寝た"],
       "explanation": {
-        "en": "The te-form (the form ending in て or で) joins two actions: \"I did this, and then that\". 読む ends in む, so it becomes 読んで. Only the last verb, 寝た, says that everything is in the past.",
-        "it": "La forma in て (la forma che finisce in て o で) unisce due azioni: «ho fatto questo, e poi quello». 読む finisce in む, quindi diventa 読んで. Solo l'ultimo verbo, 寝た, dice che tutto è al passato."
+        "en": "The te-form (the form ending in て or で) joins two actions: \"I did this, and then that\". 読む ends in む, so it becomes 読んで. Only the last verb, 寝た, says that everything is in the past. 本を stays right before 読んで: the book is what you read.",
+        "it": "La forma in て (la forma che finisce in て o で) unisce due azioni: «ho fatto questo, e poi quello». 読む finisce in む, quindi diventa 読んで. Solo l'ultimo verbo, 寝た, dice che tutto è al passato. 本を sta subito prima di 読んで: è il libro che leggi."
       }
     },
     {
@@ -344,8 +344,8 @@
       ],
       "answer": ["朝", "起きて", "顔を", "洗った"],
       "explanation": {
-        "en": "Two verbs from two different groups. 起きる (to get up) is ichidan (it simply drops る): 起きて. 洗う (to wash) is godan (its last syllable changes): う becomes a small っ, so 洗った. The te-form (the form ending in て) 起きて says \"I got up, and then\", so it comes before 顔を洗った.",
-        "it": "Due verbi di due gruppi diversi. 起きる (alzarsi) è ichidan (toglie semplicemente る): 起きて. 洗う (lavare) è godan (cambia l'ultima sillaba): う diventa una piccola っ, quindi 洗った. La forma in て (la forma che finisce in て) 起きて dice «mi sono alzato, e poi», quindi viene prima di 顔を洗った."
+        "en": "Two verbs from two different groups. 起きる (to get up) is ichidan (it simply drops る): 起きて. 洗う (to wash) is godan (its last syllable changes): う becomes a small っ, so 洗った. The te-form (the form ending in て) 起きて says \"I got up, and then\", so it comes before 顔を洗った. 顔を stays right before 洗った: the face is what you wash.",
+        "it": "Due verbi di due gruppi diversi. 起きる (alzarsi) è ichidan (toglie semplicemente る): 起きて. 洗う (lavare) è godan (cambia l'ultima sillaba): う diventa una piccola っ, quindi 洗った. La forma in て (la forma che finisce in て) 起きて dice «mi sono alzato, e poi», quindi viene prima di 顔を洗った. 顔を sta subito prima di 洗った: è la faccia che lavi."
       }
     },
     {
@@ -370,8 +370,8 @@
       ],
       "answer": ["夕方", "犬の散歩を", "した"],
       "explanation": {
-        "en": "する (to do) is one of the only two irregular verbs, together with 来る: its past is simply した. 犬の散歩をする literally means \"to do the dog's walk\". The time word 夕方 (evening) goes first with no particle, and した goes last.",
-        "it": "する (fare) è uno dei soli due verbi irregolari, insieme a 来る: il suo passato è semplicemente した. 犬の散歩をする vuol dire alla lettera «fare la passeggiata del cane». La parola di tempo 夕方 (tardo pomeriggio) va per prima senza particella, e した va in fondo."
+        "en": "する (to do) is one of the only two irregular verbs, together with 来る: its past is simply した. 犬の散歩をする literally means \"to do the dog's walk\". The time word 夕方 (evening) goes first with no particle, and した goes last, right after 犬の散歩を: the two belong together.",
+        "it": "する (fare) è uno dei soli due verbi irregolari, insieme a 来る: il suo passato è semplicemente した. 犬の散歩をする vuol dire alla lettera «fare la passeggiata del cane». La parola di tempo 夕方 (tardo pomeriggio) va per prima senza particella, e した va in fondo, subito dopo 犬の散歩を: i due pezzi vanno insieme."
       }
     }
   ]

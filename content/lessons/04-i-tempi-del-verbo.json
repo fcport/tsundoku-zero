@@ -144,8 +144,8 @@
       "answer": ["先週", "新しい", "靴を", "買った"],
       "alsoAccepted": [["新しい", "靴を", "先週", "買った"]],
       "explanation": {
-        "en": "The time word 先週 (last week) goes first, with no particle. Then \"new shoes\" + を (the particle that marks what you buy), then the verb at the end. 買う → 買った (bought). \"新しい靴を先週買った\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
-        "it": "La parola di tempo 先週 (la settimana scorsa) va per prima, senza particella. Poi «scarpe nuove» + を (la particella che indica cosa compri), poi il verbo in fondo. 買う → 買った (ho comprato). Va bene anche «新しい靴を先週買った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+        "en": "The time word 先週 (last week) usually goes first, with no particle. Then \"new shoes\" + を (the particle that marks what you buy), then the verb at the end. 買う → 買った (bought). \"新しい靴を先週買った\" is also correct: the verb stays at the end, and 先週 can move. 新しい, though, always stays right before 靴を, because it describes the shoes.",
+        "it": "La parola di tempo 先週 (la settimana scorsa) di solito va per prima, senza particella. Poi «scarpe nuove» + を (la particella che indica cosa compri), poi il verbo in fondo. 買う → 買った (ho comprato). Va bene anche «新しい靴を先週買った»: il verbo resta in fondo, e 先週 può spostarsi. 新しい invece sta sempre subito prima di 靴を, perché descrive le scarpe."
       }
     },
     {
@@ -255,8 +255,8 @@
       "answer": ["毎朝", "コーヒーを", "飲む"],
       "alsoAccepted": [["コーヒーを", "毎朝", "飲む"]],
       "explanation": {
-        "en": "For a habit, use the non-past: the verb exactly as a dictionary lists it, 飲む, \"I drink\". 毎朝 (every morning) takes no に and goes first; the verb always comes last. \"コーヒーを毎朝飲む\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
-        "it": "Per un'abitudine si usa il non passato: il verbo così come lo trovi sul dizionario, 飲む, «bevo». 毎朝 (ogni mattina) non prende に e va per primo; il verbo sta sempre in fondo. Va bene anche «コーヒーを毎朝飲む»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+        "en": "For a habit, use the non-past: the verb exactly as a dictionary lists it, 飲む, \"I drink\". 毎朝 (every morning) takes no に and usually goes first; the verb always comes last. \"コーヒーを毎朝飲む\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "Per un'abitudine si usa il non passato: il verbo così come lo trovi sul dizionario, 飲む, «bevo». 毎朝 (ogni mattina) non prende に e di solito va per primo; il verbo sta sempre in fondo. Va bene anche «コーヒーを毎朝飲む»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -476,10 +476,10 @@
         { "text": "焼いている", "reading": "やいている", "meaning": { "en": "is grilling", "it": "sta cuocendo alla griglia" } }
       ],
       "answer": ["シェフが", "台所で", "魚を", "焼いている"],
-      "alsoAccepted": [["シェフが", "魚を", "台所で", "焼いている"]],
+      "alsoAccepted": [["シェフが", "魚を", "台所で", "焼いている"], ["台所で", "シェフが", "魚を", "焼いている"]],
       "explanation": {
-        "en": "焼く (to grill) ends in く, so its te-form (the form ending in て) is 焼いて; adding いる gives 焼いている, \"is grilling\". The one doing it comes first with が, the verb goes last. \"シェフが魚を台所で焼いている\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
-        "it": "焼く (cuocere alla griglia) finisce in く, quindi la sua forma in て (la forma che finisce in て) è 焼いて; aggiungendo いる si ottiene 焼いている, «sta cuocendo». Chi lo fa viene per primo con が, il verbo va in fondo. Va bene anche «シェフが魚を台所で焼いている»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+        "en": "焼く (to grill) ends in く, so its te-form (the form ending in て) is 焼いて; adding いる gives 焼いている, \"is grilling\". The one doing it usually comes first with が, the verb goes last. \"シェフが魚を台所で焼いている\" and \"台所でシェフが魚を焼いている\" are also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "焼く (cuocere alla griglia) finisce in く, quindi la sua forma in て (la forma che finisce in て) è 焼いて; aggiungendo いる si ottiene 焼いている, «sta cuocendo». Chi lo fa di solito viene per primo con が, il verbo va in fondo. Vanno bene anche «シェフが魚を台所で焼いている» e «台所でシェフが魚を焼いている»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -592,10 +592,10 @@
         { "text": "撮った", "reading": "とった", "meaning": { "en": "took (a photo)", "it": "ho fatto (una foto)" } }
       ],
       "answer": ["おととい", "海で", "写真を", "撮った"],
-      "alsoAccepted": [["おととい", "写真を", "海で", "撮った"]],
+      "alsoAccepted": [["おととい", "写真を", "海で", "撮った"], ["海で", "おととい", "写真を", "撮った"]],
       "explanation": {
-        "en": "撮る (to take a photo) ends in る and makes its past with a small っ: 撮る → 撮った. The time word おととい (the day before yesterday) goes first with no particle, and the verb goes last. \"おととい写真を海で撮った\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
-        "it": "撮る (fotografare) finisce in る e fa il passato con una piccola っ: 撮る → 撮った. La parola di tempo おととい (l'altro ieri) va per prima senza particella, e il verbo va in fondo. Va bene anche «おととい写真を海で撮った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+        "en": "撮る (to take a photo) ends in る and makes its past with a small っ: 撮る → 撮った. The time word おととい (the day before yesterday) usually goes first with no particle, and the verb goes last. \"おととい写真を海で撮った\" and \"海でおととい写真を撮った\" are also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "撮る (fotografare) finisce in る e fa il passato con una piccola っ: 撮る → 撮った. La parola di tempo おととい (l'altro ieri) di solito va per prima senza particella, e il verbo va in fondo. Vanno bene anche «おととい写真を海で撮った» e «海でおととい写真を撮った»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {

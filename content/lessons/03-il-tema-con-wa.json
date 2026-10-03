@@ -63,8 +63,8 @@
       "kind": "assemble",
       "grammarPoint": "「は」が示す主題",
       "prompt": {
-        "en": "Build: \"I drink coffee every day.\" Start with the topic.",
-        "it": "Componi: «Bevo caffè ogni giorno.» Comincia dal tema."
+        "en": "Build: \"I drink coffee every day.\"",
+        "it": "Componi: «Bevo caffè ogni giorno.»"
       },
       "sentence": {
         "kanji": "私は毎日コーヒーを飲む",
@@ -266,9 +266,10 @@
         { "text": "入った", "reading": "はいった", "meaning": { "en": "went in", "it": "è entrato" } }
       ],
       "answer": ["子どもが", "部屋に", "入った"],
+      "alsoAccepted": [["部屋に", "子どもが", "入った"]],
       "explanation": {
-        "en": "が marks the subject, the one who moves (子ども, child). に marks the destination, the place where the movement ends (部屋, room). The verb 入った (went in) comes last.",
-        "it": "が segna il soggetto, chi si muove (子ども, il bambino). に segna la destinazione, il luogo in cui finisce lo spostamento (部屋, la stanza). Il verbo 入った (è entrato) va alla fine."
+        "en": "が marks the subject, the one who moves (子ども, child). に marks the destination, the place where the movement ends (部屋, room). The verb 入った (went in) comes last. \"部屋に子どもが入った\" is also correct: the particles show the roles, so the place can come first.",
+        "it": "が segna il soggetto, chi si muove (子ども, il bambino). に segna la destinazione, il luogo in cui finisce lo spostamento (部屋, la stanza). Il verbo 入った (è entrato) va alla fine. Va bene anche «部屋に子どもが入った»: i ruoli li danno le particelle, quindi il luogo può venire per primo."
       }
     },
     {

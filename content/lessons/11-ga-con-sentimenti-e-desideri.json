@@ -81,8 +81,8 @@
       ],
       "answer": ["新しい", "自転車が", "ほしい"],
       "explanation": {
-        "en": "ほしい (\"wanted\") ends in い: it is an い-adjective (a describing word ending in い), not a verb. So the thing you want takes が: 自転車がほしい. If no one else is named, the wish is the speaker's: \"I want\".",
-        "it": "ほしい («desiderato») finisce in い: è un aggettivo in い (una parola che descrive e finisce in い), non un verbo. Per questo la cosa che vuoi prende が: 自転車がほしい. Se non si nomina nessun altro, il desiderio è di chi parla: «voglio»."
+        "en": "ほしい (\"wanted\") ends in い: it is an い-adjective (a describing word ending in い), not a verb. So the thing you want takes が: 自転車がほしい. If no one else is named, the wish is the speaker's: \"I want\". 新しい, \"new\", goes right before the noun it describes: 新しい自転車.",
+        "it": "ほしい («desiderato») finisce in い: è un aggettivo in い (una parola che descrive e finisce in い), non un verbo. Per questo la cosa che vuoi prende が: 自転車がほしい. Se non si nomina nessun altro, il desiderio è di chi parla: «voglio». 新しい, «nuova», va subito prima del nome che descrive: 新しい自転車."
       }
     },
     {
@@ -245,8 +245,8 @@
       "answer": ["私は", "日本語が", "少し", "分かる"],
       "alsoAccepted": [["私は", "少し", "日本語が", "分かる"]],
       "explanation": {
-        "en": "分かる (\"understand\") describes a state, so what is understood takes が, not を: 日本語が分かる. 私は is the topic, the person the sentence is about. 少し, \"a little\", goes right before the verb it describes. \"私は少し日本語が分かる\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
-        "it": "分かる («capire») descrive uno stato, quindi ciò che si capisce prende が, non を: 日本語が分かる. 私は è il tema, la persona di cui parla la frase. 少し, «un po'», va subito prima del verbo che descrive. Va bene anche «私は少し日本語が分かる»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
+        "en": "分かる (\"understand\") describes a state, so what is understood takes が, not を: 日本語が分かる. 私は is the topic, the person the sentence is about. 少し, \"a little\", says how much you understand: it can go right before 分かる or before 日本語が. \"私は少し日本語が分かる\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "分かる («capire») descrive uno stato, quindi ciò che si capisce prende が, non を: 日本語が分かる. 私は è il tema, la persona di cui parla la frase. 少し, «un po'», dice quanto capisci: può andare subito prima di 分かる oppure prima di 日本語が. Va bene anche «私は少し日本語が分かる»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
@@ -460,9 +460,10 @@
         { "text": "入りたがっている", "reading": "はいりたがっている", "meaning": { "en": "want to get in (as seen from outside)", "it": "vogliono entrare (visto da fuori)" } }
       ],
       "answer": ["子どもたちが", "プールに", "入りたがっている"],
+      "alsoAccepted": [["プールに", "子どもたちが", "入りたがっている"]],
       "explanation": {
-        "en": "入りたい would be the speaker's own wish, \"I want to get in\". For the children, たい drops its い and takes がる: 入りたがる, here as 入りたがっている, what they are showing right now. The place you enter takes に: プールに.",
-        "it": "入りたい sarebbe il desiderio di chi parla, «voglio entrare». Per i bambini, たい perde la い e prende がる: 入りたがる, qui 入りたがっている, ciò che stanno mostrando adesso. Il luogo in cui si entra prende に: プールに."
+        "en": "入りたい would be the speaker's own wish, \"I want to get in\". For the children, たい drops its い and takes がる: 入りたがる, here as 入りたがっている, what they are showing right now. The place you enter takes に: プールに. \"プールに子どもたちが入りたがっている\" is also correct: in Japanese the verb has to stay at the end, but before it these pieces can change places.",
+        "it": "入りたい sarebbe il desiderio di chi parla, «voglio entrare». Per i bambini, たい perde la い e prende がる: 入りたがる, qui 入りたがっている, ciò che stanno mostrando adesso. Il luogo in cui si entra prende に: プールに. Va bene anche «プールに子どもたちが入りたがっている»: in giapponese conta che il verbo resti in fondo, e prima del verbo questi pezzi possono cambiare posto."
       }
     },
     {
