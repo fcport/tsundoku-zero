@@ -397,6 +397,13 @@ export const it = {
       label: 'Lezioni nuove al giorno',
       option: '{{value}} al giorno',
     },
+    // L'audio della frase che parte da solo a risposta data (salvato su questo
+    // dispositivo). Nessun `!`, nessuna emoji.
+    autoplayAudio: {
+      label: 'Audio automatico dopo la risposta',
+      off: 'Spento',
+      on: 'Acceso',
+    },
   },
   account: {
     delete: {

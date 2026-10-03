@@ -91,6 +91,13 @@ describe('SettingsScreen — resa in inglese', () => {
     expect(markup).toContain(en.settings.lessonsPerDay.label);
   });
 
+  it('rende la scelta dell audio automatico, spento di predefinito', () => {
+    const markup = render(seededClient(DEFAULT_LESSONS_PER_DAY));
+    expect(markup).toContain(en.settings.autoplayAudio.label);
+    expect(markup).toMatch(new RegExp(`aria-pressed="true"[^>]*>${en.settings.autoplayAudio.off}<`));
+    expect(markup).toMatch(new RegExp(`aria-pressed="false"[^>]*>${en.settings.autoplayAudio.on}<`));
+  });
+
   it('è un <section> (non un <main>): preserva il single-main', () => {
     const markup = render(seededClient(DEFAULT_LESSONS_PER_DAY));
     expect(markup).toContain('<section');
@@ -102,14 +109,14 @@ describe('SettingsScreen — resa in inglese', () => {
     expect(markup).not.toContain('location.reload');
   });
 
-  it('AC4 — contiene ESATTAMENTE due gruppi role="group" (lingua e tetto)', () => {
+  it('AC4 — contiene ESATTAMENTE tre gruppi role="group" (lingua, tetto, audio)', () => {
     // La cancellazione account resta la sua <section> separata (1.10) nella shell:
-    // qui, dentro la <section> Impostazioni, esattamente due role="group". I
+    // qui, dentro la <section> Impostazioni, esattamente tre role="group". I
     // collegamenti alla privacy (7.1) e ai riconoscimenti (7.2) vivono FUORI dai
-    // gruppi, quindi il conteggio resta 2.
+    // gruppi, quindi il conteggio resta 3.
     const markup = render(seededClient(DEFAULT_LESSONS_PER_DAY));
     const groups = markup.match(/role="group"/g) ?? [];
-    expect(groups.length).toBe(2);
+    expect(groups.length).toBe(3);
   });
 
   it('7.1 — contiene il collegamento alla privacy policy (legal.privacy.linkLabel)', () => {

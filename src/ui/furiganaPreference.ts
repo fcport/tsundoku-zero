@@ -9,6 +9,9 @@
 // - «Traduzioni» (predefinito: spento). Acceso, sotto il giapponese compare la sua
 //   traduzione nella lingua dell'interfaccia; il giapponese resta sempre.
 //
+// - «Audio automatico» (predefinito: spento, si sceglie in Impostazioni). Acceso,
+//   a risposta data la frase si sente da sola, senza premere «Ascolta la frase».
+//
 // Ogni preferenza è uno store zustand, così il dorso e le schermate leggono lo
 // stesso valore.
 import { useSyncExternalStore } from 'react';
@@ -16,6 +19,7 @@ import { create, type StoreApi, type UseBoundStore } from 'zustand';
 
 export const FURIGANA_STORAGE_KEY = 'tsundoku.showFurigana';
 export const TRANSLATIONS_STORAGE_KEY = 'tsundoku.showTranslations';
+export const AUTOPLAY_AUDIO_STORAGE_KEY = 'tsundoku.autoplayAudio';
 
 /**
  * Legge una preferenza salvata: `"true"`/`"false"`; qualunque altro valore, o
@@ -71,6 +75,7 @@ function createTogglePreference(key: string, fallback: boolean): TogglePreferenc
 
 export const useFuriganaPreference = createTogglePreference(FURIGANA_STORAGE_KEY, true);
 export const useTranslationPreference = createTogglePreference(TRANSLATIONS_STORAGE_KEY, false);
+export const useAutoplayAudioPreference = createTogglePreference(AUTOPLAY_AUDIO_STORAGE_KEY, false);
 
 /**
  * Se la preferenza è accesa. Come l'hook zustand, ma il render statico (SSR, test)

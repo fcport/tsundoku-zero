@@ -398,6 +398,13 @@ export const en = {
       label: 'New lessons per day',
       option: '{{value}} per day',
     },
+    // L'audio della frase che parte da solo a risposta data (salvato su questo
+    // dispositivo). Nessun `!`, nessuna emoji; ASCII.
+    autoplayAudio: {
+      label: 'Autoplay audio on response',
+      off: 'Off',
+      on: 'On',
+    },
   },
   account: {
     delete: {

@@ -16,8 +16,10 @@
 // Il secondo gruppo (storia 3.17) è il tetto giornaliero di sblocco: legge il
 // valore corrente dalla STESSA chiave `['lessonsPerDay', userId]` della dashboard
 // (un cambio qui si riflette subito nel cancello, `setQueryData` ottimistico) e lo
-// persiste via `changeLessonsPerDay`. La <section> contiene ESATTAMENTE due gruppi
-// (`role="group"`): lingua e tetto; la cancellazione account resta la sua
+// persiste via `changeLessonsPerDay`. Il terzo gruppo è l'audio automatico dopo la
+// risposta, salvato su questo dispositivo come Furigana e Traduzioni. La <section>
+// contiene ESATTAMENTE tre gruppi (`role="group"`): lingua, tetto e audio; la
+// cancellazione account resta la sua
 // <section> separata (1.10, invariata) nella shell.
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -32,6 +34,8 @@ import { changeLocale } from './changeLocale';
 import { LessonsPerDayOptions } from './LessonsPerDayOptions';
 import { changeLessonsPerDay } from './changeLessonsPerDay';
 import { SCREEN_TITLE } from '../../ui/magazine';
+import { useAutoplayAudioPreference, usePreferenceShown } from '../../ui/furiganaPreference';
+import { AutoplayAudioOptions } from './AutoplayAudioOptions';
 
 // ANELLO DI FOCUS visibile: lo STESSO token degli interattivi delle schermate-rotta
 // (`StatsScreen`, `PrivacyScreen`). `focus-visible:` mostra l'anello solo per
@@ -84,6 +88,7 @@ export function SettingsScreen({
     queryFn: () => settings.loadLessonsPerDay(),
   });
   const currentLessonsPerDay = lessonsPerDayQ.data ?? DEFAULT_LESSONS_PER_DAY;
+  const autoplayAudio = usePreferenceShown(useAutoplayAudioPreference);
 
   return (
     <section
@@ -115,9 +120,13 @@ export function SettingsScreen({
           })
         }
       />
+      <AutoplayAudioOptions
+        current={autoplayAudio}
+        onSelect={(value) => useAutoplayAudioPreference.getState().setShow(value)}
+      />
       {/* Il collegamento alla privacy policy (7.1): un'affordance SECONDARIA
-          (button, idioma del repo) DENTRO la <section> ma FUORI dai due
-          `role="group"` (lingua e tetto), cosi il conteggio dei gruppi resta 2.
+          (button, idioma del repo) DENTRO la <section> ma FUORI dai tre
+          `role="group"` (lingua, tetto e audio), cosi il conteggio resta 3.
           -> `onViewPrivacy` (cablato in AuthenticatedShell). */}
       <div className="flex flex-col border-t-[1.5px] border-border-strong">
       <button
@@ -129,8 +138,8 @@ export function SettingsScreen({
       </button>
       {/* Il collegamento ai riconoscimenti (7.2): gemello di quello alla privacy,
           un'affordance SECONDARIA (button, idioma del repo) DENTRO la <section> ma
-          FUORI dai due `role="group"` (lingua e tetto), cosi il conteggio dei gruppi
-          resta 2. -> `onViewAcknowledgements` (cablato in AuthenticatedShell). */}
+          FUORI dai tre `role="group"` (lingua, tetto e audio), cosi il conteggio dei gruppi
+          resta 3. -> `onViewAcknowledgements` (cablato in AuthenticatedShell). */}
       <button
         type="button"
         onClick={onViewAcknowledgements}
