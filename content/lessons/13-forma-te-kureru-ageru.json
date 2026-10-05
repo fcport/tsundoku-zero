@@ -147,26 +147,26 @@
       "kind": "assemble",
       "grammarPoint": "恩恵を受ける「てくれる」",
       "prompt": {
-        "en": "Build: \"My older brother was busy and didn't help me.\"",
-        "it": "Componi: «Mio fratello maggiore era impegnato e non mi ha aiutato.»"
+        "en": "Build: \"My older sister took a photo for me.\"",
+        "it": "Componi: «Mia sorella maggiore mi ha fatto una foto.»"
       },
       "sentence": {
-        "kanji": "兄は忙しくて手伝ってくれなかった",
-        "kana": "あにはいそがしくててつだってくれなかった"
+        "kanji": "姉が写真を撮ってくれた",
+        "kana": "あねがしゃしんをとってくれた"
       },
       "translation": {
-        "en": "My older brother was busy and didn't help me.",
-        "it": "Mio fratello maggiore era impegnato e non mi ha aiutato."
+        "en": "My older sister took a photo for me.",
+        "it": "Mia sorella maggiore mi ha fatto una foto."
       },
       "glosses": [
-        { "text": "兄は", "reading": "あには", "meaning": { "en": "older brother (topic)", "it": "fratello maggiore (tema)" } },
-        { "text": "忙しくて", "reading": "いそがしくて", "meaning": { "en": "was busy, and so", "it": "era impegnato, e quindi" } },
-        { "text": "手伝ってくれなかった", "reading": "てつだってくれなかった", "meaning": { "en": "didn't help me", "it": "non mi ha aiutato" } }
+        { "text": "姉が", "reading": "あねが", "meaning": { "en": "my older sister (が: the subject)", "it": "mia sorella maggiore (が: il soggetto)" } },
+        { "text": "写真を", "reading": "しゃしんを", "meaning": { "en": "a photo (を: the object)", "it": "una foto (を: l'oggetto)" } },
+        { "text": "撮ってくれた", "reading": "とってくれた", "meaning": { "en": "took (for me)", "it": "ha scattato (per me)" } }
       ],
-      "answer": ["兄は", "忙しくて", "手伝ってくれなかった"],
+      "answer": ["姉が", "写真を", "撮ってくれた"],
       "explanation": {
-        "en": "い-adjectives (describing words ending in い) have a te-form too: 忙しい → 忙しくて, here meaning \"was busy, so…\". 手伝ってくれなかった is the negative past of てくれる: \"didn't help me\". The tense at the very end covers both parts.",
-        "it": "Anche gli aggettivi in い (parole che descrivono e finiscono in い) hanno una forma in て: 忙しい → 忙しくて, qui «era impegnato, quindi…». 手伝ってくれなかった è il passato negativo di てくれる: «non mi ha aiutato». Il tempo in fondo alla frase vale per entrambe le parti."
+        "en": "撮ってくれた = 撮って, the te-form of 撮る (\"to take a photo\"), + くれた: my sister did it for me. くれる says the favour comes to the speaker, so \"for me\" is not said. The one doing the favour takes が and comes first; 写真を stays right before 撮ってくれた, because the photo is what she takes.",
+        "it": "撮ってくれた = 撮って, la forma in て di 撮る («fotografare»), + くれた: mia sorella l'ha fatto per me. くれる dice che il favore arriva a chi parla, quindi «per me» non si dice. Chi fa il favore prende が e va per primo; 写真を sta subito prima di 撮ってくれた, perché è la foto che scatta."
       }
     },
     {
