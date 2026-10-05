@@ -61,6 +61,7 @@ import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
 import { ArrowIcon, ExternalIcon } from '../../ui/icons';
+import { REPO_URL } from '../about/links';
 import { exercisesQueryKey } from '../study/exercisesQueryKey';
 import {
   activeExercisesQueryKey,
@@ -540,8 +541,9 @@ export function DashboardScreen({
           </button>
 
           {/* I collegamenti di servizio: le statistiche (5.1, callback cablata dal
-              livello app, AD-1) e il video di riferimento della lezione in corso, un
-              vero <a> perché punta FUORI dall'app (apre YouTube, niente embed). */}
+              livello app, AD-1), il video di riferimento della lezione in corso e il
+              codice su GitHub, veri <a> perché puntano FUORI dall'app (YouTube senza
+              embed, GitHub). */}
           <div className="flex flex-wrap gap-x-5 gap-y-3 p-4 sm:p-6">
             <button type="button" onClick={onViewStats} className={SERVICE_LINK}>
               {t('dashboard.viewStats')}
@@ -559,6 +561,9 @@ export function DashboardScreen({
                 {t('dashboard.referenceVideo')} <ExternalIcon />
               </a>
             ) : null}
+            <a href={REPO_URL} target="_blank" rel="noreferrer" className={SERVICE_LINK}>
+              {t('about.repoShortLabel')} <ExternalIcon />
+            </a>
           </div>
         </div>
       </div>

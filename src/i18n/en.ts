@@ -506,6 +506,8 @@ export const en = {
     siteLabel: 'My site: federicocasadei.dev',
     githubLabel: 'My GitHub profile',
     repoLabel: 'The code of this site on GitHub',
+    // The short link to the code, among the service links of sign-in and dashboard.
+    repoShortLabel: 'Code on GitHub',
     back: 'Back',
   },
 } as const;

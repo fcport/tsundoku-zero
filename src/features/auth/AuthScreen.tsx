@@ -18,6 +18,8 @@ import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { FOCUS_RING, KICKER } from '../../ui/magazine';
+import { ExternalIcon } from '../../ui/icons';
+import { REPO_URL } from '../about/links';
 import type { AuthGateway } from '../../domain/ports/authGateway';
 import { AuthForm, type AuthFormValues } from './AuthForm';
 import { applyAuthOutcome } from './authOutcome';
@@ -98,7 +100,7 @@ export function AuthScreen({
             .finally(() => setPending(false));
         }}
       />
-      {/* I due collegamenti legali, affiancati sotto un filetto. */}
+      {/* I collegamenti di servizio, affiancati sotto un filetto. */}
       <div className="flex flex-wrap gap-x-6 gap-y-2 border-t-[1.5px] border-border-strong pt-4">
         {/* «Come funziona?» per primo: è la domanda di chi non conosce il sito. */}
         <button
@@ -130,6 +132,15 @@ export function AuthScreen({
         >
           {t('legal.acknowledgements.linkLabel')}
         </button>
+        {/* Il codice del sito: un vero <a>, punta fuori dall'app. */}
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noreferrer"
+          className={`inline-flex min-h-[44px] items-center gap-1 text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
+        >
+          {t('about.repoShortLabel')} <ExternalIcon />
+        </a>
       </div>
     </main>
     </MagazineFrame>

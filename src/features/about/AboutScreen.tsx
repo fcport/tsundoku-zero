@@ -10,6 +10,7 @@ import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { FOCUS_RING, KICKER, SCREEN_TITLE } from '../../ui/magazine';
+import { AUTHOR_LINKS } from './links';
 
 export interface AboutScreenProps {
   /** Il ritorno: autenticato → dashboard, anonimo → accesso (cablato in AppRoutes). */
@@ -17,13 +18,6 @@ export interface AboutScreenProps {
 }
 
 const MOE_GUIDE_URL = 'https://learnjapanese.moe/routine/';
-
-// Chi scrive il sito: il sito personale, il profilo GitHub e il codice del progetto.
-const AUTHOR_LINKS = [
-  ['siteLabel', 'https://federicocasadei.dev'],
-  ['githubLabel', 'https://github.com/fcport'],
-  ['repoLabel', 'https://github.com/fcport/tsundoku-zero'],
-] as const;
 
 // Ogni sezione si apre con un filetto e un occhiello, come le colonne della rivista.
 const SECTION = 'flex flex-col gap-3 border-t-[1.5px] border-border-strong pt-4';

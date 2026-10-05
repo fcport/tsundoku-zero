@@ -497,6 +497,8 @@ export const it = {
     siteLabel: 'Il mio sito: federicocasadei.dev',
     githubLabel: 'Il mio profilo GitHub',
     repoLabel: 'Il codice di questo sito su GitHub',
+    // Il link breve al codice, fra i link di servizio di accesso e dashboard.
+    repoShortLabel: 'Codice su GitHub',
     back: 'Indietro',
   },
 } as const;
