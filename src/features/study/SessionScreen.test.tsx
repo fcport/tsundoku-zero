@@ -213,7 +213,7 @@ describe('AC1/AC2/AC5 — store + esercizi seminati ⇒ card dell esercizio CORR
   });
 });
 
-describe('3.23 — il <main> compone il contenitore responsive condiviso + thumb-zone', () => {
+describe('3.23 — il <main> compone il contenitore responsive condiviso, ancorato in basso', () => {
   function setup(): string {
     seedStore(['ex-1', 'ex-2']);
     const qc = seededClient(
@@ -238,14 +238,15 @@ describe('3.23 — il <main> compone il contenitore responsive condiviso + thumb
     expect(markup).toMatch(/<main[^>]*class="[^"]*sm:px-gutter-desktop[^"]*"/);
   });
 
-  it('AC7 — sotto 640px il <main> è alto quanto il viewport e ancora in basso (thumb-zone)', () => {
+  it('AC7 — sotto 640px il <main> è alto quanto il viewport piccolo e ancora in basso', () => {
     const markup = setup();
-    // Alto quanto il viewport sotto 640px (min-h-screen) → altezza minima da 640px.
-    expect(markup).toMatch(/<main[^>]*class="[^"]*min-h-screen[^"]*"/);
-    // Il blocco interattivo è spinto verso il basso (justify-end) e il padding
-    // inferiore è la thumb-zone (120px): l'ultimo bersaglio cade entro 120px dal fondo.
+    // Alto quanto il viewport PICCOLO sotto 640px (min-h-svh: con la barra del
+    // browser visibile) → altezza minima da 640px.
+    expect(markup).toMatch(/<main[^>]*class="[^"]*min-h-svh[^"]*"/);
+    // Il blocco interattivo è spinto verso il basso (justify-end), con spaziature
+    // strette perché il quiz stia in uno schermo di telefono.
     expect(markup).toMatch(/<main[^>]*class="[^"]*justify-end[^"]*"/);
-    expect(markup).toMatch(/<main[^>]*class="[^"]*pb-thumb-zone[^"]*"/);
+    expect(markup).toMatch(/<main[^>]*class="[^"]*gap-4[^"]*"/);
     // Da 640px ricentra (sm:justify-center): la centratura è invariata (AC6).
     expect(markup).toMatch(/<main[^>]*class="[^"]*sm:justify-center[^"]*"/);
   });
@@ -257,7 +258,7 @@ describe('3.23 — il <main> compone il contenitore responsive condiviso + thumb
       'max-w-measure',
       'px-gutter-mobile',
       'sm:px-gutter-desktop',
-      'pb-thumb-zone',
+      'min-h-svh',
     ]) {
       expect(skeleton).toContain(klass);
       expect(loaded).toContain(klass);

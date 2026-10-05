@@ -159,9 +159,9 @@ export function ExerciseCard({
 
   return (
     // `w-full` sulla CARD (3.23): l'`<article>` è un figlio flex del `<main>`
-    // `items-center`, che gli darebbe larghezza AUTO (max-content). `p-4 sm:p-6`:
-    // padding ridotto sotto 640px perché la frase più lunga stia in ≤3 righe.
-    <article className="w-full flex flex-col items-center gap-6 border-y-[1.5px] border-border-strong py-5 sm:py-6">
+    // `items-center`, che gli darebbe larghezza AUTO (max-content). Spaziature
+    // strette sotto 640px: domanda e opzioni devono stare in uno schermo.
+    <article className="w-full flex flex-col items-center gap-4 border-y-[1.5px] border-border-strong py-4 sm:gap-6 sm:py-6">
       {/* La consegna (come si risponde, per tipo) sopra la domanda vera. */}
       <div className="flex w-full flex-col gap-2">
         <p className="text-label text-ink-secondary">{t(PROMPT_KEY[exercise.kind])}</p>
@@ -200,11 +200,11 @@ export function ExerciseCard({
       {view.kind === 'hidden' && (
         // Riordino: la frase si compone qui, tessera dopo tessera, invece di essere
         // mostrata già fatta sopra le tessere.
-        <div className="flex w-full flex-col items-center gap-2">
+        <div className="flex w-full flex-col items-center gap-1 sm:gap-2">
           <span className="text-caption text-ink-muted">{t('session.assembled.label')}</span>
           <p
             lang="ja"
-            className="min-h-[3rem] w-full border-[1.5px] border-dashed border-border-strong bg-surface-raised p-3 text-center text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary"
+            className="min-h-[3rem] w-full border-[1.5px] border-dashed border-border-strong bg-surface-raised p-2 text-center sm:p-3 text-sentence-hero-mobile sm:text-sentence-hero text-ink-primary"
           >
             {selected.length > 0 ? (
               selected.map((i) => options[i]).join('')
@@ -220,7 +220,7 @@ export function ExerciseCard({
         <Translation
           text={sentenceTranslation.text}
           lang={sentenceTranslation.language}
-          className="-mt-3 block w-full text-center text-body italic text-ink-secondary"
+          className="-mt-2 block w-full text-center text-body italic text-ink-secondary sm:-mt-3"
         />
       )}
 
@@ -232,7 +232,7 @@ export function ExerciseCard({
           disabled e porta un badge d'ordine. Risposta data: tutti disabled, e
           l'opzione giusta e quella scelta sbagliata sono DICHIARATE in testo, non
           solo col colore. min-h-[56px] su ciascuna. */}
-      <ul className="flex w-full flex-col gap-3">
+      <ul className="flex w-full flex-col gap-2 sm:gap-3">
         {options.map((option, i) => {
           const orderPosition = selected.indexOf(i) + 1;
           const isChosen = orderPosition > 0;
@@ -259,7 +259,7 @@ export function ExerciseCard({
                 aria-pressed={isChosen}
                 disabled={isDisabled}
                 onClick={isDisabled ? undefined : () => onSelect(i)}
-                className={`flex min-h-[56px] w-full items-center gap-4 border-[1.5px] px-4 py-3 text-left ${tone} ${FOCUS_RING}`}
+                className={`flex min-h-[56px] w-full items-center gap-4 border-[1.5px] px-4 py-2 text-left sm:py-3 ${tone} ${FOCUS_RING}`}
               >
                 {/* Il numero del tasto (1–9): decorativo, fuori dal nome accessibile. */}
                 <span aria-hidden="true" className="font-mono text-label-caps opacity-60">

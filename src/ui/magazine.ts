@@ -38,6 +38,13 @@ export const KICKER = 'font-mono text-label-caps uppercase text-ink-secondary';
 export const ACTION_BAR = `flex min-h-[72px] w-full items-center justify-between gap-4 bg-ink-primary px-5 text-left text-[28px] leading-none text-surface-base *:transition-transform hover:[&>svg]:translate-x-1.5 sm:min-h-[88px] sm:px-8 sm:text-[34px] ${HEADLINE} ${FOCUS_RING}`;
 
 /**
+ * «Prossimo esercizio» nei quiz: la barra d'azione, che sotto 640px resta attaccata
+ * al fondo dello schermo mentre si legge la spiegazione (niente scroll per andare
+ * avanti). Da 640px torna al suo posto, in fila col resto.
+ */
+export const NEXT_BAR = `${ACTION_BAR} sticky bottom-0 z-10 sm:static`;
+
+/**
  * Il link di SERVIZIO: testo sottolineato, piccolo, senza riempimento. Chiaramente
  * non la barra d'azione.
  */

@@ -153,6 +153,8 @@ function html(): string {
 
 beforeEach(async () => {
   await i18n.changeLanguage('en');
+  // «Prossimo» riporta la pagina in cima: jsdom non implementa lo scroll.
+  vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
   // Store SEMINATO: `start` di produzione è un effetto guardato; qui seminiamo lo
   // store direttamente così la corrente parte da ex-1 (2 esercizi in coda).
   useSessionStore.setState({
@@ -176,6 +178,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  vi.restoreAllMocks();
   act(() => root.unmount());
   container.remove();
   await i18n.changeLanguage('en');

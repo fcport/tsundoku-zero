@@ -22,8 +22,8 @@ import { resolveLocale, useTranslation } from '../../i18n';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { Masthead } from '../../ui/Masthead';
 import { ArrowIcon } from '../../ui/icons';
-import { ACTION_BAR, FOCUS_RING, KICKER } from '../../ui/magazine';
-import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { ACTION_BAR, FOCUS_RING, KICKER, NEXT_BAR } from '../../ui/magazine';
+import { QUIZ_MAIN, scrollToTop } from '../../ui/layout';
 import { useFuriganaPreference, usePreferenceShown } from '../../ui/furiganaPreference';
 import { usePorts } from '../ports/PortsContext';
 import { ExerciseCard } from '../study/ExerciseCard';
@@ -39,9 +39,9 @@ export interface LessonPracticeScreenProps {
   readonly random?: () => number;
 }
 
-// Lo stesso <main> della sessione: colonna centrata, blocco interattivo nella zona
-// del pollice sotto 640px.
-const MAIN_CLASS = `min-h-screen sm:min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-center justify-end gap-6 pt-6 pb-thumb-zone sm:justify-center sm:py-6`;
+// Lo stesso <main> della sessione (`QUIZ_MAIN`): colonna centrata, blocco
+// interattivo verso il pollice e tutto il quiz in uno schermo sotto 640px.
+const MAIN_CLASS = QUIZ_MAIN;
 
 // Come nella sessione: `Enter` su un controllo nativo lo attiva già.
 function isInteractiveTarget(target: EventTarget | null): boolean {
@@ -144,6 +144,7 @@ function PracticeContent({ userId, lessonId, onExit, random = Math.random }: Les
   };
 
   const onNext = () => {
+    scrollToTop();
     setSelected([]);
     setAnswered(false);
     setCorrect(null);
@@ -266,10 +267,10 @@ function PracticeContent({ userId, lessonId, onExit, random = Math.random }: Les
     <main className={MAIN_CLASS}>
       <div className="mb-auto w-full sm:mb-0">
         {heading}
-        <div className="mb-3 mt-4 flex items-end justify-between">
+        <div className="mb-2 mt-3 flex items-end justify-between sm:mb-3 sm:mt-4">
           <p aria-hidden="true" className="leading-none">
             <span className={`block ${KICKER}`}>{t('session.questionKicker')}</span>
-            <span className="text-[64px] font-black leading-[0.85] font-stretch-extra-condensed text-ink-primary">
+            <span className="text-[44px] font-black leading-[0.85] font-stretch-extra-condensed text-ink-primary sm:text-[64px]">
               {String(position + 1).padStart(2, '0')}
             </span>
           </p>
@@ -294,7 +295,7 @@ function PracticeContent({ userId, lessonId, onExit, random = Math.random }: Les
         furigana={showFurigana}
       />
       {answered && (
-        <button type="button" onClick={onNext} className={ACTION_BAR}>
+        <button type="button" onClick={onNext} className={NEXT_BAR}>
           <span>{t('session.next')}</span>
           <ArrowIcon className="text-accent-on-ink" />
         </button>

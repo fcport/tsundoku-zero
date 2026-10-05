@@ -106,6 +106,8 @@ function keyFor(exercise: Exercise, option: string): string {
 
 beforeEach(async () => {
   await i18n.changeLanguage('it');
+  // «Prossimo» riporta la pagina in cima: jsdom non implementa lo scroll.
+  vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
   applyReview = vi.fn(async () => {});
   unlockLesson = vi.fn(async () => {});
   listExercisesByLesson = vi.fn(async () => EXERCISES);
@@ -117,6 +119,7 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+  vi.restoreAllMocks();
   act(() => root.unmount());
   container.remove();
 });

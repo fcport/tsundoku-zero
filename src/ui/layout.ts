@@ -31,3 +31,21 @@
  */
 export const RESPONSIVE_CONTAINER =
   'mx-auto w-full max-w-measure px-gutter-mobile sm:px-gutter-desktop';
+
+/**
+ * Il `<main>` dei QUIZ (sessione e ripasso di una lezione), condiviso così le due
+ * schermate non divergono. Sotto 640px è alto quanto il viewport PICCOLO (`svh`,
+ * con la barra del browser visibile: `vh` è quello grande e spingeva le opzioni
+ * sotto il bordo) e spinge il blocco interattivo in basso, verso il pollice, con
+ * spaziature strette: domanda e opzioni devono stare in uno schermo di telefono
+ * senza scorrere. Da 640px torna centrato con le spaziature larghe.
+ */
+export const QUIZ_MAIN = `min-h-svh sm:min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-center justify-end gap-4 pt-4 pb-4 sm:justify-center sm:gap-6 sm:py-6`;
+
+/**
+ * Riporta la pagina in cima: al passaggio all'esercizio seguente, che altrimenti
+ * su telefono si apriva scorso in basso, dov'era il «Prossimo esercizio».
+ */
+export function scrollToTop(): void {
+  window.scrollTo({ top: 0 });
+}

@@ -44,7 +44,7 @@
 //
 // RESPONSIVE (3.23): il <main> compone il contenitore condiviso di `src/ui/layout.ts`
 // (colonna singola centrata, `measure`, gutter 20/32px) e ancora il blocco interattivo
-// nella thumb-zone sotto 640px (vedi `MAIN_CLASS`). FUORI SCOPE: l'anello di focus
+// in basso sotto 640px (vedi `MAIN_CLASS`). FUORI SCOPE: l'anello di focus
 // app-wide su auth/settings/shell (DW-10) e l'audit con screen reader reale NVDA/
 // VoiceOver (7.6).
 import { useEffect, useRef, useState } from 'react';
@@ -59,9 +59,9 @@ import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
 import { streak } from '../../domain/streak';
 import { resolveLocale, useTranslation } from '../../i18n';
-import { RESPONSIVE_CONTAINER } from '../../ui/layout';
+import { QUIZ_MAIN, scrollToTop } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
-import { ACTION_BAR, KICKER } from '../../ui/magazine';
+import { ACTION_BAR, KICKER, NEXT_BAR } from '../../ui/magazine';
 import { ArrowIcon } from '../../ui/icons';
 import { usePorts } from '../ports/PortsContext';
 import { exercisesQueryKey } from './exercisesQueryKey';
@@ -91,24 +91,13 @@ export interface SessionScreenProps {
   readonly onExit: () => void;
 }
 
-// Altezza CONDIVISA fra scheletro, stato neutro e card: la stessa classe sul <main>
-// nei vari rami evita salti di layout (stesso pattern della dashboard). Una sola
-// definizione così i rami non divergono. Sotto 640px il <main> è alto QUANTO IL
-// VIEWPORT (`min-h-screen`) così il blocco interattivo può cadere nella thumb-zone
-// (vedi `MAIN_CLASS`); da 640px torna all'altezza minima condivisa (`sm:min-h-[24rem]`),
-// centrata come le altre schermate.
-const CONTAINER_HEIGHT = 'min-h-screen sm:min-h-[24rem]';
-
-// La classe CONDIVISA del <main> della sessione (3.23): l'altezza condivisa PIÙ il
-// contenitore responsive di `src/ui/layout.ts` (colonna singola centrata, `measure`,
-// gutter 20/32px) PIÙ l'ANCORAGGIO alla thumb-zone sotto 640px. `flex flex-col`:
-// sotto 640px `justify-end` spinge il contenuto (card + opzioni) verso il basso e
-// `pb-thumb-zone` (padding inferiore 120px) garantisce che l'ULTIMO bersaglio opzione
-// cada entro 120px dal bordo inferiore del viewport (AC7, UX-DR36/UJ-1: una mano, in
-// alto la frase, in basso i bersagli). Da 640px `sm:justify-center` ricentra e
-// `sm:pb-6` ripristina il padding simmetrico: la centratura è invariata (AC6). Una
-// sola definizione, composta in TUTTI i rami <main> così non divergono.
-const MAIN_CLASS = `${CONTAINER_HEIGHT} ${RESPONSIVE_CONTAINER} flex flex-col items-center justify-end gap-6 pt-6 pb-thumb-zone sm:justify-center sm:py-6`;
+// La classe CONDIVISA del <main> della sessione (3.23, rivista il 05-10-2026): la
+// stessa in TUTTI i rami (scheletro, stato neutro, card, completamento), così non
+// divergono e non c'è salto di layout. È `QUIZ_MAIN` di `src/ui/layout.ts`, in
+// comune col ripasso di una lezione: contenitore responsive, sotto 640px alto
+// quanto il viewport e ancorato in basso verso il pollice, con spaziature strette
+// perché domanda e opzioni stiano in uno schermo di telefono; da 640px centrato.
+const MAIN_CLASS = QUIZ_MAIN;
 
 // ANELLO DI FOCUS visibile (3.22, AC5): una sola definizione condivisa dagli
 // interattivi della SESSIONE (qui: «prossimo esercizio», «esci»; la card riusa lo
@@ -455,6 +444,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
 
   const onNext = () => {
     commitPending(false);
+    scrollToTop();
     setEasyChoice(null);
     setAnsweredId(null);
     setSelected([]);
@@ -596,10 +586,10 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
             dell'esercizio in corso, enorme e condensato, poi la barra. Il numero è
             decorativo (`aria-hidden`): l'avanzamento per l'AT lo portano la barra
             (`role="progressbar"`) e la live region. */}
-        <div className="mb-3 flex items-end justify-between">
+        <div className="mb-2 flex items-end justify-between sm:mb-3">
           <p aria-hidden="true" className="leading-none">
             <span className={`block ${KICKER}`}>{t('session.questionKicker')}</span>
-            <span className="text-[64px] font-black leading-[0.85] font-stretch-extra-condensed text-ink-primary">
+            <span className="text-[44px] font-black leading-[0.85] font-stretch-extra-condensed text-ink-primary sm:text-[64px]">
               {String(Math.max(1, Math.min(answered ? completed : completed + 1, total))).padStart(2, '0')}
             </span>
           </p>
@@ -641,7 +631,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
         </div>
       )}
       {answered && (
-        <button type="button" onClick={onNext} className={ACTION_BAR}>
+        <button type="button" onClick={onNext} className={NEXT_BAR}>
           <span>{t('session.next')}</span>
           <ArrowIcon className="text-accent-on-ink" />
         </button>
