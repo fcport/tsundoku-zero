@@ -178,13 +178,13 @@
         "it": "Mi hanno rubato il portafoglio."
       },
       "glosses": [
-        { "text": "財布を盗", "reading": "さいふをぬす", "meaning": { "en": "the wallet (を: the object) + steal (first part)", "it": "il portafoglio (を: l'oggetto) + rubare (prima parte)" } },
-        { "text": "まれた", "meaning": { "en": "was …-en (passive, past)", "it": "è stato … (passivo, passato)" } }
+        { "text": "財布を盗ま", "reading": "さいふをぬすま", "meaning": { "en": "the wallet (を: the object) + 盗ま, 盗む with its last kana in the a-sound", "it": "il portafoglio (を: l'oggetto) + 盗ま, 盗む con l'ultimo kana nel suono a" } },
+        { "text": "れた", "meaning": { "en": "was …-en (passive, past)", "it": "è stato … (passivo, passato)" } }
       ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select まれた. The passive (\"something is done to someone\") adds れる to the verb with its last kana changed to the a-sound: 盗む → 盗ま + れる; in the past, 盗まれた. So the part you select starts with ま, the changed last kana of 盗む, followed by れた. The person it happened to (\"me\") is understood and not said.",
-        "it": "Seleziona まれた. Il passivo («qualcosa viene fatto a qualcuno») aggiunge れる al verbo con l'ultimo kana cambiato nel suono a: 盗む → 盗ま + れる; al passato, 盗まれた. Per questo la parte da selezionare comincia con ま, l'ultimo kana di 盗む cambiato, seguito da れた. Chi l'ha subito («io») è sottinteso e non si dice."
+        "en": "Select れた. The passive (\"something is done to someone\") adds れる to the verb with its last kana changed to the a-sound: 盗む → 盗ま + れる; in the past, 盗まれた. The person it happened to (\"me\") is understood and not said.",
+        "it": "Seleziona れた. Il passivo («qualcosa viene fatto a qualcuno») aggiunge れる al verbo con l'ultimo kana cambiato nel suono a: 盗む → 盗ま + れる; al passato, 盗まれた. Chi l'ha subito («io») è sottinteso e non si dice."
       }
     },
     {

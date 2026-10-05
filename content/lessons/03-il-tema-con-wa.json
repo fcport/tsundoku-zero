@@ -104,8 +104,8 @@
       },
       "glosses": [
         { "text": "ポストに", "meaning": { "en": "into the postbox (destination)", "it": "nella buca (destinazione)" } },
-        { "text": "手紙を入", "reading": "てがみをい", "meaning": { "en": "letter (object), 入 of 入れる", "it": "lettera (oggetto), 入 di 入れる" } },
-        { "text": "れた", "meaning": { "en": "rest of 入れた (past)", "it": "resto di 入れた (passato)" } }
+        { "text": "手紙を", "reading": "てがみを", "meaning": { "en": "the letter (を: the object)", "it": "la lettera (を: l'oggetto)" } },
+        { "text": "入れた", "reading": "いれた", "meaning": { "en": "put in (past)", "it": "ho messo dentro (passato)" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {

@@ -60,7 +60,8 @@ export type {
 };
 
 /**
- * Uno span sui INDICI DEI SEGMENTI di `alignFurigana()` (Epic 3): intervallo
+ * Uno span sugli INDICI DEI PEZZI della frase (`spanSegments`: le glosse, o in
+ * mancanza i segmenti di `alignFurigana()`, 05-10-2026): intervallo
  * semiaperto `[start, end)`, interi ≥ 0, `end > start`. NON sono indici di
  * carattere (AC4): `alignFurigana()` non esiste qui (è Epic 3); la validazione
  * che `end` non superi il numero di segmenti reali è controllo di CONTENUTO in

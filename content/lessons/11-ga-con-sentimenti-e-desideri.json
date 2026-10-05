@@ -102,8 +102,8 @@
       },
       "glosses": [
         { "text": "ラーメンが", "meaning": { "en": "ramen + が (what is wanted)", "it": "ramen + が (ciò che si vuole)" } },
-        { "text": "食", "reading": "た", "meaning": { "en": "eat (kanji of 食べる)", "it": "mangiare (kanji di 食べる)" } },
-        { "text": "べたい", "meaning": { "en": "rest of 食べ + たい, \"want to\"", "it": "resto di 食べ + たい, «voler fare»" } }
+        { "text": "食べ", "reading": "たべ", "meaning": { "en": "eat (食べる without る)", "it": "mangiare (食べる senza る)" } },
+        { "text": "たい", "meaning": { "en": "want to", "it": "voler fare" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
@@ -186,8 +186,7 @@
       },
       "glosses": [
         { "text": "スポーツが", "meaning": { "en": "sports + が (what is liked)", "it": "sport + が (ciò che piace)" } },
-        { "text": "好", "reading": "す", "meaning": { "en": "liked (kanji of 好き)", "it": "che piace (kanji di 好き)" } },
-        { "text": "きです", "meaning": { "en": "end of 好き + です, polite \"is\"", "it": "fine di 好き + です, «è» cortese" } }
+        { "text": "好きです", "reading": "すきです", "meaning": { "en": "is liked (polite)", "it": "piace (forma cortese)" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
@@ -293,8 +292,7 @@
       },
       "glosses": [
         { "text": "トマトが", "meaning": { "en": "tomatoes + が (what is disliked)", "it": "pomodori + が (ciò che non piace)" } },
-        { "text": "嫌", "reading": "きら", "meaning": { "en": "disliked (kanji of 嫌い)", "it": "sgradito (kanji di 嫌い)" } },
-        { "text": "いだ", "meaning": { "en": "end of 嫌い + だ, \"is\"", "it": "fine di 嫌い + だ, «è»" } }
+        { "text": "嫌いだ", "reading": "きらいだ", "meaning": { "en": "is disliked", "it": "non piace" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
@@ -404,13 +402,13 @@
       },
       "glosses": [
         { "text": "テニスを", "meaning": { "en": "tennis + を (what you start)", "it": "tennis + を (ciò che inizi)" } },
-        { "text": "始", "reading": "はじ", "meaning": { "en": "start (kanji of 始める)", "it": "iniziare (kanji di 始める)" } },
-        { "text": "めたい", "meaning": { "en": "end of 始め + たい, \"want to\"", "it": "fine di 始め + たい, «voler fare»" } }
+        { "text": "始め", "reading": "はじめ", "meaning": { "en": "start (始める without る)", "it": "iniziare (始める senza る)" } },
+        { "text": "たい", "meaning": { "en": "want to", "it": "voler fare" } }
       ],
       "answer": { "start": 2, "end": 3 },
       "explanation": {
-        "en": "Select めたい. 始める, \"start\", drops る and becomes 始め; adding たい gives 始めたい, \"I want to start\". In a statement, たい always says the speaker's own wish. Here the thing you want to start keeps を, the particle it has with 始める.",
-        "it": "Seleziona めたい. 始める, «iniziare», perde る e diventa 始め; aggiungendo たい si ottiene 始めたい, «voglio iniziare». In un'affermazione, たい dice sempre il desiderio di chi parla. Qui la cosa che vuoi iniziare tiene を, la particella che ha con 始める."
+        "en": "Select たい. 始める, \"start\", drops る and becomes 始め; adding たい gives 始めたい, \"I want to start\". In a statement, たい always says the speaker's own wish. Here the thing you want to start keeps を, the particle it has with 始める.",
+        "it": "Seleziona たい. 始める, «iniziare», perde る e diventa 始め; aggiungendo たい si ottiene 始めたい, «voglio iniziare». In un'affermazione, たい dice sempre il desiderio di chi parla. Qui la cosa che vuoi iniziare tiene を, la particella che ha con 始める."
       }
     },
     {

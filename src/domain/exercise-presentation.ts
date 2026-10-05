@@ -50,8 +50,8 @@ function orderByHash(options: readonly string[], exercise: Exercise): readonly s
  *   conteggio è `1 + |distractors|` (mai fisso).
  * - `assemble`: le tessere (`answer`) PERMUTATE per `orderByHash` — MAI in ordine
  *   di risposta, così la sequenza corretta non è regalata. Conteggio `|answer|`.
- * - `select-span`: i `text` dei segmenti di `alignFurigana(kanji, kana)` in ordine
- *   NATURALE (già deterministico, nessuna permutazione). Conteggio `|segmenti|`.
+ * - `select-span`: i pezzi della frase in ordine NATURALE (già deterministico,
+ *   nessuna permutazione), cioè `spanSegments`. Conteggio `|segmenti|`.
  */
 export function answerOptions(exercise: Exercise): readonly string[] {
   switch (exercise.kind) {
@@ -60,9 +60,7 @@ export function answerOptions(exercise: Exercise): readonly string[] {
     case 'assemble':
       return orderByHash(exercise.answer, exercise);
     case 'select-span':
-      return alignFurigana(exercise.sentence.kanji, exercise.sentence.kana).map(
-        (segment) => segment.text,
-      );
+      return spanSegments(exercise);
     default: {
       // Registro chiuso (AD-22): un kind non gestito è errore di COMPILAZIONE.
       const _exhaustive: never = exercise;
@@ -70,6 +68,32 @@ export function answerOptions(exercise: Exercise): readonly string[] {
       return [];
     }
   }
+}
+
+/**
+ * I pezzi fra cui si sceglie in un `select-span` (05-10-2026). Sono le GLOSSE,
+ * quando ricompongono esattamente la frase: le scrive chi conosce la grammatica, e
+ * tagliano dove finisce davvero un pezzo (作って|あげた, 食べ|たい). Prima i pezzi
+ * erano i segmenti della furigana, che tagliano per forza dove finisce un kanji
+ * (作|ってあげた): la divisione della furigana faceva da divisione grammaticale.
+ * Senza glosse complete si ricade su `alignFurigana` (contenuto più vecchio, le
+ * fixture); `content-validation` impone che le glosse, se ci sono, ricompongano la
+ * frase. Gli indici di `answer` contano su questa lista.
+ */
+export function spanSegments(exercise: Extract<Exercise, { kind: 'select-span' }>): readonly string[] {
+  return spanFromGlosses(exercise)
+    ? exercise.glosses!.map((gloss) => gloss.text)
+    : alignFurigana(exercise.sentence.kanji, exercise.sentence.kana).map((segment) => segment.text);
+}
+
+/** Le glosse di un `select-span` ricompongono la frase, quindi ne sono i pezzi. */
+export function spanFromGlosses(exercise: Extract<Exercise, { kind: 'select-span' }>): boolean {
+  const glosses = exercise.glosses;
+  return (
+    glosses !== undefined &&
+    glosses.length > 0 &&
+    glosses.map((gloss) => gloss.text).join('') === exercise.sentence.kanji
+  );
 }
 
 /**

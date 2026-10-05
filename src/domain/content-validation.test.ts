@@ -373,3 +373,31 @@ describe('validateLessons — gli ordini alternativi del riordino (i)', () => {
     ]);
   });
 });
+
+describe('validateLessons — select-span: le glosse sono i pezzi della frase', () => {
+  function withSpan(span: Record<string, unknown>) {
+    return { ...validLesson, exercises: [{ ...validLesson.exercises[1], ...span }] };
+  }
+
+  it('glosse che ricompongono la frase e risposta su un pezzo ⇒ nessun issue', () => {
+    const lesson = withSpan({
+      glosses: [{ text: '毎日', reading: 'まいにち' }, { text: '新聞を', reading: 'しんぶんを' }, { text: '読む', reading: 'よむ' }],
+      answer: { start: 1, end: 2 },
+    });
+    expect(validateLessons([file('01.json', lesson)])).toEqual([]);
+  });
+
+  it('glosse che non ricompongono la frase ⇒ issue sulle glosse', () => {
+    const lesson = withSpan({ glosses: [{ text: '毎日', reading: 'まいにち' }] });
+    const issues = validateLessons([file('01.json', lesson)]);
+    expect(issues.some((i) => i.path.join('.') === 'exercises.0.glosses')).toBe(true);
+  });
+
+  it('risposta su due pezzi, o oltre l’ultimo ⇒ issue sulla risposta', () => {
+    const glosses = [{ text: '毎日', reading: 'まいにち' }, { text: '新聞を', reading: 'しんぶんを' }, { text: '読む', reading: 'よむ' }];
+    for (const answer of [{ start: 0, end: 2 }, { start: 3, end: 4 }]) {
+      const issues = validateLessons([file('01.json', withSpan({ glosses, answer }))]);
+      expect(issues.some((i) => i.path.join('.') === 'exercises.0.answer')).toBe(true);
+    }
+  });
+});

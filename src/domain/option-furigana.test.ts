@@ -211,3 +211,20 @@ describe('annotateKnownKanji — le parole giapponesi dentro un testo in prosa',
     expect(show('(来) e 来年', known)).toBe('(来) e 来年[らいねん]');
   });
 });
+
+describe('optionFurigana — select-span con le glosse come pezzi', () => {
+  it('ogni pezzo prende la sua lettura, la desinenza kana nessuna', () => {
+    const ex: Exercise = {
+      kind: 'select-span',
+      grammarPoint: 'g',
+      sentence: { kanji: '母に花を買ってあげた', kana: 'ははにはなをかってあげた' },
+      answer: { start: 1, end: 2 },
+      explanation,
+      glosses: [{ text: '母に花を買って', reading: 'ははにはなをかって' }, { text: 'あげた' }],
+    };
+    const furigana = byOption(ex);
+    expect(Object.keys(furigana)).toEqual(['母に花を買って', 'あげた']);
+    expect(furigana['あげた']).toBeNull();
+    expect(furigana['母に花を買って']).toContain('買[か]');
+  });
+});

@@ -247,8 +247,8 @@
       },
       "glosses": [
         { "text": "うちに", "meaning": { "en": "(to) home", "it": "a casa" } },
-        { "text": "帰", "reading": "かえ", "meaning": { "en": "go back (first part of the verb)", "it": "tornare (prima parte del verbo)" } },
-        { "text": "りたい", "meaning": { "en": "(end of the verb) + want to", "it": "(fine del verbo) + voglio" } }
+        { "text": "帰り", "reading": "かえり", "meaning": { "en": "go back (帰る in the form used before たい)", "it": "tornare (帰る nella forma che va davanti a たい)" } },
+        { "text": "たい", "meaning": { "en": "want to", "it": "voglio" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
@@ -490,8 +490,7 @@
       },
       "glosses": [
         { "text": "ランチに", "meaning": { "en": "for lunch (the purpose)", "it": "a pranzo (lo scopo)" } },
-        { "text": "出", "reading": "で", "meaning": { "en": "go out (first part of the verb)", "it": "uscire (prima parte del verbo)" } },
-        { "text": "かけた", "meaning": { "en": "(end of the verb, past)", "it": "(fine del verbo, passato)" } }
+        { "text": "出かけた", "reading": "でかけた", "meaning": { "en": "went out", "it": "sono uscito" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {
@@ -806,8 +805,8 @@
       },
       "glosses": [
         { "text": "うしろへ", "meaning": { "en": "towards the back", "it": "verso dietro" } },
-        { "text": "下", "reading": "さ", "meaning": { "en": "move back (first part of the verb)", "it": "arretrare (prima parte del verbo)" } },
-        { "text": "がってください", "meaning": { "en": "(end of the verb) + please", "it": "(fine del verbo) + per favore" } }
+        { "text": "下がって", "reading": "さがって", "meaning": { "en": "move back (te-form of 下がる)", "it": "arretri (forma in て di 下がる)" } },
+        { "text": "ください", "meaning": { "en": "please", "it": "per favore" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {

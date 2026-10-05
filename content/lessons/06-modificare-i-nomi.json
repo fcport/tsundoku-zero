@@ -450,8 +450,8 @@
       },
       "glosses": [
         { "text": "イタリアの", "meaning": { "en": "from Italy, Italian", "it": "dell'Italia, italiana" } },
-        { "text": "車が好", "reading": "くるまがす", "meaning": { "en": "cars, liked", "it": "macchine, piacere" } },
-        { "text": "きだ", "meaning": { "en": "end of 好き + だ (is liked)", "it": "fine di 好き + だ (piace)" } }
+        { "text": "車が", "reading": "くるまが", "meaning": { "en": "cars (が: what is liked)", "it": "le macchine (が: ciò che piace)" } },
+        { "text": "好きだ", "reading": "すきだ", "meaning": { "en": "is liked", "it": "piace" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {

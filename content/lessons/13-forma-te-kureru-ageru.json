@@ -108,13 +108,13 @@
         "it": "Mio padre mi ha preparato la cena."
       },
       "glosses": [
-        { "text": "父が夕飯を作", "reading": "ちちがゆうはんをつく", "meaning": { "en": "father + が, dinner + を, first part of 作る, \"make\"", "it": "padre + が, cena + を, inizio di 作る, «preparare»" } },
-        { "text": "ってくれた", "meaning": { "en": "end of 作って + くれた, \"did for me\"", "it": "fine di 作って + くれた, «ha fatto per me»" } }
+        { "text": "父が夕飯を作って", "reading": "ちちがゆうはんをつくって", "meaning": { "en": "father + が, dinner + を, 作って (te-form of 作る, \"make\")", "it": "padre + が, cena + を, 作って (forma in て di 作る, «preparare»)" } },
+        { "text": "くれた", "meaning": { "en": "did for me", "it": "ha fatto per me" } }
       ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select ってくれた: 作って is the te-form of 作る (\"make\"), and くれた means \"did for me\". Together they say the dinner was made for the speaker, with no need for a word meaning \"for me\".",
-        "it": "Seleziona ってくれた: 作って è la forma in て di 作る («preparare»), e くれた significa «ha fatto per me». Insieme dicono che la cena è stata preparata per chi parla, senza bisogno di una parola per «per me»."
+        "en": "Select くれた, \"did for me\". It comes after 作って, the te-form of 作る (\"make\"): together they say the dinner was made for the speaker, with no need for a word meaning \"for me\".",
+        "it": "Seleziona くれた, «ha fatto per me». Viene dopo 作って, la forma in て di 作る («preparare»): insieme dicono che la cena è stata preparata per chi parla, senza bisogno di una parola per «per me»."
       }
     },
     {
@@ -243,13 +243,13 @@
         "it": "Ho comprato dei fiori per mia madre."
       },
       "glosses": [
-        { "text": "母に花を買", "reading": "ははにはなをか", "meaning": { "en": "mother + に (for whom), flowers + を, first part of 買う, \"buy\"", "it": "madre + に (per chi), fiori + を, inizio di 買う, «comprare»" } },
-        { "text": "ってあげた", "meaning": { "en": "end of 買って + あげた, \"did for someone\"", "it": "fine di 買って + あげた, «ho fatto per qualcuno»" } }
+        { "text": "母に花を買って", "reading": "ははにはなをかって", "meaning": { "en": "mother + に (for whom), flowers + を, 買って (te-form of 買う, \"buy\")", "it": "madre + に (per chi), fiori + を, 買って (forma in て di 買う, «comprare»)" } },
+        { "text": "あげた", "meaning": { "en": "did for someone", "it": "ho fatto per qualcuno" } }
       ],
       "answer": { "start": 1, "end": 2 },
       "explanation": {
-        "en": "Select ってあげた: 買って is the te-form of 買う (\"buy\"), and あげた means \"did for someone\". Together they say I bought the flowers for my mother's sake. The person who receives the favour takes に: 母に.",
-        "it": "Seleziona ってあげた: 買って è la forma in て di 買う («comprare»), e あげた significa «ho fatto per qualcuno». Insieme dicono che ho comprato i fiori per mia madre. La persona che riceve il favore prende に: 母に."
+        "en": "Select あげた, \"did for someone\". It comes after 買って, the te-form of 買う (\"buy\"): together they say I bought the flowers for my mother's sake. The person who receives the favour takes に: 母に.",
+        "it": "Seleziona あげた, «ho fatto per qualcuno». Viene dopo 買って, la forma in て di 買う («comprare»): insieme dicono che ho comprato i fiori per mia madre. La persona che riceve il favore prende に: 母に."
       }
     },
     {
@@ -381,13 +381,13 @@
       },
       "glosses": [
         { "text": "となりのおばさんがりんごを", "meaning": { "en": "the lady next door + が (who does it), apples + を", "it": "la signora accanto + が (chi lo fa), mele + を" } },
-        { "text": "分", "reading": "わ", "meaning": { "en": "share, divide (kanji of 分ける)", "it": "dividere (kanji di 分ける)" } },
-        { "text": "けてくれた", "meaning": { "en": "end of 分けて + くれた, \"did for me\"", "it": "fine di 分けて + くれた, «ha fatto per me»" } }
+        { "text": "分けて", "reading": "わけて", "meaning": { "en": "shared (te-form of 分ける)", "it": "ha diviso (forma in て di 分ける)" } },
+        { "text": "くれた", "meaning": { "en": "did for me", "it": "ha fatto per me" } }
       ],
       "answer": { "start": 2, "end": 3 },
       "explanation": {
-        "en": "Select けてくれた: 分けて is the te-form of 分ける, \"share\", and くれた means \"did for me\". So the favour comes toward the speaker, even though no word in the sentence says \"me\".",
-        "it": "Seleziona けてくれた: 分けて è la forma in て di 分ける, «dividere, condividere», e くれた significa «ha fatto per me». Quindi il favore arriva a chi parla, anche se nessuna parola della frase dice «me»."
+        "en": "Select くれた, \"did for me\". It comes after 分けて, the te-form of 分ける (\"share\"): so the favour comes toward the speaker, even though no word in the sentence says \"me\".",
+        "it": "Seleziona くれた, «ha fatto per me». Viene dopo 分けて, la forma in て di 分ける («dividere, condividere»): quindi il favore arriva a chi parla, anche se nessuna parola della frase dice «me»."
       }
     },
     {
@@ -466,13 +466,13 @@
       },
       "glosses": [
         { "text": "ルームメイトに", "meaning": { "en": "to my roommate (who receives it)", "it": "al coinquilino (chi lo riceve)" } },
-        { "text": "料理を作", "reading": "りょうりをつく", "meaning": { "en": "food + を, first part of 作る, \"make\"", "it": "cibo + を, inizio di 作る, «preparare»" } },
-        { "text": "ってあげた", "meaning": { "en": "end of 作って + あげた, \"did for someone\"", "it": "fine di 作って + あげた, «ho fatto per qualcuno»" } }
+        { "text": "料理を作って", "reading": "りょうりをつくって", "meaning": { "en": "food + を, 作って (te-form of 作る, \"make\")", "it": "cibo + を, 作って (forma in て di 作る, «preparare»)" } },
+        { "text": "あげた", "meaning": { "en": "did for someone", "it": "ho fatto per qualcuno" } }
       ],
       "answer": { "start": 2, "end": 3 },
       "explanation": {
-        "en": "Select ってあげた: 作って is the te-form of 作る, \"make\", and あげた means \"did for someone\". The person who receives the favour takes に: ルームメイトに.",
-        "it": "Seleziona ってあげた: 作って è la forma in て di 作る, «preparare», e あげた significa «ho fatto per qualcuno». La persona che riceve il favore prende に: ルームメイトに."
+        "en": "Select あげた, \"did for someone\". It comes after 作って, the te-form of 作る (\"make\"): together they say I cooked for someone else. The person who receives the favour takes に: ルームメイトに.",
+        "it": "Seleziona あげた, «ho fatto per qualcuno». Viene dopo 作って, la forma in て di 作る («preparare»): insieme dicono che ho cucinato per qualcun altro. La persona che riceve il favore prende に: ルームメイトに."
       }
     },
     {

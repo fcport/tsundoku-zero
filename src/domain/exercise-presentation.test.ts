@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   answerOptions,
+  spanSegments,
   composeResponse,
   correctOptionIndex,
   sentenceView,
@@ -235,5 +236,35 @@ describe('sentenceView — la frase non rivela la soluzione prima della risposta
   it('correctOptionIndex indica la risposta fra le opzioni permutate', () => {
     expect(answerOptions(gapped)[correctOptionIndex(gapped)!]).toBe('を');
     expect(correctOptionIndex(assemble)).toBeNull();
+  });
+});
+
+describe('spanSegments — i pezzi di un select-span vengono dalle glosse', () => {
+  const withGlosses: Exercise = {
+    kind: 'select-span',
+    grammarPoint: 'te-ageru',
+    sentence: { kanji: '料理を作ってあげた', kana: 'りょうりをつくってあげた' },
+    answer: { start: 1, end: 2 },
+    explanation: { en: 'Did it for someone.' },
+    glosses: [{ text: '料理を作って', reading: 'りょうりをつくって' }, { text: 'あげた' }],
+  };
+
+  it('glosse che ricompongono la frase ⇒ i loro testi, non i tagli della furigana', () => {
+    expect(answerOptions(withGlosses)).toEqual(['料理を作って', 'あげた']);
+    expect(spanSegments(withGlosses)).toEqual(['料理を作って', 'あげた']);
+    // La furigana invece taglierebbe dove finisce il kanji.
+    expect(alignFurigana('料理を作ってあげた', 'りょうりをつくってあげた').map((s) => s.text)).not.toEqual([
+      '料理を作って',
+      'あげた',
+    ]);
+    // La risposta si valuta su questi pezzi.
+    expect(check(withGlosses, composeResponse(withGlosses, [1])).correct).toBe(true);
+  });
+
+  it('glosse che non ricompongono la frase ⇒ si ricade sui segmenti della furigana', () => {
+    const partial = { ...withGlosses, glosses: [{ text: 'あげた' }] } as Exercise;
+    expect(answerOptions(partial)).toEqual(
+      alignFurigana('料理を作ってあげた', 'りょうりをつくってあげた').map((s) => s.text),
+    );
   });
 });

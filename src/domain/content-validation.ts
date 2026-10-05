@@ -166,6 +166,29 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
     // incerta); nella scelta singola niente `meaning`, che rivelerebbe la risposta.
     lesson.exercises.forEach((exercise, i) => {
       if (exercise.glosses === undefined) return;
+      // In un select-span le glosse SONO i pezzi fra cui si sceglie: devono
+      // ricomporre la frase, nell'ordine, senza buchi (05-10-2026).
+      if (
+        exercise.kind === 'select-span' &&
+        exercise.glosses.map((gloss) => gloss.text).join('') !== exercise.sentence.kanji
+      ) {
+        issues.push({
+          file,
+          path: ['exercises', i, 'glosses'],
+          message: 'in un select-span le glosse sono i pezzi della frase: unite, devono dare sentence.kanji',
+        });
+      }
+      // La risposta è UN pezzo esistente: la sessione ne fa scegliere uno solo.
+      if (exercise.kind === 'select-span') {
+        const { start, end } = exercise.answer;
+        if (end !== start + 1 || end > answerOptions(exercise).length) {
+          issues.push({
+            file,
+            path: ['exercises', i, 'answer'],
+            message: 'in un select-span la risposta è un solo pezzo esistente: end = start + 1, entro i pezzi',
+          });
+        }
+      }
       const options = new Set(answerOptions(exercise));
       exercise.glosses.forEach((gloss, g) => {
         const at = (field: string) => ['exercises', i, 'glosses', g, field];

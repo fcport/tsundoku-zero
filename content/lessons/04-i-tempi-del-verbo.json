@@ -646,8 +646,8 @@
       },
       "glosses": [
         { "text": "クリスマスに", "meaning": { "en": "at Christmas", "it": "a Natale" } },
-        { "text": "家族が集", "reading": "かぞくがあつ", "meaning": { "en": "the family, gather", "it": "la famiglia, riunirsi" } },
-        { "text": "まる", "meaning": { "en": "end of the verb 集まる (gets together)", "it": "fine del verbo 集まる (si riunisce)" } }
+        { "text": "家族が", "reading": "かぞくが", "meaning": { "en": "the family (が: the subject)", "it": "la famiglia (が: il soggetto)" } },
+        { "text": "集まる", "reading": "あつまる", "meaning": { "en": "gets together", "it": "si riunisce" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {

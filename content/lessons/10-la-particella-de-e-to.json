@@ -209,8 +209,8 @@
       },
       "glosses": [
         { "text": "レストランで", "meaning": { "en": "at a restaurant", "it": "al ristorante" } },
-        { "text": "晩ご飯を食", "reading": "ばんごはんをた", "meaning": { "en": "dinner (what is eaten) + first part of 食べる, \"eat\"", "it": "cena (ciò che si mangia) + inizio di 食べる, «mangiare»" } },
-        { "text": "べた", "meaning": { "en": "end of 食べた, \"ate\"", "it": "fine di 食べた, «ho mangiato»" } }
+        { "text": "晩ご飯を", "reading": "ばんごはんを", "meaning": { "en": "dinner (what is eaten)", "it": "la cena (ciò che si mangia)" } },
+        { "text": "食べた", "reading": "たべた", "meaning": { "en": "ate", "it": "ho mangiato" } }
       ],
       "answer": { "start": 0, "end": 1 },
       "explanation": {

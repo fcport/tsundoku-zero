@@ -3,8 +3,9 @@
 // sola FRASE (`sentence.kana`), non di ogni opzione: qui la si ricava, e SOLO quando
 // il ricavo è certo. Una furigana sbagliata insegna male; una furigana assente no.
 //
-// - `select-span`: le opzioni sono i segmenti di `alignFurigana` sulla frase, che
-//   portano già la loro lettura di gruppo.
+// - `select-span`: le opzioni sono i pezzi della frase (`spanSegments`): di norma le
+//   glosse, con la loro lettura scritta; si allineano alla lettura della frase come
+//   le tessere. Senza glosse, i segmenti di `alignFurigana` con la loro lettura.
 // - `assemble`: le tessere, nell'ordine della risposta, ricompongono la frase. Si
 //   allinea la sequenza delle tessere alla lettura della frase: i kana delle tessere
 //   sono ancore letterali, ogni corsa di kanji prende la lettura fra due ancore. Se
@@ -17,7 +18,7 @@
 //   kanji senza lettura nota, nessuna opzione ha furigana: altrimenti la furigana
 //   distinguerebbe la risposta giusta (presa dalla frase) dai distrattori.
 import type { Exercise } from './exercise';
-import { answerOptions } from './exercise-presentation';
+import { answerOptions, spanFromGlosses } from './exercise-presentation';
 import { alignFurigana, isKana, type FuriganaSegment } from './furigana';
 
 /** Una corsa massimale di caratteri: kana (letterale) o no (da leggere). */
@@ -275,10 +276,16 @@ function derivedOptionFurigana(
 ): readonly (readonly FuriganaSegment[] | null)[] {
   const options = answerOptions(exercise);
   switch (exercise.kind) {
-    case 'select-span':
-      return alignFurigana(exercise.sentence.kanji, exercise.sentence.kana).map((segment) =>
-        segment.ruby ? [segment] : null,
-      );
+    case 'select-span': {
+      if (!spanFromGlosses(exercise)) {
+        return alignFurigana(exercise.sentence.kanji, exercise.sentence.kana).map((segment) =>
+          segment.ruby ? [segment] : null,
+        );
+      }
+      // I pezzi ricompongono la frase, come le tessere: stesso allineamento.
+      const readings = alignTokens(options, exercise.sentence.kana);
+      return options.map((option, i) => (readings ? segmentsOf(toRuns(option), readings[i]!) : null));
+    }
     case 'assemble': {
       const tokens = exercise.answer;
       const readings =
