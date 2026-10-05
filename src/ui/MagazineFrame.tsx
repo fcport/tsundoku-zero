@@ -79,33 +79,39 @@ export function MagazineFrame({
   const Brand = brandAsHeading ? 'h1' : 'p';
   return (
     <div className="flex min-h-dvh">
-      {/* Il dorso resta fermo mentre la pagina scorre (`sticky`, alto quanto il
-          viewport). Il filetto destro è lo stesso della griglia. */}
-      <aside className="sticky top-0 flex h-dvh w-[52px] shrink-0 flex-col items-center justify-between border-r-[1.5px] border-border-strong py-5 sm:w-[72px]">
-        <Brand className="font-jp text-[20px] font-extrabold tracking-[0.2em] text-ink-primary [writing-mode:vertical-rl] sm:text-[24px]">
-          <span lang="ja">
-            <Furigana segments={BRAND} />
-          </span>
-          <span className="sr-only"> · {t('app.name')}</span>
-          {/* La traduzione del marchio, con «Traduzioni» acceso: di traverso sul
-              dorso come il marchio. */}
-          <Translation
-            text={t('app.brandMeaning')}
-            lang={resolveLocale(i18n.language)}
-            className="mt-2 block font-mono text-[11px] font-medium normal-case tracking-normal text-ink-secondary"
-          />
-        </Brand>
-        <span aria-hidden="true" className="size-3.5 rounded-full bg-accent" />
-        {furiganaToggle ? (
-          <div className="flex flex-col items-center gap-3">
-            <SpineToggle label={t('app.translationsToggle')} usePreference={useTranslationPreference} />
-            <SpineToggle label={t('app.furiganaToggle')} usePreference={useFuriganaPreference} />
-          </div>
-        ) : (
-          <div className="min-h-[1em] font-mono text-label-caps uppercase tracking-[0.08em] text-ink-primary [writing-mode:vertical-rl]">
-            {foot}
-          </div>
-        )}
+      {/* Il dorso resta fermo mentre la pagina scorre: la colonna col filetto destro
+          corre per tutta la pagina, dentro il contenuto è `sticky` e alto quanto il
+          viewport PICCOLO (`svh`, con la barra del browser visibile). Non `dvh`: su
+          telefono `dvh` cambia quando la barra compare o sparisce, ma il browser lo
+          ricalcola solo a fine scroll, e gli interruttori in fondo inseguivano la
+          pagina con un secondo di ritardo. */}
+      <aside className="w-[52px] shrink-0 border-r-[1.5px] border-border-strong sm:w-[72px]">
+        <div className="sticky top-0 flex h-svh flex-col items-center justify-between py-5">
+          <Brand className="font-jp text-[20px] font-extrabold tracking-[0.2em] text-ink-primary [writing-mode:vertical-rl] sm:text-[24px]">
+            <span lang="ja">
+              <Furigana segments={BRAND} />
+            </span>
+            <span className="sr-only"> · {t('app.name')}</span>
+            {/* La traduzione del marchio, con «Traduzioni» acceso: di traverso sul
+                dorso come il marchio. */}
+            <Translation
+              text={t('app.brandMeaning')}
+              lang={resolveLocale(i18n.language)}
+              className="mt-2 block font-mono text-[11px] font-medium normal-case tracking-normal text-ink-secondary"
+            />
+          </Brand>
+          <span aria-hidden="true" className="size-3.5 rounded-full bg-accent" />
+          {furiganaToggle ? (
+            <div className="flex flex-col items-center gap-3">
+              <SpineToggle label={t('app.translationsToggle')} usePreference={useTranslationPreference} />
+              <SpineToggle label={t('app.furiganaToggle')} usePreference={useFuriganaPreference} />
+            </div>
+          ) : (
+            <div className="min-h-[1em] font-mono text-label-caps uppercase tracking-[0.08em] text-ink-primary [writing-mode:vertical-rl]">
+              {foot}
+            </div>
+          )}
+        </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">{children}</div>
     </div>
