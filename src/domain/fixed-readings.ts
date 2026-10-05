@@ -61,6 +61,10 @@ export const GRAMMAR_POINT_READINGS: Readonly<Record<string, string | readonly F
   'て形で節をつなぐ': 'てけいでせつをつなぐ',
   '恩恵を受ける「てくれる」': 'おんけいをうける「てくれる」',
   '恩恵を与える「てあげる」': 'おんけいをあたえる「てあげる」',
+  '引用の「と」': 'いんようの「と」',
+  '連用形でつなぐ複合動詞': 'れんようけいでつなぐふくごうどうし',
+  '複合名詞の連濁': 'ふくごうめいしのれんだく',
+  '擬音語・擬態語と「と」': 'ぎおんご・ぎたいごと「と」',
 };
 
 /**
@@ -111,6 +115,10 @@ export const GRAMMAR_POINT_MEANINGS: Readonly<Record<string, BilingualText>> = {
   'て形で節をつなぐ': { en: 'Joining clauses with the te-form', it: 'Unire proposizioni con la forma in て' },
   '恩恵を受ける「てくれる」': { en: 'てくれる, receiving a favour', it: 'てくれる, ricevere un favore' },
   '恩恵を与える「てあげる」': { en: 'てあげる, doing a favour', it: 'てあげる, fare un favore' },
+  '引用の「と」': { en: 'と for quoting words and thoughts', it: 'と per citare parole e pensieri' },
+  '連用形でつなぐ複合動詞': { en: 'Two verbs joined into one', it: 'Due verbi uniti in uno' },
+  '複合名詞の連濁': { en: 'The sound change in compound nouns', it: 'Il cambio di suono nei nomi composti' },
+  '擬音語・擬態語と「と」': { en: 'Sound and manner words with と', it: 'Le parole che imitano suoni e modi, con と' },
 };
 
 /** Parole con una sola lettura, per le spiegazioni (vedi l'intestazione). */

@@ -1,0 +1,529 @@
+{
+  "order": 14,
+  "title": {
+    "en": "Quoting with と; verbs and nouns joined into one word",
+    "it": "Citare con と; verbi e nomi uniti in una parola sola"
+  },
+  "video": "7dYT6Xf1BkA",
+  "grammarPoints": ["引用の「と」", "連用形でつなぐ複合動詞", "複合名詞の連濁", "擬音語・擬態語と「と」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "\"My younger brother said: 'Tasty!'\" Which particle closes the words he said?",
+        "it": "«Mio fratello minore ha detto: “Buono!”» Quale particella chiude le parole che ha detto?"
+      },
+      "sentence": {
+        "kanji": "弟は「おいしい」と言った",
+        "kana": "おとうとは「おいしい」といった"
+      },
+      "translation": {
+        "en": "My younger brother said: \"Tasty!\"",
+        "it": "Mio fratello minore ha detto: «Buono!»"
+      },
+      "gap": {
+        "kanji": "弟は「おいしい」＿言った",
+        "kana": "おとうとは「おいしい」＿いった"
+      },
+      "answer": "と",
+      "distractors": ["が", "に", "で"],
+      "explanation": {
+        "en": "The exact words someone says are closed by と, and the verb comes after it: 「おいしい」と言った, \"said 'Tasty!'\". The brackets 「」 are only written, while と is also spoken, so it is never left out.",
+        "it": "Le parole esatte che qualcuno dice sono chiuse da と, e dopo viene il verbo: 「おいしい」と言った, «ha detto: “Buono!”». Le parentesi 「」 si scrivono soltanto, mentre と si pronuncia anche, quindi non si toglie mai."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "連用形でつなぐ複合動詞",
+      "prompt": {
+        "en": "\"Suddenly it started to rain.\" Which form says \"started to rain\"?",
+        "it": "«All'improvviso ha cominciato a piovere.» Quale forma dice «ha cominciato a piovere»?"
+      },
+      "sentence": {
+        "kanji": "雨が急に降り出した",
+        "kana": "あめがきゅうにふりだした"
+      },
+      "translation": {
+        "en": "Suddenly it started to rain.",
+        "it": "All'improvviso ha cominciato a piovere."
+      },
+      "glosses": [
+        { "text": "降り出した", "reading": "ふりだした" },
+        { "text": "降って出した", "reading": "ふってだした" },
+        { "text": "降る出した", "reading": "ふるだした" },
+        { "text": "降ら出した", "reading": "ふらだした" }
+      ],
+      "gap": {
+        "kanji": "雨が急に＿",
+        "kana": "あめがきゅうに＿"
+      },
+      "answer": "降り出した",
+      "distractors": ["降って出した", "降る出した", "降ら出した"],
+      "explanation": {
+        "en": "Two verbs can join into one. The first one goes in the i-stem (the verb with its last kana changed to the i-sound): 降る → 降り. The second follows it: 出す, which on its own means \"take out\", but after a stem says that the action starts, often all of a sudden. So 降り出した = \"started to rain\". The te-form 降って and the plain 降る do not join this way.",
+        "it": "Due verbi possono unirsi in uno solo. Il primo va nel radicale in i (il verbo con l'ultimo kana cambiato nel suono i): 降る → 降り. Il secondo viene subito dopo: 出す, che da solo vuol dire «tirare fuori», ma dopo un radicale dice che l'azione comincia, spesso all'improvviso. Quindi 降り出した = «ha cominciato a piovere». La forma in て 降って e la forma base 降る non si uniscono così."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "Which part is what the teacher said?",
+        "it": "Quale parte è ciò che ha detto l'insegnante?"
+      },
+      "sentence": {
+        "kanji": "先生は「明日はテストです」と言った",
+        "kana": "せんせいは「あしたはテストです」といった"
+      },
+      "translation": {
+        "en": "The teacher said: \"There's a test tomorrow.\"",
+        "it": "L'insegnante ha detto: «Domani c'è una verifica.»"
+      },
+      "glosses": [
+        { "text": "先生は", "reading": "せんせいは", "meaning": { "en": "the teacher (は: the topic)", "it": "l'insegnante (は: il tema)" } },
+        { "text": "「明日はテストです」と", "reading": "「あしたはテストです」と", "meaning": { "en": "\"there's a test tomorrow\" + と", "it": "«domani c'è una verifica» + と" } },
+        { "text": "言った", "reading": "いった", "meaning": { "en": "said", "it": "ha detto" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 「明日はテストです」と. The teacher's words go inside 「」, と closes them, and 言った (\"said\") follows. What is quoted is a whole sentence with its own topic and its own です: 明日は belongs to the teacher's sentence, not to the outer one.",
+        "it": "Seleziona 「明日はテストです」と. Le parole dell'insegnante stanno dentro 「」, と le chiude e dopo viene 言った («ha detto»). Quello che si cita è una frase intera, con il suo tema e il suo です: 明日は appartiene alla frase dell'insegnante, non a quella che la contiene."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "複合名詞の連濁",
+      "prompt": {
+        "en": "むかし (\"long ago\") + はなし (\"story\") make one word, \"old tale\". How does it sound?",
+        "it": "むかし («tanto tempo fa») + はなし («racconto») formano una parola sola, «fiaba antica». Come suona?"
+      },
+      "sentence": {
+        "kanji": "祖母がむかしばなしをしてくれた",
+        "kana": "そぼがむかしばなしをしてくれた"
+      },
+      "translation": {
+        "en": "My grandmother told me an old tale.",
+        "it": "Mia nonna mi ha raccontato una fiaba antica."
+      },
+      "gap": {
+        "kanji": "祖母が＿をしてくれた",
+        "kana": "そぼが＿をしてくれた"
+      },
+      "answer": "むかしばなし",
+      "distractors": ["むかしはなし", "むかしぱなし"],
+      "explanation": {
+        "en": "When two nouns join into one word, the first kana of the second noun often takes the two dots ゛ and its sound becomes voiced: は → ば. So むかし + はなし = むかしばなし (昔話). The small circle ゜ (ぱ) is a different sound and does not come from this change.",
+        "it": "Quando due nomi si uniscono in una parola sola, il primo kana del secondo nome spesso prende i due puntini ゛ e il suono diventa sonoro: は → ば. Quindi むかし + はなし = むかしばなし (昔話). Il cerchietto ゜ (ぱ) è un altro suono e non viene da questo cambiamento."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "連用形でつなぐ複合動詞",
+      "prompt": {
+        "en": "Which part says that the playing went on?",
+        "it": "Quale parte dice che il gioco è andato avanti?"
+      },
+      "sentence": {
+        "kanji": "子どもたちは公園で遊び続けた",
+        "kana": "こどもたちはこうえんであそびつづけた"
+      },
+      "translation": {
+        "en": "The children kept playing in the park.",
+        "it": "I bambini hanno continuato a giocare al parco."
+      },
+      "glosses": [
+        { "text": "子どもたちは", "reading": "こどもたちは", "meaning": { "en": "the children (は: the topic)", "it": "i bambini (は: il tema)" } },
+        { "text": "公園で", "reading": "こうえんで", "meaning": { "en": "in the park", "it": "al parco" } },
+        { "text": "遊び", "reading": "あそび", "meaning": { "en": "play (i-stem of 遊ぶ)", "it": "giocare (radicale in i di 遊ぶ)" } },
+        { "text": "続けた", "reading": "つづけた", "meaning": { "en": "continued", "it": "hanno continuato" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select 続けた. 続ける means \"continue\": after the i-stem of another verb it says that action goes on. 遊ぶ (\"play\") → 遊び + 続けた = 遊び続けた, \"kept playing\". The two verbs make one, so only the last one changes for the past.",
+        "it": "Seleziona 続けた. 続ける vuol dire «continuare»: dopo il radicale in i di un altro verbo dice che quell'azione va avanti. 遊ぶ («giocare») → 遊び + 続けた = 遊び続けた, «hanno continuato a giocare». I due verbi ne fanno uno solo, quindi solo l'ultimo cambia per il passato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "擬音語・擬態語と「と」",
+      "prompt": {
+        "en": "\"The stars are twinkling.\" Which particle links きらきら to the verb?",
+        "it": "«Le stelle brillano.» Quale particella lega きらきら al verbo?"
+      },
+      "sentence": {
+        "kanji": "星がきらきらと光っている",
+        "kana": "ほしがきらきらとひかっている"
+      },
+      "translation": {
+        "en": "The stars are twinkling.",
+        "it": "Le stelle brillano."
+      },
+      "gap": {
+        "kanji": "星がきらきら＿光っている",
+        "kana": "ほしがきらきら＿ひかっている"
+      },
+      "answer": "と",
+      "distractors": ["を", "で"],
+      "explanation": {
+        "en": "Japanese has many words that imitate a sound or paint how something looks or moves, often made of a doubled part: きらきら is the flicker of a small light. Followed by と, the word tells how the action happens: きらきらと光っている, \"shines with a twinkle\". With many of these words と can also be dropped: きらきら光っている is correct too.",
+        "it": "Il giapponese ha molte parole che imitano un suono o dipingono come appare o si muove qualcosa, spesso fatte di una parte ripetuta: きらきら è il tremolio di una piccola luce. Seguita da と, la parola dice come avviene l'azione: きらきらと光っている, «brillano scintillando». Con molte di queste parole と si può anche togliere: anche きらきら光っている è giusto."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "Build: \"My friend said: 'Thank you.'\"",
+        "it": "Componi: «Il mio amico ha detto: “Grazie.”»"
+      },
+      "sentence": {
+        "kanji": "友達が「ありがとう」と言った",
+        "kana": "ともだちが「ありがとう」といった"
+      },
+      "translation": {
+        "en": "My friend said: \"Thank you.\"",
+        "it": "Il mio amico ha detto: «Grazie.»"
+      },
+      "glosses": [
+        { "text": "友達が", "reading": "ともだちが", "meaning": { "en": "my friend (が: who says it)", "it": "il mio amico (が: chi lo dice)" } },
+        { "text": "「ありがとう」と", "meaning": { "en": "\"thank you\" + と", "it": "«grazie» + と" } },
+        { "text": "言った", "reading": "いった", "meaning": { "en": "said", "it": "ha detto" } }
+      ],
+      "answer": ["友達が", "「ありがとう」と", "言った"],
+      "alsoAccepted": [["「ありがとう」と", "友達が", "言った"]],
+      "explanation": {
+        "en": "「ありがとう」と is what was said: と closes the words, and the piece goes before 言った, the verb it belongs to. 友達が, the one who says it, can go first or right after the quotation: \"「ありがとう」と友達が言った\" is also correct, and stories often use this order.",
+        "it": "「ありがとう」と è ciò che è stato detto: と chiude le parole, e il pezzo va prima di 言った, il verbo a cui appartiene. 友達が, chi lo dice, può andare per primo o subito dopo la citazione: va bene anche «「ありがとう」と友達が言った», un ordine frequente nei racconti."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "連用形でつなぐ複合動詞",
+      "prompt": {
+        "en": "Build: \"I finished reading this book yesterday.\"",
+        "it": "Componi: «Ieri ho finito di leggere questo libro.»"
+      },
+      "sentence": {
+        "kanji": "昨日この本を読み終わった",
+        "kana": "きのうこのほんをよみおわった"
+      },
+      "translation": {
+        "en": "I finished reading this book yesterday.",
+        "it": "Ieri ho finito di leggere questo libro."
+      },
+      "glosses": [
+        { "text": "昨日", "reading": "きのう", "meaning": { "en": "yesterday", "it": "ieri" } },
+        { "text": "この本を", "reading": "このほんを", "meaning": { "en": "this book + を (what is read)", "it": "questo libro + を (ciò che si legge)" } },
+        { "text": "読み終わった", "reading": "よみおわった", "meaning": { "en": "finished reading", "it": "ho finito di leggere" } }
+      ],
+      "answer": ["昨日", "この本を", "読み終わった"],
+      "alsoAccepted": [["この本を", "昨日", "読み終わった"]],
+      "explanation": {
+        "en": "読み終わった = 読み, the i-stem of 読む (\"read\"), + 終わった (\"ended\"): \"finished reading\". The two verbs are now one, so they stay together at the end. この本を, what is read, goes before them. 昨日 (\"yesterday\") can go first or after この本を: \"この本を昨日読み終わった\" is also correct.",
+        "it": "読み終わった = 読み, il radicale in i di 読む («leggere»), + 終わった («è finito»): «ho finito di leggere». I due verbi ora sono uno solo, quindi stanno insieme in fondo. この本を, ciò che si legge, va prima di loro. 昨日 («ieri») può andare per primo o dopo この本を: va bene anche «この本を昨日読み終わった»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "複合名詞の連濁",
+      "prompt": {
+        "en": "Which word changes the sound of its second half when its two nouns join?",
+        "it": "Quale parola cambia il suono della sua seconda metà quando i suoi due nomi si uniscono?"
+      },
+      "sentence": {
+        "kanji": "夏祭りで花火を見た",
+        "kana": "なつまつりではなびをみた"
+      },
+      "translation": {
+        "en": "I watched the fireworks at the summer festival.",
+        "it": "Ho visto i fuochi d'artificio alla festa d'estate."
+      },
+      "glosses": [
+        { "text": "夏祭りで", "reading": "なつまつりで", "meaning": { "en": "at the summer festival", "it": "alla festa d'estate" } },
+        { "text": "花火を", "reading": "はなびを", "meaning": { "en": "fireworks + を (what is watched)", "it": "fuochi d'artificio + を (ciò che si guarda)" } },
+        { "text": "見た", "reading": "みた", "meaning": { "en": "watched", "it": "ho visto" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 花火を. 花 (はな, \"flower\") + 火 (ひ, \"fire\") = 花火, \"fireworks\", read はなび: ひ takes the two dots ゛ and becomes び. 夏祭り is also two nouns joined, 夏 (なつ) + 祭り (まつり), but まつり keeps its sound: the change is frequent, not automatic.",
+        "it": "Seleziona 花火を. 花 (はな, «fiore») + 火 (ひ, «fuoco») = 花火, «fuochi d'artificio», letto はなび: ひ prende i due puntini ゛ e diventa び. Anche 夏祭り è fatto di due nomi, 夏 (なつ) + 祭り (まつり), ma まつり tiene il suo suono: il cambiamento è frequente, non automatico."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "\"I think it will rain tomorrow.\" Which form goes before 思う (\"think\")?",
+        "it": "«Penso che domani piova.» Quale forma va prima di 思う («pensare»)?"
+      },
+      "sentence": {
+        "kanji": "明日は雨だと思う",
+        "kana": "あしたはあめだとおもう"
+      },
+      "translation": {
+        "en": "I think it will rain tomorrow.",
+        "it": "Penso che domani piova."
+      },
+      "glosses": [
+        { "text": "雨だと", "reading": "あめだと" },
+        { "text": "雨を", "reading": "あめを" },
+        { "text": "雨と", "reading": "あめと" }
+      ],
+      "gap": {
+        "kanji": "明日は＿思う",
+        "kana": "あしたは＿おもう"
+      },
+      "answer": "雨だと",
+      "distractors": ["雨を", "雨と"],
+      "explanation": {
+        "en": "思う (\"think\") works like 言う: what you think is closed by と. The thought is a complete sentence, so after a noun it keeps だ (\"is\"): 雨だ, \"it is rain\", + と → 雨だと思う. 雨と is missing だ, and 雨を思う would mean \"to think of the rain\".",
+        "it": "思う («pensare») funziona come 言う: ciò che si pensa è chiuso da と. Il pensiero è una frase completa, quindi dopo un nome tiene だ («è»): 雨だ, «è pioggia», + と → 雨だと思う. A 雨と manca だ, e 雨を思う vorrebbe dire «pensare alla pioggia»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "連用形でつなぐ複合動詞",
+      "prompt": {
+        "en": "\"Yesterday I drank too much.\" Which form says \"drank too much\"?",
+        "it": "«Ieri ho bevuto troppo.» Quale forma dice «ho bevuto troppo»?"
+      },
+      "sentence": {
+        "kanji": "昨日はお酒を飲み過ぎた",
+        "kana": "きのうはおさけをのみすぎた"
+      },
+      "translation": {
+        "en": "Yesterday I drank too much.",
+        "it": "Ieri ho bevuto troppo."
+      },
+      "glosses": [
+        { "text": "飲み過ぎた", "reading": "のみすぎた" },
+        { "text": "飲んで過ぎた", "reading": "のんですぎた" },
+        { "text": "飲む過ぎた", "reading": "のむすぎた" },
+        { "text": "飲ま過ぎた", "reading": "のますぎた" }
+      ],
+      "gap": {
+        "kanji": "昨日はお酒を＿",
+        "kana": "きのうはおさけを＿"
+      },
+      "answer": "飲み過ぎた",
+      "distractors": ["飲んで過ぎた", "飲む過ぎた", "飲ま過ぎた"],
+      "explanation": {
+        "en": "過ぎる means \"pass, go beyond\". After the i-stem of a verb it says the action went past the right amount: 飲む (\"drink\") → 飲み + 過ぎた = 飲み過ぎた, \"drank too much\". Only the i-stem joins to 過ぎる: not the te-form 飲んで, not the plain 飲む, not 飲ま.",
+        "it": "過ぎる vuol dire «passare, andare oltre». Dopo il radicale in i di un verbo dice che l'azione è andata oltre la misura giusta: 飲む («bere») → 飲み + 過ぎた = 飲み過ぎた, «ho bevuto troppo». A 過ぎる si unisce solo il radicale in i: non la forma in て 飲んで, non la forma base 飲む, non 飲ま."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "擬音語・擬態語と「と」",
+      "prompt": {
+        "en": "Which part says how the baby is smiling?",
+        "it": "Quale parte dice come sorride il bambino?"
+      },
+      "sentence": {
+        "kanji": "赤ちゃんがにこにこと笑っている",
+        "kana": "あかちゃんがにこにことわらっている"
+      },
+      "translation": {
+        "en": "The baby is beaming.",
+        "it": "Il bambino sorride tutto contento."
+      },
+      "glosses": [
+        { "text": "赤ちゃんが", "reading": "あかちゃんが", "meaning": { "en": "the baby (が: who smiles)", "it": "il bambino (が: chi sorride)" } },
+        { "text": "にこにこと", "meaning": { "en": "with a big happy smile", "it": "con un gran sorriso contento" } },
+        { "text": "笑っている", "reading": "わらっている", "meaning": { "en": "is smiling", "it": "sta sorridendo" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select にこにこと. にこにこ paints a warm, happy smile. With と after it, it says how the action of 笑っている (\"is smiling\") happens, and like every piece that belongs to a verb it comes before it.",
+        "it": "Seleziona にこにこと. にこにこ dipinge un sorriso caldo e contento. Con と dopo, dice come avviene l'azione di 笑っている («sta sorridendo»), e come ogni pezzo che appartiene a un verbo viene prima del verbo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "Which part is what my sister thinks?",
+        "it": "Quale parte è ciò che pensa mia sorella?"
+      },
+      "sentence": {
+        "kanji": "姉は明日も晴れると思っている",
+        "kana": "あねはあしたもはれるとおもっている"
+      },
+      "translation": {
+        "en": "My older sister thinks it will be sunny tomorrow too.",
+        "it": "Mia sorella maggiore pensa che anche domani farà bel tempo."
+      },
+      "glosses": [
+        { "text": "姉は", "reading": "あねは", "meaning": { "en": "my older sister (は: the topic)", "it": "mia sorella maggiore (は: il tema)" } },
+        { "text": "明日も晴れると", "reading": "あしたもはれると", "meaning": { "en": "\"tomorrow too it will be sunny\" + と", "it": "«anche domani farà bello» + と" } },
+        { "text": "思っている", "reading": "おもっている", "meaning": { "en": "thinks", "it": "pensa" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 明日も晴れると. What she thinks ends with と, and 思っている (\"thinks\") follows. A thought needs no 「」: と alone marks where it ends. For someone else's thoughts Japanese uses 思っている, \"is thinking\", while a plain 思う is what the speaker thinks.",
+        "it": "Seleziona 明日も晴れると. Ciò che pensa finisce con と, e dopo viene 思っている («pensa»). Un pensiero non ha bisogno di 「」: basta と a segnare dove finisce. Per i pensieri di un'altra persona il giapponese usa 思っている, «sta pensando», mentre 思う da solo è ciò che pensa chi parla."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "連用形でつなぐ複合動詞",
+      "prompt": {
+        "en": "Which part is the first verb, in the form that joins it to the second?",
+        "it": "Quale parte è il primo verbo, nella forma che lo unisce al secondo?"
+      },
+      "sentence": {
+        "kanji": "七時に晩ごはんを食べ始めた",
+        "kana": "しちじにばんごはんをたべはじめた"
+      },
+      "translation": {
+        "en": "I started eating dinner at seven.",
+        "it": "Alle sette ho cominciato a cenare."
+      },
+      "glosses": [
+        { "text": "七時に", "reading": "しちじに", "meaning": { "en": "at seven o'clock", "it": "alle sette" } },
+        { "text": "晩ごはんを", "reading": "ばんごはんを", "meaning": { "en": "dinner + を (what is eaten)", "it": "la cena + を (ciò che si mangia)" } },
+        { "text": "食べ", "reading": "たべ", "meaning": { "en": "eat (stem of 食べる)", "it": "mangiare (radicale di 食べる)" } },
+        { "text": "始めた", "reading": "はじめた", "meaning": { "en": "began", "it": "ho cominciato" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select 食べ. 食べる is an ichidan verb (it just drops る), so its stem is 食べ. 始める (\"begin\") attaches right after it: 食べ始めた, \"started eating\". The second verb carries the past; the first stays in the stem.",
+        "it": "Seleziona 食べ. 食べる è un verbo ichidan (perde solo る), quindi il suo radicale è 食べ. 始める («cominciare») si attacca subito dopo: 食べ始めた, «ho cominciato a mangiare». Il passato lo porta il secondo verbo; il primo resta nel radicale."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "There are two と here. Which part ends with the と that closes the words that were said?",
+        "it": "Qui ci sono due と. Quale parte finisce con il と che chiude le parole dette?"
+      },
+      "sentence": {
+        "kanji": "父と母は「いいよ」と言った",
+        "kana": "ちちとははは「いいよ」といった"
+      },
+      "translation": {
+        "en": "My father and mother said: \"Sure.\"",
+        "it": "Mio padre e mia madre hanno detto: «Va bene.»"
+      },
+      "glosses": [
+        { "text": "父と", "reading": "ちちと", "meaning": { "en": "father and", "it": "padre e" } },
+        { "text": "母は", "reading": "ははは", "meaning": { "en": "mother (は: the topic)", "it": "madre (は: il tema)" } },
+        { "text": "「いいよ」と", "meaning": { "en": "\"sure\" + と", "it": "«va bene» + と" } },
+        { "text": "言った", "reading": "いった", "meaning": { "en": "said", "it": "hanno detto" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select 「いいよ」と. Here と closes the words that were said, and 言った (\"said\") follows. 父と is the other と, the one that joins two nouns: 父と母, \"father and mother\".",
+        "it": "Seleziona 「いいよ」と. Qui と chiude le parole dette, e dopo viene 言った («hanno detto»). 父と è l'altro と, quello che unisce due nomi: 父と母, «padre e madre»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "複合名詞の連濁",
+      "prompt": {
+        "en": "おもちゃ (\"toy\") + はこ (\"box\") make one word, \"toy box\". How does it sound?",
+        "it": "おもちゃ («giocattolo») + はこ («scatola») formano una parola sola, «scatola dei giocattoli». Come suona?"
+      },
+      "sentence": {
+        "kanji": "弟がおもちゃばこを開けた",
+        "kana": "おとうとがおもちゃばこをあけた"
+      },
+      "translation": {
+        "en": "My younger brother opened the toy box.",
+        "it": "Mio fratello minore ha aperto la scatola dei giocattoli."
+      },
+      "gap": {
+        "kanji": "弟が＿を開けた",
+        "kana": "おとうとが＿をあけた"
+      },
+      "answer": "おもちゃばこ",
+      "distractors": ["おもちゃはこ", "おもちゃぱこ"],
+      "explanation": {
+        "en": "Joined to おもちゃ, はこ takes the two dots ゛ on its first kana: は → ば, おもちゃばこ. It is the same change as in はなし → むかしばなし. Other pairs work the same way: か → が, た → だ, さ → ざ, ひ → び.",
+        "it": "Unito a おもちゃ, はこ prende i due puntini ゛ sul primo kana: は → ば, おもちゃばこ. È lo stesso cambiamento di はなし → むかしばなし. Le altre coppie funzionano allo stesso modo: か → が, た → だ, さ → ざ, ひ → び."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "連用形でつなぐ複合動詞",
+      "prompt": {
+        "en": "Build: \"The light turned green and everyone started walking.\"",
+        "it": "Componi: «Il semaforo è diventato verde e tutti si sono messi a camminare.»"
+      },
+      "sentence": {
+        "kanji": "信号が青になってみんなが歩き出した",
+        "kana": "しんごうがあおになってみんながあるきだした"
+      },
+      "translation": {
+        "en": "The light turned green and everyone started walking.",
+        "it": "Il semaforo è diventato verde e tutti si sono messi a camminare."
+      },
+      "glosses": [
+        { "text": "信号が", "reading": "しんごうが", "meaning": { "en": "the traffic light (が: what changes)", "it": "il semaforo (が: ciò che cambia)" } },
+        { "text": "青になって", "reading": "あおになって", "meaning": { "en": "turned green, and then", "it": "è diventato verde, e poi" } },
+        { "text": "みんなが", "meaning": { "en": "everyone (が: who walks)", "it": "tutti (が: chi cammina)" } },
+        { "text": "歩き出した", "reading": "あるきだした", "meaning": { "en": "started walking", "it": "si sono messi a camminare" } }
+      ],
+      "answer": ["信号が", "青になって", "みんなが", "歩き出した"],
+      "explanation": {
+        "en": "歩き出した = 歩き, the i-stem of 歩く (\"walk\"), + 出した: \"started walking\". The sentence has two parts joined by the te-form: first 信号が青になって (\"the light turned green, and then\"), then みんなが歩き出した. Each subject stays in its own part: 信号が before 青になって, みんなが before 歩き出した.",
+        "it": "歩き出した = 歩き, il radicale in i di 歩く («camminare»), + 出した: «si sono messi a camminare». La frase ha due parti unite dalla forma in て: prima 信号が青になって («il semaforo è diventato verde, e poi»), poi みんなが歩き出した. Ogni soggetto resta nella sua parte: 信号が prima di 青になって, みんなが prima di 歩き出した."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "擬音語・擬態語と「と」",
+      "prompt": {
+        "en": "Build: \"It's pouring with rain.\"",
+        "it": "Componi: «Piove a dirotto.»"
+      },
+      "sentence": {
+        "kanji": "雨がざあざあと降っている",
+        "kana": "あめがざあざあとふっている"
+      },
+      "translation": {
+        "en": "It's pouring with rain.",
+        "it": "Piove a dirotto."
+      },
+      "glosses": [
+        { "text": "雨が", "reading": "あめが", "meaning": { "en": "the rain (が: what falls)", "it": "la pioggia (が: ciò che cade)" } },
+        { "text": "ざあざあと", "meaning": { "en": "with the roar of heavy rain", "it": "con lo scroscio della pioggia forte" } },
+        { "text": "降っている", "reading": "ふっている", "meaning": { "en": "is falling", "it": "sta cadendo" } }
+      ],
+      "answer": ["雨が", "ざあざあと", "降っている"],
+      "alsoAccepted": [["ざあざあと", "雨が", "降っている"]],
+      "explanation": {
+        "en": "ざあざあ imitates the sound of heavy rain. With と it says how the rain falls, so it goes before the verb 降っている (\"is falling\"). 雨が can come first or after ざあざあと: \"ざあざあと雨が降っている\" is also correct.",
+        "it": "ざあざあ imita il rumore della pioggia forte. Con と dice come cade la pioggia, quindi va prima del verbo 降っている («sta cadendo»). 雨が può andare per primo o dopo ざあざあと: va bene anche «ざあざあと雨が降っている»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "引用の「と」",
+      "prompt": {
+        "en": "Build: \"I think Japanese is interesting.\"",
+        "it": "Componi: «Penso che il giapponese sia interessante.»"
+      },
+      "sentence": {
+        "kanji": "日本語はおもしろいと思う",
+        "kana": "にほんごはおもしろいとおもう"
+      },
+      "translation": {
+        "en": "I think Japanese is interesting.",
+        "it": "Penso che il giapponese sia interessante."
+      },
+      "glosses": [
+        { "text": "日本語は", "reading": "にほんごは", "meaning": { "en": "Japanese (は: the topic)", "it": "il giapponese (は: il tema)" } },
+        { "text": "おもしろいと", "meaning": { "en": "\"is interesting\" + と", "it": "«è interessante» + と" } },
+        { "text": "思う", "reading": "おもう", "meaning": { "en": "I think", "it": "penso" } }
+      ],
+      "answer": ["日本語は", "おもしろいと", "思う"],
+      "explanation": {
+        "en": "The thought is 日本語はおもしろい, \"Japanese is interesting\": と closes it, so おもしろいと goes right before 思う. 日本語は is the topic of the thought and stays at its start. おもしろい already contains the \"is\", so no だ is needed before と.",
+        "it": "Il pensiero è 日本語はおもしろい, «il giapponese è interessante»: と lo chiude, quindi おもしろいと va subito prima di 思う. 日本語は è il tema del pensiero e resta al suo inizio. おもしろい contiene già il «è», quindi prima di と non serve だ."
+      }
+    }
+  ]
+}
