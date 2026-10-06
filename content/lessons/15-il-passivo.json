@@ -1,0 +1,515 @@
+{
+  "order": 15,
+  "title": {
+    "en": "The passive with れる and られる",
+    "it": "Il passivo con れる e られる"
+  },
+  "video": "cvV6d-RETs8",
+  "grammarPoints": ["受身の「れる」「られる」", "受身で動作主を示す「に」", "迷惑の受身"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "\"Everyone laughed at my younger brother.\" Which form says \"got laughed at\" (from 笑う)?",
+        "it": "«Tutti hanno riso di mio fratello minore.» Quale forma dice «è stato deriso» (da 笑う)?"
+      },
+      "sentence": {
+        "kanji": "弟はみんなに笑われた",
+        "kana": "おとうとはみんなにわらわれた"
+      },
+      "translation": {
+        "en": "Everyone laughed at my younger brother.",
+        "it": "Tutti hanno riso di mio fratello minore."
+      },
+      "glosses": [
+        { "text": "笑われた", "reading": "わらわれた" },
+        { "text": "笑いれた", "reading": "わらいれた" },
+        { "text": "笑うれた", "reading": "わらうれた" },
+        { "text": "笑わせた", "reading": "わらわせた" }
+      ],
+      "gap": {
+        "kanji": "弟はみんなに＿",
+        "kana": "おとうとはみんなに＿"
+      },
+      "answer": "笑われた",
+      "distractors": ["笑いれた", "笑うれた", "笑わせた"],
+      "explanation": {
+        "en": "The passive (\"something is done to someone\") of a godan verb changes the last kana to the a-sound and adds れる. 笑う ends in う, and う in the a-sound becomes わ, not あ: 笑う → 笑わ + れる; in the past, 笑われた. 笑わせた is the causative, \"made (someone) laugh\".",
+        "it": "Il passivo («qualcosa viene fatto a qualcuno») di un verbo godan cambia l'ultimo kana nel suono a e aggiunge れる. 笑う finisce in う, e う nel suono a diventa わ, non あ: 笑う → 笑わ + れる; al passato, 笑われた. 笑わせた è il causativo, «ha fatto ridere»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "受身で動作主を示す「に」",
+      "prompt": {
+        "en": "\"The fish got eaten by the cat.\" Which particle marks who did the eating?",
+        "it": "«Il pesce è stato mangiato dal gatto.» Quale particella segna chi ha mangiato?"
+      },
+      "sentence": {
+        "kanji": "魚が猫に食べられた",
+        "kana": "さかながねこにたべられた"
+      },
+      "translation": {
+        "en": "The fish got eaten by the cat.",
+        "it": "Il pesce è stato mangiato dal gatto."
+      },
+      "gap": {
+        "kanji": "魚が猫＿食べられた",
+        "kana": "さかながねこ＿たべられた"
+      },
+      "answer": "に",
+      "distractors": ["を", "が", "で"],
+      "explanation": {
+        "en": "In a passive sentence が marks what the action happens to (魚が, the fish), and the one who does the action takes に: 猫に, \"by the cat\". With が on both, the sentence would no longer say who ate whom.",
+        "it": "In una frase passiva が segna ciò a cui capita l'azione (魚が, il pesce), e chi fa l'azione prende に: 猫に, «dal gatto». Con が su tutti e due, la frase non direbbe più chi ha mangiato chi."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "迷惑の受身",
+      "prompt": {
+        "en": "\"Our younger brother broke my older sister's phone.\" Which part is the person it happened to?",
+        "it": "«Nostro fratello minore ha rotto il telefono a mia sorella maggiore.» Quale parte è la persona a cui è capitato?"
+      },
+      "sentence": {
+        "kanji": "姉は弟にスマホを壊された",
+        "kana": "あねはおとうとにスマホをこわされた"
+      },
+      "translation": {
+        "en": "Our younger brother broke my older sister's phone.",
+        "it": "Nostro fratello minore ha rotto il telefono a mia sorella maggiore."
+      },
+      "glosses": [
+        { "text": "姉は", "reading": "あねは", "meaning": { "en": "my older sister (は: the topic)", "it": "mia sorella maggiore (は: il tema)" } },
+        { "text": "弟に", "reading": "おとうとに", "meaning": { "en": "by our younger brother", "it": "dal fratello minore" } },
+        { "text": "スマホを", "meaning": { "en": "her phone (を: the object)", "it": "il telefono (を: l'oggetto)" } },
+        { "text": "壊された", "reading": "こわされた", "meaning": { "en": "had (it) broken", "it": "si è vista rompere" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 姉は. Japanese often uses the passive to say that something happened to someone and they did not want it. The person it happened to is the topic (姉は), the thing it happened to keeps を (スマホを), and the one who did it takes に (弟に). 壊された is the passive of 壊す (\"break\"): 壊さ + れる; in the past, 壊された.",
+        "it": "Seleziona 姉は. Il giapponese usa spesso il passivo per dire che a qualcuno è capitata una cosa che non voleva. La persona a cui è capitata è il tema (姉は), la cosa colpita tiene を (スマホを) e chi l'ha fatto prende に (弟に). 壊された è il passivo di 壊す («rompere»): 壊さ + れる; al passato, 壊された."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "Build: \"I got praised by the teacher.\"",
+        "it": "Componi: «Sono stato lodato dall'insegnante.»"
+      },
+      "sentence": {
+        "kanji": "私は先生にほめられた",
+        "kana": "わたしはせんせいにほめられた"
+      },
+      "translation": {
+        "en": "I got praised by the teacher.",
+        "it": "Sono stato lodato dall'insegnante."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (は: the topic)", "it": "io (は: il tema)" } },
+        { "text": "先生に", "reading": "せんせいに", "meaning": { "en": "by the teacher", "it": "dall'insegnante" } },
+        { "text": "ほめられた", "meaning": { "en": "got praised", "it": "sono stato lodato" } }
+      ],
+      "answer": ["私は", "先生に", "ほめられた"],
+      "explanation": {
+        "en": "ほめる (\"praise\") is an ichidan verb (it just drops る), and ichidan verbs take the longer form of the passive, られる: ほめ + られる; in the past, ほめられた. 私は, the one who was praised, comes first as the topic; 先生に, who did the praising, stays right before the verb.",
+        "it": "ほめる («lodare») è un verbo ichidan (perde solo る), e i verbi ichidan prendono la forma lunga del passivo, られる: ほめ + られる; al passato, ほめられた. 私は, chi è stato lodato, va per primo come tema; 先生に, chi ha lodato, sta subito prima del verbo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "迷惑の受身",
+      "prompt": {
+        "en": "\"I got caught in the rain on the way home.\" Which form says \"got rained on\" (from 降る)?",
+        "it": "«Sulla via di casa mi ha preso la pioggia.» Quale forma dice «mi è piovuto addosso» (da 降る)?"
+      },
+      "sentence": {
+        "kanji": "帰り道で雨に降られた",
+        "kana": "かえりみちであめにふられた"
+      },
+      "translation": {
+        "en": "I got caught in the rain on the way home.",
+        "it": "Sulla via di casa mi ha preso la pioggia."
+      },
+      "glosses": [
+        { "text": "降られた", "reading": "ふられた" },
+        { "text": "降れた", "reading": "ふれた" },
+        { "text": "降りられた", "reading": "おりられた" },
+        { "text": "降らせた", "reading": "ふらせた" }
+      ],
+      "gap": {
+        "kanji": "帰り道で雨に＿",
+        "kana": "かえりみちであめに＿"
+      },
+      "answer": "降られた",
+      "distractors": ["降れた", "降りられた", "降らせた"],
+      "explanation": {
+        "en": "In Japanese even a verb with no object can go into the passive, when something happens to you that you would rather avoid. 降る (\"fall\", of rain) → 降ら + れる; in the past, 降られた. The rain, which does the falling, takes に: 雨に降られた, \"I got rained on\". 降れた is the potential, 降りられた comes from another verb (降りる, \"get off\"), 降らせた is the causative.",
+        "it": "In giapponese anche un verbo senza oggetto può andare al passivo, quando ti capita qualcosa che avresti voluto evitare. 降る («cadere», della pioggia) → 降ら + れる; al passato, 降られた. La pioggia, che è ciò che cade, prende に: 雨に降られた, «mi è piovuto addosso». 降れた è il potenziale, 降りられた viene da un altro verbo (降りる, «scendere»), 降らせた è il causativo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "Which part makes 建てる (\"build\") passive and past?",
+        "it": "Quale parte rende 建てる («costruire») passivo e al passato?"
+      },
+      "sentence": {
+        "kanji": "この寺は八百年前に建てられた",
+        "kana": "このてらははっぴゃくねんまえにたてられた"
+      },
+      "translation": {
+        "en": "This temple was built eight hundred years ago.",
+        "it": "Questo tempio è stato costruito ottocento anni fa."
+      },
+      "glosses": [
+        { "text": "この寺は", "reading": "このてらは", "meaning": { "en": "this temple (は: the topic)", "it": "questo tempio (は: il tema)" } },
+        { "text": "八百年前に", "reading": "はっぴゃくねんまえに", "meaning": { "en": "eight hundred years ago", "it": "ottocento anni fa" } },
+        { "text": "建て", "reading": "たて", "meaning": { "en": "build (stem of 建てる)", "it": "costruire (radicale di 建てる)" } },
+        { "text": "られた", "meaning": { "en": "was …-ed (passive, past)", "it": "è stato … (passivo, passato)" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select られた. 建てる is an ichidan verb, so the passive is 建て + られる; in the past, 建てられた. The one the action happens to does not have to be a person: here it is the temple. Who built it is not known, so it is simply not said.",
+        "it": "Seleziona られた. 建てる è un verbo ichidan, quindi il passivo è 建て + られる; al passato, 建てられた. Ciò a cui capita l'azione non deve per forza essere una persona: qui è il tempio. Chi l'ha costruito non si sa, quindi semplicemente non si dice."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "受身で動作主を示す「に」",
+      "prompt": {
+        "en": "\"The child got stung by a bee.\" Which part is the one who did the stinging?",
+        "it": "«Il bambino è stato punto da un'ape.» Quale parte è chi ha punto?"
+      },
+      "sentence": {
+        "kanji": "子どもが蜂に刺された",
+        "kana": "こどもがはちにさされた"
+      },
+      "translation": {
+        "en": "The child got stung by a bee.",
+        "it": "Il bambino è stato punto da un'ape."
+      },
+      "glosses": [
+        { "text": "子どもが", "reading": "こどもが", "meaning": { "en": "the child (が: who it happens to)", "it": "il bambino (が: a chi capita)" } },
+        { "text": "蜂に", "reading": "はちに", "meaning": { "en": "by a bee", "it": "da un'ape" } },
+        { "text": "刺された", "reading": "さされた", "meaning": { "en": "got stung", "it": "è stato punto" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 蜂に. In a passive sentence the one who does the action takes に, and が goes on the one it happens to: 子どもが. 刺された is the passive of 刺す (\"sting\"): 刺さ + れる; in the past, 刺された.",
+        "it": "Seleziona 蜂に. In una frase passiva chi fa l'azione prende に, e が va su chi la subisce: 子どもが. 刺された è il passivo di 刺す («pungere»): 刺さ + れる; al passato, 刺された."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "\"My older sister got a warning from her boss.\" Which form says \"got warned\" (from 注意する)?",
+        "it": "«Mia sorella maggiore è stata ripresa dal suo capo.» Quale forma dice «è stata ripresa» (da 注意する)?"
+      },
+      "sentence": {
+        "kanji": "姉は部長に注意された",
+        "kana": "あねはぶちょうにちゅういされた"
+      },
+      "translation": {
+        "en": "My older sister got a warning from her boss.",
+        "it": "Mia sorella maggiore è stata ripresa dal suo capo."
+      },
+      "glosses": [
+        { "text": "注意された", "reading": "ちゅういされた" },
+        { "text": "注意さられた", "reading": "ちゅういさられた" },
+        { "text": "注意しられた", "reading": "ちゅういしられた" },
+        { "text": "注意させた", "reading": "ちゅういさせた" }
+      ],
+      "gap": {
+        "kanji": "姉は部長に＿",
+        "kana": "あねはぶちょうに＿"
+      },
+      "answer": "注意された",
+      "distractors": ["注意さられた", "注意しられた", "注意させた"],
+      "explanation": {
+        "en": "する is irregular: its passive is される. So 注意する (\"warn, tell off\") → 注意される; in the past, 注意された. 注意させた is the causative, \"made (someone) warn\".",
+        "it": "する è irregolare: il suo passivo è される. Quindi 注意する («riprendere, avvertire») → 注意される; al passato, 注意された. 注意させた è il causativo, «ha fatto riprendere»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "迷惑の受身",
+      "prompt": {
+        "en": "Build: \"My younger sister read my diary (and I didn't want her to).\"",
+        "it": "Componi: «Mia sorella minore mi ha letto il diario (e non volevo).»"
+      },
+      "sentence": {
+        "kanji": "妹に日記を読まれた",
+        "kana": "いもうとににっきをよまれた"
+      },
+      "translation": {
+        "en": "My younger sister read my diary (and I didn't want her to).",
+        "it": "Mia sorella minore mi ha letto il diario (e non volevo)."
+      },
+      "glosses": [
+        { "text": "妹に", "reading": "いもうとに", "meaning": { "en": "by my younger sister", "it": "da mia sorella minore" } },
+        { "text": "日記を", "reading": "にっきを", "meaning": { "en": "my diary (を: the object)", "it": "il diario (を: l'oggetto)" } },
+        { "text": "読まれた", "reading": "よまれた", "meaning": { "en": "had (it) read", "it": "me l'ha letto" } }
+      ],
+      "answer": ["妹に", "日記を", "読まれた"],
+      "alsoAccepted": [["日記を", "妹に", "読まれた"]],
+      "explanation": {
+        "en": "読まれた is the passive of 読む (\"read\"): 読ま + れる; in the past, 読まれた. The speaker, the one it happened to, is understood and not said; the passive is what tells you it was unwelcome. Who did it takes に (妹に), the diary keeps を. Both go before the verb, in either order: \"日記を妹に読まれた\" is also correct.",
+        "it": "読まれた è il passivo di 読む («leggere»): 読ま + れる; al passato, 読まれた. Chi parla, a cui è capitato, è sottinteso e non si dice; è il passivo a far capire che la cosa non gli è piaciuta. Chi l'ha fatto prende に (妹に), il diario tiene を. Vanno tutti e due prima del verbo, in qualsiasi ordine: va bene anche «日記を妹に読まれた»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "受身で動作主を示す「に」",
+      "prompt": {
+        "en": "食べられた can mean \"got eaten\" or \"could eat\". Here it means \"got eaten\": which part shows it?",
+        "it": "食べられた può voler dire «è stato mangiato» o «sono riuscito a mangiare». Qui vuol dire «è stato mangiato»: quale parte lo mostra?"
+      },
+      "sentence": {
+        "kanji": "弟にプリンを食べられた",
+        "kana": "おとうとにプリンをたべられた"
+      },
+      "translation": {
+        "en": "My younger brother ate my pudding.",
+        "it": "Mio fratello minore mi ha mangiato il budino."
+      },
+      "glosses": [
+        { "text": "弟に", "reading": "おとうとに", "meaning": { "en": "by my younger brother", "it": "da mio fratello minore" } },
+        { "text": "プリンを", "meaning": { "en": "the pudding (を: the object)", "it": "il budino (を: l'oggetto)" } },
+        { "text": "食べられた", "reading": "たべられた", "meaning": { "en": "had (it) eaten", "it": "me l'ha mangiato" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 弟に. For ichidan verbs the passive and the potential look the same: 食べられる. The particles tell them apart: 弟に says who did the eating, so this is the passive, and it was unwelcome for the speaker. As \"I could eat\" the sentence would have no に, and the pudding would usually take が: プリンが食べられた, \"I managed to eat the pudding\".",
+        "it": "Seleziona 弟に. Per i verbi ichidan il passivo e il potenziale hanno la stessa forma: 食べられる. Le particelle li distinguono: 弟に dice chi ha mangiato, quindi questo è il passivo, e la cosa non è piaciuta a chi parla. Come «sono riuscito a mangiare» la frase non avrebbe に, e il budino prenderebbe di solito が: プリンが食べられた, «sono riuscito a mangiare il budino»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "\"My younger brother got chased by a dog.\" Which form says \"got chased\" (from 追いかける)?",
+        "it": "«Mio fratello minore è stato inseguito da un cane.» Quale forma dice «è stato inseguito» (da 追いかける)?"
+      },
+      "sentence": {
+        "kanji": "弟は犬に追いかけられた",
+        "kana": "おとうとはいぬにおいかけられた"
+      },
+      "translation": {
+        "en": "My younger brother got chased by a dog.",
+        "it": "Mio fratello minore è stato inseguito da un cane."
+      },
+      "glosses": [
+        { "text": "追いかけられた", "reading": "おいかけられた" },
+        { "text": "追いかけれた", "reading": "おいかけれた" },
+        { "text": "追いかかれた", "reading": "おいかかれた" },
+        { "text": "追いかけさせた", "reading": "おいかけさせた" }
+      ],
+      "gap": {
+        "kanji": "弟は犬に＿",
+        "kana": "おとうとはいぬに＿"
+      },
+      "answer": "追いかけられた",
+      "distractors": ["追いかけれた", "追いかかれた", "追いかけさせた"],
+      "explanation": {
+        "en": "追いかける (\"chase\") is an ichidan verb: it drops る and takes られる, 追いかけ + られる; in the past, 追いかけられた. 追いかけれた, without ら, is heard in casual speech, but only to mean \"could chase\", never for the passive. 追いかかれた treats the verb as godan, and 追いかけさせた is the causative.",
+        "it": "追いかける («inseguire») è un verbo ichidan: perde る e prende られる, 追いかけ + られる; al passato, 追いかけられた. 追いかけれた, senza ら, si sente nel parlato informale, ma solo per «è riuscito a inseguire», mai per il passivo. 追いかかれた tratta il verbo come godan, e 追いかけさせた è il causativo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "迷惑の受身",
+      "prompt": {
+        "en": "\"The doctor told my father to stop drinking.\" Which particle goes after お酒?",
+        "it": "«Il medico ha proibito l'alcol a mio padre.» Quale particella va dopo お酒?"
+      },
+      "sentence": {
+        "kanji": "父は医者にお酒を止められた",
+        "kana": "ちちはいしゃにおさけをとめられた"
+      },
+      "translation": {
+        "en": "The doctor told my father to stop drinking.",
+        "it": "Il medico ha proibito l'alcol a mio padre."
+      },
+      "gap": {
+        "kanji": "父は医者にお酒＿止められた",
+        "kana": "ちちはいしゃにおさけ＿とめられた"
+      },
+      "answer": "を",
+      "distractors": ["が", "に", "で"],
+      "explanation": {
+        "en": "In this kind of passive the person it happened to is the topic (父は) and the one who did it takes に (医者に), but the thing involved keeps を, just as in the active sentence 医者が父にお酒を止めた: お酒を止められた, \"had alcohol stopped (by the doctor)\".",
+        "it": "In questo tipo di passivo la persona a cui è capitato è il tema (父は) e chi l'ha fatto prende に (医者に), ma la cosa coinvolta tiene を, come nella frase attiva 医者が父にお酒を止めた: お酒を止められた, «si è visto togliere l'alcol (dal medico)»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "受身で動作主を示す「に」",
+      "prompt": {
+        "en": "Build: \"The letter got blown away by the wind.\"",
+        "it": "Componi: «La lettera è stata portata via dal vento.»"
+      },
+      "sentence": {
+        "kanji": "手紙が風に飛ばされた",
+        "kana": "てがみがかぜにとばされた"
+      },
+      "translation": {
+        "en": "The letter got blown away by the wind.",
+        "it": "La lettera è stata portata via dal vento."
+      },
+      "glosses": [
+        { "text": "手紙が", "reading": "てがみが", "meaning": { "en": "the letter (が: what it happens to)", "it": "la lettera (が: ciò a cui capita)" } },
+        { "text": "風に", "reading": "かぜに", "meaning": { "en": "by the wind", "it": "dal vento" } },
+        { "text": "飛ばされた", "reading": "とばされた", "meaning": { "en": "got blown away", "it": "è stata portata via" } }
+      ],
+      "answer": ["手紙が", "風に", "飛ばされた"],
+      "alsoAccepted": [["風に", "手紙が", "飛ばされた"]],
+      "explanation": {
+        "en": "飛ばされた is the passive of 飛ばす (\"send flying\"): 飛ばさ + れる; in the past, 飛ばされた. The one who does the action does not have to be a person: here it is the wind, and it takes に. 手紙が can come first or after 風に: \"風に手紙が飛ばされた\" is also correct.",
+        "it": "飛ばされた è il passivo di 飛ばす («far volare»): 飛ばさ + れる; al passato, 飛ばされた. Chi fa l'azione non deve per forza essere una persona: qui è il vento, e prende に. 手紙が può andare per primo o dopo 風に: va bene anche «風に手紙が飛ばされた»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "Build: \"This book is read by many people.\"",
+        "it": "Componi: «Questo libro è letto da molte persone.»"
+      },
+      "sentence": {
+        "kanji": "この本は多くの人に読まれている",
+        "kana": "このほんはおおくのひとによまれている"
+      },
+      "translation": {
+        "en": "This book is read by many people.",
+        "it": "Questo libro è letto da molte persone."
+      },
+      "glosses": [
+        { "text": "この本は", "reading": "このほんは", "meaning": { "en": "this book (は: the topic)", "it": "questo libro (は: il tema)" } },
+        { "text": "多くの人に", "reading": "おおくのひとに", "meaning": { "en": "by many people", "it": "da molte persone" } },
+        { "text": "読まれている", "reading": "よまれている", "meaning": { "en": "is being read", "it": "è letto" } }
+      ],
+      "answer": ["この本は", "多くの人に", "読まれている"],
+      "explanation": {
+        "en": "読まれる, the passive of 読む, is itself an ichidan verb, so it takes ている like any other: 読まれている, \"is read\", something that keeps happening. この本は, the topic, comes first; 多くの人に, who does the reading, stays right before the verb.",
+        "it": "読まれる, il passivo di 読む, è a sua volta un verbo ichidan, quindi prende ている come tutti gli altri: 読まれている, «è letto», una cosa che continua ad accadere. この本は, il tema, va per primo; 多くの人に, chi legge, sta subito prima del verbo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "迷惑の受身",
+      "prompt": {
+        "en": "\"The baby cried in the middle of the night (and kept me awake).\" Which form says it (from 泣く)?",
+        "it": "«Il bambino ha pianto in piena notte (e non mi ha fatto dormire).» Quale forma lo dice (da 泣く)?"
+      },
+      "sentence": {
+        "kanji": "夜中に赤ちゃんに泣かれた",
+        "kana": "よなかにあかちゃんになかれた"
+      },
+      "translation": {
+        "en": "The baby cried in the middle of the night (and kept me awake).",
+        "it": "Il bambino ha pianto in piena notte (e non mi ha fatto dormire)."
+      },
+      "glosses": [
+        { "text": "泣かれた", "reading": "なかれた" },
+        { "text": "泣きれた", "reading": "なきれた" },
+        { "text": "泣くれた", "reading": "なくれた" },
+        { "text": "泣かせた", "reading": "なかせた" }
+      ],
+      "gap": {
+        "kanji": "夜中に赤ちゃんに＿",
+        "kana": "よなかにあかちゃんに＿"
+      },
+      "answer": "泣かれた",
+      "distractors": ["泣きれた", "泣くれた", "泣かせた"],
+      "explanation": {
+        "en": "泣く (\"cry\") has no object, but it can still go into the passive when the crying is a trouble for someone: 泣か + れる; in the past, 泣かれた. The baby, who cries, takes に; the speaker, who could not sleep, is understood. 泣かせた is the causative, \"made (someone) cry\".",
+        "it": "泣く («piangere») non ha oggetto, ma può andare lo stesso al passivo quando il pianto è un problema per qualcuno: 泣か + れる; al passato, 泣かれた. Il bambino, che piange, prende に; chi parla, che non ha dormito, è sottinteso. 泣かせた è il causativo, «ha fatto piangere»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "受身の「れる」「られる」",
+      "prompt": {
+        "en": "Which part is 歌う (\"sing\") in the form the passive attaches to?",
+        "it": "Quale parte è 歌う («cantare») nella forma a cui si attacca il passivo?"
+      },
+      "sentence": {
+        "kanji": "この歌は世界中で歌われている",
+        "kana": "このうたはせかいじゅうでうたわれている"
+      },
+      "translation": {
+        "en": "This song is sung all over the world.",
+        "it": "Questa canzone è cantata in tutto il mondo."
+      },
+      "glosses": [
+        { "text": "この歌は", "reading": "このうたは", "meaning": { "en": "this song (は: the topic)", "it": "questa canzone (は: il tema)" } },
+        { "text": "世界中で", "reading": "せかいじゅうで", "meaning": { "en": "all over the world", "it": "in tutto il mondo" } },
+        { "text": "歌わ", "reading": "うたわ", "meaning": { "en": "sing (歌う with its last kana in the a-sound)", "it": "cantare (歌う con l'ultimo kana nel suono a)" } },
+        { "text": "れている", "meaning": { "en": "is …-ed (passive + ている)", "it": "è …-ato (passivo + ている)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select 歌わ. The passive of a godan verb attaches to the last kana changed to the a-sound, and for verbs ending in う that sound is わ: 歌う → 歌わ + れる. Then ている says it keeps happening: 歌われている, \"is sung\".",
+        "it": "Seleziona 歌わ. Il passivo di un verbo godan si attacca all'ultimo kana cambiato nel suono a, e per i verbi in う quel suono è わ: 歌う → 歌わ + れる. Poi ている dice che continua ad accadere: 歌われている, «è cantata»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "受身で動作主を示す「に」",
+      "prompt": {
+        "en": "\"The dog is being petted by the child.\" Which particle marks who is petting?",
+        "it": "«Il cane viene accarezzato dal bambino.» Quale particella segna chi accarezza?"
+      },
+      "sentence": {
+        "kanji": "犬が子どもになでられている",
+        "kana": "いぬがこどもになでられている"
+      },
+      "translation": {
+        "en": "The dog is being petted by the child.",
+        "it": "Il cane viene accarezzato dal bambino."
+      },
+      "gap": {
+        "kanji": "犬が子ども＿なでられている",
+        "kana": "いぬがこども＿なでられている"
+      },
+      "answer": "に",
+      "distractors": ["を", "が", "で"],
+      "explanation": {
+        "en": "なでられている is the passive of なでる (\"pet, stroke\") with ている: \"is being petted\". The dog receives the action, so it takes が; the child, who does it, takes に. With を the child would be the one being petted.",
+        "it": "なでられている è il passivo di なでる («accarezzare») con ている: «viene accarezzato». Il cane subisce l'azione, quindi prende が; il bambino, che la fa, prende に. Con を sarebbe il bambino a essere accarezzato."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "迷惑の受身",
+      "prompt": {
+        "en": "Build: \"My mother threw away the manga in my room (and I didn't want her to).\"",
+        "it": "Componi: «Mia madre mi ha buttato via i manga che avevo in camera (e non volevo).»"
+      },
+      "sentence": {
+        "kanji": "母に部屋のマンガを捨てられた",
+        "kana": "ははにへやのマンガをすてられた"
+      },
+      "translation": {
+        "en": "My mother threw away the manga in my room (and I didn't want her to).",
+        "it": "Mia madre mi ha buttato via i manga che avevo in camera (e non volevo)."
+      },
+      "glosses": [
+        { "text": "母に", "reading": "ははに", "meaning": { "en": "by my mother", "it": "da mia madre" } },
+        { "text": "部屋のマンガを", "reading": "へやのマンガを", "meaning": { "en": "the manga in my room (を: the object)", "it": "i manga in camera (を: l'oggetto)" } },
+        { "text": "捨てられた", "reading": "すてられた", "meaning": { "en": "had (them) thrown away", "it": "me li ha buttati via" } }
+      ],
+      "answer": ["母に", "部屋のマンガを", "捨てられた"],
+      "alsoAccepted": [["部屋のマンガを", "母に", "捨てられた"]],
+      "explanation": {
+        "en": "捨てる (\"throw away\") is ichidan, so its passive is 捨て + られる; in the past, 捨てられた. The speaker it happened to is understood; who did it takes に (母に), and the manga keep を. Both go before the verb, in either order: \"部屋のマンガを母に捨てられた\" is also correct.",
+        "it": "捨てる («buttare via») è ichidan, quindi il suo passivo è 捨て + られる; al passato, 捨てられた. Chi parla, a cui è capitato, è sottinteso; chi l'ha fatto prende に (母に), e i manga tengono を. Vanno tutti e due prima del verbo, in qualsiasi ordine: va bene anche «部屋のマンガを母に捨てられた»."
+      }
+    }
+  ]
+}

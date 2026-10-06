@@ -40,17 +40,18 @@ con il contenuto reale. -->
 | 12 | `12-la-forma-potenziale.json` | `lezione-12` | 7 | 6 | 6 | 19 |
 | 13 | `13-forma-te-kureru-ageru.json` | `lezione-13` | 6 | 6 | 6 | 18 |
 | 14 | `14-citare-con-to-e-verbi-composti.json` | `lezione-14` | 7 | 7 | 5 | 19 |
+| 15 | `15-il-passivo.json` | `lezione-15` | 8 | 5 | 5 | 18 |
 | 900 | `01-la-particella-wo.json` | — (fixture dei test) | 1 | 1 | 1 | 3 |
 
-<!-- inventory-total: 277 -->
+<!-- inventory-total: 295 -->
 
-**Totale: 277 esercizi** in 15 file — 104 `single-select`, 84 `select-span`,
-89 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
+**Totale: 295 esercizi** in 16 file — 112 `single-select`, 89 `select-span`,
+94 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
 curriculum (fascia riservata 900+, `docs/authoring-runbook.md`).
 
 ## Transcript ancora da lavorare
 
-I transcript da `lezione-15` a `lezione-99` sono presenti in
+I transcript da `lezione-16` a `lezione-99` sono presenti in
 `.authoring/transcripts/` ma **vuoti** (0 byte): non c'è nulla da cui estrarre
 fatti. Quando un transcript viene riempito e la lezione autorata, la si aggiunge
 alla tabella sopra.

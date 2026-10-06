@@ -65,6 +65,9 @@ export const GRAMMAR_POINT_READINGS: Readonly<Record<string, string | readonly F
   '連用形でつなぐ複合動詞': 'れんようけいでつなぐふくごうどうし',
   '複合名詞の連濁': 'ふくごうめいしのれんだく',
   '擬音語・擬態語と「と」': 'ぎおんご・ぎたいごと「と」',
+  '受身の「れる」「られる」': 'うけみの「れる」「られる」',
+  '受身で動作主を示す「に」': 'うけみでどうさぬしをしめす「に」',
+  '迷惑の受身': 'めいわくのうけみ',
 };
 
 /**
@@ -119,6 +122,9 @@ export const GRAMMAR_POINT_MEANINGS: Readonly<Record<string, BilingualText>> = {
   '連用形でつなぐ複合動詞': { en: 'Two verbs joined into one', it: 'Due verbi uniti in uno' },
   '複合名詞の連濁': { en: 'The sound change in compound nouns', it: 'Il cambio di suono nei nomi composti' },
   '擬音語・擬態語と「と」': { en: 'Sound and manner words with と', it: 'Le parole che imitano suoni e modi, con と' },
+  '受身の「れる」「られる」': { en: 'The passive with れる and られる', it: 'Il passivo con れる e られる' },
+  '受身で動作主を示す「に」': { en: 'に for who does the action in the passive', it: "に per chi fa l'azione nel passivo" },
+  '迷惑の受身': { en: 'The passive for something unwelcome', it: 'Il passivo per una cosa sgradita' },
 };
 
 /** Parole con una sola lettura, per le spiegazioni (vedi l'intestazione). */
