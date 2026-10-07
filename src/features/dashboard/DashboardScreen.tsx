@@ -62,6 +62,7 @@ import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
 import { ArrowIcon, ExternalIcon } from '../../ui/icons';
+import { Cat } from '../../ui/Cat';
 import { REPO_URL } from '../about/links';
 import { exercisesQueryKey } from '../study/exercisesQueryKey';
 import {
@@ -373,10 +374,12 @@ export function DashboardScreen({
     return (
       <main className={MAIN_CLASS}>
         {/* La descrizione al posto del numero, poi la sola barra «comincia». */}
-        <div className="flex-1 border-b-[1.5px] border-border-strong">
+        <div className="flex flex-1 flex-col justify-between border-b-[1.5px] border-border-strong">
           <p className={`${DECLARATION_CLASS} max-w-[34rem]`}>
             {t('dashboard.firstRunBody')}
           </p>
+          {/* Il gatto della libreria aspetta, seduto (07-10-2026). */}
+          <Cat pose="sitting" height={96} className="m-5 self-end sm:m-8 sm:h-[140px] sm:w-auto" />
         </div>
         {next !== null ? (
           <button
@@ -468,7 +471,7 @@ export function DashboardScreen({
               </p>
             </>
           ) : (
-            <div className="flex flex-col">
+            <div className="flex h-full flex-col">
               {next === null ? (
                 <p className={DECLARATION_CLASS}>{t('dashboard.curriculumCompleteBody')}</p>
               ) : null}
@@ -496,6 +499,12 @@ export function DashboardScreen({
                   </button>
                 </div>
               ) : null}
+              {/* La pila è a zero: il gatto della libreria dorme (07-10-2026). */}
+              <Cat
+                pose="sleeping"
+                height={52}
+                className="mx-5 mb-6 mt-auto sm:mx-8 sm:mb-8 sm:h-[76px] sm:w-auto"
+              />
             </div>
           )}
         </div>

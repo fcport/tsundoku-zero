@@ -68,6 +68,7 @@ import { MagazineFrame } from '../../ui/MagazineFrame';
 import { ACTION_BAR, KICKER, NEXT_BAR } from '../../ui/magazine';
 import { ArrowIcon } from '../../ui/icons';
 import { Stamp } from '../../ui/Stamp';
+import { Cat } from '../../ui/Cat';
 import { MILESTONE_STAMPS, READ_STAMP } from '../lessons/stamps';
 import { useExerciseLessons } from '../lessons/useExerciseLessons';
 import { usePorts } from '../ports/PortsContext';
@@ -597,12 +598,16 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
         <main className={MAIN_CLASS}>
           {/* Lo ZERO del nome, a tutta pagina: la pila è a zero. Decorativo
               (`aria-hidden`): la conferma la porta il testo subito sotto. */}
-          <p
-            aria-hidden="true"
-            className="self-start text-[200px] font-black leading-[0.8] font-stretch-extra-condensed text-ink-primary sm:text-[260px]"
-          >
-            0
-          </p>
+          <div className="flex items-end gap-4 self-start">
+            <p
+              aria-hidden="true"
+              className="text-[200px] font-black leading-[0.8] font-stretch-extra-condensed text-ink-primary sm:text-[260px]"
+            >
+              0
+            </p>
+            {/* Accanto allo zero il gatto della libreria dorme (07-10-2026). */}
+            <Cat pose="sleeping" height={46} className="mb-1 sm:h-[64px] sm:w-auto" />
+          </div>
           {/* La conferma sobria di aver finito (AC1/AC2): nessun `!`, nessun verde. */}
           <p className="w-full border-t-[1.5px] border-border-strong pt-4 text-[22px] font-medium leading-snug text-ink-primary">
             {t('session.complete.body')}

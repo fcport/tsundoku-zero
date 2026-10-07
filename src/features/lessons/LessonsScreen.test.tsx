@@ -215,6 +215,11 @@ describe('LessonsScreen — la libreria', () => {
     expect(html).toContain('Esercizi imparati: 1 su 2');
   });
 
+  it('il gatto dorme sullo scaffale solo se c’è una lezione imparata', () => {
+    expect(renderWithLibrary([...goods('a', 4)])).toContain('data-mascot="sleeping"');
+    expect(renderWithLibrary([...goods('a', 3)])).not.toContain('data-mascot');
+  });
+
   it('senza la lezione di ogni esercizio: niente conteggi', () => {
     const html = render([lesson(1), lesson(2)], ['l1'], undefined, goods('a', 4));
     expect(html).toContain('Lezioni imparate');

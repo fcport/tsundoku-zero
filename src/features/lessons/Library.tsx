@@ -10,6 +10,7 @@ import type { CSSProperties } from 'react';
 import type { LessonMastery } from '../../domain/library';
 import type { ShelfEntry } from '../../domain/curriculum';
 import { useTranslation } from '../../i18n';
+import { Cat } from '../../ui/Cat';
 import { HEADLINE, KICKER } from '../../ui/magazine';
 
 // Le altezze dei dorsi, come libri veri (telefono; da 640px un terzo in più).
@@ -24,6 +25,20 @@ export interface LibraryProps {
 export function Library({ shelf, mastery }: LibraryProps) {
   const { t } = useTranslation();
   const read = shelf.filter(({ lesson }) => mastery?.get(lesson.id)?.read).length;
+  // Il gatto dorme sopra l'ultima lezione imparata, appoggiato al più alto dei
+  // tre libri su cui si stende.
+  const lastRead = shelf.reduce(
+    (last, { lesson }, i) => (mastery?.get(lesson.id)?.read ? i : last),
+    -1,
+  );
+  const catBed =
+    lastRead < 0
+      ? 0
+      : Math.max(
+          ...shelf
+            .slice(lastRead, lastRead + 3)
+            .map((_, k) => HEIGHTS[(lastRead + k) % HEIGHTS.length]!),
+        );
 
   return (
     <section className="flex flex-col gap-3 border-b-[1.5px] border-border-strong p-5 sm:p-8">
@@ -37,7 +52,9 @@ export function Library({ shelf, mastery }: LibraryProps) {
 
       <ol
         aria-hidden="true"
-        className="mt-2 grid grid-cols-[repeat(auto-fill,minmax(22px,1fr))] items-end gap-y-4 sm:grid-cols-[repeat(auto-fill,minmax(30px,1fr))]"
+        className={`mt-2 grid grid-cols-[repeat(auto-fill,minmax(22px,1fr))] items-end gap-y-4 sm:grid-cols-[repeat(auto-fill,minmax(30px,1fr))] ${
+          lastRead < 0 ? '' : 'pt-8 sm:pt-10'
+        }`}
       >
         {shelf.map(({ lesson, status }, i) => {
           const m = mastery?.get(lesson.id);
@@ -52,8 +69,17 @@ export function Library({ shelf, mastery }: LibraryProps) {
           return (
             <li
               key={lesson.id}
-              className="flex h-full items-end border-b-[3px] border-ink-primary px-[1.5px]"
+              style={i === lastRead ? ({ '--bed': `${catBed}px` } as CSSProperties) : undefined}
+              className="relative flex h-full items-end border-b-[3px] border-ink-primary px-[1.5px]"
             >
+              {/* Il gatto della libreria, addormentato sopra i libri (07-10-2026). */}
+              {i === lastRead ? (
+                <Cat
+                  pose="sleeping"
+                  height={28}
+                  className="absolute bottom-[calc(var(--bed)+1px)] left-0 z-10 sm:bottom-[calc(var(--bed)*4/3+1px)] sm:h-[38px] sm:w-auto"
+                />
+              ) : null}
               <span
                 style={{ '--h': `${HEIGHTS[i % HEIGHTS.length]}px` } as CSSProperties}
                 className={`relative flex h-[var(--h)] w-full justify-center overflow-hidden border-[1.5px] pt-1 sm:h-[calc(var(--h)*4/3)] ${tone} ${

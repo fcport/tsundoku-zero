@@ -1144,3 +1144,21 @@ describe('la serie col giorno libero e le lezioni imparate', () => {
     expect(render(qc, UID)).toContain('Lessons learned: 1');
   });
 });
+
+// Il gatto della libreria (07-10-2026): solo nei momenti che contano.
+describe('il gatto della libreria', () => {
+  it('primo avvio ⇒ il gatto seduto', () => {
+    const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 0, total: 3 }), UID);
+    expect(markup).toContain('data-mascot="sitting"');
+  });
+
+  it('pila a zero ⇒ il gatto addormentato', () => {
+    const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 1, total: 3 }), UID);
+    expect(markup).toContain('data-mascot="sleeping"');
+  });
+
+  it('pila da svuotare ⇒ nessun gatto: è la schermata di tutti i giorni', () => {
+    const markup = render(seededClient({ dueCount: 4, log: [], unlocked: 1, total: 3 }), UID);
+    expect(markup).not.toContain('data-mascot');
+  });
+});

@@ -421,6 +421,10 @@ describe('schermata dello zero — il riepilogo della sessione', () => {
     expect(drained(STARTED)).not.toContain('!');
   });
 
+  it('accanto allo zero dorme il gatto della libreria', () => {
+    expect(drained(STARTED)).toContain('data-mascot="sleeping"');
+  });
+
   it('senza l’istante d’inizio il riepilogo non c’è', () => {
     const markup = drained(null);
     expect(markup).toContain(en.session.complete.body);
