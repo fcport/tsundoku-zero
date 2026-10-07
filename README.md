@@ -40,6 +40,16 @@ is not affiliated with Cure Dolly or TheMoeWay, and the exercises are original.
   the things you know without thinking.
 - **At 2 a.m.** Due dates fall at the start of the study day, 2 a.m. local time:
   the whole pile fills up at once and does not grow during the day.
+- **Streak, with a day off.** A day counts when you answer at least once. You
+  can skip one day in seven without losing the streak: the skipped day does not
+  count, but the streak goes on. Two days skipped in a row end it.
+- **Lessons learned.** An exercise is *learned* once you have got it right enough
+  times in a row that it comes back only after 16 days or more (level 4). A lesson
+  is learned when all its exercises are; a mistake puts it back to learning. The
+  Lessons page shows them as books on a shelf. A few milestones (lessons learned,
+  exercises that come back after 35 days, days in a row) are rebuilt from your
+  answers and stay once earned, and the end of a session says what moved:
+  exercises you got right, lessons learned, new milestones.
 - **Outside the pile.** From the Lessons page you can watch the video again and
   freely practise any lesson you have unlocked; there is also a drill on verb
   forms. Neither touches the pile.

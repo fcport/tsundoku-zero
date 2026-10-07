@@ -47,7 +47,8 @@ import { resolveBilingual } from '../../domain/bilingual';
 import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
 import { dueQueryKey } from '../../domain/due';
 import { pileBooks } from '../../domain/pile';
-import { streak } from '../../domain/streak';
+import { lessonMastery } from '../../domain/library';
+import { streakStatus, streakWeek, type StreakDay } from '../../domain/streak';
 import {
   DEFAULT_LESSONS_PER_DAY,
   dailyUnlockLimitReached,
@@ -68,6 +69,7 @@ import {
   useActiveExerciseCounts,
   useAddLessonExercises,
 } from '../lessons/useAddLessonExercises';
+import { useExerciseLessons } from '../lessons/useExerciseLessons';
 import { PileOfBooks } from './PileOfBooks';
 
 export interface DashboardScreenProps {
@@ -143,16 +145,42 @@ const PILE_HERO_CLASS =
 // 冊, il contatore giapponese dei libri, con la sua lettura.
 const SATSU = [{ text: '冊', ruby: 'さつ' }] as const;
 
-// Una fila di segmenti: `filled` pieni d'inchiostro su `count`. Decorativa: il dato
-// lo porta il testo accanto (numero visibile + frase per l'AT), mai il solo disegno.
-function Segments({ count, filled }: { readonly count: number; readonly filled: number }) {
+// Le file di segmenti sotto i due dati sono decorative: il dato lo porta il testo
+// accanto (numero visibile + frase per l'AT), mai il solo disegno.
+//
+// La settimana della serie (07-10-2026): sette caselle, dal più vecchio a oggi.
+// Studiato pieno d'inchiostro, giorno libero a righe, saltato incavato, oggi ancora
+// aperto solo bordato. Decorativa: la serie la dice il testo (numero + frase AT).
+const DAY_TONE: Readonly<Record<StreakDay['state'], string>> = {
+  studied: 'bg-ink-primary',
+  free: 'border-[1.5px] border-ink-primary bg-[repeating-linear-gradient(135deg,var(--color-ink-primary)_0_1.5px,transparent_1.5px_4px)]',
+  missed: 'bg-surface-sunken',
+  open: 'border-[1.5px] border-ink-primary',
+};
+
+function WeekStrip({ week }: { readonly week: readonly StreakDay[] }) {
   return (
     <span aria-hidden="true" className="mt-3 flex gap-[2px]">
-      {Array.from({ length: count }, (_, i) => (
-        <span
-          key={i}
-          className={`h-[6px] flex-1 ${i < filled ? 'bg-ink-primary' : 'bg-surface-sunken'}`}
-        />
+      {week.map((day) => (
+        <span key={day.date} className={`h-[10px] flex-1 ${DAY_TONE[day.state]}`} />
+      ))}
+    </span>
+  );
+}
+
+// Le lezioni del curriculum (07-10-2026): imparate in rosso (il colore del timbro
+// 習得), sbloccate d'inchiostro, le altre incavate. Decorativa come `Segments`.
+const LESSON_TONE = {
+  read: 'bg-accent',
+  unlocked: 'bg-ink-primary',
+  locked: 'bg-surface-sunken',
+} as const;
+
+function LessonSegments({ states }: { readonly states: readonly (keyof typeof LESSON_TONE)[] }) {
+  return (
+    <span aria-hidden="true" className="mt-3 flex gap-[2px]">
+      {states.map((state, i) => (
+        <span key={i} className={`h-[6px] flex-1 ${LESSON_TONE[state]}`} />
       ))}
     </span>
   );
@@ -217,6 +245,9 @@ export function DashboardScreen({
   // cancello scheletro: finché manca, l'offerta semplicemente non compare.
   const activeQ = useActiveExerciseCounts(userId);
   const moreMutation = useAddLessonExercises(userId);
+  // La lezione di ogni esercizio, per le lezioni imparate (07-10-2026). Fuori dal
+  // cancello scheletro: finché manca, «Lezioni imparate» semplicemente non compare.
+  const exerciseLessonsQ = useExerciseLessons();
 
   // L'azione di SBLOCCO (3.13): materializza la lezione via porta
   // (`progress.unlockLesson`, scrittura atomica/idempotente), MAI da `data`
@@ -272,7 +303,11 @@ export function DashboardScreen({
   const count = dueQ.data.length;
   // I dorsi della pila, nell'ordine della coda; vuoti finché il contenuto non c'è.
   const books = pileBooks(dueIds, pileQ.data ?? [], lessonsQ.data);
-  const days = streak(logQ.data, clock.now(), clock.timeZone());
+  // La serie col giorno libero (07-10-2026): giorni, settimana e giorno libero
+  // dalle funzioni pure di `streak.ts`, l'unica autorità.
+  const streakNow = streakStatus(logQ.data, clock.now(), clock.timeZone());
+  const days = streakNow.days;
+  const week = streakWeek(logQ.data, clock.now(), clock.timeZone());
   // Il read-model UNICO del progresso (3.17): da `unlockedQ.data` (UnlockedLesson[])
   // derivano SIA gli id (sequenza del curriculum) SIA gli istanti (tetto), senza
   // doppia lettura di `lesson_progress`.
@@ -291,6 +326,19 @@ export function DashboardScreen({
   // stato persistito (`['lessons']` + `['unlocked']` + pila), mai memorizzata
   // (AD-5): sopravvive al refresh.
   const lastUnlocked = lastUnlockedLesson(curriculum, unlockedIds);
+  // Le lezioni LETTE (la libreria, 07-10-2026): `null` finché non c'è la lezione di
+  // ogni esercizio. Lo stato di ciascuna lezione nell'ordine del curriculum.
+  const mastery =
+    exerciseLessonsQ.data === undefined
+      ? null
+      : lessonMastery(logQ.data, curriculum, exerciseLessonsQ.data);
+  const unlockedSet = new Set(unlockedIds);
+  const lessonStates = [...curriculum]
+    .sort((a, b) => a.ordinal - b.ordinal)
+    .map((lesson) =>
+      mastery?.get(lesson.id)?.read ? 'read' : unlockedSet.has(lesson.id) ? 'unlocked' : 'locked',
+    ) as (keyof typeof LESSON_TONE)[];
+  const lessonsRead = lessonStates.filter((state) => state === 'read').length;
   // Gli esercizi della lezione in corso ancora in riserva (0 finché i conteggi non
   // ci sono): a pila vuota li offre «Esercitati di più».
   const reserve =
@@ -355,6 +403,15 @@ export function DashboardScreen({
     month: 'long',
     timeZone: clock.timeZone(),
   }).format(clock.now());
+  // Il giorno della settimana in cui torna il giorno libero (`YYYY-MM-DD` nominale,
+  // quindi letto in UTC).
+  const freeDayBackWeekday =
+    streakNow.freeDayBackOn === null
+      ? null
+      : new Intl.DateTimeFormat(locale === 'it' ? 'it-IT' : 'en-GB', {
+          weekday: 'long',
+          timeZone: 'UTC',
+        }).format(new Date(`${streakNow.freeDayBackOn}T12:00:00Z`));
 
   return (
     <main className={MAIN_CLASS}>
@@ -479,8 +536,16 @@ export function DashboardScreen({
               <p aria-hidden="true" className="mt-2 text-[44px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
                 {days}
               </p>
-              <Segments count={7} filled={Math.min(days, 7)} />
+              <WeekStrip week={week} />
               <p className="sr-only">{t('dashboard.streakLabel', { days })}</p>
+              {/* Il giorno libero: c'è, o da quando torna. Solo a serie viva. */}
+              {days > 0 ? (
+                <p className="mt-2 text-label text-ink-secondary">
+                  {freeDayBackWeekday === null
+                    ? t('dashboard.freeDayReady')
+                    : t('dashboard.freeDayBack', { weekday: freeDayBackWeekday })}
+                </p>
+              ) : null}
             </div>
             {/* curriculum-progress: sbloccate su totale ("u di t lezioni"). */}
             <div className="p-4 sm:p-6 lg:border-b-[1.5px] lg:border-border-strong">
@@ -491,8 +556,14 @@ export function DashboardScreen({
                   / {total}
                 </span>
               </p>
-              <Segments count={total} filled={unlocked} />
+              <LessonSegments states={lessonStates} />
               <p className="sr-only">{t('dashboard.curriculumLabel', { unlocked, total })}</p>
+              {/* Le lezioni imparate (la libreria): in rosso nella fila qui sopra. */}
+              {mastery !== null ? (
+                <p className="mt-2 text-label text-ink-secondary">
+                  {t('dashboard.lessonsRead', { value: lessonsRead })}
+                </p>
+              ) : null}
             </div>
           </div>
 

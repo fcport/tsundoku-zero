@@ -32,7 +32,7 @@ const inMemoryPorts: Ports = {
     applyReview: async () => {},
   },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
-  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };
 
 // Una voce di log COMPLETA (`ReviewLogRecord`): `answersOverTime` legge solo
@@ -445,7 +445,7 @@ describe('5.2 AC — la fonte è SOLO review.listReviewLog() (mai listDue/review
         },
       },
       progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
-      content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
+      content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
     };
     const qc = seededClient([logAt('2026-09-25T10:00:00.000Z', 'ex-1', 'good')]);
     const markup = render(qc, UID, spyPorts);
@@ -525,7 +525,7 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
         },
       },
       progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
-      content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
+      content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
     };
   }
 
@@ -663,7 +663,7 @@ describe('5.3 AC — la fonte e SOLO review.listReviewLog() + content.listLesson
           return [];
         },
         listExercisesByIds: async () => [],
-        listExercisesByLesson: async () => [],
+        listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map(),
       },
     };
     const lessons: readonly LessonSummary[] = [
@@ -758,5 +758,54 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     expect(markup).not.toContain(itCatalog.stats.answersOverTime.heading);
     expect(markup).not.toContain(itCatalog.stats.stageDistribution.heading);
     expect(markup).not.toContain(itCatalog.stats.grammarPointErrorRates.heading);
+  });
+});
+
+// La serie, il calendario e i traguardi (07-10-2026). NOW = 25 settembre 2026, UTC.
+describe('la serie, il calendario e i traguardi', () => {
+  // 22, 23 e (24 saltato, giorno libero) 25: serie di 3 giorni di studio.
+  const LOG = [
+    logAt('2026-09-22T10:00:00.000Z'),
+    logAt('2026-09-23T10:00:00.000Z'),
+    logAt('2026-09-25T10:00:00.000Z'),
+  ];
+
+  it('la serie: giorni, record, la regola del giorno libero e quando torna', () => {
+    const markup = render(seededClient(LOG), UID);
+    expect(markup).toContain(en.stats.streak.heading);
+    expect(markup).toContain('3 day streak');
+    expect(markup).toContain('Longest streak: 3');
+    expect(markup).toContain(en.stats.streak.rule);
+    expect(markup).toContain(
+      'You skipped Thursday 24 September without losing your streak. You can skip the next day from Thursday 1 October.',
+    );
+  });
+
+  it('il calendario: la frase per l’AT, poi i numeri degli ultimi giorni', () => {
+    const markup = render(seededClient(LOG), UID);
+    expect(markup).toContain(
+      'In the last 26 weeks you answered on 3 different days, 3 answers in all.',
+    );
+    expect(markup).toContain('The last 14 days');
+    expect(markup).toContain('2026-09-24 - answers: 0');
+  });
+
+  it('i traguardi compaiono con la lezione di ogni esercizio, con le soglie e il massimo', () => {
+    const qc = seededClient(LOG);
+    expect(render(qc, UID)).not.toContain(en.stats.milestones.heading);
+    qc.setQueryData(['exerciseLessons'], new Map());
+    const markup = render(qc, UID);
+    expect(markup).toContain(en.stats.milestones.heading);
+    expect(markup).toContain(en.stats.milestones.family.streak);
+    expect(markup).toContain('Days in a row: 7');
+    expect(markup).toContain('So far: 3');
+  });
+
+  it('log vuoto: né serie né traguardi', () => {
+    const qc = seededClient([]);
+    qc.setQueryData(['exerciseLessons'], new Map());
+    const markup = render(qc, UID);
+    expect(markup).not.toContain(en.stats.streak.heading);
+    expect(markup).not.toContain(en.stats.milestones.heading);
   });
 });

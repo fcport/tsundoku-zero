@@ -122,6 +122,12 @@ export const it = {
     practiceKicker: 'Forme del verbo',
     lessonsKicker: 'Le lezioni · in corso',
     lessonsOpen: 'Apri le lezioni',
+    // Il giorno libero sotto la serie (07-10-2026): se c'è, o da quando torna
+    // (`{{weekday}}` = giorno della settimana, già nella lingua dell'interfaccia).
+    freeDayReady: 'Puoi saltare un giorno senza perdere la serie',
+    freeDayBack: 'Hai già saltato un giorno: il prossimo puoi saltarlo da {{weekday}}',
+    // Le lezioni lette (la libreria), sotto il curriculum.
+    lessonsRead: 'Lezioni imparate: {{value}}',
   },
   // Le statistiche (Epic 5): STESSE chiavi di `en` (parità ricorsiva). Gli stati a
   // dati insufficienti DICHIARANO «cosa manca e quanto» (5.4, FR7.5): il grafico
@@ -175,6 +181,42 @@ export const it = {
     },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continua"/"Indietro" generico.
+    // Il calendario (07-10-2026): una casella per giorno, più scura con più
+    // risposte. `summary` è l'alternativa testuale per l'AT.
+    calendar: {
+      less: 'meno',
+      more: 'più',
+      freeDay: 'saltato senza perdere la serie',
+      summary:
+        'Nelle ultime {{weeks}} settimane hai risposto in {{days}} giorni diversi, {{answers}} risposte in tutto.',
+      recentHeading: 'Gli ultimi {{days}} giorni',
+    },
+    // La serie e il giorno libero (07-10-2026).
+    streak: {
+      heading: 'La serie',
+      best: 'La serie più lunga: {{days}}',
+      rule: "La serie conta i giorni in cui studi, uno dopo l'altro. Puoi saltare un giorno ogni 7 senza perderla: quel giorno non si conta, ma la serie va avanti. Se salti due giorni di fila, o due giorni a meno di una settimana l'uno dall'altro, la serie riparte da zero.",
+      freeDayReady: 'Adesso puoi saltare un giorno senza perdere la serie.',
+      freeDayUsed: 'Hai saltato {{date}} senza perdere la serie. Il prossimo giorno puoi saltarlo da {{back}}.',
+    },
+    // I traguardi (07-10-2026): forma etichetta-valore («Lezioni lette: 5»).
+    milestones: {
+      heading: 'Traguardi',
+      hint: 'Si prendono imparando lezioni, portando gli esercizi al punto in cui tornano solo dopo 35 giorni, e studiando tanti giorni di fila. Una volta presi restano, anche se poi sbagli.',
+      family: {
+        lessonsRead: 'Lezioni imparate',
+        topLevel: 'Esercizi che tornano dopo 35 giorni',
+        streak: 'Giorni di fila',
+      },
+      entry: '{{family}}: {{threshold}}',
+      achievedOn: 'Preso il {{date}}',
+      progress: 'Finora: {{best}}',
+      stampMeaning: {
+        lessonsRead: 'imparare',
+        topLevel: 'ricordare',
+        streak: 'continuare',
+      },
+    },
     back: 'Torna alla dashboard',
   },
   session: {
@@ -260,6 +302,12 @@ export const it = {
       body: 'La pila di ripasso è a zero. Hai completato ogni esercizio di questa sessione.',
       streakLabel: 'Giorni di fila: {{days}}',
       dismiss: 'Torna alla dashboard',
+      // Il riepilogo (07-10-2026): cosa è cambiato, in forma etichetta-valore
+      // (niente «1 esercizi»). Niente `!`, niente lode: i fatti.
+      recapLevelUps: 'Esercizi fatti giusti, che ora tornano più avanti: {{value}}',
+      recapTop: 'Esercizi che ora tornano solo dopo 35 giorni: {{value}}',
+      lessonRead: 'Lezione {{order}} imparata: tutti i suoi esercizi ora tornano solo dopo 16 giorni o più.',
+      milestone: 'Nuovo traguardo',
     },
   },
   // La pagina Lezioni: tutto il curriculum in ordine, con lo stato di ciascuna, e il
@@ -300,6 +348,17 @@ export const it = {
     rules: 'Cosa insegna',
     practice: 'Ripassa gli esercizi',
     video: 'Video di riferimento',
+    // La libreria (07-10-2026): una lezione è imparata quando lo sono tutti i suoi
+    // esercizi (livello 4 o più: tornano fra 16 giorni o più). Forma etichetta-valore, niente «1 lezioni».
+    library: {
+      kicker: 'Lezioni imparate',
+      heading: '{{read}} su {{total}}',
+      explain:
+        "Un esercizio è imparato quando l'hai fatto giusto abbastanza volte di fila da tornare solo dopo 16 giorni o più. Una lezione è imparata quando lo sono tutti i suoi esercizi; se ne sbagli uno, torna da imparare. Qui sotto ogni libro è una lezione: rosso se l'hai imparata, si riempie man mano che ne impari gli esercizi, grigio se è ancora bloccata.",
+    },
+    known: 'Esercizi imparati: {{known}} su {{total}}',
+    read: 'Imparata: tutti i suoi esercizi tornano solo dopo 16 giorni o più.',
+    readStampMeaning: 'imparata',
   },
   lessonPractice: {
     back: 'Torna alle lezioni',

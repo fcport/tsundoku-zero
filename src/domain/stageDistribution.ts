@@ -57,19 +57,34 @@ export function stageDistribution(
 ): readonly StageCount[] {
   if (log.length === 0) return [];
 
-  // Raggruppa gli esiti per esercizio (una lista di voci per exerciseId).
+  // Lo stadio finale di ogni esercizio, poi un bucket per stadio.
+  const N = LEITNER_INTERVALS_DAYS.length;
+  const counts = new Array<number>(N).fill(0);
+  for (const stage of currentStages(log).values()) {
+    counts[stage] += 1;
+  }
+
+  // L'asse: un StageCount per OGNI stadio 0..N-1 (contiguo, zeri inclusi).
+  return counts.map((count, stage) => ({ stage, count }));
+}
+
+/**
+ * Lo stadio CORRENTE di ogni esercizio presente nel `log`, ricostruito dal solo
+ * log: raggruppa per `exerciseId`, ordina per `reviewedAt` crescente e fa la fold
+ * degli esiti dallo stadio 0 via `nextStage` (l'unica transizione del motore). Pura
+ * e senza tempo; condivisa con la padronanza delle lezioni (`./library`).
+ */
+export function currentStages(
+  log: readonly ReviewLogRecord[],
+): ReadonlyMap<string, number> {
   const byExercise = new Map<string, ReviewLogRecord[]>();
   for (const record of log) {
     const entries = byExercise.get(record.exerciseId);
     if (entries) entries.push(record);
     else byExercise.set(record.exerciseId, [record]);
   }
-
-  // Per ogni esercizio: ordina per reviewedAt crescente e fa la fold degli esiti
-  // da stadio 0 via nextStage; poi incrementa il bucket dello stadio finale.
-  const N = LEITNER_INTERVALS_DAYS.length;
-  const counts = new Array<number>(N).fill(0);
-  for (const entries of byExercise.values()) {
+  const stages = new Map<string, number>();
+  for (const [exerciseId, entries] of byExercise) {
     const sorted = [...entries].sort(
       (a, b) => a.reviewedAt.getTime() - b.reviewedAt.getTime(),
     );
@@ -77,9 +92,7 @@ export function stageDistribution(
     for (const record of sorted) {
       stage = nextStage(stage, record.outcome);
     }
-    counts[stage] += 1;
+    stages.set(exerciseId, stage);
   }
-
-  // L'asse: un StageCount per OGNI stadio 0..N-1 (contiguo, zeri inclusi).
-  return counts.map((count, stage) => ({ stage, count }));
+  return stages;
 }

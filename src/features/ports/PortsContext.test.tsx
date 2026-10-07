@@ -69,6 +69,7 @@ const inMemoryContent: ContentRepository = {
   listLessons: async () => sampleLessons,
   listExercisesByIds: async () => sampleExercises,
   listExercisesByLesson: async () => sampleExercises,
+  listExerciseLessons: async () => new Map(),
 };
 const sampleLog = [
   { exerciseId: 'ex-1', outcome: 'good', reviewedAt: FIXED_NOW, grammarPoint: 'te-form' },

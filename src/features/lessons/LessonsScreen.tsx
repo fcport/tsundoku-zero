@@ -8,6 +8,10 @@
 // il resto è in RISERVA. Ogni lezione aperta con una riserva dice quanti esercizi ha
 // in pila su quanti, e offre «Esercitati di più» (`useAddLessonExercises`).
 //
+// In testa la LIBRERIA (07-10-2026, `Library`): lo scaffale delle lezioni, imparate o
+// no. Ogni lezione aperta dice quanti esercizi sai bene e, quando li sai bene tutti,
+// porta il timbro 習得 (`lessonMastery`).
+//
 // Legge le STESSE chiavi della dashboard (`['lessons']`, `['unlocked', userId]`), così
 // arriva da cache calda; lo stato di ciascuna lezione è DERIVATO (`lessonShelf`), mai
 // memorizzato. Le porte arrivano da `usePorts()`, la navigazione come callback (AD-1).
@@ -17,17 +21,22 @@ import { resolveBilingual } from '../../domain/bilingual';
 import { lessonShelf, type LessonStatus } from '../../domain/curriculum';
 import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
 import { RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
+import { lessonMastery } from '../../domain/library';
 import { weakLessons } from '../../domain/weakLessons';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { Furigana } from '../../ui/Furigana';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { Masthead } from '../../ui/Masthead';
+import { Stamp } from '../../ui/Stamp';
 import { Translation } from '../../ui/Translation';
 import { ArrowIcon, ExternalIcon } from '../../ui/icons';
 import { lessonNumberSegments } from '../../ui/kanjiDate';
 import { FOCUS_RING, KICKER, SCREEN_TITLE, SERVICE_LINK } from '../../ui/magazine';
 import { usePorts } from '../ports/PortsContext';
 import { useActiveExerciseCounts, useAddLessonExercises } from './useAddLessonExercises';
+import { Library } from './Library';
+import { READ_STAMP } from './stamps';
+import { useExerciseLessons } from './useExerciseLessons';
 import { WeakLessons } from './WeakLessons';
 
 export interface LessonsScreenProps {
@@ -90,6 +99,9 @@ function LessonsContent({
   // Non entra nello scheletro: finché manca, ogni lezione mostra il suo totale.
   const activeQ = useActiveExerciseCounts(userId);
   const more = useAddLessonExercises(userId);
+  // La lezione di ogni esercizio, per la libreria (07-10-2026). Non entra nello
+  // scheletro: finché manca, la libreria non ha ancora i conteggi.
+  const exerciseLessonsQ = useExerciseLessons();
   // L'esito dell'ultimo «Esercitati di più», sotto la lezione che l'ha chiesto.
   const [added, setAdded] = useState<{ lessonId: string; value: number; where: 'weak' | 'list' } | null>(null);
 
@@ -125,6 +137,12 @@ function LessonsContent({
     curriculum.filter((l) => unlockedIds.has(l.id)),
     clock.now(),
   );
+  // La padronanza di ogni lezione (la libreria): dal log e dalla lezione di ogni
+  // esercizio, `null` finché uno dei due manca.
+  const mastery =
+    logQ.data === undefined || exerciseLessonsQ.data === undefined
+      ? null
+      : lessonMastery(logQ.data, curriculum, exerciseLessonsQ.data);
   // L'esito compare sotto il pulsante premuto: nel riquadro o nell'elenco.
   const addMore = (lessonId: string, where: 'weak' | 'list') =>
     more.mutate(lessonId, { onSuccess: (value) => setAdded({ lessonId, value, where }) });
@@ -132,6 +150,7 @@ function LessonsContent({
   return (
     <main className="flex min-h-[24rem] flex-1 flex-col">
       {header}
+      <Library shelf={shelf} mastery={mastery} />
       <WeakLessons
         weak={weak}
         active={activeQ.data}
@@ -146,6 +165,7 @@ function LessonsContent({
           const open = OPEN.has(status);
           const active = open ? activeQ.data?.get(lesson.id) : undefined;
           const reserve = exerciseReserve(lesson.exerciseCount, active);
+          const known = open && lesson.exerciseCount > 0 ? mastery?.get(lesson.id) : undefined;
           return (
             <li
               key={lesson.id}
@@ -171,6 +191,17 @@ function LessonsContent({
                 <span aria-hidden="true" lang="ja" className="whitespace-nowrap font-jp text-[11px] font-bold text-ink-secondary sm:text-[13px]">
                   <Furigana segments={lessonNumberSegments(lesson.ordinal)} />
                 </span>
+                {/* Imparata: il timbro 習得 sotto il numero. */}
+                {known?.read ? (
+                  <span className="mt-3">
+                    <Stamp
+                      segments={READ_STAMP}
+                      meaning={t('lessons.readStampMeaning')}
+                      meaningLang={locale}
+                      size="sm"
+                    />
+                  </span>
+                ) : null}
               </div>
 
               <div className="flex min-w-0 flex-col gap-3 p-4 sm:p-6">
@@ -221,6 +252,25 @@ function LessonsContent({
                       ? t('lessons.exercisesInPile', { active, total: lesson.exerciseCount })
                       : t('lessons.exercises', { value: lesson.exerciseCount })}
                 </p>
+                {/* Quanti esercizi della lezione sai bene (livello 4 o più), con una
+                    barra; imparata quando li sai bene tutti. */}
+                {known !== undefined ? (
+                  known.read ? (
+                    <p className="text-label font-semibold text-ink-primary">{t('lessons.read')}</p>
+                  ) : (
+                    <div className="flex max-w-[24rem] flex-col gap-1">
+                      <p className="text-label text-ink-secondary">
+                        {t('lessons.known', { known: known.known, total: known.total })}
+                      </p>
+                      <span aria-hidden="true" className="h-[6px] w-full bg-surface-sunken">
+                        <span
+                          className="block h-full bg-ink-primary"
+                          style={{ width: `${(known.known / known.total) * 100}%` }}
+                        />
+                      </span>
+                    </div>
+                  )
+                ) : null}
                 {status === 'next' ? (
                   <p className="text-label font-semibold text-ink-primary">{t('lessons.nextHint')}</p>
                 ) : null}

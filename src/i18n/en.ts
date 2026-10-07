@@ -123,6 +123,9 @@ export const en = {
     practiceKicker: 'Verb forms',
     lessonsKicker: 'Lessons · in progress',
     lessonsOpen: 'Open the lessons',
+    freeDayReady: 'You can skip a day without losing your streak',
+    freeDayBack: 'You already skipped a day: you can skip the next one from {{weekday}}',
+    lessonsRead: 'Lessons learned: {{value}}',
   },
   // Le statistiche (Epic 5): la vista delle risposte nel tempo (5.1, FR7.1),
   // distribuzione per stadio (5.2), tassi d'errore per punto (5.3). Gli stati a dati
@@ -183,6 +186,38 @@ export const en = {
     },
     // L'affordance di ritorno alla dashboard (5.1): SECONDARIA, verbale e concreta,
     // mai "Continue"/"Back" generico.
+    calendar: {
+      less: 'less',
+      more: 'more',
+      freeDay: 'skipped without losing the streak',
+      summary:
+        'In the last {{weeks}} weeks you answered on {{days}} different days, {{answers}} answers in all.',
+      recentHeading: 'The last {{days}} days',
+    },
+    streak: {
+      heading: 'Your streak',
+      best: 'Longest streak: {{days}}',
+      rule: 'Your streak counts the days you study, one after another. You can skip one day in seven without losing it: that day does not count, but the streak goes on. If you skip two days in a row, or two days less than a week apart, the streak starts again from zero.',
+      freeDayReady: 'Right now you can skip a day without losing your streak.',
+      freeDayUsed: 'You skipped {{date}} without losing your streak. You can skip the next day from {{back}}.',
+    },
+    milestones: {
+      heading: 'Milestones',
+      hint: 'You earn them by learning lessons, by getting exercises to the point where they come back only after 35 days, and by studying many days in a row. Once earned they stay, even if you make mistakes later.',
+      family: {
+        lessonsRead: 'Lessons learned',
+        topLevel: 'Exercises coming back after 35 days',
+        streak: 'Days in a row',
+      },
+      entry: '{{family}}: {{threshold}}',
+      achievedOn: 'Earned on {{date}}',
+      progress: 'So far: {{best}}',
+      stampMeaning: {
+        lessonsRead: 'learn',
+        topLevel: 'remember',
+        streak: 'keep going',
+      },
+    },
     back: 'Back to the dashboard',
   },
   session: {
@@ -264,6 +299,10 @@ export const en = {
       body: 'Your review pile is at zero. You have worked through every exercise in this session.',
       streakLabel: '{{days}} day streak',
       dismiss: 'Back to the dashboard',
+      recapLevelUps: 'Exercises you got right, now coming back later: {{value}}',
+      recapTop: 'Exercises that now come back only after 35 days: {{value}}',
+      lessonRead: 'Lesson {{order}} learned: all its exercises now come back only after 16 days or more.',
+      milestone: 'New milestone',
     },
   },
   lessons: {
@@ -301,6 +340,15 @@ export const en = {
     rules: 'What it teaches',
     practice: 'Review the exercises',
     video: 'Reference video',
+    library: {
+      kicker: 'Lessons learned',
+      heading: '{{read}} of {{total}}',
+      explain:
+        'An exercise is learned once you have got it right enough times in a row that it comes back only after 16 days or more. A lesson is learned when all its exercises are; miss one and it is back to learning. Below, each book is a lesson: red once you have learned it, filling up as you learn its exercises, grey while it is still locked.',
+    },
+    known: 'Exercises learned: {{known}} of {{total}}',
+    read: 'Learned: all its exercises come back only after 16 days or more.',
+    readStampMeaning: 'learned',
   },
   lessonPractice: {
     back: 'Back to lessons',

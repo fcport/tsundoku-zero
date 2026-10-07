@@ -53,9 +53,12 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   answersOverTime,
+  calendarWeeks,
   daysWithAnswers,
   MIN_ANSWER_DAYS,
 } from '../../domain/answersOverTime';
+import { milestones } from '../../domain/milestones';
+import { freeDaysInHistory, streakHistory, streakStatus } from '../../domain/streak';
 import { stageDistribution } from '../../domain/stageDistribution';
 import { grammarPointErrorRates } from '../../domain/grammarPointErrorRates';
 import { lessonsByGrammarPoint } from '../../domain/curriculum';
@@ -65,8 +68,11 @@ import { MagazineFrame } from '../../ui/MagazineFrame';
 import { Furigana } from '../../ui/Furigana';
 import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
 import { Translation } from '../../ui/Translation';
-import { SCREEN_TITLE } from '../../ui/magazine';
+import { KICKER, SCREEN_TITLE } from '../../ui/magazine';
 import { usePorts } from '../ports/PortsContext';
+import { useExerciseLessons } from '../lessons/useExerciseLessons';
+import { CalendarHeatmap } from './CalendarHeatmap';
+import { Milestones } from './Milestones';
 import { resolveLocale, useTranslation } from '../../i18n';
 
 export interface StatsScreenProps {
@@ -116,6 +122,10 @@ export function StatsScreen(props: StatsScreenProps) {
 const SECTION_HEADING =
   'border-t-[1.5px] border-border-strong pt-3 text-[22px] font-extrabold uppercase leading-tight font-stretch-condensed text-ink-primary';
 
+// Il calendario: quante settimane, e quanti degli ultimi giorni elencare coi numeri.
+const CALENDAR_WEEKS = 26;
+const RECENT_DAYS = 14;
+
 function StatsContent({ userId, onExit }: StatsScreenProps) {
   const { review, content, clock } = usePorts();
   const { t, i18n } = useTranslation();
@@ -141,6 +151,9 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
     queryKey: ['lessons'],
     queryFn: () => content.listLessons(),
   });
+  // La lezione di ogni esercizio, per i traguardi delle lezioni lette (07-10-2026).
+  // Fuori dallo scheletro: finché manca, la sezione dei traguardi non c'è.
+  const exerciseLessonsQ = useExerciseLessons();
 
   // Scheletro finché l'id non è risolto o una delle due query è ancora pending
   // (cache non seminata). Stessa altezza del contenuto, nessuno spinner, `aria-busy`
@@ -182,6 +195,26 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
   const errorRates = grammarPointErrorRates(logQ.data);
   const lessonByPoint = lessonsByGrammarPoint(lessonsQ.data);
 
+  // La serie, il calendario e i traguardi (07-10-2026), tutti dal solo log. Le date
+  // dei giorni liberi sono giorni nominali (`YYYY-MM-DD`), quindi lette in UTC.
+  const hasLog = logQ.data.length > 0;
+  const dateLocale = locale === 'it' ? 'it-IT' : 'en-GB';
+  const dayName = new Intl.DateTimeFormat(dateLocale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+  });
+  const nominal = (iso: string) => dayName.format(new Date(`${iso}T12:00:00Z`));
+  const streakNow = streakStatus(logQ.data, clock.now(), clock.timeZone());
+  const bestStreak = Math.max(0, ...streakHistory(logQ.data, clock.timeZone()).map((p) => p.days));
+  const weeks = calendarWeeks(logQ.data, clock.now(), clock.timeZone(), CALENDAR_WEEKS);
+  const freeDays = freeDaysInHistory(logQ.data, clock.now(), clock.timeZone());
+  const tracks =
+    exerciseLessonsQ.data === undefined
+      ? null
+      : milestones(logQ.data, lessonsQ.data, exerciseLessonsQ.data, clock.timeZone());
+
   return (
     <main className={CONTAINER}>
       {/* Il titolo di livello schermata (`<h2>`, come ogni altra schermata): reso
@@ -190,6 +223,38 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
       <h2 className={`${SCREEN_TITLE} text-ink-primary`}>
         {t('stats.title')}
       </h2>
+      {/* La SERIE (07-10-2026): i giorni di fila, il record e il giorno libero, con
+          la regola detta per intero. Solo dopo la prima risposta. */}
+      {hasLog ? (
+        <section className="flex flex-col gap-3">
+          <h3 className={SECTION_HEADING}>{t('stats.streak.heading')}</h3>
+          <div className="flex flex-wrap items-end gap-x-8 gap-y-2">
+            <p className="flex items-baseline gap-3">
+              <span aria-hidden="true" className="text-[56px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
+                {streakNow.days}
+              </span>
+              <span aria-hidden="true" className={KICKER}>
+                {t('dashboard.streakKicker')}
+              </span>
+              <span className="sr-only">{t('dashboard.streakLabel', { days: streakNow.days })}</span>
+            </p>
+            <p className="text-label text-ink-secondary">
+              {t('stats.streak.best', { days: bestStreak })}
+            </p>
+          </div>
+          <p className="text-body text-ink-primary">{t('stats.streak.rule')}</p>
+          {streakNow.days > 0 ? (
+            <p className="text-body font-semibold text-ink-primary">
+              {streakNow.lastFreeDay === null || streakNow.freeDayBackOn === null
+                ? t('stats.streak.freeDayReady')
+                : t('stats.streak.freeDayUsed', {
+                    date: nominal(streakNow.lastFreeDay),
+                    back: nominal(streakNow.freeDayBackOn),
+                  })}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
       {answerDays < MIN_ANSWER_DAYS ? (
         // Sotto soglia (5.4): un trend con meno di `MIN_ANSWER_DAYS` giorni distinti
         // non è un trend. Rende SOLO la dichiarazione quantificata (soglia + giorni
@@ -208,11 +273,17 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
           <h3 className={SECTION_HEADING}>
             {t('stats.answersOverTime.heading')}
           </h3>
+          {/* Il CALENDARIO delle ultime settimane (07-10-2026), poi i numeri esatti
+              degli ultimi giorni. */}
+          <CalendarHeatmap weeks={weeks} freeDays={freeDays} dateLocale={dateLocale} />
+          <h4 className="text-[18px] font-bold text-ink-primary">
+            {t('stats.calendar.recentHeading', { days: RECENT_DAYS })}
+          </h4>
           {/* La lista ordinata di barre per-giorno: ogni giorno porta il proprio
               conteggio come TESTO (mai dal solo colore) più una barra proporzionale
               (larghezza = count/max, token neutri, nessun verde). */}
           <ol className="flex flex-col gap-3">
-            {series.map((day) => (
+            {series.slice(-RECENT_DAYS).map((day) => (
               <li key={day.date} className="flex flex-col gap-1">
                 <span className="text-label text-ink-secondary">
                   {t('stats.answersOverTime.dayLabel', {
@@ -231,6 +302,11 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
           </ol>
         </>
       )}
+      {/* I TRAGUARDI (07-10-2026): dopo la prima risposta, quando c'è la lezione di
+          ogni esercizio. */}
+      {hasLog && tracks !== null ? (
+        <Milestones tracks={tracks} timeZone={clock.timeZone()} headingClassName={SECTION_HEADING} />
+      ) : null}
       {/* La SECONDA sezione (5.2): la distribuzione per stadio, derivata dal SOLO
           log (nessun clock). A distribuzione vuota (log vuoto) un placeholder
           testuale neutro, MAI un riquadro di grafico vuoto. */}

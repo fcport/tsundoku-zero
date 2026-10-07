@@ -44,7 +44,7 @@ const inertPorts: Ports = {
   clock: { now: () => new Date(), timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
-  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };
 
 describe('AuthRoot — resa iniziale `checking` (placeholder neutro)', () => {

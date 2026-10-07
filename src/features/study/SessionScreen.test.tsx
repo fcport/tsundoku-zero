@@ -29,7 +29,7 @@ const inMemoryPorts: Ports = {
   clock: { now: () => NOW, timeZone: () => 'UTC' },
   review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
-  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };
 
 const firstExercise: Exercise = {
@@ -367,5 +367,63 @@ describe('Matrix — id corrente assente dal caricato ⇒ stato neutro senza car
     expect(markup).not.toContain(en.session.prompt.singleSelect);
     const mains = markup.match(/<main/g) ?? [];
     expect(mains.length).toBe(1);
+  });
+});
+
+// Il RIEPILOGO dello zero (07-10-2026): cosa è cambiato in questa sessione, dal log.
+describe('schermata dello zero — il riepilogo della sessione', () => {
+  const STARTED = new Date('2026-09-25T11:00:00.000Z');
+  /** Una risposta giusta all'esercizio `exerciseId` all'istante `iso`. */
+  const good = (exerciseId: string, iso: string) => ({
+    exerciseId,
+    outcome: 'good' as const,
+    grammarPoint: 'gp',
+    reviewedAt: new Date(iso),
+  });
+  // Prima della sessione `ex-1` era al livello 3; nella sessione sale a 4: la lezione
+  // l1 (un solo esercizio) diventa imparata, ed è la prima lezione imparata (traguardo).
+  const LOG = [
+    good('ex-1', '2026-09-01T09:00:00.000Z'),
+    good('ex-1', '2026-09-02T09:00:00.000Z'),
+    good('ex-1', '2026-09-05T09:00:00.000Z'),
+    good('ex-1', '2026-09-25T11:30:00.000Z'),
+  ];
+
+  function drained(startedAt: Date | null): string {
+    useSessionStore.setState({
+      session: createSession([]),
+      total: 1,
+      initialIds: ['ex-1'],
+      startedAt,
+    });
+    const qc = freshClient();
+    qc.setQueryData(dueQueryKey(UID), []);
+    qc.setQueryData(['streak', UID], LOG);
+    qc.setQueryData(
+      ['lessons'],
+      [{ id: 'l1', ordinal: 1, title: { en: 'L1' }, grammarPoints: ['gp'], exerciseCount: 1 }],
+    );
+    qc.setQueryData(['exerciseLessons'], new Map([['ex-1', 'l1']]));
+    return render(qc, UID);
+  }
+
+  it('dice quanti esercizi sono andati avanti, la lezione imparata e il nuovo traguardo', () => {
+    const markup = drained(STARTED);
+    expect(markup).toContain('Exercises you got right, now coming back later: 1');
+    expect(markup).toContain('Lesson 1 learned: all its exercises now come back only after 16 days or more.');
+    expect(markup).toContain(en.session.complete.milestone);
+    expect(markup).toContain('Lessons learned: 1');
+    // Nessuno è arrivato al livello 5: quella riga non c'è.
+    expect(markup).not.toContain('only after 35 days');
+  });
+
+  it('niente lode: nessun «!» nemmeno nel riepilogo', () => {
+    expect(drained(STARTED)).not.toContain('!');
+  });
+
+  it('senza l’istante d’inizio il riepilogo non c’è', () => {
+    const markup = drained(null);
+    expect(markup).toContain(en.session.complete.body);
+    expect(markup).not.toContain('coming back later');
   });
 });

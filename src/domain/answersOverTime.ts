@@ -113,3 +113,50 @@ export function daysWithAnswers(series: readonly DailyAnswerCount[]): number {
   }
   return days;
 }
+
+/** Un giorno del calendario delle statistiche. */
+export interface CalendarDay {
+  /** Il giorno nominale `YYYY-MM-DD`. */
+  readonly date: string;
+  /** Le risposte di quel giorno locale. */
+  readonly count: number;
+  /** Dopo oggi: la casella c'è (la settimana è intera) ma è vuota. */
+  readonly future: boolean;
+}
+
+/**
+ * Il CALENDARIO delle ultime `weeks` settimane (07-10-2026): una colonna per
+ * settimana, dal lunedì alla domenica, l'ultima è quella di oggi. Ogni giorno porta
+ * le sue risposte; i giorni dopo oggi sono `future`. Pura come `answersOverTime`,
+ * `now` e `timeZone` come parametri, stesso confine di giornata (`localDayOrdinal`).
+ */
+export function calendarWeeks(
+  log: readonly ReviewLogEntry[],
+  now: Date,
+  timeZone: string,
+  weeks: number,
+): readonly (readonly CalendarDay[])[] {
+  const counts = new Map<number, number>();
+  for (const entry of log) {
+    const ordinal = localDayOrdinal(entry.reviewedAt, timeZone);
+    counts.set(ordinal, (counts.get(ordinal) ?? 0) + 1);
+  }
+  const today = localDayOrdinal(now, timeZone);
+  // L'ordinale 0 (1 gennaio 1970) è un giovedì: lunedì = 0 … domenica = 6.
+  const weekday = (today + 3) % 7;
+  const first = today - weekday - (weeks - 1) * 7;
+  const columns: CalendarDay[][] = [];
+  for (let w = 0; w < weeks; w += 1) {
+    const column: CalendarDay[] = [];
+    for (let d = 0; d < 7; d += 1) {
+      const ordinal = first + w * 7 + d;
+      column.push({
+        date: new Date(ordinal * MS_PER_DAY).toISOString().slice(0, 10),
+        count: counts.get(ordinal) ?? 0,
+        future: ordinal > today,
+      });
+    }
+    columns.push(column);
+  }
+  return columns;
+}

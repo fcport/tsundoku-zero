@@ -22,7 +22,7 @@ const ports: Ports = {
   content: {
     listLessons: async () => [],
     listExercisesByIds: async () => [],
-    listExercisesByLesson: async () => [],
+    listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map(),
   },
 };
 
@@ -160,5 +160,65 @@ describe('LessonsScreen', () => {
     );
     expect(html).toContain('aria-busy="true"');
     expect(html).not.toContain('Ripassa gli esercizi');
+  });
+});
+
+// La libreria (07-10-2026): una lezione è imparata quando lo sono tutti i suoi esercizi.
+describe('LessonsScreen — la libreria', () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage('it');
+  });
+
+  /** `n` risposte giuste per l'esercizio `exerciseId`, una al giorno. */
+  function goods(exerciseId: string, n: number): ReviewLogRecord[] {
+    return Array.from({ length: n }, (_, i) => ({
+      exerciseId,
+      outcome: 'good' as const,
+      grammarPoint: 'point-1',
+      reviewedAt: new Date(Date.UTC(2026, 8, 1 + i, 9)),
+    }));
+  }
+
+  function renderWithLibrary(log: readonly ReviewLogRecord[]): string {
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    qc.setQueryData(['lessons'], [lesson(1, { exerciseCount: 1 }), lesson(2, { exerciseCount: 2 }), lesson(3)]);
+    qc.setQueryData(['streak', UID], log);
+    qc.setQueryData(['unlocked', UID], ['l1', 'l2'].map((lessonId) => ({ lessonId, unlockedAt: NOW })));
+    qc.setQueryData(
+      ['exerciseLessons'],
+      new Map([
+        ['a', 'l1'],
+        ['b', 'l2'],
+        ['c', 'l2'],
+      ]),
+    );
+    return renderToStaticMarkup(
+      <QueryClientProvider client={qc}>
+        <PortsProvider value={ports}>
+          <LessonsScreen userId={UID} onExit={() => {}} onPractice={() => {}} />
+        </PortsProvider>
+      </QueryClientProvider>,
+    );
+  }
+
+  it('conta le lezioni imparate e dice cosa vuol dire', () => {
+    const html = renderWithLibrary([...goods('a', 4), ...goods('b', 4)]);
+    expect(html).toContain('Lezioni imparate');
+    expect(html).toContain('1 su 3');
+    expect(html).toContain('Un esercizio è imparato quando');
+  });
+
+  it('la lezione imparata ha il timbro 習得; le altre dicono quanti esercizi sono imparati', () => {
+    const html = renderWithLibrary([...goods('a', 4), ...goods('b', 4)]);
+    expect(html).toContain('Imparata: tutti i suoi esercizi tornano solo dopo 16 giorni o più.');
+    expect(html).toContain('習');
+    expect(html).toContain('Esercizi imparati: 1 su 2');
+  });
+
+  it('senza la lezione di ogni esercizio: niente conteggi', () => {
+    const html = render([lesson(1), lesson(2)], ['l1'], undefined, goods('a', 4));
+    expect(html).toContain('Lezioni imparate');
+    expect(html).not.toContain(' su 2<');
+    expect(html).not.toContain('Esercizi imparati');
   });
 });

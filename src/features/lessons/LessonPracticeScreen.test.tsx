@@ -68,6 +68,7 @@ function ports(): Ports {
       listLessons: async () => LESSONS,
       listExercisesByIds: async () => [],
       listExercisesByLesson: listExercisesByLesson as unknown as Ports['content']['listExercisesByLesson'],
+      listExerciseLessons: async () => new Map(),
     },
   };
 }

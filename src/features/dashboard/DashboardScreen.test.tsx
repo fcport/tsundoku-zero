@@ -48,7 +48,7 @@ const inMemoryPorts: Ports = {
     applyReview: async () => {},
   },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
-  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [] },
+  content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };
 
 // Porta impostazioni finta inerte (nuova prop 3.17): con la cache seminata la
@@ -1094,5 +1094,53 @@ describe('«Esercitati di più» a pila vuota — la lezione in corso ha eserciz
     const busy = seededClient({ dueCount: 3, log: [], unlocked: 2, total: 10, lessonExerciseCounts: [17, 24] });
     busy.setQueryData(['activeExercises', UID], new Map([['lesson-1', 12]]));
     expect(render(busy, UID)).not.toContain('Practise more');
+  });
+});
+
+// La serie col giorno libero e le lezioni lette (07-10-2026). NOW = venerdì 25
+// settembre 2026, fuso UTC.
+describe('la serie col giorno libero e le lezioni imparate', () => {
+  it('serie senza salti ⇒ «Day off available»', () => {
+    const qc = seededClient({
+      dueCount: 0,
+      log: [logAt('2026-09-25T09:00:00.000Z'), logAt('2026-09-24T09:00:00.000Z')],
+      unlocked: 1,
+      total: 3,
+    });
+    const markup = render(qc, UID);
+    expect(markup).toContain('2 day streak');
+    expect(markup).toContain(en.dashboard.freeDayReady);
+  });
+
+  it('ieri saltato e oggi ancora aperto ⇒ la serie resta, il giorno libero torna giovedì', () => {
+    const qc = seededClient({
+      dueCount: 0,
+      log: [logAt('2026-09-23T09:00:00.000Z'), logAt('2026-09-22T09:00:00.000Z')],
+      unlocked: 1,
+      total: 3,
+    });
+    const markup = render(qc, UID);
+    expect(markup).toContain('2 day streak');
+    // Saltato il 24: torna il 1° ottobre, un giovedì.
+    expect(markup).toContain('You already skipped a day: you can skip the next one from Thursday');
+  });
+
+  it('serie a zero ⇒ nessuna riga sul giorno libero', () => {
+    const qc = seededClient({ dueCount: 0, log: [], unlocked: 1, total: 3 });
+    const markup = render(qc, UID);
+    expect(markup).not.toContain('skip');
+  });
+
+  it('con la lezione di ogni esercizio ⇒ «Lessons learned: N» sotto il curriculum; senza, niente', () => {
+    const log = [1, 2, 3, 4].map((d) => ({
+      reviewedAt: new Date(`2026-09-2${d}T09:00:00.000Z`),
+      exerciseId: 'ex-a',
+      outcome: 'good' as const,
+      grammarPoint: 'gp',
+    }));
+    const qc = seededClient({ dueCount: 0, log, unlocked: 2, total: 3 });
+    expect(render(qc, UID)).not.toContain('Lessons learned');
+    qc.setQueryData(['exerciseLessons'], new Map([['ex-a', 'lesson-0']]));
+    expect(render(qc, UID)).toContain('Lessons learned: 1');
   });
 });

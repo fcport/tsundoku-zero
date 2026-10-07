@@ -30,6 +30,9 @@
 // del dominio) PIÙ l'affordance di ritorno (riusa `onExit`, già cablata dalla 3.20).
 // La pila vuota all'INGRESSO (`total === 0`, deep-link) resta lo `<main>` neutro e
 // vuoto. Nessuna celebrazione: nessun verde/rosso, `!`, emoji, badge o animazione.
+// Dal 07-10-2026 sotto lo streak c'è il RIEPILOGO della sessione (`sessionRecap`):
+// i fatti, in forma etichetta-valore, e per lezioni imparate e traguardi lo stesso
+// timbro da impaginato della spiegazione. Ancora niente animazioni né lode.
 //
 // CONTRATTO TASTIERA (3.22): l'intera sessione e pilotabile SENZA MOUSE (aggiornamento
 // di AD-15, registrato in `docs/session-keyboard-contract.md`). UN solo listener
@@ -57,12 +60,16 @@ import type { Exercise } from '../../domain/exercise';
 import { evaluateAnswer, type AnswerEvaluation } from '../../domain/review';
 import type { ReviewState } from '../../domain/schedule';
 import { currentExerciseId, remainingCount } from '../../domain/session';
+import { sessionRecap } from '../../domain/sessionRecap';
 import { streak } from '../../domain/streak';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { QUIZ_MAIN, scrollToTop } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { ACTION_BAR, KICKER, NEXT_BAR } from '../../ui/magazine';
 import { ArrowIcon } from '../../ui/icons';
+import { Stamp } from '../../ui/Stamp';
+import { MILESTONE_STAMPS, READ_STAMP } from '../lessons/stamps';
+import { useExerciseLessons } from '../lessons/useExerciseLessons';
 import { usePorts } from '../ports/PortsContext';
 import { exercisesQueryKey } from './exercisesQueryKey';
 import {
@@ -143,7 +150,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   // La preferenza rapida «mostra la furigana» (hook top-level, prima di ogni
   // early-return): l'interruttore vive sul dorso della cornice, qui la si legge.
   const showFurigana = usePreferenceShown(useFuriganaPreference);
-  const { session, total, initialIds } = useSessionStore.getState();
+  const { session, total, initialIds, startedAt } = useSessionStore.getState();
   const startSession = useSessionStore.getState().start;
   const dispatch = useSessionStore.getState().dispatch;
 
@@ -218,9 +225,9 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   // guarda contro il ri-avvio e `startSession` è stabile (azione dello store zustand).
   useEffect(() => {
     if (dueQ.data !== undefined && initialIds.length === 0 && dueIds.length > 0) {
-      startSession(dueIds);
+      startSession(dueIds, clock.now());
     }
-  }, [dueQ.data, initialIds.length, dueIds, startSession]);
+  }, [dueQ.data, initialIds.length, dueIds, startSession, clock]);
 
   // Gli esercizi completi per gli id INIZIALI della sessione (dallo store): ancorata
   // così la pila che si accorcia in modo ottimistico non provoca refetch/scheletri a
@@ -244,6 +251,14 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
     enabled: !!userId && sessionComplete,
     queryFn: () => review.listReviewLog(),
   });
+  // Il RIEPILOGO dello zero (07-10-2026) legge anche le lezioni e la lezione di ogni
+  // esercizio: stesse chiavi globali delle altre schermate, imparate solo allo zero.
+  const lessonsQ = useQuery({
+    queryKey: ['lessons'],
+    enabled: sessionComplete,
+    queryFn: () => content.listLessons(),
+  });
+  const exerciseLessonsQ = useExerciseLessons(sessionComplete);
 
   // La mutation di persistenza (AC4). La `mutationFn` NON è più qui: vive ai DEFAULT
   // del QueryClient (`registerReviewMutationDefaults`, glue di bootstrap) risolta per
@@ -513,6 +528,71 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   //   invariato: nessun `body` di completamento.
   if (shownId === null) {
     if (sessionComplete) {
+      // Il riepilogo, quando log, lezioni e lezione di ogni esercizio sono arrivati.
+      // Senza l'istante d'inizio (sessione non avviata da `start`) non c'è.
+      const recap =
+        startedAt !== null &&
+        streakLogQ.data !== undefined &&
+        lessonsQ.data !== undefined &&
+        exerciseLessonsQ.data !== undefined
+          ? sessionRecap(
+              streakLogQ.data,
+              startedAt,
+              lessonsQ.data,
+              exerciseLessonsQ.data,
+              clock.timeZone(),
+            )
+          : null;
+      const recapItems =
+        recap === null
+          ? []
+          : [
+              recap.levelUps > 0 ? (
+                <li key="levelUps" className="text-body text-ink-primary">
+                  {t('session.complete.recapLevelUps', { value: recap.levelUps })}
+                </li>
+              ) : null,
+              recap.reachedTop > 0 ? (
+                <li key="top" className="text-body text-ink-primary">
+                  {t('session.complete.recapTop', { value: recap.reachedTop })}
+                </li>
+              ) : null,
+              ...recap.lessonsRead.map((lesson) => (
+                <li key={`read-${lesson.id}`} className="flex items-center gap-4">
+                  <Stamp
+                    segments={READ_STAMP}
+                    meaning={t('lessons.readStampMeaning')}
+                    meaningLang={locale}
+                    size="sm"
+                  />
+                  <span className="text-body font-semibold text-ink-primary">
+                    {t('session.complete.lessonRead', { order: lesson.ordinal })}
+                  </span>
+                </li>
+              )),
+              ...recap.newMilestones.map((milestone) => (
+                <li
+                  key={`milestone-${milestone.family}-${milestone.threshold}`}
+                  className="flex items-center gap-4"
+                >
+                  <Stamp
+                    segments={MILESTONE_STAMPS[milestone.family]}
+                    meaning={t(`stats.milestones.stampMeaning.${milestone.family}`)}
+                    meaningLang={locale}
+                    size="sm"
+                  />
+                  <span className="flex flex-col">
+                    <span className={KICKER}>{t('session.complete.milestone')}</span>
+                    <span className="text-body font-semibold text-ink-primary">
+                      {t('stats.milestones.entry', {
+                        family: t(`stats.milestones.family.${milestone.family}`),
+                        threshold: milestone.threshold,
+                      })}
+                    </span>
+                  </span>
+                </li>
+              )),
+            ].filter((item) => item !== null);
       return (
         <main className={MAIN_CLASS}>
           {/* Lo ZERO del nome, a tutta pagina: la pila è a zero. Decorativo
@@ -532,7 +612,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
               carica (cache fredda), un placeholder alla stessa altezza, nessuno
               spinner (evita salto di layout). */}
           {streakLogQ.data !== undefined ? (
-            <p className="text-label text-ink-secondary">
+            <p className="w-full text-label text-ink-secondary">
               {t('session.complete.streakLabel', {
                 days: streak(streakLogQ.data, clock.now(), clock.timeZone()),
               })}
@@ -540,6 +620,13 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
           ) : (
             <div className="h-[16px] w-36 rounded-md bg-surface-sunken" />
           )}
+          {/* Il RIEPILOGO (07-10-2026): cosa è cambiato in questa sessione. Solo i
+              fatti che ci sono: niente righe a zero, niente lode. */}
+          {recapItems.length > 0 ? (
+            <ul className="flex w-full flex-col gap-3 border-t-[1.5px] border-border-strong pt-4">
+              {recapItems}
+            </ul>
+          ) : null}
           {/* L'affordance di ritorno alla dashboard (AC2): riusa `onExit` (già cablata
               a `ROOT_PATH` dalla 3.20). SECONDARIA — chiaramente non il button-primary
               (nessun fill, ink muto, nessun verde). Mai "Continua". */}

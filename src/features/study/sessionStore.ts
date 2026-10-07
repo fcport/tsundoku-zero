@@ -44,8 +44,14 @@ export interface SessionStore {
    * questi id.
    */
   readonly initialIds: readonly string[];
+  /**
+   * L'istante in cui la sessione è iniziata (07-10-2026): il riepilogo dello zero
+   * considera le risposte da qui in poi. `null` finché nessuna sessione è iniziata,
+   * o se chi l'ha avviata non l'ha passato.
+   */
+  readonly startedAt: Date | null;
   /** Inizia una nuova sessione dalla lista ordinata degli id (via `createSession`). */
-  readonly start: (ids: readonly string[]) => void;
+  readonly start: (ids: readonly string[], startedAt?: Date) => void;
   /** Fa evolvere la sessione applicando un evento (via `sessionReducer`). */
   readonly dispatch: (event: SessionEvent) => void;
   /**
@@ -68,16 +74,19 @@ export const useSessionStore = create<SessionStore>()((set) => ({
   session: createSession([]),
   total: 0,
   initialIds: [],
-  start: (ids) =>
+  startedAt: null,
+  start: (ids, startedAt) =>
     set(() => ({
       session: createSession(ids),
       // `total`/`initialIds` catturati UNA volta agli id iniziali: la barra e la
       // query esercizi restano ancorate mentre la coda (`session`) si accorcia.
       total: ids.length,
       initialIds: [...ids],
+      startedAt: startedAt ?? null,
     })),
   dispatch: (event) => set((s) => ({ session: sessionReducer(s.session, event) })),
   // Ricostruzione all'ingresso (3.20): torna alla forma iniziale — coda vuota, total
   // 0, initialIds []. Nessuna chiamata a porta/DB; solo la coda in memoria.
-  reset: () => set(() => ({ session: createSession([]), total: 0, initialIds: [] })),
+  reset: () =>
+    set(() => ({ session: createSession([]), total: 0, initialIds: [], startedAt: null })),
 }));

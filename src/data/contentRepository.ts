@@ -292,5 +292,28 @@ export function createSupabaseContentRepository(
       const rows = (data ?? []) as readonly ExerciseRow[];
       return rows.map(toExerciseContent);
     },
+
+    async listExerciseLessons(): Promise<ReadonlyMap<string, string>> {
+      // Solo le due colonne: è il legame esercizio → lezione, senza il contenuto.
+      // Stesso contratto d'errore: una riga malformata è un fallimento (DataError).
+      const { data, error } = await client
+        .from(EXERCISE_TABLE)
+        .select('id, lesson_id')
+        .order('id');
+
+      if (error) {
+        throw new DataError('listExerciseLessons', error);
+      }
+
+      const byExercise = new Map<string, string>();
+      for (const row of (data ?? []) as readonly unknown[]) {
+        const { id, lesson_id: lessonId } = (row ?? {}) as { id?: unknown; lesson_id?: unknown };
+        if (typeof id !== 'string' || typeof lessonId !== 'string') {
+          throw new DataError('listExerciseLessons', new Error('riga exercise malformata'));
+        }
+        byExercise.set(id, lessonId);
+      }
+      return byExercise;
+    },
   };
 }

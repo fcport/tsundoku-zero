@@ -252,6 +252,11 @@ Sostituisce F6 della v1 (nuovi item con tetto giornaliero).
 - **FR7.3** La stessa vista mostra **i punti grammaticali con il tasso di errore più alto**, non i singoli esercizi. È la differenza fra "sbagli questa frase" e "non hai capito に di destinazione", e solo la seconda è azionabile.
 - **FR7.4** Una giornata conta ai fini dello streak quando l'utente porta la pila a zero, oppure completa almeno un esercizio se la pila era già vuota. **La giornata termina a mezzanotte nel fuso orario locale del dispositivo.**
 - **FR7.5** Con dati insufficienti la vista dichiara cosa manca, invece di mostrare grafici vuoti.
+- **FR7.6** *(07-10-2026)* **Giorno libero.** Un giorno saltato ogni 7 non interrompe lo streak: non conta, ma la serie prosegue. Due giorni saltati di fila, o due salti a meno di 7 giorni l'uno dall'altro, la interrompono. La dashboard dice se il giorno libero è disponibile o da quando torna; le statistiche lo spiegano per intero.
+- **FR7.7** *(07-10-2026)* **Lezioni imparate.** Un esercizio è *imparato* quando è almeno al livello 4 (torna fra 16 giorni o più); una lezione è *imparata* quando lo sono tutti i suoi esercizi. È uno stato corrente: un errore la riporta da imparare. La pagina Lezioni mostra le lezioni come libri su uno scaffale e, per ognuna, quanti esercizi sono imparati; la dashboard quante lezioni sono imparate. Nei testi per lo studente si dice il fatto concreto («tornano solo dopo 16 giorni o più»), mai «livello 4».
+- **FR7.8** *(07-10-2026)* **Traguardi.** Pochi e solo su ciò che indica apprendimento: lezioni imparate (1, 5, 10, 20), esercizi che tornano dopo 35 giorni, cioè al livello 5 (1, 25, 100, 250), giorni di fila (7, 30, 100, 365). Mai sul volume di risposte. Si ricostruiscono dal registro delle risposte e, una volta presi, restano.
+- **FR7.9** *(07-10-2026)* **Riepilogo dello zero.** La schermata di completamento dice cosa è cambiato nella sessione: esercizi fatti giusti che ora tornano più avanti, esercizi che ora tornano solo dopo 35 giorni, lezioni diventate imparate, traguardi presi. Solo le righe che non sono a zero, senza lode.
+- **FR7.10** *(07-10-2026)* **Calendario.** Le statistiche mostrano le ultime 26 settimane come calendario (più risposte, più inchiostro; i giorni liberi a righe) e i numeri esatti degli ultimi 14 giorni.
 
 ### F8 — Lingua
 

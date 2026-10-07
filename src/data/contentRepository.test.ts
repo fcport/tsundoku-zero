@@ -659,3 +659,46 @@ describe('listExercisesByLesson — tutti gli esercizi di una lezione, per il ri
     });
   });
 });
+
+describe('listExerciseLessons — la lezione di ogni esercizio, per la libreria', () => {
+  it('legge id e lesson_id dalla tabella exercise e li mappa', async () => {
+    const { client, calls } = makeFakeClient({
+      rows: [
+        { id: 'ex-1', lesson_id: 'l1' },
+        { id: 'ex-2', lesson_id: 'l2' },
+      ],
+    });
+    const repo = createSupabaseContentRepository(client);
+
+    const result = await repo.listExerciseLessons();
+
+    expect(calls.table).toBe('exercise');
+    expect(calls.columns).toBe('id, lesson_id');
+    expect([...result]).toEqual([
+      ['ex-1', 'l1'],
+      ['ex-2', 'l2'],
+    ]);
+  });
+
+  it("riga malformata ⇒ DataError('listExerciseLessons')", async () => {
+    const { client } = makeFakeClient({ rows: [{ id: 'ex-1', lesson_id: null }] });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listExerciseLessons()).rejects.toMatchObject({
+      name: 'DataError',
+      operation: 'listExerciseLessons',
+    });
+  });
+
+  it("errore Supabase ⇒ DataError('listExerciseLessons') con causa preservata", async () => {
+    const supabaseError = { message: 'rls denied', code: '42501' };
+    const { client } = makeFakeClient({ error: supabaseError });
+    const repo = createSupabaseContentRepository(client);
+
+    await expect(repo.listExerciseLessons()).rejects.toMatchObject({
+      name: 'DataError',
+      operation: 'listExerciseLessons',
+      cause: supabaseError,
+    });
+  });
+});

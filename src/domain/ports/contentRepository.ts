@@ -83,4 +83,11 @@ export interface ContentRepository {
    * Una lezione concettuale (o un id sconosciuto) ⇒ `[]`.
    */
   listExercisesByLesson(lessonId: string): Promise<readonly ExerciseContent[]>;
+  /**
+   * La lezione di OGNI esercizio: id di riga dell'esercizio → id della lezione.
+   * Serve alla libreria (07-10-2026): la regola grammaticale non basta a dire di
+   * quale lezione è un esercizio, perché più lezioni ne condividono una. Sola
+   * lettura, uguale per tutti.
+   */
+  listExerciseLessons(): Promise<ReadonlyMap<string, string>>;
 }
