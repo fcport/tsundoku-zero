@@ -45,6 +45,14 @@ export const ACTION_BAR = `flex min-h-[72px] w-full items-center justify-between
 export const NEXT_BAR = `${ACTION_BAR} sticky bottom-0 z-10 sm:static`;
 
 /**
+ * La barra d'azione della dashboard: attaccata al fondo dello schermo a OGNI
+ * larghezza. La colonna dei dati è più alta di molte finestre (un portatile a 768px,
+ * un monitor col browser a ~950px) e l'azione del giorno non deve chiedere uno
+ * scroll; arrivati in fondo alla pagina torna al suo posto, sotto la griglia.
+ */
+export const STICKY_ACTION_BAR = `${ACTION_BAR} sticky bottom-0 z-10`;
+
+/**
  * Il link di SERVIZIO: testo sottolineato, piccolo, senza riempimento. Chiaramente
  * non la barra d'azione.
  */

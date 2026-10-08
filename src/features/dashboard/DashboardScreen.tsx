@@ -57,7 +57,7 @@ import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { usePorts } from '../ports/PortsContext';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
-import { ACTION_BAR, FOCUS_RING, HEADLINE, KICKER, SERVICE_LINK } from '../../ui/magazine';
+import { FOCUS_RING, HEADLINE, KICKER, SERVICE_LINK, STICKY_ACTION_BAR } from '../../ui/magazine';
 import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
@@ -386,7 +386,7 @@ export function DashboardScreen({
             type="button"
             onClick={() => unlockMutation.mutate(next.id)}
             disabled={unlockMutation.isPending}
-            className={ACTION_BAR}
+            className={STICKY_ACTION_BAR}
           >
             <span>{t('dashboard.startAction')}</span>
             <ArrowIcon className="text-accent-on-ink" />
@@ -662,7 +662,7 @@ export function DashboardScreen({
           - Pila vuota a curriculum esaurito (next === null) ⇒ NESSUNA azione (la
             schermata senza-azione è 3.16): non si rende alcun pulsante. */}
       {count > 0 ? (
-        <button type="button" onClick={onStartSession} className={ACTION_BAR}>
+        <button type="button" onClick={onStartSession} className={STICKY_ACTION_BAR}>
           <span>{t('dashboard.primaryAction')}</span>
           <ArrowIcon className="text-accent-on-ink" />
         </button>
@@ -678,7 +678,7 @@ export function DashboardScreen({
             type="button"
             onClick={() => unlockMutation.mutate(next.id)}
             disabled={unlockMutation.isPending}
-            className={ACTION_BAR}
+            className={STICKY_ACTION_BAR}
           >
             <span>{t('dashboard.unlockAction')}</span>
             <ArrowIcon className="text-accent-on-ink" />
