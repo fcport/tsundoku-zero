@@ -18,7 +18,7 @@ import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { FOCUS_RING, KICKER } from '../../ui/magazine';
-import { ExternalIcon } from '../../ui/icons';
+import { ExternalIcon, GitHubIcon } from '../../ui/icons';
 import { REPO_URL } from '../about/links';
 import type { AuthGateway } from '../../domain/ports/authGateway';
 import { AuthForm, type AuthFormValues } from './AuthForm';
@@ -139,6 +139,7 @@ export function AuthScreen({
           rel="noreferrer"
           className={`inline-flex min-h-[44px] items-center gap-1 text-label text-ink-secondary underline underline-offset-4 ${FOCUS_RING}`}
         >
+          <GitHubIcon />
           {t('about.repoShortLabel')} <ExternalIcon />
         </a>
       </div>

@@ -61,7 +61,7 @@ import { FOCUS_RING, HEADLINE, KICKER, SERVICE_LINK, STICKY_ACTION_BAR } from '.
 import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
-import { ArrowIcon, ExternalIcon } from '../../ui/icons';
+import { ArrowIcon, ExternalIcon, GitHubIcon } from '../../ui/icons';
 import { Cat } from '../../ui/Cat';
 import { REPO_URL } from '../about/links';
 import { exercisesQueryKey } from '../study/exercisesQueryKey';
@@ -126,9 +126,14 @@ const MAIN_CLASS = `${CONTAINER_HEIGHT} flex flex-1 flex-col`;
 
 // La GRIGLIA della pagina: sotto 1024px il numero e la colonna della data, con i
 // dati a tutta larghezza sotto; da 1024px tre colonne affiancate (numero, data in
-// verticale, dati). I filetti sono i bordi delle celle.
+// verticale, dati). I filetti sono i bordi delle celle. In fondo, a tutta larghezza,
+// la riga dei collegamenti di servizio: lo spazio in più va alle righe sopra, mai a lei.
 const GRID_CLASS =
-  'grid flex-1 grid-cols-[minmax(0,1fr)_64px] border-b-[1.5px] border-border-strong lg:grid-cols-[minmax(0,1fr)_150px_300px]';
+  'grid flex-1 grid-cols-[minmax(0,1fr)_64px] grid-rows-[1fr_auto_auto] border-b-[1.5px] border-border-strong lg:grid-cols-[minmax(0,1fr)_150px_300px] lg:grid-rows-[1fr_auto]';
+
+// La riga dei collegamenti di servizio, a tutta larghezza sotto le colonne.
+const SERVICE_ROW_CLASS =
+  'col-span-2 flex flex-wrap gap-x-6 gap-y-3 border-t-[1.5px] border-border-strong p-4 sm:px-6 lg:col-span-3';
 
 // Il riquadro del numero: alto abbastanza da far uscire il numero dal fondo.
 const HERO_CLASS = 'relative min-h-[300px] overflow-hidden sm:min-h-[400px]';
@@ -292,6 +297,7 @@ export function DashboardScreen({
           </div>
           <div className="border-l-[1.5px] border-border-strong" />
           <div className="col-span-2 h-[132px] border-t-[1.5px] border-border-strong lg:col-span-1 lg:h-auto lg:border-l-[1.5px] lg:border-t-0" />
+          <div className={`${SERVICE_ROW_CLASS} min-h-[54px]`} />
         </div>
         <div className="min-h-[72px] bg-surface-sunken sm:min-h-[88px]" />
       </main>
@@ -373,9 +379,11 @@ export function DashboardScreen({
   if (unlocked === 0) {
     return (
       <main className={MAIN_CLASS}>
-        {/* La descrizione al posto del numero, poi la sola barra «comincia». */}
-        <div className="flex flex-1 flex-col justify-between border-b-[1.5px] border-border-strong">
-          <p className={`${DECLARATION_CLASS} max-w-[34rem]`}>
+        {/* La descrizione al posto del numero, poi la sola barra «comincia». Da
+            1024px il gatto sta accanto al testo, non sotto: la pagina resta nello
+            schermo senza scroll. */}
+        <div className="flex flex-1 flex-col justify-between border-b-[1.5px] border-border-strong lg:flex-row lg:items-start">
+          <p className={`${DECLARATION_CLASS} max-w-[34rem] lg:max-w-[46rem]`}>
             {t('dashboard.firstRunBody')}
           </p>
           {/* Il gatto della libreria aspetta, seduto (07-10-2026). */}
@@ -609,7 +617,7 @@ export function DashboardScreen({
           <button
             type="button"
             onClick={onPractice}
-            className={`group flex items-center justify-between gap-4 border-y-[1.5px] border-border-strong p-4 lg:border-t-0 text-left hover:bg-surface-sunken sm:p-6 ${FOCUS_RING}`}
+            className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 lg:flex-1 lg:border-t-0 text-left hover:bg-surface-sunken sm:p-6 ${FOCUS_RING}`}
           >
             <span className="flex flex-col gap-1">
               <span className={KICKER}>{t('dashboard.practiceKicker')}</span>
@@ -619,32 +627,35 @@ export function DashboardScreen({
             </span>
             <ArrowIcon className="shrink-0 text-accent transition-transform group-hover:translate-x-1.5" />
           </button>
+        </div>
 
-          {/* I collegamenti di servizio: le statistiche (5.1, callback cablata dal
-              livello app, AD-1), il video di riferimento della lezione in corso e il
-              codice su GitHub, veri <a> perché puntano FUORI dall'app (YouTube senza
-              embed, GitHub). */}
-          <div className="flex flex-wrap gap-x-5 gap-y-3 p-4 sm:p-6">
-            <button type="button" onClick={onViewStats} className={SERVICE_LINK}>
-              {t('dashboard.viewStats')}
-            </button>
-            <button type="button" onClick={onViewAbout} className={SERVICE_LINK}>
-              {t('about.linkLabel')}
-            </button>
-            {lastUnlocked?.video ? (
-              <a
-                href={`https://www.youtube.com/watch?v=${lastUnlocked.video}`}
-                target="_blank"
-                rel="noreferrer"
-                className={SERVICE_LINK}
-              >
-                {t('dashboard.referenceVideo')} <ExternalIcon />
-              </a>
-            ) : null}
-            <a href={REPO_URL} target="_blank" rel="noreferrer" className={SERVICE_LINK}>
-              {t('about.repoShortLabel')} <ExternalIcon />
+        {/* I collegamenti di servizio: le statistiche (5.1, callback cablata dal
+            livello app, AD-1), il video di riferimento della lezione in corso e il
+            codice su GitHub, veri <a> perché puntano FUORI dall'app (YouTube senza
+            embed, GitHub). Una riga a tutta larghezza in fondo alla griglia, il piede
+            della pagina: nella colonna dei dati, larga 300px, andavano a capo su tre
+            righe e allungavano la pagina oltre lo schermo (09-10-2026). */}
+        <div className={SERVICE_ROW_CLASS}>
+          <button type="button" onClick={onViewStats} className={SERVICE_LINK}>
+            {t('dashboard.viewStats')}
+          </button>
+          <button type="button" onClick={onViewAbout} className={SERVICE_LINK}>
+            {t('about.linkLabel')}
+          </button>
+          {lastUnlocked?.video ? (
+            <a
+              href={`https://www.youtube.com/watch?v=${lastUnlocked.video}`}
+              target="_blank"
+              rel="noreferrer"
+              className={SERVICE_LINK}
+            >
+              {t('dashboard.referenceVideo')} <ExternalIcon />
             </a>
-          </div>
+          ) : null}
+          <a href={REPO_URL} target="_blank" rel="noreferrer" className={SERVICE_LINK}>
+            <GitHubIcon className="mr-1.5" />
+            {t('about.repoShortLabel')} <ExternalIcon />
+          </a>
         </div>
       </div>
 
