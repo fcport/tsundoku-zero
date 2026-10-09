@@ -18,6 +18,7 @@ import {
 } from './furiganaPreference';
 import { FOCUS_RING } from './magazine';
 import { Furigana } from './Furigana';
+import { useHomeLink } from './homeLink';
 
 // Il marchio a segmenti, con la lettura di 積ん読 (つんどく) per la furigana.
 const BRAND = [
@@ -77,6 +78,7 @@ export function MagazineFrame({
 }: MagazineFrameProps) {
   const { t, i18n } = useTranslation();
   const Brand = brandAsHeading ? 'h1' : 'p';
+  const home = useHomeLink();
   return (
     <div className="flex min-h-dvh">
       {/* Il dorso resta fermo mentre la pagina scorre: la colonna col filetto destro
@@ -88,17 +90,20 @@ export function MagazineFrame({
       <aside className="w-[52px] shrink-0 border-r-[1.5px] border-border-strong sm:w-[72px]">
         <div className="sticky top-0 flex h-svh flex-col items-center justify-between py-5">
           <Brand className="font-jp text-[20px] font-extrabold tracking-[0.2em] text-ink-primary [writing-mode:vertical-rl] sm:text-[24px]">
-            <span lang="ja">
-              <Furigana segments={BRAND} />
-            </span>
-            <span className="sr-only"> · {t('app.name')}</span>
-            {/* La traduzione del marchio, con «Traduzioni» acceso: di traverso sul
-                dorso come il marchio. */}
-            <Translation
-              text={t('app.brandMeaning')}
-              lang={resolveLocale(i18n.language)}
-              className="mt-2 block font-mono text-[11px] font-medium normal-case tracking-normal text-ink-secondary"
-            />
+            {/* Il marchio porta sempre alla home, da qualunque schermata. */}
+            <a href={home.href} onClick={home.onClick} className={`block ${FOCUS_RING}`}>
+              <span lang="ja">
+                <Furigana segments={BRAND} />
+              </span>
+              <span className="sr-only"> · {t('app.name')}</span>
+              {/* La traduzione del marchio, con «Traduzioni» acceso: di traverso sul
+                  dorso come il marchio. */}
+              <Translation
+                text={t('app.brandMeaning')}
+                lang={resolveLocale(i18n.language)}
+                className="mt-2 block font-mono text-[11px] font-medium normal-case tracking-normal text-ink-secondary"
+              />
+            </a>
           </Brand>
           <span aria-hidden="true" className="size-3.5 rounded-full bg-accent" />
           {furiganaToggle ? (

@@ -27,6 +27,7 @@ import { AboutScreen } from '../features/about/AboutScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { SettingsPage } from './SettingsPage';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
+import { HomeLinkProvider } from '../ui/homeLink';
 import {
   ABOUT_PATH,
   ACKNOWLEDGEMENTS_PATH,
@@ -77,138 +78,142 @@ export function AppRoutes({
   // shell. `onExit` della sessione (3.20) è cablato qui → ROOT_PATH (il catch-all
   // rende la dashboard), speculare a `onStartSession` della dashboard.
   const navigate = useNavigate();
+  // Il marchio sul dorso porta alla home: la dashboard, o l'accesso da anonimo.
+  const home = authenticated ? ROOT_PATH : LOGIN_PATH;
   return (
-    <Routes>
-      {/* I vecchi percorsi in italiano: solo reindirizzamenti verso i nuovi, fuori
-          dalle guardie (la destinazione applica la sua). */}
-      {LEGACY_PATH_REDIRECTS.map(([from, to]) => (
-        <Route key={from} path={from} element={<Navigate to={to} replace />} />
-      ))}
-      <Route path="/lezioni/:lessonId" element={<LegacyLessonRedirect />} />
-      {/* La privacy policy (7.1): l'UNICA rotta pubblica in ENTRAMBI gli stati —
-          raggiungibile da anonimo (prima della registrazione) e da autenticato.
-          Dichiarata come figlio DIRETTO di <Routes>, FUORI da entrambe le guardie,
-          cosi il match statico `/privacy` batte il catch-all `*`. `onExit` e
-          DETERMINISTICO dal livello app (niente navigate(-1), che su deep-link
-          diretto sarebbe un vicolo cieco): autenticato -> ROOT_PATH, anonimo ->
-          LOGIN_PATH. */}
-      <Route
-        path={PRIVACY_PATH}
-        element={
-          <PrivacyScreen
-            onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+    <HomeLinkProvider href={home} go={() => navigate(home)}>
+      <Routes>
+        {/* I vecchi percorsi in italiano: solo reindirizzamenti verso i nuovi, fuori
+            dalle guardie (la destinazione applica la sua). */}
+        {LEGACY_PATH_REDIRECTS.map(([from, to]) => (
+          <Route key={from} path={from} element={<Navigate to={to} replace />} />
+        ))}
+        <Route path="/lezioni/:lessonId" element={<LegacyLessonRedirect />} />
+        {/* La privacy policy (7.1): l'UNICA rotta pubblica in ENTRAMBI gli stati —
+            raggiungibile da anonimo (prima della registrazione) e da autenticato.
+            Dichiarata come figlio DIRETTO di <Routes>, FUORI da entrambe le guardie,
+            cosi il match statico `/privacy` batte il catch-all `*`. `onExit` e
+            DETERMINISTICO dal livello app (niente navigate(-1), che su deep-link
+            diretto sarebbe un vicolo cieco): autenticato -> ROOT_PATH, anonimo ->
+            LOGIN_PATH. */}
+        <Route
+          path={PRIVACY_PATH}
+          element={
+            <PrivacyScreen
+              onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+            />
+          }
+        />
+        {/* I riconoscimenti (7.2): la SECONDA rotta pubblica in ENTRAMBI gli stati,
+            gemella di `/privacy`. Figlio DIRETTO di <Routes>, FUORI da entrambe le
+            guardie, cosi il match statico `/acknowledgements` batte il catch-all `*`.
+            `onExit` DETERMINISTICO dal livello app (niente navigate(-1), vicolo cieco
+            su deep-link diretto): autenticato -> ROOT_PATH, anonimo -> LOGIN_PATH. */}
+        <Route
+          path={ACKNOWLEDGEMENTS_PATH}
+          element={
+            <AcknowledgementsScreen
+              onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+            />
+          }
+        />
+        {/* «Come funziona?»: pubblica in entrambi gli stati, gemella di `/privacy`. */}
+        <Route
+          path={ABOUT_PATH}
+          element={
+            <AboutScreen
+              onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+            />
+          }
+        />
+        <Route element={<RedirectIfAuthenticated authenticated={authenticated} />}>
+          <Route
+            path={LOGIN_PATH}
+            element={
+              <AuthScreen
+                gateway={gateway}
+                onAuthenticated={onAuthenticated}
+                onViewPrivacy={() => navigate(PRIVACY_PATH)}
+                onViewAcknowledgements={() => navigate(ACKNOWLEDGEMENTS_PATH)}
+                onViewAbout={() => navigate(ABOUT_PATH)}
+              />
+            }
           />
-        }
-      />
-      {/* I riconoscimenti (7.2): la SECONDA rotta pubblica in ENTRAMBI gli stati,
-          gemella di `/privacy`. Figlio DIRETTO di <Routes>, FUORI da entrambe le
-          guardie, cosi il match statico `/acknowledgements` batte il catch-all `*`.
-          `onExit` DETERMINISTICO dal livello app (niente navigate(-1), vicolo cieco
-          su deep-link diretto): autenticato -> ROOT_PATH, anonimo -> LOGIN_PATH. */}
-      <Route
-        path={ACKNOWLEDGEMENTS_PATH}
-        element={
-          <AcknowledgementsScreen
-            onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+        </Route>
+        <Route element={<RequireAuth authenticated={authenticated} />}>
+          {/* La sessione di esercizi (3.18): rotta VERA sotto il guard, PRIMA del
+              catch-all così `/study` ha precedenza. `userId` è già una prop di
+              AppRoutes (chiave per-utente della pila, AD-5). */}
+          <Route
+            path={STUDY_PATH}
+            element={
+              <SessionScreen
+                userId={userId}
+                onExit={() => navigate(ROOT_PATH)}
+              />
+            }
           />
-        }
-      />
-      {/* «Come funziona?»: pubblica in entrambi gli stati, gemella di `/privacy`. */}
-      <Route
-        path={ABOUT_PATH}
-        element={
-          <AboutScreen
-            onExit={() => navigate(authenticated ? ROOT_PATH : LOGIN_PATH)}
+          {/* Le statistiche (5.1): rotta VERA sotto il guard, PRIMA del catch-all così
+              `/stats` ha precedenza. `onExit`→ROOT_PATH, speculare alla sessione. */}
+          <Route
+            path={STATS_PATH}
+            element={
+              <StatsScreen
+                userId={userId}
+                onExit={() => navigate(ROOT_PATH)}
+              />
+            }
           />
-        }
-      />
-      <Route element={<RedirectIfAuthenticated authenticated={authenticated} />}>
-        <Route
-          path={LOGIN_PATH}
-          element={
-            <AuthScreen
-              gateway={gateway}
-              onAuthenticated={onAuthenticated}
-              onViewPrivacy={() => navigate(PRIVACY_PATH)}
-              onViewAcknowledgements={() => navigate(ACKNOWLEDGEMENTS_PATH)}
-              onViewAbout={() => navigate(ABOUT_PATH)}
-            />
-          }
-        />
-      </Route>
-      <Route element={<RequireAuth authenticated={authenticated} />}>
-        {/* La sessione di esercizi (3.18): rotta VERA sotto il guard, PRIMA del
-            catch-all così `/study` ha precedenza. `userId` è già una prop di
-            AppRoutes (chiave per-utente della pila, AD-5). */}
-        <Route
-          path={STUDY_PATH}
-          element={
-            <SessionScreen
-              userId={userId}
-              onExit={() => navigate(ROOT_PATH)}
-            />
-          }
-        />
-        {/* Le statistiche (5.1): rotta VERA sotto il guard, PRIMA del catch-all così
-            `/stats` ha precedenza. `onExit`→ROOT_PATH, speculare alla sessione. */}
-        <Route
-          path={STATS_PATH}
-          element={
-            <StatsScreen
-              userId={userId}
-              onExit={() => navigate(ROOT_PATH)}
-            />
-          }
-        />
-        {/* L'allenamento libero: fuori dalla pila, `onExit`→ROOT_PATH come le altre. */}
-        <Route
-          path={DRILL_PATH}
-          element={<DrillScreen onExit={() => navigate(ROOT_PATH)} />}
-        />
-        {/* Le lezioni e il ripasso libero di una lezione: fuori dalla pila. */}
-        <Route
-          path={LESSONS_PATH}
-          element={
-            <LessonsScreen
-              userId={userId}
-              onExit={() => navigate(ROOT_PATH)}
-              onPractice={(lessonId) => navigate(lessonPracticePath(lessonId))}
-            />
-          }
-        />
-        <Route
-          path={LESSON_PRACTICE_PATH}
-          element={
-            <LessonPracticeRoute
-              userId={userId}
-              onExit={() => navigate(LESSONS_PATH)}
-            />
-          }
-        />
-        <Route
-          path={SETTINGS_PATH}
-          element={
-            <SettingsPage
-              settings={settings}
-              account={account}
-              userId={userId}
-              onAccountDeleted={onAccountDeleted}
-            />
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <AuthenticatedShell
-              settings={settings}
-              userId={userId}
-              onSignOut={onSignOut}
-              signOutPending={signOutPending}
-            />
-          }
-        />
-      </Route>
-    </Routes>
+          {/* L'allenamento libero: fuori dalla pila, `onExit`→ROOT_PATH come le altre. */}
+          <Route
+            path={DRILL_PATH}
+            element={<DrillScreen onExit={() => navigate(ROOT_PATH)} />}
+          />
+          {/* Le lezioni e il ripasso libero di una lezione: fuori dalla pila. */}
+          <Route
+            path={LESSONS_PATH}
+            element={
+              <LessonsScreen
+                userId={userId}
+                onExit={() => navigate(ROOT_PATH)}
+                onPractice={(lessonId) => navigate(lessonPracticePath(lessonId))}
+              />
+            }
+          />
+          <Route
+            path={LESSON_PRACTICE_PATH}
+            element={
+              <LessonPracticeRoute
+                userId={userId}
+                onExit={() => navigate(LESSONS_PATH)}
+              />
+            }
+          />
+          <Route
+            path={SETTINGS_PATH}
+            element={
+              <SettingsPage
+                settings={settings}
+                account={account}
+                userId={userId}
+                onAccountDeleted={onAccountDeleted}
+              />
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <AuthenticatedShell
+                settings={settings}
+                userId={userId}
+                onSignOut={onSignOut}
+                signOutPending={signOutPending}
+              />
+            }
+          />
+        </Route>
+      </Routes>
+    </HomeLinkProvider>
   );
 }
 
