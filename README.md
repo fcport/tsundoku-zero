@@ -1,10 +1,20 @@
+<img src="src/ui/mascot/tanuki-thumbs-up.png" alt="The Tsundoku Zero tanuki giving a thumbs-up" width="150" align="right">
+
 # Tsundoku Zero
 
 積ん読ゼロ — clear the pile.
 
-**[tsundokuzero.federicocasadei.dev](https://tsundokuzero.federicocasadei.dev)**
+> **Live at [tsundokuzero.federicocasadei.dev](https://tsundokuzero.federicocasadei.dev)**
+> — free, sign up with an email and a password. Interface in English and Italian.
 
-Japanese grammar exercises that go with the video lessons of
+![The dashboard: today's pile of exercises, the streak, the current lesson](docs/images/dashboard.png)
+
+## What it is for
+
+Tsundoku Zero is a place to **practise Japanese grammar** right after watching a
+lesson, and to keep practising it until it sticks.
+
+It follows the video lessons of
 [Cure Dolly](https://www.youtube.com/channel/UCkdmU8hGK4Fg3LghTVtKltQ), one
 lesson at a time. I am studying Japanese with
 [30 Day Japanese](https://learnjapanese.moe/routine/) by TheMoeWay, which
@@ -13,9 +23,25 @@ exercises to go with them, and whatever you do not practise you forget. So as I
 work through the lessons I add them here and write their exercises, so that
 anyone can use them.
 
-The name is the product's metric: the exercises waiting for review are "the
-pile", and the daily goal is to bring it to zero. The project is independent: it
-is not affiliated with Cure Dolly or TheMoeWay, and the exercises are original.
+The idea in one line: **watch a lesson, then the app hands you its exercises and
+brings each one back just before you would forget it.** You do not choose what to
+review; you open the app, clear the pile, and close it.
+
+*Tsundoku* (積ん読) is the Japanese word for the pile of books you bought and
+never read. Here the pile is the exercises waiting for review, and the daily
+goal is to bring it to zero.
+
+**Who it is for:** anyone learning Japanese with the Cure Dolly videos, or
+following the same grammar order, who already reads kana. Kanji come with
+furigana, and every sentence has a translation you can switch on.
+
+**Where it stands (October 2026):** the first 15 lessons are in, with 295
+exercises; the playlist has 93 videos, and lessons are added as I study them.
+
+The project is independent: it is not affiliated with Cure Dolly or TheMoeWay,
+and the exercises are original.
+
+<img src="docs/images/exercise.png" alt="An exercise: build the sentence from tiles, with the explanation after a wrong answer" width="600">
 
 ## How it works
 
