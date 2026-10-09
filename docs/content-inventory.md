@@ -51,7 +51,10 @@ curriculum (fascia riservata 900+, `docs/authoring-runbook.md`).
 
 ## Transcript ancora da lavorare
 
-I transcript da `lezione-16` a `lezione-99` sono presenti in
-`.authoring/transcripts/` ma **vuoti** (0 byte): non c'è nulla da cui estrarre
-fatti. Quando un transcript viene riempito e la lezione autorata, la si aggiunge
-alla tabella sopra.
+`lezione-NN` è il video in posizione NN della playlist «Japanese From Scratch»
+(`PLg9uYxuZf8x_A-vcqqyOFZu06WlhnypWj`); l'elenco posizione → id → titolo è in
+`.authoring/playlist.txt`. La playlist ha 93 video: i transcript da `lezione-16`
+a `lezione-93` sono pieni (sottotitoli inglesi scritti a mano, scaricati il
+09-10-2026) e aspettano di essere autorati; da `lezione-94` a `lezione-99` sono
+**vuoti** (0 byte) perché nella playlist non c'è un video corrispondente. Quando
+una lezione viene autorata, la si aggiunge alla tabella sopra.
