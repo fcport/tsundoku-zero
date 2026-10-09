@@ -370,7 +370,7 @@ describe('Matrix — id corrente assente dal caricato ⇒ stato neutro senza car
   });
 });
 
-// Il RIEPILOGO dello zero (07-10-2026): cosa è cambiato in questa sessione, dal log.
+// Il RIEPILOGO dello zero (09-10-2026): cosa è cambiato in questa sessione, dal log.
 describe('schermata dello zero — il riepilogo della sessione', () => {
   const STARTED = new Date('2026-09-25T11:00:00.000Z');
   /** Una risposta giusta all'esercizio `exerciseId` all'istante `iso`. */
@@ -421,8 +421,15 @@ describe('schermata dello zero — il riepilogo della sessione', () => {
     expect(drained(STARTED)).not.toContain('!');
   });
 
-  it('accanto allo zero dorme il gatto della libreria', () => {
-    expect(drained(STARTED)).toContain('data-mascot="sleeping"');
+  it('lezione imparata o traguardo nella sessione ⇒ accanto allo zero il tanuki preme il timbro', () => {
+    expect(drained(STARTED)).toContain('data-mascot="stamp"');
+  });
+
+  it('niente di nuovo nella sessione ⇒ il tanuki alza il pollice: hai finito la pila', () => {
+    // La sessione comincia dopo l'ultima risposta: nessuna lezione imparata, nessun
+    // traguardo.
+    expect(drained(new Date('2026-09-25T12:00:00.000Z'))).toContain('data-mascot="thumbs-up"');
+    expect(drained(null)).toContain('data-mascot="thumbs-up"');
   });
 
   it('senza l’istante d’inizio il riepilogo non c’è', () => {

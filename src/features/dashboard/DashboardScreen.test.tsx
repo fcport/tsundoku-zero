@@ -1097,7 +1097,7 @@ describe('«Esercitati di più» a pila vuota — la lezione in corso ha eserciz
   });
 });
 
-// La serie col giorno libero e le lezioni lette (07-10-2026). NOW = venerdì 25
+// La serie col giorno libero e le lezioni lette (09-10-2026). NOW = venerdì 25
 // settembre 2026, fuso UTC.
 describe('la serie col giorno libero e le lezioni imparate', () => {
   it('serie senza salti ⇒ «Day off available»', () => {
@@ -1145,19 +1145,32 @@ describe('la serie col giorno libero e le lezioni imparate', () => {
   });
 });
 
-// Il gatto della libreria (07-10-2026): solo nei momenti che contano.
-describe('il gatto della libreria', () => {
-  it('primo avvio ⇒ il gatto seduto', () => {
+// Il tanuki della libreria (09-10-2026): solo nei momenti che contano.
+describe('il tanuki della libreria', () => {
+  it('primo avvio ⇒ il tanuki seduto', () => {
     const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 0, total: 3 }), UID);
     expect(markup).toContain('data-mascot="sitting"');
   });
 
-  it('pila a zero ⇒ il gatto addormentato', () => {
+  it('pila a zero con una lezione da sbloccare ⇒ il tanuki legge', () => {
     const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 1, total: 3 }), UID);
+    expect(markup).toContain('data-mascot="reading"');
+  });
+
+  it('pila a zero e per oggi hai finito (tetto raggiunto) ⇒ il tanuki dorme', () => {
+    const markup = render(
+      seededClient({ dueCount: 0, log: [], unlocked: 1, total: 10, lessonsPerDay: 1, unlockedTodayCount: 1 }),
+      UID,
+    );
     expect(markup).toContain('data-mascot="sleeping"');
   });
 
-  it('pila da svuotare ⇒ nessun gatto: è la schermata di tutti i giorni', () => {
+  it('pila a zero a corso finito ⇒ il tanuki dorme', () => {
+    const markup = render(seededClient({ dueCount: 0, log: [], unlocked: 3, total: 3 }), UID);
+    expect(markup).toContain('data-mascot="sleeping"');
+  });
+
+  it('pila da svuotare ⇒ nessun tanuki: è la schermata di tutti i giorni', () => {
     const markup = render(seededClient({ dueCount: 4, log: [], unlocked: 1, total: 3 }), UID);
     expect(markup).not.toContain('data-mascot');
   });

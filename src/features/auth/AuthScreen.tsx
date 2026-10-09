@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
+import { Tanuki } from '../../ui/Tanuki';
 import { FOCUS_RING, KICKER } from '../../ui/magazine';
 import { ExternalIcon, GitHubIcon } from '../../ui/icons';
 import { REPO_URL } from '../about/links';
@@ -75,7 +76,11 @@ export function AuthScreen({
     <main
       className={`${RESPONSIVE_CONTAINER} flex flex-col gap-8 py-8 sm:py-14`}
     >
-      <p className={KICKER}>{t('app.tagline')}</p>
+      {/* Il sottotitolo e, accanto, il tanuki che saluta chi arriva (09-10-2026). */}
+      <div className="flex items-end justify-between gap-4">
+        <p className={`${KICKER} text-balance`}>{t('app.tagline')}</p>
+        <Tanuki pose="waving" height={80} className="sm:h-[112px] sm:w-auto" />
+      </div>
       <AuthForm
         values={values}
         error={error}

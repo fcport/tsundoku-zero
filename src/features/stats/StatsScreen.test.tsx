@@ -781,6 +781,13 @@ describe('la serie, il calendario e i traguardi', () => {
     );
   });
 
+  it('giorno saltato senza perdere la serie ⇒ accanto, il tanuki si stiracchia', () => {
+    expect(render(seededClient(LOG), UID)).toContain('data-mascot="stretch"');
+    // Senza giorni saltati, niente tanuki.
+    const noSkip = [logAt('2026-09-23T10:00:00.000Z'), logAt('2026-09-24T10:00:00.000Z'), logAt('2026-09-25T10:00:00.000Z')];
+    expect(render(seededClient(noSkip), UID)).not.toContain('data-mascot');
+  });
+
   it('il calendario: la frase per l’AT, poi i numeri degli ultimi giorni', () => {
     const markup = render(seededClient(LOG), UID);
     expect(markup).toContain(

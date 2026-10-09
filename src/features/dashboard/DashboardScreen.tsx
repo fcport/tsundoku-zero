@@ -62,7 +62,7 @@ import { kanjiDate } from '../../ui/kanjiDate';
 import { Furigana } from '../../ui/Furigana';
 import { Translation } from '../../ui/Translation';
 import { ArrowIcon, ExternalIcon, GitHubIcon } from '../../ui/icons';
-import { Cat } from '../../ui/Cat';
+import { Tanuki } from '../../ui/Tanuki';
 import { REPO_URL } from '../about/links';
 import { exercisesQueryKey } from '../study/exercisesQueryKey';
 import {
@@ -154,7 +154,7 @@ const SATSU = [{ text: '冊', ruby: 'さつ' }] as const;
 // Le file di segmenti sotto i due dati sono decorative: il dato lo porta il testo
 // accanto (numero visibile + frase per l'AT), mai il solo disegno.
 //
-// La settimana della serie (07-10-2026): sette caselle, dal più vecchio a oggi.
+// La settimana della serie (09-10-2026): sette caselle, dal più vecchio a oggi.
 // Studiato pieno d'inchiostro, giorno libero a righe, saltato incavato, oggi ancora
 // aperto solo bordato. Decorativa: la serie la dice il testo (numero + frase AT).
 const DAY_TONE: Readonly<Record<StreakDay['state'], string>> = {
@@ -174,7 +174,7 @@ function WeekStrip({ week }: { readonly week: readonly StreakDay[] }) {
   );
 }
 
-// Le lezioni del curriculum (07-10-2026): imparate in rosso (il colore del timbro
+// Le lezioni del curriculum (09-10-2026): imparate in rosso (il colore del timbro
 // 習得), sbloccate d'inchiostro, le altre incavate. Decorativa come `Segments`.
 const LESSON_TONE = {
   read: 'bg-accent',
@@ -251,7 +251,7 @@ export function DashboardScreen({
   // cancello scheletro: finché manca, l'offerta semplicemente non compare.
   const activeQ = useActiveExerciseCounts(userId);
   const moreMutation = useAddLessonExercises(userId);
-  // La lezione di ogni esercizio, per le lezioni imparate (07-10-2026). Fuori dal
+  // La lezione di ogni esercizio, per le lezioni imparate (09-10-2026). Fuori dal
   // cancello scheletro: finché manca, «Lezioni imparate» semplicemente non compare.
   const exerciseLessonsQ = useExerciseLessons();
 
@@ -310,7 +310,7 @@ export function DashboardScreen({
   const count = dueQ.data.length;
   // I dorsi della pila, nell'ordine della coda; vuoti finché il contenuto non c'è.
   const books = pileBooks(dueIds, pileQ.data ?? [], lessonsQ.data);
-  // La serie col giorno libero (07-10-2026): giorni, settimana e giorno libero
+  // La serie col giorno libero (09-10-2026): giorni, settimana e giorno libero
   // dalle funzioni pure di `streak.ts`, l'unica autorità.
   const streakNow = streakStatus(logQ.data, clock.now(), clock.timeZone());
   const days = streakNow.days;
@@ -380,14 +380,14 @@ export function DashboardScreen({
     return (
       <main className={MAIN_CLASS}>
         {/* La descrizione al posto del numero, poi la sola barra «comincia». Da
-            1024px il gatto sta accanto al testo, non sotto: la pagina resta nello
+            1024px il tanuki sta accanto al testo, non sotto: la pagina resta nello
             schermo senza scroll. */}
         <div className="flex flex-1 flex-col justify-between border-b-[1.5px] border-border-strong lg:flex-row lg:items-start">
           <p className={`${DECLARATION_CLASS} max-w-[34rem] lg:max-w-[46rem]`}>
             {t('dashboard.firstRunBody')}
           </p>
-          {/* Il gatto della libreria aspetta, seduto (07-10-2026). */}
-          <Cat pose="sitting" height={96} className="m-5 self-end sm:m-8 sm:h-[140px] sm:w-auto" />
+          {/* Il tanuki della libreria aspetta, seduto (09-10-2026). */}
+          <Tanuki pose="sitting" height={96} className="m-5 self-end sm:m-8 sm:h-[140px] sm:w-auto" />
         </div>
         {next !== null ? (
           <button
@@ -507,12 +507,24 @@ export function DashboardScreen({
                   </button>
                 </div>
               ) : null}
-              {/* La pila è a zero: il gatto della libreria dorme (07-10-2026). */}
-              <Cat
-                pose="sleeping"
-                height={52}
-                className="mx-5 mb-6 mt-auto sm:mx-8 sm:mb-8 sm:h-[76px] sm:w-auto"
-              />
+              {/* La pila è a zero (09-10-2026): se c'è una lezione da sbloccare il
+                  tanuki legge, il libro nuovo è pronto; se per oggi hai finito
+                  (tetto raggiunto o corso finito) dorme. */}
+              {next !== null && !capReached ? (
+                // In piedi è più stretto di quello che dorme: più alto, per non
+                // sparire nel riquadro vuoto.
+                <Tanuki
+                  pose="reading"
+                  height={72}
+                  className="mx-5 mb-6 mt-auto self-center sm:mx-8 sm:mb-8 sm:h-[120px] sm:w-auto"
+                />
+              ) : (
+                <Tanuki
+                  pose="sleeping"
+                  height={52}
+                  className="mx-5 mb-6 mt-auto self-center sm:mx-8 sm:mb-8 sm:h-[76px] sm:w-auto"
+                />
+              )}
             </div>
           )}
         </div>

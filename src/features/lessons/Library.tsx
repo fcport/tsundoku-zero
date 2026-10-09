@@ -1,4 +1,4 @@
-// Livello features/lessons: la LIBRERIA (07-10-2026), in testa alla pagina Lezioni.
+// Livello features/lessons: la LIBRERIA (09-10-2026), in testa alla pagina Lezioni.
 // Ogni lezione del curriculum è un dorso sullo scaffale: rosso quando è imparata (il
 // colore del timbro 習得), carta con l'inchiostro che sale man mano che ne sai bene
 // gli esercizi quando è sbloccata, incavato quando è ancora chiusa. I dorsi vanno a
@@ -10,7 +10,7 @@ import type { CSSProperties } from 'react';
 import type { LessonMastery } from '../../domain/library';
 import type { ShelfEntry } from '../../domain/curriculum';
 import { useTranslation } from '../../i18n';
-import { Cat } from '../../ui/Cat';
+import { Tanuki } from '../../ui/Tanuki';
 import { HEADLINE, KICKER } from '../../ui/magazine';
 
 // Le altezze dei dorsi, come libri veri (telefono; da 640px un terzo in più).
@@ -25,13 +25,13 @@ export interface LibraryProps {
 export function Library({ shelf, mastery }: LibraryProps) {
   const { t } = useTranslation();
   const read = shelf.filter(({ lesson }) => mastery?.get(lesson.id)?.read).length;
-  // Il gatto dorme sopra l'ultima lezione imparata, appoggiato al più alto dei
+  // Il tanuki dorme sopra l'ultima lezione imparata, appoggiato al più alto dei
   // tre libri su cui si stende.
   const lastRead = shelf.reduce(
     (last, { lesson }, i) => (mastery?.get(lesson.id)?.read ? i : last),
     -1,
   );
-  const catBed =
+  const bed =
     lastRead < 0
       ? 0
       : Math.max(
@@ -69,12 +69,12 @@ export function Library({ shelf, mastery }: LibraryProps) {
           return (
             <li
               key={lesson.id}
-              style={i === lastRead ? ({ '--bed': `${catBed}px` } as CSSProperties) : undefined}
+              style={i === lastRead ? ({ '--bed': `${bed}px` } as CSSProperties) : undefined}
               className="relative flex h-full items-end border-b-[3px] border-ink-primary px-[1.5px]"
             >
-              {/* Il gatto della libreria, addormentato sopra i libri (07-10-2026). */}
+              {/* Il tanuki della libreria, addormentato sopra i libri (09-10-2026). */}
               {i === lastRead ? (
-                <Cat
+                <Tanuki
                   pose="sleeping"
                   height={28}
                   className="absolute bottom-[calc(var(--bed)+1px)] left-0 z-10 sm:bottom-[calc(var(--bed)*4/3+1px)] sm:h-[38px] sm:w-auto"

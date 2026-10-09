@@ -9,6 +9,7 @@
 import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
+import { Tanuki } from '../../ui/Tanuki';
 import { FOCUS_RING, KICKER, SCREEN_TITLE } from '../../ui/magazine';
 import { AUTHOR_LINKS } from './links';
 
@@ -28,7 +29,12 @@ export function AboutScreen({ onExit }: AboutScreenProps) {
   return (
     <MagazineFrame brandAsHeading>
     <main className={`${RESPONSIVE_CONTAINER} flex flex-col gap-8 py-8 sm:py-14`}>
-      <h2 className={`${SCREEN_TITLE} text-ink-primary`}>{t('about.title')}</h2>
+      {/* Il titolo e, accanto, il tanuki che aggiunge un libro alla pila: è la pila
+          di cui parla la pagina (09-10-2026). */}
+      <div className="flex items-end justify-between gap-4">
+        <h2 className={`${SCREEN_TITLE} text-ink-primary`}>{t('about.title')}</h2>
+        <Tanuki pose="books" height={80} className="sm:h-[120px] sm:w-auto" />
+      </div>
 
       <section className={SECTION}>
         <p className={KICKER}>{t('about.whoKicker')}</p>

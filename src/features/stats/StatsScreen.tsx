@@ -65,6 +65,7 @@ import { lessonsByGrammarPoint } from '../../domain/curriculum';
 import { resolveBilingual } from '../../domain/bilingual';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
+import { Tanuki } from '../../ui/Tanuki';
 import { Furigana } from '../../ui/Furigana';
 import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
 import { Translation } from '../../ui/Translation';
@@ -253,14 +254,21 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
           </div>
           <p className="text-body text-ink-primary">{t('stats.streak.rule')}</p>
           {streakNow.days > 0 ? (
-            <p className="text-body font-semibold text-ink-primary">
-              {streakNow.lastFreeDay === null || streakNow.freeDayBackOn === null
-                ? t('stats.streak.freeDayReady')
-                : t('stats.streak.freeDayUsed', {
+            streakNow.lastFreeDay === null || streakNow.freeDayBackOn === null ? (
+              <p className="text-body font-semibold text-ink-primary">{t('stats.streak.freeDayReady')}</p>
+            ) : (
+              // Il giorno saltato senza perdere la serie: accanto, il tanuki si
+              // stiracchia (09-10-2026). Riposarsi un giorno va bene.
+              <div className="flex items-end justify-between gap-4">
+                <p className="text-body font-semibold text-ink-primary">
+                  {t('stats.streak.freeDayUsed', {
                     date: nominal(streakNow.lastFreeDay),
                     back: nominal(streakNow.freeDayBackOn),
                   })}
-            </p>
+                </p>
+                <Tanuki pose="stretch" height={72} className="sm:h-[96px] sm:w-auto" />
+              </div>
+            )
           ) : null}
         </section>
       ) : null}

@@ -163,7 +163,7 @@ describe('LessonsScreen', () => {
   });
 });
 
-// La libreria (07-10-2026): una lezione è imparata quando lo sono tutti i suoi esercizi.
+// La libreria (09-10-2026): una lezione è imparata quando lo sono tutti i suoi esercizi.
 describe('LessonsScreen — la libreria', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('it');
@@ -215,7 +215,7 @@ describe('LessonsScreen — la libreria', () => {
     expect(html).toContain('Esercizi imparati: 1 su 2');
   });
 
-  it('il gatto dorme sullo scaffale solo se c’è una lezione imparata', () => {
+  it('il tanuki dorme sullo scaffale solo se c’è una lezione imparata', () => {
     expect(renderWithLibrary([...goods('a', 4)])).toContain('data-mascot="sleeping"');
     expect(renderWithLibrary([...goods('a', 3)])).not.toContain('data-mascot');
   });

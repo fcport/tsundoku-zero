@@ -48,6 +48,10 @@ describe('AuthScreen — contenitore responsive condiviso (3.23)', () => {
     expect(mains.length).toBe(1);
   });
 
+  it('il tanuki saluta chi arriva', () => {
+    expect(markup).toContain('data-mascot="waving"');
+  });
+
   it('il <main> porta max-w-measure, px-gutter-mobile, sm:px-gutter-desktop', () => {
     // La classe di `src/ui/layout.ts` (`RESPONSIVE_CONTAINER`): colonna centrata a
     // `measure`, gutter 20/32px. Un test qui evita che la schermata perda il

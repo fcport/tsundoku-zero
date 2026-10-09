@@ -42,6 +42,10 @@ describe('AboutScreen', () => {
     }
   });
 
+  it('accanto al titolo, il tanuki aggiunge un libro alla pila', () => {
+    expect(render()).toContain('data-mascot="books"');
+  });
+
   it('ha un solo landmark <main> col contenitore responsive condiviso', () => {
     const markup = render();
     expect(markup.match(/<main/g) ?? []).toHaveLength(1);

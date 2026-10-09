@@ -68,7 +68,7 @@ import { MagazineFrame } from '../../ui/MagazineFrame';
 import { ACTION_BAR, KICKER, NEXT_BAR } from '../../ui/magazine';
 import { ArrowIcon } from '../../ui/icons';
 import { Stamp } from '../../ui/Stamp';
-import { Cat } from '../../ui/Cat';
+import { Tanuki } from '../../ui/Tanuki';
 import { MILESTONE_STAMPS, READ_STAMP } from '../lessons/stamps';
 import { useExerciseLessons } from '../lessons/useExerciseLessons';
 import { usePorts } from '../ports/PortsContext';
@@ -252,7 +252,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
     enabled: !!userId && sessionComplete,
     queryFn: () => review.listReviewLog(),
   });
-  // Il RIEPILOGO dello zero (07-10-2026) legge anche le lezioni e la lezione di ogni
+  // Il RIEPILOGO dello zero (09-10-2026) legge anche le lezioni e la lezione di ogni
   // esercizio: stesse chiavi globali delle altre schermate, imparate solo allo zero.
   const lessonsQ = useQuery({
     queryKey: ['lessons'],
@@ -605,8 +605,19 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
             >
               0
             </p>
-            {/* Accanto allo zero il gatto della libreria dorme (07-10-2026). */}
-            <Cat pose="sleeping" height={46} className="mb-1 sm:h-[64px] sm:w-auto" />
+            {/* Hai finito la pila: accanto allo zero il tanuki alza il pollice
+                (09-10-2026); se nella sessione hai imparato una lezione o preso un
+                traguardo, preme il timbro, come quelli del riepilogo qui sotto.
+                Dopo, sulla dashboard a pila vuota, legge o dorme. */}
+            <Tanuki
+              pose={
+                recap !== null && (recap.lessonsRead.length > 0 || recap.newMilestones.length > 0)
+                  ? 'stamp'
+                  : 'thumbs-up'
+              }
+              height={88}
+              className="mb-1 sm:h-[120px] sm:w-auto"
+            />
           </div>
           {/* La conferma sobria di aver finito (AC1/AC2): nessun `!`, nessun verde. */}
           <p className="w-full border-t-[1.5px] border-border-strong pt-4 text-[22px] font-medium leading-snug text-ink-primary">
@@ -625,7 +636,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
           ) : (
             <div className="h-[16px] w-36 rounded-md bg-surface-sunken" />
           )}
-          {/* Il RIEPILOGO (07-10-2026): cosa è cambiato in questa sessione. Solo i
+          {/* Il RIEPILOGO (09-10-2026): cosa è cambiato in questa sessione. Solo i
               fatti che ci sono: niente righe a zero, niente lode. */}
           {recapItems.length > 0 ? (
             <ul className="flex w-full flex-col gap-3 border-t-[1.5px] border-border-strong pt-4">
