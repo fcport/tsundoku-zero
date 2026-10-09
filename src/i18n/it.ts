@@ -136,7 +136,7 @@ export const it = {
   stats: {
     title: 'Statistiche',
     // Risposte nel tempo (5.1/5.4): `heading` intitola la serie; `dayLabel` etichetta
-    // ogni giorno (`{{date}}` = YYYY-MM-DD, `{{answers}}` = conteggio del giorno,
+    // ogni giorno per l'AT (`{{date}}` = il giorno per esteso, `{{answers}}` = conteggio del giorno,
     // MAI `{{count}}` che innescherebbe il pluralizzatore i18next e romperebbe la
     // parità en/it). `insufficient` è la dichiarazione quantificata sotto soglia
     // (`{{needed}}` = `MIN_ANSWER_DAYS`, l'unica fonte del numero; `{{soFar}}` = giorni

@@ -36,13 +36,16 @@ export function CalendarHeatmap({ weeks, freeDays, dateLocale }: CalendarHeatmap
   const activeDays = past.filter((day) => day.count > 0).length;
   const answers = past.reduce((sum, day) => sum + day.count, 0);
   const month = new Intl.DateTimeFormat(dateLocale, { month: 'short', timeZone: 'UTC' });
-  // Il mese sopra la colonna in cui comincia (e sopra la prima colonna, se il mese
-  // dopo non comincia già nella seconda: le etichette si sovrapporrebbero).
+  // Il mese sopra la colonna in cui comincia, e sopra la prima colonna. Un nome di
+  // mese è largo circa tre colonne su un telefono: se la colonna etichettata prima è
+  // più vicina, l'etichetta salta (vince il mese che comincia davvero lì).
   const startsMonth = weeks.map((week) => week.some((day) => day.date.endsWith('-01')));
-  const monthLabels = weeks.map((week, i) => {
-    const labelled = startsMonth[i] || (i === 0 && !startsMonth[1]);
-    return labelled ? month.format(new Date(`${week[week.length - 1]!.date}T12:00:00Z`)) : '';
-  });
+  const MONTH_LABEL_COLUMNS = 3;
+  const labelledAt = startsMonth.flatMap((starts, i) => (starts ? [i] : []));
+  if (labelledAt[0] !== 0 && (labelledAt[0] ?? Infinity) >= MONTH_LABEL_COLUMNS) labelledAt.unshift(0);
+  const monthLabels = weeks.map((week, i) =>
+    labelledAt.includes(i) ? month.format(new Date(`${week[week.length - 1]!.date}T12:00:00Z`)) : '',
+  );
   const columns = { gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` };
 
   return (

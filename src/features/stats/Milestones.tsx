@@ -8,21 +8,32 @@ import { MILESTONE_STAMPS } from '../lessons/stamps';
 
 export interface MilestonesProps {
   readonly tracks: readonly MilestoneTrack[];
+  /** Adesso: l'anno delle date si scrive solo se non è quello in corso. */
+  readonly now: Date;
   /** Il fuso in cui leggere il giorno di ogni traguardo. */
   readonly timeZone: string;
   /** Il titolo di sezione (`<h3>`), con le classi della schermata. */
   readonly headingClassName: string;
 }
 
-export function Milestones({ tracks, timeZone, headingClassName }: MilestonesProps) {
+export function Milestones({ tracks, now, timeZone, headingClassName }: MilestonesProps) {
   const { t, i18n } = useTranslation();
   const locale = resolveLocale(i18n.language);
-  const date = new Intl.DateTimeFormat(locale === 'it' ? 'it-IT' : 'en-GB', {
+  const dateLocale = locale === 'it' ? 'it-IT' : 'en-GB';
+  // «27 set», con l'anno solo se non è quello in corso: su un telefono la data sta
+  // sotto il numero, accanto al timbro, in poco spazio.
+  const yearOf = new Intl.DateTimeFormat('en', { year: 'numeric', timeZone });
+  const thisYear = yearOf.format(now);
+  const sameYear = new Intl.DateTimeFormat(dateLocale, { day: 'numeric', month: 'short', timeZone });
+  const otherYear = new Intl.DateTimeFormat(dateLocale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
     timeZone,
   });
+  // Spazi non separabili: se la riga va a capo, il giorno resta col suo mese.
+  const date = (at: Date) =>
+    (yearOf.format(at) === thisYear ? sameYear : otherYear).format(at).replace(/ /g, '\u00a0');
 
   return (
     <>
@@ -61,9 +72,9 @@ export function Milestones({ tracks, timeZone, headingClassName }: MilestonesPro
                         {milestone.threshold}
                       </span>
                       {milestone.achievedAt !== null ? (
-                        <span className="whitespace-nowrap text-label-caps text-ink-secondary">
+                        <span className="text-label-caps text-ink-secondary">
                           {t('stats.milestones.achievedOn', {
-                            date: date.format(milestone.achievedAt),
+                            date: date(milestone.achievedAt),
                           })}
                         </span>
                       ) : null}

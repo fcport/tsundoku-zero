@@ -126,11 +126,11 @@ describe('AC1 — serie con dati: intestazione + conteggi per giorno come testo'
   });
 
   it('mostra il conteggio di ciascun giorno come TESTO', () => {
-    // Il dayLabel interpola {{date}} e {{answers}}: il giorno e il suo conteggio,
+    // Il dayLabel interpola {{date}} (per esteso) e {{answers}}: il giorno e il suo conteggio,
     // in forma etichetta-valore (nessuna concordanza di numero).
-    expect(markup).toContain('2026-09-23 - answers: 1');
-    expect(markup).toContain('2026-09-24 - answers: 1');
-    expect(markup).toContain('2026-09-25 - answers: 1');
+    expect(markup).toContain('Wednesday 23 September - answers: 1');
+    expect(markup).toContain('Thursday 24 September - answers: 1');
+    expect(markup).toContain('Friday 25 September - answers: 1');
   });
 
   it('rende un solo <main> (il landmark)', () => {
@@ -174,9 +174,9 @@ describe('AC1 — ultima risposta nel passato ⇒ la serie si estende fino a ogg
   const markup = render(qc, UID);
 
   it('rende i giorni con risposta e i giorni di coda a 0 come testo', () => {
-    expect(markup).toContain('2026-09-23 - answers: 1');
-    expect(markup).toContain('2026-09-24 - answers: 0');
-    expect(markup).toContain('2026-09-25 - answers: 0');
+    expect(markup).toContain('Wednesday 23 September - answers: 1');
+    expect(markup).toContain('Thursday 24 September - answers: 0');
+    expect(markup).toContain('Friday 25 September - answers: 0');
   });
 
   it('NON rende la dichiarazione di dati insufficienti (tre giorni distinti)', () => {
@@ -192,7 +192,7 @@ describe('AC1 — ultima risposta nel passato ⇒ la serie si estende fino a ogg
 });
 
 describe('AC1 — più risposte lo stesso giorno ⇒ un solo giorno col conteggio sommato', () => {
-  it('tre risposte il 25 (+ due altri giorni per la soglia) ⇒ «2026-09-25 - answers: 3»', () => {
+  it('tre risposte il 25 (+ due altri giorni per la soglia) ⇒ «Friday 25 September - answers: 3»', () => {
     // Tre risposte il 25 sommano nello stesso giorno; il 23 e il 24 portano un'altra
     // risposta ciascuno perche il grafico raggiunga MIN_ANSWER_DAYS giorni distinti e
     // sia reso (5.4). Il giorno pieno che l'AC osserva resta il 25 con conteggio 3.
@@ -204,7 +204,7 @@ describe('AC1 — più risposte lo stesso giorno ⇒ un solo giorno col conteggi
       logAt('2026-09-25T20:00:00.000Z'),
     ]);
     const markup = render(qc, UID);
-    expect(markup).toContain('2026-09-25 - answers: 3');
+    expect(markup).toContain('Friday 25 September - answers: 3');
   });
 });
 
@@ -233,8 +233,8 @@ describe('5.4 AC1 — temporale sotto soglia ⇒ dichiarazione quantificata, nes
   it('NON rende l\'intestazione del temporale ne le barre della serie', () => {
     expect(markup).not.toContain(en.stats.answersOverTime.heading);
     // La dichiarazione non e una lista di barre: nessun conteggio per-giorno reso.
-    expect(markup).not.toContain('2026-09-24 - answers:');
-    expect(markup).not.toContain('2026-09-25 - answers:');
+    expect(markup).not.toContain('Thursday 24 September - answers:');
+    expect(markup).not.toContain('Friday 25 September - answers:');
   });
 
   it('interpola soFar corretto (2) e la soglia dal dominio (nessun 3 letterale nel codice)', () => {
@@ -272,8 +272,8 @@ describe('5.4 AC1/AC2 — confine della soglia: 2 giorni insufficiente, 3 giorni
       UID,
     );
     expect(markup).toContain(en.stats.answersOverTime.heading);
-    expect(markup).toContain('2026-09-23 - answers: 1');
-    expect(markup).toContain('2026-09-25 - answers: 1');
+    expect(markup).toContain('Wednesday 23 September - answers: 1');
+    expect(markup).toContain('Friday 25 September - answers: 1');
     // A soglia esatta nessuna dichiarazione di insufficienza.
     expect(markup).not.toContain(
       i18n.t('stats.answersOverTime.insufficient', {
@@ -543,9 +543,9 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
     const markup = render(qc, UID, spyPorts(calls));
 
     // La serie viene dal log seminato: i tre giorni con conteggio 1.
-    expect(markup).toContain('2026-09-23 - answers: 1');
-    expect(markup).toContain('2026-09-24 - answers: 1');
-    expect(markup).toContain('2026-09-25 - answers: 1');
+    expect(markup).toContain('Wednesday 23 September - answers: 1');
+    expect(markup).toContain('Thursday 24 September - answers: 1');
+    expect(markup).toContain('Friday 25 September - answers: 1');
     // Né listDue né applyReview sono toccate (leggere/scrivere la pila).
     expect(calls).not.toContain('listDue');
     expect(calls).not.toContain('applyReview');
@@ -731,7 +731,7 @@ describe('AC — parità en/it e microcopy senza celebrazione', () => {
     );
     expect(markup).toContain(itCatalog.stats.title);
     expect(markup).toContain(itCatalog.stats.answersOverTime.heading);
-    expect(markup).toContain('2026-09-25 - risposte: 1');
+    expect(markup).toContain('venerdì 25 settembre - risposte: 1');
     // La distribuzione per stadio in italiano: intestazione ed etichette di stadio.
     expect(markup).toContain(itCatalog.stats.stageDistribution.heading);
     expect(markup).toContain('Livello 0 - esercizi: 1');
@@ -787,7 +787,7 @@ describe('la serie, il calendario e i traguardi', () => {
       'In the last 26 weeks you answered on 3 different days, 3 answers in all.',
     );
     expect(markup).toContain('The last 14 days');
-    expect(markup).toContain('2026-09-24 - answers: 0');
+    expect(markup).toContain('Thursday 24 September - answers: 0');
   });
 
   it('i traguardi compaiono con la lezione di ogni esercizio, con le soglie e il massimo', () => {

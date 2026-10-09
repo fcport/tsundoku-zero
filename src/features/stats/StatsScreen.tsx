@@ -104,7 +104,7 @@ const FOCUS_RING =
 // larghezza; l'altezza minima è condivisa. Compone il contenitore responsive di
 // `src/ui/layout.ts` (3.23): colonna singola centrata, `measure`, gutter 20/32px, mai
 // allargata a ≥1024px; il gutter orizzontale è del contenitore, qui resta `py-6`.
-const CONTAINER = `min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-stretch gap-8 py-8 sm:py-12`;
+const CONTAINER = `min-h-[24rem] ${RESPONSIVE_CONTAINER} flex flex-col items-stretch gap-6 py-8 sm:gap-8 sm:py-12`;
 
 // Direzione «rivista» (29-09-2026): il dorso col marchio attorno a ogni stato della
 // vista; dentro, la colonna di lettura con il titolo a testata e le sezioni divise
@@ -206,6 +206,15 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
     timeZone: 'UTC',
   });
   const nominal = (iso: string) => dayName.format(new Date(`${iso}T12:00:00Z`));
+  // La forma corta per l'elenco degli ultimi giorni («sab 26 set»): sta in una riga
+  // anche su un telefono stretto.
+  const dayShort = new Intl.DateTimeFormat(dateLocale, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  });
+  const shortDay = (iso: string) => dayShort.format(new Date(`${iso}T12:00:00Z`));
   const streakNow = streakStatus(logQ.data, clock.now(), clock.timeZone());
   const bestStreak = Math.max(0, ...streakHistory(logQ.data, clock.timeZone()).map((p) => p.days));
   const weeks = calendarWeeks(logQ.data, clock.now(), clock.timeZone(), CALENDAR_WEEKS);
@@ -279,24 +288,34 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
           <h4 className="text-[18px] font-bold text-ink-primary">
             {t('stats.calendar.recentHeading', { days: RECENT_DAYS })}
           </h4>
-          {/* La lista ordinata di barre per-giorno: ogni giorno porta il proprio
-              conteggio come TESTO (mai dal solo colore) più una barra proporzionale
-              (larghezza = count/max, token neutri, nessun verde). */}
-          <ol className="flex flex-col gap-3">
+          {/* La lista ordinata di barre per-giorno, una riga per giorno: la data
+              corta, la barra proporzionale (larghezza = count/max, token neutri,
+              nessun verde) e il conteggio come TESTO (mai dal solo colore). Per l'AT
+              la riga intera in una frase, con la data per esteso. */}
+          <ol className="flex flex-col gap-2">
             {series.slice(-RECENT_DAYS).map((day) => (
-              <li key={day.date} className="flex flex-col gap-1">
-                <span className="text-label text-ink-secondary">
+              <li
+                key={day.date}
+                className="grid grid-cols-[6.5rem_minmax(0,1fr)_2rem] items-center gap-3"
+              >
+                <span className="sr-only">
                   {t('stats.answersOverTime.dayLabel', {
-                    date: day.date,
+                    date: nominal(day.date),
                     answers: day.count,
                   })}
                 </span>
-                <div className="h-[8px] w-full overflow-hidden bg-surface-sunken">
+                <span aria-hidden="true" className="whitespace-nowrap text-label text-ink-secondary">
+                  {shortDay(day.date)}
+                </span>
+                <div aria-hidden="true" className="h-[8px] w-full overflow-hidden bg-surface-sunken">
                   <div
                     className="h-full bg-ink-primary"
                     style={{ width: `${(day.count / max) * 100}%` }}
                   />
                 </div>
+                <span aria-hidden="true" className="text-right text-label font-bold tabular-nums text-ink-primary">
+                  {day.count}
+                </span>
               </li>
             ))}
           </ol>
@@ -305,7 +324,12 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
       {/* I TRAGUARDI (07-10-2026): dopo la prima risposta, quando c'è la lezione di
           ogni esercizio. */}
       {hasLog && tracks !== null ? (
-        <Milestones tracks={tracks} timeZone={clock.timeZone()} headingClassName={SECTION_HEADING} />
+        <Milestones
+          tracks={tracks}
+          now={clock.now()}
+          timeZone={clock.timeZone()}
+          headingClassName={SECTION_HEADING}
+        />
       ) : null}
       {/* La SECONDA sezione (5.2): la distribuzione per stadio, derivata dal SOLO
           log (nessun clock). A distribuzione vuota (log vuoto) un placeholder
