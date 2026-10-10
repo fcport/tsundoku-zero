@@ -3,6 +3,8 @@
 // trasparente, palette ridotta): mascherina nera sugli occhi, coda ad anelli,
 // sciarpa rossa. Ogni posa ha il suo momento:
 // - seduto: aspetta, al primo avvio;
+// - col libro rosso: la pila da svuotare, in fondo alla colonna della data della
+//   dashboard (il libro è il prossimo, come il dorso rosso in cima alla pila);
 // - addormentato: per oggi hai finito (pila a zero senza lezioni da sbloccare), la
 //   lezione è imparata (scaffale);
 // - legge: la pila è a zero e c'è una lezione nuova da aprire;
@@ -15,12 +17,13 @@
 // - foglia in testa, con l'occhiolino: la pagina non trovata (così il tanuki si
 //   trasforma, nelle storie giapponesi).
 //
-// Compare solo nei momenti che contano, mai sulla dashboard di tutti i giorni; è
+// Compare in un momento alla volta, un tanuki per schermata; è
 // muto e decorativo (alt vuoto, `aria-hidden`): i fatti li dicono sempre le
 // scritte accanto.
 import books from './mascot/tanuki-books.png';
 import leaf from './mascot/tanuki-leaf.png';
 import reading from './mascot/tanuki-reading.png';
+import ready from './mascot/tanuki-ready.png';
 import sitting from './mascot/tanuki-sitting.png';
 import sleeping from './mascot/tanuki-sleeping.png';
 import stamp from './mascot/tanuki-stamp.png';
@@ -30,6 +33,7 @@ import waving from './mascot/tanuki-waving.png';
 
 export type TanukiPose =
   | 'sitting'
+  | 'ready'
   | 'sleeping'
   | 'reading'
   | 'thumbs-up'
@@ -51,6 +55,7 @@ export interface TanukiProps {
 // scaffale poggia sui libri).
 const POSES: Readonly<Record<TanukiPose, { readonly src: string; readonly w: number; readonly h: number }>> = {
   sitting: { src: sitting, w: 197, h: 199 },
+  ready: { src: ready, w: 333, h: 400 },
   sleeping: { src: sleeping, w: 228, h: 172 },
   reading: { src: reading, w: 413, h: 400 },
   'thumbs-up': { src: thumbsUp, w: 492, h: 439 },

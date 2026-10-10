@@ -1170,8 +1170,10 @@ describe('il tanuki della libreria', () => {
     expect(markup).toContain('data-mascot="sleeping"');
   });
 
-  it('pila da svuotare ⇒ nessun tanuki: è la schermata di tutti i giorni', () => {
+  it('pila da svuotare ⇒ il tanuki tiene in mano il prossimo libro, accanto alla data', () => {
     const markup = render(seededClient({ dueCount: 4, log: [], unlocked: 1, total: 3 }), UID);
-    expect(markup).not.toContain('data-mascot');
+    expect(markup).toContain('data-mascot="ready"');
+    // Uno solo: nella colonna della data, non anche altrove.
+    expect(markup.match(/data-mascot=/g)?.length).toBe(1);
   });
 });

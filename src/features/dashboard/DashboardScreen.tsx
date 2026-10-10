@@ -532,7 +532,7 @@ export function DashboardScreen({
         {/* La colonna centrale: la data di oggi scritta in verticale (縦書き), col
             giorno della settimana in rosso in testa. Impaginato, non informazione
             nuova: la data in chiaro è nella testata, quindi qui `aria-hidden`. */}
-        <div className="flex justify-center border-l-[1.5px] border-border-strong py-5 sm:py-8">
+        <div className="flex flex-col items-center justify-between gap-4 border-l-[1.5px] border-border-strong py-5 sm:py-8">
           <p
             lang="ja"
             aria-hidden="true"
@@ -551,6 +551,13 @@ export function DashboardScreen({
               className="mt-3 block font-mono text-[12px] font-medium normal-case tracking-normal text-ink-secondary"
             />
           </p>
+          {/* Con la pila da svuotare, in fondo alla colonna della data il tanuki
+              tiene in mano il prossimo libro, rosso come il dorso in cima alla pila
+              (10-10-2026): qui non toglie spazio né alla pila né al numero. A pila
+              vuota il tanuki sta nel riquadro grande, non anche qui. */}
+          {count > 0 ? (
+            <Tanuki pose="ready" height={60} className="shrink-0 sm:h-[104px] sm:w-auto" />
+          ) : null}
         </div>
 
         {/* La colonna dei DATI: sotto 1024px a tutta larghezza sotto il numero, da
