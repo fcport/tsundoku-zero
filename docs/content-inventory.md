@@ -41,19 +41,20 @@ con il contenuto reale. -->
 | 13 | `13-forma-te-kureru-ageru.json` | `lezione-13` | 6 | 6 | 6 | 18 |
 | 14 | `14-citare-con-to-e-verbi-composti.json` | `lezione-14` | 7 | 7 | 5 | 19 |
 | 15 | `15-il-passivo.json` | `lezione-15` | 8 | 5 | 5 | 18 |
+| 16 | `16-avverbi-e-la-particella-mo.json` | `lezione-16` | 9 | 6 | 5 | 20 |
 | 900 | `01-la-particella-wo.json` | — (fixture dei test) | 1 | 1 | 1 | 3 |
 
-<!-- inventory-total: 295 -->
+<!-- inventory-total: 315 -->
 
-**Totale: 295 esercizi** in 16 file — 112 `single-select`, 89 `select-span`,
-94 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
+**Totale: 315 esercizi** in 17 file — 121 `single-select`, 95 `select-span`,
+99 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
 curriculum (fascia riservata 900+, `docs/authoring-runbook.md`).
 
 ## Transcript ancora da lavorare
 
 `lezione-NN` è il video in posizione NN della playlist «Japanese From Scratch»
 (`PLg9uYxuZf8x_A-vcqqyOFZu06WlhnypWj`); l'elenco posizione → id → titolo è in
-`.authoring/playlist.txt`. La playlist ha 93 video: i transcript da `lezione-16`
+`.authoring/playlist.txt`. La playlist ha 93 video: i transcript da `lezione-17`
 a `lezione-93` sono pieni (sottotitoli inglesi scritti a mano, scaricati il
 09-10-2026) e aspettano di essere autorati; da `lezione-94` a `lezione-99` sono
 **vuoti** (0 byte) perché nella playlist non c'è un video corrispondente. Quando

@@ -68,6 +68,10 @@ export const GRAMMAR_POINT_READINGS: Readonly<Record<string, string | readonly F
   '受身の「れる」「られる」': 'うけみの「れる」「られる」',
   '受身で動作主を示す「に」': 'うけみでどうさぬしをしめす「に」',
   '迷惑の受身': 'めいわくのうけみ',
+  '副詞になる「く」': 'ふくしになる「く」',
+  '副詞を作る「に」': 'ふくしをつくる「に」',
+  '同類を示す「も」': 'どうるいをしめす「も」',
+  '経験の「たことがある」': 'けいけんの「たことがある」',
 };
 
 /**
@@ -125,6 +129,10 @@ export const GRAMMAR_POINT_MEANINGS: Readonly<Record<string, BilingualText>> = {
   '受身の「れる」「られる」': { en: 'The passive with れる and られる', it: 'Il passivo con れる e られる' },
   '受身で動作主を示す「に」': { en: 'に for who does the action in the passive', it: "に per chi fa l'azione nel passivo" },
   '迷惑の受身': { en: 'The passive for something unwelcome', it: 'Il passivo per una cosa sgradita' },
+  '副詞になる「く」': { en: 'く: an い-adjective saying how an action is done', it: "く: un aggettivo in い che dice come si fa un'azione" },
+  '副詞を作る「に」': { en: 'に: a noun or な-adjective saying how an action is done', it: "に: un nome o un aggettivo in な che dice come si fa un'azione" },
+  '同類を示す「も」': { en: 'も: the same goes for this too', it: 'も: vale lo stesso anche per questo' },
+  '経験の「たことがある」': { en: 'たことがある: having done something at least once', it: 'たことがある: aver fatto una cosa almeno una volta' },
 };
 
 /** Parole con una sola lettura, per le spiegazioni (vedi l'intestazione). */

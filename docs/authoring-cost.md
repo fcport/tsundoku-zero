@@ -145,14 +145,14 @@ La Definition of Done del PRD §11 chiede **almeno cinque** lezioni autorate,
 revisionate e giocabili; l'**obiettivo è undici**, pari a quelle già viste
 dall'owner. Questo è il traguardo dell'epica di contenuto.
 
-<!-- authored-lessons: 16 -->
+<!-- authored-lessons: 17 -->
 <!-- dod-status: met -->
 
-**Stato reale.** Il repository contiene al momento **16** file di lezione sotto
+**Stato reale.** Il repository contiene al momento **17** file di lezione sotto
 `content/lessons/`, tutti **validi** contro il cancello di Epic 2
 (`validateLessons` → `[]`):
 
-- **15 lezioni di curriculum**, `order` da 1 a 15, una per ciascun transcript non vuoto
+- **16 lezioni di curriculum**, `order` da 1 a 16, una per ciascuno dei primi sedici transcript
   della cartella di lavoro. Il dettaglio — quanti esercizi ha ogni lezione, per tipo, e
   da quale transcript sono stati estratti i fatti — è in `docs/content-inventory.md`.
 - `content/lessons/01-la-particella-wo.json` — `order: 900`, la lezione campione della

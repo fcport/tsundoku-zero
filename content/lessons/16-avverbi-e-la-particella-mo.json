@@ -1,0 +1,565 @@
+{
+  "order": 16,
+  "title": {
+    "en": "Saying how an action is done with く and に; も for \"also\"; たことがある for \"I have done it\"",
+    "it": "Dire come si fa un'azione con く e に; も per «anche»; たことがある per «l'ho già fatto»"
+  },
+  "video": "9DR9ifftMvs",
+  "grammarPoints": ["副詞になる「く」", "副詞を作る「に」", "同類を示す「も」", "経験の「たことがある」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "副詞になる「く」",
+      "prompt": {
+        "en": "\"This morning I got up earlier than usual.\" Which form of 早い (\"early\") says how I got up?",
+        "it": "«Stamattina mi sono alzato prima del solito.» Quale forma di 早い («presto») dice come mi sono alzato?"
+      },
+      "sentence": {
+        "kanji": "今朝はいつもより早く起きた",
+        "kana": "けさはいつもよりはやくおきた"
+      },
+      "translation": {
+        "en": "This morning I got up earlier than usual.",
+        "it": "Stamattina mi sono alzato prima del solito."
+      },
+      "glosses": [
+        { "text": "早く", "reading": "はやく" },
+        { "text": "早い", "reading": "はやい" },
+        { "text": "早いに", "reading": "はやいに" },
+        { "text": "早かった", "reading": "はやかった" }
+      ],
+      "gap": {
+        "kanji": "今朝はいつもより＿起きた",
+        "kana": "けさはいつもより＿おきた"
+      },
+      "answer": "早く",
+      "distractors": ["早い", "早いに", "早かった"],
+      "explanation": {
+        "en": "An い-adjective that says how an action is done drops い and takes く: 早い → 早く. Then it goes before the verb: 早く起きた, \"got up early\". 早い and 早かった can close a sentence or describe a noun, not a verb; に never goes after an い-adjective.",
+        "it": "Un aggettivo in い che dice come si fa un'azione perde い e prende く: 早い → 早く. Poi va prima del verbo: 早く起きた, «mi sono alzato presto». 早い e 早かった possono chiudere la frase o descrivere un nome, non un verbo; に non va mai dopo un aggettivo in い."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "副詞になる「く」",
+      "prompt": {
+        "en": "\"The children are singing happily.\" Which part says how they are singing?",
+        "it": "«I bambini cantano allegri.» Quale parte dice come cantano?"
+      },
+      "sentence": {
+        "kanji": "子どもたちが楽しく歌っている",
+        "kana": "こどもたちがたのしくうたっている"
+      },
+      "translation": {
+        "en": "The children are singing happily.",
+        "it": "I bambini cantano allegri."
+      },
+      "glosses": [
+        { "text": "子どもたちが", "reading": "こどもたちが", "meaning": { "en": "the children (が: who does it)", "it": "i bambini (が: chi lo fa)" } },
+        { "text": "楽しく", "reading": "たのしく", "meaning": { "en": "happily", "it": "allegri, divertendosi" } },
+        { "text": "歌っている", "reading": "うたっている", "meaning": { "en": "are singing", "it": "cantano" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 楽しく. It comes from 楽しい (\"fun, happy\"): い becomes く, and the word now describes the singing, not the children. 楽しい子どもたち would be \"cheerful children\"; 楽しく歌っている says the way they sing.",
+        "it": "Seleziona 楽しく. Viene da 楽しい («divertente, allegro»): い diventa く, e la parola ora descrive il cantare, non i bambini. 楽しい子どもたち sarebbe «bambini allegri»; 楽しく歌っている dice il modo in cui cantano."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "副詞になる「く」",
+      "prompt": {
+        "en": "Build: \"My younger brother wrote the letters big.\"",
+        "it": "Componi: «Mio fratello minore ha scritto le lettere in grande.»"
+      },
+      "sentence": {
+        "kanji": "弟は字を大きく書いた",
+        "kana": "おとうとはじをおおきくかいた"
+      },
+      "translation": {
+        "en": "My younger brother wrote the letters big.",
+        "it": "Mio fratello minore ha scritto le lettere in grande."
+      },
+      "glosses": [
+        { "text": "弟は", "reading": "おとうとは", "meaning": { "en": "my younger brother (は: the topic)", "it": "mio fratello minore (は: il tema)" } },
+        { "text": "字を", "reading": "じを", "meaning": { "en": "the letters (を: the object)", "it": "le lettere (を: l'oggetto)" } },
+        { "text": "大きく", "reading": "おおきく", "meaning": { "en": "big", "it": "in grande" } },
+        { "text": "書いた", "reading": "かいた", "meaning": { "en": "wrote", "it": "ha scritto" } }
+      ],
+      "answer": ["弟は", "字を", "大きく", "書いた"],
+      "alsoAccepted": [["弟は", "大きく", "字を", "書いた"]],
+      "explanation": {
+        "en": "大きい (\"big\") → 大きく: it says how he wrote, so it belongs to 書いた and goes before it. 弟は, the topic, comes first. 大きく can sit right before the verb or before 字を: \"弟は大きく字を書いた\" is also correct.",
+        "it": "大きい («grande») → 大きく: dice come ha scritto, quindi appartiene a 書いた e va prima del verbo. 弟は, il tema, va per primo. 大きく può stare subito prima del verbo o prima di 字を: va bene anche «弟は大きく字を書いた»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "副詞になる「く」",
+      "prompt": {
+        "en": "\"My older sister cut her hair short.\" Which form of 短い (\"short\") goes in the gap?",
+        "it": "«Mia sorella maggiore si è tagliata i capelli corti.» Quale forma di 短い («corto») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "姉は髪を短く切った",
+        "kana": "あねはかみをみじかくきった"
+      },
+      "translation": {
+        "en": "My older sister cut her hair short.",
+        "it": "Mia sorella maggiore si è tagliata i capelli corti."
+      },
+      "glosses": [
+        { "text": "短く", "reading": "みじかく" },
+        { "text": "短い", "reading": "みじかい" },
+        { "text": "短に", "reading": "みじかに" },
+        { "text": "短かった", "reading": "みじかかった" }
+      ],
+      "gap": {
+        "kanji": "姉は髪を＿切った",
+        "kana": "あねはかみを＿きった"
+      },
+      "answer": "短く",
+      "distractors": ["短い", "短に", "短かった"],
+      "explanation": {
+        "en": "短い is an い-adjective, so before a verb it becomes 短く: 短く切った, \"cut (it) short\". 短に treats it as a な-adjective, which it is not: い-adjectives always take く, never に.",
+        "it": "短い è un aggettivo in い, quindi prima di un verbo diventa 短く: 短く切った, «li ha tagliati corti». 短に lo tratta come un aggettivo in な, ma non lo è: gli aggettivi in い prendono sempre く, mai に."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "副詞になる「く」",
+      "prompt": {
+        "en": "\"I slept well last night.\" Which part comes from いい (\"good\")?",
+        "it": "«Ieri notte ho dormito bene.» Quale parte viene da いい («buono»)?"
+      },
+      "sentence": {
+        "kanji": "昨日はよく眠れた",
+        "kana": "きのうはよくねむれた"
+      },
+      "translation": {
+        "en": "I slept well last night.",
+        "it": "Ieri notte ho dormito bene."
+      },
+      "glosses": [
+        { "text": "昨日は", "reading": "きのうは", "meaning": { "en": "yesterday (は: the topic)", "it": "ieri (は: il tema)" } },
+        { "text": "よく", "meaning": { "en": "well", "it": "bene" } },
+        { "text": "眠れた", "reading": "ねむれた", "meaning": { "en": "could sleep", "it": "sono riuscito a dormire" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select よく. いい is the one irregular い-adjective: all its other forms start from よ, so before a verb it becomes よく, never いく. よく眠れた: \"I could sleep well\".",
+        "it": "Seleziona よく. いい è l'unico aggettivo in い irregolare: tutte le sue altre forme partono da よ, quindi prima di un verbo diventa よく, mai いく. よく眠れた: «sono riuscito a dormire bene»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "副詞を作る「に」",
+      "prompt": {
+        "en": "\"My younger brother closed the door quietly.\" Which form of 静か (\"quiet\") goes in the gap?",
+        "it": "«Mio fratello minore ha chiuso la porta piano.» Quale forma di 静か («silenzioso») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "弟はドアを静かに閉めた",
+        "kana": "おとうとはドアをしずかにしめた"
+      },
+      "translation": {
+        "en": "My younger brother closed the door quietly.",
+        "it": "Mio fratello minore ha chiuso la porta piano."
+      },
+      "glosses": [
+        { "text": "静かに", "reading": "しずかに" },
+        { "text": "静かな", "reading": "しずかな" },
+        { "text": "静かく", "reading": "しずかく" },
+        { "text": "静かだ", "reading": "しずかだ" }
+      ],
+      "gap": {
+        "kanji": "弟はドアを＿閉めた",
+        "kana": "おとうとはドアを＿しめた"
+      },
+      "answer": "静かに",
+      "distractors": ["静かな", "静かく", "静かだ"],
+      "explanation": {
+        "en": "静か is a な-adjective (it takes な before a noun: 静かな部屋, \"a quiet room\"). To say how an action is done it takes に instead: 静かに閉めた, \"closed (it) quietly\". く is only for い-adjectives.",
+        "it": "静か è un aggettivo in な (vuole な davanti a un nome: 静かな部屋, «una stanza silenziosa»). Per dire come si fa un'azione prende invece に: 静かに閉めた, «l'ha chiusa piano». く è solo per gli aggettivi in い."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "副詞を作る「に」",
+      "prompt": {
+        "en": "\"Suddenly the sky turned dark.\" Which part says the change came all at once?",
+        "it": "«All'improvviso il cielo si è fatto scuro.» Quale parte dice che il cambiamento è arrivato di colpo?"
+      },
+      "sentence": {
+        "kanji": "急に空が暗くなった",
+        "kana": "きゅうにそらがくらくなった"
+      },
+      "translation": {
+        "en": "Suddenly the sky turned dark.",
+        "it": "All'improvviso il cielo si è fatto scuro."
+      },
+      "glosses": [
+        { "text": "急に", "reading": "きゅうに", "meaning": { "en": "suddenly", "it": "all'improvviso" } },
+        { "text": "空が", "reading": "そらが", "meaning": { "en": "the sky (が: what changes)", "it": "il cielo (が: ciò che cambia)" } },
+        { "text": "暗く", "reading": "くらく", "meaning": { "en": "dark (暗い + く)", "it": "scuro (暗い + く)" } },
+        { "text": "なった", "meaning": { "en": "became", "it": "è diventato" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 急に. 急 is a noun meaning \"sudden\"; with に it describes how the change happens: 急に, \"suddenly\". The same sentence also has the other way: 暗い (\"dark\") becomes 暗く before なる, \"become dark\".",
+        "it": "Seleziona 急に. 急 è un nome che vuol dire «improvviso»; con に descrive come avviene il cambiamento: 急に, «all'improvviso». Nella stessa frase c'è anche l'altro modo: 暗い («scuro») diventa 暗く prima di なる, «diventare scuro»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "副詞を作る「に」",
+      "prompt": {
+        "en": "Build: \"My father polished his shoes carefully.\"",
+        "it": "Componi: «Mio padre ha lucidato le scarpe con cura.»"
+      },
+      "sentence": {
+        "kanji": "父は靴を丁寧に磨いた",
+        "kana": "ちちはくつをていねいにみがいた"
+      },
+      "translation": {
+        "en": "My father polished his shoes carefully.",
+        "it": "Mio padre ha lucidato le scarpe con cura."
+      },
+      "glosses": [
+        { "text": "父は", "reading": "ちちは", "meaning": { "en": "my father (は: the topic)", "it": "mio padre (は: il tema)" } },
+        { "text": "靴を", "reading": "くつを", "meaning": { "en": "his shoes (を: the object)", "it": "le scarpe (を: l'oggetto)" } },
+        { "text": "丁寧に", "reading": "ていねいに", "meaning": { "en": "carefully", "it": "con cura" } },
+        { "text": "磨いた", "reading": "みがいた", "meaning": { "en": "polished", "it": "ha lucidato" } }
+      ],
+      "answer": ["父は", "靴を", "丁寧に", "磨いた"],
+      "alsoAccepted": [["父は", "丁寧に", "靴を", "磨いた"]],
+      "explanation": {
+        "en": "丁寧 (\"careful\") is a な-adjective, so it takes に to describe the polishing: 丁寧に磨いた. It belongs to the verb and goes before it, either right before or before 靴を: \"父は丁寧に靴を磨いた\" is also correct. 父は, the topic, comes first.",
+        "it": "丁寧 («accurato») è un aggettivo in な, quindi prende に per descrivere il lucidare: 丁寧に磨いた. Appartiene al verbo e va prima di lui, subito prima o prima di 靴を: va bene anche «父は丁寧に靴を磨いた». 父は, il tema, va per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "副詞を作る「に」",
+      "prompt": {
+        "en": "\"My younger sister tidied her room neatly.\" Which form of きれい (\"neat, clean\") goes in the gap?",
+        "it": "«Mia sorella minore ha messo in ordine la camera per bene.» Quale forma di きれい («pulito, in ordine») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "妹は部屋をきれいに片付けた",
+        "kana": "いもうとはへやをきれいにかたづけた"
+      },
+      "translation": {
+        "en": "My younger sister tidied her room neatly.",
+        "it": "Mia sorella minore ha messo in ordine la camera per bene."
+      },
+      "gap": {
+        "kanji": "妹は部屋を＿片付けた",
+        "kana": "いもうとはへやを＿かたづけた"
+      },
+      "answer": "きれいに",
+      "distractors": ["きれく", "きれいく", "きれいな"],
+      "explanation": {
+        "en": "きれい ends in い, but it is a な-adjective: you say きれいな部屋, \"a clean room\". So before a verb it takes に: きれいに片付けた. The い of きれい is part of the word and never drops, so きれく does not exist.",
+        "it": "きれい finisce in い, ma è un aggettivo in な: si dice きれいな部屋, «una camera pulita». Quindi prima di un verbo prende に: きれいに片付けた. La い di きれい fa parte della parola e non cade mai, quindi きれく non esiste."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "副詞を作る「に」",
+      "prompt": {
+        "en": "Build: \"I solved this problem easily.\"",
+        "it": "Componi: «Questo problema l'ho risolto facilmente.»"
+      },
+      "sentence": {
+        "kanji": "この問題は簡単に解けた",
+        "kana": "このもんだいはかんたんにとけた"
+      },
+      "translation": {
+        "en": "I solved this problem easily.",
+        "it": "Questo problema l'ho risolto facilmente."
+      },
+      "glosses": [
+        { "text": "この問題は", "reading": "このもんだいは", "meaning": { "en": "this problem (は: the topic)", "it": "questo problema (は: il tema)" } },
+        { "text": "簡単に", "reading": "かんたんに", "meaning": { "en": "easily", "it": "facilmente" } },
+        { "text": "解けた", "reading": "とけた", "meaning": { "en": "got solved", "it": "si è risolto" } }
+      ],
+      "answer": ["この問題は", "簡単に", "解けた"],
+      "explanation": {
+        "en": "簡単 (\"easy\") is a な-adjective: 簡単な問題 is \"an easy problem\", 簡単に解けた \"(it) got solved easily\". 簡単に belongs to the verb and goes right before it; この問題は, the topic, comes first.",
+        "it": "簡単 («facile») è un aggettivo in な: 簡単な問題 è «un problema facile», 簡単に解けた «si è risolto facilmente». 簡単に appartiene al verbo e va subito prima di lui; この問題は, il tema, va per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "同類を示す「も」",
+      "prompt": {
+        "en": "\"Neither my older brother nor my younger brother can swim.\" Which particle goes after 弟?",
+        "it": "«Né mio fratello maggiore né mio fratello minore sanno nuotare.» Quale particella va dopo 弟?"
+      },
+      "sentence": {
+        "kanji": "兄も弟も泳げない",
+        "kana": "あにもおとうともおよげない"
+      },
+      "translation": {
+        "en": "Neither my older brother nor my younger brother can swim.",
+        "it": "Né mio fratello maggiore né mio fratello minore sanno nuotare."
+      },
+      "gap": {
+        "kanji": "兄も弟＿泳げない",
+        "kana": "あにもおとうと＿およげない"
+      },
+      "answer": "も",
+      "distractors": ["は", "が", "を"],
+      "explanation": {
+        "en": "も says that what is said about one thing holds for another as well. With two of them, も goes after each: 兄も弟も. With an affirmative verb it means \"both\", with a negative one, as here, \"neither… nor\": the particle is the same, only the verb changes.",
+        "it": "も dice che ciò che si dice di una cosa vale anche per un'altra. Con due cose, も va dopo ciascuna: 兄も弟も. Con un verbo affermativo vuol dire «tutti e due», con uno negativo, come qui, «né… né»: la particella è la stessa, cambia solo il verbo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "同類を示す「も」",
+      "prompt": {
+        "en": "\"I saw that film too.\" Which part says the speaker did the same as someone else?",
+        "it": "«Quel film l'ho visto anch'io.» Quale parte dice che chi parla ha fatto la stessa cosa di qualcun altro?"
+      },
+      "sentence": {
+        "kanji": "私もその映画を見た",
+        "kana": "わたしもそのえいがをみた"
+      },
+      "translation": {
+        "en": "I saw that film too.",
+        "it": "Quel film l'ho visto anch'io."
+      },
+      "glosses": [
+        { "text": "私も", "reading": "わたしも", "meaning": { "en": "I too", "it": "anch'io" } },
+        { "text": "その映画を", "reading": "そのえいがを", "meaning": { "en": "that film (を: the object)", "it": "quel film (を: l'oggetto)" } },
+        { "text": "見た", "reading": "みた", "meaning": { "en": "saw", "it": "ho visto" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 私も. も works like は: it says who or what the sentence is about. But は often sets this person apart from the others, while も says the same thing goes for them: someone saw the film, and so did I. も takes the place of は: never 私はも.",
+        "it": "Seleziona 私も. も funziona come は: dice di chi o di cosa parla la frase. Ma は spesso distingue questa persona dalle altre, mentre も dice che per lei vale la stessa cosa: qualcuno ha visto il film, e anch'io. も prende il posto di は: mai 私はも."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "同類を示す「も」",
+      "prompt": {
+        "en": "Build: \"My younger brother likes dogs too.\"",
+        "it": "Componi: «Anche a mio fratello minore piacciono i cani.»"
+      },
+      "sentence": {
+        "kanji": "弟も犬が好きだ",
+        "kana": "おとうともいぬがすきだ"
+      },
+      "translation": {
+        "en": "My younger brother likes dogs too.",
+        "it": "Anche a mio fratello minore piacciono i cani."
+      },
+      "glosses": [
+        { "text": "弟も", "reading": "おとうとも", "meaning": { "en": "my younger brother too", "it": "anche mio fratello minore" } },
+        { "text": "犬が", "reading": "いぬが", "meaning": { "en": "dogs (が: what is liked)", "it": "i cani (が: ciò che piace)" } },
+        { "text": "好きだ", "reading": "すきだ", "meaning": { "en": "likes", "it": "piacciono" } }
+      ],
+      "answer": ["弟も", "犬が", "好きだ"],
+      "explanation": {
+        "en": "弟も takes the place of 弟は: he is who the sentence is about, and he likes dogs just like someone already mentioned. It comes first, as は would. With 好き, what is liked takes が (犬が) and stays right before 好きだ.",
+        "it": "弟も prende il posto di 弟は: è di lui che parla la frase, e i cani gli piacciono come a qualcuno già nominato. Va per primo, come andrebbe は. Con 好き, ciò che piace prende が (犬が) e sta subito prima di 好きだ."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "同類を示す「も」",
+      "prompt": {
+        "en": "\"I bought bread, and milk too.\" Which goes after 牛乳?",
+        "it": "«Ho comprato il pane, e anche il latte.» Cosa va dopo 牛乳?"
+      },
+      "sentence": {
+        "kanji": "パンを買って、牛乳も買った",
+        "kana": "パンをかって、ぎゅうにゅうもかった"
+      },
+      "translation": {
+        "en": "I bought bread, and milk too.",
+        "it": "Ho comprato il pane, e anche il latte."
+      },
+      "gap": {
+        "kanji": "パンを買って、牛乳＿買った",
+        "kana": "パンをかって、ぎゅうにゅう＿かった"
+      },
+      "answer": "も",
+      "distractors": ["もを", "は", "が"],
+      "explanation": {
+        "en": "も also takes the place of を: 牛乳を買った → 牛乳も買った, \"bought milk too\". The two are never stacked, so もを does not exist. は would set the milk apart from the bread instead of adding it.",
+        "it": "も prende anche il posto di を: 牛乳を買った → 牛乳も買った, «ho comprato anche il latte». Le due particelle non si mettono mai insieme, quindi もを non esiste. は distinguerebbe il latte dal pane invece di aggiungerlo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "同類を示す「も」",
+      "prompt": {
+        "en": "\"I studied at home, and at the library too.\" Which goes after 図書館?",
+        "it": "«Ho studiato a casa, e anche in biblioteca.» Cosa va dopo 図書館?"
+      },
+      "sentence": {
+        "kanji": "家で勉強して、図書館でも勉強した",
+        "kana": "いえでべんきょうして、としょかんでもべんきょうした"
+      },
+      "translation": {
+        "en": "I studied at home, and at the library too.",
+        "it": "Ho studiato a casa, e anche in biblioteca."
+      },
+      "gap": {
+        "kanji": "家で勉強して、図書館＿勉強した",
+        "kana": "いえでべんきょうして、としょかん＿べんきょうした"
+      },
+      "answer": "でも",
+      "distractors": ["も", "もで", "にも"],
+      "explanation": {
+        "en": "も replaces only は, が and を. Other particles stay, and も goes after them: 図書館で → 図書館でも, \"at the library too\". Without で, 図書館も勉強した would mean you studied the library itself. で is the particle for where an action happens, so にも does not fit here.",
+        "it": "も sostituisce solo は, が e を. Le altre particelle restano, e も va dopo di loro: 図書館で → 図書館でも, «anche in biblioteca». Senza で, 図書館も勉強した vorrebbe dire che hai studiato la biblioteca stessa. Il luogo in cui si fa un'azione prende で, quindi にも qui non va."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "経験の「たことがある」",
+      "prompt": {
+        "en": "\"I have climbed Mount Fuji.\" Which form of 登る (\"climb\") goes before こと?",
+        "it": "«Sono già salito sul monte Fuji.» Quale forma di 登る («salire») va prima di こと?"
+      },
+      "sentence": {
+        "kanji": "富士山に登ったことがある",
+        "kana": "ふじさんにのぼったことがある"
+      },
+      "translation": {
+        "en": "I have climbed Mount Fuji.",
+        "it": "Sono già salito sul monte Fuji."
+      },
+      "glosses": [
+        { "text": "登った", "reading": "のぼった" },
+        { "text": "登って", "reading": "のぼって" },
+        { "text": "登り", "reading": "のぼり" },
+        { "text": "登ります", "reading": "のぼります" }
+      ],
+      "gap": {
+        "kanji": "富士山に＿ことがある",
+        "kana": "ふじさんに＿ことがある"
+      },
+      "answer": "登った",
+      "distractors": ["登って", "登り", "登ります"],
+      "explanation": {
+        "en": "こと is \"thing, fact\", and a verb in the past placed right before it describes it: 登ったこと, \"the fact of having climbed\". ことがある says that fact exists: \"I have climbed it (at least once)\". A verb before a noun is always in the plain form, so 登ります does not fit.",
+        "it": "こと vuol dire «cosa, fatto», e un verbo al passato messo subito prima lo descrive: 登ったこと, «il fatto di essere salito». ことがある dice che quel fatto c'è: «ci sono salito (almeno una volta)». Un verbo davanti a un nome è sempre nella forma semplice, quindi 登ります non va."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "経験の「たことがある」",
+      "prompt": {
+        "en": "\"I have never seen snow yet.\" Which part says it has never happened?",
+        "it": "«Non ho ancora mai visto la neve.» Quale parte dice che non è mai successo?"
+      },
+      "sentence": {
+        "kanji": "私はまだ雪を見たことがない",
+        "kana": "わたしはまだゆきをみたことがない"
+      },
+      "translation": {
+        "en": "I have never seen snow yet.",
+        "it": "Non ho ancora mai visto la neve."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (は: the topic)", "it": "io (は: il tema)" } },
+        { "text": "まだ", "meaning": { "en": "yet, still", "it": "ancora" } },
+        { "text": "雪を", "reading": "ゆきを", "meaning": { "en": "snow (を: the object)", "it": "la neve (を: l'oggetto)" } },
+        { "text": "見た", "reading": "みた", "meaning": { "en": "saw", "it": "ho visto" } },
+        { "text": "ことがない", "meaning": { "en": "has never happened", "it": "non è mai successo" } }
+      ],
+      "answer": { "start": 4, "end": 5 },
+      "explanation": {
+        "en": "Select ことがない. ない is the negative of ある: the fact of having seen snow does not exist, so \"I have never seen snow\". What has が is こと, the experience; 私は is only the topic, who the sentence is about.",
+        "it": "Seleziona ことがない. ない è la negazione di ある: il fatto di aver visto la neve non c'è, quindi «non ho mai visto la neve». Chi prende が è こと, l'esperienza; 私は è solo il tema, la persona di cui si parla."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "経験の「たことがある」",
+      "prompt": {
+        "en": "Build: \"My grandmother has never been abroad.\"",
+        "it": "Componi: «Mia nonna non è mai stata all'estero.»"
+      },
+      "sentence": {
+        "kanji": "祖母は外国に行ったことがない",
+        "kana": "そぼはがいこくにいったことがない"
+      },
+      "translation": {
+        "en": "My grandmother has never been abroad.",
+        "it": "Mia nonna non è mai stata all'estero."
+      },
+      "glosses": [
+        { "text": "祖母は", "reading": "そぼは", "meaning": { "en": "my grandmother (は: the topic)", "it": "mia nonna (は: il tema)" } },
+        { "text": "外国に", "reading": "がいこくに", "meaning": { "en": "abroad (に: where she would go)", "it": "all'estero (に: dove andrebbe)" } },
+        { "text": "行った", "reading": "いった", "meaning": { "en": "went", "it": "è andata" } },
+        { "text": "ことがない", "meaning": { "en": "has never happened", "it": "non è mai successo" } }
+      ],
+      "answer": ["祖母は", "外国に", "行った", "ことがない"],
+      "explanation": {
+        "en": "行った describes こと, so it goes right before ことがない; 外国に belongs to 行った and goes right before it. 祖母は, the topic, comes first. Together: \"the fact of having gone abroad does not exist\", that is, she has never been.",
+        "it": "行った descrive こと, quindi va subito prima di ことがない; 外国に appartiene a 行った e va subito prima di lui. 祖母は, il tema, va per primo. Tutto insieme: «il fatto di essere andata all'estero non c'è», cioè non ci è mai stata."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "経験の「たことがある」",
+      "prompt": {
+        "en": "\"I have read this book.\" Which particle goes after こと?",
+        "it": "«Questo libro l'ho già letto.» Quale particella va dopo こと?"
+      },
+      "sentence": {
+        "kanji": "この本を読んだことがある",
+        "kana": "このほんをよんだことがある"
+      },
+      "translation": {
+        "en": "I have read this book.",
+        "it": "Questo libro l'ho già letto."
+      },
+      "gap": {
+        "kanji": "この本を読んだこと＿ある",
+        "kana": "このほんをよんだこと＿ある"
+      },
+      "answer": "が",
+      "distractors": ["を", "に", "で"],
+      "explanation": {
+        "en": "ある (\"there is\") has no object: what exists takes が. Here what exists is the fact of having read the book, so こと takes が: 読んだことがある. この本を keeps を because it is the object of 読んだ, not of ある.",
+        "it": "ある («c'è») non ha oggetto: ciò che c'è prende が. Qui ciò che c'è è il fatto di aver letto il libro, quindi こと prende が: 読んだことがある. この本を tiene を perché è l'oggetto di 読んだ, non di ある."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "経験の「たことがある」",
+      "prompt": {
+        "en": "\"My younger brother has never once been on a plane.\" Which part is 乗る (\"ride\") in the form that goes before こと?",
+        "it": "«Mio fratello minore non è mai salito su un aereo, nemmeno una volta.» Quale parte è 乗る («salire su un mezzo») nella forma che va prima di こと?"
+      },
+      "sentence": {
+        "kanji": "弟は一度も飛行機に乗ったことがない",
+        "kana": "おとうとはいちどもひこうきにのったことがない"
+      },
+      "translation": {
+        "en": "My younger brother has never once been on a plane.",
+        "it": "Mio fratello minore non è mai salito su un aereo, nemmeno una volta."
+      },
+      "glosses": [
+        { "text": "弟は", "reading": "おとうとは", "meaning": { "en": "my younger brother (は: the topic)", "it": "mio fratello minore (は: il tema)" } },
+        { "text": "一度も", "reading": "いちども", "meaning": { "en": "(not) even once", "it": "(nemmeno) una volta" } },
+        { "text": "飛行機に", "reading": "ひこうきに", "meaning": { "en": "a plane (に: what he gets on)", "it": "un aereo (に: dove sale)" } },
+        { "text": "乗った", "reading": "のった", "meaning": { "en": "rode", "it": "è salito" } },
+        { "text": "ことがない", "meaning": { "en": "has never happened", "it": "non è mai successo" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select 乗った. Before ことがある and ことがない the verb is always in the past, even if you are talking about your whole life up to now: 乗ったことがない. 一度も (\"even once\") with a negative verb means \"not even once\": here too, も with a negative.",
+        "it": "Seleziona 乗った. Prima di ことがある e ことがない il verbo è sempre al passato, anche se parli di tutta la vita fino a oggi: 乗ったことがない. 一度も («anche una volta») con un verbo negativo vuol dire «nemmeno una volta»: anche qui, も con un negativo."
+      }
+    }
+  ]
+}
