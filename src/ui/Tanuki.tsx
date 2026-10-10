@@ -12,7 +12,8 @@
 // - si stiracchia: hai saltato un giorno senza perdere la serie (statistiche);
 // - saluta: la pagina di accesso;
 // - pila di libri: «Come funziona?»;
-// - foglia in testa: pronta, ancora senza un posto.
+// - foglia in testa, con l'occhiolino: la pagina non trovata (così il tanuki si
+//   trasforma, nelle storie giapponesi).
 //
 // Compare solo nei momenti che contano, mai sulla dashboard di tutti i giorni; è
 // muto e decorativo (alt vuoto, `aria-hidden`): i fatti li dicono sempre le
@@ -57,7 +58,7 @@ const POSES: Readonly<Record<TanukiPose, { readonly src: string; readonly w: num
   stretch: { src: stretch, w: 402, h: 400 },
   waving: { src: waving, w: 404, h: 400 },
   books: { src: books, w: 412, h: 400 },
-  leaf: { src: leaf, w: 347, h: 400 },
+  leaf: { src: leaf, w: 358, h: 400 },
 };
 
 export function Tanuki({ pose, height, className }: TanukiProps) {

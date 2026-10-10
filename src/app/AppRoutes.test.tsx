@@ -145,12 +145,36 @@ describe('AppRoutes — radice protetta, autenticato', () => {
   });
 });
 
-describe('AppRoutes — deep link protetto, autenticato', () => {
+// Un indirizzo sconosciuto (10-10-2026): non più la dashboard in silenzio, ma la
+// pagina «non trovata», in entrambi gli stati.
+describe('AppRoutes — indirizzo sconosciuto, autenticato', () => {
   const markup = renderAt('/dashboard', true);
 
-  it('rende la radice protetta minima (azione primaria + Disconnetti)', () => {
-    expect(markup).toContain(en.dashboard.primaryAction);
-    expect(markup).toContain(en.auth.signOut);
+  it('rende la pagina «non trovata» con l’indirizzo aperto, non la dashboard', () => {
+    expect(markup).toContain(en.notFound.title);
+    expect(markup).toContain('/dashboard');
+    expect(markup).toContain('data-mascot="leaf"');
+    expect(markup).not.toContain(en.dashboard.primaryAction);
+  });
+
+  it('il ritorno porta alla dashboard', () => {
+    expect(markup).toContain(en.notFound.toDashboard);
+    expect(markup).not.toContain(en.notFound.toSignIn);
+  });
+
+  it('ha un solo landmark <main>', () => {
+    expect((markup.match(/<main/g) ?? []).length).toBe(1);
+  });
+});
+
+describe('AppRoutes — indirizzo sconosciuto, anonimo', () => {
+  const markup = renderAt('/statss', false);
+
+  it('rende la pagina «non trovata» (nessun rimando all’accesso), col ritorno all’accesso', () => {
+    expect(markup).toContain(en.notFound.title);
+    expect(markup).toContain('/statss');
+    expect(markup).toContain(en.notFound.toSignIn);
+    expect(markup).not.toContain(en.dashboard.primaryAction);
   });
 });
 

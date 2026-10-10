@@ -560,4 +560,12 @@ export const it = {
     repoShortLabel: 'Codice su GitHub',
     back: 'Indietro',
   },
+  // La pagina per un indirizzo che non porta da nessuna parte (10-10-2026): STESSE
+  // chiavi di `en` (parità ricorsiva).
+  notFound: {
+    title: "Questa pagina non c'è",
+    body: "L'indirizzo che hai aperto non porta a nessuna pagina di Tsundoku Zero. Forse è scritto male, o la pagina ha cambiato indirizzo.",
+    toDashboard: 'Torna alla dashboard',
+    toSignIn: "Vai all'accesso",
+  },
 } as const;

@@ -558,4 +558,13 @@ export const en = {
     repoShortLabel: 'Code on GitHub',
     back: 'Back',
   },
+  // La pagina per un indirizzo che non porta da nessuna parte (10-10-2026). Dice il
+  // fatto (l'indirizzo non esiste) e una causa probabile; il ritorno cambia con lo
+  // stato: dashboard da autenticato, accesso da anonimo.
+  notFound: {
+    title: 'This page is not here',
+    body: 'The address you opened does not lead to any page of Tsundoku Zero. It may be mistyped, or the page may have moved.',
+    toDashboard: 'Back to the dashboard',
+    toSignIn: 'Go to sign in',
+  },
 } as const;
