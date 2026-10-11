@@ -72,6 +72,11 @@ export const GRAMMAR_POINT_READINGS: Readonly<Record<string, string | readonly F
   '副詞を作る「に」': 'ふくしをつくる「に」',
   '同類を示す「も」': 'どうるいをしめす「も」',
   '経験の「たことがある」': 'けいけんの「たことがある」',
+  '丁寧体「です・ます」': 'ていねいたい「です・ます」',
+  '形容詞・名詞と「です」': 'けいようし・めいしと「です」',
+  '誘いの「ましょう」「ませんか」': 'さそいの「ましょう」「ませんか」',
+  '推量の「でしょう」': 'すいりょうの「でしょう」',
+  '依頼の「ください」': 'いらいの「ください」',
 };
 
 /**
@@ -133,6 +138,11 @@ export const GRAMMAR_POINT_MEANINGS: Readonly<Record<string, BilingualText>> = {
   '副詞を作る「に」': { en: 'に: a noun or な-adjective saying how an action is done', it: "に: un nome o un aggettivo in な che dice come si fa un'azione" },
   '同類を示す「も」': { en: 'も: the same goes for this too', it: 'も: vale lo stesso anche per questo' },
   '経験の「たことがある」': { en: 'たことがある: having done something at least once', it: 'たことがある: aver fatto una cosa almeno una volta' },
+  '丁寧体「です・ます」': { en: 'です and ます: speaking politely, and to whom', it: 'です e ます: parlare in modo cortese, e con chi' },
+  '形容詞・名詞と「です」': { en: 'です after adjectives and nouns, now and in the past', it: 'です dopo aggettivi e nomi, al presente e al passato' },
+  '誘いの「ましょう」「ませんか」': { en: 'ましょう and ませんか: proposing, offering, inviting', it: 'ましょう e ませんか: proporre, offrire, invitare' },
+  '推量の「でしょう」': { en: 'でしょう: probably', it: 'でしょう: probabilmente' },
+  '依頼の「ください」': { en: 'ください: asking politely', it: 'ください: chiedere per favore' },
 };
 
 /** Parole con una sola lettura, per le spiegazioni (vedi l'intestazione). */

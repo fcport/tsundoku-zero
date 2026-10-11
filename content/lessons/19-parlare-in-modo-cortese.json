@@ -1,0 +1,627 @@
+{
+  "order": 19,
+  "title": {
+    "en": "Speaking politely: です and ます, ましょう and ませんか, でしょう, ください",
+    "it": "Parlare in modo cortese: です e ます, ましょう e ませんか, でしょう, ください"
+  },
+  "video": "ymJWb31qWI8",
+  "grammarPoints": ["丁寧体「です・ます」", "形容詞・名詞と「です」", "誘いの「ましょう」「ませんか」", "推量の「でしょう」", "依頼の「ください」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧体「です・ます」",
+      "prompt": {
+        "en": "You are talking to your teacher: \"I'll hand in my homework tomorrow.\" Which form of 出す (\"hand in\") goes in the gap?",
+        "it": "Parli con il tuo professore: «Domani consegno i compiti.» Quale forma di 出す («consegnare») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "明日宿題を出します",
+        "kana": "あしたしゅくだいをだします"
+      },
+      "translation": {
+        "en": "I'll hand in my homework tomorrow.",
+        "it": "Domani consegno i compiti."
+      },
+      "glosses": [
+        { "text": "出します", "reading": "だします" },
+        { "text": "出す", "reading": "だす" },
+        { "text": "出した", "reading": "だした" },
+        { "text": "出しました", "reading": "だしました" }
+      ],
+      "gap": {
+        "kanji": "明日宿題を＿",
+        "kana": "あしたしゅくだいを＿"
+      },
+      "answer": "出します",
+      "distractors": ["出す", "出した", "出しました"],
+      "explanation": {
+        "en": "With a teacher, a customer, a colleague or someone you don't know, you speak politely: the verb that closes the sentence takes ます. 出す → 出し + ます = 出します. 出す is the same sentence said to a friend or at home: correct, but too casual for a teacher. 出した and 出しました are past: \"I handed it in\".",
+        "it": "Con un professore, un cliente, un collega o una persona che non conosci si parla in modo cortese: il verbo in fondo alla frase prende ます. 出す → 出し + ます = 出します. 出す è la stessa frase detta a un amico o in famiglia: giusta, ma con un professore suona troppo confidenziale. 出した e 出しました sono al passato: «ho consegnato»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧体「です・ます」",
+      "prompt": {
+        "en": "You tell a friend: \"I saw a film yesterday.\" Which form of 見る (\"see\") goes in the gap?",
+        "it": "Lo racconti a un amico: «Ieri ho visto un film.» Quale forma di 見る («vedere») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "昨日映画を見た",
+        "kana": "きのうえいがをみた"
+      },
+      "translation": {
+        "en": "I saw a film yesterday.",
+        "it": "Ieri ho visto un film."
+      },
+      "glosses": [
+        { "text": "見た", "reading": "みた" },
+        { "text": "見ました", "reading": "みました" },
+        { "text": "見ます", "reading": "みます" },
+        { "text": "見ません", "reading": "みません" }
+      ],
+      "gap": {
+        "kanji": "昨日映画を＿",
+        "kana": "きのうえいがを＿"
+      },
+      "answer": "見た",
+      "distractors": ["見ました", "見ます", "見ません"],
+      "explanation": {
+        "en": "With friends and family you use the plain form, without ます: 見た, \"I saw\". 見ました says the same thing politely: not a mistake, but with a friend it sounds distant, as if you were talking to a stranger. 見ます is the present and 見ません the \"not\": with 昨日 (\"yesterday\") you need the past.",
+        "it": "Con gli amici e in famiglia si usa la forma semplice, senza ます: 見た, «ho visto». 見ました dice la stessa cosa in modo cortese: non è un errore, ma con un amico suona distaccato, come se parlassi con un estraneo. 見ます è il presente e 見ません il «non»: con 昨日 («ieri») serve il passato."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "丁寧体「です・ます」",
+      "prompt": {
+        "en": "\"I read the book I bought yesterday.\" The sentence is polite: which verb stays in the plain form?",
+        "it": "«Ho letto il libro che ho comprato ieri.» La frase è cortese: quale verbo resta nella forma semplice?"
+      },
+      "sentence": {
+        "kanji": "昨日買った本を読みました",
+        "kana": "きのうかったほんをよみました"
+      },
+      "translation": {
+        "en": "I read the book I bought yesterday.",
+        "it": "Ho letto il libro che ho comprato ieri."
+      },
+      "glosses": [
+        { "text": "昨日", "reading": "きのう", "meaning": { "en": "yesterday", "it": "ieri" } },
+        { "text": "買った", "reading": "かった", "meaning": { "en": "(that I) bought", "it": "(che ho) comprato" } },
+        { "text": "本を", "reading": "ほんを", "meaning": { "en": "the book (を: the object)", "it": "il libro (を: l'oggetto)" } },
+        { "text": "読みました", "reading": "よみました", "meaning": { "en": "I read (polite)", "it": "ho letto (cortese)" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 買った. ます goes only on the verb that ends the sentence: 読みました. 買った describes 本 (\"the book I bought\") and stays plain even when you speak politely: nobody says 買いました本. Politeness sits on the last word, not inside the sentence.",
+        "it": "Seleziona 買った. ます va solo sul verbo che chiude la frase: 読みました. 買った descrive 本 («il libro che ho comprato») e resta nella forma semplice anche quando parli in modo cortese: 買いました本 non si dice. La cortesia sta in fondo alla frase, non dentro."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "丁寧体「です・ます」",
+      "prompt": {
+        "en": "Said politely: \"The film I saw last week was interesting.\" Which form of 見る goes in the gap?",
+        "it": "Detto in modo cortese: «Il film che ho visto la settimana scorsa era interessante.» Quale forma di 見る va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "先週見た映画はおもしろかったです",
+        "kana": "せんしゅうみたえいがはおもしろかったです"
+      },
+      "translation": {
+        "en": "The film I saw last week was interesting.",
+        "it": "Il film che ho visto la settimana scorsa era interessante."
+      },
+      "glosses": [
+        { "text": "見た", "reading": "みた" },
+        { "text": "見ました", "reading": "みました" },
+        { "text": "見ます", "reading": "みます" },
+        { "text": "見て", "reading": "みて" }
+      ],
+      "gap": {
+        "kanji": "先週＿映画はおもしろかったです",
+        "kana": "せんしゅう＿えいがはおもしろかったです"
+      },
+      "answer": "見た",
+      "distractors": ["見ました", "見ます", "見て"],
+      "explanation": {
+        "en": "見た describes 映画: \"the film I saw\". A verb that describes a noun stays plain even in a polite sentence; politeness goes only at the end: おもしろかったです. 見ました is not used before a noun; 見ます would be \"that I see\", and 見て cannot describe a noun.",
+        "it": "見た descrive 映画: «il film che ho visto». Un verbo che descrive un nome resta nella forma semplice anche in una frase cortese; la cortesia va solo in fondo: おもしろかったです. 見ました davanti a un nome non si usa; 見ます sarebbe «che vedo», e 見て non può descrivere un nome."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "丁寧体「です・ます」",
+      "prompt": {
+        "en": "Build, politely: \"In the morning I wash my face and have breakfast.\"",
+        "it": "Componi, in modo cortese: «La mattina mi lavo la faccia e faccio colazione.»"
+      },
+      "sentence": {
+        "kanji": "朝は顔を洗って朝ご飯を食べます",
+        "kana": "あさはかおをあらってあさごはんをたべます"
+      },
+      "translation": {
+        "en": "In the morning I wash my face and have breakfast.",
+        "it": "La mattina mi lavo la faccia e faccio colazione."
+      },
+      "glosses": [
+        { "text": "朝は", "reading": "あさは", "meaning": { "en": "in the morning (は: the topic)", "it": "la mattina (は: il tema)" } },
+        { "text": "顔を", "reading": "かおを", "meaning": { "en": "my face (を: the object)", "it": "la faccia (を: l'oggetto)" } },
+        { "text": "洗って", "reading": "あらって", "meaning": { "en": "wash, and…", "it": "lavo, e…" } },
+        { "text": "朝ご飯を", "reading": "あさごはんを", "meaning": { "en": "breakfast (を: the object)", "it": "la colazione (を: l'oggetto)" } },
+        { "text": "食べます", "reading": "たべます", "meaning": { "en": "eat (polite)", "it": "mangio (cortese)" } }
+      ],
+      "answer": ["朝は", "顔を", "洗って", "朝ご飯を", "食べます"],
+      "explanation": {
+        "en": "The two actions are joined by the te-form: 顔を洗って, \"I wash my face and…\". The verb in て does not take ます: politeness goes only on the last verb, 食べます, which closes the sentence. 朝は, the topic, comes first; each object with を sits right before its verb: 顔を before 洗って, 朝ご飯を before 食べます.",
+        "it": "Le due azioni sono unite dalla forma in て: 顔を洗って, «mi lavo la faccia e…». Il verbo in て non prende ます: la cortesia va solo sull'ultimo verbo, 食べます, in fondo alla frase. 朝は, il tema, va per primo; ogni oggetto con を sta subito prima del suo verbo: 顔を prima di 洗って, 朝ご飯を prima di 食べます."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "形容詞・名詞と「です」",
+      "prompt": {
+        "en": "To the shop assistant: \"This bag is a little expensive.\" What goes in the gap?",
+        "it": "Al commesso: «Questa borsa è un po' cara.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "このかばんは少し高いです",
+        "kana": "このかばんはすこしたかいです"
+      },
+      "translation": {
+        "en": "This bag is a little expensive.",
+        "it": "Questa borsa è un po' cara."
+      },
+      "glosses": [
+        { "text": "高いです", "reading": "たかいです" },
+        { "text": "高いだ", "reading": "たかいだ" },
+        { "text": "高です", "reading": "たかです" },
+        { "text": "高いでした", "reading": "たかいでした" }
+      ],
+      "gap": {
+        "kanji": "このかばんは少し＿",
+        "kana": "このかばんはすこし＿"
+      },
+      "answer": "高いです",
+      "distractors": ["高いだ", "高です", "高いでした"],
+      "explanation": {
+        "en": "An い-adjective already says \"is\": 高い = \"is expensive\". Among friends 高い is enough; politely you add です at the end: 高いです. Here です changes nothing in the meaning, it only adds the polite tone. だ never goes after an い-adjective: 高いだ is wrong. 高です drops the い, which has to stay. 高いでした puts the past on です, but with an い-adjective the past goes on the adjective: 高かったです.",
+        "it": "Un aggettivo in い dice già «è»: 高い = «è caro». Fra amici basta 高い; in modo cortese si aggiunge です in fondo: 高いです. Qui です non cambia il significato, aggiunge solo il tono cortese. だ dopo un aggettivo in い non va mai: 高いだ è sbagliato. 高です perde la い, che invece resta. 高いでした mette il passato su です, ma con un aggettivo in い il passato va sull'aggettivo: 高かったです."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "形容詞・名詞と「です」",
+      "prompt": {
+        "en": "Build, politely, for your boss: \"The trip was great fun.\"",
+        "it": "Componi, in modo cortese, per il tuo capo: «Il viaggio è stato molto divertente.»"
+      },
+      "sentence": {
+        "kanji": "旅行はとても楽しかったです",
+        "kana": "りょこうはとてもたのしかったです"
+      },
+      "translation": {
+        "en": "The trip was great fun.",
+        "it": "Il viaggio è stato molto divertente."
+      },
+      "glosses": [
+        { "text": "旅行は", "reading": "りょこうは", "meaning": { "en": "the trip (は: the topic)", "it": "il viaggio (は: il tema)" } },
+        { "text": "とても", "meaning": { "en": "very", "it": "molto" } },
+        { "text": "楽しかった", "reading": "たのしかった", "meaning": { "en": "was fun", "it": "è stato divertente" } },
+        { "text": "です", "meaning": { "en": "(polite tone)", "it": "(tono cortese)" } }
+      ],
+      "answer": ["旅行は", "とても", "楽しかった", "です"],
+      "explanation": {
+        "en": "The past goes on the adjective: 楽しい → 楽しかった, \"was fun\". Then, for politeness, です at the very end, always the same: 楽しかったです. 楽しいでした is a very common mistake: でした, the past of です, only goes after a noun or a な-adjective (学生でした, 静かでした). とても describes 楽しかった and sits right before it; 旅行は, the topic, comes first.",
+        "it": "Il passato va sull'aggettivo: 楽しい → 楽しかった, «è stato divertente». Poi, per la cortesia, です proprio in fondo, sempre uguale: 楽しかったです. 楽しいでした è un errore molto comune: でした, il passato di です, va solo dopo un nome o un aggettivo in な (学生でした, 静かでした). とても descrive 楽しかった e sta subito prima; 旅行は, il tema, va per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "形容詞・名詞と「です」",
+      "prompt": {
+        "en": "\"Yesterday the library was quiet.\" Said politely, what goes in the gap?",
+        "it": "«Ieri la biblioteca era silenziosa.» Detto in modo cortese, cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "昨日の図書館は静かでした",
+        "kana": "きのうのとしょかんはしずかでした"
+      },
+      "translation": {
+        "en": "Yesterday the library was quiet.",
+        "it": "Ieri la biblioteca era silenziosa."
+      },
+      "glosses": [
+        { "text": "静かでした", "reading": "しずかでした" },
+        { "text": "静かかったです", "reading": "しずかかったです" },
+        { "text": "静かいでした", "reading": "しずかいでした" },
+        { "text": "静かです", "reading": "しずかです" }
+      ],
+      "gap": {
+        "kanji": "昨日の図書館は＿",
+        "kana": "きのうのとしょかんは＿"
+      },
+      "answer": "静かでした",
+      "distractors": ["静かかったです", "静かいでした", "静かです"],
+      "explanation": {
+        "en": "静か is a な-adjective: like a noun, it needs だ to say \"is\", and です politely. In the past だった becomes でした: 静かでした, \"was quiet\". かった is only for い-adjectives, and 静か has no い to change. 静かです is the present: with 昨日 (\"yesterday\") you need the past.",
+        "it": "静か è un aggettivo in な: come un nome, per dire «è» vuole だ, e in modo cortese です. Al passato だった diventa でした: 静かでした, «era silenziosa». かった è solo per gli aggettivi in い, e 静か non ha una い da cambiare. 静かです è il presente: con 昨日 («ieri») serve il passato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "形容詞・名詞と「です」",
+      "prompt": {
+        "en": "Someone you have just met asks if you are a student: \"No, I'm not a student.\" What goes in the gap?",
+        "it": "Una persona appena conosciuta ti chiede se sei uno studente: «No, non sono uno studente.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "いいえ、私は学生じゃありません",
+        "kana": "いいえ、わたしはがくせいじゃありません"
+      },
+      "translation": {
+        "en": "No, I'm not a student.",
+        "it": "No, non sono uno studente."
+      },
+      "gap": {
+        "kanji": "いいえ、私は学生＿",
+        "kana": "いいえ、わたしはがくせい＿"
+      },
+      "answer": "じゃありません",
+      "distractors": ["じゃないません", "くないです", "じゃません"],
+      "explanation": {
+        "en": "After a noun the polite \"is not\" is じゃありません (in writing also ではありません): 学生じゃありません. 学生じゃないです is also correct, a little more casual. じゃないません says \"not\" twice, with ない and ません. くないです is for い-adjectives (高くないです), not for nouns. じゃません does not exist: ません needs あり before it.",
+        "it": "Dopo un nome il «non è» cortese è じゃありません (per iscritto anche ではありません): 学生じゃありません. Va bene anche 学生じゃないです, un po' più colloquiale. じゃないません dice «non» due volte, con ない e con ません. くないです è per gli aggettivi in い (高くないです), non per i nomi. じゃません non esiste: prima di ません serve あり."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "形容詞・名詞と「です」",
+      "prompt": {
+        "en": "\"This room isn't very cold.\" Which part makes the sentence polite?",
+        "it": "«Questa stanza non è molto fredda.» Quale parte rende la frase cortese?"
+      },
+      "sentence": {
+        "kanji": "この部屋はあまり寒くないです",
+        "kana": "このへやはあまりさむくないです"
+      },
+      "translation": {
+        "en": "This room isn't very cold.",
+        "it": "Questa stanza non è molto fredda."
+      },
+      "glosses": [
+        { "text": "この部屋は", "reading": "このへやは", "meaning": { "en": "this room (は: the topic)", "it": "questa stanza (は: il tema)" } },
+        { "text": "あまり", "meaning": { "en": "(not) very", "it": "(non) molto" } },
+        { "text": "寒くない", "reading": "さむくない", "meaning": { "en": "isn't cold", "it": "non è fredda" } },
+        { "text": "です", "meaning": { "en": "(polite tone)", "it": "(tono cortese)" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select です. 寒くない (\"isn't cold\") is already a complete sentence: an い-adjective with its \"not\". To say it politely you add です at the end, as with any い-adjective: 寒くないです. The same works for verbs: 行かないです is a polite \"I don't go\", next to 行きません.",
+        "it": "Seleziona です. 寒くない («non è fredda») è già una frase completa: un aggettivo in い con il suo «non». Per dirlo in modo cortese si aggiunge です in fondo, come con ogni aggettivo in い: 寒くないです. Lo stesso vale per i verbi: 行かないです è un «non vado» cortese, accanto a 行きません."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "形容詞・名詞と「です」",
+      "prompt": {
+        "en": "Build, politely: \"Yesterday was my father's birthday.\"",
+        "it": "Componi, in modo cortese: «Ieri era il compleanno di mio padre.»"
+      },
+      "sentence": {
+        "kanji": "昨日は父の誕生日でした",
+        "kana": "きのうはちちのたんじょうびでした"
+      },
+      "translation": {
+        "en": "Yesterday was my father's birthday.",
+        "it": "Ieri era il compleanno di mio padre."
+      },
+      "glosses": [
+        { "text": "昨日は", "reading": "きのうは", "meaning": { "en": "yesterday (は: the topic)", "it": "ieri (は: il tema)" } },
+        { "text": "父の", "reading": "ちちの", "meaning": { "en": "my father's", "it": "di mio padre" } },
+        { "text": "誕生日", "reading": "たんじょうび", "meaning": { "en": "birthday", "it": "compleanno" } },
+        { "text": "でした", "meaning": { "en": "was (polite)", "it": "era (cortese)" } }
+      ],
+      "answer": ["昨日は", "父の", "誕生日", "でした"],
+      "explanation": {
+        "en": "でした is です in the past and goes after a noun: 誕生日でした, \"was the birthday\". 父の describes 誕生日 and sits right before it: 父の誕生日, \"my father's birthday\". 昨日は, the topic, comes first. Among friends you would say 昨日は父の誕生日だった.",
+        "it": "でした è です al passato e va dopo un nome: 誕生日でした, «era il compleanno». 父の descrive 誕生日 e sta subito prima: 父の誕生日, «il compleanno di mio padre». 昨日は, il tema, va per primo. Fra amici si direbbe 昨日は父の誕生日だった."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "誘いの「ましょう」「ませんか」",
+      "prompt": {
+        "en": "To your colleagues: \"Let's take a short break.\" Which part means \"let's\"?",
+        "it": "Ai colleghi: «Facciamo una piccola pausa.» Quale parte vuol dire «facciamo»?"
+      },
+      "sentence": {
+        "kanji": "少し休みましょう",
+        "kana": "すこしやすみましょう"
+      },
+      "translation": {
+        "en": "Let's take a short break.",
+        "it": "Facciamo una piccola pausa."
+      },
+      "glosses": [
+        { "text": "少し", "reading": "すこし", "meaning": { "en": "a little", "it": "un po'" } },
+        { "text": "休み", "reading": "やすみ", "meaning": { "en": "rest (休む before ます)", "it": "riposare (休む prima di ます)" } },
+        { "text": "ましょう", "meaning": { "en": "let's (polite)", "it": "facciamo (cortese)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select ましょう. It is the polite \"let's\", and it attaches where ます attaches, to the form ending in i: 休む → 休み + ましょう. Among friends you use the plain volitional form instead: 休もう, \"let's rest\".",
+        "it": "Seleziona ましょう. È il «facciamo…» cortese, e si attacca dove si attacca ます, alla forma che finisce in i: 休む → 休み + ましょう. Fra amici si usa invece la forma volitiva semplice: 休もう, «riposiamoci»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "誘いの「ましょう」「ませんか」",
+      "prompt": {
+        "en": "You invite a colleague: \"Why don't we go and see a film together on Sunday?\" What goes in the gap?",
+        "it": "Inviti una collega: «Domenica perché non andiamo a vedere un film insieme?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "日曜日、一緒に映画を見に行きませんか",
+        "kana": "にちようび、いっしょにえいがをみにいきませんか"
+      },
+      "translation": {
+        "en": "Why don't we go and see a film together on Sunday?",
+        "it": "Domenica perché non andiamo a vedere un film insieme?"
+      },
+      "glosses": [
+        { "text": "行きませんか", "reading": "いきませんか" },
+        { "text": "行きません", "reading": "いきません" },
+        { "text": "行きませんでしたか", "reading": "いきませんでしたか" },
+        { "text": "行くか", "reading": "いくか" }
+      ],
+      "gap": {
+        "kanji": "日曜日、一緒に映画を見に＿",
+        "kana": "にちようび、いっしょにえいがをみに＿"
+      },
+      "answer": "行きませんか",
+      "distractors": ["行きません", "行きませんでしたか", "行くか"],
+      "explanation": {
+        "en": "A negative question with ませんか is the polite way to invite: 行きませんか, \"won't you come?\". It leaves the other person free to say no. Without か, 行きません is a statement: \"I'm not going\". 行きませんでしたか asks about the past: \"didn't you go?\". 行くか is the plain form, and said like this it sounds blunt.",
+        "it": "Una domanda al negativo con ませんか è il modo cortese di invitare: 行きませんか, «non ci andiamo?», «ti va di andare?». Lascia all'altra persona la libertà di dire di no. Senza か, 行きません è un'affermazione: «non ci vado». 行きませんでしたか chiede del passato: «non ci sei andata?». 行くか è la forma semplice, e detta così suona brusca."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "誘いの「ましょう」「ませんか」",
+      "prompt": {
+        "en": "Build: \"Shall I carry your bags to the station?\"",
+        "it": "Componi: «Le porto io i bagagli fino alla stazione?»"
+      },
+      "sentence": {
+        "kanji": "駅まで荷物を持ちましょうか",
+        "kana": "えきまでにもつをもちましょうか"
+      },
+      "translation": {
+        "en": "Shall I carry your bags to the station?",
+        "it": "Le porto io i bagagli fino alla stazione?"
+      },
+      "glosses": [
+        { "text": "駅まで", "reading": "えきまで", "meaning": { "en": "as far as the station", "it": "fino alla stazione" } },
+        { "text": "荷物を", "reading": "にもつを", "meaning": { "en": "the bags (を: the object)", "it": "i bagagli (を: l'oggetto)" } },
+        { "text": "持ちましょうか", "reading": "もちましょうか", "meaning": { "en": "shall I carry?", "it": "li porto io?" } }
+      ],
+      "answer": ["駅まで", "荷物を", "持ちましょうか"],
+      "alsoAccepted": [["荷物を", "駅まで", "持ちましょうか"]],
+      "explanation": {
+        "en": "ましょう with か becomes an offer: 持ちましょうか, \"shall I carry them?\". It is the polite way to offer help. The verb goes at the end; 駅まで (\"as far as the station\") and 荷物を (\"the bags\") sit before it and can swap places: \"荷物を駅まで持ちましょうか\" is also correct.",
+        "it": "ましょう con か diventa un'offerta: 持ちましょうか, «li porto io?». È il modo cortese di offrire un aiuto. Il verbo va in fondo; 駅まで («fino alla stazione») e 荷物を («i bagagli») stanno prima di lui e possono scambiarsi: va bene anche «荷物を駅まで持ちましょうか»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "誘いの「ましょう」「ませんか」",
+      "prompt": {
+        "en": "A notice in the library: \"In the library, let's speak quietly.\" Which form of 話す (\"speak\") goes in the gap?",
+        "it": "Un cartello in biblioteca: «In biblioteca parliamo a bassa voce.» Quale forma di 話す («parlare») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "図書館では静かに話しましょう",
+        "kana": "としょかんではしずかにはなしましょう"
+      },
+      "translation": {
+        "en": "In the library, let's speak quietly.",
+        "it": "In biblioteca parliamo a bassa voce."
+      },
+      "glosses": [
+        { "text": "話しましょう", "reading": "はなしましょう" },
+        { "text": "話すましょう", "reading": "はなすましょう" },
+        { "text": "話さましょう", "reading": "はなさましょう" },
+        { "text": "話しよう", "reading": "はなしよう" }
+      ],
+      "gap": {
+        "kanji": "図書館では静かに＿",
+        "kana": "としょかんではしずかに＿"
+      },
+      "answer": "話しましょう",
+      "distractors": ["話すましょう", "話さましょう", "話しよう"],
+      "explanation": {
+        "en": "話す → 話し + ましょう: ましょう attaches to the form ending in i, like ます (話します). On signs and notices ましょう asks everyone to do something, kindly. 話すましょう and 話さましょう attach it to the wrong form. 話しよう mixes two forms: the plain \"let's speak\" is 話そう, because よう goes on verbs that just drop る, like 食べる → 食べよう, and 話す is not one of them.",
+        "it": "話す → 話し + ましょう: ましょう si attacca alla forma che finisce in i, come ます (話します). Nei cartelli e negli avvisi ましょう chiede a tutti di fare una cosa, con gentilezza. 話すましょう e 話さましょう lo attaccano alla forma sbagliata. 話しよう mescola due forme: il «parliamo» semplice è 話そう, perché よう va sui verbi che perdono solo る, come 食べる → 食べよう, e 話す non è fra questi."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "推量の「でしょう」",
+      "prompt": {
+        "en": "The weather forecast: \"Tomorrow it will probably rain.\" What goes in the gap?",
+        "it": "Le previsioni del tempo: «Domani probabilmente pioverà.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "明日は雨が降るでしょう",
+        "kana": "あしたはあめがふるでしょう"
+      },
+      "translation": {
+        "en": "Tomorrow it will probably rain.",
+        "it": "Domani probabilmente pioverà."
+      },
+      "glosses": [
+        { "text": "降るでしょう", "reading": "ふるでしょう" },
+        { "text": "降りでしょう", "reading": "ふりでしょう" },
+        { "text": "降るだでしょう", "reading": "ふるだでしょう" },
+        { "text": "降ります", "reading": "ふります" }
+      ],
+      "gap": {
+        "kanji": "明日は雨が＿",
+        "kana": "あしたはあめが＿"
+      },
+      "answer": "降るでしょう",
+      "distractors": ["降りでしょう", "降るだでしょう", "降ります"],
+      "explanation": {
+        "en": "でしょう adds \"probably\", politely. It goes after the verb's plain form, not after the form used before ます: 降る + でしょう. だ and でしょう never go together. 降ります is polite too, but it says it will rain for sure: the \"probably\" is missing. Among friends you would say 降るだろう.",
+        "it": "でしょう aggiunge «probabilmente», in modo cortese. Va dopo la forma semplice del verbo, non dopo la forma che si usa davanti a ます: 降る + でしょう. だ e でしょう non vanno mai insieme. Anche 降ります è cortese, ma dice che pioverà di sicuro: manca il «probabilmente». Fra amici si direbbe 降るだろう."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "推量の「でしょう」",
+      "prompt": {
+        "en": "\"The teacher probably knows already.\" Which part says it is only a guess?",
+        "it": "«Il professore probabilmente lo sa già.» Quale parte dice che è solo un'ipotesi?"
+      },
+      "sentence": {
+        "kanji": "先生はもう知っているでしょう",
+        "kana": "せんせいはもうしっているでしょう"
+      },
+      "translation": {
+        "en": "The teacher probably knows already.",
+        "it": "Il professore probabilmente lo sa già."
+      },
+      "glosses": [
+        { "text": "先生は", "reading": "せんせいは", "meaning": { "en": "the teacher (は: the topic)", "it": "il professore (は: il tema)" } },
+        { "text": "もう", "meaning": { "en": "already", "it": "già" } },
+        { "text": "知っている", "reading": "しっている", "meaning": { "en": "knows", "it": "sa" } },
+        { "text": "でしょう", "meaning": { "en": "probably", "it": "probabilmente" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select でしょう. Without it, 先生はもう知っている states it as a fact: \"the teacher already knows\". でしょう at the end turns it into a guess, said politely; among friends you use だろう: 知っているだろう.",
+        "it": "Seleziona でしょう. Senza, 先生はもう知っている lo dà per certo: «il professore lo sa già». でしょう in fondo lo rende un'ipotesi, detta in modo cortese; fra amici si usa だろう: 知っているだろう."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "推量の「でしょう」",
+      "prompt": {
+        "en": "\"That shop is probably expensive.\" What goes in the gap?",
+        "it": "«Quel negozio probabilmente è caro.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "あの店は高いでしょう",
+        "kana": "あのみせはたかいでしょう"
+      },
+      "translation": {
+        "en": "That shop is probably expensive.",
+        "it": "Quel negozio probabilmente è caro."
+      },
+      "glosses": [
+        { "text": "高いでしょう", "reading": "たかいでしょう" },
+        { "text": "高いですでしょう", "reading": "たかいですでしょう" },
+        { "text": "高くでしょう", "reading": "たかくでしょう" },
+        { "text": "高でしょう", "reading": "たかでしょう" }
+      ],
+      "gap": {
+        "kanji": "あの店は＿",
+        "kana": "あのみせは＿"
+      },
+      "answer": "高いでしょう",
+      "distractors": ["高いですでしょう", "高くでしょう", "高でしょう"],
+      "explanation": {
+        "en": "でしょう attaches straight to the whole い-adjective: 高いでしょう, \"it's probably expensive\". です and でしょう never go together: でしょう is already polite. 高く is the form that goes before a verb, and 高でしょう drops the い, which has to stay.",
+        "it": "でしょう si attacca direttamente all'aggettivo in い intero: 高いでしょう, «probabilmente è caro». です e でしょう non vanno mai insieme: でしょう è già cortese. 高く è la forma che sta prima di un verbo, e 高でしょう perde la い, che invece resta."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "依頼の「ください」",
+      "prompt": {
+        "en": "In a taxi: \"Excuse me, please stop here.\" What goes in the gap?",
+        "it": "In taxi: «Scusi, si fermi qui, per favore.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "すみません、ここで止めてください",
+        "kana": "すみません、ここでとめてください"
+      },
+      "translation": {
+        "en": "Excuse me, please stop here.",
+        "it": "Scusi, si fermi qui, per favore."
+      },
+      "glosses": [
+        { "text": "止めてください", "reading": "とめてください" },
+        { "text": "止めください", "reading": "とめください" },
+        { "text": "止めるください", "reading": "とめるください" },
+        { "text": "止めたください", "reading": "とめたください" }
+      ],
+      "gap": {
+        "kanji": "すみません、ここで＿",
+        "kana": "すみません、ここで＿"
+      },
+      "answer": "止めてください",
+      "distractors": ["止めください", "止めるください", "止めたください"],
+      "explanation": {
+        "en": "To ask someone politely to do something: the verb in て + ください. 止める (\"stop\", the car) → 止めて + ください. ください comes from くださる, the polite version of くれる: with a friend you would ask the same favour with 止めてくれる?. After a verb, ください wants the form in て: 止めください, 止めるください and 止めたください are wrong.",
+        "it": "Per chiedere a qualcuno, in modo cortese, di fare una cosa: il verbo in て + ください. 止める («fermare», la macchina) → 止めて + ください. ください viene da くださる, la versione cortese di くれる: con un amico chiederesti lo stesso favore con 止めてくれる?. Dopo un verbo ください vuole la forma in て: 止めください, 止めるください e 止めたください sono sbagliati."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "依頼の「ください」",
+      "prompt": {
+        "en": "Build: \"Please write your name here.\"",
+        "it": "Componi: «Scriva qui il suo nome, per favore.»"
+      },
+      "sentence": {
+        "kanji": "ここに名前を書いてください",
+        "kana": "ここになまえをかいてください"
+      },
+      "translation": {
+        "en": "Please write your name here.",
+        "it": "Scriva qui il suo nome, per favore."
+      },
+      "glosses": [
+        { "text": "ここに", "meaning": { "en": "here (に: where it goes)", "it": "qui (に: dove va)" } },
+        { "text": "名前を", "reading": "なまえを", "meaning": { "en": "your name (を: the object)", "it": "il nome (を: l'oggetto)" } },
+        { "text": "書いて", "reading": "かいて", "meaning": { "en": "write (て-form)", "it": "scrivere (forma in て)" } },
+        { "text": "ください", "meaning": { "en": "please", "it": "per favore" } }
+      ],
+      "answer": ["ここに", "名前を", "書いて", "ください"],
+      "alsoAccepted": [["名前を", "ここに", "書いて", "ください"]],
+      "explanation": {
+        "en": "書く → 書いて, and right after it ください: 書いてください, \"please write\". ください always goes at the end, attached to the verb in て. ここに (\"here\") and 名前を (\"your name\") sit before the verb and can swap places: \"名前をここに書いてください\" is also correct.",
+        "it": "書く → 書いて, e subito dopo ください: 書いてください, «scriva, per favore». ください va sempre in fondo, attaccata al verbo in て. ここに («qui») e 名前を («il nome») stanno prima del verbo e possono scambiarsi: va bene anche «名前をここに書いてください»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "依頼の「ください」",
+      "prompt": {
+        "en": "At a café: \"Excuse me, one coffee, please.\" What goes in the gap?",
+        "it": "Al bar: «Scusi, un caffè, per favore.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "すみません、コーヒーを一つください",
+        "kana": "すみません、コーヒーをひとつください"
+      },
+      "translation": {
+        "en": "Excuse me, one coffee, please.",
+        "it": "Scusi, un caffè, per favore."
+      },
+      "gap": {
+        "kanji": "すみません、コーヒーを一つ＿",
+        "kana": "すみません、コーヒーをひとつ＿"
+      },
+      "answer": "ください",
+      "distractors": ["くれ", "てください", "ほしい"],
+      "explanation": {
+        "en": "To ask for a thing: the thing with を, then ください: コーヒーを一つください, \"one coffee, please\". くれ is the same request said bluntly, at most for very close friends. てください only goes after a verb (\"please do…\"). ほしい says \"I want\" (and the thing you want takes が): it is not a request.",
+        "it": "Per chiedere una cosa: la cosa con を, poi ください: コーヒーを一つください, «un caffè, per favore». くれ è la stessa richiesta detta in modo brusco, al massimo con amici molto stretti. てください va solo dopo un verbo («fai…, per favore»). ほしい dice «voglio» (e la cosa voluta prende が): non è una richiesta."
+      }
+    }
+  ]
+}
