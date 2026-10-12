@@ -1,0 +1,592 @@
+{
+  "order": 17,
+  "title": {
+    "en": "Verb pairs: it happens by itself (ドアが開く) or someone does it (ドアを開ける)",
+    "it": "Coppie di verbi: succede da sé (ドアが開く) o lo fa qualcuno (ドアを開ける)"
+  },
+  "video": "ELk1dqaEmyk",
+  "grammarPoints": ["自動詞と他動詞", "「す」で終わる他動詞", "「あ段＋る」の自動詞", "「める」「てる」「べる」の他動詞"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "自動詞と他動詞",
+      "prompt": {
+        "en": "\"Suddenly the door opened.\" Which particle goes in the gap?",
+        "it": "«All'improvviso la porta si è aperta.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "急にドアが開いた",
+        "kana": "きゅうにドアがあいた"
+      },
+      "translation": {
+        "en": "Suddenly the door opened.",
+        "it": "All'improvviso la porta si è aperta."
+      },
+      "gap": {
+        "kanji": "急にドア＿開いた",
+        "kana": "きゅうにドア＿あいた"
+      },
+      "answer": "が",
+      "distractors": ["を", "に", "へ"],
+      "explanation": {
+        "en": "開く (あく) says the door opens by itself: nobody in the sentence opens it. The door is the one doing it, so it takes が: ドアが開いた. を goes with its partner 開ける (あける), where someone opens it: ドアを開けた, \"I opened the door\".",
+        "it": "開く (あく) dice che la porta si apre da sé: nella frase nessuno la apre. È la porta a fare, quindi prende が: ドアが開いた. を va con il suo compagno 開ける (あける), dove qualcuno la apre: ドアを開けた, «ho aperto la porta»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "自動詞と他動詞",
+      "prompt": {
+        "en": "\"My older brother closed the window.\" Which verb goes in the gap?",
+        "it": "«Mio fratello maggiore ha chiuso la finestra.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "兄が窓を閉めた",
+        "kana": "あにがまどをしめた"
+      },
+      "translation": {
+        "en": "My older brother closed the window.",
+        "it": "Mio fratello maggiore ha chiuso la finestra."
+      },
+      "glosses": [
+        { "text": "閉めた", "reading": "しめた" },
+        { "text": "閉まった", "reading": "しまった" },
+        { "text": "閉まる", "reading": "しまる" },
+        { "text": "閉まらなかった", "reading": "しまらなかった" }
+      ],
+      "gap": {
+        "kanji": "兄が窓を＿",
+        "kana": "あにがまどを＿"
+      },
+      "answer": "閉めた",
+      "distractors": ["閉まった", "閉まる", "閉まらなかった"],
+      "explanation": {
+        "en": "Someone (兄) closes something else (窓を): that is 閉める, past 閉めた. Its partner 閉まる (しまる) says the window closes by itself, and then the window takes が: 窓が閉まった. With を you need the verb where someone does it.",
+        "it": "Qualcuno (兄) chiude un'altra cosa (窓を): è 閉める, al passato 閉めた. Il suo compagno 閉まる (しまる) dice che la finestra si chiude da sé, e allora la finestra prende が: 窓が閉まった. Con を serve il verbo in cui qualcuno fa."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "自動詞と他動詞",
+      "prompt": {
+        "en": "\"My father stopped the car and the door opened.\" Which verb says something that happens by itself?",
+        "it": "«Mio padre ha fermato la macchina e la portiera si è aperta.» Quale verbo dice una cosa che succede da sé?"
+      },
+      "sentence": {
+        "kanji": "父が車を止めて、ドアが開いた",
+        "kana": "ちちがくるまをとめて、ドアがあいた"
+      },
+      "translation": {
+        "en": "My father stopped the car and the door opened.",
+        "it": "Mio padre ha fermato la macchina e la portiera si è aperta."
+      },
+      "glosses": [
+        { "text": "父が", "reading": "ちちが", "meaning": { "en": "my father (が: who does it)", "it": "mio padre (が: chi lo fa)" } },
+        { "text": "車を", "reading": "くるまを", "meaning": { "en": "the car (を: the object)", "it": "la macchina (を: l'oggetto)" } },
+        { "text": "止めて、", "reading": "とめて、", "meaning": { "en": "stopped, and…", "it": "ha fermato, e…" } },
+        { "text": "ドアが", "meaning": { "en": "the door (が)", "it": "la portiera (が)" } },
+        { "text": "開いた", "reading": "あいた", "meaning": { "en": "opened", "it": "si è aperta" } }
+      ],
+      "answer": { "start": 4, "end": 5 },
+      "explanation": {
+        "en": "Select 開いた. The door opens and nobody opens it: ドアが開いた. 止めて is the other kind: someone (父が) stops something else (車を). Its partner is 止まる, \"come to a stop\": 車が止まった, \"the car stopped\".",
+        "it": "Seleziona 開いた. La portiera si apre e nessuno la apre: ドアが開いた. 止めて è dell'altro tipo: qualcuno (父が) ferma un'altra cosa (車を). Il suo compagno è 止まる, «fermarsi»: 車が止まった, «la macchina si è fermata»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "自動詞と他動詞",
+      "prompt": {
+        "en": "Build: \"The bell rang and the lesson began.\"",
+        "it": "Componi: «È suonata la campanella e la lezione è cominciata.»"
+      },
+      "sentence": {
+        "kanji": "ベルが鳴って授業が始まった",
+        "kana": "ベルがなってじゅぎょうがはじまった"
+      },
+      "translation": {
+        "en": "The bell rang and the lesson began.",
+        "it": "È suonata la campanella e la lezione è cominciata."
+      },
+      "glosses": [
+        { "text": "ベルが", "meaning": { "en": "the bell (が)", "it": "la campanella (が)" } },
+        { "text": "鳴って", "reading": "なって", "meaning": { "en": "rang, and…", "it": "è suonata, e…" } },
+        { "text": "授業が", "reading": "じゅぎょうが", "meaning": { "en": "the lesson (が)", "it": "la lezione (が)" } },
+        { "text": "始まった", "reading": "はじまった", "meaning": { "en": "began", "it": "è cominciata" } }
+      ],
+      "answer": ["ベルが", "鳴って", "授業が", "始まった"],
+      "explanation": {
+        "en": "Both verbs say something that happens by itself, so what happens takes が: ベルが鳴って, 授業が始まった. With a teacher who starts the lesson you would use the partner 始める: 先生が授業を始めた. Each piece goes right before its own verb: ベルが before 鳴って, 授業が before 始まった.",
+        "it": "Tutti e due i verbi dicono una cosa che succede da sé, quindi ciò che succede prende が: ベルが鳴って, 授業が始まった. Con un professore che comincia la lezione si userebbe il compagno 始める: 先生が授業を始めた. Ogni pezzo va subito prima del suo verbo: ベルが prima di 鳴って, 授業が prima di 始まった."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "自動詞と他動詞",
+      "prompt": {
+        "en": "\"My younger brother turned on the light.\" Which particle goes in the gap?",
+        "it": "«Mio fratello minore ha acceso la luce.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "弟が電気をつけた",
+        "kana": "おとうとがでんきをつけた"
+      },
+      "translation": {
+        "en": "My younger brother turned on the light.",
+        "it": "Mio fratello minore ha acceso la luce."
+      },
+      "gap": {
+        "kanji": "弟が電気＿つけた",
+        "kana": "おとうとがでんき＿つけた"
+      },
+      "answer": "を",
+      "distractors": ["が", "に", "で"],
+      "explanation": {
+        "en": "つける means someone turns something on: the light is what gets turned on, so it takes を. The person who does it already has が: 弟が. Its partner つく says the light comes on by itself: 電気がついた.",
+        "it": "つける vuol dire che qualcuno accende qualcosa: la luce è ciò che viene acceso, quindi prende を. Chi lo fa ha già が: 弟が. Il compagno つく dice che la luce si accende da sé: 電気がついた."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "自動詞と他動詞",
+      "prompt": {
+        "en": "\"My older sister broke a plate.\" Which part is the thing that gets broken?",
+        "it": "«Mia sorella maggiore ha rotto un piatto.» Quale parte è la cosa che viene rotta?"
+      },
+      "sentence": {
+        "kanji": "姉がお皿を割った",
+        "kana": "あねがおさらをわった"
+      },
+      "translation": {
+        "en": "My older sister broke a plate.",
+        "it": "Mia sorella maggiore ha rotto un piatto."
+      },
+      "glosses": [
+        { "text": "姉が", "reading": "あねが", "meaning": { "en": "my older sister (が: who does it)", "it": "mia sorella maggiore (が: chi lo fa)" } },
+        { "text": "お皿を", "reading": "おさらを", "meaning": { "en": "a plate (を: the object)", "it": "un piatto (を: l'oggetto)" } },
+        { "text": "割った", "reading": "わった", "meaning": { "en": "broke", "it": "ha rotto" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select お皿を. 割る means someone breaks something, and the thing broken takes を. Its partner 割れる means \"break\" by itself: お皿が割れた, \"the plate broke\". In this pair the ending gives no clue which is which: you learn it with the word.",
+        "it": "Seleziona お皿を. 割る vuol dire che qualcuno rompe qualcosa, e la cosa rotta prende を. Il compagno 割れる è «rompersi» da sé: お皿が割れた, «il piatto si è rotto». In questa coppia la terminazione non dice quale è quale: si impara con la parola."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「す」で終わる他動詞",
+      "prompt": {
+        "en": "\"I took the money out of my wallet.\" Which verb goes in the gap?",
+        "it": "«Ho tirato fuori i soldi dal portafoglio.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "財布からお金を出した",
+        "kana": "さいふからおかねをだした"
+      },
+      "translation": {
+        "en": "I took the money out of my wallet.",
+        "it": "Ho tirato fuori i soldi dal portafoglio."
+      },
+      "glosses": [
+        { "text": "出した", "reading": "だした" },
+        { "text": "出た", "reading": "でた" },
+        { "text": "出ていた", "reading": "でていた" },
+        { "text": "出られた", "reading": "でられた" }
+      ],
+      "gap": {
+        "kanji": "財布からお金を＿",
+        "kana": "さいふからおかねを＿"
+      },
+      "answer": "出した",
+      "distractors": ["出た", "出ていた", "出られた"],
+      "explanation": {
+        "en": "Of the two verbs in a pair, the one that ends in す is always the one where someone does something to something else: 出す, \"take out\". 出る is \"go out, come out\" by yourself: 猫が外に出た, \"the cat went out\". With お金を you need 出す: 出した.",
+        "it": "Dei due verbi di una coppia, quello che finisce in す è sempre quello in cui qualcuno fa qualcosa a un'altra cosa: 出す, «tirare fuori». 出る è «uscire» da sé: 猫が外に出た, «il gatto è uscito». Con お金を serve 出す: 出した."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「す」で終わる他動詞",
+      "prompt": {
+        "en": "\"The child dropped the glass.\" Which verb ends in す in its base form?",
+        "it": "«Il bambino ha fatto cadere il bicchiere.» Quale verbo finisce in す nella forma base?"
+      },
+      "sentence": {
+        "kanji": "子どもがコップを落とした",
+        "kana": "こどもがコップをおとした"
+      },
+      "translation": {
+        "en": "The child dropped the glass.",
+        "it": "Il bambino ha fatto cadere il bicchiere."
+      },
+      "glosses": [
+        { "text": "子どもが", "reading": "こどもが", "meaning": { "en": "the child (が: who does it)", "it": "il bambino (が: chi lo fa)" } },
+        { "text": "コップを", "meaning": { "en": "the glass (を: the object)", "it": "il bicchiere (を: l'oggetto)" } },
+        { "text": "落とした", "reading": "おとした", "meaning": { "en": "dropped", "it": "ha fatto cadere" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select 落とした. It comes from 落とす, \"drop\": it ends in す, so someone makes something else fall (コップを). Its partner is 落ちる, \"fall\" by itself: コップが落ちた, \"the glass fell\".",
+        "it": "Seleziona 落とした. Viene da 落とす, «far cadere»: finisce in す, quindi qualcuno fa cadere un'altra cosa (コップを). Il compagno è 落ちる, «cadere» da sé: コップが落ちた, «il bicchiere è caduto»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「す」で終わる他動詞",
+      "prompt": {
+        "en": "\"My father blew out the candle.\" Which verb goes in the gap?",
+        "it": "«Mio padre ha spento la candela.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "父がろうそくの火を消した",
+        "kana": "ちちがろうそくのひをけした"
+      },
+      "translation": {
+        "en": "My father blew out the candle.",
+        "it": "Mio padre ha spento la candela."
+      },
+      "glosses": [
+        { "text": "消した", "reading": "けした" },
+        { "text": "消えた", "reading": "きえた" },
+        { "text": "消えない", "reading": "きえない" },
+        { "text": "消えて", "reading": "きえて" }
+      ],
+      "gap": {
+        "kanji": "父がろうそくの火を＿",
+        "kana": "ちちがろうそくのひを＿"
+      },
+      "answer": "消した",
+      "distractors": ["消えた", "消えない", "消えて"],
+      "explanation": {
+        "en": "消す ends in す: someone puts out something (火を, \"the flame\"). Its partner 消える is \"go out\" by itself: 火が消えた, \"the flame went out\". With 父が and 火を, only 消した works.",
+        "it": "消す finisce in す: qualcuno spegne qualcosa (火を, «la fiamma»). Il compagno 消える è «spegnersi» da sé: 火が消えた, «la fiamma si è spenta». Con 父が e 火を va bene solo 消した."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「す」で終わる他動詞",
+      "prompt": {
+        "en": "Build: \"The cat poked its head out of the box.\"",
+        "it": "Componi: «Il gatto ha tirato fuori la testa dalla scatola.»"
+      },
+      "sentence": {
+        "kanji": "猫が箱から顔を出した",
+        "kana": "ねこがはこからかおをだした"
+      },
+      "translation": {
+        "en": "The cat poked its head out of the box.",
+        "it": "Il gatto ha tirato fuori la testa dalla scatola."
+      },
+      "glosses": [
+        { "text": "猫が", "reading": "ねこが", "meaning": { "en": "the cat (が: who does it)", "it": "il gatto (が: chi lo fa)" } },
+        { "text": "箱から", "reading": "はこから", "meaning": { "en": "out of the box", "it": "dalla scatola" } },
+        { "text": "顔を", "reading": "かおを", "meaning": { "en": "its head (を: the object)", "it": "la testa (を: l'oggetto)" } },
+        { "text": "出した", "reading": "だした", "meaning": { "en": "put out", "it": "ha tirato fuori" } }
+      ],
+      "answer": ["猫が", "箱から", "顔を", "出した"],
+      "alsoAccepted": [["猫が", "顔を", "箱から", "出した"]],
+      "explanation": {
+        "en": "出す ends in す: someone (猫が) brings something else out (顔を). The cat comes first and 出した goes at the end; 箱から (\"out of the box\") and 顔を both belong to 出した and can swap places: \"猫が顔を箱から出した\" is also correct.",
+        "it": "出す finisce in す: qualcuno (猫が) fa uscire un'altra cosa (顔を). Il gatto va per primo e 出した in fondo; 箱から («dalla scatola») e 顔を appartengono tutti e due a 出した e possono scambiarsi: va bene anche «猫が顔を箱から出した»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「す」で終わる他動詞",
+      "prompt": {
+        "en": "\"I put the scissors back where they were.\" Which verb goes in the gap?",
+        "it": "«Ho rimesso le forbici al loro posto.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "はさみを元の場所に戻した",
+        "kana": "はさみをもとのばしょにもどした"
+      },
+      "translation": {
+        "en": "I put the scissors back where they were.",
+        "it": "Ho rimesso le forbici al loro posto."
+      },
+      "glosses": [
+        { "text": "戻した", "reading": "もどした" },
+        { "text": "戻った", "reading": "もどった" },
+        { "text": "戻って", "reading": "もどって" },
+        { "text": "戻れた", "reading": "もどれた" }
+      ],
+      "gap": {
+        "kanji": "はさみを元の場所に＿",
+        "kana": "はさみをもとのばしょに＿"
+      },
+      "answer": "戻した",
+      "distractors": ["戻った", "戻って", "戻れた"],
+      "explanation": {
+        "en": "戻す ends in す: someone puts something else back (はさみを). 戻る is \"go back\" by yourself: 家に戻った, \"I went back home\". With はさみを you need the one in す: 戻した.",
+        "it": "戻す finisce in す: qualcuno rimette a posto un'altra cosa (はさみを). 戻る è «tornare» da sé: 家に戻った, «sono tornato a casa». Con はさみを serve quello in す: 戻した."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「あ段＋る」の自動詞",
+      "prompt": {
+        "en": "\"Prices have gone up a little.\" Which verb goes in the gap?",
+        "it": "«I prezzi sono saliti un po'.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "物の値段が少し上がった",
+        "kana": "もののねだんがすこしあがった"
+      },
+      "translation": {
+        "en": "Prices have gone up a little.",
+        "it": "I prezzi sono saliti un po'."
+      },
+      "glosses": [
+        { "text": "上がった", "reading": "あがった" },
+        { "text": "上げた", "reading": "あげた" },
+        { "text": "上げて", "reading": "あげて" },
+        { "text": "上げられる", "reading": "あげられる" }
+      ],
+      "gap": {
+        "kanji": "物の値段が少し＿",
+        "kana": "もののねだんがすこし＿"
+      },
+      "answer": "上がった",
+      "distractors": ["上げた", "上げて", "上げられる"],
+      "explanation": {
+        "en": "In a pair, the verb that ends in a sound in a + る (上がる: が + る) is always the one that happens by itself: 値段が上がった, \"prices went up\". 上げる is \"raise\" something: 店が値段を上げた, \"the shop raised its prices\". Here 値段 has が and nobody raises it, so: 上がった.",
+        "it": "In una coppia, il verbo che finisce con un suono in a + る (上がる: が + る) è sempre quello che succede da sé: 値段が上がった, «i prezzi sono saliti». 上げる è «alzare» qualcosa: 店が値段を上げた, «il negozio ha alzato i prezzi». Qui 値段 ha が e nessuno lo alza, quindi: 上がった."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「あ段＋る」の自動詞",
+      "prompt": {
+        "en": "\"People are gathering in front of the station.\" Which verb ends in a + る and says it happens by itself?",
+        "it": "«Davanti alla stazione si sta radunando gente.» Quale verbo finisce in a + る e dice che succede da sé?"
+      },
+      "sentence": {
+        "kanji": "駅の前に人が集まっている",
+        "kana": "えきのまえにひとがあつまっている"
+      },
+      "translation": {
+        "en": "People are gathering in front of the station.",
+        "it": "Davanti alla stazione si sta radunando gente."
+      },
+      "glosses": [
+        { "text": "駅の前に", "reading": "えきのまえに", "meaning": { "en": "in front of the station", "it": "davanti alla stazione" } },
+        { "text": "人が", "reading": "ひとが", "meaning": { "en": "people (が)", "it": "la gente (が)" } },
+        { "text": "集まっている", "reading": "あつまっている", "meaning": { "en": "are gathering", "it": "si sta radunando" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select 集まっている. It comes from 集まる (あつまる): ま + る, a + る, so it is the one that happens by itself: people gather, nobody gathers them, so 人が. Its partner 集める is \"collect\" something: 切手を集める, \"I collect stamps\".",
+        "it": "Seleziona 集まっている. Viene da 集まる (あつまる): ま + る, a + る, quindi è quello che succede da sé: la gente si raduna, nessuno la raduna, e perciò 人が. Il compagno 集める è «raccogliere» qualcosa: 切手を集める, «colleziono francobolli»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「あ段＋る」の自動詞",
+      "prompt": {
+        "en": "\"The date of the trip has been decided.\" Which particle goes in the gap?",
+        "it": "«La data del viaggio è stata decisa.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "旅行の日が決まった",
+        "kana": "りょこうのひがきまった"
+      },
+      "translation": {
+        "en": "The date of the trip has been decided.",
+        "it": "La data del viaggio è stata decisa."
+      },
+      "gap": {
+        "kanji": "旅行の日＿決まった",
+        "kana": "りょこうのひ＿きまった"
+      },
+      "answer": "が",
+      "distractors": ["を", "に", "で"],
+      "explanation": {
+        "en": "決まる ends in a + る (ま + る): the thing gets decided, without saying who decides it, so the date takes が. With the partner 決める you would need someone who decides and を: 父が旅行の日を決めた, \"my father decided the date of the trip\".",
+        "it": "決まる finisce in a + る (ま + る): la cosa si decide, senza dire chi la decide, quindi la data prende が. Con il compagno 決める servirebbero qualcuno che decide e を: 父が旅行の日を決めた, «mio padre ha deciso la data del viaggio»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「あ段＋る」の自動詞",
+      "prompt": {
+        "en": "Build: \"This shop closes at nine.\"",
+        "it": "Componi: «Questo negozio chiude alle nove.»"
+      },
+      "sentence": {
+        "kanji": "この店は九時に閉まる",
+        "kana": "このみせはくじにしまる"
+      },
+      "translation": {
+        "en": "This shop closes at nine.",
+        "it": "Questo negozio chiude alle nove."
+      },
+      "glosses": [
+        { "text": "この店は", "reading": "このみせは", "meaning": { "en": "this shop (は: the topic)", "it": "questo negozio (は: il tema)" } },
+        { "text": "九時に", "reading": "くじに", "meaning": { "en": "at nine", "it": "alle nove" } },
+        { "text": "閉まる", "reading": "しまる", "meaning": { "en": "closes", "it": "chiude" } }
+      ],
+      "answer": ["この店は", "九時に", "閉まる"],
+      "explanation": {
+        "en": "In Italian and English \"closes\" works both ways; in Japanese you choose. Here the shop closes and nobody in the sentence closes it: 閉まる, which ends in a + る. If someone closes something you use 閉める: 店員がドアを閉める. この店は, the topic, comes first, then 九時に, then the verb at the end.",
+        "it": "In italiano «chiude» va bene in tutti e due i casi; in giapponese bisogna scegliere. Qui il negozio chiude e nella frase nessuno lo chiude: 閉まる, che finisce in a + る. Se qualcuno chiude qualcosa si usa 閉める: 店員がドアを閉める. この店は, il tema, va per primo, poi 九時に, poi il verbo in fondo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「あ段＋る」の自動詞",
+      "prompt": {
+        "en": "\"The traffic light turned green.\" Which verb goes in the gap?",
+        "it": "«Il semaforo è diventato verde.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "信号が青に変わった",
+        "kana": "しんごうがあおにかわった"
+      },
+      "translation": {
+        "en": "The traffic light turned green.",
+        "it": "Il semaforo è diventato verde."
+      },
+      "glosses": [
+        { "text": "変わった", "reading": "かわった" },
+        { "text": "変えた", "reading": "かえた" },
+        { "text": "変えて", "reading": "かえて" },
+        { "text": "変えられた", "reading": "かえられた" }
+      ],
+      "gap": {
+        "kanji": "信号が青に＿",
+        "kana": "しんごうがあおに＿"
+      },
+      "answer": "変わった",
+      "distractors": ["変えた", "変えて", "変えられた"],
+      "explanation": {
+        "en": "変わる ends in a + る (わ + る): the light changes by itself, so 信号が変わった. 変える is \"change\" something: 髪の色を変えた, \"I changed my hair colour\". 青に says what it became.",
+        "it": "変わる finisce in a + る (わ + る): il semaforo cambia da sé, quindi 信号が変わった. 変える è «cambiare» qualcosa: 髪の色を変えた, «ho cambiato il colore dei capelli». 青に dice che cosa è diventato."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「める」「てる」「べる」の他動詞",
+      "prompt": {
+        "en": "\"A lot of people were lining up in front of the shop.\" Which verb goes in the gap?",
+        "it": "«Davanti al negozio c'era tanta gente in fila.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "店の前に人がたくさん並んでいた",
+        "kana": "みせのまえにひとがたくさんならんでいた"
+      },
+      "translation": {
+        "en": "A lot of people were lining up in front of the shop.",
+        "it": "Davanti al negozio c'era tanta gente in fila."
+      },
+      "glosses": [
+        { "text": "並んでいた", "reading": "ならんでいた" },
+        { "text": "並べていた", "reading": "ならべていた" },
+        { "text": "並べた", "reading": "ならべた" },
+        { "text": "並べられる", "reading": "ならべられる" }
+      ],
+      "gap": {
+        "kanji": "店の前に人がたくさん＿",
+        "kana": "みせのまえにひとがたくさん＿"
+      },
+      "answer": "並んでいた",
+      "distractors": ["並べていた", "並べた", "並べられる"],
+      "explanation": {
+        "en": "In pairs like 並ぶ / 並べる, the one in べる (like those in める and てる) is always the one where someone does something to something else: 皿を並べる, \"set out the plates in a row\". People who line up on their own use 並ぶ: 人が並んでいた.",
+        "it": "In coppie come 並ぶ / 並べる, quello in べる (come quelli in める e in てる) è sempre quello in cui qualcuno fa qualcosa a un'altra cosa: 皿を並べる, «mettere in fila i piatti». Le persone che si mettono in fila da sole usano 並ぶ: 人が並んでいた."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「める」「てる」「べる」の他動詞",
+      "prompt": {
+        "en": "Build: \"My mother set out the plates on the table.\"",
+        "it": "Componi: «Mia madre ha disposto i piatti sul tavolo.»"
+      },
+      "sentence": {
+        "kanji": "母がテーブルに皿を並べた",
+        "kana": "ははがテーブルにさらをならべた"
+      },
+      "translation": {
+        "en": "My mother set out the plates on the table.",
+        "it": "Mia madre ha disposto i piatti sul tavolo."
+      },
+      "glosses": [
+        { "text": "母が", "reading": "ははが", "meaning": { "en": "my mother (が: who does it)", "it": "mia madre (が: chi lo fa)" } },
+        { "text": "テーブルに", "meaning": { "en": "on the table", "it": "sul tavolo" } },
+        { "text": "皿を", "reading": "さらを", "meaning": { "en": "the plates (を: the object)", "it": "i piatti (を: l'oggetto)" } },
+        { "text": "並べた", "reading": "ならべた", "meaning": { "en": "set out in a row", "it": "ha disposto" } }
+      ],
+      "answer": ["母が", "テーブルに", "皿を", "並べた"],
+      "alsoAccepted": [["母が", "皿を", "テーブルに", "並べた"]],
+      "explanation": {
+        "en": "並べる ends in べる: someone (母が) sets out something else (皿を). The mother comes first and the verb at the end; テーブルに and 皿を both belong to 並べた and can swap places: \"母が皿をテーブルに並べた\" is also correct.",
+        "it": "並べる finisce in べる: qualcuno (母が) dispone un'altra cosa (皿を). La madre va per prima e il verbo in fondo; テーブルに e 皿を appartengono tutti e due a 並べた e possono scambiarsi: va bene anche «母が皿をテーブルに並べた»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「める」「てる」「べる」の他動詞",
+      "prompt": {
+        "en": "\"The tomatoes in the garden grew well.\" Which verb goes in the gap?",
+        "it": "«I pomodori dell'orto sono cresciuti bene.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "庭のトマトがよく育った",
+        "kana": "にわのトマトがよくそだった"
+      },
+      "translation": {
+        "en": "The tomatoes in the garden grew well.",
+        "it": "I pomodori dell'orto sono cresciuti bene."
+      },
+      "glosses": [
+        { "text": "育った", "reading": "そだった" },
+        { "text": "育てた", "reading": "そだてた" },
+        { "text": "育てて", "reading": "そだてて" },
+        { "text": "育てる", "reading": "そだてる" }
+      ],
+      "gap": {
+        "kanji": "庭のトマトがよく＿",
+        "kana": "にわのトマトがよく＿"
+      },
+      "answer": "育った",
+      "distractors": ["育てた", "育てて", "育てる"],
+      "explanation": {
+        "en": "In the pair 育つ / 育てる, the one in てる is the one where someone does it: 父がトマトを育てた, \"my father grew the tomatoes\". Here the tomatoes grow by themselves and take が, so you need 育つ: 育った.",
+        "it": "Nella coppia 育つ / 育てる, quello in てる è quello in cui qualcuno fa: 父がトマトを育てた, «mio padre ha coltivato i pomodori». Qui i pomodori crescono da soli e prendono が, quindi serve 育つ: 育った."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「める」「てる」「べる」の他動詞",
+      "prompt": {
+        "en": "\"I warmed up the cold soup.\" Which verb goes in the gap?",
+        "it": "«Ho riscaldato la zuppa fredda.» Quale verbo va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "冷たいスープを温めた",
+        "kana": "つめたいスープをあたためた"
+      },
+      "translation": {
+        "en": "I warmed up the cold soup.",
+        "it": "Ho riscaldato la zuppa fredda."
+      },
+      "glosses": [
+        { "text": "温めた", "reading": "あたためた" },
+        { "text": "温まった", "reading": "あたたまった" },
+        { "text": "温まって", "reading": "あたたまって" },
+        { "text": "温まる", "reading": "あたたまる" }
+      ],
+      "gap": {
+        "kanji": "冷たいスープを＿",
+        "kana": "つめたいスープを＿"
+      },
+      "answer": "温めた",
+      "distractors": ["温まった", "温まって", "温まる"],
+      "explanation": {
+        "en": "温める ends in める: someone warms something else up (スープを). Its partner 温まる ends in a + る (ま + る) and is \"warm up\" by itself: 部屋が温まった, \"the room warmed up\". Both clues point the same way.",
+        "it": "温める finisce in める: qualcuno scalda un'altra cosa (スープを). Il compagno 温まる finisce in a + る (ま + る) ed è «scaldarsi» da sé: 部屋が温まった, «la stanza si è scaldata». I due indizi dicono la stessa cosa."
+      }
+    }
+  ]
+}

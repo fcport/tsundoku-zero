@@ -1,0 +1,541 @@
+{
+  "order": 18,
+  "title": {
+    "en": "Trying with てみる; や for a list that goes on; から for \"from\"; すぎる for \"too much\"",
+    "it": "Provare con てみる; や per una lista che continua; から per «da»; すぎる per «troppo»"
+  },
+  "video": "H_jePzcPFAQ",
+  "grammarPoints": ["試しの「てみる」", "例を挙げる「や」", "起点の「から」", "過度の「すぎる」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "試しの「てみる」",
+      "prompt": {
+        "en": "\"I went to the new ramen place to see what it was like.\" What goes in the gap?",
+        "it": "«Sono andato a provare il nuovo locale di ramen.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "新しいラーメン屋に行ってみた",
+        "kana": "あたらしいラーメンやにいってみた"
+      },
+      "translation": {
+        "en": "I went to the new ramen place to see what it was like.",
+        "it": "Sono andato a provare il nuovo locale di ramen."
+      },
+      "gap": {
+        "kanji": "新しいラーメン屋に行って＿",
+        "kana": "あたらしいラーメンやにいって＿"
+      },
+      "answer": "みた",
+      "distractors": ["いた", "あげた", "くれた"],
+      "explanation": {
+        "en": "A verb in て + みる means doing something to find out how it is: 行ってみた, \"I went there to see\". In this use みる is usually written in kana. 行っていた would say I had gone or was there; 行ってあげた and 行ってくれた are favours, for someone or from someone.",
+        "it": "Un verbo in て + みる vuol dire fare una cosa per scoprire com'è: 行ってみた, «ci sono andato per vedere». In questo uso みる si scrive di solito in kana. 行っていた direbbe che ero andato o che ero lì; 行ってあげた e 行ってくれた sono favori, fatti a qualcuno o ricevuti da qualcuno."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "試しの「てみる」",
+      "prompt": {
+        "en": "\"Have a little taste of this cake.\" Which part means \"to see how it is\"?",
+        "it": "«Assaggia un po' di questa torta.» Quale parte vuol dire «per sentire com'è»?"
+      },
+      "sentence": {
+        "kanji": "このケーキを少し食べてみて",
+        "kana": "このケーキをすこしたべてみて"
+      },
+      "translation": {
+        "en": "Have a little taste of this cake.",
+        "it": "Assaggia un po' di questa torta."
+      },
+      "glosses": [
+        { "text": "このケーキを", "meaning": { "en": "this cake (を: the object)", "it": "questa torta (を: l'oggetto)" } },
+        { "text": "少し", "reading": "すこし", "meaning": { "en": "a little", "it": "un po'" } },
+        { "text": "食べて", "reading": "たべて", "meaning": { "en": "eat (て-form)", "it": "mangiare (forma in て)" } },
+        { "text": "みて", "meaning": { "en": "and see", "it": "e senti com'è" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select みて. 食べて alone would be \"eat\"; with みる after it becomes \"eat some and see how it is\", that is \"have a taste\". Here みる is itself in て (みて), the way you ask a friend to do something.",
+        "it": "Seleziona みて. 食べて da solo sarebbe «mangia»; con みる dopo diventa «mangiane e senti com'è», cioè «assaggia». Qui みる è a sua volta in て (みて), il modo in cui si chiede una cosa a un amico."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "試しの「てみる」",
+      "prompt": {
+        "en": "Build: \"Tomorrow I'll try phoning that shop.\"",
+        "it": "Componi: «Domani provo a telefonare a quel negozio.»"
+      },
+      "sentence": {
+        "kanji": "明日その店に電話してみる",
+        "kana": "あしたそのみせにでんわしてみる"
+      },
+      "translation": {
+        "en": "Tomorrow I'll try phoning that shop.",
+        "it": "Domani provo a telefonare a quel negozio."
+      },
+      "glosses": [
+        { "text": "明日", "reading": "あした", "meaning": { "en": "tomorrow", "it": "domani" } },
+        { "text": "その店に", "reading": "そのみせに", "meaning": { "en": "that shop (に: who you call)", "it": "quel negozio (に: chi chiami)" } },
+        { "text": "電話して", "reading": "でんわして", "meaning": { "en": "phone (て-form)", "it": "telefonare (forma in て)" } },
+        { "text": "みる", "meaning": { "en": "try and see", "it": "provo e vedo" } }
+      ],
+      "answer": ["明日", "その店に", "電話して", "みる"],
+      "alsoAccepted": [["その店に", "明日", "電話して", "みる"]],
+      "explanation": {
+        "en": "みる always goes right after the verb in て, at the end: 電話してみる, \"I'll phone and see\". 明日 (when) and その店に (who you call) sit before the verb and can swap places: \"その店に明日電話してみる\" is also correct.",
+        "it": "みる va sempre subito dopo il verbo in て, in fondo: 電話してみる, «telefono e vedo». 明日 (quando) e その店に (chi chiami) stanno prima del verbo e possono scambiarsi: va bene anche «その店に明日電話してみる»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "試しの「てみる」",
+      "prompt": {
+        "en": "\"Let's try pressing this button.\" Which form of 押す (\"press\") goes in the gap?",
+        "it": "«Proviamo a premere questo pulsante.» Quale forma di 押す («premere») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "このボタンを押してみよう",
+        "kana": "このボタンをおしてみよう"
+      },
+      "translation": {
+        "en": "Let's try pressing this button.",
+        "it": "Proviamo a premere questo pulsante."
+      },
+      "glosses": [
+        { "text": "押して", "reading": "おして" },
+        { "text": "押し", "reading": "おし" },
+        { "text": "押す", "reading": "おす" },
+        { "text": "押した", "reading": "おした" }
+      ],
+      "gap": {
+        "kanji": "このボタンを＿みよう",
+        "kana": "このボタンを＿みよう"
+      },
+      "answer": "押して",
+      "distractors": ["押し", "押す", "押した"],
+      "explanation": {
+        "en": "みる attaches to the verb in て: 押す → 押して + みる. Here みる is in its \"let's\" form, みよう: 押してみよう, \"let's press it and see what happens\". The base form, the form before ます and the form in た cannot go before みる with this meaning.",
+        "it": "みる si attacca al verbo in て: 押す → 押して + みる. Qui みる è nella forma del «facciamo», みよう: 押してみよう, «premiamolo e vediamo cosa succede». La forma base, la forma che si usa davanti a ます e la forma in た non possono stare prima di みる con questo senso."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "試しの「てみる」",
+      "prompt": {
+        "en": "Build: \"My younger brother tried natto for the first time.\"",
+        "it": "Componi: «Mio fratello minore ha provato il natto per la prima volta.»"
+      },
+      "sentence": {
+        "kanji": "弟は初めて納豆を食べてみた",
+        "kana": "おとうとははじめてなっとうをたべてみた"
+      },
+      "translation": {
+        "en": "My younger brother tried natto for the first time.",
+        "it": "Mio fratello minore ha provato il natto per la prima volta."
+      },
+      "glosses": [
+        { "text": "弟は", "reading": "おとうとは", "meaning": { "en": "my younger brother (は: the topic)", "it": "mio fratello minore (は: il tema)" } },
+        { "text": "初めて", "reading": "はじめて", "meaning": { "en": "for the first time", "it": "per la prima volta" } },
+        { "text": "納豆を", "reading": "なっとうを", "meaning": { "en": "natto (を: the object)", "it": "il natto (を: l'oggetto)" } },
+        { "text": "食べて", "reading": "たべて", "meaning": { "en": "eat (て-form)", "it": "mangiare (forma in て)" } },
+        { "text": "みた", "meaning": { "en": "tried, to see", "it": "ha provato" } }
+      ],
+      "answer": ["弟は", "初めて", "納豆を", "食べて", "みた"],
+      "alsoAccepted": [["弟は", "納豆を", "初めて", "食べて", "みた"]],
+      "explanation": {
+        "en": "食べてみた: he ate it to find out what it was like. 食べて and みた stay together at the end. 弟は, the topic, comes first; 初めて and 納豆を both belong to the verb and can swap places: \"弟は納豆を初めて食べてみた\" is also correct.",
+        "it": "食べてみた: l'ha mangiato per scoprire com'era. 食べて e みた restano insieme, in fondo. 弟は, il tema, va per primo; 初めて e 納豆を appartengono tutti e due al verbo e possono scambiarsi: va bene anche «弟は納豆を初めて食べてみた»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "例を挙げる「や」",
+      "prompt": {
+        "en": "\"In the bag there's my wallet, my keys and other things.\" Which particle goes in the gap?",
+        "it": "«Nella borsa ci sono il portafoglio, le chiavi e altre cose.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "かばんの中に財布や鍵が入っている",
+        "kana": "かばんのなかにさいふやかぎがはいっている"
+      },
+      "translation": {
+        "en": "In the bag there's my wallet, my keys and other things.",
+        "it": "Nella borsa ci sono il portafoglio, le chiavi e altre cose."
+      },
+      "gap": {
+        "kanji": "かばんの中に財布＿鍵が入っている",
+        "kana": "かばんのなかにさいふ＿かぎがはいっている"
+      },
+      "answer": "や",
+      "distractors": ["と", "も", "の"],
+      "explanation": {
+        "en": "や lists a few things and lets you understand there are others: \"wallet, keys and so on\". と would list all of them and nothing else: 財布と鍵 = only those two. も is \"also\", and の would make it \"the wallet's keys\".",
+        "it": "や elenca alcune cose e lascia capire che ce ne sono altre: «portafoglio, chiavi e così via». と le elencherebbe tutte e nient'altro: 財布と鍵 = solo quelle due. も è «anche», e の farebbe «le chiavi del portafoglio»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "例を挙げる「や」",
+      "prompt": {
+        "en": "\"My family is my father, my mother and me, three of us.\" Which particle goes in the gap?",
+        "it": "«La mia famiglia siamo mio padre, mia madre e io, in tre.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "家族は父と母と私の三人だ",
+        "kana": "かぞくはちちとははとわたしのさんにんだ"
+      },
+      "translation": {
+        "en": "My family is my father, my mother and me, three of us.",
+        "it": "La mia famiglia siamo mio padre, mia madre e io, in tre."
+      },
+      "gap": {
+        "kanji": "家族は父＿母と私の三人だ",
+        "kana": "かぞくはちち＿ははとわたしのさんにんだ"
+      },
+      "answer": "と",
+      "distractors": ["や", "も", "を"],
+      "explanation": {
+        "en": "三人 says these are all of them, so you need と, the \"and\" that closes the list: 父と母と私. や would suggest there are others too, but the family is only three people. も is \"also\" and を marks an object.",
+        "it": "三人 dice che sono tutti, quindi serve と, l'«e» che chiude la lista: 父と母と私. や lascerebbe capire che ci sono anche altri, ma la famiglia è di tre persone sole. も è «anche» e を segna un oggetto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "例を挙げる「や」",
+      "prompt": {
+        "en": "\"On the desk there are books, notebooks and so on.\" Which part says the list isn't complete?",
+        "it": "«Sulla scrivania ci sono libri, quaderni e altro.» Quale parte dice che la lista non è completa?"
+      },
+      "sentence": {
+        "kanji": "机の上に本やノートがある",
+        "kana": "つくえのうえにほんやノートがある"
+      },
+      "translation": {
+        "en": "On the desk there are books, notebooks and so on.",
+        "it": "Sulla scrivania ci sono libri, quaderni e altro."
+      },
+      "glosses": [
+        { "text": "机の上に", "reading": "つくえのうえに", "meaning": { "en": "on the desk", "it": "sulla scrivania" } },
+        { "text": "本や", "reading": "ほんや", "meaning": { "en": "books and…", "it": "libri e…" } },
+        { "text": "ノートが", "meaning": { "en": "notebooks (が)", "it": "quaderni (が)" } },
+        { "text": "ある", "meaning": { "en": "there are", "it": "ci sono" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 本や. や after 本 means \"books, notebooks and things like that\": the two are examples. With と, 本とノート, there would be only books and notebooks on the desk.",
+        "it": "Seleziona 本や. や dopo 本 vuol dire «libri, quaderni e cose così»: le due cose sono esempi. Con と, 本とノート, sulla scrivania ci sarebbero solo libri e quaderni."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "例を挙げる「や」",
+      "prompt": {
+        "en": "Build: \"At the weekend I did the cleaning, the washing and so on.\"",
+        "it": "Componi: «Nel fine settimana ho fatto le pulizie, il bucato e altre cose.»"
+      },
+      "sentence": {
+        "kanji": "週末は掃除や洗濯をした",
+        "kana": "しゅうまつはそうじやせんたくをした"
+      },
+      "translation": {
+        "en": "At the weekend I did the cleaning, the washing and so on.",
+        "it": "Nel fine settimana ho fatto le pulizie, il bucato e altre cose."
+      },
+      "glosses": [
+        { "text": "週末は", "reading": "しゅうまつは", "meaning": { "en": "at the weekend (は: the topic)", "it": "nel fine settimana (は: il tema)" } },
+        { "text": "掃除や", "reading": "そうじや", "meaning": { "en": "the cleaning and…", "it": "le pulizie e…" } },
+        { "text": "洗濯を", "reading": "せんたくを", "meaning": { "en": "the washing (を: the object)", "it": "il bucato (を: l'oggetto)" } },
+        { "text": "した", "meaning": { "en": "did", "it": "ho fatto" } }
+      ],
+      "answer": ["週末は", "掃除や", "洗濯を", "した"],
+      "explanation": {
+        "en": "や joins the two things, and the particle for the whole list goes only on the last one: 掃除や洗濯を, never 掃除をや. 週末は, the topic, comes first, and した closes the sentence.",
+        "it": "や unisce le due cose, e la particella di tutta la lista va solo sull'ultima: 掃除や洗濯を, mai 掃除をや. 週末は, il tema, va per primo, e した chiude la frase."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "起点の「から」",
+      "prompt": {
+        "en": "\"The meeting is from two to four.\" Which particle goes in the gap?",
+        "it": "«La riunione è dalle due alle quattro.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "会議は二時から四時までだ",
+        "kana": "かいぎはにじからよじまでだ"
+      },
+      "translation": {
+        "en": "The meeting is from two to four.",
+        "it": "La riunione è dalle due alle quattro."
+      },
+      "gap": {
+        "kanji": "会議は二時＿四時までだ",
+        "kana": "かいぎはにじ＿よじまでだ"
+      },
+      "answer": "から",
+      "distractors": ["に", "で", "へ"],
+      "explanation": {
+        "en": "から marks the starting point, in time or in space: 二時から, \"from two\". まで marks where it ends: 四時まで, \"until four\". They often come as a pair. に would give a single moment (\"at two\"), which does not fit with まで.",
+        "it": "から segna il punto di partenza, nel tempo o nello spazio: 二時から, «dalle due». まで segna dove finisce: 四時まで, «fino alle quattro». Spesso vanno in coppia. に darebbe un momento solo («alle due»), che non va d'accordo con まで."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "起点の「から」",
+      "prompt": {
+        "en": "\"A letter came from a friend.\" Which part says who it came from?",
+        "it": "«È arrivata una lettera da un amico.» Quale parte dice da chi viene?"
+      },
+      "sentence": {
+        "kanji": "友達から手紙が届いた",
+        "kana": "ともだちからてがみがとどいた"
+      },
+      "translation": {
+        "en": "A letter came from a friend.",
+        "it": "È arrivata una lettera da un amico."
+      },
+      "glosses": [
+        { "text": "友達から", "reading": "ともだちから", "meaning": { "en": "from a friend", "it": "da un amico" } },
+        { "text": "手紙が", "reading": "てがみが", "meaning": { "en": "a letter (が)", "it": "una lettera (が)" } },
+        { "text": "届いた", "reading": "とどいた", "meaning": { "en": "arrived", "it": "è arrivata" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 友達から. After a person, から says who something comes from. The letter arrives by itself, so it takes が: 届く is the verb that happens by itself, and its partner 届ける is \"deliver\" something.",
+        "it": "Seleziona 友達から. Dopo una persona, から dice da chi viene una cosa. La lettera arriva da sé, quindi prende が: 届く è il verbo che succede da sé, e il suo compagno 届ける è «consegnare» qualcosa."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "起点の「から」",
+      "prompt": {
+        "en": "\"I went from Tokyo to Osaka by shinkansen.\" Which particle goes in the gap?",
+        "it": "«Sono andato da Tokyo a Osaka in shinkansen.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "東京から大阪まで新幹線で行った",
+        "kana": "とうきょうからおおさかまでしんかんせんでいった"
+      },
+      "translation": {
+        "en": "I went from Tokyo to Osaka by shinkansen.",
+        "it": "Sono andato da Tokyo a Osaka in shinkansen."
+      },
+      "gap": {
+        "kanji": "東京＿大阪まで新幹線で行った",
+        "kana": "とうきょう＿おおさかまでしんかんせんでいった"
+      },
+      "answer": "から",
+      "distractors": ["まで", "に", "を"],
+      "explanation": {
+        "en": "Tokyo is where the trip starts, so it takes から: 東京から. Osaka, where it ends, already has まで. に would make Tokyo the destination; を after a place marks the place you leave or pass through, not a starting point paired with まで.",
+        "it": "Tokyo è dove parte il viaggio, quindi prende から: 東京から. Osaka, dove finisce, ha già まで. に farebbe di Tokyo la destinazione; を dopo un luogo segna il luogo che lasci o che attraversi, non una partenza in coppia con まで."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "起点の「から」",
+      "prompt": {
+        "en": "Build: \"I took the dictionary from the bookshelf.\"",
+        "it": "Componi: «Ho preso il dizionario dallo scaffale.»"
+      },
+      "sentence": {
+        "kanji": "本棚から辞書を取った",
+        "kana": "ほんだなからじしょをとった"
+      },
+      "translation": {
+        "en": "I took the dictionary from the bookshelf.",
+        "it": "Ho preso il dizionario dallo scaffale."
+      },
+      "glosses": [
+        { "text": "本棚から", "reading": "ほんだなから", "meaning": { "en": "from the bookshelf", "it": "dallo scaffale" } },
+        { "text": "辞書を", "reading": "じしょを", "meaning": { "en": "the dictionary (を: the object)", "it": "il dizionario (を: l'oggetto)" } },
+        { "text": "取った", "reading": "とった", "meaning": { "en": "took", "it": "ho preso" } }
+      ],
+      "answer": ["本棚から", "辞書を", "取った"],
+      "alsoAccepted": [["辞書を", "本棚から", "取った"]],
+      "explanation": {
+        "en": "本棚から says where the dictionary comes from. Both 本棚から and 辞書を belong to 取った, which goes at the end; the two can swap places: \"辞書を本棚から取った\" is also correct.",
+        "it": "本棚から dice da dove viene il dizionario. 本棚から e 辞書を appartengono tutti e due a 取った, che va in fondo; i due possono scambiarsi: va bene anche «辞書を本棚から取った»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "起点の「から」",
+      "prompt": {
+        "en": "\"It's raining, so I'm staying at home.\" What goes in the gap?",
+        "it": "«Piove, quindi resto a casa.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "雨だから、家にいる",
+        "kana": "あめだから、いえにいる"
+      },
+      "translation": {
+        "en": "It's raining, so I'm staying at home.",
+        "it": "Piove, quindi resto a casa."
+      },
+      "gap": {
+        "kanji": "雨だ＿、家にいる",
+        "kana": "あめだ＿、いえにいる"
+      },
+      "answer": "から",
+      "distractors": ["まで", "に", "を"],
+      "explanation": {
+        "en": "After a whole sentence (雨だ, \"it's rain\"), から gives the reason: \"since it's raining\". After a place or a time it gives the starting point instead (東京から, 二時から). It is the same idea: the reason is where the next part starts from.",
+        "it": "Dopo una frase intera (雨だ, «è pioggia»), から dà il motivo: «visto che piove». Dopo un luogo o un'ora dà invece il punto di partenza (東京から, 二時から). L'idea è la stessa: il motivo è il punto da cui parte quello che segue."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "過度の「すぎる」",
+      "prompt": {
+        "en": "\"This tea is too hot.\" What goes in the gap?",
+        "it": "«Questo tè è troppo caldo.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "このお茶は熱すぎる",
+        "kana": "このおちゃはあつすぎる"
+      },
+      "translation": {
+        "en": "This tea is too hot.",
+        "it": "Questo tè è troppo caldo."
+      },
+      "glosses": [
+        { "text": "熱すぎる", "reading": "あつすぎる" },
+        { "text": "熱いすぎる", "reading": "あついすぎる" },
+        { "text": "熱くすぎる", "reading": "あつくすぎる" },
+        { "text": "熱かったすぎる", "reading": "あつかったすぎる" }
+      ],
+      "gap": {
+        "kanji": "このお茶は＿",
+        "kana": "このおちゃは＿"
+      },
+      "answer": "熱すぎる",
+      "distractors": ["熱いすぎる", "熱くすぎる", "熱かったすぎる"],
+      "explanation": {
+        "en": "すぎる means \"too much\". With an い-adjective you drop い and attach すぎる: 熱い → 熱 + すぎる = 熱すぎる, \"too hot\". The い does not stay, and neither く nor かった goes before すぎる.",
+        "it": "すぎる vuol dire «troppo». Con un aggettivo in い si toglie い e si attacca すぎる: 熱い → 熱 + すぎる = 熱すぎる, «troppo caldo». La い non resta, e prima di すぎる non vanno né く né かった."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "過度の「すぎる」",
+      "prompt": {
+        "en": "\"I ate too much yesterday and my stomach hurts.\" What goes in the gap?",
+        "it": "«Ieri ho mangiato troppo e mi fa male la pancia.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "昨日は食べすぎて、おなかが痛い",
+        "kana": "きのうはたべすぎて、おなかがいたい"
+      },
+      "translation": {
+        "en": "I ate too much yesterday and my stomach hurts.",
+        "it": "Ieri ho mangiato troppo e mi fa male la pancia."
+      },
+      "glosses": [
+        { "text": "食べすぎて", "reading": "たべすぎて" },
+        { "text": "食べてすぎて", "reading": "たべてすぎて" },
+        { "text": "食べるすぎて", "reading": "たべるすぎて" },
+        { "text": "食べたすぎて", "reading": "たべたすぎて" }
+      ],
+      "gap": {
+        "kanji": "昨日は＿、おなかが痛い",
+        "kana": "きのうは＿、おなかがいたい"
+      },
+      "answer": "食べすぎて",
+      "distractors": ["食べてすぎて", "食べるすぎて", "食べたすぎて"],
+      "explanation": {
+        "en": "With a verb, すぎる attaches to the form used before ます: 食べ(ます) → 食べ + すぎる, \"eat too much\". Then すぎる goes into て to join the next part: 食べすぎて、おなかが痛い, \"I ate too much, and so my stomach hurts\".",
+        "it": "Con un verbo, すぎる si attacca alla forma che si usa davanti a ます: 食べ(ます) → 食べ + すぎる, «mangiare troppo». Poi すぎる va in て per unirsi al pezzo dopo: 食べすぎて、おなかが痛い, «ho mangiato troppo, e così mi fa male la pancia»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "過度の「すぎる」",
+      "prompt": {
+        "en": "\"This room is so quiet it's a little scary.\" Which part says \"too\"?",
+        "it": "«Questa stanza è così silenziosa che fa un po' paura.» Quale parte dice «troppo»?"
+      },
+      "sentence": {
+        "kanji": "この部屋は静かすぎて少し怖い",
+        "kana": "このへやはしずかすぎてすこしこわい"
+      },
+      "translation": {
+        "en": "This room is so quiet it's a little scary.",
+        "it": "Questa stanza è così silenziosa che fa un po' paura."
+      },
+      "glosses": [
+        { "text": "この部屋は", "reading": "このへやは", "meaning": { "en": "this room (は: the topic)", "it": "questa stanza (は: il tema)" } },
+        { "text": "静かすぎて", "reading": "しずかすぎて", "meaning": { "en": "too quiet, and so…", "it": "troppo silenziosa, e così…" } },
+        { "text": "少し", "reading": "すこし", "meaning": { "en": "a little", "it": "un po'" } },
+        { "text": "怖い", "reading": "こわい", "meaning": { "en": "is scary", "it": "fa paura" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 静かすぎて. With a な-adjective, すぎる attaches straight on, with nothing in between: 静か + すぎる. In て it joins what follows: \"too quiet, and so a little scary\".",
+        "it": "Seleziona 静かすぎて. Con un aggettivo in な, すぎる si attacca direttamente, senza niente in mezzo: 静か + すぎる. In て si unisce a quello che segue: «troppo silenziosa, e così fa un po' paura»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "過度の「すぎる」",
+      "prompt": {
+        "en": "Build: \"My older brother drinks too much every evening.\"",
+        "it": "Componi: «Mio fratello maggiore beve troppo tutte le sere.»"
+      },
+      "sentence": {
+        "kanji": "兄は毎晩お酒を飲みすぎる",
+        "kana": "あにはまいばんおさけをのみすぎる"
+      },
+      "translation": {
+        "en": "My older brother drinks too much every evening.",
+        "it": "Mio fratello maggiore beve troppo tutte le sere."
+      },
+      "glosses": [
+        { "text": "兄は", "reading": "あには", "meaning": { "en": "my older brother (は: the topic)", "it": "mio fratello maggiore (は: il tema)" } },
+        { "text": "毎晩", "reading": "まいばん", "meaning": { "en": "every evening", "it": "tutte le sere" } },
+        { "text": "お酒を", "reading": "おさけを", "meaning": { "en": "alcohol (を: the object)", "it": "alcolici (を: l'oggetto)" } },
+        { "text": "飲みすぎる", "reading": "のみすぎる", "meaning": { "en": "drinks too much", "it": "beve troppo" } }
+      ],
+      "answer": ["兄は", "毎晩", "お酒を", "飲みすぎる"],
+      "alsoAccepted": [["兄は", "お酒を", "毎晩", "飲みすぎる"]],
+      "explanation": {
+        "en": "飲む → 飲み + すぎる: すぎる sits on the form used before ます, and the whole verb goes at the end. 兄は, the topic, comes first; 毎晩 and お酒を both belong to the verb and can swap places: \"兄はお酒を毎晩飲みすぎる\" is also correct.",
+        "it": "飲む → 飲み + すぎる: すぎる sta sulla forma che si usa davanti a ます, e il verbo intero va in fondo. 兄は, il tema, va per primo; 毎晩 e お酒を appartengono tutti e due al verbo e possono scambiarsi: va bene anche «兄はお酒を毎晩飲みすぎる»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "過度の「すぎる」",
+      "prompt": {
+        "en": "\"I have too much homework.\" What goes in the gap?",
+        "it": "«Ho troppi compiti.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "宿題が多すぎる",
+        "kana": "しゅくだいがおおすぎる"
+      },
+      "translation": {
+        "en": "I have too much homework.",
+        "it": "Ho troppi compiti."
+      },
+      "glosses": [
+        { "text": "多すぎる", "reading": "おおすぎる" },
+        { "text": "多いすぎる", "reading": "おおいすぎる" },
+        { "text": "多くすぎる", "reading": "おおくすぎる" },
+        { "text": "多かったすぎる", "reading": "おおかったすぎる" }
+      ],
+      "gap": {
+        "kanji": "宿題が＿",
+        "kana": "しゅくだいが＿"
+      },
+      "answer": "多すぎる",
+      "distractors": ["多いすぎる", "多くすぎる", "多かったすぎる"],
+      "explanation": {
+        "en": "多い (\"are many\") is an い-adjective: drop い and add すぎる, 多すぎる, \"there are too many\". 多いすぎる keeps the い, 多くすぎる uses the form that goes before a verb, and the past goes on すぎる, not before it: 多すぎた.",
+        "it": "多い («sono tanti») è un aggettivo in い: si toglie い e si aggiunge すぎる, 多すぎる, «sono troppi». 多いすぎる tiene la い, 多くすぎる usa la forma che sta prima di un verbo, e il passato va su すぎる, non prima: 多すぎた."
+      }
+    }
+  ]
+}
