@@ -1,30 +1,29 @@
-# Inventario del contenuto
+# Content inventory
 
-Quanti esercizi ha ogni lezione, divisi per tipo, e da quale transcript della
-cartella di lavoro `.authoring/transcripts/` sono stati estratti i fatti. È il
-registro da aggiornare ogni volta che si aggiunge o si modifica una lezione
-(passo 4 di `docs/authoring-runbook.md`).
+How many exercises each lesson has, by kind, and which transcript in the
+`.authoring/transcripts/` working folder the facts were taken from. It is the
+record to update every time a lesson is added or changed (step 4 of
+`docs/authoring-runbook.md`).
 
-La tabella è tenuta onesta da `src/content-inventory.test.ts`: ogni file sotto
-`content/lessons/` deve avere **una** riga, con i conteggi uguali a quelli reali, e
-la riga dei totali deve tornare. Aggiungere una lezione, o un esercizio, senza
-aggiornare questa tabella rende il test rosso, e il messaggio dice quale riga
-scrivere.
+The table is kept honest by `src/content-inventory.test.ts`: every file under
+`content/lessons/` must have **one** row, with counts equal to the real ones, and
+the totals row must add up. Adding a lesson, or an exercise, without updating this
+table turns the test red, and the message says which row to write.
 
-La colonna **Transcript** è l'unica che il test non può verificare: i transcript
-non entrano nel repository (`docs/authoring-pipeline.md`), quindi in CI non c'è
-nulla con cui confrontarla. Il nome del transcript è un'annotazione di
-provenienza per l'autore, **non** l'identità della lezione: quella deriva solo dal
-punto grammaticale (`grammarPoints[0]`).
+The **Transcript** column is the only one the test cannot check: transcripts do
+not enter the repository (`docs/authoring-pipeline.md`), so in CI there is nothing
+to compare it with. The transcript name is a provenance note for the author,
+**not** the lesson's identity: that comes only from the grammar point
+(`grammarPoints[0]`).
 
-## Lezioni
+## Lessons
 
-<!-- Manutenzione: una riga per file, nella forma
-| order | `file.json` | transcript | single-select | select-span | assemble | totale |
-Il test estrae le righe che iniziano con `| <numero> | \`...json\`` e le confronta
-con il contenuto reale. -->
+<!-- Maintenance: one row per file, in the form
+| order | `file.json` | transcript | single-select | select-span | assemble | total |
+The test extracts the rows that start with `| <number> | \`...json\`` and compares
+them with the real content. -->
 
-| Order | File | Transcript | single-select | select-span | assemble | Totale |
+| Order | File | Transcript | single-select | select-span | assemble | Total |
 |---:|---|---|---:|---:|---:|---:|
 | 1 | `01-il-soggetto-con-ga.json` | `lezione-01` | 6 | 5 | 6 | 17 |
 | 2 | `02-il-pronome-zero.json` | `lezione-02` | 6 | 5 | 5 | 16 |
@@ -45,20 +44,20 @@ con il contenuto reale. -->
 | 17 | `17-coppie-di-verbi.json` | `lezione-17` | 12 | 4 | 4 | 20 |
 | 18 | `18-temiru-ya-kara-sugiru.json` | `lezione-18` | 10 | 4 | 5 | 19 |
 | 19 | `19-parlare-in-modo-cortese.json` | `lezione-19` | 12 | 4 | 5 | 21 |
-| 900 | `01-la-particella-wo.json` | — (fixture dei test) | 1 | 1 | 1 | 3 |
+| 900 | `01-la-particella-wo.json` | — (test fixture) | 1 | 1 | 1 | 3 |
 
 <!-- inventory-total: 375 -->
 
-**Totale: 375 esercizi** in 20 file — 155 `single-select`, 107 `select-span`,
-113 `assemble`. La lezione `order: 900` è la fixture della storia 2.7, fuori dal
-curriculum (fascia riservata 900+, `docs/authoring-runbook.md`).
+**Total: 375 exercises** in 20 files — 155 `single-select`, 107 `select-span`,
+113 `assemble`. The `order: 900` lesson is the fixture from story 2.7, outside the
+curriculum (reserved range 900+, `docs/authoring-runbook.md`).
 
-## Transcript ancora da lavorare
+## Transcripts still to work through
 
-`lezione-NN` è il video in posizione NN della playlist «Japanese From Scratch»
-(`PLg9uYxuZf8x_A-vcqqyOFZu06WlhnypWj`); l'elenco posizione → id → titolo è in
-`.authoring/playlist.txt`. La playlist ha 93 video: i transcript da `lezione-20`
-a `lezione-93` sono pieni (sottotitoli inglesi scritti a mano, scaricati il
-09-10-2026) e aspettano di essere autorati; da `lezione-94` a `lezione-99` sono
-**vuoti** (0 byte) perché nella playlist non c'è un video corrispondente. Quando
-una lezione viene autorata, la si aggiunge alla tabella sopra.
+`lezione-NN` is the video at position NN of the "Japanese From Scratch" playlist
+(`PLg9uYxuZf8x_A-vcqqyOFZu06WlhnypWj`); the position → id → title list is in
+`.authoring/playlist.txt`. The playlist has 93 videos: the transcripts from
+`lezione-20` to `lezione-93` are full (hand-written English subtitles, downloaded
+on 09-10-2026) and waiting to be authored; those from `lezione-94` to `lezione-99`
+are **empty** (0 bytes) because the playlist has no matching video. When a lesson
+is authored, it is added to the table above.

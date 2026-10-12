@@ -103,10 +103,10 @@ describe('storia 6.4 — sostenibilità della pipeline (documentazione)', () => 
   it('AC1 — dichiara il verdetto NFR9 (nessun costo manuale cresce; lunghezza non nota)', () => {
     const doc = readFileSync(docPath, 'utf-8');
     // Il verdetto esplicito: nessun passaggio manuale cresce col numero di lezioni.
-    expect(doc).toMatch(/nessun passaggio manuale/i);
-    expect(doc).toMatch(/cresc/i);
+    expect(doc).toMatch(/no manual step/i);
+    expect(doc).toMatch(/grow/i);
     // Verificato contro un corso di lunghezza non nota / non fissata (non un totale).
-    expect(doc).toMatch(/non (nota|fissat)/i);
+    expect(doc).toMatch(/not (known|fixed)/i);
     // La distinzione portante: costo automatico O(N) vs fatica manuale.
     expect(doc).toMatch(/automatic/i);
     expect(doc).toMatch(/manual/i);
@@ -120,14 +120,14 @@ describe('storia 6.4 — sostenibilità della pipeline (documentazione)', () => 
     expect(doc).toMatch(/30/);
     expect(doc).toMatch(/minut/i);
     // 30 minuti è una STIMA DA TARARE, non una verità.
-    expect(doc).toMatch(/stima/i);
-    expect(doc).toMatch(/tarar/i);
+    expect(doc).toMatch(/estimate/i);
+    expect(doc).toMatch(/tune/i);
     // La metodologia: inizio = guardare la fonte; fine = esercizio giocabile.
-    expect(doc).toMatch(/giocabile/i);
+    expect(doc).toMatch(/playable/i);
     // Presenza della tabella di registrazione: la riga iniziale «da misurare» dovuta
     // all'operatore (nessun tempo inventato).
-    expect(doc).toMatch(/da misurare/i);
-    expect(doc).toMatch(/operatore/i);
+    expect(doc).toMatch(/to\s+be\s+measured/i);
+    expect(doc).toMatch(/operator/i);
   });
 
   it('AC3 — le lezioni reali VALIDANO e il conteggio coincide con la sentinella', () => {
@@ -158,7 +158,7 @@ describe('storia 6.4 — sostenibilità della pipeline (documentazione)', () => 
     // Il traguardo: almeno cinque lezioni. (`/almeno cinque/` è l'ancora specifica;
     // NON usiamo `/\b5\b/`, soddisfatta anche da «passo 5» o dalla riga «5 —» della
     // tabella NFR9, che non fissa il cinque della DoD.)
-    expect(doc).toMatch(/almeno\s+cinque/i);
+    expect(doc).toMatch(/at\s+least\s+five/i);
     // Definition of Done nominata.
     expect(doc).toMatch(/Definition of Done|DoD/);
     // Il verdetto di stato è ACCOPPIATO al conteggio reale tramite la sentinella

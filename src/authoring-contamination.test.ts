@@ -409,8 +409,8 @@ describe('storia 6.3 — documentazione del controllo (docs/contamination-check.
 
   it('dichiara cosa confronta (AC1): frase giapponese e spiegazione, NFKC', () => {
     const doc = readFileSync(docPath, 'utf-8');
-    expect(doc).toMatch(/frase giapponese/i);
-    expect(doc).toMatch(/spiegazione/i);
+    expect(doc).toMatch(/Japanese sentence/i);
+    expect(doc).toMatch(/every explanation/i);
     expect(doc).toMatch(/sentence\.kanji/);
     expect(doc).toMatch(/sentence\.kana/);
     expect(doc).toMatch(/explanation\.en/);
@@ -421,36 +421,36 @@ describe('storia 6.3 — documentazione del controllo (docs/contamination-check.
     // «Non banale»: le soglie dichiarate e tarabili.
     expect(doc).toMatch(/MIN_JA_RUN/);
     expect(doc).toMatch(/MIN_PROSE_WORDS/);
-    expect(doc).toMatch(/tarabil/i);
+    expect(doc).toMatch(/tunable/i);
   });
 
   it('dichiara la risposta a una segnalazione (AC2): riscrivere o motivare, reason non vuota', () => {
     const doc = readFileSync(docPath, 'utf-8');
-    expect(doc).toMatch(/riscriv/i);
-    expect(doc).toMatch(/motiv/i);
+    expect(doc).toMatch(/rewrit/i);
+    expect(doc).toMatch(/justif/i);
     expect(doc).toMatch(/allowlist/i);
     // reason vuota NON sopprime.
     expect(doc).toMatch(/reason/i);
-    expect(doc).toMatch(/vuota/i);
+    expect(doc).toMatch(/empty/i);
   });
 
   it('dichiara collocazione e limite (AC4): non-cancello-di-CI, unico anello, per 6.1', () => {
     const doc = readFileSync(docPath, 'utf-8');
     // Non può essere un cancello di CI perché il transcript è fuori dal repo.
-    expect(doc).toMatch(/non può essere un cancello di CI/i);
+    expect(doc).toMatch(/cannot be a CI gate/i);
     expect(doc).toMatch(/transcript/i);
     expect(doc).toMatch(/6\.1/);
     // L'unico anello della catena di qualità che non si chiude a valle.
-    expect(doc).toMatch(/unico anello/i);
-    expect(doc).toMatch(/valle/i);
+    expect(doc).toMatch(/only link/i);
+    expect(doc).toMatch(/downstream/i);
   });
 
   it('registra l\'audit retroattivo (AC3) della lezione campione di 2.7', () => {
     const doc = readFileSync(docPath, 'utf-8');
-    expect(doc).toMatch(/audit retroattivo/i);
+    expect(doc).toMatch(/retroactive audit/i);
     expect(doc).toMatch(/content\/lessons\/01-la-particella-wo\.json/);
     // L'esito o l'azione dovuta all'operatore (transcript privato assente).
-    expect(doc).toMatch(/operatore/i);
+    expect(doc).toMatch(/operator/i);
     expect(doc).toMatch(/2\.7/);
   });
 });

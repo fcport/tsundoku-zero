@@ -74,23 +74,23 @@ describe('storia 6.2 — runbook di autorazione (documentazione)', () => {
     const doc = readFileSync(docPath, 'utf-8');
     // Autorazione assistita da un LLM, SOLO in autorazione (mai a runtime) — AC2.
     expect(doc).toMatch(/LLM/);
-    expect(doc).toMatch(/autorazione/i);
+    expect(doc).toMatch(/authoring/i);
     // L'LLM è confinato all'autorazione e NON compare a runtime: invariante
     // portante (l'app serve contenuto statico, non genera nulla in tempo reale).
-    expect(doc).toMatch(/mai a runtime/i);
+    expect(doc).toMatch(/never at runtime/i);
     // Revisione umana OBBLIGATORIA prima del commit: nessun esercizio raggiunge il
     // repository senza essere stato riletto — AC2, l'invariante non aggirabile.
-    expect(doc).toMatch(/revisione umana/i);
-    expect(doc).toMatch(/prima del commit/i);
-    expect(doc).toMatch(/nessun esercizio/i);
+    expect(doc).toMatch(/human review/i);
+    expect(doc).toMatch(/before the commit/i);
+    expect(doc).toMatch(/no exercise/i);
     // Il cancello di Epic 2, imposto in CI — AC3.
     expect(doc).toMatch(/npm run validate-content/);
     // Aggiungere una lezione NON tocca il codice — AC3.
-    expect(doc).toMatch(/non tocca il codice/i);
+    expect(doc).toMatch(/does not touch the code/i);
     // Rinvio al confine fatto/formulazione (storia 6.1).
     expect(doc).toMatch(/authoring-pipeline\.md/);
     // Indicizzazione per concetto grammaticale, mai per numero/titolo della fonte.
-    expect(doc).toMatch(/per concetto/i);
+    expect(doc).toMatch(/by grammar concept/i);
     // La difesa anti-contaminazione oggi è umana; il controllo meccanico è 6.3.
     expect(doc).toMatch(/6\.3/);
   });

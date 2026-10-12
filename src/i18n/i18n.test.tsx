@@ -134,17 +134,17 @@ describe('AC4 — il confine a tre di AD-14 è documentato', () => {
   const doc = readFileSync(resolve(repoRoot, 'docs/i18n-boundary.md'), 'utf8');
 
   it('dichiara il lato INTERFACCIA da t()', () => {
-    expect(doc).toMatch(/interfaccia/i);
+    expect(doc).toMatch(/interface/i);
     expect(doc).toMatch(/t\(\)/);
   });
 
   it('dichiara il lato CONTENUTO delle lezioni dal file di lezione', () => {
-    expect(doc).toMatch(/contenuto delle lezioni/i);
-    expect(doc).toMatch(/file di lezione/i);
+    expect(doc).toMatch(/lesson content/i);
+    expect(doc).toMatch(/lesson file/i);
   });
 
   it('dichiara il lato GIAPPONESE da nessuno dei due', () => {
-    expect(doc).toMatch(/giapponese/i);
-    expect(doc).toMatch(/nessuno dei due/i);
+    expect(doc).toMatch(/Japanese/i);
+    expect(doc).toMatch(/from neither/i);
   });
 });

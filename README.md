@@ -98,7 +98,7 @@ src/features/     the screens
 src/app/          the wiring: routes, guards, ports
 content/lessons/  the lessons and their exercises, one JSON file per lesson
 supabase/         migrations and the account deletion Edge Function
-docs/             detailed documentation (in Italian)
+docs/             detailed documentation
 ```
 
 ## Running it locally

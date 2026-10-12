@@ -138,20 +138,20 @@ describe('FR11.7 — documentazione della pipeline', () => {
   it('dichiara i tre principi e l\'esempio concreto "motori"/treno', () => {
     const doc = readFileSync(docPath, 'utf-8');
     // Principio 1: fatti, mai formulazioni.
-    expect(doc).toMatch(/fatt/i);
-    expect(doc).toMatch(/formulazion/i);
+    expect(doc).toMatch(/fact/i);
+    expect(doc).toMatch(/wording/i);
     // Principio 2: parafrasi con i sinonimi = opera derivata.
-    expect(doc).toMatch(/sinonim/i);
-    expect(doc).toMatch(/derivata/i);
+    expect(doc).toMatch(/synonym/i);
+    expect(doc).toMatch(/derivative/i);
     // Principio 3: le metafore didattiche non si riusano.
-    expect(doc).toMatch(/metafor/i);
+    expect(doc).toMatch(/metaphor/i);
     // Esempio concreto: il caso "motori"/treno del progetto, con la correzione
     // in terminologia standard e il rinvio verificabile alla storia.
-    expect(doc).toMatch(/motori/i);
-    expect(doc).toMatch(/treno/i);
-    expect(doc).toMatch(/verbo/i);
+    expect(doc).toMatch(/engine/i);
+    expect(doc).toMatch(/train/i);
+    expect(doc).toMatch(/verb/i);
     expect(doc).toMatch(/copula/i);
-    expect(doc).toMatch(/aggettivo in い/);
+    expect(doc).toMatch(/い-adjective/);
     expect(doc).toMatch(/c618164/);
   });
 });

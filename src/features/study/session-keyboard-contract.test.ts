@@ -21,17 +21,17 @@ describe('AC1 — il documento aggiorna e SOSTITUISCE AD-15', () => {
   });
 
   it('dichiara di SOSTITUIRE il vecchio contratto («spazio rivela, 1-4 valutano»)', () => {
-    expect(doc).toMatch(/sostitu/i);
+    expect(doc).toMatch(/replace/i);
     // Cita il vecchio contratto che rimpiazza (le cifre sono formattate come codice).
-    expect(doc).toMatch(/spazio rivela/i);
-    expect(doc).toMatch(/valutano/i);
+    expect(doc).toMatch(/space reveals/i);
+    expect(doc).toMatch(/`1`-`4` rate/i);
   });
 });
 
 describe('AC1 — il documento dichiara i punti del contratto', () => {
   it('mappa tasto numerico → posizione, stessa associazione per ogni tipo (AC2)', () => {
-    expect(doc).toMatch(/tasto numerico/i);
-    expect(doc).toMatch(/posizione/i);
+    expect(doc).toMatch(/number key/i);
+    expect(doc).toMatch(/position/i);
     // La funzione pura è agnostica al tipo che rende vera l'invariante.
     expect(doc).toMatch(/keyboardSelectionIndex/);
     expect(doc).toMatch(/agnostic/i);
@@ -40,7 +40,7 @@ describe('AC1 — il documento dichiara i punti del contratto', () => {
   it('dichiara il comportamento di overflow (AC3)', () => {
     expect(doc).toMatch(/overflow/i);
     // La fila numerica copre 1-9 (le cifre sono formattate come codice `1`-`9`).
-    expect(doc).toMatch(/fila numerica/i);
+    expect(doc).toMatch(/number row/i);
     expect(doc).toMatch(/NUMERIC_ROW_SIZE/);
     expect(doc).toMatch(/no-op/i);
   });
@@ -52,7 +52,7 @@ describe('AC1 — il documento dichiara i punti del contratto', () => {
 
   it('dichiara tab-order = ordine di lettura = ordine dei tasti numerici (AC5)', () => {
     expect(doc).toMatch(/tab-order/i);
-    expect(doc).toMatch(/ordine di lettura/i);
+    expect(doc).toMatch(/reading order/i);
   });
 
   it('dichiara l anello di focus visibile col token focus-ring (AC5)', () => {

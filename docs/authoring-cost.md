@@ -1,218 +1,222 @@
-# La sostenibilità della pipeline (NFR9, M5, DoD — storia 6.4)
+# The sustainability of the pipeline (NFR9, M5, DoD — story 6.4)
 
-L'epica 6 ha costruito il **confine con la fonte** (`docs/authoring-pipeline.md`,
-storia 6.1), il **runbook** operativo (`docs/authoring-runbook.md`, storia 6.2) e
-il **controllo meccanico anti-contaminazione** (`docs/contamination-check.md`,
-storia 6.3). Manca l'**accettazione dell'epica**: esaminare quella procedura
-contro i requisiti che la governano — il costo di autorazione (`NFR9`), il tempo
-di autorazione (`M5`) e la Definition of Done del PRD §11 (**almeno cinque**
-lezioni autorate, revisionate e validate) — e registrarne lo stato reale.
+Epic 6 built the **source boundary** (`docs/authoring-pipeline.md`, story 6.1), the
+operating **runbook** (`docs/authoring-runbook.md`, story 6.2) and the **mechanical
+anti-contamination check** (`docs/contamination-check.md`, story 6.3). What is
+missing is the **epic's acceptance**: examining that procedure against the
+requirements that govern it — authoring cost (`NFR9`), authoring time (`M5`) and the
+Definition of Done in PRD §11 (**at least five** lessons authored, reviewed and
+validated) — and recording where things really stand.
 
-Sul precedente durevole di `docs/authoring-runbook.md` e `docs/contamination-check.md`,
-è un documento con un test — `src/authoring-cost.test.ts` — che ne verifica
-meccanicamente le dichiarazioni obbligatorie: **àncora** l'analisi al runbook (una
-riga per ciascun passo; se il runbook guadagna o perde un passo, il test è rosso
-finché l'analisi non lo copre) e **al contenuto reale** (le lezioni esistenti
-validano, e il contatore della DoD non può mentire in silenzio).
+Following the durable precedent of `docs/authoring-runbook.md` and
+`docs/contamination-check.md`, it is a document with a test —
+`src/authoring-cost.test.ts` — that mechanically checks its mandatory statements: it
+**anchors** the analysis to the runbook (one row per step; if the runbook gains or
+loses a step, the test is red until the analysis covers it) and **to the real
+content** (the existing lessons validate, and the DoD counter cannot silently lie).
 
-## Analisi NFR9 (AC1)
+## NFR9 analysis (AC1)
 
-`NFR9` chiede che la pipeline di F11 **regga un corso di durata indefinita senza
-degradare**: nessun passaggio **manuale** il cui costo cresca con il numero di
-lezioni **già autorate** (chiamiamolo `N`). Il requisito è deliberatamente
-indipendente dal totale delle lezioni, che **non è noto** e continuerà a crescere:
-la verifica è quindi contro un corso di **lunghezza non fissata**, non contro un
-totale prestabilito.
+`NFR9` asks that the F11 pipeline **hold up for a course of indefinite length
+without degrading**: no **manual** step whose cost grows with the number of lessons
+**already authored** (call it `N`). The requirement is deliberately independent of
+the total number of lessons, which **is not known** and will keep growing: so the
+check is against a course of **length not fixed**, not against a set total.
 
-Esaminiamo la procedura **reale** — gli otto passi di `docs/authoring-runbook.md` —
-uno per uno. Per ciascuno: è fatica **manuale** dell'autore o **calcolo
-automatico** di un comando? E come cresce il suo costo al crescere di `N`?
+We examine the **real** procedure — the eight steps of `docs/authoring-runbook.md` —
+one by one. For each: is it **manual** work for the author or **automatic
+computation** by a command? And how does its cost grow as `N` grows?
 
-<!-- Manutenzione: ogni riga della tabella qui sotto deve iniziare con `| N —`, dove
-`N` è il numero di un passo `### N.` di docs/authoring-runbook.md. Il test
-src/authoring-cost.test.ts estrae i numeri di passo dal runbook e pretende copertura
-ESATTA: una riga per passo, né più né meno. Se il runbook guadagna o perde un passo,
-aggiorna questa tabella per tenere i due formati in sincrono. -->
+<!-- Maintenance: every row of the table below must start with `| N —`, where
+`N` is the number of a `### N.` step in docs/authoring-runbook.md. The test
+src/authoring-cost.test.ts extracts the step numbers from the runbook and requires
+EXACT coverage: one row per step, no more, no less. If the runbook gains or loses a
+step, update this table to keep the two formats in sync. -->
 
-| Passo | Manuale? | Costo in N | Perché |
+| Step | Manual? | Cost in N | Why |
 |---|---|---|---|
-| 1 — Prerequisiti e cartella di lavoro | manuale (una volta) + automatico | O(1) manuale; O(N) automatico | Preparare l'ambiente è O(1). `npm ci`/`npm test` ri-processano tutto ma sono **automatici**: calcolo, non fatica manuale. |
-| 2 — Estrarre i fatti dal transcript | manuale | O(1) per lezione | L'autore legge **una** fonte e ne estrae i fatti; la lezione è indicizzata **per concetto**, non per episodio (6.1), quindi non deve consultare né riordinare le N lezioni precedenti. La scelta di `order` è la **prossima posizione libera**: O(1). |
-| 3 — Autorazione assistita da un LLM (dai fatti) | manuale | O(1) per lezione | Comporre esercizi **da questo fatto** non richiede di rileggere le N lezioni esistenti. L'assistenza dell'LLM è solo in autorazione, mai a runtime. |
-| 4 — Comporre il file `content/lessons/NN-<concetto>.json` | manuale | O(1) per lezione | Si scrive **un** file JSON per la lezione corrente; l'identità (`lessonId`) deriva **solo** dal punto grammaticale primario, non da un numero da coordinare con le altre. |
-| 5 — Revisione umana obbligatoria (prima del commit) | manuale + automatico | O(1) manuale; O(N) automatico | L'autore rilegge **la lezione appena scritta**, non le N precedenti: O(1). `npm run check-contamination` confronta il **contenuto** con il transcript e ri-processa tutte le lezioni, ma è **calcolo automatico** su contenuto minuscolo. |
-| 6 — Cancello di validazione | automatico | O(N) automatico | `npm run validate-content` valida **tutte** le N lezioni (le regole di unicità di `order`/`lessonId`/identità sono cross-file, quindi devono vederle tutte). È calcolo automatico: l'unicità la **impone il cancello**, non l'autore. |
-| 7 — Rendere la lezione disponibile all'app | automatico | O(N) automatico | `npm run generate-content-seed` rigenera il seed da tutte le N lezioni. Automatico: un comando, nessuna fatica manuale che cresca. |
-| 8 — Generare l'audio delle frasi | automatico + manuale | O(N) automatico; O(1) manuale | `npm run generate-audio` scorre tutte le frasi ma salta quelle che hanno già l'audio: genera solo le nuove. L'autore ascolta **le frasi nuove** e quelle con la lettura corretta dai kana, non le N lezioni precedenti: O(1). |
+| 1 — Prerequisites and working folder | manual (once) + automatic | O(1) manual; O(N) automatic | Setting up the environment is O(1). `npm ci`/`npm test` reprocess everything but are **automatic**: computation, not manual work. |
+| 2 — Extract the facts from the transcript | manual | O(1) per lesson | The author reads **one** source and extracts its facts; the lesson is indexed **by concept**, not by episode (6.1), so they do not have to consult or reorder the N earlier lessons. The choice of `order` is the **next free position**: O(1). |
+| 3 — Authoring with the help of an LLM (from the facts) | manual | O(1) per lesson | Writing exercises **from this fact** does not require rereading the N existing lessons. The LLM's help is only during authoring, never at runtime. |
+| 4 — Put together the file `content/lessons/NN-<concept>.json` | manual | O(1) per lesson | You write **one** JSON file for the current lesson; the identity (`lessonId`) is derived **only** from the primary grammar point, not from a number to coordinate with the others. |
+| 5 — Mandatory human review (before the commit) | manual + automatic | O(1) manual; O(N) automatic | The author reviews **the lesson just written**, not the N earlier ones: O(1). `npm run check-contamination` compares the **content** with the transcript and reprocesses every lesson, but it is **automatic computation** on tiny content. |
+| 6 — Validation gate | automatic | O(N) automatic | `npm run validate-content` validates **all** N lessons (the uniqueness rules for `order`/`lessonId`/identity are cross-file, so it must see them all). It is automatic computation: uniqueness is **enforced by the gate**, not by the author. |
+| 7 — Make the lesson available to the app | automatic | O(N) automatic | `npm run generate-content-seed` regenerates the seed from all N lessons. Automatic: one command, no manual work that grows. |
+| 8 — Generate the sentence audio | automatic + manual | O(N) automatic; O(1) manual | `npm run generate-audio` goes through every sentence but skips those that already have audio: it generates only the new ones. The author listens to **the new sentences** and those whose reading was corrected from the kana, not the N earlier lessons: O(1). |
 
-**Verdetto NFR9.** **Nessun passaggio manuale** ha un costo che cresce col numero
-di lezioni già autorate: la fatica dell'autore per aggiungere una lezione resta
-**O(1)** — estrarre i fatti da una fonte, autorare da quei fatti, comporre un file,
-rileggerlo — verificato contro un corso di **lunghezza non nota / non fissata**. I
-passi che scalano con `N` (`npm test`, `npm run check-contamination`,
-`npm run validate-content`, `npm run generate-content-seed`, `npm run generate-audio`) ri-processano tutte
-le `N` lezioni a ogni esecuzione — è **calcolo automatico** O(N) su contenuto
-minuscolo, **non** fatica manuale, e **non** viola `NFR9`.
+**NFR9 verdict.** **No manual step** has a cost that grows with the number of
+lessons already authored: the author's work to add a lesson stays **O(1)** —
+extract the facts from one source, author from those facts, put together one file,
+review it — checked against a course of **length not known / not fixed**. The steps
+that scale with `N` (`npm test`, `npm run check-contamination`,
+`npm run validate-content`, `npm run generate-content-seed`, `npm run generate-audio`) reprocess all
+`N` lessons on every run — that is O(N) **automatic computation** on tiny content,
+**not** manual work, and it does **not** violate `NFR9`.
 
-Il punto sottile: senza la scelta «**indicizzare per concetto, non per episodio**»
-(6.1), autorare la lezione N-esima costringerebbe l'autore a coordinare `order` e
-identità con le N-1 esistenti — un costo manuale O(N). L'indicizzazione per
-concetto lo azzera: l'autore prende la **prossima posizione libera** per `order` e
-l'unicità di `order`/`lessonId`/identità la **impone automaticamente** il cancello
-(`src/domain/content-validation.ts`), non l'autore a mano. È questa scelta a tenere
-O(1) il costo manuale anche là dove l'O(N) sarebbe sembrato inevitabile.
+The subtle point: without the choice to "**index by concept, not by episode**"
+(6.1), authoring the Nth lesson would force the author to coordinate `order` and
+identity with the N-1 existing ones — an O(N) manual cost. Indexing by concept
+removes it: the author takes the **next free position** for `order`, and uniqueness
+of `order`/`lessonId`/identity is **enforced automatically** by the gate
+(`src/domain/content-validation.ts`), not by the author by hand. It is this choice
+that keeps the manual cost O(1) even where O(N) would have seemed unavoidable.
 
-## Tempo di autorazione M5 (AC2)
+## M5 authoring time (AC2)
 
-`M5` è la **metrica di sostenibilità** del progetto: il tempo per autorare una
-lezione completa, **dalla visione all'esercizio giocabile**, deve essere ≤ **30
-minuti**. Come le soglie del controllo anti-contaminazione (8 caratteri / 6 parole,
-`docs/contamination-check.md`), i **30 minuti** sono una **stima da tarare**
-sull'esperienza reale, non una verità: è la soglia dichiarata dal PRD, da
-confermare o correggere una volta misurata.
+`M5` is the project's **sustainability metric**: the time to author a complete
+lesson, **from watching to a playable exercise**, must be ≤ **30 minutes**. Like the
+thresholds of the anti-contamination check (8 characters / 6 words,
+`docs/contamination-check.md`), the **30 minutes** are an **estimate to be tuned**
+against real experience, not a truth: it is the threshold stated by the PRD, to be
+confirmed or corrected once measured.
 
-**Cosa si misura** (metodologia):
+**What is measured** (methodology):
 
-- **Inizio della misura:** l'autore comincia a **guardare la fonte** della lezione
-  (il transcript / la sessione da studiare).
-- **Fine della misura:** l'esercizio è **giocabile** — la lezione è composta,
-  ha passato la revisione umana obbligatoria, il cancello `npm run validate-content`
-  è verde, il seed è rigenerato (passo 7) e la lezione è **committata**.
-- **Unità:** una riga di registrazione **per lezione**. Si annota il tempo reale
-  cronometrato di quell'esecuzione, non una stima.
+- **Start of the measurement:** the author starts **watching the source** of the
+  lesson (the transcript / the session to study).
+- **End of the measurement:** the exercise is **playable** — the lesson is put
+  together, has passed the mandatory human review, the `npm run validate-content`
+  gate is green, the seed is regenerated (step 7) and the lesson is **committed**.
+- **Unit:** one recording row **per lesson**. You write down the real, timed
+  duration of that run, not an estimate.
 
-**Nessun tempo è inventato.** Nessuna misura reale è ancora stata eseguita: farla
-richiede di guardare la fonte e cronometrare un'esecuzione completa del flusso —
-un'azione **umana** fuori dal repository, dovuta all'operatore. La tabella parte
-quindi con una riga **da misurare**.
+**No time is made up.** No real measurement has been taken yet: taking one means
+watching the source and timing a complete run of the procedure — a **human** action
+outside the repository, left to the operator. So the table starts with a row **to be
+measured**.
 
-| Lezione | Inizio (guardare la fonte) | Fine (esercizio giocabile/committato) | Tempo reale | Entro i 30 min? |
+| Lesson | Start (watching the source) | End (exercise playable/committed) | Real time | Within 30 min? |
 |---|---|---|---|---|
-| `01-il-soggetto-con-ga` (が + le tre forme del predicato) | 28-09-2026 15:00:55 | 28-09-2026 15:09:00 | **8 min 05 s** | sì, con ampio margine |
+| `01-il-soggetto-con-ga` (が + the three predicate forms) | 28-09-2026 15:00:55 | 28-09-2026 15:09:00 | **8 min 05 s** | yes, with plenty of margin |
 
-**Cosa comprende questa misura, e cosa no.** Cronometro avviato all'apertura del
-transcript, fermato quando tutti i cancelli erano verdi: fatti estratti, tre esercizi
-autorati (uno per `kind`), span di `select-span` verificati sui segmenti reali di
-`alignFurigana`, `npm run validate-content` verde, seed rigenerato, suite verde.
+**What this measurement includes, and what it does not.** Timer started when the
+transcript was opened, stopped when every gate was green: facts extracted, three
+exercises authored (one per `kind`), `select-span` spans checked against the real
+`alignFurigana` segments, `npm run validate-content` green, seed regenerated, suite
+green.
 
-**NON comprende il passo 5**, la rilettura umana obbligatoria di `FR11.2`: quella non è
-delegabile e va cronometrata a parte dall'owner, che aggiunge il proprio tempo a questa
-riga. Gli 8 minuti sono quindi il costo *assistito*, non il costo totale — e vanno letti
-così, non spacciati per il tempo pieno.
+**It does NOT include step 5**, the mandatory human review of `FR11.2`: that cannot
+be delegated and must be timed separately by the owner, who adds their own time to
+this row. The 8 minutes are therefore the *assisted* cost, not the total cost — and
+should be read that way, not passed off as the full time.
 
-**Due costi incontrati che non erano previsti dal runbook**, e che vale la pena
-registrare perché li pagherà ogni lezione futura:
+**Two costs encountered that the runbook did not foresee**, worth recording because
+every future lesson will pay them:
 
-1. `select-span` può selezionare **solo confini di segmento**, e `alignFurigana` riduce
-   una frase intera a due segmenti (nucleo con kanji + coda in kana). Isolare una parola
-   *dentro* la frase non è esprimibile: la frase va scelta perché il segmento 0 coincida
-   con ciò che si vuole far selezionare. Verificarlo richiede di calcolare i segmenti
-   prima di scrivere l'esercizio, non dopo.
-2. Cambiare il contenuto obbliga a rigenerare il seed e ad aggiornare la sentinella del
-   conteggio. Entrambi i passi sono già nel runbook (6 e 7) e sono **imposti da un test**,
-   quindi non si possono dimenticare — ma vanno contati nel tempo.
+1. `select-span` can select **only segment boundaries**, and `alignFurigana` reduces
+   a whole sentence to two segments (kanji core + kana tail). Isolating a word
+   *inside* the sentence cannot be expressed: the sentence has to be chosen so that
+   segment 0 matches what you want selected. Checking this means computing the
+   segments before writing the exercise, not after.
+2. Changing the content forces you to regenerate the seed and update the count
+   sentinel. Both steps are already in the runbook (6 and 7) and are **enforced by a
+   test**, so they cannot be forgotten — but they have to be counted in the time.
 
-**Il debito che la prima lezione ha pagato, e che la seconda non pagherà.** Oltre agli
-8 minuti di autorazione, la prima lezione vera ha fatto emergere tre difetti latenti
-della pipeline, costati circa quaranta minuti in più. Non sono costo per-lezione: sono
-debito una volta sola, e vanno tenuti distinti dalla misura di `M5` invece di gonfiarla.
+**The debt the first lesson paid, and the second will not.** Beyond the 8 minutes of
+authoring, the first real lesson brought out three latent defects in the pipeline,
+which cost about forty extra minutes. They are not a per-lesson cost: they are
+one-off debt, and they must be kept apart from the `M5` measurement instead of
+inflating it.
 
-1. **Il seed cancellava la migrazione precedente.** Un test pretendeva «esattamente un
-   seed committato», ma la cronologia delle migrazioni è append-only: `supabase db push`
-   fallisce se un file già applicato sparisce dal repository. Sarebbe stato un intervento
-   manuale sulla cronologia in produzione **a ogni cambio di contenuto**. Ora i seed si
-   accumulano e il controllo anti-deriva guarda il più recente.
-2. **Il collaudo e2e era legato al nome di un file.** Cercava una tessera della lezione
-   campione; appena il curriculum ha avuto la sua prima lezione vera, si è rotto. Ora
-   sceglie la lezione come la sceglie il dominio: `order` minimo.
-3. **Il seed aggiornava senza rimuovere.** Correggere una frase cambia l'identità
-   dell'esercizio (`AD-23`), quindi la versione sbagliata restava nel database a fianco
-   di quella corretta — misurato: 4 esercizi per una lezione che ne ha 3. Ora il seed
-   riconcilia.
+1. **The seed deleted the previous migration.** A test required "exactly one
+   committed seed", but migration history is append-only: `supabase db push` fails
+   if an already applied file disappears from the repository. It would have meant a
+   manual intervention on the production history **at every content change**. Now
+   seeds accumulate and the anti-drift check looks at the most recent one.
+2. **The e2e acceptance check was tied to a file name.** It looked for a tile from
+   the sample lesson; as soon as the curriculum had its first real lesson, it broke.
+   Now it picks the lesson the way the domain does: lowest `order`.
+3. **The seed updated without removing.** Fixing a sentence changes the exercise's
+   identity (`AD-23`), so the wrong version stayed in the database next to the
+   corrected one — measured: 4 exercises for a lesson that has 3. Now the seed
+   reconciles.
 
-Tutti e tre avrebbero colpito **ogni** lezione successiva, e tutti e tre violavano
-`NFR9` allo stesso modo: un costo manuale che cresce col numero di lezioni già autorate.
-Sono stati trovati perché la prima lezione vera è stata portata fino in produzione, non
-fermandosi ai test verdi in locale.
+All three would have hit **every** later lesson, and all three violated `NFR9` in
+the same way: a manual cost that grows with the number of lessons already authored.
+They were found because the first real lesson was taken all the way to production,
+instead of stopping at green tests locally.
 
-Quando l'operatore misura le lezioni successive, aggiunge una riga per ciascuna. Solo
-con più righe si vede se `M5` regge o va ritarata: il punto di `NFR9` è che la decima
-riga non sia più lenta della seconda.
+When the operator measures later lessons, they add a row for each. Only with more
+rows can you see whether `M5` holds or needs retuning: the point of `NFR9` is that
+the tenth row is no slower than the second.
 
 ## Definition of Done (AC3)
 
-La Definition of Done del PRD §11 chiede **almeno cinque** lezioni autorate,
-revisionate e giocabili; l'**obiettivo è undici**, pari a quelle già viste
-dall'owner. Questo è il traguardo dell'epica di contenuto.
+The Definition of Done in PRD §11 asks for **at least five** lessons authored,
+reviewed and playable; the **goal is eleven**, matching those the owner has already
+watched. This is the content epic's target.
 
 <!-- authored-lessons: 20 -->
 <!-- dod-status: met -->
 
-**Stato reale.** Il repository contiene al momento **20** file di lezione sotto
-`content/lessons/`, tutti **validi** contro il cancello di Epic 2
+**Where things stand.** The repository currently holds **20** lesson files under
+`content/lessons/`, all **valid** against the Epic 2 gate
 (`validateLessons` → `[]`):
 
-- **19 lezioni di curriculum**, `order` da 1 a 19, una per ciascuno dei primi diciannove transcript
-  della cartella di lavoro. Il dettaglio — quanti esercizi ha ogni lezione, per tipo, e
-  da quale transcript sono stati estratti i fatti — è in `docs/content-inventory.md`.
-- `content/lessons/01-la-particella-wo.json` — `order: 900`, la lezione campione della
-  storia 2.7. Vive nella **fascia riservata 900+** perché nasce come fixture dei test e
-  la sua posizione nel curriculum è provvisoria: quando arriverà la lezione vera su を
-  va **sostituita**, non affiancata (avrebbero lo stesso `lessonId`). La lezione 2 del
-  curriculum esercita を come punto secondario, ma il suo punto primario è il pronome
-  zero: i due file non collidono.
+- **19 curriculum lessons**, `order` 1 to 19, one for each of the first nineteen
+  transcripts in the working folder. The details — how many exercises each lesson
+  has, by kind, and which transcript the facts were taken from — are in
+  `docs/content-inventory.md`.
+- `content/lessons/01-la-particella-wo.json` — `order: 900`, the sample lesson from
+  story 2.7. It lives in the **reserved range 900+** because it started as a test
+  fixture and its position in the curriculum is provisional: when the real lesson on
+  を arrives it must be **replaced**, not kept alongside (they would have the same
+  `lessonId`). Curriculum lesson 2 practises を as a secondary point, but its primary
+  point is the zero pronoun: the two files do not collide.
 
-**Verdetto DoD:** il traguardo delle cinque lezioni è **raggiunto**, e anche l'obiettivo
-di undici. Le lezioni dalla 2 alla 13 sono però state autorate con l'assistenza di un LLM
-e sono state pubblicate **senza la rilettura umana obbligatoria** del passo 5 del runbook
-(`FR11.2`): il 28-09-2026 l'owner ha rinunciato esplicitamente a farla, per la lunghezza.
-Al suo posto c'è stata una **rilettura indipendente eseguita da un secondo LLM**, che ha
-trovato cinque errori reali (un distrattore corretto, quattro spiegazioni imprecise) e tre
-casi dubbi, tutti corretti prima del commit. È una difesa più debole di quella prevista:
-chi incontra un esercizio sbagliato in queste lezioni sa da dove viene. Il conteggio misura
-i file validi, non la rilettura. Il verdetto è tenuto
-onesto da una seconda sentinella machine-readable — `<!-- dod-status: … -->` — che il
-test **accoppia al conteggio reale**: finché le lezioni sono meno di cinque vale
-`below-target`; quando si raggiungono le cinque va portata a `met`. Così il verdetto
-non può restare stantio — un doc che dichiarasse `below-target` con cinque o più
-lezioni (o `met` con meno) renderebbe il test **rosso** — senza vincolare la prosa
-umana, libera di spiegare entrambi gli stati. La sentinella è distinta dalla prosa
-proprio perché la spiegazione qui nomina entrambi gli stati.
+**DoD verdict:** the five-lesson target is **met**, and so is the goal of eleven.
+Lessons 2 to 13, however, were authored with the help of an LLM and published
+**without the mandatory human review** of step 5 of the runbook (`FR11.2`): on
+28-09-2026 the owner explicitly chose not to do it, because of its length. In its
+place there was an **independent review run by a second LLM**, which found five real
+errors (one distractor that was actually correct, four imprecise explanations) and
+three doubtful cases, all fixed before the commit. It is a weaker defence than the
+one planned: whoever runs into a wrong exercise in these lessons knows where it
+comes from. The count measures valid files, not the review. The verdict is kept
+honest by a second machine-readable sentinel — `<!-- dod-status: … -->` — that the
+test **ties to the real count**: while there are fewer than five lessons it reads
+`below-target`; once five are reached it must be changed to `met`. So the verdict
+cannot go stale — a doc that said `below-target` with five or more lessons (or `met`
+with fewer) would turn the test **red** — without constraining the human prose, which
+is free to explain both states. The sentinel is kept separate from the prose
+precisely because the explanation here names both states.
 
-Il conteggio qui sopra è tenuto **onesto** da una forcing function: la sentinella
-machine-readable `<!-- authored-lessons: N -->` è confrontata dal test con il numero
-reale di file `*.json` sotto `content/lessons/`. Aggiungere una lezione senza
-aggiornare questo numero (o viceversa) rende il test **rosso**: il tracker della DoD
-non può mentire in silenzio.
+The count above is kept **honest** by a forcing function: the machine-readable
+sentinel `<!-- authored-lessons: N -->` is compared by the test with the real number
+of `*.json` files under `content/lessons/`. Adding a lesson without updating this
+number (or vice versa) turns the test **red**: the DoD tracker cannot silently lie.
 
-Il test **non** asserisce `N ≥ 5` (sarebbe rosso ora, e un agente non può renderlo
-verde autorando lezioni): il traguardo ≥ 5 resta **prosa dichiarata** e azione
-dovuta all'operatore. Ciò che il test prova meccanicamente è che le lezioni
-**esistenti validano** (guardia anti-vacuità) e che il contatore è **allineato** al
-contenuto reale.
+The test does **not** assert `N ≥ 5` (it would be red now, and an agent cannot make
+it green by authoring lessons): the ≥ 5 target remains **stated prose** and an
+action left to the operator. What the test proves mechanically is that the
+**existing** lessons **validate** (guard against vacuity) and that the counter is
+**aligned** with the real content.
 
-## Collocazione e limite
+## Placement and limit
 
-Questa storia è l'**accettazione documentale** dell'epica 6, non un altro strumento.
-Costruisce e prova tutto ciò che un agente può produrre:
+This story is the **documentary acceptance** of epic 6, not another tool. It builds
+and proves everything an agent can produce:
 
-- l'**analisi NFR9** (AC1) — l'esame passo per passo del runbook e il verdetto;
-- la **metodologia e la tabella di misura** di `M5` (AC2);
-- il **tracciamento della DoD** (AC3) — il traguardo, la sentinella e lo stato reale;
-- il **test-ancora** `src/authoring-cost.test.ts`, che tiene onesto tutto quanto sopra.
+- the **NFR9 analysis** (AC1) — the step-by-step examination of the runbook and the
+  verdict;
+- the **methodology and the measurement table** for `M5` (AC2);
+- the **DoD tracking** (AC3) — the target, the sentinel and where things stand;
+- the **anchor test** `src/authoring-cost.test.ts`, which keeps all of the above
+  honest.
 
-Due parti dipendono da **esecuzione umana fuori dal repository** e sono quindi
-**dovute all'operatore** (la storia si finalizza a `awaiting-operator`, non a
-`blocked`), sul modello dell'audit retroattivo di `docs/contamination-check.md`:
+Two parts depend on **human action outside the repository** and are therefore
+**left to the operator** (the story ends in `awaiting-operator`, not `blocked`),
+on the model of the retroactive audit in `docs/contamination-check.md`:
 
-- **Misurare il tempo reale** `M5` (AC2): guardare la fonte e cronometrare
-  un'esecuzione completa del flusso — un agente non può guardare la fonte.
-- **Autorare, rileggere e committare ≥ 4 lezioni ulteriori** (AC3): committare
-  contenuto di corso richiede la **rilettura umana obbligatoria** (FR11.2, passo 5
-  del runbook), che per progetto **non è delegabile a un agente** — coerente con lo
-  `Never` della storia 6.2. L'unica prova sul contenuto che un agente costruisce è
-  che le lezioni **esistenti** validano.
+- **Measuring the real `M5` time** (AC2): watching the source and timing a complete
+  run of the procedure — an agent cannot watch the source.
+- **Authoring, reviewing and committing ≥ 4 more lessons** (AC3): committing course
+  content requires the **mandatory human review** (FR11.2, step 5 of the runbook),
+  which by design **cannot be delegated to an agent** — consistent with story 6.2's
+  `Never`. The only evidence about content that an agent builds is that the
+  **existing** lessons validate.
 
-Questo documento chiude l'analisi che il runbook (`docs/authoring-runbook.md`)
-rende eseguibile: quello dice **come** si autora una lezione, questo dice **perché**
-il costo di farlo N volte non degrada e **dove** siamo rispetto al traguardo.
+This document completes the analysis that the runbook (`docs/authoring-runbook.md`)
+makes actionable: that one says **how** a lesson is authored, this one says **why**
+the cost of doing it N times does not degrade and **where** we stand against the
+target.

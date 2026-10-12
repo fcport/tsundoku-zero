@@ -1,73 +1,69 @@
-Licenza del contenuto delle lezioni
-====================================
+Licence for the lesson content
+==============================
 
 Copyright (c) 2026 Federico Casadei
 
-Questo file licenzia il CONTENUTO delle lezioni — i file dati sotto
-`content/lessons/` (le frasi giapponesi, le spiegazioni bilingui e i titoli
-autorati) — non il codice dell'applicazione. Il codice è licenziato a parte,
-con licenza MIT, nel file `LICENSE`. Le due licenze sono separate perché codice
-e contenuto sono due tipi di opera diversi: vedi `README.md`, sezione «Le due
-licenze».
+This file licenses the lesson CONTENT — the data files under
+`content/lessons/` (the Japanese sentences, the bilingual explanations and the
+authored titles) — not the application code. The code is licensed separately,
+under the MIT licence, in the `LICENSE` file. The two licences are kept apart
+because code and content are two different kinds of work: see `README.md`,
+section "The two licences".
 
-Il contenuto delle lezioni è rilasciato sotto:
+The lesson content is released under:
 
     Creative Commons Attribution-ShareAlike 4.0 International
     (CC BY-SA 4.0)
 
-Identificatore SPDX: CC-BY-SA-4.0
+SPDX identifier: CC-BY-SA-4.0
 
-Testo legale integrale (autoritativo):
+Full legal text (authoritative):
     https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-Sintesi leggibile (deed):
+Human-readable summary (deed):
     https://creativecommons.org/licenses/by-sa/4.0/
 
-Questo file identifica la licenza in modo non ambiguo — nome completo,
-identificatore SPDX e URL canonico del testo legale — invece di trascrivere le
-circa 7500 parole del legalcode, per non introdurre refusi in un testo lungo. Il
-testo autoritativo è quello all'URL sopra.
+This file identifies the licence unambiguously — full name, SPDX identifier and
+canonical URL of the legal text — instead of copying the roughly 7,500 words of
+the legal code, so as not to introduce typos into a long text. The
+authoritative text is the one at the URL above.
 
-Riassunto dei termini (traduzione di cortesia del deed Creative Commons)
------------------------------------------------------------------------
+Summary of the terms (from the Creative Commons deed)
+-----------------------------------------------------
 
-Sei libero di:
+You are free to:
 
-- Condividere — riprodurre e distribuire il materiale con qualsiasi mezzo e
-  formato.
-- Adattare — remixare, trasformare il materiale e basarti su di esso per
-  qualsiasi fine, anche commerciale.
+- Share — copy and redistribute the material in any medium or format.
+- Adapt — remix, transform, and build upon the material for any purpose, even
+  commercially.
 
-Il licenziante non può revocare questi diritti fintanto che rispetti i termini
-della licenza. Alle seguenti condizioni:
+The licensor cannot revoke these freedoms as long as you follow the licence
+terms. Under the following terms:
 
-- Attribuzione (BY) — devi riconoscere una menzione di paternità adeguata,
-  fornire un link alla licenza e indicare se sono state effettuate delle
-  modifiche. Puoi farlo in qualsiasi maniera ragionevole possibile, ma non in
-  modo tale da suggerire che il licenziante avalli te o il tuo utilizzo del
-  materiale.
-- StessaLicenza (SA, share-alike) — se remixi, trasformi il materiale o ti basi
-  su di esso, devi distribuire i tuoi contributi con la stessa licenza del
-  materiale originario.
+- Attribution (BY) — you must give appropriate credit, provide a link to the
+  licence, and indicate if changes were made. You may do so in any reasonable
+  manner, but not in any way that suggests the licensor endorses you or your
+  use.
+- ShareAlike (SA) — if you remix, transform, or build upon the material, you
+  must distribute your contributions under the same licence as the original.
 
-Non ci sono ulteriori restrizioni — non puoi applicare termini legali o misure
-tecnologiche che impongano ad altri soggetti dei vincoli giuridici su quanto la
-licenza consente loro di fare.
+No additional restrictions — you may not apply legal terms or technological
+measures that legally restrict others from doing anything the licence permits.
 
-Attribuzione
-------------
+Attribution
+-----------
 
-Nel riusare il contenuto, attribuisci: «Tsundoku Zero — contenuto delle lezioni
-di Federico Casadei, CC BY-SA 4.0» con un link alla licenza
-(https://creativecommons.org/licenses/by-sa/4.0/) e l'indicazione di eventuali
-modifiche.
+When reusing the content, credit it as: "Tsundoku Zero — lesson content by
+Federico Casadei, CC BY-SA 4.0", with a link to the licence
+(https://creativecommons.org/licenses/by-sa/4.0/) and an indication of any
+changes.
 
-Esclusione: l'audio delle frasi
--------------------------------
+Exclusion: the sentence audio
+-----------------------------
 
-I file audio sotto `public/audio/` NON sono coperti da questa licenza, né dalla
-licenza MIT del codice. Sono generati con il software VOICEVOX usando la voce
-«No.7» e seguono le condizioni d'uso di quella voce: uso non commerciale, con la
-menzione «VOICEVOX:No.7». Ogni uso commerciale richiede il consenso preventivo
-del No.7製作委員会 (https://voiceseven.com/). Condizioni complete:
+The audio files under `public/audio/` are NOT covered by this licence, nor by
+the MIT licence of the code. They are generated with the VOICEVOX software
+using the voice "No.7" and follow that voice's terms of use: non-commercial
+use, credited as "VOICEVOX:No.7". Any commercial use requires prior consent
+from the No.7製作委員会 (https://voiceseven.com/). Full terms:
 https://voiceseven.com/#j0200

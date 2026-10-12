@@ -1,238 +1,238 @@
-# L'audit screen reader della sessione (storia 7.6)
+# The session screen reader audit (story 7.6)
 
-Questo documento è il **record di audit** dell'accessibilità con **screen reader
-reale** della schermata di esercizio. Segue lo stesso precedente durevole di
-`docs/session-keyboard-contract.md` (AD-15) e di `docs/i18n-boundary.md` (AD-14):
-un file di contratto/record con un test che ne verifica esistenza e contenuti.
+This document is the **audit record** for accessibility of the exercise screen with
+a **real screen reader**. It follows the same durable precedent as
+`docs/session-keyboard-contract.md` (AD-15) and `docs/i18n-boundary.md` (AD-14):
+a contract/record file with a test that checks it exists and what it says.
 
-## Scopo e ambito
+## Purpose and scope
 
-Il **contratto di accessibilità** della sessione — furigana in
-`<rt aria-hidden="true">` così che una voce giapponese legga la frase UNA volta e
-non due; `lang="ja"` sul giapponese; **UNA sola** live region `aria-live="polite"`
-che annuncia esito e avanzamento; ordine di lettura
-**consegna → frase → opzioni → esito → spiegazione** — è **costruito** e **coperto
-da test** di componente/jsdom. Ma quei test girano contro markup statico: asseriscono
-gli **attributi** DOM/ARIA, non ciò che uno screen reader reale con voce giapponese
-**pronuncia** davvero.
+The session's **accessibility contract** — furigana in
+`<rt aria-hidden="true">` so that a Japanese voice reads the sentence ONCE and not
+twice; `lang="ja"` on Japanese; **a single** `aria-live="polite"` live region that
+announces outcome and progress; reading order
+**prompt → sentence → options → outcome → explanation** — is **built** and **covered
+by** component/jsdom **tests**. But those tests run against static markup: they
+assert the DOM/ARIA **attributes**, not what a real screen reader with a Japanese
+voice actually **says**.
 
-L'unica affermazione di accessibilità che **nessun test automatico può fare** — che
-uno screen reader vero percorre la sessione in modo comprensibile e legge la frase
-**una sola volta** — è l'oggetto di questo audit. L'agente scrive e verifica tutto
-**offline** (inventario, comportamento atteso, procedura); l'**operatore** esegue lo
-screen reader reale e ne registra l'esito nella sezione «Esito misurato». Finché non
-lo fa, «accessibile» resta **ragionato, non misurato**.
+The only accessibility claim that **no automated test can make** — that a real
+screen reader walks through the session in an understandable way and reads the
+sentence **only once** — is the subject of this audit. The agent writes and checks
+everything **offline** (inventory, expected behaviour, procedure); the **operator**
+runs the real screen reader and records the outcome in the "Measured outcome"
+section. Until they do, "accessible" remains **reasoned, not measured**.
 
-**Ambito:** il **percorso della sessione di esercizio**. Fuori ambito le voci a11y
-app-wide differite (vedi «Voci note adiacenti»): sono citate come contorno che
-l'operatore può verificare opportunisticamente, non come Acceptance Criteria della 7.6.
+**Scope:** the **exercise session path**. Out of scope are the deferred app-wide
+a11y items (see "Known adjacent items"): they are mentioned as surrounding context
+the operator can check opportunistically, not as Acceptance Criteria of 7.6.
 
-## Inventario della copertura automatica ESISTENTE
+## Inventory of the EXISTING automated coverage
 
-Questi test girano oggi e asseriscono gli **attributi** DOM/ARIA. Ambiente `node`
-(`vitest.config.ts`), resa statica con `renderToStaticMarkup` — nessun runtime di
-screen reader:
+These tests run today and assert the DOM/ARIA **attributes**. `node` environment
+(`vitest.config.ts`), static rendering with `renderToStaticMarkup` — no screen
+reader runtime:
 
-- **`src/ui/JapaneseText.test.tsx`** — ogni `<rt>` reso porta `aria-hidden="true"`
-  (il match `bareRt` fallisce se un `<rt>` è nudo); l'involucro resta `lang="ja"`
-  anche a furigana nascosta; il contenuto dell'`<rt>` è la kana **verbatim**, mai
-  romaji.
-- **`src/features/study/SessionScreen.test.tsx`** — rende **esattamente una** live
-  region `aria-live="polite"` nel ramo di sessione attiva; è `sr-only` e **vuota**
-  prima della risposta; **nessuna** `aria-live` su scheletro, completamento o stato
-  vuoto (così resta una sola per l'intera sessione).
-- **`src/features/study/SessionScreen.keyboard.test.tsx`** — la live region annuncia
-  **esito + avanzamento** dopo la risposta; una risposta **errata** annuncia
-  `session.outcome.incorrect` e **mai** `session.outcome.correct` (copre il ramo
-  `incorrect`).
-- **`src/features/study/session-keyboard-contract.test.ts`** — verifica il documento
-  del **contratto tastiera** (`docs/session-keyboard-contract.md`): ordine di lettura
-  = tab-order = ordine dei tasti numerici, anello di focus, `Enter` avanza / `Esc`
-  esce, UNA sola `aria-live="polite"`.
-- **`src/features/study/ExerciseCard.test.tsx`** — la **presenza** dei nodi della
-  card (la consegna/prompt; la frase come `JapaneseText`, con `lang="ja"` + `<ruby>`;
-  il **numero** di opzioni per kind), l'ordine **solo fra le opzioni** (`answerOptions`,
-  `indexOf` ordinato) e gli stati reveal/esito/spiegazione. **NON** verifica l'ordine
-  di lettura **top-level** consegna → frase → opzioni → esito → spiegazione: non fa
-  alcun confronto di posizione fra quei nodi.
-- **`src/features/study/ProgressMeter.test.tsx`** — `role="progressbar"` con
+- **`src/ui/JapaneseText.test.tsx`** — every rendered `<rt>` carries
+  `aria-hidden="true"` (the `bareRt` match fails if an `<rt>` is bare); the wrapper
+  stays `lang="ja"` even with furigana hidden; the content of the `<rt>` is the kana
+  **verbatim**, never romaji.
+- **`src/features/study/SessionScreen.test.tsx`** — renders **exactly one** live
+  region `aria-live="polite"` in the active session branch; it is `sr-only` and
+  **empty** before the answer; **no** `aria-live` on skeleton, completion or empty
+  state (so it stays one for the whole session).
+- **`src/features/study/SessionScreen.keyboard.test.tsx`** — the live region
+  announces **outcome + progress** after the answer; a **wrong** answer announces
+  `session.outcome.incorrect` and **never** `session.outcome.correct` (covers the
+  `incorrect` branch).
+- **`src/features/study/session-keyboard-contract.test.ts`** — checks the
+  **keyboard contract** document (`docs/session-keyboard-contract.md`): reading
+  order = tab-order = number key order, focus ring, `Enter` advances / `Esc` exits,
+  a SINGLE `aria-live="polite"`.
+- **`src/features/study/ExerciseCard.test.tsx`** — the **presence** of the card's
+  nodes (the prompt; the sentence as `JapaneseText`, with `lang="ja"` + `<ruby>`;
+  the **number** of options per kind), the order **among the options only**
+  (`answerOptions`, ordered `indexOf`) and the reveal/outcome/explanation states. It
+  does **NOT** check the **top-level** reading order prompt → sentence → options →
+  outcome → explanation: it makes no position comparison between those nodes.
+- **`src/features/study/ProgressMeter.test.tsx`** — `role="progressbar"` with
   `aria-label` / `aria-valuenow` / `aria-valuemin` / `aria-valuemax`.
 
-**L'ordine di lettura top-level fra i nodi della card (consegna → frase → opzioni →
-esito → spiegazione) NON è asserito da alcun test automatico** — nessun test confronta
-le posizioni di quei nodi fra loro. È precisamente parte di ciò che l'audit manuale
-misura (AC2): un lettore reale percorre i nodi nell'ordine del DOM, e solo l'operatore
-può udire se l'ordine risultante è comprensibile.
+**The top-level reading order between the card's nodes (prompt → sentence → options →
+outcome → explanation) is NOT asserted by any automated test** — no test compares
+the positions of those nodes with each other. That is exactly part of what the
+manual audit measures (AC2): a real reader walks the nodes in DOM order, and only
+the operator can hear whether the resulting order makes sense.
 
-**L'esperienza a runtime con screen reader reale è l'UNICA affermazione di
-accessibilità NON coperta da alcun test automatico.** Nessuno dei test qui sopra
-esegue una voce TTS o un lettore di schermo: asseriscono l'artefatto DOM, non la
-pronuncia. È precisamente ciò che l'operatore misura in «Esito misurato» (AC3). Il
-test companion `src/features/study/session-screen-reader-audit.test.ts` verifica
-questo **documento** (l'artefatto), non il comportamento a runtime.
+**The runtime experience with a real screen reader is the ONLY accessibility claim
+not covered by any automated test.** None of the tests above runs a TTS voice or a
+screen reader: they assert the DOM artefact, not the pronunciation. That is exactly
+what the operator measures in "Measured outcome" (AC3). The companion test
+`src/features/study/session-screen-reader-audit.test.ts` checks this **document**
+(the artefact), not the runtime behaviour.
 
-## Comportamento atteso (ragionato dal codice)
+## Expected behaviour (reasoned from the code)
 
-Ragionato dal codice reale, ancorato. Sono **aspettative** che l'operatore conferma
-o smentisce; non sono misurazioni.
+Reasoned from the real code, with anchors. These are **expectations** the operator
+confirms or refutes; they are not measurements.
 
-### AC1 — la frase giapponese è letta UNA volta
+### AC1 — the Japanese sentence is read ONCE
 
-- In `src/ui/JapaneseText.tsx:57-74` l'involucro è `<span lang="ja">` (`:59`) — il
-  giapponese è dato, non passa da i18n (AD-14/UX-DR24) — reso **sempre**, anche a
-  furigana nascosta.
-- Ogni annotazione ruby è `<rt aria-hidden="true">` (`:65`) con `<rp>` di ripiego a
-  parentesi (`:64,66`). Motivazione nel commento del contratto (`:12-16`, UX-DR28):
-  uno screen reader con voce giapponese legge già il testo base; un `<rt>` **non**
-  nascosto lo farebbe leggere **due volte** (base + lettura kana).
-- **Attesa:** con voce giapponese, la frase è pronunciata **una** volta — il testo
-  base — e la furigana (`<rt>`) **non** è vocalizzata.
+- In `src/ui/JapaneseText.tsx:57-74` the wrapper is `<span lang="ja">` (`:59`) —
+  Japanese is data, it does not go through i18n (AD-14/UX-DR24) — rendered
+  **always**, even with furigana hidden.
+- Every ruby annotation is `<rt aria-hidden="true">` (`:65`) with fallback `<rp>`
+  parentheses (`:64,66`). The reasoning is in the contract comment (`:12-16`,
+  UX-DR28): a screen reader with a Japanese voice already reads the base text; an
+  `<rt>` that is **not** hidden would make it read **twice** (base + kana reading).
+- **Expectation:** with a Japanese voice, the sentence is spoken **once** — the base
+  text — and the furigana (`<rt>`) is **not** voiced.
 
-### AC2 — ordine comprensibile consegna → opzioni → esito → spiegazione
+### AC2 — understandable order prompt → options → outcome → explanation
 
-L'ordine di lettura **completo** dei nodi è consegna → **frase (AC1)** → opzioni →
-esito → spiegazione. AC2 osserva l'ordine degli elementi che **nomina** — consegna,
-opzioni, esito, spiegazione; la **frase** giapponese è competenza di AC1 (letta una
-volta) e sta fra la consegna e le opzioni. Le due formulazioni descrivono la stessa
-sequenza del DOM, viste da AC diversi.
+The **full** reading order of the nodes is prompt → **sentence (AC1)** → options →
+outcome → explanation. AC2 looks at the order of the elements it **names** — prompt,
+options, outcome, explanation; the Japanese **sentence** belongs to AC1 (read once)
+and sits between the prompt and the options. The two formulations describe the same
+DOM sequence, seen from different ACs.
 
-- L'ordine semantico dei nodi della card è, in `src/features/study/ExerciseCard.tsx:109-174`:
-  consegna (`<p>` con la chiave i18n del kind, `:112`) → **frase giapponese**
-  (`JapaneseText`, `:116-118`) → `<ul>` di `<button aria-pressed>`, uno per opzione,
-  nell'ordine del dominio (`:126-154`) → «mostra la spiegazione» (`:159-167`) →
+- The semantic order of the card's nodes is, in `src/features/study/ExerciseCard.tsx:109-174`:
+  prompt (`<p>` with the kind's i18n key, `:112`) → **Japanese sentence**
+  (`JapaneseText`, `:116-118`) → `<ul>` of `<button aria-pressed>`, one per option,
+  in domain order (`:126-154`) → "Show the explanation" (`:159-167`) →
   `ExplanationPanel` (`:171-173`).
-- `src/features/study/ExplanationPanel.tsx:38-63` rende, a risposta data, l'esito
-  **testuale** (`session.outcome.correct` | `incorrect`, `:42-46`) e il testo della
-  spiegazione con `lang` sulla lingua **effettiva** resa (`:52`) — così una voce
-  legge italiano/inglese con la lingua giusta, non trattato come giapponese.
-- L'ordine di lettura = tab-order = ordine dei tasti numerici è fissato dal contratto
-  tastiera (`docs/session-keyboard-contract.md`, sezioni 1 e 4).
-- **Attesa:** navigando col lettore, i nodi sono annunciati in quest'ordine, senza
-  salti né inversioni; ogni opzione è un bottone con stato `aria-pressed`.
+- `src/features/study/ExplanationPanel.tsx:38-63` renders, once answered, the
+  **textual** outcome (`session.outcome.correct` | `incorrect`, `:42-46`) and the
+  explanation text with `lang` set to the language **actually** rendered (`:52`) —
+  so a voice reads Italian/English in the right language, not treated as Japanese.
+- Reading order = tab-order = number key order is fixed by the keyboard contract
+  (`docs/session-keyboard-contract.md`, sections 1 and 4).
+- **Expectation:** navigating with the reader, the nodes are announced in this order,
+  with no jumps or reversals; every option is a button with an `aria-pressed` state.
 
-### AC3 — l'avanzamento è annunciato dalla live region unica
+### AC3 — progress is announced by the single live region
 
-- In `src/features/study/SessionScreen.tsx:454-503`, il ramo di **sessione attiva**
-  rende `<main>` → `ProgressMeter` → `ExerciseCard` → «prossimo esercizio» → «esci» e
-  **UNA sola** `<p aria-live="polite" className="sr-only">` (`:498-502`).
-- Alla risposta la live region annuncia **esito + avanzamento**: p.es. «That answer is
-  correct. 1 of 5 completed» — `session.outcome.*` più
+- In `src/features/study/SessionScreen.tsx:454-503`, the **active session** branch
+  renders `<main>` → `ProgressMeter` → `ExerciseCard` → "Next exercise" → "Leave the
+  session" and **a single** `<p aria-live="polite" className="sr-only">` (`:498-502`).
+- On answering, the live region announces **outcome + progress**: e.g. «That answer
+  is correct. 1 of 5 completed» — `session.outcome.*` plus
   `session.progress.announce` («{{completed}} of {{total}} completed», in
-  `src/i18n/en.ts:164-196`). Prima della risposta è **vuota** (stringa vuota).
-- La `ProgressMeter` (`src/features/study/ProgressMeter.tsx`) porta in parallelo
-  `role="progressbar"` con `aria-valuenow`/`min`/`max` per lo stato numerico.
-- È `sr-only`: l'esito visibile lo dà già l'`ExplanationPanel`, l'avanzamento la barra;
-  la live region serve alla sola assistive technology. **Non** è resa su
-  scheletro/completamento/vuoto — così resta esattamente una per l'intera sessione.
-- **Attesa:** dopo aver risposto, il lettore annuncia da solo l'esito e «X di N
-  completati» da una sola live region `aria-live="polite"`, una volta sola e senza
-  doppioni (nessun annuncio duplicato indice di più d'una live region).
+  `src/i18n/en.ts:164-196`). Before the answer it is **empty** (empty string).
+- The `ProgressMeter` (`src/features/study/ProgressMeter.tsx`) carries, in parallel,
+  `role="progressbar"` with `aria-valuenow`/`min`/`max` for the numeric state.
+- It is `sr-only`: the visible outcome is already given by the `ExplanationPanel`,
+  the progress by the bar; the live region is for assistive technology only. It is
+  **not** rendered on skeleton/completion/empty — so it stays exactly one for the
+  whole session.
+- **Expectation:** after answering, the reader announces on its own the outcome and
+  «X of N completed» from a single live region `aria-live="polite"`, only once and
+  without duplicates (a duplicated announcement would point to more than one live
+  region).
 
-## Procedura manuale riproducibile
+## Reproducible manual procedure
 
-L'operatore esegue questa procedura con uno screen reader reale e una voce TTS
-giapponese, poi compila «Esito misurato» e «Difetti».
+The operator runs this procedure with a real screen reader and a Japanese TTS
+voice, then fills in "Measured outcome" and "Defects".
 
-### 1. Abilitare uno screen reader con voce giapponese
+### 1. Enable a screen reader with a Japanese voice
 
-Il comportamento di `aria-live` e la commutazione di `lang` sono **dipendenti dal
-browser**: usare un abbinamento screen reader ↔ browser raccomandato, così l'audit è
-riproducibile.
+The behaviour of `aria-live` and `lang` switching **depends on the browser**: use a
+recommended screen reader ↔ browser pairing, so the audit is reproducible.
 
-- **Windows — NVDA:** installare NVDA; installare/attivare una voce TTS giapponese
-  (p.es. Windows OneCore giapponese, o una voce Vocalizer/eSpeak con supporto `ja`).
-  In NVDA → Preferenze → Impostazioni → Voce, verificare che il giapponese venga
-  vocalizzato (NVDA usa la lingua del documento; l'involucro `lang="ja"` la guida).
-  **Abbinamento raccomandato: NVDA + Firefox oppure NVDA + Chrome.**
-- **macOS — VoiceOver:** Preferenze di Sistema → Accessibilità → VoiceOver;
-  aggiungere una voce giapponese (Kyoko/Otoya) in VoiceOver Utility → Speech.
-  VoiceOver commuta lingua sui nodi con `lang="ja"`. **Abbinamento raccomandato:
-  VoiceOver + Safari.**
+- **Windows — NVDA:** install NVDA; install/enable a Japanese TTS voice (e.g.
+  Windows OneCore Japanese, or a Vocalizer/eSpeak voice with `ja` support). In
+  NVDA → Preferences → Settings → Speech, check that Japanese is voiced (NVDA uses
+  the document language; the `lang="ja"` wrapper drives it).
+  **Recommended pairing: NVDA + Firefox or NVDA + Chrome.**
+- **macOS — VoiceOver:** System Preferences → Accessibility → VoiceOver; add a
+  Japanese voice (Kyoko/Otoya) in VoiceOver Utility → Speech. VoiceOver switches
+  language on nodes with `lang="ja"`. **Recommended pairing: VoiceOver + Safari.**
 
-### 2. Avviare l'app e raggiungere una sessione
+### 2. Start the app and reach a session
 
-- `npm run dev` contro un progetto **Supabase reale** (nessun backend finto/locale —
-  AD-12/AD-13: un solo progetto reale).
-- Accedere con un account che abbia **almeno la prima lezione sbloccata**, così da
-  raggiungere una sessione con esercizi. Avviare la sessione fino a vedere una card
-  (consegna + frase giapponese + opzioni).
+- `npm run dev` against a **real Supabase** project (no fake/local backend —
+  AD-12/AD-13: a single real project).
+- Sign in with an account that has **at least the first lesson unlocked**, so you
+  can reach a session with exercises. Start the session until you see a card
+  (prompt + Japanese sentence + options).
 
-### 3. Percorrere la sessione
+### 3. Walk through the session
 
-Con lo screen reader attivo:
+With the screen reader on:
 
-1. **Consegna → frase → opzioni.** Navigare dall'alto (consegna, poi la frase
-   giapponese, poi le opzioni). Ascoltare come viene letta la **frase giapponese**:
-   annotare se il testo base è letto **una** volta o se la lettura kana (`<rt>`) viene
-   vocalizzata, facendola sentire **due** volte.
-2. **Rispondere** (click o tasto numerico `1`-`9`, cfr. contratto tastiera).
-3. **Esito → spiegazione → avanzamento.** Verificare che il lettore annunci l'esito
-   («That answer is correct/not correct.») e l'avanzamento («X of N completed»)
-   dalla live region, e che la spiegazione sia letta nella **lingua giusta**
-   (`lang` sul nodo). Annotare se l'esito + avanzamento è annunciato **UNA volta (non
-   ripetuto/doppio)**: un annuncio duplicato rivela a runtime il fallimento «più di una
-   live region / annuncio duplicato» che il test automatico non può cogliere
-   (specularmente al check «frase letta una volta vs due» di AC1).
-4. Osservare l'**ordine** complessivo: consegna → opzioni → esito → spiegazione,
-   senza salti.
+1. **Prompt → sentence → options.** Navigate from the top (prompt, then the Japanese
+   sentence, then the options). Listen to how the **Japanese sentence** is read:
+   note whether the base text is read **once** or whether the kana reading (`<rt>`)
+   is voiced too, so that it is heard **twice**.
+2. **Answer** (click or number key `1`-`9`, see the keyboard contract).
+3. **Outcome → explanation → progress.** Check that the reader announces the outcome
+   («That answer is correct/not correct.») and the progress («X of N completed»)
+   from the live region, and that the explanation is read in the **right language**
+   (`lang` on the node). Note whether outcome + progress is announced **ONCE (not
+   repeated/doubled)**: a duplicated announcement reveals at runtime the "more than
+   one live region / duplicated announcement" failure that the automated test cannot
+   catch (mirroring AC1's "sentence read once vs twice" check).
+4. Observe the overall **order**: prompt → options → outcome → explanation, with no
+   jumps.
 
-## Esito misurato
+## Measured outcome
 
-> **DA ESEGUIRE dall'operatore.** Questa sezione è vuota di risultati finché uno
-> screen reader reale non ha percorso la sessione. NON fabbricare risultati: l'agente
-> non può eseguire uno screen reader né udire una voce TTS giapponese.
+> **TO BE RUN by the operator.** This section has no results until a real screen
+> reader has walked through the session. DO NOT fabricate results: the agent cannot
+> run a screen reader or hear a Japanese TTS voice.
 
-**Come registrare.** Per ogni AC, sostituire il segnaposto `_da eseguire_` nella
-colonna «Esito misurato» con **ESITO: PASS** oppure **ESITO: FAIL** più una breve nota
-testuale di ciò che si è sentito (p.es. «PASS — frase letta una sola volta, kana non
-vocalizzata»), e compilare l'ultima colonna con **data / browser / screen reader /
-voce** usati. Non lasciare celle a metà: o `_da eseguire_` (non ancora misurato) o un
-esito PASS/FAIL con nota.
+**How to record.** For each AC, replace the `_to be run_` placeholder in the
+"Measured outcome" column with **OUTCOME: PASS** or **OUTCOME: FAIL** plus a short
+note on what was heard (e.g. «PASS — sentence read only once, kana not voiced»),
+and fill in the last column with the **date / browser / screen reader / voice**
+used. Do not leave cells half done: either `_to be run_` (not measured yet) or a
+PASS/FAIL outcome with a note.
 
-| AC | Aspettativa | Esito misurato | Data / browser / SR / voce |
+| AC | Expectation | Measured outcome | Date / browser / SR / voice |
 | --- | --- | --- | --- |
-| **AC1** | La frase giapponese è pronunciata **una** volta (non due); `<rt>` non è vocalizzato. | _da eseguire_ | _da eseguire_ |
-| **AC2** | Ordine comprensibile: consegna → opzioni → esito → spiegazione, senza salti. | _da eseguire_ | _da eseguire_ |
-| **AC3** | L'avanzamento («X di N completati») è annunciato dall'unica live region `aria-live="polite"`. | _da eseguire_ | _da eseguire_ |
+| **AC1** | The Japanese sentence is spoken **once** (not twice); `<rt>` is not voiced. | _to be run_ | _to be run_ |
+| **AC2** | Understandable order: prompt → options → outcome → explanation, with no jumps. | _to be run_ | _to be run_ |
+| **AC3** | Progress («X of N completed») is announced by the single live region `aria-live="polite"`. | _to be run_ | _to be run_ |
 
-## Difetti
+## Defects
 
-> **DA COMPILARE dall'operatore durante il run reale.** Registrare qui ogni
-> discrepanza fra il comportamento atteso e ciò che lo screen reader ha fatto
-> davvero (p.es. frase letta due volte, ordine invertito, avanzamento non annunciato).
-> Se nessun difetto emerge, dichiararlo esplicitamente. Nessun difetto è
-> pre-registrato: la lista è vuota finché l'operatore non misura.
+> **TO BE FILLED IN by the operator during the real run.** Record here every
+> mismatch between the expected behaviour and what the screen reader actually did
+> (e.g. sentence read twice, order reversed, progress not announced). If no defect
+> shows up, say so explicitly. No defect is pre-recorded: the list stays empty until
+> the operator measures.
 
-- _(nessun difetto registrato — da compilare al run)_
+- _(no defect recorded — to be filled in at the run)_
 
-## Definizione di completo e quando ri-eseguire
+## Definition of complete, and when to run it again
 
-- **Completo quando:** tutte e tre le righe AC («Esito misurato») hanno un esito
-  registrato (PASS/FAIL con nota) **e** i difetti sono elencati, oppure è dichiarato
-  esplicitamente «nessun difetto». Finché una riga AC resta `_da eseguire_`, l'audit è
-  incompleto.
-- **Ri-eseguire dopo ogni modifica a:** `src/ui/JapaneseText.tsx` (ruby /
-  `aria-hidden` — superficie di AC1), `src/features/study/ExerciseCard.tsx` o
-  `src/features/study/ExplanationPanel.tsx` (ordine di lettura — superficie di AC2), o
-  la live region in `src/features/study/SessionScreen.tsx` (annuncio esito/avanzamento
-  — superficie di AC3). È la convenzione dei documenti-contratto durevoli del repo
-  (`docs/session-keyboard-contract.md`, `docs/i18n-boundary.md`): il record diventa
-  **stale** quando la sua superficie di codice cambia, e va rimisurato.
+- **Complete when:** all three AC rows ("Measured outcome") have a recorded outcome
+  (PASS/FAIL with a note) **and** the defects are listed, or "no defects" is stated
+  explicitly. While an AC row is still `_to be run_`, the audit is incomplete.
+- **Run it again after any change to:** `src/ui/JapaneseText.tsx` (ruby /
+  `aria-hidden` — AC1's surface), `src/features/study/ExerciseCard.tsx` or
+  `src/features/study/ExplanationPanel.tsx` (reading order — AC2's surface), or the
+  live region in `src/features/study/SessionScreen.tsx` (outcome/progress
+  announcement — AC3's surface). This is the convention of the repo's durable
+  contract documents (`docs/session-keyboard-contract.md`, `docs/i18n-boundary.md`):
+  the record goes **stale** when its code surface changes, and must be measured
+  again.
 
-## Voci note adiacenti (fuori ambito 7.6)
+## Known adjacent items (outside the scope of 7.6)
 
-Queste voci a11y **app-wide** erano state parcheggiate «per l'audit 7.6», ma **non**
-sono negli Acceptance Criteria della 7.6 (il percorso della sessione). Sono
-**code-change** di altre storie, non ciò che la 7.6 chiede; correggerle è fuori
-scope. L'operatore, mentre ha lo screen reader attivo, **può** verificarle
-opportunisticamente e annotarle, ma la loro correzione appartiene alle storie
-proprietarie:
+These **app-wide** a11y items had been parked "for the 7.6 audit", but they are
+**not** in the Acceptance Criteria of 7.6 (the session path). They are **code
+changes** belonging to other stories, not what 7.6 asks for; fixing them is out of
+scope. While the screen reader is on, the operator **may** check them
+opportunistically and note them, but fixing them belongs to the stories that own
+them:
 
-- **DW-10** (`_bmad-output/implementation-artifacts/deferred-work.md:79-85`) — anello
-  di focus visibile (`focus-visible`) mancante sugli interattivi **app-wide**
-  (auth/settings/shell). Nella sessione l'anello di focus è invece presente
-  (contratto tastiera, sezione 5).
+- **DW-10** (`_bmad-output/implementation-artifacts/deferred-work.md:79-85`) —
+  visible focus ring (`focus-visible`) missing on **app-wide** interactive elements
+  (auth/settings/shell). In the session, by contrast, the focus ring is present
+  (keyboard contract, section 5).
 - **DW-14** (`_bmad-output/implementation-artifacts/deferred-work.md:113-118`) —
-  wiring a11y della **conferma distruttiva** (cancellazione account): manca
-  `aria-expanded` sul grilletto, la gestione del focus alla transizione di fase e
-  l'annuncio live del cambio di stato.
+  a11y wiring of the **destructive confirmation** (account deletion): the trigger
+  lacks `aria-expanded`, focus handling on the phase transition and the live
+  announcement of the state change are missing.

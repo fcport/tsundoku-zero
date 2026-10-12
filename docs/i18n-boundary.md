@@ -1,47 +1,46 @@
-# Il confine a tre di AD-14
+# The three-way boundary of AD-14
 
-Nessuna stringa d'interfaccia visibile è cablata nel codice. La regola è imposta
-**meccanicamente** dal compilatore (`tsc` strict): le chiavi i18n sono tipizzate
-via declaration merging su `CustomTypeOptions` di i18next, così che `t()` con una
-chiave inesistente sia un **errore di compilazione**, non un fallimento a runtime
-(vedi `src/i18n/i18next.d.ts` e `src/i18n/en.ts`).
+No visible interface string is hard-coded. The rule is enforced
+**mechanically** by the compiler (`tsc` strict): i18n keys are typed through
+declaration merging on i18next's `CustomTypeOptions`, so that `t()` with a key
+that does not exist is a **compile error**, not a runtime failure
+(see `src/i18n/i18next.d.ts` and `src/i18n/en.ts`).
 
-Ma non tutto il testo reso passa dal traduttore. Il confine ha **tre lati**, e
-ogni testo appartiene a uno solo di essi:
+But not all rendered text goes through the translator. The boundary has **three
+sides**, and every piece of text belongs to exactly one of them:
 
-## 1. Interfaccia — da `t()`
+## 1. Interface — from `t()`
 
-Ogni stringa d'interfaccia (etichette, messaggi, titoli, testo dei bottoni) passa
-dal traduttore tipizzato `t()`, con chiavi definite nei cataloghi `src/i18n/en.ts`
-e `src/i18n/it.ts` (stesso insieme di chiavi, parità verificata da test). È il
-livello `src/i18n/` — e solo lui — a importare `i18next`/`react-i18next`;
-`ui`/`features` ricevono `t`/`useTranslation` dal re-export (archi AD-1). Oggi il
-catalogo è minimo (`app.tagline`); i consumatori d'interfaccia arrivano con
-l'autenticazione (storia 1.6+).
+Every interface string (labels, messages, titles, button text) goes through the
+typed translator `t()`, with keys defined in the catalogues `src/i18n/en.ts`
+and `src/i18n/it.ts` (same set of keys, parity checked by a test). The
+`src/i18n/` layer — and only that layer — imports `i18next`/`react-i18next`;
+`ui`/`features` get `t`/`useTranslation` from the re-export (AD-1 edges). Today
+the catalogue is minimal (`app.tagline`); the interface consumers arrive with
+authentication (story 1.6+).
 
-## 2. Contenuto delle lezioni — dal file di lezione
+## 2. Lesson content — from the lesson file
 
-Il contenuto didattico (frasi, esercizi, spiegazioni delle lezioni) **non** passa
-da `t()`: è dato di contenuto, non stringa d'interfaccia, e vive nel proprio file
-di lezione. Tradurlo con `t()` confonderebbe due assi distinti (la lingua
-dell'interfaccia contro la lingua/contenuto della lezione).
+Teaching content (sentences, exercises, lesson explanations) does **not** go
+through `t()`: it is content data, not an interface string, and it lives in its
+own lesson file. Translating it with `t()` would mix up two separate axes (the
+interface language versus the language/content of the lesson).
 
-In Epic 1 questo lato **non ha ancora consumatori**: il contenuto delle lezioni
-arriva in Epic 2. Il confine è però documentato e imposto già qui, perché AD-14
-si autoimpone da questo punto in avanti invece di diventare un'epica di pulizia
-finale.
+In Epic 1 this side **has no consumers yet**: lesson content arrives in Epic 2.
+The boundary is nonetheless documented and enforced already here, because AD-14
+applies itself from this point on instead of becoming a final clean-up epic.
 
-## 3. Giapponese — da nessuno dei due
+## 3. Japanese — from neither
 
-Il giapponese reso come tale (a partire dal nome proprio del prodotto,
-積ん読ゼロ) è **dato**: non passa da `t()` **né** dal file di lezione. Il nodo che
-lo contiene porta l'attributo `lang="ja"` (per la resa tipografica e
-l'accessibilità), e **nessun carattere CJK** compare nei cataloghi `en`/`it`
-(verificato da test). Non si introduce romaji.
+Japanese rendered as such (starting with the product's own name, 積ん読ゼロ) is
+**data**: it goes through neither `t()` **nor** the lesson file. The node that
+holds it carries the `lang="ja"` attribute (for typography and accessibility),
+and **no CJK character** appears in the `en`/`it` catalogues (checked by a
+test). No romaji is introduced.
 
-Esempio nel codice (`src/ui/App.tsx`):
+Example in the code (`src/ui/App.tsx`):
 
 ```tsx
-<h1 lang="ja">積ん読ゼロ</h1>   {/* dato: giapponese, mai da t() */}
-<p>{t('app.tagline')}</p>       {/* interfaccia: da t() */}
+<h1 lang="ja">積ん読ゼロ</h1>   {/* data: Japanese, never from t() */}
+<p>{t('app.tagline')}</p>       {/* interface: from t() */}
 ```

@@ -1,81 +1,82 @@
-# Il contratto tastiera della sessione (aggiornamento di AD-15)
+# The session keyboard contract (update to AD-15)
 
-Questo documento è la fonte del **contratto tastiera** della schermata di esercizio,
-registrato come **aggiornamento di AD-15** — non come convenzione locale sparsa nel
-codice. Segue lo stesso precedente durevole di `docs/i18n-boundary.md` per AD-14: un
-file di documentazione con un test che ne verifica esistenza e contenuti.
+This document is the source of the **keyboard contract** for the exercise screen,
+recorded as an **update to AD-15** — not as a local convention scattered through
+the code. It follows the same durable precedent as `docs/i18n-boundary.md` for
+AD-14: a documentation file with a test that checks it exists and what it says.
 
-## Sostituisce il vecchio contratto
+## It replaces the old contract
 
-Il vecchio contratto di AD-15 diceva **«spazio rivela, `1`-`4` valutano»**. Non
-descrive più niente: descriveva un'**autovalutazione** (l'utente dichiarava la
-difficoltà con i tasti `1`-`4`) che il prodotto non ha più — l'esito è **calcolato,
-non dichiarato** (AD-24). E la scala non poteva essere fissa a `1`-`4`, perché
-`assemble` (AD-22) è un **ordinamento**, non una selezione singola: il contratto deve
-coprire tre interazioni diverse (`single-select`, `select-span`, `assemble`).
+The old AD-15 contract said **"space reveals, `1`-`4` rate"**. It no longer
+describes anything: it described a **self-assessment** (the user declared the
+difficulty with the `1`-`4` keys) that the product no longer has — the outcome is
+**computed, not declared** (AD-24). And the scale could not be fixed at `1`-`4`,
+because `assemble` (AD-22) is an **ordering**, not a single choice: the contract has
+to cover three different interactions (`single-select`, `select-span`, `assemble`).
 
-Questo documento **sostituisce** quel contratto per intero.
+This document **replaces** that contract in full.
 
-## Il contratto
+## The contract
 
-### 1. Tasto numerico → posizione (stessa associazione per ogni tipo)
+### 1. Number key → position (same mapping for every kind)
 
-Un tasto numerico `1`-`9` seleziona l'opzione alla **posizione corrispondente**:
-`'1'` → prima opzione, `'2'` → seconda, ... L'associazione numero↔posizione è la
-**stessa** per single-select, select-span e assemble: per costruzione, perché la
-regola vive in una sola funzione **pura e agnostica al tipo**,
-`keyboardSelectionIndex(key, optionCount)` in `src/domain/keyboard.ts`, che riceve la
-stringa del tasto e il numero di opzioni — mai il tipo di esercizio. L'ordine delle
-opzioni è quello del dominio (`answerOptions`), che è anche l'ordine di lettura e
-l'ordine di tabulazione.
+A number key `1`-`9` selects the option at the **matching position**:
+`'1'` → first option, `'2'` → second, ... The number↔position mapping is the
+**same** for single-select, select-span and assemble: by construction, because the
+rule lives in a single **pure, kind-agnostic** function,
+`keyboardSelectionIndex(key, optionCount)` in `src/domain/keyboard.ts`, which
+receives the key string and the number of options — never the exercise kind. The
+order of the options is the domain's (`answerOptions`), which is also the reading
+order and the tab order.
 
-Per `assemble` il tasto **aggiunge** la tessera alla sequenza (append in ordine, come
-il click); una tessera già scelta è saltata. Per gli altri tipi il tasto sceglie
-l'unica opzione. Il tasto numerico chiama la **stessa** funzione di risposta del
-click: nessuna seconda pipeline. È attivo solo in fase di **consegna** (prima di
-rispondere); i tasti con `Ctrl`/`Meta`/`Alt` sono ignorati per non dirottare le
-scorciatoie del browser.
+For `assemble` the key **appends** the tile to the sequence (in order, like a
+click); a tile already chosen is skipped. For the other kinds the key picks the
+single option. The number key calls the **same** answer function as the click: no
+second pipeline. It is active only in the **prompt** phase (before answering); keys
+with `Ctrl`/`Meta`/`Alt` are ignored so browser shortcuts are not hijacked.
 
-### 2. Comportamento di overflow (dichiarato)
+### 2. Overflow behaviour (declared)
 
-La **fila numerica** copre le posizioni `1`-`9` (`NUMERIC_ROW_SIZE = 9`). Il
-comportamento oltre la fila è **dichiarato esplicitamente**, non indefinito:
+The **number row** covers positions `1`-`9` (`NUMERIC_ROW_SIZE = 9`). Behaviour
+beyond the row is **explicitly declared**, not undefined:
 
-- Una cifra **senza opzione corrispondente** (es. `'4'` con 3 opzioni) è un **no-op**.
-- Le opzioni **oltre la nona** non sono raggiungibili da tasto numerico: si
-  raggiungono con `Tab` + `Enter`/`Space` (il percorso di focus, sempre valido per
-  ogni opzione).
-- `'0'`, ogni tasto non-cifra e la stringa vuota sono no-op.
+- A digit **with no matching option** (e.g. `'4'` with 3 options) is a **no-op**.
+- Options **beyond the ninth** cannot be reached with a number key: they are reached
+  with `Tab` + `Enter`/`Space` (the focus path, always valid for every option).
+- `'0'`, any non-digit key and the empty string are no-ops.
 
-### 3. Una sola live region
+### 3. A single live region
 
-Esiste **esattamente una** live region `aria-live="polite"` per l'intera sessione,
-resa solo nel ramo di sessione **attiva** (con la card). Annuncia l'**esito** della
-risposta più l'**avanzamento** (`{{completed}} di {{total}}`). È `sr-only` (l'esito
-visibile lo porta già l'`ExplanationPanel`, l'avanzamento la barra). **Non** è resa su
-scheletro, completamento o stato vuoto — così resta una sola per l'intera sessione.
+There is **exactly one** `aria-live="polite"` live region for the whole session,
+rendered only in the **active** session branch (with the card). It announces the
+**outcome** of the answer plus the **progress** (`{{completed}} of {{total}}`). It is
+`sr-only` (the visible outcome is already carried by the `ExplanationPanel`, the
+progress by the bar). It is **not** rendered on the skeleton, completion or empty
+state — so it stays one for the whole session.
 
-### 4. Tab-order = ordine di lettura = ordine dei tasti numerici
+### 4. Tab-order = reading order = number key order
 
-L'ordine dei nodi interattivi nel DOM è l'ordine di `answerOptions` (dominio), che è
-anche l'ordine di lettura e l'ordine dei tasti numerici. Nessun `tabindex` positivo.
+The order of the interactive nodes in the DOM is the order of `answerOptions`
+(domain), which is also the reading order and the number key order. No positive
+`tabindex`.
 
-### 5. Anello di focus visibile
+### 5. Visible focus ring
 
-Ogni elemento interattivo della sessione (opzioni, «mostra la spiegazione»,
-«prossimo esercizio», «esci») mostra un **anello di focus visibile** via `focus-visible:`
-col token `focus-ring` (in scuro `accent-dark`, cfr. `src/ui/theme.css`).
+Every interactive element in the session (options, "Show the explanation",
+"Next exercise", "Leave the session") shows a **visible focus ring** via
+`focus-visible:` with the `focus-ring` token (`accent-dark` in dark mode, see
+`src/ui/theme.css`).
 
-### 6. `Enter` avanza, `Esc` esce
+### 6. `Enter` advances, `Esc` exits
 
-In fase di **spiegazione** (dopo aver risposto), `Enter` con target non interattivo
-(non un `<button>`/`<a>`/input) avanza al prossimo esercizio; sul bottone focalizzato
-agisce l'attivazione nativa (nessun doppio avanzamento). `Esc` esce dalla sessione in
-qualunque fase (già parte del contratto dalla storia 3.20, ora unificato in un solo
-listener `keydown` a livello window).
+In the **explanation** phase (after answering), `Enter` with a non-interactive
+target (not a `<button>`/`<a>`/input) advances to the next exercise; on a focused
+button the native activation applies (no double advance). `Esc` exits the session in
+any phase (already part of the contract since story 3.20, now unified in a single
+window-level `keydown` listener).
 
-## Fuori scope
+## Out of scope
 
-L'anello di focus **app-wide** (auth/settings/shell) è DW-10, di competenza
-dell'audit di accessibilità (storia 7.6). La verifica manuale con **screen reader
-reale** (NVDA/VoiceOver) è anch'essa competenza della 7.6, non di questa storia.
+The **app-wide** focus ring (auth/settings/shell) is DW-10, which belongs to the
+accessibility audit (story 7.6). Manual testing with a **real screen reader**
+(NVDA/VoiceOver) also belongs to 7.6, not to this story.

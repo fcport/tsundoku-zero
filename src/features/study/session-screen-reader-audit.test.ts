@@ -36,8 +36,8 @@ describe('7.6 — il documento inventaria la copertura automatica ESISTENTE (AC1
 
   it('dichiara ESPLICITAMENTE che l esperienza screen reader e l UNICA affermazione non coperta da test automatico (AC3)', () => {
     // L'affermazione che protegge AC3: l'agente non maschera l'a11y a runtime come «coperta».
-    expect(doc).toMatch(/unica affermazione/i);
-    expect(doc).toMatch(/non coperta da alcun test automatico/i);
+    expect(doc).toMatch(/only accessibility claim/i);
+    expect(doc).toMatch(/not covered by any automated test/i);
   });
 });
 
@@ -46,19 +46,19 @@ describe('7.6 — il documento ragiona il comportamento atteso dal codice (AC2)'
     expect(doc).toMatch(/JapaneseText\.tsx/);
     expect(doc).toMatch(/aria-hidden="true"/);
     expect(doc).toMatch(/lang="ja"/);
-    expect(doc).toMatch(/una volta/i);
+    expect(doc).toMatch(/once/i);
   });
 
   it('AC2: ordine consegna -> opzioni -> esito -> spiegazione ancorato a ExerciseCard.tsx', () => {
     expect(doc).toMatch(/ExerciseCard\.tsx/);
-    expect(doc).toMatch(/consegna/i);
-    expect(doc).toMatch(/opzioni/i);
-    expect(doc).toMatch(/esito/i);
-    expect(doc).toMatch(/spiegazione/i);
+    expect(doc).toMatch(/prompt/i);
+    expect(doc).toMatch(/options/i);
+    expect(doc).toMatch(/outcome/i);
+    expect(doc).toMatch(/explanation/i);
     // L'ordine di lettura compare come SEQUENZA CONTIGUA ORDINATA: un documento che
     // dichiarasse l'ordine SBAGLIATO (parole sparse ma non nell'ordine giusto)
     // fallirebbe qui. Guarda l'ordine degli elementi che AC2 nomina.
-    expect(doc).toMatch(/consegna → opzioni → esito → spiegazione/);
+    expect(doc).toMatch(/prompt → options → outcome → explanation/);
   });
 
   it('AC3: avanzamento dall UNICA live region aria-live="polite" ancorato a SessionScreen.tsx', () => {
@@ -67,7 +67,7 @@ describe('7.6 — il documento ragiona il comportamento atteso dal codice (AC2)'
     expect(doc).toMatch(/aria-live="polite"/);
     // UNA sola live region: assertita con PROSSIMITÀ (le due parole adiacenti), non
     // un «una sola» vagante che potrebbe riferirsi ad altro.
-    expect(doc).toMatch(/una sola live region/i);
+    expect(doc).toMatch(/single live region/i);
   });
 });
 
@@ -75,12 +75,12 @@ describe('7.6 — il documento espone la superficie del record (procedura + esit
   it('da una procedura manuale con NVDA/VoiceOver e voce giapponese', () => {
     expect(doc).toMatch(/NVDA/);
     expect(doc).toMatch(/VoiceOver/);
-    expect(doc).toMatch(/giappones/i);
+    expect(doc).toMatch(/Japanese/i);
     expect(doc).toMatch(/npm run dev/);
   });
 
   it('ha una sezione «Esito misurato» strutturata per AC, marcata da eseguire', () => {
-    expect(doc).toMatch(/Esito misurato/i);
+    expect(doc).toMatch(/Measured outcome/i);
     // La superficie strutturata del record: righe PER-AC, non solo un «da eseguire»
     // vagante. Un documento sventrato senza i marcatori per-AC fallirebbe.
     expect(doc).toMatch(/\*\*AC1\*\*/);
@@ -88,11 +88,11 @@ describe('7.6 — il documento espone la superficie del record (procedura + esit
     expect(doc).toMatch(/\*\*AC3\*\*/);
     // Marcata esplicitamente «da eseguire»: mai risultati fabbricati. (Guardia sullo
     // stato pendente agent-side; l'operatore la sostituirà con PASS/FAIL al run.)
-    expect(doc).toMatch(/da eseguire/i);
+    expect(doc).toMatch(/to be run/i);
   });
 
   it('ha un registro «Difetti» da compilare dall operatore', () => {
-    expect(doc).toMatch(/Difetti/i);
-    expect(doc).toMatch(/da compilare/i);
+    expect(doc).toMatch(/Defects/i);
+    expect(doc).toMatch(/to be filled in/i);
   });
 });
