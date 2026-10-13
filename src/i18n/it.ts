@@ -462,6 +462,39 @@ export const it = {
       length3: 'Tre pezzi',
       length4: 'Quattro pezzi',
       askKicker: "Costruisci, un pezzo dopo l'altro",
+      order: {
+        title: 'Come si mettono in ordine i pezzi',
+        rule: "Ogni pezzo vale per tutto quello che ha davanti, quindi si parte dall'azione e si va verso l'esterno. Il trucco: leggi la frase italiana al contrario. «Non volevo essere lodato» diventa lodare, essere lodato, volere, non, passato.",
+        example: 'Un esempio intero',
+        exampleText:
+          "«Non volevo essere lodato», detto in modo cortese. Leggi i nomi da destra a sinistra e ritrovi l'ordine della frase italiana.",
+        groups: {
+          action: {
+            name: "Cosa cambia l'azione",
+            text: "Subito dopo il verbo: chi lo fa fare, chi lo subisce, se si può, se è troppo. Ognuno dà un verbo nuovo in ru, che si coniuga come un ichidan. Nelle domande ce n'è sempre uno solo. L'unica coppia arriva con la lezione 21: prima il causativo, poi il passivo, come in tabesaserareta, «mi hanno fatto mangiare».",
+          },
+          wish: {
+            name: 'Voglio',
+            text: 'Tai dice cosa vuoi tu e dà una parola in i, che si coniuga come takai. Se a volere è un altro, subito dopo tai viene garu: la i cade e la parola torna un verbo, godan.',
+          },
+          ongoing: {
+            name: 'In corso',
+            text: "Te iru dice che l'azione, o il volerla, sta succedendo adesso. Iru si coniuga come un ichidan: te ita, te inai.",
+          },
+          negative: {
+            name: 'Negativo',
+            text: "Nai nega tutto quello che c'è prima: tabetakunai è «non voglio mangiare», non «voglio non mangiare». Dà una parola in i: il passato è nakatta.",
+          },
+          past: {
+            name: 'Passato',
+            text: 'Il tempo vale per tutta la frase, quindi viene quasi in fondo: dopo il negativo, prima della cortesia.',
+          },
+          polite: {
+            name: 'Cortese',
+            text: "Sempre ultimo, perché non cambia l'azione ma il modo in cui parli a chi ti ascolta. Desu dopo una parola in i (tabetakatta desu), masu dopo un verbo (tabete imasu).",
+          },
+        },
+      },
       piecesLabel: "I pezzi, nell'ordine in cui si attaccano",
       pieces: {
         causative: 'Causativo',
@@ -470,6 +503,7 @@ export const it = {
         sugiru: 'Troppo',
         teiru: 'Azione in corso',
         tai: 'Voglio',
+        garu: 'Mostra di',
         negative: 'Negativo',
         past: 'Passato',
         polite: 'Cortese',
@@ -483,12 +517,16 @@ export const it = {
           'Finisce in i, come un aggettivo: la i finale diventa katta, come takai che diventa takakatta.',
         desu: 'Per renderlo cortese si aggiunge desu alla fine. Il resto non cambia.',
         masenDeshita: 'Il passato di masen si fa aggiungendo deshita: masen deshita.',
+        garu:
+          "Tai dice solo il desiderio di chi parla. Per un'altra persona la i finale cade e si aggiunge garu, «mostrare di»: asobitai diventa asobitagaru.",
       },
       becomes: {
         ichidan:
           'Il risultato finisce in ru: da qui in poi si coniuga come un verbo ichidan (si toglie ru e si attacca il pezzo dopo).',
         adjective:
           'Il risultato finisce in i: da qui in poi si coniuga come un aggettivo in i, come takai.',
+        godan:
+          'Il risultato finisce in ru ma è un verbo godan: garu fa gatte e garanai, come tsukuru fa tsukutte.',
       },
     },
   },

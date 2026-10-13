@@ -34,6 +34,7 @@ export type FormPiece =
   | 'sugiru'
   | 'teiru'
   | 'tai'
+  | 'garu'
   | 'negative'
   | 'past'
   | 'polite'
@@ -49,7 +50,8 @@ export type BuildRule =
   | 'adjective-negative'
   | 'adjective-past'
   | 'desu'
-  | 'masen-deshita';
+  | 'masen-deshita'
+  | 'garu';
 
 /** Un passaggio: da cosa si parte, cosa si attacca, cosa si ottiene. */
 export interface BuildStep {
@@ -64,10 +66,11 @@ export interface BuildStep {
   readonly looksIchidan: boolean;
   /**
    * Il tipo della parola ottenuta, quando cambia il modo di coniugarla: `ichidan`
-   * per un nuovo verbo in る, `adjective` per una parola in い. `null` se la parola
-   * non prende altri pezzi o resta del tipo che era.
+   * per un nuovo verbo in る, `godan` per un verbo in がる (遊びたがる fa
+   * 遊びたがって), `adjective` per una parola in い. `null` se la parola non prende
+   * altri pezzi o resta del tipo che era.
    */
-  readonly becomes: 'ichidan' | 'adjective' | null;
+  readonly becomes: 'ichidan' | 'godan' | 'adjective' | null;
 }
 
 export interface Built {
@@ -85,8 +88,11 @@ function spellingOf(word: Word): Spelling {
   return word.type === 'verb' ? { kanji: word.verb.kanji, kana: word.verb.kana } : word.spelling;
 }
 
+/** I pezzi che si attaccano a un verbo; がる si attacca solo a una parola in い. */
+type VerbPiece = Exclude<FormPiece, 'garu'>;
+
 /** Il pezzo che si attacca a un verbo, con la forma di `conjugate` che lo fa. */
-const VERB_FORM: Readonly<Record<FormPiece, ConjugationForm>> = {
+const VERB_FORM: Readonly<Record<VerbPiece, ConjugationForm>> = {
   causative: 'causative',
   passive: 'passive',
   potential: 'potential',
@@ -102,7 +108,7 @@ const VERB_FORM: Readonly<Record<FormPiece, ConjugationForm>> = {
 };
 
 /** Cosa diventa il verbo dopo il pezzo. */
-const VERB_NEXT: Readonly<Record<FormPiece, 'ichidan' | 'adjective' | 'end'>> = {
+const VERB_NEXT: Readonly<Record<VerbPiece, 'ichidan' | 'adjective' | 'end'>> = {
   causative: 'ichidan',
   passive: 'ichidan',
   potential: 'ichidan',
@@ -117,6 +123,7 @@ const VERB_NEXT: Readonly<Record<FormPiece, 'ichidan' | 'adjective' | 'end'>> = 
 };
 
 function applyToVerb(verb: Verb, piece: FormPiece, first: boolean): { step: BuildStep; next: Word } {
+  if (piece === 'garu') throw new Error(`Il pezzo garu non si attacca al verbo ${verb.kanji}`);
   const c = conjugate(verb, VERB_FORM[piece]);
   let to = c.result;
   let ending = c.ending;
@@ -163,9 +170,10 @@ function append(spelling: Spelling, tail: string): Spelling {
 function applyToAdjective(
   word: Extract<Word, { type: 'adjective' | 'adjectivePast' }>,
   piece: FormPiece,
+  meaning: BilingualText,
 ): { step: BuildStep; next: Word } {
   const from = word.spelling;
-  const step = (stem: Spelling, ending: string, rule: BuildRule) => ({
+  const step = (stem: Spelling, ending: string, rule: BuildRule): BuildStep => ({
     piece,
     from,
     stem,
@@ -175,6 +183,14 @@ function applyToAdjective(
     looksIchidan: false,
     becomes: null,
   });
+  if (word.type === 'adjective' && piece === 'garu') {
+    // Per un'altra persona: la い cade e arriva がる, un verbo godan in る.
+    const s = { ...step(dropI(from), 'がる', 'garu'), becomes: 'godan' as const };
+    return {
+      step: s,
+      next: { type: 'verb', verb: { kanji: s.to.kanji, kana: s.to.kana, group: 'godan', meaning } },
+    };
+  }
   if (word.type === 'adjective' && piece === 'negative') {
     const s = step(dropI(from), 'くない', 'adjective-negative');
     return { step: s, next: { type: 'adjective', spelling: s.to } };
@@ -205,13 +221,70 @@ export function buildForm(verb: Verb, pieces: readonly FormPiece[]): Built {
     } else if (word.type === 'end') {
       throw new Error(`Il pezzo ${piece} non si attacca a ${word.spelling.kanji}`);
     } else {
-      applied = applyToAdjective(word, piece);
+      applied = applyToAdjective(word, piece, verb.meaning);
     }
     steps.push(applied.step);
     word = applied.next;
   });
   return { steps, result: spellingOf(word) };
 }
+
+// ---------------------------------------------------------------------------
+// L'ordine dei pezzi: ogni pezzo vale per tutto quello che ha davanti, quindi
+// dall'azione verso l'esterno. È la frase italiana letta al contrario: «non volevo
+// essere lodato» → lodare, essere, volere, non, passato → 褒め・られ・たく・なかっ・た.
+
+/** I gruppi di pezzi, nell'ordine in cui si attaccano. */
+export type PieceGroup = 'action' | 'wish' | 'ongoing' | 'negative' | 'past' | 'polite';
+
+export const PIECE_GROUPS: readonly PieceGroup[] = [
+  'action',
+  'wish',
+  'ongoing',
+  'negative',
+  'past',
+  'polite',
+];
+
+/** Il gruppo di ogni pezzo: le ricette li usano in questo ordine (provato nei test). */
+export const PIECE_GROUP: Readonly<Record<FormPiece, PieceGroup>> = {
+  causative: 'action',
+  passive: 'action',
+  potential: 'action',
+  sugiru: 'action',
+  tai: 'wish',
+  garu: 'wish',
+  teiru: 'ongoing',
+  negative: 'negative',
+  past: 'past',
+  polite: 'polite',
+  politePast: 'polite',
+  politeNegativePast: 'polite',
+};
+
+/** I pezzi di ogni gruppo da mostrare nella spiegazione, nel loro ordine. */
+export const GROUP_PIECES: Readonly<Record<PieceGroup, readonly FormPiece[]>> = {
+  action: ['causative', 'passive', 'potential', 'sugiru'],
+  wish: ['tai', 'garu'],
+  ongoing: ['teiru'],
+  negative: ['negative'],
+  past: ['past'],
+  polite: ['polite'],
+};
+
+/**
+ * L'esempio intero della spiegazione, spezzato nei suoi pezzi: il verbo, poi un
+ * pezzo per ogni segmento. Che i segmenti diano la forma costruita è provato nei test.
+ */
+export const ORDER_EXAMPLE = {
+  verb: '褒める',
+  pieces: ['passive', 'tai', 'negative', 'past', 'polite'],
+  segments: ['褒め', 'られ', 'たく', 'なかっ', 'た', 'です'],
+} as const satisfies {
+  verb: string;
+  pieces: readonly FormPiece[];
+  segments: readonly string[];
+};
 
 // ---------------------------------------------------------------------------
 // Le ricette: quali catene si allenano.
@@ -320,11 +393,15 @@ export const RECIPES: readonly Recipe[] = [
   { id: 'passive-tai-past', pieces: ['passive', 'tai', 'past'], meaning: { it: 'volevo essere …', en: 'I wanted to be …ed' }, only: PASSIVE_WISH },
   { id: 'passive-tai-negative', pieces: ['passive', 'tai', 'negative'], meaning: { it: 'non voglio essere …, non voglio che mi …', en: "I don't want to be …ed, or to have it …ed" }, only: PASSIVE_AVOID },
   { id: 'causative-negative-past', pieces: ['causative', 'negative', 'past'], meaning: { it: 'non ho fatto (o lasciato) … nessuno', en: "I didn't make (or let) anyone …" } },
+  { id: 'tai-garu-teiru', pieces: ['tai', 'garu', 'teiru'], meaning: { it: 'mostra di voler … (adesso)', en: 'is showing they want to …' } },
+  { id: 'tai-garu-past', pieces: ['tai', 'garu', 'past'], meaning: { it: 'ha mostrato di voler …', en: 'showed they wanted to …' } },
+  { id: 'tai-garu-negative', pieces: ['tai', 'garu', 'negative'], meaning: { it: 'non vuole … (un altro)', en: "doesn't want to … (someone else)" } },
   { id: 'causative-tai-past', pieces: ['causative', 'tai', 'past'], meaning: { it: 'volevo far (o lasciar) …', en: 'I wanted to make (or let) someone …' } },
   // Quattro pezzi.
   { id: 'tai-negative-past-polite', pieces: ['tai', 'negative', 'past', 'polite'], meaning: { it: 'non volevo … (cortese)', en: "I didn't want to … (polite)" } },
   { id: 'passive-tai-past-polite', pieces: ['passive', 'tai', 'past', 'polite'], meaning: { it: 'volevo essere … (cortese)', en: 'I wanted to be …ed (polite)' }, only: PASSIVE_WISH },
   { id: 'passive-tai-negative-past', pieces: ['passive', 'tai', 'negative', 'past'], meaning: { it: 'non volevo essere …, non volevo che mi …', en: "I didn't want to be …ed, or to have it …ed" }, only: PASSIVE_AVOID },
+  { id: 'tai-garu-teiru-past', pieces: ['tai', 'garu', 'teiru', 'past'], meaning: { it: 'mostrava di voler …', en: 'was showing they wanted to …' } },
   { id: 'causative-tai-negative-past', pieces: ['causative', 'tai', 'negative', 'past'], meaning: { it: 'non volevo far (o lasciar) …', en: "I didn't want to make (or let) anyone …" } },
 ];
 
@@ -344,7 +421,8 @@ export const RECIPE_LENGTHS: readonly number[] = [...new Set(RECIPES.map(pieceCo
 export function recipeFits(recipe: Recipe, verb: Verb): boolean {
   if (recipe.only && !recipe.only.includes(verb.kanji)) return false;
   if (recipe.except?.includes(verb.kanji)) return false;
-  return formsOf(verb).includes(VERB_FORM[recipe.pieces[0]!]);
+  const first = recipe.pieces[0]!;
+  return first !== 'garu' && formsOf(verb).includes(VERB_FORM[first]);
 }
 
 export interface Build {

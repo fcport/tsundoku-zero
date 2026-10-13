@@ -51,7 +51,7 @@ import {
   toggleValue,
   type DrillMode,
 } from './drillSelection';
-import { BuilderTraining, RecipeOptions } from './FormBuilder';
+import { BuilderTraining, OrderGuide, RecipeOptions } from './FormBuilder';
 
 export interface DrillScreenProps {
   /** Il ritorno alla dashboard, cablato dal livello app. */
@@ -193,9 +193,10 @@ function Chooser({
             ))}
           </fieldset>
 
-          <p className="max-w-[40rem] text-body text-ink-primary">
-            {t(`drill.modes.${mode}.intro`)}
-          </p>
+          <div className="flex max-w-[40rem] flex-col gap-4">
+            <p className="text-body text-ink-primary">{t(`drill.modes.${mode}.intro`)}</p>
+            {mode === 'builder' ? <OrderGuide /> : null}
+          </div>
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
             <fieldset className="flex flex-col self-start border-t-[1.5px] border-border-strong pt-4">

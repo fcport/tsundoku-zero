@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { isCorrectAnswer, pickDrill, type Verb } from './conjugation';
 import { DRILL_VERBS } from './drill-verbs';
 import {
+  ORDER_EXAMPLE,
+  PIECE_GROUP,
+  PIECE_GROUPS,
   RECIPES,
   RECIPE_LENGTHS,
   buildForm,
@@ -50,6 +53,11 @@ describe('buildForm', () => {
     ['行く', 'teiru-negative', '行っていない', 'いっていない'],
     ['寝る', 'teiru-polite-past', '寝ていました', 'ねていました'],
     ['飲む', 'sugiru-past', '飲みすぎた', 'のみすぎた'],
+    ['遊ぶ', 'tai-garu-teiru', '遊びたがっている', 'あそびたがっている'],
+    ['行く', 'tai-garu-negative', '行きたがらない', 'いきたがらない'],
+    ['食べる', 'tai-garu-past', '食べたがった', 'たべたがった'],
+    ['見る', 'tai-garu-teiru-past', '見たがっていた', 'みたがっていた'],
+    ['勉強する', 'tai-garu-negative', '勉強したがらない', 'べんきょうしたがらない'],
     ['勉強する', 'sugiru-past', '勉強しすぎた', 'べんきょうしすぎた'],
   ])('%s + %s = %s', (base, id, kanji, kana) => {
     expect(built(base, id)).toEqual({ kanji, kana });
@@ -78,6 +86,15 @@ describe('buildForm', () => {
     expect(steps.map((s) => s.looksIchidan)).toEqual([true, false]);
   });
 
+  it('がる: la い di たい cade, e quello che resta si coniuga come un godan', () => {
+    const { steps } = buildForm(verb('遊ぶ'), recipe('tai-garu-teiru').pieces);
+    expect(steps.map((s) => s.to.kanji)).toEqual(['遊びたい', '遊びたがる', '遊びたがっている']);
+    expect(steps.map((s) => s.becomes)).toEqual(['adjective', 'godan', 'ichidan']);
+    expect(steps.map((s) => s.rules)).toEqual([['godan-i'], ['garu'], ['godan-te-small-tsu']]);
+    expect(steps[1]).toMatchObject({ stem: { kanji: '遊びた' }, ending: 'がる' });
+    expect(() => buildForm(verb('遊ぶ'), ['garu'])).toThrow();
+  });
+
   it('ませんでした: la regola del verbo, poi でした', () => {
     const { steps } = buildForm(verb('書く'), ['politeNegativePast']);
     expect(steps[0]!.to.kanji).toBe('書きませんでした');
@@ -96,6 +113,19 @@ describe('le ricette', () => {
     const lengths = RECIPES.map(pieceCount);
     expect(lengths).toEqual([...lengths].sort((a, b) => a - b));
     expect(RECIPE_LENGTHS).toEqual([2, 3, 4]);
+  });
+
+  it("rispettano l'ordine dei gruppi: azione, voglio, in corso, no, passato, cortese", () => {
+    for (const r of RECIPES) {
+      const ranks = r.pieces.map((piece) => PIECE_GROUPS.indexOf(PIECE_GROUP[piece]));
+      expect(ranks, r.id).toEqual([...ranks].sort((a, b) => a - b));
+    }
+  });
+
+  it("l'esempio della spiegazione si spezza nei pezzi giusti", () => {
+    const { result } = buildForm(verb(ORDER_EXAMPLE.verb), ORDER_EXAMPLE.pieces);
+    expect(ORDER_EXAMPLE.segments.join('')).toBe(result.kanji);
+    expect(ORDER_EXAMPLE.segments).toHaveLength(ORDER_EXAMPLE.pieces.length + 1);
   });
 
   it('i verbi nominati esistono e accettano il primo pezzo', () => {

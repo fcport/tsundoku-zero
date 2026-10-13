@@ -452,6 +452,39 @@ export const en = {
       length3: 'Three pieces',
       length4: 'Four pieces',
       askKicker: 'Build it, one piece after another',
+      order: {
+        title: 'What order the pieces go in',
+        rule: "Each piece applies to everything in front of it, so you start from the action and work outwards. The trick: read the English sentence backwards. 'I didn't want to be praised' becomes praise, be praised, want, not, past.",
+        example: 'A whole example',
+        exampleText:
+          "'I didn't want to be praised', said politely. Read the names from right to left and you get the order of the English sentence.",
+        groups: {
+          action: {
+            name: 'What changes the action',
+            text: 'Right after the verb: who is made to do it, who undergoes it, whether it can be done, whether it is too much. Each one makes a new verb in ru that conjugates like an ichidan. A question only ever has one. The one pair arrives with lesson 21: causative first, then passive, as in tabesaserareta, "I was made to eat".',
+          },
+          wish: {
+            name: 'Want to',
+            text: 'Tai says what you want and makes a word in i that conjugates like takai. If someone else wants it, garu comes right after tai: the i drops and the word is a verb again, godan.',
+          },
+          ongoing: {
+            name: 'Ongoing',
+            text: 'Te iru says the action, or wanting it, is happening now. Iru conjugates like an ichidan: te ita, te inai.',
+          },
+          negative: {
+            name: 'Negative',
+            text: "Nai negates everything before it: tabetakunai is 'I don't want to eat', not 'I want to not eat'. It makes a word in i: the past is nakatta.",
+          },
+          past: {
+            name: 'Past',
+            text: 'Tense applies to the whole sentence, so it comes near the end: after the negative, before politeness.',
+          },
+          polite: {
+            name: 'Polite',
+            text: 'Always last, because it does not change the action, only how you speak to the listener. Desu after a word in i (tabetakatta desu), masu after a verb (tabete imasu).',
+          },
+        },
+      },
       piecesLabel: 'The pieces, in the order they attach',
       pieces: {
         causative: 'Causative',
@@ -460,6 +493,7 @@ export const en = {
         sugiru: 'Too much',
         teiru: 'Ongoing action',
         tai: 'Want to',
+        garu: 'Shows they',
         negative: 'Negative',
         past: 'Past',
         polite: 'Polite',
@@ -473,12 +507,16 @@ export const en = {
           'It ends in i, like an adjective: the final i becomes katta, as takai becomes takakatta.',
         desu: 'To make it polite, add desu at the end. Nothing else changes.',
         masenDeshita: 'The past of masen is made by adding deshita: masen deshita.',
+        garu:
+          "Tai only describes the speaker's own wish. For someone else the final i drops and garu, 'to show signs of', is added: asobitai becomes asobitagaru.",
       },
       becomes: {
         ichidan:
           'The result ends in ru: from here on it conjugates like an ichidan verb (drop ru, attach the next piece).',
         adjective:
           'The result ends in i: from here on it conjugates like an i-adjective, such as takai.',
+        godan:
+          'The result ends in ru but it is a godan verb: garu makes gatte and garanai, as tsukuru makes tsukutte.',
       },
     },
   },

@@ -7,6 +7,9 @@ import type { ReactNode } from 'react';
 import { FORM_MARKERS } from '../../domain/conjugation';
 import { DRILL_VERBS } from '../../domain/drill-verbs';
 import {
+  GROUP_PIECES,
+  ORDER_EXAMPLE,
+  PIECE_GROUPS,
   RECIPES,
   RECIPE_IDS,
   RECIPE_LENGTHS,
@@ -16,10 +19,12 @@ import {
   type Build,
   type BuildRule,
   type BuildStep,
+  type FormPiece,
 } from '../../domain/form-builder';
 import { resolveBilingual } from '../../domain/bilingual';
 import { resolveLocale, useTranslation } from '../../i18n';
-import { KICKER } from '../../ui/magazine';
+import { ArrowIcon } from '../../ui/icons';
+import { FOCUS_RING, KICKER } from '../../ui/magazine';
 import {
   ASK_HEADING,
   CHECKBOX,
@@ -39,34 +44,95 @@ const BUILD_RULE_KEYS = {
   'adjective-past': 'drill.builder.rules.adjectivePast',
   desu: 'drill.builder.rules.desu',
   'masen-deshita': 'drill.builder.rules.masenDeshita',
+  garu: 'drill.builder.rules.garu',
 } as const satisfies Record<BuildRule, string>;
 
-/** L'etichetta giapponese di ogni pezzo; il cortese dipende da cosa lo prende. */
+/** L'etichetta giapponese di ogni pezzo, quando non si sa ancora a cosa si attacca. */
+const PIECE_MARKERS: Readonly<Record<FormPiece, string>> = {
+  causative: FORM_MARKERS.causative,
+  passive: FORM_MARKERS.passive,
+  potential: FORM_MARKERS.potential,
+  sugiru: '〜すぎる',
+  teiru: FORM_MARKERS.teiru,
+  tai: FORM_MARKERS.tai,
+  garu: '〜がる',
+  negative: FORM_MARKERS.nai,
+  past: FORM_MARKERS.ta,
+  polite: '〜です／ます',
+  politePast: FORM_MARKERS.mashita,
+  politeNegativePast: '〜ませんでした',
+};
+
+/** L'etichetta di un passaggio: il cortese è です dopo una parola in い, ます dopo un verbo. */
 function pieceMarker(step: BuildStep): string {
-  switch (step.piece) {
-    case 'causative':
-      return FORM_MARKERS.causative;
-    case 'passive':
-      return FORM_MARKERS.passive;
-    case 'potential':
-      return FORM_MARKERS.potential;
-    case 'sugiru':
-      return '〜すぎる';
-    case 'teiru':
-      return FORM_MARKERS.teiru;
-    case 'tai':
-      return FORM_MARKERS.tai;
-    case 'negative':
-      return FORM_MARKERS.nai;
-    case 'past':
-      return FORM_MARKERS.ta;
-    case 'polite':
-      return step.rules[0] === 'desu' ? '〜です' : FORM_MARKERS.masu;
-    case 'politePast':
-      return FORM_MARKERS.mashita;
-    case 'politeNegativePast':
-      return '〜ませんでした';
-  }
+  if (step.piece === 'polite') return step.rules[0] === 'desu' ? '〜です' : FORM_MARKERS.masu;
+  return PIECE_MARKERS[step.piece];
+}
+
+const CHIP =
+  'flex items-baseline gap-2 border-[1.5px] border-border-strong px-3 py-1 text-label font-semibold text-ink-primary';
+
+/**
+ * Come si mettono in ordine i pezzi: la regola, i gruppi nell'ordine in cui si
+ * attaccano e un esempio intero spezzato. Si apre dalla scelta e da ogni domanda.
+ */
+export function OrderGuide() {
+  const { t, i18n } = useTranslation();
+  const locale = resolveLocale(i18n.language);
+  const verb = DRILL_VERBS.find((v) => v.kanji === ORDER_EXAMPLE.verb)!;
+  const labels = [
+    resolveBilingual(verb.meaning, locale).text,
+    ...ORDER_EXAMPLE.pieces.map((piece) => t(`drill.builder.pieces.${piece}`)),
+  ];
+  return (
+    <details className="group border-[1.5px] border-border-strong">
+      <summary
+        className={`flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-3 px-4 py-2 text-label font-semibold text-ink-primary [&::-webkit-details-marker]:hidden ${FOCUS_RING}`}
+      >
+        {t('drill.builder.order.title')}
+        <ArrowIcon className="shrink-0 rotate-90 transition-transform group-open:-rotate-90" />
+      </summary>
+      <div className="flex flex-col gap-5 border-t-[1.5px] border-border-strong p-4 text-ink-primary">
+        <p className="text-body">{t('drill.builder.order.rule')}</p>
+        <ol className="flex flex-col gap-4">
+          {PIECE_GROUPS.map((group, index) => (
+            <li key={group} className="flex flex-col gap-2">
+              <p className="text-[20px] font-extrabold uppercase leading-tight font-stretch-condensed">
+                {index + 1}. {t(`drill.builder.order.groups.${group}.name`)}
+              </p>
+              <ul className="flex flex-wrap gap-2">
+                {GROUP_PIECES[group].map((piece) => (
+                  <li key={piece} className={CHIP}>
+                    {t(`drill.builder.pieces.${piece}`)}
+                    <span lang="ja" className="font-jp-read font-bold text-accent">
+                      {PIECE_MARKERS[piece]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-body">{t(`drill.builder.order.groups.${group}.text`)}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="flex flex-col gap-2 border-t-[1.5px] border-border-strong pt-4">
+          <p className={KICKER}>{t('drill.builder.order.example')}</p>
+          {/* Ogni pezzo sopra il suo nome: si legge da sinistra a destra in giapponese,
+              da destra a sinistra in italiano. */}
+          <ol className="flex flex-wrap gap-x-4 gap-y-3">
+            {ORDER_EXAMPLE.segments.map((segment, index) => (
+              <li key={index} className="flex flex-col items-center gap-1">
+                <span lang="ja" className="font-jp-read text-[24px] font-bold leading-none sm:text-[28px]">
+                  {segment}
+                </span>
+                <span className="text-[12px] text-ink-secondary">{labels[index]}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="text-body">{t('drill.builder.order.exampleText')}</p>
+        </div>
+      </div>
+    </details>
+  );
 }
 
 const LENGTH_KEYS: Readonly<Record<number, 'drill.builder.length2' | 'drill.builder.length3' | 'drill.builder.length4'>> = {
@@ -176,7 +242,7 @@ export function BuilderTraining({
                     →
                   </span>
                 ) : null}
-                <span className="flex items-baseline gap-2 border-[1.5px] border-border-strong px-3 py-1 text-label font-semibold text-ink-primary">
+                <span className={CHIP}>
                   {t(`drill.builder.pieces.${step.piece}`)}
                   <span lang="ja" className="font-jp-read font-bold text-accent">
                     {pieceMarker(step)}
@@ -185,6 +251,9 @@ export function BuilderTraining({
               </li>
             ))}
           </ol>
+          <div className="mt-4">
+            <OrderGuide />
+          </div>
         </>
       )}
       explain={(b, correct) => <BuildSteps steps={built(b).steps} correct={correct} />}
