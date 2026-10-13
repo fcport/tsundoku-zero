@@ -66,6 +66,7 @@ export const DRILL_VERBS: readonly Verb[] = [
   { kanji: '取る', kana: 'とる', group: 'godan', meaning: { en: 'to take', it: 'prendere' } },
   { kanji: '座る', kana: 'すわる', group: 'godan', meaning: { en: 'to sit', it: 'sedersi' }, forms: NO_PASSIVE },
   { kanji: '送る', kana: 'おくる', group: 'godan', meaning: { en: 'to send', it: 'spedire' } },
+  { kanji: '叱る', kana: 'しかる', group: 'godan', meaning: { en: 'to scold', it: 'sgridare' }, forms: except('causative') },
   { kanji: '分かる', kana: 'わかる', group: 'godan', meaning: { en: 'to understand', it: 'capire' }, forms: STATE_FORMS },
   { kanji: 'ある', kana: 'ある', group: 'godan', meaning: { en: 'to exist (things)', it: 'esserci (cose)' }, forms: STATE_FORMS },
   // godan che sembrano ichidan
@@ -89,6 +90,7 @@ export const DRILL_VERBS: readonly Verb[] = [
   { kanji: '借りる', kana: 'かりる', group: 'ichidan', meaning: { en: 'to borrow', it: 'prendere in prestito' }, forms: NO_PASSIVE },
   { kanji: '忘れる', kana: 'わすれる', group: 'ichidan', meaning: { en: 'to forget', it: 'dimenticare' } },
   { kanji: '始める', kana: 'はじめる', group: 'ichidan', meaning: { en: 'to begin', it: 'cominciare' }, forms: NO_PASSIVE },
+  { kanji: '褒める', kana: 'ほめる', group: 'ichidan', meaning: { en: 'to praise', it: 'lodare' }, forms: except('causative') },
   { kanji: '考える', kana: 'かんがえる', group: 'ichidan', meaning: { en: 'to think', it: 'pensare' } },
   { kanji: '見せる', kana: 'みせる', group: 'ichidan', meaning: { en: 'to show', it: 'mostrare' }, forms: except('potential', 'passive', 'causative') },
   { kanji: 'いる', kana: 'いる', group: 'ichidan', meaning: { en: 'to exist (living things)', it: 'esserci (esseri viventi)' }, forms: STATE_FORMS },

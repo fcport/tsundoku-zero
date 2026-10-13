@@ -392,8 +392,6 @@ export const it = {
     score: 'Risposte corrette: {{right}} su {{total}}',
     empty: 'Scegli almeno una forma e un gruppo di verbi.',
     changeSelection: 'Cambia cosa allenare',
-    chooseIntro:
-      'Scegli i gruppi di verbi e le forme da allenare, poi comincia. Le domande arrivano a caso fra quelle scelte, finché vuoi.',
     selectAll: 'Tutte',
     selectNone: 'Nessuna',
     poolSize: '{{value}} combinazioni di verbo e forma',
@@ -438,6 +436,60 @@ export const it = {
       suru: 'Suru è irregolare: shi davanti a quasi tutto, sa per far fare e per il passivo, dekiru per il potenziale.',
       kuru: 'Kuru è irregolare: la vocale cambia, ko per negativo, potenziale, volitivo, causativo e passivo, ki per il resto.',
       looksIchidan: "Attenzione: finisce in -iru o -eru ma è godan, quindi cambia l'ultimo kana invece di perdere ru.",
+    },
+    modeLabel: 'Come allenarti',
+    modes: {
+      forms: {
+        name: 'Una forma alla volta',
+        hint: 'Dalla forma del dizionario a una forma: kaku diventa kakitai.',
+        intro:
+          'Scegli i gruppi di verbi e le forme da allenare, poi comincia. Le domande arrivano a caso fra quelle scelte, finché vuoi.',
+      },
+      builder: {
+        name: 'Costruttore di forme',
+        hint: "Più forme attaccate una dopo l'altra: benkyou suru diventa benkyou shitakatta desu.",
+        intro:
+          "Ogni domanda chiede più pezzi insieme, da attaccare nell'ordine indicato. Dopo la risposta vedi ogni passaggio: cosa si attacca e come si coniuga quello che ottieni. Scegli i gruppi di verbi e le combinazioni, poi comincia.",
+      },
+    },
+    // Il costruttore di forme: più pezzi in catena sullo stesso verbo.
+    builder: {
+      name: 'Costruttore di forme',
+      poolSize: '{{value}} domande diverse',
+      empty: 'Scegli almeno una combinazione e un gruppo di verbi.',
+      recipesLabel: 'Combinazioni',
+      length2: 'Due pezzi',
+      length3: 'Tre pezzi',
+      length4: 'Quattro pezzi',
+      askKicker: "Costruisci, un pezzo dopo l'altro",
+      piecesLabel: "I pezzi, nell'ordine in cui si attaccano",
+      pieces: {
+        causative: 'Causativo',
+        passive: 'Passivo',
+        potential: 'Potenziale',
+        sugiru: 'Troppo',
+        teiru: 'Azione in corso',
+        tai: 'Voglio',
+        negative: 'Negativo',
+        past: 'Passato',
+        polite: 'Cortese',
+        politePast: 'Passato cortese',
+        politeNegativePast: 'Passato negativo cortese',
+      },
+      rules: {
+        adjectiveNegative:
+          'Finisce in i, come un aggettivo: la i finale diventa kunai, come takai che diventa takakunai.',
+        adjectivePast:
+          'Finisce in i, come un aggettivo: la i finale diventa katta, come takai che diventa takakatta.',
+        desu: 'Per renderlo cortese si aggiunge desu alla fine. Il resto non cambia.',
+        masenDeshita: 'Il passato di masen si fa aggiungendo deshita: masen deshita.',
+      },
+      becomes: {
+        ichidan:
+          'Il risultato finisce in ru: da qui in poi si coniuga come un verbo ichidan (si toglie ru e si attacca il pezzo dopo).',
+        adjective:
+          'Il risultato finisce in i: da qui in poi si coniuga come un aggettivo in i, come takai.',
+      },
     },
   },
   settings: {

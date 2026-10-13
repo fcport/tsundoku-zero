@@ -3,11 +3,17 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { i18n } from '../../i18n';
 import { CONJUGATION_FORMS, VERB_GROUPS, drillPool } from '../../domain/conjugation';
 import { DRILL_VERBS } from '../../domain/drill-verbs';
+import { RECIPES, RECIPE_IDS, buildPool } from '../../domain/form-builder';
 import { DrillScreen, Training } from './DrillScreen';
+import { BuilderTraining, RecipeOptions } from './FormBuilder';
 import {
   DRILL_FORMS_STORAGE_KEY,
+  DRILL_MODE_STORAGE_KEY,
+  DRILL_RECIPES_STORAGE_KEY,
   readFormSelection,
   readGroupSelection,
+  readModeSelection,
+  readRecipeSelection,
   toggleValue,
 } from './drillSelection';
 
@@ -38,6 +44,13 @@ describe('DrillScreen', () => {
     );
   });
 
+  it('offre le due modalità, a partire da una forma alla volta', () => {
+    const html = renderToStaticMarkup(<DrillScreen onExit={() => {}} random={() => 0} />);
+    expect(html).toContain('Una forma alla volta');
+    expect(html).toContain('Costruttore di forme');
+    expect(html.match(/type="radio"/g)).toHaveLength(2);
+  });
+
   it('dice quante combinazioni ha la scelta', () => {
     const html = renderToStaticMarkup(<DrillScreen onExit={() => {}} random={() => 0} />);
     const count = drillPool(DRILL_VERBS, CONJUGATION_FORMS, VERB_GROUPS).length;
@@ -64,7 +77,53 @@ describe('Training', () => {
   });
 });
 
+describe('il costruttore di forme', () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage('it');
+  });
+
+  it('elenca le combinazioni divise per numero di pezzi, con un esempio', () => {
+    const html = renderToStaticMarkup(<RecipeOptions recipes={[...RECIPE_IDS]} onRecipes={() => {}} />);
+    expect(html.match(/type="checkbox"/g)).toHaveLength(RECIPES.length);
+    expect(html).toContain('Due pezzi');
+    expect(html).toContain('Quattro pezzi');
+    expect(html).toContain('volevo … (cortese)');
+    expect(html).toContain('食べたかったです');
+  });
+
+  it('chiede la catena coi suoi pezzi in ordine', () => {
+    const pool = buildPool(
+      DRILL_VERBS.filter((v) => v.kanji === '勉強する'),
+      ['tai-past-polite'],
+      ['irregular'],
+    );
+    const html = renderToStaticMarkup(
+      <BuilderTraining pool={pool} random={() => 0} masthead={() => null} />,
+    );
+    expect(html).toContain('勉強');
+    expect(html).toContain('volevo … (cortese)');
+    expect(html).toContain('Voglio');
+    expect(html).toContain('〜です');
+    expect(html.indexOf('Voglio')).toBeLessThan(html.indexOf('Passato'));
+    expect(html).toContain('La tua risposta');
+    // La risposta non si vede prima di rispondere.
+    expect(html).not.toContain('したかった');
+  });
+});
+
 describe('drillSelection', () => {
+  it('la modalità parte da una forma alla volta, e ricorda il costruttore', () => {
+    expect(readModeSelection(storage({}))).toBe('forms');
+    expect(readModeSelection(storage({ [DRILL_MODE_STORAGE_KEY]: 'builder' }))).toBe('builder');
+    expect(readModeSelection(storage({ [DRILL_MODE_STORAGE_KEY]: 'boh' }))).toBe('forms');
+  });
+
+  it('le combinazioni salvate tengono solo quelle che esistono', () => {
+    expect(readRecipeSelection(storage({}))).toEqual(RECIPE_IDS);
+    const saved = storage({ [DRILL_RECIPES_STORAGE_KEY]: '["tai-past-polite","vecchia","tai-past"]' });
+    expect(readRecipeSelection(saved)).toEqual(['tai-past', 'tai-past-polite']);
+  });
+
   it('senza nulla di salvato sceglie tutto', () => {
     expect(readFormSelection(storage({}))).toEqual(CONJUGATION_FORMS);
     expect(readGroupSelection(undefined)).toEqual(VERB_GROUPS);

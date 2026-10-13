@@ -414,11 +414,11 @@ export function drillPool(
  * (il dominio non tira dadi da sé). Evita lo stesso verbo della domanda prima
  * quando c'è altro da scegliere. `null` ⇒ la scelta non lascia nessuna domanda.
  */
-export function pickDrill(
-  pool: readonly Drill[],
+export function pickDrill<T extends { readonly verb: Verb }>(
+  pool: readonly T[],
   random: () => number,
-  previous: Drill | null = null,
-): Drill | null {
+  previous: T | null = null,
+): T | null {
   const fresh = previous ? pool.filter((d) => d.verb !== previous.verb) : pool;
   const from = fresh.length > 0 ? fresh : pool;
   if (from.length === 0) return null;
@@ -440,7 +440,7 @@ export function normalizeAnswer(input: string): string {
 }
 
 /** Giusta se coincide con la forma in kana o con quella coi kanji. */
-export function isCorrectAnswer(input: string, conjugation: Conjugation): boolean {
+export function isCorrectAnswer(input: string, conjugation: Pick<Conjugation, 'result'>): boolean {
   const answer = normalizeAnswer(input);
   if (answer === '') return false;
   return answer === conjugation.result.kana || answer === conjugation.result.kanji;

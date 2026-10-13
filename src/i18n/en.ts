@@ -382,8 +382,6 @@ export const en = {
     score: 'Correct answers: {{right}} of {{total}}',
     empty: 'Pick at least one form and one verb group.',
     changeSelection: 'Change what to practise',
-    chooseIntro:
-      'Pick the verb groups and the forms to practise, then start. Questions come at random from your choice, for as long as you like.',
     selectAll: 'All',
     selectNone: 'None',
     poolSize: '{{value}} verb and form combinations',
@@ -428,6 +426,60 @@ export const en = {
       suru: 'Suru is irregular: shi before almost everything, sa for causative and passive, dekiru for the potential.',
       kuru: 'Kuru is irregular: the vowel changes, ko for negative, potential, volitional, causative and passive, ki for the rest.',
       looksIchidan: 'Careful: it ends in -iru or -eru but it is godan, so the last kana changes instead of ru dropping off.',
+    },
+    modeLabel: 'How to practise',
+    modes: {
+      forms: {
+        name: 'One form at a time',
+        hint: 'From the dictionary form to one form: kaku becomes kakitai.',
+        intro:
+          'Pick the verb groups and the forms to practise, then start. Questions come at random from your choice, for as long as you like.',
+      },
+      builder: {
+        name: 'Form builder',
+        hint: 'Several forms attached one after another: benkyou suru becomes benkyou shitakatta desu.',
+        intro:
+          'Each question asks for several pieces together, attached in the order shown. After you answer you see every step: what gets attached and how the result conjugates. Pick the verb groups and the combinations, then start.',
+      },
+    },
+    // The form builder: several pieces chained on the same verb.
+    builder: {
+      name: 'Form builder',
+      poolSize: '{{value}} different questions',
+      empty: 'Pick at least one combination and one verb group.',
+      recipesLabel: 'Combinations',
+      length2: 'Two pieces',
+      length3: 'Three pieces',
+      length4: 'Four pieces',
+      askKicker: 'Build it, one piece after another',
+      piecesLabel: 'The pieces, in the order they attach',
+      pieces: {
+        causative: 'Causative',
+        passive: 'Passive',
+        potential: 'Potential',
+        sugiru: 'Too much',
+        teiru: 'Ongoing action',
+        tai: 'Want to',
+        negative: 'Negative',
+        past: 'Past',
+        polite: 'Polite',
+        politePast: 'Polite past',
+        politeNegativePast: 'Polite negative past',
+      },
+      rules: {
+        adjectiveNegative:
+          'It ends in i, like an adjective: the final i becomes kunai, as takai becomes takakunai.',
+        adjectivePast:
+          'It ends in i, like an adjective: the final i becomes katta, as takai becomes takakatta.',
+        desu: 'To make it polite, add desu at the end. Nothing else changes.',
+        masenDeshita: 'The past of masen is made by adding deshita: masen deshita.',
+      },
+      becomes: {
+        ichidan:
+          'The result ends in ru: from here on it conjugates like an ichidan verb (drop ru, attach the next piece).',
+        adjective:
+          'The result ends in i: from here on it conjugates like an i-adjective, such as takai.',
+      },
     },
   },
   settings: {

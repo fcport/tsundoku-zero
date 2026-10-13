@@ -7,9 +7,16 @@ import {
   type ConjugationForm,
   type VerbGroup,
 } from '../../domain/conjugation';
+import { RECIPE_IDS } from '../../domain/form-builder';
 
 export const DRILL_FORMS_STORAGE_KEY = 'tsundoku.drill.forms';
 export const DRILL_GROUPS_STORAGE_KEY = 'tsundoku.drill.groups';
+export const DRILL_RECIPES_STORAGE_KEY = 'tsundoku.drill.recipes';
+export const DRILL_MODE_STORAGE_KEY = 'tsundoku.drill.mode';
+
+/** Le due modalità: una forma alla volta, o più forme in catena (costruttore). */
+export type DrillMode = 'forms' | 'builder';
+export const DRILL_MODES: readonly DrillMode[] = ['forms', 'builder'];
 
 /**
  * Legge un elenco salvato tenendo solo i valori conosciuti, nell'ordine canonico.
@@ -72,4 +79,30 @@ export function toggleValue<T extends string>(
   return selected.includes(value)
     ? selected.filter((v) => v !== value)
     : known.filter((v) => v === value || selected.includes(v));
+}
+
+export function readRecipeSelection(
+  storage: Pick<Storage, 'getItem'> | undefined = browserStorage(),
+): string[] {
+  return readSelection(storage, DRILL_RECIPES_STORAGE_KEY, RECIPE_IDS);
+}
+
+/** L'ultima modalità usata; assente o sconosciuta ⇒ una forma alla volta. */
+export function readModeSelection(
+  storage: Pick<Storage, 'getItem'> | undefined = browserStorage(),
+): DrillMode {
+  try {
+    const raw = storage?.getItem(DRILL_MODE_STORAGE_KEY);
+    return DRILL_MODES.find((mode) => mode === raw) ?? 'forms';
+  } catch {
+    return 'forms';
+  }
+}
+
+export function saveMode(mode: DrillMode): void {
+  try {
+    browserStorage()?.setItem(DRILL_MODE_STORAGE_KEY, mode);
+  } catch {
+    // Storage pieno o negato: la scelta vale solo per questa visita.
+  }
 }
