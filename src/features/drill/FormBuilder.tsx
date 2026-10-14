@@ -72,6 +72,9 @@ function pieceMarker(step: BuildStep): string {
 const CHIP =
   'flex items-baseline gap-2 border-[1.5px] border-border-strong px-3 py-1 text-label font-semibold text-ink-primary';
 
+const INVERTED_CHIP =
+  'flex items-baseline gap-2 border-[1.5px] border-surface-sunken px-3 py-1 text-label font-semibold text-surface-base';
+
 /**
  * Come si mettono in ordine i pezzi: la regola, i gruppi nell'ordine in cui si
  * attaccano e un esempio intero spezzato. Si apre dalla scelta e da ogni domanda.
@@ -206,6 +209,42 @@ export function RecipeOptions({
   );
 }
 
+/** I pezzi di una catena, nell'ordine in cui si attaccano. */
+export function PieceChips({
+  steps,
+  className = '',
+  inverted = false,
+}: {
+  readonly steps: readonly BuildStep[];
+  readonly className?: string;
+  /** Su fondo scuro (le notti): filetto e testo chiari. */
+  readonly inverted?: boolean;
+}) {
+  const { t } = useTranslation();
+  return (
+    <ol
+      aria-label={t('drill.builder.piecesLabel')}
+      className={`flex flex-wrap items-center gap-x-2 gap-y-2 ${className}`}
+    >
+      {steps.map((step, index) => (
+        <li key={index} className="flex items-center gap-2">
+          {index > 0 ? (
+            <span aria-hidden="true" className={inverted ? 'text-surface-sunken' : 'text-ink-secondary'}>
+              →
+            </span>
+          ) : null}
+          <span className={inverted ? INVERTED_CHIP : CHIP}>
+            {t(`drill.builder.pieces.${step.piece}`)}
+            <span lang="ja" className={`font-jp-read font-bold ${inverted ? 'text-accent-on-ink' : 'text-accent'}`}>
+              {pieceMarker(step)}
+            </span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 /** Le catene da costruire, una domanda per volta. */
 export function BuilderTraining({
   pool,
@@ -230,27 +269,7 @@ export function BuilderTraining({
         <>
           <p className={KICKER}>{t('drill.builder.askKicker')}</p>
           <h2 className={ASK_HEADING}>{resolveBilingual(b.recipe.meaning, locale).text}</h2>
-          {/* I pezzi, nell'ordine in cui si attaccano. */}
-          <ol
-            aria-label={t('drill.builder.piecesLabel')}
-            className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2"
-          >
-            {built(b).steps.map((step, index) => (
-              <li key={index} className="flex items-center gap-2">
-                {index > 0 ? (
-                  <span aria-hidden="true" className="text-ink-secondary">
-                    →
-                  </span>
-                ) : null}
-                <span className={CHIP}>
-                  {t(`drill.builder.pieces.${step.piece}`)}
-                  <span lang="ja" className="font-jp-read font-bold text-accent">
-                    {pieceMarker(step)}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ol>
+          <PieceChips steps={built(b).steps} className="mt-3" />
           <div className="mt-4">
             <OrderGuide />
           </div>

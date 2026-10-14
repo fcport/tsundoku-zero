@@ -451,6 +451,36 @@ export const it = {
         intro:
           "Ogni domanda chiede più pezzi insieme, da attaccare nell'ordine indicato. Dopo la risposta vedi ogni passaggio: cosa si attacca e come si coniuga quello che ottieni. Scegli i gruppi di verbi e le combinazioni, poi comincia.",
       },
+      nights: {
+        name: 'Le notti della pila',
+        hint: 'Una storia da giocare: per rispondere ai libri costruisci le forme.',
+        intro:
+          "Ogni notte è una storia breve. Quando un libro ti parla, scegli cosa rispondere e scrivilo in giapponese: la storia cambia con quello che scrivi. Ogni errore accorcia la candela, ma non perdi niente: dopo tre tentativi il tanuki ti detta la forma.",
+      },
+    },
+    // Le notti della pila: la modalità a storia. Il racconto è nel dominio (nights.ts).
+    nights: {
+      label: 'Notti',
+      played: 'Giocata: la candela è spenta e il timbro è tuo.',
+      notPlayed: 'Da giocare.',
+      choose: 'Cosa vuoi dire?',
+      change: 'Cambia frase',
+      yourWords: 'Le tue parole',
+      next: 'Avanti',
+      answer: 'Rispondi',
+      you: 'Tu',
+      speakers: {
+        tanuki: 'Il tanuki',
+        book: 'Il libro',
+      },
+      dictate: 'Te la dico io. La prossima volta tocca a te:',
+      end: 'Fine di {{title}}',
+      saved: "Il timbro resta nell'elenco delle notti, su questo dispositivo.",
+      again: 'Rigioca la notte',
+      back: "Torna all'allenamento",
+      candleLit: 'La candela è accesa',
+      candleShort: 'La candela si è accorciata',
+      candleOut: 'La candela è spenta',
     },
     // Il costruttore di forme: più pezzi in catena sullo stesso verbo.
     builder: {

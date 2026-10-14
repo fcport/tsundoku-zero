@@ -6,6 +6,8 @@ import { DRILL_VERBS } from '../../domain/drill-verbs';
 import { RECIPES, RECIPE_IDS, buildPool } from '../../domain/form-builder';
 import { DrillScreen, Training } from './DrillScreen';
 import { BuilderTraining, RecipeOptions } from './FormBuilder';
+import { NightPlayer } from './NightPlayer';
+import { NIGHTS } from '../../domain/nights';
 import {
   DRILL_FORMS_STORAGE_KEY,
   DRILL_MODE_STORAGE_KEY,
@@ -44,11 +46,12 @@ describe('DrillScreen', () => {
     );
   });
 
-  it('offre le due modalità, a partire da una forma alla volta', () => {
+  it('offre le tre modalità, a partire da una forma alla volta', () => {
     const html = renderToStaticMarkup(<DrillScreen onExit={() => {}} random={() => 0} />);
     expect(html).toContain('Una forma alla volta');
     expect(html).toContain('Costruttore di forme');
-    expect(html.match(/type="radio"/g)).toHaveLength(2);
+    expect(html).toContain('Le notti della pila');
+    expect(html.match(/type="radio"/g)).toHaveLength(3);
   });
 
   it('dice quante combinazioni ha la scelta', () => {
@@ -108,6 +111,23 @@ describe('il costruttore di forme', () => {
     expect(html).toContain('La tua risposta');
     // La risposta non si vede prima di rispondere.
     expect(html).not.toContain('したかった');
+  });
+});
+
+describe('le notti', () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage('it');
+  });
+
+  it('la notte comincia dalla prima battuta, con la candela accesa', () => {
+    const html = renderToStaticMarkup(<NightPlayer night={NIGHTS[0]!} masthead={null} onExit={() => {}} />);
+    expect(html).toContain('第一夜');
+    expect(html).toContain('La prima candela');
+    expect(html).toContain('Ne conti ventotto');
+    expect(html).toContain('La candela è accesa');
+    expect(html).toContain('Avanti');
+    // Niente domanda finché la storia non ci arriva.
+    expect(html).not.toContain('Cosa rispondi al libro?');
   });
 });
 

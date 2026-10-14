@@ -22,7 +22,10 @@ import {
 } from '../../domain/conjugation';
 import { DRILL_VERBS } from '../../domain/drill-verbs';
 import { buildPool } from '../../domain/form-builder';
-import { useTranslation } from '../../i18n';
+import { NIGHTS } from '../../domain/nights';
+import { resolveBilingual } from '../../domain/bilingual';
+import { resolveLocale, useTranslation } from '../../i18n';
+import { Stamp } from '../../ui/Stamp';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { Masthead } from '../../ui/Masthead';
 import { ArrowIcon } from '../../ui/icons';
@@ -52,6 +55,8 @@ import {
   type DrillMode,
 } from './drillSelection';
 import { BuilderTraining, OrderGuide, RecipeOptions } from './FormBuilder';
+import { NightPlayer } from './NightPlayer';
+import { readDoneNights } from './nightProgress';
 
 export interface DrillScreenProps {
   /** Il ritorno alla dashboard, cablato dal livello app. */
@@ -69,10 +74,13 @@ export function DrillScreen({ onExit, random = Math.random }: DrillScreenProps) 
   const [forms, setForms] = useState<ConjugationForm[]>(() => readFormSelection());
   const [recipes, setRecipes] = useState<string[]>(() => readRecipeSelection());
   const [groups, setGroups] = useState<VerbGroup[]>(() => readGroupSelection());
+  const [nightId, setNightId] = useState(NIGHTS[0]!.id);
   const [training, setTraining] = useState(false);
   const formPool = useMemo(() => drillPool(DRILL_VERBS, forms, groups), [forms, groups]);
   const recipePool = useMemo(() => buildPool(DRILL_VERBS, recipes, groups), [recipes, groups]);
-  const count = mode === 'forms' ? formPool.length : recipePool.length;
+  const count =
+    mode === 'forms' ? formPool.length : mode === 'builder' ? recipePool.length : NIGHTS.length;
+  const night = NIGHTS.find((n) => n.id === nightId) ?? NIGHTS[0]!;
 
   const start = () => {
     if (count === 0) return;
@@ -108,6 +116,8 @@ export function DrillScreen({ onExit, random = Math.random }: DrillScreenProps) 
           <Masthead start={backButton(t('drill.back'), onExit)} />
           <Chooser
             mode={mode}
+            nightId={night.id}
+            onNight={setNightId}
             forms={forms}
             recipes={recipes}
             groups={groups}
@@ -121,8 +131,15 @@ export function DrillScreen({ onExit, random = Math.random }: DrillScreenProps) 
         </>
       ) : mode === 'forms' ? (
         <Training pool={formPool} random={random} masthead={masthead} />
-      ) : (
+      ) : mode === 'builder' ? (
         <BuilderTraining pool={recipePool} random={random} masthead={masthead} />
+      ) : (
+        <NightPlayer
+          key={night.id}
+          night={night}
+          masthead={<Masthead start={backButton(t('drill.changeSelection'), () => setTraining(false))} />}
+          onExit={() => setTraining(false)}
+        />
       )}
     </MagazineFrame>
   );
@@ -131,6 +148,8 @@ export function DrillScreen({ onExit, random = Math.random }: DrillScreenProps) 
 /** Il primo passo: come allenarsi, cosa allenare, poi «Comincia». */
 function Chooser({
   mode,
+  nightId,
+  onNight,
   forms,
   recipes,
   groups,
@@ -142,6 +161,8 @@ function Chooser({
   onStart,
 }: {
   readonly mode: DrillMode;
+  readonly nightId: string;
+  readonly onNight: (id: string) => void;
   readonly forms: readonly ConjugationForm[];
   readonly recipes: readonly string[];
   readonly groups: readonly VerbGroup[];
@@ -169,7 +190,7 @@ function Chooser({
           </div>
 
           {/* Le due modalità: una forma alla volta, o più forme in catena. */}
-          <fieldset className="grid gap-3 sm:grid-cols-2">
+          <fieldset className="grid gap-3 md:grid-cols-3">
             <legend className="sr-only">{t('drill.modeLabel')}</legend>
             {DRILL_MODES.map((option) => (
               <label
@@ -198,6 +219,10 @@ function Chooser({
             {mode === 'builder' ? <OrderGuide /> : null}
           </div>
 
+          {mode === 'nights' ? (
+            <NightOptions nightId={nightId} onNight={onNight} />
+          ) : (
+            <>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
             <fieldset className="flex flex-col self-start border-t-[1.5px] border-border-strong pt-4">
               <legend className="sr-only">{t('drill.groupsLabel')}</legend>
@@ -229,6 +254,8 @@ function Chooser({
               ? t(mode === 'forms' ? 'drill.poolSize' : 'drill.builder.poolSize', { value: count })
               : t(mode === 'forms' ? 'drill.empty' : 'drill.builder.empty')}
           </p>
+          </>
+          )}
         </div>
         <button type="submit" disabled={count === 0} className={`${ACTION_BAR} disabled:bg-ink-secondary`}>
           <span>{t('drill.start')}</span>
@@ -236,6 +263,48 @@ function Chooser({
         </button>
       </form>
     </main>
+  );
+}
+
+/** Le notti da giocare: quelle già giocate hanno la candela spenta e il timbro. */
+function NightOptions({ nightId, onNight }: { readonly nightId: string; readonly onNight: (id: string) => void }) {
+  const { t, i18n } = useTranslation();
+  const locale = resolveLocale(i18n.language);
+  const done = readDoneNights();
+  return (
+    <fieldset className="flex max-w-[40rem] flex-col border-t-[1.5px] border-border-strong pt-4">
+      <legend className="sr-only">{t('drill.nights.label')}</legend>
+      <p aria-hidden="true" className={`${SECTION_HEADING} mb-3`}>
+        {t('drill.nights.label')}
+      </p>
+      {NIGHTS.map((n) => {
+        const played = done.includes(n.id);
+        const meaning = resolveBilingual(n.stampMeaning, locale);
+        return (
+          <label key={n.id} className={`${OPTION_LABEL} gap-4 py-2`}>
+            <input
+              type="radio"
+              name="night"
+              className={CHECKBOX}
+              checked={nightId === n.id}
+              onChange={() => onNight(n.id)}
+            />
+            <span className="flex flex-1 flex-col">
+              <span className="flex items-baseline gap-2">
+                <span lang="ja" className="font-jp-read font-bold">
+                  {n.kanjiTitle}
+                </span>
+                {resolveBilingual(n.title, locale).text}
+              </span>
+              <span className="text-ink-secondary">
+                {played ? t('drill.nights.played') : t('drill.nights.notPlayed')}
+              </span>
+            </span>
+            {played ? <Stamp segments={n.stamp} size="sm" meaning={meaning.text} meaningLang={meaning.language} /> : null}
+          </label>
+        );
+      })}
+    </fieldset>
   );
 }
 

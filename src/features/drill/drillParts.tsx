@@ -2,7 +2,7 @@
 // (una forma alla volta, costruttore di forme): il ciclo domanda → risposta →
 // esito, il campo della risposta, l'esito e le frasi delle regole. Ogni modalità
 // porta solo come si chiede e come si spiega.
-import { useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react';
 import {
   isCorrectAnswer,
   normalizeAnswer,
@@ -91,7 +91,6 @@ export function QuestionLoop<T extends { readonly verb: Verb }>({
   const [value, setValue] = useState('');
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [score, setScore] = useState({ right: 0, total: 0 });
-  const composing = useRef(false);
   const input = useRef<HTMLInputElement>(null);
 
   if (!item) return null;
@@ -142,28 +141,13 @@ export function QuestionLoop<T extends { readonly verb: Verb }>({
 
             <label className="flex flex-col gap-2">
               <span className={KICKER}>{t('drill.inputLabel')}</span>
-              <input
-                ref={input}
-                lang="ja"
+              <KanaInput
+                inputRef={input}
                 value={value}
+                onValue={setValue}
                 readOnly={answer !== null}
-                autoFocus
-                autoComplete="off"
-                autoCapitalize="none"
-                autoCorrect="off"
-                spellCheck={false}
                 enterKeyHint={answer ? 'next' : 'done'}
-                aria-describedby="drill-hint"
-                onCompositionStart={() => {
-                  composing.current = true;
-                }}
-                onCompositionEnd={(e) => {
-                  composing.current = false;
-                  setValue(romajiToKana(e.currentTarget.value));
-                }}
-                onChange={(e) =>
-                  setValue(composing.current ? e.target.value : romajiToKana(e.target.value))
-                }
+                describedBy="drill-hint"
                 className={`min-h-[64px] w-full border-[1.5px] border-border-strong bg-surface-raised px-4 font-jp-read text-[28px] text-ink-primary read-only:bg-surface-sunken sm:text-[34px] ${FOCUS_RING}`}
               />
               <span id="drill-hint" className="text-label text-ink-secondary">
@@ -187,6 +171,58 @@ export function QuestionLoop<T extends { readonly verb: Verb }>({
         </form>
       </main>
     </>
+  );
+}
+
+/**
+ * Il campo della risposta in giapponese: il romaji diventa kana mentre si scrive;
+ * con la tastiera giapponese si lascia lavorare la composizione e si converte alla fine.
+ */
+export function KanaInput({
+  inputRef,
+  value,
+  onValue,
+  readOnly = false,
+  enterKeyHint,
+  describedBy,
+  label,
+  className,
+}: {
+  readonly inputRef?: RefObject<HTMLInputElement | null>;
+  readonly value: string;
+  readonly onValue: (value: string) => void;
+  readonly readOnly?: boolean;
+  readonly enterKeyHint?: 'next' | 'done';
+  readonly describedBy?: string;
+  /** Il nome del campo, quando non sta dentro un `<label>`. */
+  readonly label?: string;
+  readonly className: string;
+}) {
+  const composing = useRef(false);
+  return (
+    <input
+      ref={inputRef}
+      lang="ja"
+      value={value}
+      readOnly={readOnly}
+      autoFocus
+      autoComplete="off"
+      autoCapitalize="none"
+      autoCorrect="off"
+      spellCheck={false}
+      enterKeyHint={enterKeyHint}
+      aria-describedby={describedBy}
+      aria-label={label}
+      onCompositionStart={() => {
+        composing.current = true;
+      }}
+      onCompositionEnd={(e) => {
+        composing.current = false;
+        onValue(romajiToKana(e.currentTarget.value));
+      }}
+      onChange={(e) => onValue(composing.current ? e.target.value : romajiToKana(e.target.value))}
+      className={className}
+    />
   );
 }
 

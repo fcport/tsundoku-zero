@@ -14,9 +14,9 @@ export const DRILL_GROUPS_STORAGE_KEY = 'tsundoku.drill.groups';
 export const DRILL_RECIPES_STORAGE_KEY = 'tsundoku.drill.recipes';
 export const DRILL_MODE_STORAGE_KEY = 'tsundoku.drill.mode';
 
-/** Le due modalità: una forma alla volta, o più forme in catena (costruttore). */
-export type DrillMode = 'forms' | 'builder';
-export const DRILL_MODES: readonly DrillMode[] = ['forms', 'builder'];
+/** Le modalità: una forma alla volta, più forme in catena (costruttore), le notti. */
+export type DrillMode = 'forms' | 'builder' | 'nights';
+export const DRILL_MODES: readonly DrillMode[] = ['forms', 'builder', 'nights'];
 
 /**
  * Legge un elenco salvato tenendo solo i valori conosciuti, nell'ordine canonico.

@@ -210,6 +210,27 @@
       transform: translateY(0) rotate(0deg);
     }
   }
+
+  /* La fiamma della candela nelle notti della pila (14-10-2026): trema piano,
+   * di continuo, come una candela vera in una stanza chiusa. È atmosfera, non
+   * celebrazione; con meno movimento richiesto resta ferma (`motion-safe:`). */
+  --animate-flame: flame 2.4s ease-in-out infinite;
+
+  @keyframes flame {
+    0%,
+    100% {
+      transform: scaleY(1) skewX(0deg);
+    }
+    30% {
+      transform: scaleY(1.08) skewX(-3deg);
+    }
+    55% {
+      transform: scaleY(0.94) skewX(2deg);
+    }
+    80% {
+      transform: scaleY(1.04) skewX(-1deg);
+    }
+  }
 }
 
 /*

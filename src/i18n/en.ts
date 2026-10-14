@@ -441,6 +441,36 @@ export const en = {
         intro:
           'Each question asks for several pieces together, attached in the order shown. After you answer you see every step: what gets attached and how the result conjugates. Pick the verb groups and the combinations, then start.',
       },
+      nights: {
+        name: 'Nights of the pile',
+        hint: 'A story to play: you build the forms to answer the books.',
+        intro:
+          'Each night is a short story. When a book speaks to you, pick what to answer and write it in Japanese: the story changes with what you write. Every mistake shortens the candle, but you lose nothing: after three tries the tanuki dictates the form.',
+      },
+    },
+    // Nights of the pile: the story mode. The story itself is in the domain (nights.ts).
+    nights: {
+      label: 'Nights',
+      played: 'Played: the candle is out and the stamp is yours.',
+      notPlayed: 'Not played yet.',
+      choose: 'What do you want to say?',
+      change: 'Change sentence',
+      yourWords: 'Your words',
+      next: 'Next',
+      answer: 'Answer',
+      you: 'You',
+      speakers: {
+        tanuki: 'The tanuki',
+        book: 'The book',
+      },
+      dictate: 'I will tell you this once. Next time it is your turn:',
+      end: 'End of {{title}}',
+      saved: 'The stamp stays in the list of nights, on this device.',
+      again: 'Play the night again',
+      back: 'Back to practice',
+      candleLit: 'The candle is lit',
+      candleShort: 'The candle has burned down',
+      candleOut: 'The candle is out',
     },
     // The form builder: several pieces chained on the same verb.
     builder: {
