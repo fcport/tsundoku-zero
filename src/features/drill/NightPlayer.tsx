@@ -123,7 +123,8 @@ export function NightPlayer({
     if (!option) return;
     const verdict = judge(value, option);
     if (verdict.kind === 'empty') return;
-    const you: Entry = { kind: 'you', text: normalizeAnswer(value) };
+    // Le tue parole come le hai scritte, con la punteggiatura giapponese al posto di quella del romaji.
+    const you: Entry = { kind: 'you', text: normalizeAnswer(value).replace(/,/g, '、').replace(/\./g, '。') };
     setValue('');
     if (verdict.kind === 'correct') {
       setState((s) => reveal(s, [...verdict.then, ...s.queue], [you]));

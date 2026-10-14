@@ -74,7 +74,10 @@ export function DrillScreen({ onExit, random = Math.random }: DrillScreenProps) 
   const [forms, setForms] = useState<ConjugationForm[]>(() => readFormSelection());
   const [recipes, setRecipes] = useState<string[]>(() => readRecipeSelection());
   const [groups, setGroups] = useState<VerbGroup[]>(() => readGroupSelection());
-  const [nightId, setNightId] = useState(NIGHTS[0]!.id);
+  // Parte dalla prima notte non ancora giocata.
+  const [nightId, setNightId] = useState(
+    () => (NIGHTS.find((n) => !readDoneNights().includes(n.id)) ?? NIGHTS[0]!).id,
+  );
   const [training, setTraining] = useState(false);
   const formPool = useMemo(() => drillPool(DRILL_VERBS, forms, groups), [forms, groups]);
   const recipePool = useMemo(() => buildPool(DRILL_VERBS, recipes, groups), [recipes, groups]);

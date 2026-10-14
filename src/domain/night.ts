@@ -18,7 +18,7 @@ import { DRILL_VERBS } from './drill-verbs';
 import { buildForm, type BuildStep, type FormPiece } from './form-builder';
 
 /** Chi parla. */
-export type Speaker = 'tanuki' | 'book';
+export type Speaker = 'tanuki' | 'book' | 'diary';
 
 export type Beat =
   /** Il racconto. */
@@ -114,6 +114,20 @@ export function cleanAnswer(input: string): string {
   return normalizeAnswer(input.replace(/[。、．，.,!?！？「」『』…]/g, ''));
 }
 
+/**
+ * Toglie dalla risposta i pezzi della frase già scritti: chi ricopia tutta la frase
+ * (はい、よみたい al posto di よみたい) ha risposto lo stesso.
+ */
+function withoutFrame(answer: string, frame: Spelling): string {
+  let rest = answer;
+  for (const spelling of [frame.kana, frame.kanji]) {
+    const [before = '', after = ''] = spelling.split(FRAME_GAP).map(cleanAnswer);
+    if (before && rest.startsWith(before) && rest.length > before.length) rest = rest.slice(before.length);
+    if (after && rest.endsWith(after) && rest.length > after.length) rest = rest.slice(0, -after.length);
+  }
+  return rest;
+}
+
 function matches(answer: string, candidates: readonly string[]): boolean {
   return candidates.some((c) => cleanAnswer(c) === answer);
 }
@@ -131,7 +145,7 @@ export type Verdict =
  * conversione del romaji ⇒ parole non giapponesi; altrimenti sbagliata.
  */
 export function judge(input: string, option: AskOption): Verdict {
-  const answer = cleanAnswer(input);
+  const answer = withoutFrame(cleanAnswer(input), option.frame);
   if (answer === '') return { kind: 'empty' };
   const { result } = targetForm(option.target);
   const canonical = 'verb' in option.target

@@ -88,6 +88,21 @@ describe('judge, con le risposte date davvero', () => {
     expect(judge('yomanakatta', option('didnt')).kind).toBe('mistake');
   });
 
+  it('il diario: はい da solo non basta, la frase intera sì', () => {
+    expect(judge('hai', option('diary-yes')).kind).toBe('mistake');
+    expect(judge('hai, watashi ha yomitai', option('diary-yes')).kind).toBe('correct');
+    expect(judge('yomitai', option('diary-yes')).kind).toBe('correct');
+    expect(judge('はい、よみたい。', option('diary-yes')).kind).toBe('correct');
+    expect(judge('よみたかった', option('diary-yes')).kind).toBe('mistake');
+  });
+
+  it('il diario: 話しました è «al» tanuki, il passivo è «dal» tanuki', () => {
+    expect(judge('hanashimashita', option('spoke')).kind).toBe('mistake');
+    expect(judge('hanasaremashita', option('spoke')).kind).toBe('correct');
+    expect(judge('今夜、わたしはたぬきに話された。', option('spoke')).kind).toBe('correct');
+    expect(judge('mirareta', option('watched')).kind).toBe('correct');
+  });
+
   it('parole non giapponesi, sbagliate, vuote', () => {
     expect(judge('divertente', option('boring')).kind).toBe('foreign');
     expect(judge('たべたい', option('boring')).kind).toBe('wrong');

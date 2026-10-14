@@ -472,6 +472,7 @@ export const it = {
       speakers: {
         tanuki: 'Il tanuki',
         book: 'Il libro',
+        diary: 'Il diario',
       },
       dictate: 'Te la dico io. La prossima volta tocca a te:',
       end: 'Fine di {{title}}',

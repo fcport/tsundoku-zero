@@ -462,6 +462,7 @@ export const en = {
       speakers: {
         tanuki: 'The tanuki',
         book: 'The book',
+        diary: 'The diary',
       },
       dictate: 'I will tell you this once. Next time it is your turn:',
       end: 'End of {{title}}',
