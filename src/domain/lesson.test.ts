@@ -295,7 +295,7 @@ describe('exerciseReserve — gli esercizi di una lezione ancora fuori dalla pil
   });
 
   it('le costanti dello sblocco a gruppi', () => {
-    expect(FIRST_EXERCISES_BATCH).toBe(12);
+    expect(FIRST_EXERCISES_BATCH).toBe(8);
     expect(EXTRA_EXERCISES_BATCH).toBe(6);
   });
 });

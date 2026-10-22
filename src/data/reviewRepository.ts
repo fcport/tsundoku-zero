@@ -11,6 +11,13 @@
 // confine `<=` di `isDue`; lo `review_state` di un utente è isolato ai suoi
 // esercizi sbloccati (RLS), quindi fetch-poi-filtro è accettabile. `now` è
 // INIETTATO dal chiamante (via Clock), mai letto dalla piattaforma.
+//
+// Il RIENTRO DOLCE (22-10-2026): letti tutti gli stati, `spreadBacklog` (dominio)
+// decide quali arretrati oltre il tetto rinviare; l'adattatore li toglie dalla pila
+// di oggi e salva i rinvii con la RPC `postpone_reviews`. Il salvataggio è
+// BEST-EFFORT: se fallisce (rete, offline) la pila di oggi resta comunque nel
+// tetto, e la lettura dopo riprova. La pila esce nell'ordine di `mixByLesson`:
+// lezioni alternate, in un ordine diverso ogni giorno.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   ApplyReviewInput,
@@ -20,14 +27,18 @@ import type { ReviewState } from '../domain/schedule';
 import { REVIEW_OUTCOMES, type ReviewOutcome } from '../domain/schedule';
 import type { ReviewLogRecord } from '../domain/streak';
 import { isDue } from '../domain/due';
+import { backlogBefore, mixByLesson, postponedAhead, spreadBacklog } from '../domain/backlog';
+import { studyDayOrdinal } from '../domain/calendarDay';
 import { DataError } from './dataError';
 
 // Il nome della tabella e le colonne vivono qui una sola volta (AD-2). Colonne di
 // `review_state` (3.8): exercise_id, stage, due_at, review_count, lapse_count,
-// last_reviewed_at (nullable). `user_id` non serve: RLS isola già la riga.
+// last_reviewed_at (nullable). `user_id` non serve: RLS isola già la riga. La
+// lezione dell'esercizio (`exercise(lesson_id)`, dalla FK `exercise_id`) serve
+// solo al rientro dolce, per variare gli arretrati fra le lezioni.
 const REVIEW_STATE_TABLE = 'review_state';
 const REVIEW_STATE_COLUMNS =
-  'exercise_id, stage, due_at, review_count, lapse_count, last_reviewed_at';
+  'exercise_id, stage, due_at, review_count, lapse_count, last_reviewed_at, exercise(lesson_id)';
 
 // Il registro append-only dei ripassi (3.7): il canale UNICO delle statistiche
 // derivate (AD-18) ora porta la riga COMPLETA. `exercise_id` (identita), `outcome`
@@ -44,6 +55,7 @@ const REVIEW_LOG_COLUMNS = 'exercise_id, outcome, reviewed_at, grammar_point';
 // (nessuna logica di valutazione/scheduling in SQL). Il nome vive qui una sola
 // volta (AD-2).
 const APPLY_REVIEW_FN = 'apply_review';
+const POSTPONE_REVIEWS_FN = 'postpone_reviews';
 
 // Forma GREZZA di una riga `review_log` come arriva da Supabase. La riga porta la
 // proiezione COMPLETA (statistiche derivate, AD-18): l'identita dell'esercizio,
@@ -110,6 +122,22 @@ interface ReviewStateRow {
   readonly review_count: unknown;
   readonly lapse_count: unknown;
   readonly last_reviewed_at: unknown;
+  readonly exercise?: unknown;
+}
+
+/**
+ * La lezione di ogni esercizio, dalle righe grezze. TOLLERANTE: una riga senza
+ * lezione leggibile non entra nella mappa (il rientro dolce la tratta da sola).
+ */
+function lessonsOf(rows: readonly ReviewStateRow[]): ReadonlyMap<string, string> {
+  const lessons = new Map<string, string>();
+  for (const row of rows) {
+    const exercise = row?.exercise as { lesson_id?: unknown } | null | undefined;
+    if (typeof row?.exercise_id === 'string' && typeof exercise?.lesson_id === 'string') {
+      lessons.set(row.exercise_id, exercise.lesson_id);
+    }
+  }
+  return lessons;
 }
 
 /**
@@ -175,10 +203,10 @@ export function createSupabaseReviewRepository(
   client: SupabaseClient,
 ): ReviewRepository {
   return {
-    async listDue(now: Date): Promise<readonly ReviewState[]> {
+    async listDue(now: Date, timeZone: string): Promise<readonly ReviewState[]> {
       // Su errore Supabase LANCIA (reject). Poi mappa OGNI riga in ReviewState e
       // ritorna SOLO quelle per cui `isDue(state, now)` (autorità di dominio,
-      // AD-5): la porta rispecchia il predicato, non lo reimplementa.
+      // AD-5), meno gli arretrati che `spreadBacklog` rinvia ai giorni dopo.
       const { data, error } = await client
         .from(REVIEW_STATE_TABLE)
         .select(REVIEW_STATE_COLUMNS);
@@ -188,7 +216,39 @@ export function createSupabaseReviewRepository(
       }
 
       const rows = (data ?? []) as readonly ReviewStateRow[];
-      return rows.map(toReviewState).filter((state) => isDue(state, now));
+      const states = rows.map(toReviewState);
+      const lessons = lessonsOf(rows);
+      const postponed = spreadBacklog(states, lessons, now, timeZone);
+      if (postponed.length > 0) {
+        // Best-effort: l'esito non conta, un errore non rompe la pila (vedi in testa).
+        try {
+          await client.rpc(POSTPONE_REVIEWS_FN, {
+            exercise_ids: postponed.map((p) => p.exerciseId),
+            due_ats: postponed.map((p) => p.dueAt.toISOString()),
+            still_due_before: backlogBefore(now, timeZone).toISOString(),
+          });
+        } catch {
+          // La lettura dopo riprova.
+        }
+      }
+      const moved = new Set(postponed.map((p) => p.exerciseId));
+      const due = states.filter((state) => isDue(state, now) && !moved.has(state.exerciseId));
+      return mixByLesson(due, lessons, studyDayOrdinal(now, timeZone));
+    },
+
+    async countPostponed(now: Date, timeZone: string): Promise<number> {
+      // Stessa lettura di `listDue` (RLS isola le righe dell'utente); il conteggio
+      // è del dominio (`postponedAhead`). Su errore LANCIA come `listDue`.
+      const { data, error } = await client
+        .from(REVIEW_STATE_TABLE)
+        .select(REVIEW_STATE_COLUMNS);
+
+      if (error) {
+        throw new DataError('countPostponed', error);
+      }
+
+      const rows = (data ?? []) as readonly ReviewStateRow[];
+      return postponedAhead(rows.map(toReviewState), now, timeZone);
     },
 
     async listReviewLog(): Promise<readonly ReviewLogRecord[]> {

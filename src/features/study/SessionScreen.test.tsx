@@ -27,7 +27,7 @@ const NOW = new Date('2026-09-25T12:00:00.000Z');
 // Porte inerti: con la cache seminata le queryFn non partono.
 const inMemoryPorts: Ports = {
   clock: { now: () => NOW, timeZone: () => 'UTC' },
-  review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
+  review: { listDue: async () => [], countPostponed: async () => 0, listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };

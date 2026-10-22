@@ -83,6 +83,7 @@ function spyPorts(): Ports {
     clock: { now: () => NOW, timeZone: () => 'UTC' },
     review: {
       listDue: listDue as unknown as Ports['review']['listDue'],
+      countPostponed: async () => 0,
       listReviewLog: async () => [],
       applyReview: async () => {},
     },
@@ -240,6 +241,7 @@ describe('AuthenticatedShell — precarico all avvio sessione (4.1, AC4)', () =>
       clock: { now: () => NOW, timeZone: () => 'UTC' },
       review: {
         listDue: async () => DUE_STATES,
+        countPostponed: async () => 0,
         listReviewLog: async () => [],
         applyReview: async () => {},
       },

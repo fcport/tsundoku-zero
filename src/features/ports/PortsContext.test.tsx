@@ -76,6 +76,7 @@ const sampleLog = [
 ] as const;
 const inMemoryReview: ReviewRepository = {
   listDue: async () => sampleDue,
+  countPostponed: async () => 0,
   listReviewLog: async () => sampleLog,
   applyReview: async () => {},
 };
@@ -146,7 +147,7 @@ describe('PortsProvider / usePorts — iniezione di porte in memoria', () => {
     );
 
     await expect(captured!.content.listLessons()).resolves.toBe(sampleLessons);
-    await expect(captured!.review.listDue(FIXED_NOW)).resolves.toBe(sampleDue);
+    await expect(captured!.review.listDue(FIXED_NOW, FIXED_TZ)).resolves.toBe(sampleDue);
     await expect(captured!.progress.listUnlockedLessons()).resolves.toBe(
       sampleUnlocked,
     );

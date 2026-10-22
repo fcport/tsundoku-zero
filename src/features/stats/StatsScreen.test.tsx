@@ -28,6 +28,7 @@ const inMemoryPorts: Ports = {
   clock: { now: () => NOW, timeZone: () => TZ },
   review: {
     listDue: async () => [],
+    countPostponed: async () => 0,
     listReviewLog: async () => [],
     applyReview: async () => {},
   },
@@ -360,7 +361,7 @@ describe('AC5 — log vuoto ⇒ dichiarazione quantificata «cosa manca e quanto
   });
 });
 
-describe('5.2 AC — distribuzione per stadio: intestazione + sei stadi con conteggi come testo', () => {
+describe('5.2 AC — distribuzione per stadio: intestazione + otto stadi con conteggi come testo', () => {
   // Tre esercizi a stadi finali diversi:
   //  - ex-A: good ⇒ stadio 1
   //  - ex-B: good, good ⇒ stadio 2
@@ -383,15 +384,17 @@ describe('5.2 AC — distribuzione per stadio: intestazione + sei stadi con cont
     expect(markup).toContain(en.stats.stageDistribution.heading);
   });
 
-  it('mostra ESATTAMENTE i sei stadi 0-5 col conteggio come TESTO', () => {
+  it('mostra ESATTAMENTE gli otto stadi 0-7 col conteggio come TESTO', () => {
     expect(markup).toContain('Level 0 - exercises: 0');
     expect(markup).toContain('Level 1 - exercises: 1');
     expect(markup).toContain('Level 2 - exercises: 2');
     expect(markup).toContain('Level 3 - exercises: 0');
     expect(markup).toContain('Level 4 - exercises: 0');
     expect(markup).toContain('Level 5 - exercises: 0');
-    // Nessun settimo stadio.
-    expect(markup).not.toContain('Level 6 -');
+    expect(markup).toContain('Level 6 - exercises: 0');
+    expect(markup).toContain('Level 7 - exercises: 0');
+    // Nessun nono stadio.
+    expect(markup).not.toContain('Level 8 -');
   });
 
   it('include uno stadio a conteggio 0 come testo (asse contiguo, zeri inclusi)', () => {
@@ -436,6 +439,7 @@ describe('5.2 AC — la fonte è SOLO review.listReviewLog() (mai listDue/review
           calls.push('listDue');
           throw new Error('listDue non deve essere consultata dalle statistiche');
         },
+        countPostponed: async () => 0,
         listReviewLog: async () => {
           calls.push('listReviewLog');
           return [];
@@ -516,6 +520,7 @@ describe('AC2 — la fonte è SOLO review.listReviewLog() (mai listDue/review_co
           calls.push('listDue');
           throw new Error('listDue non deve essere consultata dalle statistiche');
         },
+        countPostponed: async () => 0,
         listReviewLog: async () => {
           calls.push('listReviewLog');
           return [];
@@ -648,6 +653,7 @@ describe('5.3 AC — la fonte e SOLO review.listReviewLog() + content.listLesson
           calls.push('listDue');
           throw new Error('listDue non deve essere consultata dalle statistiche');
         },
+        countPostponed: async () => 0,
         listReviewLog: async () => {
           calls.push('listReviewLog');
           return [];

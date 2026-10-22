@@ -71,6 +71,7 @@ function makeVars(reviewId?: string): ReviewMutationVars {
 function spyReview(applyReview: ReviewRepository['applyReview']): ReviewRepository {
   return {
     listDue: async () => [],
+    countPostponed: async () => 0,
     listReviewLog: async () => [],
     applyReview,
   };

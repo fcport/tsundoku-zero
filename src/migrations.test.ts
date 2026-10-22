@@ -1096,12 +1096,17 @@ describe('migrazione review/progress — progresso per-utente e isolato (Story 3
   // AC3 (riga "Scala dello stadio"): il CHECK su review_state.stage NON è un
   // elenco parallelo — il limite superiore SQL === LEITNER_INTERVALS_DAYS.length -
   // 1 (import da ./domain/schedule). Un drift della scala qui è CI rossa.
+  // La scala si allarga con una migrazione successiva (22-10-2026, 0–7): conta
+  // l'ULTIMO CHECK su stage in ordine di versione, non quello della creazione.
   it('il CHECK su stage deriva dalla scala Leitner (limite superiore === length - 1)', () => {
-    const sql = stripSqlComments(reviewProgress?.sql ?? '').toLowerCase();
-    const maxStage = LEITNER_INTERVALS_DAYS.length - 1;
-    const match = sql.match(/check\s*\(\s*stage\s+between\s+0\s+and\s+(\d+)\s*\)/);
-    expect(match, 'CHECK (stage between 0 and N) assente').not.toBeNull();
-    expect(Number(match?.[1])).toBe(maxStage);
+    const stageCheck = /check\s*\(\s*stage\s+between\s+0\s+and\s+(\d+)\s*\)/;
+    expect(stripSqlComments(reviewProgress?.sql ?? '').toLowerCase()).toMatch(stageCheck);
+    const latest = [...migrations]
+      .reverse()
+      .map((m) => stripSqlComments(m.sql).toLowerCase().match(stageCheck))
+      .find((match) => match !== null);
+    expect(latest, 'CHECK (stage between 0 and N) assente').toBeDefined();
+    expect(Number(latest?.[1])).toBe(LEITNER_INTERVALS_DAYS.length - 1);
   });
 
   // AC4 (riga "Insieme degli esiti"): il CHECK su review_log.outcome contiene
@@ -1946,7 +1951,7 @@ describe('migrazione unlock_lesson — sbloccare la lezione successiva (Story 3.
 });
 
 // ---------------------------------------------------------------------------
-// Lo sblocco a gruppi: 12 esercizi alla lezione nuova, gli altri in riserva.
+// Lo sblocco a gruppi: 12 esercizi alla lezione nuova (poi 8, vedi sotto), gli altri in riserva.
 // L'effetto dal vivo (12 su 30, copertura di regole e tipi, +6 per volta, pulizia
 // delle pile esistenti) è stato provato su Postgres reale (PGlite) all'autorazione;
 // qui si fissano la forma e le soglie.
@@ -1995,5 +2000,82 @@ describe('migrazione unlock_lesson_in_batches — 12 alla lezione nuova, 6 per v
     expect(code).toContain('k.review_count = 0');
     expect(code).toContain('s.last_reviewed_at is null');
     expect(code).toContain('k.slot > 12');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Lo sblocco scende a 8: stessa funzione, soglia più bassa, stessa pulizia.
+// ---------------------------------------------------------------------------
+
+const eight = migrations.find((m) => m.name.endsWith('_unlock_lesson_eight.sql'));
+
+describe('migrazione unlock_lesson_eight — 8 alla lezione nuova', () => {
+  const code = stripSqlComments(eight?.sql ?? '').toLowerCase();
+
+  it('esiste, viene dopo lo sblocco a gruppi e parsa', () => {
+    expect(eight, 'atteso un file *_unlock_lesson_eight.sql').toBeDefined();
+    expect((eight?.name ?? '') > (batches?.name ?? '')).toBe(true);
+    expect(parseSql(eight?.sql ?? '').error).toBeNull();
+  });
+
+  it('lo sblocco materializza solo le prime 8 posizioni, idempotente', () => {
+    expect(code).toMatch(/create or replace function public\.unlock_lesson\(/);
+    expect(code).toContain('r.position <= 8');
+    expect(code).not.toContain('r.position <= 12');
+    expect(code).toContain('on conflict (user_id, lesson_id) do nothing');
+    expect(code).toContain('on conflict (user_id, exercise_id) do nothing');
+  });
+
+  it('la funzione resta language sql, security invoker, search_path vuoto', () => {
+    const fns = code.match(/create (or replace )?function[\s\S]*?\$\$/g) ?? [];
+    expect(fns).toHaveLength(1);
+    expect(fns[0]).toContain('language sql');
+    expect(fns[0]).toContain('security invoker');
+    expect(fns[0]).toContain("set search_path = ''");
+  });
+
+  it("la pulizia toglie solo esercizi mai fatti oltre l'ottavo", () => {
+    expect(code).toContain('delete from public.review_state');
+    expect(code).toContain('k.review_count = 0');
+    expect(code).toContain('s.last_reviewed_at is null');
+    expect(code).toContain('k.slot > 8');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// La scala più lunga (0–7) e il rinvio degli arretrati (22-10-2026).
+// ---------------------------------------------------------------------------
+
+const postpone = migrations.find((m) => m.name.endsWith('_longer_scale_and_postpone.sql'));
+
+describe('migrazione longer_scale_and_postpone — CHECK 0–7 e postpone_reviews', () => {
+  const code = stripSqlComments(postpone?.sql ?? '').toLowerCase();
+
+  it('esiste, viene dopo lo sblocco a 8 e parsa', () => {
+    expect(postpone, 'atteso un file *_longer_scale_and_postpone.sql').toBeDefined();
+    expect((postpone?.name ?? '') > (eight?.name ?? '')).toBe(true);
+    expect(parseSql(postpone?.sql ?? '').error).toBeNull();
+  });
+
+  it('sostituisce il CHECK su stage con lo stesso nome', () => {
+    expect(code).toContain('drop constraint review_state_stage_check');
+    expect(code).toMatch(/add constraint review_state_stage_check check \(stage between 0 and \d+\)/);
+  });
+
+  it('postpone_reviews: language sql, security invoker, search_path vuoto, ritorna int', () => {
+    expect(code).toMatch(
+      /create function public\.postpone_reviews\(\s*exercise_ids uuid\[\],\s*due_ats timestamptz\[\],\s*still_due_before timestamptz\s*\)\s*returns int/,
+    );
+    const fns = code.match(/create (or replace )?function[\s\S]*?\$\$/g) ?? [];
+    expect(fns).toHaveLength(1);
+    expect(fns[0]).toContain('language sql');
+    expect(fns[0]).toContain('security invoker');
+    expect(fns[0]).toContain("set search_path = ''");
+  });
+
+  it("sposta solo righe dell'utente corrente ancora arretrate", () => {
+    expect(code).toContain('update public.review_state s');
+    expect(code).toContain('s.user_id = auth.uid()');
+    expect(code).toContain('s.due_at < postpone_reviews.still_due_before');
   });
 });

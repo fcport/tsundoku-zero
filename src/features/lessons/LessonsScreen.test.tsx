@@ -17,7 +17,7 @@ const NOW = new Date('2026-09-30T10:00:00.000Z');
 
 const ports: Ports = {
   clock: { now: () => NOW, timeZone: () => 'UTC' },
-  review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
+  review: { listDue: async () => [], countPostponed: async () => 0, listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: {
     listLessons: async () => [],

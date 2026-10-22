@@ -143,6 +143,7 @@ function makeModeledReviewGate(failReviewIdsOnce: readonly string[] = []) {
 
   const review: ReviewRepository = {
     listDue: async () => [],
+    countPostponed: async () => 0,
     listReviewLog: async () => [],
     applyReview,
   };

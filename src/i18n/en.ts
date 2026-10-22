@@ -110,6 +110,11 @@ export const en = {
     // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
     // della dashboard. Verbale e concreta, mai "Continue"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode; ASCII.
+    // Arretrati rinviati ancora in arrivo (22-10-2026): vedi `it`.
+    backlogAheadBody:
+      'Overdue exercises coming over the next days, {{perDay}} a day: {{value}}. New lessons unlock once you have reviewed them all, in {{days}} days.',
+    backlogAheadTomorrowBody:
+      'Overdue exercises coming tomorrow: {{value}}. New lessons unlock once you have reviewed them.',
     viewStats: 'See your statistics',
     currentLesson: 'Lesson {{order}}: {{title}}',
     openSettings: 'Settings',
@@ -149,17 +154,17 @@ export const en = {
         'The chart appears once you have answered on at least {{needed}} different days. Days so far: {{soFar}}.',
     },
     // Distribuzione per stadio (5.2, FR7.2): `heading` intitola la sezione;
-    // `stageLabel` etichetta ogni stadio (`{{stage}}` = indice 0-5, `{{exercises}}`
+    // `stageLabel` etichetta ogni stadio (`{{stage}}` = indice 0-7, `{{exercises}}`
     // = numero di esercizi in quello stadio, MAI `{{count}}` che innescherebbe il
     // pluralizzatore i18next e romperebbe la parita en/it); `empty` è la dichiarazione
     // quantificata a log vuoto (5.4): asse CATEGORIALE, meaningful con qualunque dato,
     // quindi il minimo onesto è «almeno un esercizio ripassato» (nessuna soglia
     // numerica fabbricata). Nessuna etichetta mnemonica ne intervallo in giorni: l'AC
-    // chiede «sei stadi, 0-5».
+    // chiede «uno stadio per gradino della scala, 0-7».
     stageDistribution: {
       heading: 'How well you know the exercises',
       stageLabel: 'Level {{stage}} - exercises: {{exercises}}',
-      // Cosa sono i livelli (0-5): senza, «level 1» non dice niente.
+      // Cosa sono i livelli (0-7): senza, «level 1» non dice niente.
       hint: 'Each right answer moves an exercise up one level and brings it back later. A wrong answer sends it back to level 0.',
       empty: 'After your first review you will see the level of each exercise here.',
     },
@@ -203,10 +208,10 @@ export const en = {
     },
     milestones: {
       heading: 'Milestones',
-      hint: 'You earn them by learning lessons, by getting exercises to the point where they come back only after 35 days, and by studying many days in a row. Once earned they stay, even if you make mistakes later.',
+      hint: 'You earn them by learning lessons, by getting exercises to the point where they come back only after 35 days or more, and by studying many days in a row. Once earned they stay, even if you make mistakes later.',
       family: {
         lessonsRead: 'Lessons learned',
-        topLevel: 'Exercises coming back after 35 days',
+        topLevel: 'Exercises coming back after 35 days or more',
         streak: 'Days in a row',
       },
       entry: '{{family}}: {{threshold}}',
@@ -300,7 +305,7 @@ export const en = {
       streakLabel: '{{days}} day streak',
       dismiss: 'Back to the dashboard',
       recapLevelUps: 'Exercises you got right, now coming back later: {{value}}',
-      recapTop: 'Exercises that now come back only after 35 days: {{value}}',
+      recapTop: 'Exercises that now come back only after 35 days or more: {{value}}',
       lessonRead: 'Lesson {{order}} learned: all its exercises now come back only after 16 days or more.',
       milestone: 'New milestone',
     },
@@ -310,7 +315,7 @@ export const en = {
     kicker: 'Curriculum',
     title: 'Lessons',
     intro:
-      'Every lesson of the course, in order. A new lesson puts 12 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». Unlocked lessons can also be reviewed freely: free review does not change the pile. The others unlock one at a time from the dashboard, once the pile is empty.',
+      'Every lesson of the course, in order. A new lesson puts 8 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». Unlocked lessons can also be reviewed freely: free review does not change the pile. The others unlock one at a time from the dashboard, once the pile is empty.',
     lessonNumber: 'Lesson {{order}}',
     status: {
       current: 'In progress',
@@ -663,7 +668,7 @@ export const en = {
       'So I built this platform. As I go through the lessons I add them here and write their exercises, so that anyone, now or in the future, can use it to practise what they learned with Cure Dolly.',
     howKicker: 'How to use it',
     how:
-      'Each lesson matches a video. When you unlock a lesson, 12 of its exercises go onto your pile; if you want more, add them with «Practise more». An exercise you get right comes back after a longer and longer gap; one you get wrong comes back sooner. Clear the pile every day, and when it is empty, unlock the next lesson.',
+      'Each lesson matches a video. When you unlock a lesson, 8 of its exercises go onto your pile; if you want more, add them with «Practise more». An exercise you get right comes back after a longer and longer gap; one you get wrong comes back sooner. Clear the pile every day, and when it is empty, unlock the next lesson.',
     lessonsPage:
       'On the Lessons page you can watch the video again and practise any lesson you have unlocked, whenever you like.',
     passionKicker: 'Why I do it',

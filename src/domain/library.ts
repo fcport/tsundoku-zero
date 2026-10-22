@@ -11,7 +11,6 @@
 // contenuto non conosce più (riautorato) non conta.
 //
 // Pura: nessun import esterno, nessun orologio.
-import { LEITNER_INTERVALS_DAYS } from './schedule';
 import type { LessonSummary } from './ports/contentRepository';
 import { currentStages } from './stageDistribution';
 import type { ReviewLogRecord } from './streak';
@@ -19,8 +18,13 @@ import type { ReviewLogRecord } from './streak';
 /** Da questo livello un esercizio «lo sai bene»: torna fra 16 giorni o più. */
 export const KNOWN_STAGE = 4;
 
-/** Il livello più alto della scala (5: torna fra 35 giorni). */
-export const TOP_STAGE = LEITNER_INTERVALS_DAYS.length - 1;
+/**
+ * Da questo livello un esercizio torna fra 35 giorni o più: è la soglia dei
+ * traguardi e del riepilogo. Fino al 22-10-2026 era il livello più alto della
+ * scala; la scala ora sale fino a 140 giorni, ma la soglia resta qui così i
+ * traguardi già presi non cambiano.
+ */
+export const LONG_STAGE = 5;
 
 /** A che punto è una lezione. */
 export interface LessonMastery {

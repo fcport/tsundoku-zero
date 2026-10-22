@@ -8,7 +8,7 @@
 // Chiave del design: NIENTE RAMI per gli estremi. Si sceglie lo stadio prossimo
 // per esito, poi si CLAMP aritmeticamente (`Math.min`/`Math.max`); l'intervallo è
 // un unico prodotto `scala[nextStage] × fattoreEsito`. Lo stadio 0 (intervallo 0)
-// e lo stadio 5 saturato cadono fuori da soli, senza `if (stage === 0/5)`.
+// e l'ultimo stadio saturato cadono fuori da soli, senza `if (stage === 0/max)`.
 //
 // L'hash della dispersione (`fnv1a`) NON è più definito qui: vive in `./hash`
 // (estrazione pura, i test di questo modulo restano verdi), condiviso con l'ordine
@@ -55,14 +55,20 @@ export interface ReviewState {
 }
 
 /**
- * L'UNICA costante di scala Leitner (AC1): gli INDICI sono gli stadi `0`–`5`, i
+ * L'UNICA costante di scala Leitner (AC1): gli INDICI sono gli stadi `0`–`7`, i
  * VALORI gli intervalli in giorni. Lo stadio massimo si DERIVA da `length - 1`,
  * non da una seconda costante: aggiungere un gradino qui basta a estendere la
- * scala senza toccare altro.
+ * scala (il `CHECK` SQL su `review_state.stage` va allargato con una migrazione,
+ * un test lo pretende).
+ *
+ * Fino al 22-10-2026 la scala si fermava a 35 giorni: un esercizio saputo tornava
+ * ogni 35–44 giorni PER SEMPRE, e il carico di ogni giorno cresceva con le lezioni
+ * senza mai scendere. I gradini 70 e 140 lasciano uscire dalla rotazione gli
+ * esercizi saputi; un errore li riporta comunque a 0.
  */
-export const LEITNER_INTERVALS_DAYS = [0, 1, 3, 7, 16, 35] as const;
+export const LEITNER_INTERVALS_DAYS = [0, 1, 3, 7, 16, 35, 70, 140] as const;
 
-/** Stadio massimo, DERIVATO dalla scala (5), non una seconda costante. */
+/** Stadio massimo, DERIVATO dalla scala (7), non una seconda costante. */
 const MAX_STAGE = LEITNER_INTERVALS_DAYS.length - 1;
 
 /**
@@ -117,6 +123,18 @@ function nextStageFor(stage: number, outcome: ReviewOutcome): number {
  */
 export function nextStage(stage: number, outcome: ReviewOutcome): number {
   return Math.max(0, Math.min(MAX_STAGE, nextStageFor(stage, outcome)));
+}
+
+/**
+ * Il PIÙ LONTANO che `schedule` può mandare un esercizio che arriva allo stadio
+ * `stage`, in giornate di studio dopo quella del ripasso: l'intervallo pieno più
+ * tutta la dispersione, arrotondato come in `schedule` (0 allo stadio 0). Una
+ * scadenza più lontana di così non viene dallo scheduler ma da un rinvio
+ * (`./backlog`).
+ */
+export function latestIntervalDays(stage: number): number {
+  const intervalDays = LEITNER_INTERVALS_DAYS[stage] ?? 0;
+  return intervalDays > 0 ? Math.max(1, Math.round(intervalDays * (1 + DISPERSION_FRACTION))) : 0;
 }
 
 /**

@@ -7,10 +7,10 @@ import type { ReviewLogRecord } from './streak';
 // stadio, derivata dal SOLO log (AD-18). Lo stadio finale di un esercizio si
 // RICOSTRUISCE rigiocando i suoi esiti (in ordine di reviewedAt crescente) dallo
 // stadio 0 via l'unica transizione del motore (`nextStage`). L'asse ha ESATTAMENTE
-// gli stadi 0..N-1 (N = LEITNER_INTERVALS_DAYS.length, sei), contiguo, zeri inclusi.
+// gli stadi 0..N-1 (N = LEITNER_INTERVALS_DAYS.length, otto), contiguo, zeri inclusi.
 // Pura, totale, SENZA tempo (nessun `now`/`timeZone`).
 
-const N = LEITNER_INTERVALS_DAYS.length; // 6
+const N = LEITNER_INTERVALS_DAYS.length; // 8
 
 /**
  * Una voce di log completa: esercizio, esito e istante. `grammarPoint` e richiesto
@@ -30,10 +30,10 @@ function countAt(dist: readonly StageCount[], stage: number): number {
   return dist.find((s) => s.stage === stage)?.count ?? -1;
 }
 
-describe('stageDistribution: asse dei sei stadi derivato dalla scala (AC)', () => {
+describe('stageDistribution: asse degli stadi derivato dalla scala (AC)', () => {
   it('log NON vuoto ⇒ un StageCount per OGNI stadio 0..N-1, contiguo', () => {
     const dist = stageDistribution([rec('ex-1', 'good', '2026-09-01T10:00:00.000Z')]);
-    expect(dist.map((s) => s.stage)).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(dist.map((s) => s.stage)).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     expect(dist.length).toBe(N);
   });
 

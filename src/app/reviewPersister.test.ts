@@ -107,6 +107,7 @@ function spyReview(
 ): ReviewRepository {
   return {
     listDue: async () => [],
+    countPostponed: async () => 0,
     listReviewLog: async () => [],
     applyReview,
   };

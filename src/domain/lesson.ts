@@ -145,9 +145,9 @@ export function isCurriculumLesson(lesson: { readonly order: number }): boolean 
 /**
  * Quanti esercizi una lezione appena sbloccata porta nella pila (il resto resta in
  * riserva). Specchio documentale della costante nella RPC `unlock_lesson`
- * (migrazione `20261001150000_unlock_lesson_in_batches.sql`): l'autorità è l'SQL.
+ * (migrazione `20261017120000_unlock_lesson_eight.sql`): l'autorità è l'SQL.
  */
-export const FIRST_EXERCISES_BATCH = 12;
+export const FIRST_EXERCISES_BATCH = 8;
 
 /** Quanti esercizi in riserva aggiunge ogni «Esercitati di più» (RPC `add_lesson_exercises`). */
 export const EXTRA_EXERCISES_BATCH = 6;

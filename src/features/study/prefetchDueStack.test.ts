@@ -80,11 +80,12 @@ function spyPorts(overrides: {
         EXERCISES.filter((e) => ids.includes(e.id))),
   );
   const now = vi.fn(() => NOW);
+  const timeZone = vi.fn(() => 'Europe/Rome');
   return {
     ports: {
       review: { listDue },
       content: { listExercisesByIds },
-      clock: { now },
+      clock: { now, timeZone },
     },
     listDue,
     listExercisesByIds,
@@ -93,15 +94,15 @@ function spyPorts(overrides: {
 }
 
 describe('prefetchDueStack — riga: pila NON in cache', () => {
-  it('chiama listDue(clock.now()), precarica gli esercizi, popola entrambe le chiavi (AC1)', async () => {
+  it('chiama listDue(clock.now(), clock.timeZone()), precarica gli esercizi, popola entrambe le chiavi (AC1)', async () => {
     const qc = freshClient();
     const { ports, listDue, listExercisesByIds, now } = spyPorts();
 
     await prefetchDueStack(qc, ports, UID);
 
-    // `listDue` chiamato UNA volta con l'istante dell'orologio.
+    // `listDue` chiamato UNA volta con l'istante e il fuso dell'orologio.
     expect(listDue).toHaveBeenCalledTimes(1);
-    expect(listDue).toHaveBeenCalledWith(NOW);
+    expect(listDue).toHaveBeenCalledWith(NOW, 'Europe/Rome');
     expect(now).toHaveBeenCalled();
     // Il contenuto precaricato con gli id derivati dalla pila.
     expect(listExercisesByIds).toHaveBeenCalledTimes(1);

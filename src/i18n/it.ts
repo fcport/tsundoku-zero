@@ -109,6 +109,15 @@ export const it = {
     // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
     // della dashboard. Verbale e concreta, mai "Continua"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode.
+    // Arretrati rinviati ancora in arrivo (22-10-2026): resa SSE la pila è a zero,
+    // c'è una lezione successiva e il rientro dolce ha rinviato degli arretrati ai
+    // giorni dopo. Al posto del pulsante di sblocco, NESSUNA azione. Forma
+    // etichetta-valore per `{{value}}` (niente «1 esercizi»); `{{days}}` ≥ 2, per 1
+    // c'è la variante «domani».
+    backlogAheadBody:
+      'Arretrati in arrivo nei prossimi giorni, {{perDay}} al giorno: {{value}}. Le lezioni nuove si sbloccano quando li hai ripassati tutti, fra {{days}} giorni.',
+    backlogAheadTomorrowBody:
+      'Arretrati in arrivo domani: {{value}}. Le lezioni nuove si sbloccano quando li hai ripassati.',
     viewStats: 'Vedi le tue statistiche',
     currentLesson: 'Lezione {{order}}: {{title}}',
     openSettings: 'Impostazioni',
@@ -149,15 +158,15 @@ export const it = {
     },
     // Distribuzione per stadio (5.2, FR7.2): STESSE chiavi di `en` (parita
     // ricorsiva). `heading` intitola la sezione; `stageLabel` etichetta ogni stadio
-    // (`{{stage}}` = indice 0-5, `{{exercises}}` = numero di esercizi, MAI
+    // (`{{stage}}` = indice 0-7, `{{exercises}}` = numero di esercizi, MAI
     // `{{count}}` che innescherebbe il pluralizzatore i18next); `empty` e la
     // dichiarazione quantificata a log vuoto (5.4): asse CATEGORIALE, meaningful con
     // qualunque dato, quindi il minimo onesto e «almeno un esercizio ripassato».
-    // Nessuna etichetta mnemonica ne intervallo in giorni: l'AC chiede «sei stadi, 0-5».
+    // Nessuna etichetta mnemonica ne intervallo in giorni: l'AC chiede «uno stadio per gradino della scala, 0-7».
     stageDistribution: {
       heading: 'Quanto conosci gli esercizi',
       stageLabel: 'Livello {{stage}} - esercizi: {{exercises}}',
-      // Cosa sono i livelli (0-5): senza, «livello 1» non dice niente.
+      // Cosa sono i livelli (0-7): senza, «livello 1» non dice niente.
       hint: 'Ogni risposta giusta fa salire l\'esercizio di un livello, e lo fa tornare più avanti nel tempo. Una risposta sbagliata lo riporta al livello 0.',
       empty: 'Qui vedrai a che livello è ogni esercizio, dopo il primo ripasso.',
     },
@@ -202,10 +211,10 @@ export const it = {
     // I traguardi (07-10-2026): forma etichetta-valore («Lezioni lette: 5»).
     milestones: {
       heading: 'Traguardi',
-      hint: 'Si prendono imparando lezioni, portando gli esercizi al punto in cui tornano solo dopo 35 giorni, e studiando tanti giorni di fila. Una volta presi restano, anche se poi sbagli.',
+      hint: 'Si prendono imparando lezioni, portando gli esercizi al punto in cui tornano solo dopo 35 giorni o più, e studiando tanti giorni di fila. Una volta presi restano, anche se poi sbagli.',
       family: {
         lessonsRead: 'Lezioni imparate',
-        topLevel: 'Esercizi che tornano dopo 35 giorni',
+        topLevel: 'Esercizi che tornano dopo 35 giorni o più',
         streak: 'Giorni di fila',
       },
       entry: '{{family}}: {{threshold}}',
@@ -305,7 +314,7 @@ export const it = {
       // Il riepilogo (07-10-2026): cosa è cambiato, in forma etichetta-valore
       // (niente «1 esercizi»). Niente `!`, niente lode: i fatti.
       recapLevelUps: 'Esercizi fatti giusti, che ora tornano più avanti: {{value}}',
-      recapTop: 'Esercizi che ora tornano solo dopo 35 giorni: {{value}}',
+      recapTop: 'Esercizi che ora tornano solo dopo 35 giorni o più: {{value}}',
       lessonRead: 'Lezione {{order}} imparata: tutti i suoi esercizi ora tornano solo dopo 16 giorni o più.',
       milestone: 'Nuovo traguardo',
     },
@@ -318,7 +327,7 @@ export const it = {
     kicker: 'Curriculum',
     title: 'Le lezioni',
     intro:
-      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 12 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate si possono anche ripassare liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
+      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 8 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate si possono anche ripassare liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
     lessonNumber: 'Lezione {{order}}',
     status: {
       current: 'In corso',
@@ -665,7 +674,7 @@ export const it = {
       'Per questo ho creato questa piattaforma. Man mano che vado avanti con le lezioni le aggiungo qui e ne scrivo gli esercizi, così che chiunque, anche in futuro, possa usarla per esercitarsi su quello che ha imparato con Cure Dolly.',
     howKicker: 'Come si usa',
     how:
-      "Ogni lezione corrisponde a un video. Quando sblocchi una lezione, 12 dei suoi esercizi entrano nella tua pila; se ne vuoi altri, li aggiungi con «Esercitati di più». Un esercizio a cui rispondi bene torna dopo un intervallo sempre più lungo; uno che sbagli torna prima. Ogni giorno svuoti la pila e, quando è vuota, sblocchi la lezione successiva.",
+      "Ogni lezione corrisponde a un video. Quando sblocchi una lezione, 8 dei suoi esercizi entrano nella tua pila; se ne vuoi altri, li aggiungi con «Esercitati di più». Un esercizio a cui rispondi bene torna dopo un intervallo sempre più lungo; uno che sbagli torna prima. Ogni giorno svuoti la pila e, quando è vuota, sblocchi la lezione successiva.",
     lessonsPage:
       'Dalla pagina Lezioni puoi rivedere il video e ripassare quando vuoi qualsiasi lezione che hai sbloccato.',
     passionKicker: 'Perché lo faccio',

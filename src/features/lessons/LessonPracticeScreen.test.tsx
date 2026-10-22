@@ -57,7 +57,7 @@ let listExercisesByLesson: ReturnType<typeof vi.fn>;
 function ports(): Ports {
   return {
     clock: { now: () => NOW, timeZone: () => 'UTC' },
-    review: { listDue: async () => [], listReviewLog: async () => [], applyReview },
+    review: { listDue: async () => [], countPostponed: async () => 0, listReviewLog: async () => [], applyReview },
     progress: {
       listUnlockedLessons: async () => [{ lessonId: 'l1', unlockedAt: NOW }],
       unlockLesson,

@@ -41,7 +41,7 @@
 // FONTE UNICA e derivata anche per la distribuzione (AD-18): lo stadio corrente di
 // un esercizio NON si legge da `review_state` — si RICOSTRUISCE rigiocando i suoi
 // esiti dal SOLO log via `stageDistribution` (dominio, pura e SENZA orologio: lo
-// stadio non dipende dal tempo). L'asse dei sei stadi deriva dalla costante unica
+// stadio non dipende dal tempo). L'asse degli stadi deriva dalla costante unica
 // della scala Leitner (`LEITNER_INTERVALS_DAYS`), non da un elenco parallelo nella
 // vista.
 //
@@ -187,6 +187,8 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
   // divisione per zero quando qualche stadio è a 0.
   const distribution = stageDistribution(logQ.data);
   const stageMax = Math.max(1, ...distribution.map((s) => s.count));
+  // Una colonna per livello: il numero viene dalla scala, non è scritto qui.
+  const stageColumns = { gridTemplateColumns: `repeat(${distribution.length}, minmax(0, 1fr))` };
 
   // I tassi d'errore per punto grammaticale DERIVATI dal SOLO log (AD-18): puri e
   // SENZA orologio (il tasso non dipende dal tempo). `[]` a log vuoto ⇒ placeholder.
@@ -354,11 +356,14 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
           </h3>
           {/* Cosa sono i livelli: senza, «livello 1» non dice niente a chi studia. */}
           <p className="-mt-4 text-body text-ink-secondary">{t('stats.stageDistribution.hint')}</p>
-          {/* La lista ordinata di barre per-stadio: ogni stadio (0-5, contiguo,
+          {/* La lista ordinata di barre per-stadio: ogni stadio (0-7, contiguo,
               zeri inclusi — l'asse deriva da `LEITNER_INTERVALS_DAYS`) porta il
               proprio conteggio come TESTO (mai dal solo colore) più una barra
               proporzionale (larghezza = count/max, token neutri, nessun verde). */}
-          <ol className="grid h-[200px] grid-cols-6 items-stretch gap-2 border-b-[1.5px] border-border-strong">
+          <ol
+            className="grid h-[200px] items-stretch gap-2 border-b-[1.5px] border-border-strong"
+            style={stageColumns}
+          >
             {distribution.map((bucket) => (
               <li key={bucket.stage} className="flex flex-col items-center gap-1">
                 <span className="sr-only">
@@ -380,7 +385,11 @@ function StatsContent({ userId, onExit }: StatsScreenProps) {
             ))}
           </ol>
           {/* L'asse: il numero di ciascuno stadio sotto la sua colonna. */}
-          <div aria-hidden="true" className="-mt-6 grid grid-cols-6 gap-2 text-center font-mono text-label-caps text-ink-secondary">
+          <div
+            aria-hidden="true"
+            className="-mt-6 grid gap-2 text-center font-mono text-label-caps text-ink-secondary"
+            style={stageColumns}
+          >
             {distribution.map((bucket) => (
               <span key={bucket.stage}>{bucket.stage}</span>
             ))}

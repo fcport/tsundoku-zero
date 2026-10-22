@@ -35,12 +35,20 @@ export interface ApplyReviewInput {
 export interface ReviewRepository {
   /**
    * Legge la pila dei dovuti dell'utente corrente all'istante `now`. Restituisce
-   * ESATTAMENTE gli stati per cui `isDue(state, now)` (di `../due`) è vero: la
-   * porta NON reimplementa la dovutezza, la rispecchia. È l'UNICA interrogazione
-   * dietro l'identità `dueQueryKey(userId)`: nessun consumatore ricalcola la
-   * pila. Opera sull'utente corrente, senza parametro `userId`.
+   * gli stati per cui `isDue(state, now)` (di `../due`) è vero, MENO gli arretrati
+   * oltre il tetto che `spreadBacklog` (`../backlog`) rinvia ai giorni dopo: la
+   * porta NON reimplementa né la dovutezza né il rinvio, li applica, e salva i
+   * rinvii. `timeZone` serve al confine della giornata di studio. È l'UNICA
+   * interrogazione dietro l'identità `dueQueryKey(userId)`: nessun consumatore
+   * ricalcola la pila. Opera sull'utente corrente, senza parametro `userId`.
    */
-  listDue(now: Date): Promise<readonly ReviewState[]>;
+  listDue(now: Date, timeZone: string): Promise<readonly ReviewState[]>;
+  /**
+   * Quanti arretrati rinviati dal rientro dolce aspettano ancora nei giorni dopo
+   * oggi (`postponedAhead` di `../backlog`). Finché non sono zero, la dashboard non
+   * offre lezioni nuove. Opera sull'utente corrente.
+   */
+  countPostponed(now: Date, timeZone: string): Promise<number>;
   /**
    * Legge il registro dei ripassi (`review_log`) dell'utente corrente: l'UNICO
    * canale da cui le statistiche derivate si calcolano (AD-18). Ritorna la

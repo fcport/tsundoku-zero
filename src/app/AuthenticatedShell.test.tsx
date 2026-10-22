@@ -28,7 +28,7 @@ const inertSettings: SettingsRepository = {
 // Porte del ciclo iniettate alla dashboard (3.12): inerti con cache seminata.
 const inertPorts: Ports = {
   clock: { now: () => new Date('2026-09-25T12:00:00.000Z'), timeZone: () => 'UTC' },
-  review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
+  review: { listDue: async () => [], countPostponed: async () => 0, listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };

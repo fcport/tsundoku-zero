@@ -44,6 +44,7 @@ const inMemoryPorts: Ports = {
   clock: { now: () => NOW, timeZone: () => TZ },
   review: {
     listDue: async () => [],
+    countPostponed: async () => 0,
     listReviewLog: async () => [],
     applyReview: async () => {},
   },
@@ -114,6 +115,8 @@ function seededClient(opts: {
   lessonExerciseCounts?: readonly number[];
   lessonsPerDay?: number;
   unlockedTodayCount?: number;
+  /** Arretrati rinviati ancora in arrivo (rientro dolce). */
+  postponed?: number;
 }): QueryClient {
   const qc = freshClient();
   qc.setQueryData(
@@ -147,6 +150,7 @@ function seededClient(opts: {
     ['lessonsPerDay', UID],
     opts.lessonsPerDay ?? DEFAULT_LESSONS_PER_DAY,
   );
+  if (opts.postponed !== undefined) qc.setQueryData(['postponed', UID], opts.postponed);
   return qc;
 }
 
@@ -917,6 +921,48 @@ describe('Storia 3.17 — il tetto giornaliero di sblocco (AC3)', () => {
 // 3.23 ma l'intera pagina a destra del dorso, una griglia a filetti che riempie
 // l'altezza. Resta il vincolo di 3.23 AC8: scheletro e caricato condividono la
 // stessa classe del <main> e la stessa griglia, nessun ramo per dispositivo.
+describe('il rientro dolce — arretrati rinviati in arrivo bloccano le lezioni nuove', () => {
+  const base = { dueCount: 0, log: [], unlocked: 1, total: 10, lessonsPerDay: 1, unlockedTodayCount: 0 };
+
+  it('arretrati in arrivo su più giorni ⇒ quanti e fra quanti giorni, nessuno sblocco', () => {
+    const markup = render(seededClient({ ...base, postponed: 20 }), UID);
+    expect(markup).toContain(
+      en.dashboard.backlogAheadBody
+        .replace('{{perDay}}', '8')
+        .replace('{{value}}', '20')
+        .replace('{{days}}', '3'),
+    );
+    expect(markup).not.toContain(en.dashboard.unlockAction);
+  });
+
+  it('arretrati che arrivano tutti domani ⇒ la variante «domani»', () => {
+    const markup = render(seededClient({ ...base, postponed: 5 }), UID);
+    expect(markup).toContain(en.dashboard.backlogAheadTomorrowBody.replace('{{value}}', '5'));
+    expect(markup).not.toContain(en.dashboard.unlockAction);
+  });
+
+  it('nessun arretrato in arrivo ⇒ lo sblocco come sempre', () => {
+    const markup = render(seededClient({ ...base, postponed: 0 }), UID);
+    expect(markup).toContain(en.dashboard.unlockAction);
+    expect(markup).not.toContain('Overdue exercises coming');
+  });
+
+  it('con arretrati in arrivo non offre «Esercitati di più»', () => {
+    const qc = seededClient({ ...base, lessonExerciseCounts: [17], postponed: 20 });
+    qc.setQueryData(['activeExercises', UID], new Map([['lesson-0', 8]]));
+    expect(render(qc, UID)).not.toContain(en.dashboard.moreAction.replace('{{order}}', '0'));
+    const free = seededClient({ ...base, lessonExerciseCounts: [17], postponed: 0 });
+    free.setQueryData(['activeExercises', UID], new Map([['lesson-0', 8]]));
+    expect(render(free, UID)).toContain(en.dashboard.moreAction.replace('{{order}}', '0'));
+  });
+
+  it('con la pila piena conta solo «svuota la pila»', () => {
+    const markup = render(seededClient({ ...base, dueCount: 3, postponed: 20 }), UID);
+    expect(markup).toContain(en.dashboard.primaryAction);
+    expect(markup).not.toContain('Overdue exercises coming');
+  });
+});
+
 describe('rivista — il <main> è la pagina a griglia; count-hero-mobile', () => {
   it('il <main> riempie la pagina (flex-1) e contiene la griglia a tre colonne da 1024px', () => {
     const markup = render(

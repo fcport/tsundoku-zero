@@ -84,6 +84,7 @@ function inMemoryPorts(): Ports {
     clock: { now: () => NOW, timeZone: () => 'UTC' },
     review: {
       listDue: async () => DUE_STATES,
+      countPostponed: async () => 0,
       listReviewLog: async () => [],
       applyReview: async () => {},
     },

@@ -213,7 +213,7 @@ function SessionContent({ userId, onExit }: SessionScreenProps) {
   const dueQ = useQuery({
     queryKey: dueQueryKey(userId ?? ''),
     enabled: !!userId,
-    queryFn: () => review.listDue(clock.now()),
+    queryFn: () => review.listDue(clock.now(), clock.timeZone()),
   });
 
   // Avvia lo store una sola volta quando la pila è caricata (effetto guardato).

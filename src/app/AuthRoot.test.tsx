@@ -42,7 +42,7 @@ const inertAccount: AccountGateway = {
 // (lo stato `checking` rende un placeholder, mai il PortsProvider/la dashboard).
 const inertPorts: Ports = {
   clock: { now: () => new Date(), timeZone: () => 'UTC' },
-  review: { listDue: async () => [], listReviewLog: async () => [], applyReview: async () => {} },
+  review: { listDue: async () => [], countPostponed: async () => 0, listReviewLog: async () => [], applyReview: async () => {} },
   progress: { listUnlockedLessons: async () => [], unlockLesson: async () => {}, addLessonExercises: async () => 0, listActiveExerciseCounts: async () => new Map() },
   content: { listLessons: async () => [], listExercisesByIds: async () => [], listExercisesByLesson: async () => [], listExerciseLessons: async () => new Map() },
 };

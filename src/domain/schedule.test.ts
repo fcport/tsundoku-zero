@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   LEITNER_INTERVALS_DAYS,
+  latestIntervalDays,
   nextStage,
   REVIEW_OUTCOMES,
   schedule,
@@ -10,7 +11,7 @@ import {
 import { studyDayOrdinal, studyDayStart } from './calendarDay';
 
 // Copre ogni riga della I/O Matrix della spec (Story 3.1): transizioni di stadio
-// per i quattro esiti, saturazione a 5 con `easy`, reset a 0 con `again`, stadio 0
+// per i quattro esiti, saturazione all'ultimo stadio con `easy`, reset a 0 con `again`, stadio 0
 // stabile con intervallo 0, `hard` che tiene lo stadio riducendo l'intervallo,
 // determinismo e dispersione delle scadenze. Una scadenza positiva cade sempre
 // all'INIZIO di una giornata di studio (le 2 locali): il jitter è deterministico ma
@@ -102,16 +103,25 @@ describe('schedule: transizioni di stadio per esito (AC2)', () => {
 });
 
 describe('schedule: saturazione agli estremi senza rami speciali (AC3)', () => {
-  it('easy che satura: stage 5 resta 5 (non 7), intervallo 35g', () => {
-    const result = schedule(stateAt({ stage: 5 }), 'easy', NOW, TZ);
-    expect(result.stage).toBe(5);
-    expectDueWindow(result, NOW, LEITNER_INTERVALS_DAYS[5]); // 35g
+  it('easy che satura: stage 7 resta 7 (non 9), intervallo 140g', () => {
+    const result = schedule(stateAt({ stage: 7 }), 'easy', NOW, TZ);
+    expect(result.stage).toBe(7);
+    expectDueWindow(result, NOW, LEITNER_INTERVALS_DAYS[7]); // 140g
   });
 
-  it('easy oltre il tetto: stage 4 → clamp a 5, intervallo 35g', () => {
-    const result = schedule(stateAt({ stage: 4 }), 'easy', NOW, TZ);
-    expect(result.stage).toBe(5);
-    expectDueWindow(result, NOW, LEITNER_INTERVALS_DAYS[5]); // 35g
+  it('easy oltre il tetto: stage 6 → clamp a 7, intervallo 140g', () => {
+    const result = schedule(stateAt({ stage: 6 }), 'easy', NOW, TZ);
+    expect(result.stage).toBe(7);
+    expectDueWindow(result, NOW, LEITNER_INTERVALS_DAYS[7]); // 140g
+  });
+
+  it('dopo i 35 giorni la scala continua: good da 5 → 6 (70g), da 6 → 7 (140g)', () => {
+    const at6 = schedule(stateAt({ stage: 5 }), 'good', NOW, TZ);
+    expect(at6.stage).toBe(6);
+    expectDueWindow(at6, NOW, 70);
+    const at7 = schedule(stateAt({ stage: 6 }), 'good', NOW, TZ);
+    expect(at7.stage).toBe(7);
+    expectDueWindow(at7, NOW, 140);
   });
 
   it('again a stadio 0: resta 0, dueAt === now, senza rami speciali', () => {
@@ -177,7 +187,7 @@ describe('schedule: purezza — nessuna mutazione dell input', () => {
 });
 
 describe('nextStage: la transizione di stadio pura e clampata (export 5.2)', () => {
-  const MAX_STAGE = LEITNER_INTERVALS_DAYS.length - 1; // 5
+  const MAX_STAGE = LEITNER_INTERVALS_DAYS.length - 1; // 7
 
   it('good avanza di 1 sotto il tetto', () => {
     expect(nextStage(2, 'good')).toBe(3);
@@ -196,7 +206,7 @@ describe('nextStage: la transizione di stadio pura e clampata (export 5.2)', () 
     expect(nextStage(0, 'again')).toBe(0);
   });
 
-  it('clamp in alto: easy oltre il tetto satura a MAX_STAGE (non 6/7)', () => {
+  it('clamp in alto: easy oltre il tetto satura a MAX_STAGE (non 8/9)', () => {
     expect(nextStage(MAX_STAGE, 'easy')).toBe(MAX_STAGE);
     expect(nextStage(MAX_STAGE - 1, 'easy')).toBe(MAX_STAGE);
     expect(nextStage(MAX_STAGE, 'good')).toBe(MAX_STAGE);
@@ -288,5 +298,25 @@ describe('schedule: la pila si riempie tutta alle 2 di notte', () => {
     const ny = 'America/New_York';
     const result = schedule(stateAt(), 'good', new Date('2026-09-24T16:00:00.000Z'), ny);
     expect(result.dueAt.toISOString()).toBe('2026-09-25T06:00:00.000Z'); // 02:00 a New York
+  });
+});
+
+describe('latestIntervalDays: il più lontano che schedule può mandare un esercizio', () => {
+  it('intervallo pieno più tutta la dispersione, arrotondato; 0 allo stadio 0', () => {
+    expect(LEITNER_INTERVALS_DAYS.map((_, stage) => latestIntervalDays(stage))).toEqual([
+      0, 1, 4, 9, 20, 44, 88, 175,
+    ]);
+  });
+
+  it('nessuna scadenza di schedule va oltre, per nessun esito né esercizio', () => {
+    for (const outcome of REVIEW_OUTCOMES) {
+      for (let stage = 0; stage < LEITNER_INTERVALS_DAYS.length; stage += 1) {
+        for (const id of ['a', 'b', 'c', 'ex-42', 'zz']) {
+          const result = schedule(stateAt({ exerciseId: id, stage }), outcome, NOW, TZ);
+          const days = studyDayOrdinal(result.dueAt, TZ) - studyDayOrdinal(NOW, TZ);
+          expect(days).toBeLessThanOrEqual(latestIntervalDays(result.stage));
+        }
+      }
+    }
   });
 });

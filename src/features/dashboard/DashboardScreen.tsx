@@ -37,6 +37,12 @@
 // (svuota-pila), il primo avvio (3.15) né le dichiarazioni 3.16 a pila vuota: agisce
 // SOLO nel blocco azione.
 //
+// Il RIENTRO DOLCE (22-10-2026): dopo una pausa gli arretrati oltre gli 8 di oggi
+// sono rinviati ai giorni dopo (`spreadBacklog`). Finché ne resta qualcuno in
+// arrivo (`countPostponed`), a pila vuota il cancello NON offre lezioni nuove: dice
+// quanti ne arrivano e fra quanti giorni si sblocca. Finché il conteggio non è
+// arrivato vale 0 (arriva subito dopo la pila, che lo produce).
+//
 // Nessuna grammatica della celebrazione (nessun verde, nessun `!`, nessuna
 // emoji): solo token del sistema di design (la regola colore vale anche qui). I
 // primitivi ui (pile-counter, streak-badge, curriculum-progress, button-primary)
@@ -45,6 +51,7 @@ import type { CSSProperties } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { resolveBilingual } from '../../domain/bilingual';
 import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
+import { BACKLOG_PER_DAY } from '../../domain/backlog';
 import { dueQueryKey } from '../../domain/due';
 import { pileBooks } from '../../domain/pile';
 import { lessonMastery } from '../../domain/library';
@@ -212,7 +219,7 @@ export function DashboardScreen({
   const dueQ = useQuery({
     queryKey: dueQueryKey(userId ?? ''),
     enabled: !!userId,
-    queryFn: () => review.listDue(clock.now()),
+    queryFn: () => review.listDue(clock.now(), clock.timeZone()),
   });
   const logQ = useQuery({
     queryKey: ['streak', userId],
@@ -223,6 +230,13 @@ export function DashboardScreen({
     queryKey: ['unlocked', userId],
     enabled: !!userId,
     queryFn: () => progress.listUnlockedLessons(),
+  });
+  // Gli arretrati rinviati ancora in arrivo: si leggono DOPO la pila, perché è la
+  // lettura della pila a rinviarli. Un errore vale 0: non blocca la dashboard.
+  const postponedQ = useQuery({
+    queryKey: ['postponed', userId],
+    enabled: !!userId && dueQ.data !== undefined,
+    queryFn: () => review.countPostponed(clock.now(), clock.timeZone()).catch(() => 0),
   });
   const lessonsQ = useQuery({
     queryKey: ['lessons'],
@@ -267,6 +281,7 @@ export function DashboardScreen({
       progress.unlockLesson(lessonId, clock.now()),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: dueQueryKey(userId ?? '') });
+      void queryClient.invalidateQueries({ queryKey: ['postponed', userId] });
       void queryClient.invalidateQueries({ queryKey: ['unlocked', userId] });
       void queryClient.invalidateQueries({ queryKey: activeExercisesQueryKey(userId) });
     },
@@ -363,6 +378,10 @@ export function DashboardScreen({
     clock.now(),
     clock.timeZone(),
   );
+  // Gli arretrati rinviati ancora in arrivo: finché ce n'è, niente lezioni nuove.
+  // Ne arrivano `BACKLOG_PER_DAY` al giorno da domani: l'ultimo fra `backlogDays`.
+  const postponed = postponedQ.data ?? 0;
+  const backlogDays = Math.ceil(postponed / BACKLOG_PER_DAY);
 
   // Il ramo di PRIMO AVVIO (3.15): DERIVATO, mai memorizzato (AD-5). Segnale
   // canonico `unlocked === 0` (= zero righe lesson_progress = «mai sbloccato
@@ -490,8 +509,9 @@ export function DashboardScreen({
               ) : null}
               {/* «Esercitati di più»: la lezione in corso ha ancora esercizi in
                   riserva. Un'azione SECONDARIA (bordo, niente fondo d'inchiostro):
-                  la barra in fondo resta l'unica azione primaria. */}
-              {lastUnlocked !== null && reserve > 0 ? (
+                  la barra in fondo resta l'unica azione primaria. Non con
+                  arretrati in arrivo: prima quelli. */}
+              {lastUnlocked !== null && reserve > 0 && postponed === 0 ? (
                 <div className="flex flex-col items-start gap-3 px-5 pb-5 sm:px-8 sm:pb-8">
                   <p className="text-body text-ink-secondary">
                     {t('dashboard.moreReserve', { value: reserve })}
@@ -510,7 +530,7 @@ export function DashboardScreen({
               {/* La pila è a zero (09-10-2026): se c'è una lezione da sbloccare il
                   tanuki legge, il libro nuovo è pronto; se per oggi hai finito
                   (tetto raggiunto o corso finito) dorme. */}
-              {next !== null && !capReached ? (
+              {next !== null && !capReached && postponed === 0 ? (
                 // In piedi è più stretto di quello che dorme: più alto, per non
                 // sparire nel riquadro vuoto.
                 <Tanuki
@@ -689,6 +709,8 @@ export function DashboardScreen({
           - Pila vuota, lezione successiva, ma tetto RAGGIUNTO ⇒ NESSUN pulsante,
             ma la DICHIARAZIONE del limite (`dailyLimitReachedBody`, con
             `{{limit}}`=cap): il tetto riapre a mezzanotte, si cambia da Impostazioni.
+          - Pila vuota, lezione successiva, ma arretrati rinviati ancora in arrivo
+            (22-10-2026) ⇒ NESSUN pulsante, quanti ne arrivano e fra quanti giorni.
           - Pila vuota a curriculum esaurito (next === null) ⇒ NESSUNA azione (la
             schermata senza-azione è 3.16): non si rende alcun pulsante. */}
       {count > 0 ? (
@@ -697,7 +719,18 @@ export function DashboardScreen({
           <ArrowIcon className="text-accent-on-ink" />
         </button>
       ) : next !== null ? (
-        capReached ? (
+        postponed > 0 ? (
+          // Arretrati in arrivo: nessun pulsante, quanti e fino a quando.
+          <p className="p-4 text-body text-ink-primary sm:px-8 sm:py-6">
+            {backlogDays === 1
+              ? t('dashboard.backlogAheadTomorrowBody', { value: postponed })
+              : t('dashboard.backlogAheadBody', {
+                  value: postponed,
+                  perDay: BACKLOG_PER_DAY,
+                  days: backlogDays,
+                })}
+          </p>
+        ) : capReached ? (
           // Tetto raggiunto: nessun pulsante, la dichiarazione del limite.
           <p className="p-4 text-body text-ink-primary sm:px-8 sm:py-6">
             {t('dashboard.dailyLimitReachedBody', { limit: cap })}

@@ -5,7 +5,7 @@
 //
 // La sessione è tutto ciò che nel log ha `reviewedAt >= since`; lo stato «prima» è
 // il log fino a `since`. Deriva dal SOLO log (AD-18). Pura.
-import { lessonMastery, TOP_STAGE } from './library';
+import { lessonMastery, LONG_STAGE } from './library';
 import { milestones, type Milestone } from './milestones';
 import type { LessonSummary } from './ports/contentRepository';
 import { currentStages } from './stageDistribution';
@@ -16,7 +16,7 @@ export interface SessionRecap {
   readonly answers: number;
   /** Gli esercizi che a fine sessione sono più in alto di prima. */
   readonly levelUps: number;
-  /** Gli esercizi arrivati nella sessione al livello più alto. */
+  /** Gli esercizi arrivati nella sessione a `LONG_STAGE` (tornano fra 35 giorni o più). */
   readonly reachedTop: number;
   /** Le lezioni imparate adesso e non prima, in ordine di `ordinal`. */
   readonly lessonsRead: readonly LessonSummary[];
@@ -43,7 +43,7 @@ export function sessionRecap(
     const from = stagesBefore.get(exerciseId) ?? 0;
     const to = stagesAfter.get(exerciseId) ?? 0;
     if (to > from) levelUps += 1;
-    if (to === TOP_STAGE && from < TOP_STAGE) reachedTop += 1;
+    if (to >= LONG_STAGE && from < LONG_STAGE) reachedTop += 1;
   }
 
   const masteryBefore = lessonMastery(before, lessons, exerciseLessons);

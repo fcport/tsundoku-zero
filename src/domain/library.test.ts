@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { calendarWeeks } from './answersOverTime';
-import { KNOWN_STAGE, lessonMastery, TOP_STAGE } from './library';
+import { KNOWN_STAGE, lessonMastery, LONG_STAGE } from './library';
+import { LEITNER_INTERVALS_DAYS } from './schedule';
 import { MILESTONE_THRESHOLDS, milestones } from './milestones';
 import type { LessonSummary } from './ports/contentRepository';
 import type { ReviewOutcome } from './schedule';
@@ -44,9 +45,11 @@ function goods(exerciseId: string, n: number, day = 1): ReviewLogRecord[] {
 }
 
 describe('lessonMastery: una lezione è letta quando sai bene tutti i suoi esercizi', () => {
-  it('le soglie: «lo sai bene» dal livello 4, il livello più alto è 5', () => {
+  it('le soglie: «lo sai bene» dal livello 4 (16 giorni), i traguardi dal 5 (35 giorni)', () => {
     expect(KNOWN_STAGE).toBe(4);
-    expect(TOP_STAGE).toBe(5);
+    expect(LEITNER_INTERVALS_DAYS[KNOWN_STAGE]).toBe(16);
+    expect(LONG_STAGE).toBe(5);
+    expect(LEITNER_INTERVALS_DAYS[LONG_STAGE]).toBe(35);
   });
 
   it('conta gli esercizi almeno al livello 4, per lezione', () => {

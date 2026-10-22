@@ -29,13 +29,13 @@ import { exercisesQueryKey } from './exercisesQueryKey';
 /**
  * Il sottoinsieme di porte che il precarico consuma: la pila dei dovuti
  * (`review.listDue`), il contenuto (`content.listExercisesByIds`) e l'orologio
- * (`clock.now`) per l'istante di dovutezza. Tipato sulle interfacce PURE del
+ * (`clock.now`, `clock.timeZone`) per l'istante di dovutezza e la giornata di studio. Tipato sulle interfacce PURE del
  * dominio: non conosce Supabase né gli adattatori concreti.
  */
 export interface PrefetchPorts {
   readonly review: Pick<ReviewRepository, 'listDue'>;
   readonly content: Pick<ContentRepository, 'listExercisesByIds'>;
-  readonly clock: Pick<Clock, 'now'>;
+  readonly clock: Pick<Clock, 'now' | 'timeZone'>;
 }
 
 /**
@@ -45,7 +45,7 @@ export interface PrefetchPorts {
  * - `userId` null ⇒ no-op immediato (nessuna chiamata di porta).
  * - RIUSA la pila `['due', userId]` via `ensureQueryData` (cache-hit senza
  *   refetch se già popolata dal conteggio della dashboard; altrimenti chiama
- *   `listDue(clock.now())`).
+ *   `listDue(clock.now(), clock.timeZone())`).
  * - Deriva gli id dalla pila e precarica il contenuto sotto `['exercises', ids]`
  *   con la STESSA forma di chiave che `SessionScreen` costruisce
  *   (`['exercises', initialIds]`, `initialIds = dueData.map(s => s.exerciseId)`),
@@ -66,7 +66,7 @@ export async function prefetchDueStack(
   if (userId === null) return;
   const states = await queryClient.ensureQueryData({
     queryKey: dueQueryKey(userId),
-    queryFn: () => ports.review.listDue(ports.clock.now()),
+    queryFn: () => ports.review.listDue(ports.clock.now(), ports.clock.timeZone()),
   });
   const ids = states.map((s) => s.exerciseId);
   await queryClient.ensureQueryData({

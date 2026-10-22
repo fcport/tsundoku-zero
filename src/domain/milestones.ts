@@ -1,6 +1,6 @@
 // Livello domain: i TRAGUARDI (07-10-2026). Pochi, rari, e solo su ciò che dice
 // davvero che stai imparando: lezioni imparate (`./library`), esercizi arrivati al
-// livello più alto, e la serie (`./streak`). Mai sul volume (risposte date), che
+// punto in cui tornano fra 35 giorni o più (`LONG_STAGE`), e la serie (`./streak`). Mai sul volume (risposte date), che
 // premierebbe il macinare.
 //
 // Un traguardo, una volta preso, RESTA: si ricostruisce rigiocando il `review_log`
@@ -8,7 +8,7 @@
 // prima volta. Niente si memorizza (AD-18): stesso log ⇒ stessi traguardi.
 //
 // Pura: `timeZone` entra come parametro (serve alla serie), nessun orologio.
-import { KNOWN_STAGE, TOP_STAGE } from './library';
+import { KNOWN_STAGE, LONG_STAGE } from './library';
 import type { LessonSummary } from './ports/contentRepository';
 import { nextStage } from './schedule';
 import { streakHistory, type ReviewLogRecord } from './streak';
@@ -65,7 +65,7 @@ function track(
  * - `lessonsRead`: quante lezioni sono state imparate almeno una volta (una lezione
  *   imparata che poi torna giù resta contata);
  * - `topLevel`: quanti esercizi diversi sono arrivati almeno una volta al livello
- *   più alto;
+ *   `LONG_STAGE` o più su (tornano fra 35 giorni o più);
  * - `streak`: la serie più lunga (`streakHistory`).
  */
 export function milestones(
@@ -100,7 +100,7 @@ export function milestones(
       }
     }
 
-    if (after === TOP_STAGE && !top.has(record.exerciseId)) {
+    if (after >= LONG_STAGE && !top.has(record.exerciseId)) {
       top.add(record.exerciseId);
       topSteps.push({ value: top.size, at: record.reviewedAt });
     }

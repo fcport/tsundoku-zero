@@ -15,7 +15,7 @@
 // `Math.random()`. A differenza di streak e answersOverTime, e SENZA `now`/`timeZone`:
 // lo STADIO non dipende dall'orologio (`nextStage` opera solo su `(stage, outcome)`),
 // quindi la firma e a UN solo argomento (`stageDistribution.length === 1`). L'asse
-// dei sei stadi DERIVA da `LEITNER_INTERVALS_DAYS.length` di `./schedule` (AD-17),
+// degli stadi DERIVA da `LEITNER_INTERVALS_DAYS.length` di `./schedule` (AD-17),
 // mai da un elenco parallelo.
 import { LEITNER_INTERVALS_DAYS, nextStage } from './schedule';
 import type { ReviewLogRecord } from './streak';
@@ -41,7 +41,7 @@ export interface StageCount {
  * `reviewedAt` crescente e ne fa la fold dallo stadio 0 attraverso `nextStage`
  * (l'unica transizione del motore), ottenendo lo stadio FINALE; conta gli esercizi
  * per stadio finale. Ritorna un `StageCount` per OGNI stadio `0..N-1` (dove
- * `N = LEITNER_INTERVALS_DAYS.length`, sei), CONTIGUO e con gli stadi a 0 inclusi;
+ * `N = LEITNER_INTERVALS_DAYS.length`, otto), CONTIGUO e con gli stadi a 0 inclusi;
  * l'ordine di arrivo delle voci e irrilevante (la fold e per `reviewedAt`, non per
  * ordine d'arrivo). Un esercizio conta UNA sola volta, al suo stadio finale.
  *
