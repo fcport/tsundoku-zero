@@ -111,6 +111,8 @@ export interface DashboardScreenProps {
    * cablata dalla shell, come `onViewStats`.
    */
   readonly onPractice: () => void;
+  /** L'ingresso a Kotodama, il gioco dei kana: cablato dal livello app. */
+  readonly onKotodama: () => void;
   /**
    * Apre la pagina Lezioni (tutto il curriculum, il ripasso libero di una lezione).
    * Callback cablata dalla shell, come `onViewStats`.
@@ -205,6 +207,7 @@ export function DashboardScreen({
   onStartSession,
   onViewStats,
   onPractice,
+  onKotodama,
   onViewLessons,
   onViewAbout,
 }: DashboardScreenProps) {
@@ -587,7 +590,7 @@ export function DashboardScreen({
         <div className="col-span-2 flex flex-col border-t-[1.5px] border-border-strong lg:col-span-1 lg:border-l-[1.5px] lg:border-t-0">
           <div className="grid grid-cols-2 lg:grid-cols-1">
             {/* streak-badge: giorni consecutivi da `streak()` su review_log. */}
-            <div className="border-r-[1.5px] border-border-strong p-4 sm:p-6 lg:border-b-[1.5px] lg:border-r-0">
+            <div className="border-r-[1.5px] border-border-strong p-4 sm:p-6 lg:border-b-[1.5px] lg:border-r-0 lg:py-5">
               <p className={KICKER}>{t('dashboard.streakKicker')}</p>
               <p aria-hidden="true" className="mt-2 text-[44px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
                 {days}
@@ -604,7 +607,7 @@ export function DashboardScreen({
               ) : null}
             </div>
             {/* curriculum-progress: sbloccate su totale ("u di t lezioni"). */}
-            <div className="p-4 sm:p-6 lg:border-b-[1.5px] lg:border-border-strong">
+            <div className="p-4 sm:p-6 lg:border-b-[1.5px] lg:border-border-strong lg:py-5">
               <p className={KICKER}>{t('dashboard.curriculumKicker')}</p>
               <p aria-hidden="true" className="mt-2 text-[44px] font-extrabold leading-none font-stretch-condensed text-ink-primary">
                 {unlocked}
@@ -630,7 +633,7 @@ export function DashboardScreen({
             <button
               type="button"
               onClick={onViewLessons}
-              className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 text-left hover:bg-surface-sunken lg:border-b-[1.5px] lg:border-t-0 sm:p-6 ${FOCUS_RING}`}
+              className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 text-left hover:bg-surface-sunken lg:border-b-[1.5px] lg:border-t-0 sm:p-6 lg:py-4 ${FOCUS_RING}`}
             >
               <span className="flex min-w-0 flex-col gap-1">
                 <span className={KICKER}>{t('dashboard.lessonsKicker')}</span>
@@ -656,12 +659,30 @@ export function DashboardScreen({
           <button
             type="button"
             onClick={onPractice}
-            className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 lg:flex-1 lg:border-t-0 text-left hover:bg-surface-sunken sm:p-6 ${FOCUS_RING}`}
+            className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 lg:flex-1 lg:border-t-0 text-left hover:bg-surface-sunken sm:p-6 lg:py-3.5 ${FOCUS_RING}`}
           >
             <span className="flex flex-col gap-1">
               <span className={KICKER}>{t('dashboard.practiceKicker')}</span>
-              <span className={`text-[34px] leading-none text-ink-primary ${HEADLINE}`}>
+              <span className={`text-[34px] leading-none text-ink-primary lg:text-[28px] ${HEADLINE}`}>
                 {t('dashboard.practice')}
+              </span>
+            </span>
+            <ArrowIcon className="shrink-0 text-accent transition-transform group-hover:translate-x-1.5" />
+          </button>
+
+          {/* KOTODAMA, il gioco dei kana (16-10-2026): un blocco come l'allenamento,
+              sotto di lui, con l'occhiello che dice cosa si allena. Perché la home
+              resti senza scroll su un 1080p, da 1024px i blocchi della colonna hanno
+              meno aria e i due ingressi la testata a 28px. */}
+          <button
+            type="button"
+            onClick={onKotodama}
+            className={`group flex items-center justify-between gap-4 border-t-[1.5px] border-border-strong p-4 lg:flex-1 text-left hover:bg-surface-sunken sm:p-6 lg:py-3.5 ${FOCUS_RING}`}
+          >
+            <span className="flex flex-col gap-1">
+              <span className={KICKER}>{t('kotodama.dashboardKicker')}</span>
+              <span className={`text-[34px] leading-none text-ink-primary lg:text-[28px] ${HEADLINE}`}>
+                {t('kotodama.title')}
               </span>
             </span>
             <ArrowIcon className="shrink-0 text-accent transition-transform group-hover:translate-x-1.5" />

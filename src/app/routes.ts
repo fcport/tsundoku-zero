@@ -76,6 +76,12 @@ export const SETTINGS_PATH = '/settings';
 export const DRILL_PATH = '/practice';
 
 /**
+ * La rotta di KOTODAMA, il gioco dei kana col tanuki mago (16-10-2026): fuori dalla
+ * pila, i progressi sul dispositivo. Protetta, raggiunta dalla dashboard.
+ */
+export const KOTODAMA_PATH = '/kotodama';
+
+/**
  * La rotta delle LEZIONI: tutto il curriculum con lo stato di ciascuna lezione, il
  * video e l'ingresso al ripasso libero. Protetta, raggiunta dalla dashboard.
  */

@@ -18,6 +18,7 @@ import { AuthScreen } from '../features/auth/AuthScreen';
 import { SessionScreen } from '../features/study/SessionScreen';
 import { StatsScreen } from '../features/stats/StatsScreen';
 import { DrillScreen } from '../features/drill/DrillScreen';
+import { KotodamaScreen } from '../features/kotodama/KotodamaScreen';
 import { LessonsScreen } from '../features/lessons/LessonsScreen';
 import { LessonPracticeScreen } from '../features/lessons/LessonPracticeScreen';
 import { PrivacyScreen } from '../features/legal/PrivacyScreen';
@@ -32,6 +33,7 @@ import {
   ABOUT_PATH,
   ACKNOWLEDGEMENTS_PATH,
   DRILL_PATH,
+  KOTODAMA_PATH,
   LEGACY_PATH_REDIRECTS,
   LESSON_PRACTICE_PATH,
   LESSONS_PATH,
@@ -180,6 +182,11 @@ export function AppRoutes({
           <Route
             path={DRILL_PATH}
             element={<DrillScreen onExit={() => navigate(ROOT_PATH)} />}
+          />
+          {/* Kotodama, il gioco dei kana: fuori dalla pila come l'allenamento. */}
+          <Route
+            path={KOTODAMA_PATH}
+            element={<KotodamaScreen onExit={() => navigate(ROOT_PATH)} />}
           />
           {/* Le lezioni e il ripasso libero di una lezione: fuori dalla pila. */}
           <Route

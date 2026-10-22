@@ -40,7 +40,7 @@ import { prefetchDueStack } from '../features/study/prefetchDueStack';
 import { MagazineFrame } from '../ui/MagazineFrame';
 import { Masthead } from '../ui/Masthead';
 import { FOCUS_RING } from '../ui/magazine';
-import { ABOUT_PATH, DRILL_PATH, LESSONS_PATH, SETTINGS_PATH, STATS_PATH, STUDY_PATH } from './routes';
+import { ABOUT_PATH, DRILL_PATH, KOTODAMA_PATH, LESSONS_PATH, SETTINGS_PATH, STATS_PATH, STUDY_PATH } from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 export interface AuthenticatedShellProps {
@@ -129,6 +129,7 @@ export function AuthenticatedShell({
         onStartSession={onStartSession}
         onViewStats={onViewStats}
         onPractice={() => navigate(DRILL_PATH)}
+        onKotodama={() => navigate(KOTODAMA_PATH)}
         onViewLessons={() => navigate(LESSONS_PATH)}
         onViewAbout={() => navigate(ABOUT_PATH)}
       />
