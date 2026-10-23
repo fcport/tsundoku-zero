@@ -30,6 +30,22 @@ export const en = {
     switchToSignIn: 'Already have an account? Sign in',
     switchToSignUp: "Don't have an account? Sign up",
     signOut: 'Sign out',
+    // La prova senza account (23-10-2026): l'ingresso sulla pagina d'accesso e la
+    // pagina che trasforma l'ospite in un account tenendo i progressi.
+    guest: {
+      kicker: 'Just want to look around?',
+      action: 'Try it without an account',
+      note: 'It opens right away, no email needed. Your progress is tied to this browser, and if you create an account later, you keep it.',
+      mastheadAction: 'Save progress',
+      saveTitle: 'Keep your progress',
+      saveIntro:
+        'You are using Tsundoku without an account. Your lessons, exercises and streak are tied to this browser: if you clear its data or open the site on another device, you will not find them. With an email and a password you keep everything and find it anywhere.',
+      saveSubmit: 'Save my progress',
+      haveAccount: 'Already have an account? Sign in',
+      haveAccountNote:
+        'Signing in ends the trial: its progress does not move into the account you already have.',
+      back: 'Back',
+    },
     error: {
       emailAlreadyRegistered: 'This email is already registered.',
       invalidEmail: 'Enter a valid email address.',
@@ -623,6 +639,8 @@ export const en = {
         'We do not collect your name, your date of birth, or any data to track you.',
       deletion:
         'You can delete your account in Settings, with Delete account. The list of your answers is deleted too, and this cannot be undone.',
+      guest:
+        'If you try it without an account, we keep the same things except the email and the password, under an anonymous code tied to this browser. You can delete them the same way, in Settings.',
       back: 'Back',
     },
     // I riconoscimenti (7.2): la pagina pubblica `/acknowledgements` che attribuisce

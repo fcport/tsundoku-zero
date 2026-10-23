@@ -88,6 +88,13 @@ export const KOTODAMA_PATH = '/kotodama';
 export const LESSONS_PATH = '/lessons';
 
 /**
+ * La pagina che trasforma l'OSPITE (entrato con «Prova senza account») in un account
+ * con email e password, tenendo i progressi (23-10-2026). Protetta; solo l'ospite la
+ * vede, chi ha già un account torna alla dashboard.
+ */
+export const SAVE_PROGRESS_PATH = '/save-progress';
+
+/**
  * Il ripasso libero di UNA lezione, fuori dalla pila: `/lessons/:lessonId`. L'id è
  * uno slug che può contenere kana e kanji, quindi va codificato nel path.
  */

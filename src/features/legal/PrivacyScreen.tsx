@@ -59,6 +59,7 @@ export function PrivacyScreen({ onExit }: PrivacyScreenProps) {
         {t('legal.privacy.notCollected')}
       </p>
       <p className="text-body text-ink-primary">{t('legal.privacy.deletion')}</p>
+      <p className="text-body text-ink-primary">{t('legal.privacy.guest')}</p>
       {/* L'affordance di ritorno (7.1): SECONDARIA — chiaramente non il
           button-primary (nessun fill accent, ink muto, nessun verde). -> `onExit`. */}
       <button

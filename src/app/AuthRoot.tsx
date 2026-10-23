@@ -14,6 +14,7 @@
 import { useEffect, useState } from 'react';
 import { AppRoutes } from './AppRoutes';
 import { submitSignOut } from '../features/auth/signOut';
+import { submitDeleteAccount } from '../features/account/deleteAccount';
 import { i18n, resolveLocale } from '../i18n';
 import { PortsProvider, type Ports } from '../features/ports/PortsContext';
 import { SyncIndicator } from '../features/study/SyncIndicator';
@@ -44,6 +45,9 @@ export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
   // Alimenta la chiave per-utente della dashboard (`dueQueryKey(userId)`); con
   // `null` la dashboard mostra lo scheletro, nessun ramo speciale.
   const [userId, setUserId] = useState<string | null>(null);
+  // Vero se la sessione è di un ospite («Prova senza account», 23-10-2026). Risolto
+  // INSIEME all'id, così chi legge `userId !== null` legge anche il valore giusto.
+  const [guest, setGuest] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -82,10 +86,12 @@ export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
     // `active` come le altre letture asincrone; corre insieme a `rehydrateLocale`
     // sull'edge-trigger. Un sign-out riporta `userId` a `null` (rami anonimi).
     const resolveUserId = () => {
-      void gateway
-        .currentUserId()
-        .then((id) => {
-          if (active) setUserId(id);
+      void Promise.all([gateway.currentUserId(), gateway.isGuest()])
+        .then(([id, isGuest]) => {
+          if (active) {
+            setUserId(id);
+            setGuest(isGuest);
+          }
         })
         .catch(() => {
           if (active) setUserId(null);
@@ -118,6 +124,7 @@ export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
         } else {
           authApplied = false;
           setUserId(null);
+          setGuest(false);
         }
       }
     });
@@ -140,6 +147,7 @@ export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
         } else {
           authApplied = false;
           setUserId(null);
+          setGuest(false);
         }
       }
     });
@@ -164,6 +172,19 @@ export function AuthRoot({ gateway, settings, account, ports }: AuthRootProps) {
         settings={settings}
         account={account}
         userId={userId}
+        guest={guest}
+        onGuestSaved={() => setGuest(false)}
+        onLeaveGuest={() => {
+          // Chi chiude la prova per entrare nel suo account: l'utente anonimo non
+          // servirà più a nessuno (senza email non si ritrova), quindi si cancella
+          // invece di restare orfano nel database. Poi lo stesso scarico del token
+          // della cancellazione dell'account.
+          setSignOutPending(true);
+          void submitDeleteAccount(account)
+            .then(() => submitSignOut(gateway))
+            .then(() => setStatus('anonymous'))
+            .finally(() => setSignOutPending(false));
+        }}
         onAuthenticated={() => setStatus('authenticated')}
         signOutPending={signOutPending}
         onSignOut={() => {

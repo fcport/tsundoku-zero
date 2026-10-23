@@ -18,13 +18,14 @@ import { useTranslation } from '../../i18n';
 import { RESPONSIVE_CONTAINER } from '../../ui/layout';
 import { MagazineFrame } from '../../ui/MagazineFrame';
 import { Tanuki } from '../../ui/Tanuki';
-import { FOCUS_RING, KICKER } from '../../ui/magazine';
-import { ExternalIcon, GitHubIcon } from '../../ui/icons';
+import { FOCUS_RING, HEADLINE, KICKER } from '../../ui/magazine';
+import { ArrowIcon, ExternalIcon, GitHubIcon } from '../../ui/icons';
 import { REPO_URL } from '../about/links';
 import type { AuthGateway } from '../../domain/ports/authGateway';
 import { AuthForm, type AuthFormValues } from './AuthForm';
 import { applyAuthOutcome } from './authOutcome';
 import { AUTH_MODE_COPY, submitForMode, type AuthMode } from './authMode';
+import { submitGuest } from './guest';
 import type { AuthErrorMessage } from './authFailureMessage';
 
 export interface AuthScreenProps {
@@ -65,6 +66,8 @@ export function AuthScreen({
   const [error, setError] = useState<AuthErrorMessage | null>(null);
   const [pending, setPending] = useState(false);
   const [mode, setMode] = useState<AuthMode>('sign-up');
+  // La prova senza account ha il suo errore: non va ancorato ai campi del modulo.
+  const [guestError, setGuestError] = useState<AuthErrorMessage | null>(null);
 
   const copy = AUTH_MODE_COPY[mode];
 
@@ -81,6 +84,37 @@ export function AuthScreen({
         <p className={`${KICKER} text-balance`}>{t('app.tagline')}</p>
         <Tanuki pose="waving" height={80} className="sm:h-[112px] sm:w-auto" />
       </div>
+      {/* La prova senza account (23-10-2026), PRIMA del modulo: chi arriva per
+          curiosità entra con un clic, senza email. */}
+      <section aria-labelledby="guest-title" className="flex flex-col gap-3">
+        <p id="guest-title" className={KICKER}>
+          {t('auth.guest.kicker')}
+        </p>
+        <button
+          type="button"
+          disabled={pending}
+          onClick={() => {
+            setPending(true);
+            setGuestError(null);
+            void submitGuest(gateway)
+              .then((outcome) =>
+                applyAuthOutcome(outcome, { onAuthenticated, onError: setGuestError }),
+              )
+              .finally(() => setPending(false));
+          }}
+          className={`flex min-h-[56px] w-full items-center justify-between gap-4 border-[1.5px] border-border-strong px-5 py-3 text-left text-[22px] leading-none text-ink-primary hover:bg-surface-raised hover:[&>svg]:translate-x-1.5 *:transition-transform sm:min-h-[64px] sm:text-[26px] ${HEADLINE} ${FOCUS_RING}`}
+        >
+          {t('auth.guest.action')}
+          <ArrowIcon />
+        </button>
+        <p className="text-caption text-ink-secondary">{t('auth.guest.note')}</p>
+        {guestError ? (
+          <p role="alert" className="text-caption text-danger">
+            {t(guestError.key)}
+          </p>
+        ) : null}
+      </section>
+      <div className="border-t-[1.5px] border-border-strong" aria-hidden="true" />
       <AuthForm
         values={values}
         error={error}

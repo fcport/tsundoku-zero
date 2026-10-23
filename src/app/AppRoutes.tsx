@@ -25,6 +25,7 @@ import { PrivacyScreen } from '../features/legal/PrivacyScreen';
 import { AcknowledgementsScreen } from '../features/legal/AcknowledgementsScreen';
 import { AboutScreen } from '../features/about/AboutScreen';
 import { NotFoundScreen } from '../features/notFound/NotFoundScreen';
+import { SaveProgressScreen } from '../features/auth/SaveProgressScreen';
 import { AuthenticatedShell } from './AuthenticatedShell';
 import { SettingsPage } from './SettingsPage';
 import { RedirectIfAuthenticated, RequireAuth } from './routeGuards';
@@ -40,6 +41,7 @@ import {
   LOGIN_PATH,
   PRIVACY_PATH,
   ROOT_PATH,
+  SAVE_PROGRESS_PATH,
   STATS_PATH,
   SETTINGS_PATH,
   STUDY_PATH,
@@ -59,6 +61,12 @@ export interface AppRoutesProps {
    * protetta e da lì alla dashboard (chiave per-utente della pila, 3.12).
    */
   readonly userId: string | null;
+  /** Vero se l'utente è un ospite, entrato con «Prova senza account». */
+  readonly guest: boolean;
+  /** L'ospite ha salvato i progressi in un account. */
+  readonly onGuestSaved: () => void;
+  /** L'ospite chiude la prova per accedere a un account che ha già. */
+  readonly onLeaveGuest: () => void;
   readonly onAuthenticated: () => void;
   readonly onSignOut: () => void;
   readonly signOutPending: boolean;
@@ -71,6 +79,9 @@ export function AppRoutes({
   settings,
   account,
   userId,
+  guest,
+  onGuestSaved,
+  onLeaveGuest,
   onAuthenticated,
   onSignOut,
   signOutPending,
@@ -219,6 +230,27 @@ export function AppRoutes({
               />
             }
           />
+          {/* La prova senza account: solo l'ospite salva i progressi qui. Finché l'id
+              non è risolto non si decide (niente redirect su un ospite al boot);
+              chi ha già un account torna alla dashboard. */}
+          <Route
+            path={SAVE_PROGRESS_PATH}
+            element={
+              userId === null ? null : guest ? (
+                <SaveProgressScreen
+                  gateway={gateway}
+                  onSaved={() => {
+                    onGuestSaved();
+                    navigate(ROOT_PATH);
+                  }}
+                  onBack={() => navigate(ROOT_PATH)}
+                  onSignInInstead={onLeaveGuest}
+                />
+              ) : (
+                <Navigate to={ROOT_PATH} replace />
+              )
+            }
+          />
           {/* La dashboard, solo sulla radice: gli altri indirizzi sconosciuti
               vanno alla pagina «non trovata» (prima ricadevano qui). */}
           <Route
@@ -227,6 +259,7 @@ export function AppRoutes({
               <AuthenticatedShell
                 settings={settings}
                 userId={userId}
+                guest={guest}
                 onSignOut={onSignOut}
                 signOutPending={signOutPending}
               />

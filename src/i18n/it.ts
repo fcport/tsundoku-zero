@@ -25,6 +25,20 @@ export const it = {
     switchToSignIn: 'Hai già un account? Accedi',
     switchToSignUp: 'Non hai un account? Registrati',
     signOut: 'Disconnetti',
+    guest: {
+      kicker: "Vuoi solo dare un'occhiata?",
+      action: 'Prova senza account',
+      note: 'Si apre subito, senza email. I progressi restano legati a questo browser e, se poi crei un account, li tieni.',
+      mastheadAction: 'Salva i progressi',
+      saveTitle: 'Tieni i tuoi progressi',
+      saveIntro:
+        'Stai usando Tsundoku senza account. Lezioni, esercizi e giorni di fila restano legati a questo browser: se ne cancelli i dati o apri il sito da un altro dispositivo, non li ritrovi. Con email e password tieni tutto e lo ritrovi ovunque.',
+      saveSubmit: 'Salva i progressi',
+      haveAccount: 'Hai già un account? Accedi',
+      haveAccountNote:
+        "Accedendo chiudi la prova: i suoi progressi non passano nell'account che hai già.",
+      back: 'Indietro',
+    },
     error: {
       emailAlreadyRegistered: 'Questa email è già registrata.',
       invalidEmail: 'Inserisci un indirizzo email valido.',
@@ -632,6 +646,8 @@ export const it = {
         'Non raccogliamo il tuo nome, la tua data di nascita né dati per tracciarti.',
       deletion:
         'Puoi cancellare il tuo account dalle Impostazioni, con Cancella account. Si cancella anche la lista delle tue risposte, e non si può annullare.',
+      guest:
+        'Se provi senza account conserviamo le stesse cose, tranne email e password, sotto un codice anonimo legato a questo browser. Puoi cancellarle allo stesso modo, dalle Impostazioni.',
       back: 'Indietro',
     },
     // I riconoscimenti (7.2): STESSE chiavi di `en` (parità ricorsiva). Attribuisce

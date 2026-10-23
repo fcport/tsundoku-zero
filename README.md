@@ -5,7 +5,8 @@
 積ん読ゼロ: clear the pile.
 
 > Live at **[tsundokuzero.federicocasadei.dev](https://tsundokuzero.federicocasadei.dev)**.
-> It is free: sign up with an email and a password. Interface in English and Italian.
+> It is free, and you can try it without an account: one click and the whole app opens.
+> Add an email and a password later to keep your progress. Interface in English and Italian.
 
 ![The dashboard: today's pile of exercises, the streak, the current lesson](docs/images/dashboard.png)
 
@@ -184,6 +185,11 @@ Supabase provides authentication and per-user data without writing a server.
 The app is a static frontend: the only server code is the Edge Function that
 deletes an account. Data isolation is enforced by Row Level Security on every
 per-user table, and a test checks it.
+
+Trying the app without an account uses Supabase anonymous sign-in: a guest is a
+real user with no email, so the same policies apply and nothing in the schema
+changes. Saving the progress later adds an email and a password to that same
+user in a single `updateUser` call, so the id and all the data stay.
 
 There is a single Supabase project, the production one: development, CI and e2e
 all run against the same database. Tests exercise the real configuration, but

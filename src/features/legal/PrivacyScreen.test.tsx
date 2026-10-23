@@ -32,6 +32,7 @@ describe('PrivacyScreen — dichiarazioni fattuali (en)', () => {
     expect(markup).toContain(en.legal.privacy.stored);
     expect(markup).toContain(en.legal.privacy.notCollected);
     expect(markup).toContain(en.legal.privacy.deletion);
+    expect(markup).toContain(en.legal.privacy.guest);
   });
 
   it('ha un solo landmark <main>', () => {

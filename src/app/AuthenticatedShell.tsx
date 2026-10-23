@@ -40,7 +40,16 @@ import { prefetchDueStack } from '../features/study/prefetchDueStack';
 import { MagazineFrame } from '../ui/MagazineFrame';
 import { Masthead } from '../ui/Masthead';
 import { FOCUS_RING } from '../ui/magazine';
-import { ABOUT_PATH, DRILL_PATH, KOTODAMA_PATH, LESSONS_PATH, SETTINGS_PATH, STATS_PATH, STUDY_PATH } from './routes';
+import {
+  ABOUT_PATH,
+  DRILL_PATH,
+  KOTODAMA_PATH,
+  LESSONS_PATH,
+  SAVE_PROGRESS_PATH,
+  SETTINGS_PATH,
+  STATS_PATH,
+  STUDY_PATH,
+} from './routes';
 import type { SettingsRepository } from '../domain/ports/settingsRepository';
 
 export interface AuthenticatedShellProps {
@@ -48,6 +57,11 @@ export interface AuthenticatedShellProps {
   readonly settings: SettingsRepository;
   /** L'id dell'utente corrente (o `null` finché non risolto), passato alla dashboard. */
   readonly userId: string | null;
+  /**
+   * Vero per l'ospite («Prova senza account»): al posto di «Esci», che gli farebbe
+   * perdere tutto, la testata offre di salvare i progressi in un account.
+   */
+  readonly guest?: boolean;
   readonly onSignOut: () => void;
   /** Vero durante la disconnessione: disabilita il bottone. */
   readonly signOutPending: boolean;
@@ -56,6 +70,7 @@ export interface AuthenticatedShellProps {
 export function AuthenticatedShell({
   settings,
   userId,
+  guest = false,
   onSignOut,
   signOutPending,
 }: AuthenticatedShellProps) {
@@ -112,14 +127,24 @@ export function AuthenticatedShell({
             >
               {t('dashboard.openSettings')}
             </button>
-            <button
-              type="button"
-              onClick={onSignOut}
-              disabled={signOutPending}
-              className={serviceAction}
-            >
-              {t('auth.signOut')}
-            </button>
+            {guest ? (
+              <button
+                type="button"
+                onClick={() => navigate(SAVE_PROGRESS_PATH)}
+                className={serviceAction}
+              >
+                {t('auth.guest.mastheadAction')}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onSignOut}
+                disabled={signOutPending}
+                className={serviceAction}
+              >
+                {t('auth.signOut')}
+              </button>
+            )}
           </>
         }
       />

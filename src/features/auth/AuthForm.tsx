@@ -13,6 +13,7 @@
 // l'errore a livello `form` (l'`unknown` generico) vive in uno slot in fondo,
 // NON in cima alla pagina. Solo classi token del sistema di design (1.3):
 // nessun colore letterale (regola ERROR su features).
+import type { ReactNode } from 'react';
 import { useTranslation } from '../../i18n';
 import type { AuthErrorMessage } from './authFailureMessage';
 import { ACTION_BAR, FOCUS_RING, SCREEN_TITLE } from '../../ui/magazine';
@@ -24,11 +25,14 @@ export interface AuthFormValues {
 }
 
 /** Chiave i18n del titolo, secondo il modo. */
-export type AuthFormTitleKey = 'auth.title' | 'auth.signInTitle';
+export type AuthFormTitleKey = 'auth.title' | 'auth.signInTitle' | 'auth.guest.saveTitle';
 /** Chiave i18n del submit primario, secondo il modo. */
-export type AuthFormSubmitKey = 'auth.submit' | 'auth.signInSubmit';
+export type AuthFormSubmitKey = 'auth.submit' | 'auth.signInSubmit' | 'auth.guest.saveSubmit';
 /** Chiave i18n dell'affordance secondario di cambio modo. */
-export type AuthFormToggleKey = 'auth.switchToSignIn' | 'auth.switchToSignUp';
+export type AuthFormToggleKey =
+  | 'auth.switchToSignIn'
+  | 'auth.switchToSignUp'
+  | 'auth.guest.haveAccount';
 
 export interface AuthFormProps {
   readonly values: AuthFormValues;
@@ -44,6 +48,8 @@ export interface AuthFormProps {
   readonly toggleKey: AuthFormToggleKey;
   /** Alterna il modo della schermata. */
   readonly onToggle: () => void;
+  /** Un paragrafo facoltativo sotto il titolo (la pagina che salva la prova). */
+  readonly intro?: ReactNode;
 }
 
 export function AuthForm({
@@ -56,6 +62,7 @@ export function AuthForm({
   submitKey,
   toggleKey,
   onToggle,
+  intro,
 }: AuthFormProps) {
   const { t } = useTranslation();
 
@@ -74,6 +81,7 @@ export function AuthForm({
       <h2 className={`${SCREEN_TITLE} text-ink-primary`}>
         {t(titleKey)}
       </h2>
+      {intro}
 
       <div className="flex flex-col gap-2">
         <label className="font-mono text-label-caps uppercase text-ink-secondary" htmlFor="auth-email">

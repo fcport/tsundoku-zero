@@ -82,6 +82,24 @@ export interface AuthGateway {
    */
   currentUserId(): Promise<string | null>;
   /**
+   * Entra come OSPITE, senza email né password (23-10-2026): l'app intera si apre
+   * subito e i progressi restano legati a questo browser. Stessa forma d'esito di
+   * `signIn`; confine TOTALE.
+   */
+  continueAsGuest(): Promise<AuthResult>;
+  /**
+   * Vero se la sessione corrente è di un ospite (entrato con `continueAsGuest` e
+   * non ancora salvato in un account). Confine TOTALE: su throw o assenza di
+   * sessione ritorna `false`.
+   */
+  isGuest(): Promise<boolean>;
+  /**
+   * Trasforma l'ospite corrente in un account con email e password, tenendo lo
+   * stesso id e quindi tutti i progressi. Stessa classificazione degli errori della
+   * registrazione; confine TOTALE.
+   */
+  saveGuestAccount(credentials: Credentials): Promise<AuthResult>;
+  /**
    * Notifica ogni cambio dello stato di autenticazione come `boolean`; ritorna
    * una `Unsubscribe` per fermare le notifiche.
    */

@@ -113,6 +113,33 @@ export function hasSession(session: unknown): boolean {
 }
 
 /**
+ * Mappa PURA `session → ospite?`: vero se la sessione è di un utente anonimo
+ * (`user.is_anonymous`), cioè entrato senza email né password. Sessione assente o
+ * senza il campo ⇒ `false`.
+ */
+export function isGuestSession(session: unknown): boolean {
+  if (typeof session !== 'object' || session === null) return false;
+  const user = (session as { user?: unknown }).user;
+  if (typeof user !== 'object' || user === null) return false;
+  return (user as { is_anonymous?: unknown }).is_anonymous === true;
+}
+
+/**
+ * Mappa PURA della risposta di `auth.updateUser` in un `AuthResult`: errore ⇒
+ * `reason` classificato con la stessa mappa della registrazione; nessun errore ma
+ * utente assente ⇒ `unknown`; altrimenti `ok`.
+ */
+export function authResultFromUserUpdate(response: {
+  readonly data: { readonly user: unknown } | null;
+  readonly error: ClassifiableError | null;
+}): AuthResult {
+  if (response.error) {
+    return { ok: false, reason: classifyAuthError(response.error) };
+  }
+  return response.data?.user ? { ok: true } : { ok: false, reason: 'unknown' };
+}
+
+/**
  * Costruisce l'adattatore Supabase della porta AuthGateway attorno a un
  * `SupabaseClient` INIETTATO. Il client è creato UNA SOLA VOLTA nella
  * composition root (src/data/supabaseClient.ts, invocato da main.tsx) e
@@ -185,6 +212,43 @@ export function createSupabaseAuthGateway(client: SupabaseClient): AuthGateway {
         return data.session?.user?.id ?? null;
       } catch {
         return null;
+      }
+    },
+
+    async continueAsGuest(): Promise<AuthResult> {
+      // L'accesso anonimo di Supabase: un utente vero (ruolo `authenticated`, le
+      // policy RLS valgono come per tutti) senza email né password. Richiede
+      // «Allow anonymous sign-ins» acceso nella console; spento ⇒ `unknown`.
+      try {
+        const response = await client.auth.signInAnonymously();
+        return authResultFromResponse(response);
+      } catch {
+        return { ok: false, reason: 'unknown' };
+      }
+    },
+
+    async isGuest(): Promise<boolean> {
+      try {
+        const { data } = await client.auth.getSession();
+        return isGuestSession(data.session);
+      } catch {
+        return false;
+      }
+    },
+
+    async saveGuestAccount(credentials: Credentials): Promise<AuthResult> {
+      // Email e password nella STESSA chiamata: GoTrue la accetta per un anonimo e,
+      // con la conferma email spenta (come per la registrazione), conferma subito
+      // l'email e toglie `is_anonymous`. Lo stesso id resta, con tutti i progressi.
+      // Una sola chiamata, così non esiste uno stato a metà (email senza password).
+      try {
+        const response = await client.auth.updateUser({
+          email: credentials.email,
+          password: credentials.password,
+        });
+        return authResultFromUserUpdate(response);
+      } catch {
+        return { ok: false, reason: 'unknown' };
       }
     },
 

@@ -28,6 +28,9 @@ const inertGateway: AuthGateway = {
   signOut: async () => {},
   isAuthenticated: async () => false,
   currentUserId: async () => null,
+  continueAsGuest: async () => ({ ok: true }),
+  isGuest: async () => false,
+  saveGuestAccount: async () => ({ ok: true }),
   onAuthStateChange: () => () => {},
 };
 // Porta finta inerte (nuova prop 1.9, estesa in 3.17): non invocata durante la
@@ -102,6 +105,7 @@ function renderAt(
   path: string,
   authenticated: boolean,
   userId: string | null = UID,
+  guest = false,
 ): string {
   return renderToStaticMarkup(
     <QueryClientProvider client={seededClient()}>
@@ -113,6 +117,9 @@ function renderAt(
             settings={inertSettings}
             account={inertAccount}
             userId={userId}
+            guest={guest}
+            onGuestSaved={NOOP}
+            onLeaveGuest={NOOP}
             onAuthenticated={NOOP}
             onSignOut={NOOP}
             signOutPending={false}
@@ -382,5 +389,44 @@ describe('AppRoutes — rotta /study, anonimo (3.18)', () => {
   it('il guard blocca: nessuna SessionScreen (Navigate→null in SSR)', () => {
     expect(markup).not.toContain(en.session.prompt.singleSelect);
     expect(markup).not.toContain('lang="ja"');
+  });
+});
+
+// La prova senza account (23-10-2026): l'ingresso sull'accesso, la testata
+// dell'ospite e la pagina che salva i progressi.
+describe('AppRoutes — prova senza account', () => {
+  it('l accesso offre di provare senza account', () => {
+    expect(renderAt('/login', false)).toContain(en.auth.guest.action);
+  });
+
+  it('l ospite vede «Salva i progressi» al posto di «Esci»', () => {
+    const markup = renderAt('/', true, UID, true);
+    expect(markup).toContain(en.auth.guest.mastheadAction);
+    expect(markup).not.toContain(en.auth.signOut);
+    expect(markup).toContain(en.dashboard.primaryAction);
+  });
+
+  it('l ospite apre la pagina che salva i progressi', () => {
+    const markup = renderAt('/save-progress', true, UID, true);
+    expect(markup).toContain(en.auth.guest.saveTitle);
+    expect(markup).toContain(en.auth.guest.saveIntro);
+    expect(markup).toContain(en.auth.guest.haveAccount);
+    expect((markup.match(/<main/g) ?? []).length).toBe(1);
+  });
+
+  it('chi ha già un account non vede la pagina (torna alla dashboard)', () => {
+    expect(renderAt('/save-progress', true, UID, false)).not.toContain(
+      en.auth.guest.saveTitle,
+    );
+  });
+
+  it('finché l id non è risolto la pagina non decide (niente redirect)', () => {
+    expect(renderAt('/save-progress', true, null, false)).not.toContain(
+      en.auth.guest.saveTitle,
+    );
+  });
+
+  it('da anonimo la pagina è protetta', () => {
+    expect(renderAt('/save-progress', false)).not.toContain(en.auth.guest.saveTitle);
   });
 });

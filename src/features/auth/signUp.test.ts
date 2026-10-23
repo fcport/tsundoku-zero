@@ -18,6 +18,9 @@ const INERT: Omit<AuthGateway, 'signUp'> = {
   signOut: async () => {},
   isAuthenticated: async () => false,
   currentUserId: async () => null,
+  continueAsGuest: async () => ({ ok: true }),
+  isGuest: async () => false,
+  saveGuestAccount: async () => ({ ok: true }),
   onAuthStateChange: () => () => {},
 };
 
