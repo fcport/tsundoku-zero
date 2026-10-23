@@ -18,7 +18,7 @@ import { DRILL_VERBS } from './drill-verbs';
 import { buildForm, type BuildStep, type FormPiece } from './form-builder';
 
 /** Chi parla. */
-export type Speaker = 'tanuki' | 'book' | 'diary';
+export type Speaker = 'tanuki' | 'book' | 'diary' | 'child';
 
 export type Beat =
   /** Il racconto. */
@@ -125,6 +125,9 @@ function withoutFrame(answer: string, frame: Spelling): string {
     if (before && rest.startsWith(before) && rest.length > before.length) rest = rest.slice(before.length);
     if (after && rest.endsWith(after) && rest.length > after.length) rest = rest.slice(0, -after.length);
   }
+  // «Io» detto apertamente non è un errore: わたしは読みたい vale 読みたい.
+  const subject = /^(わたしは|私は|ぼくは|僕は)/.exec(rest);
+  if (subject && rest.length > subject[0].length) rest = rest.slice(subject[0].length);
   return rest;
 }
 

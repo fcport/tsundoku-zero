@@ -311,11 +311,6 @@ const SECOND_NIGHT: Night = {
           target: { verb: '読む', pieces: ['tai'] },
           alsoAccepted: [
             {
-              // Il soggetto detto apertamente: giusto, e il diario lo prende come la forma semplice.
-              answers: ['わたしはよみたい', 'わたしは読みたい', '私はよみたい', '私は読みたい'],
-              then: [],
-            },
-            {
               answers: ['よみたいです', '読みたいです'],
               then: [
                 narration(
@@ -500,4 +495,274 @@ const SECOND_NIGHT: Night = {
   ],
 };
 
-export const NIGHTS: readonly Night[] = [FIRST_NIGHT, SECOND_NIGHT];
+const child = (kanji: string, kana: string, it: string, en: string) =>
+  ({ kind: 'line', speaker: 'child', ja: { kanji, kana }, translation: { it, en } }) as const;
+
+/** たい è solo per chi parla: per il tanuki si dice quello che si è visto, con がる. */
+const onlyYourOwnWish = [
+  child('たぬきの気持ち、わかるの？', 'たぬきのきもち、わかるの？', 'Tu li conosci, i sentimenti del tanuki?', "Do you know what the tanuki feels?"),
+  narration(
+    'Ha ragione lui. たい vale solo per chi parla: quello che vuole un altro non lo puoi sapere da dentro. Puoi solo dire quello che hai visto, cioè che mostrava di volerlo: たい perde la い e prende がる.',
+    "He's right. たい only works for the speaker: you can't know from the inside what someone else wants. You can only say what you saw, that it showed it wanted to: たい drops its い and takes がる.",
+  ),
+];
+
+/** 第三夜: la porta in fondo, il bambino e il libro che volevi da piccolo. */
+const THIRD_NIGHT: Night = {
+  id: 'the-door',
+  kanjiTitle: '第三夜',
+  title: { it: 'La porta in fondo', en: 'The door at the back' },
+  stamp: [{ text: '三', ruby: 'さん' }],
+  stampMeaning: { it: 'Terza notte', en: 'Third night' },
+  steps: [
+    narration(
+      "La candela accesa da sola è proprio lì, davanti alla porta che prima non c'era. Il diario aveva scritto che stasera avresti acceso la terza candela, ma questa è accesa da tempo: la cera è già colata fino al pavimento.",
+      "The candle that lit itself is right there, in front of the door that wasn't there before. The diary said you would light the third candle tonight, but this one has been burning for a long time: the wax has already run down to the floor.",
+    ),
+    tanuki('Io lì non entro. Non è casa mia.', "I'm not going in there. It isn't my house."),
+    narration(
+      "La porta si apre da sola. Dentro c'è una stanzetta con il tatami consumato e uno scaffale basso, da bambini. Sullo scaffale c'è un solo libro, con la copertina a colori sbiaditi: にほんご 1. È un libro di giapponese per principianti, con il prezzo ancora attaccato.",
+      "The door opens by itself. Inside is a little room with worn tatami and a low shelf, a child's shelf. On it there is a single book with a faded colour cover: にほんご 1. A beginner's Japanese book, with the price tag still on.",
+    ),
+    narration(
+      "Seduto davanti allo scaffale c'è un bambino in kimono rosso, di spalle. Ha i capelli tagliati dritti sulla fronte. Non l'hai visto entrare, e non sembra che sia mai uscito. Senza voltarsi, ti chiede:",
+      "Sitting in front of the shelf, with his back to you, is a child in a red kimono. His hair is cut straight across his forehead. You didn't see him come in, and he doesn't look like he has ever left. Without turning, he asks:",
+    ),
+    child(
+      '子供の時、何がしたかった？',
+      'こどものとき、なにがしたかった？',
+      'Quando avevi la mia età, cosa volevi fare?',
+      'When you were my age, what did you want to do?',
+    ),
+    narration('Dietro di te, dalla stanza grande, il tanuki ha smesso di ridere.', 'Behind you, in the big room, the tanuki has stopped laughing.'),
+    {
+      kind: 'ask',
+      prompt: { it: 'Cosa rispondi al bambino?', en: 'What do you tell the child?' },
+      options: [
+        {
+          id: 'study',
+          label: { it: 'Volevo studiare il giapponese.', en: 'I wanted to study Japanese.' },
+          frame: { kanji: '子供の時、日本語を＿。', kana: 'こどものとき、にほんごを＿。' },
+          target: { verb: '勉強する', pieces: ['tai', 'past'] },
+          alsoAccepted: [{ answers: ['べんきょうしたかったです', '勉強したかったです'], then: [] }],
+          mistakes: [
+            {
+              answers: ['べんきょうしたいでした', '勉強したいでした', 'べんきょうしたいだった', '勉強したいだった'],
+              then: [
+                child('ちがう。', 'ちがう。', 'No.', 'No.'),
+                narration(
+                  'でした si attacca ai nomi, non alle parole in い. したい il passato se lo fa da solo: la い diventa かった.',
+                  'でした attaches to nouns, not to words in い. したい makes its own past: the い becomes かった.',
+                ),
+              ],
+            },
+            {
+              answers: ['べんきょうするたかった', '勉強するたかった', 'べんきょうしてたかった', '勉強してたかった'],
+              then: [
+                child('ちがう。', 'ちがう。', 'No.', 'No.'),
+                narration(
+                  'たい si attacca al radicale in i: per する è し, come in します. し＋たい＝したい, poi かった.',
+                  'たい attaches to the i-stem: for する that is し, as in します. し + たい = したい, then かった.',
+                ),
+              ],
+            },
+          ],
+          then: [
+            narration(
+              "Il bambino resta immobile. Poi si gira. Ha la faccia tonda, le guance arrossate dal freddo, e ti sembra di conoscerla: l'hai vista nelle tue foto d'infanzia.",
+              "The child stays still. Then he turns. His face is round, his cheeks red with cold, and you feel you know it: you've seen it in photos of yourself as a child.",
+            ),
+            child('知ってる。', 'しってる。', 'Lo so.', 'I know.'),
+          ],
+        },
+        {
+          id: 'inventor',
+          label: { it: 'Volevo diventare un inventore.', en: 'I wanted to become an inventor.' },
+          hint: { it: 'inventore: 発明家 (はつめいか) · diventare: なる', en: 'inventor: 発明家 (はつめいか) · to become: なる' },
+          frame: { kanji: '子供の時、＿。', kana: 'こどものとき、＿。' },
+          target: { answers: [{ kanji: '発明家になりたかった', kana: 'はつめいかになりたかった' }] },
+          alsoAccepted: [
+            { answers: ['発明家になりたかったです', 'はつめいかになりたかったです'], then: [] },
+            {
+              answers: ['発明家をしたかった', 'はつめいかをしたかった', '発明家をしたかったです', 'はつめいかをしたかったです'],
+              then: [
+                child(
+                  'はつめいか…',
+                  'はつめいか…',
+                  'Inventore…',
+                  'Inventor…',
+                ),
+                child(
+                  '発明家になりたかった、でしょう？',
+                  'はつめいかになりたかった、でしょう？',
+                  'Volevi diventare un inventore, vero?',
+                  'You wanted to become an inventor, right?',
+                ),
+                narration(
+                  'Lo dice senza voltarsi, contento di averti corretto, come fanno i bambini. Per i sogni di quando si era piccoli si dice 〜になりたかった, «volevo diventare»: をしたかった suona come «volevo fare il mestiere di».',
+                  'He says it without turning, pleased to have corrected you, the way children are. For childhood dreams you say 〜になりたかった, "I wanted to become": をしたかった sounds like "I wanted to do the job of".',
+                ),
+              ],
+            },
+          ],
+          mistakes: [
+            {
+              answers: ['発明家になりたいでした', 'はつめいかになりたいでした', '発明家になりたいだった', 'はつめいかになりたいだった'],
+              then: [
+                child('ちがう。', 'ちがう。', 'No.', 'No.'),
+                narration(
+                  'でした va dopo i nomi. なりたい finisce in い e il passato se lo fa da solo: なりたかった.',
+                  'でした goes after nouns. なりたい ends in い and makes its own past: なりたかった.',
+                ),
+              ],
+            },
+            {
+              answers: ['発明家になるたかった', 'はつめいかになるたかった'],
+              then: [
+                child('ちがう。', 'ちがう。', 'No.', 'No.'),
+                narration(
+                  'たい si attacca al radicale in i: なる fa なり, come in なります. なり＋たい＝なりたい.',
+                  'たい attaches to the i-stem: なる gives なり, as in なります. なり + たい = なりたい.',
+                ),
+              ],
+            },
+          ],
+          then: [
+            narration(
+              "Il bambino si gira. Ha la faccia tonda, le guance arrossate dal freddo, e ti sembra di conoscerla: l'hai vista nelle tue foto d'infanzia.",
+              "The child turns. His face is round, his cheeks red with cold, and you feel you know it: you've seen it in photos of yourself as a child.",
+            ),
+          ],
+        },
+      ],
+    },
+    narration(
+      'Il bambino prende dallo scaffale にほんご 1 e lo stringe al petto, come si tiene un giocattolo che qualcuno vuole portarti via.',
+      'The child takes にほんご 1 from the shelf and holds it to his chest, the way you hold a toy someone wants to take from you.',
+    ),
+    child(
+      'じゃあ…これは、だれが読みたかった？',
+      'じゃあ…これは、だれがよみたかった？',
+      'Allora… questo chi lo voleva leggere?',
+      'Then… who wanted to read this?',
+    ),
+    narration(
+      'Dalla stanza grande arriva un rumore di pagine strappate. Il tanuki sta facendo qualcosa al diario.',
+      'From the big room comes the sound of pages being torn. The tanuki is doing something to the diary.',
+    ),
+    {
+      kind: 'ask',
+      prompt: { it: 'Chi lo voleva leggere?', en: 'Who wanted to read it?' },
+      options: [
+        {
+          id: 'tanuki-wanted',
+          label: { it: "Il tanuki: l'ho visto, mostrava di volerlo leggere.", en: 'The tanuki: I saw it, it was showing it wanted to read it.' },
+          frame: { kanji: 'たぬきが本を＿。', kana: 'たぬきがほんを＿。' },
+          target: { verb: '読む', pieces: ['tai', 'garu', 'teiru', 'past'] },
+          alsoAccepted: [
+            { answers: ['よみたがっていました', '読みたがっていました'], then: [] },
+            {
+              answers: ['よみたがった', '読みたがった', 'よみたがりました', '読みたがりました'],
+              then: [
+                narration(
+                  'Il bambino non conta le dita. È giusto: «mostrò di volerlo», un fatto chiuso. Lui pensava a 読みたがっていた, «lo stava mostrando» mentre lo guardavi, ma anche questo è giapponese vero, e le parole vere funzionano.',
+                  'The child doesn\'t count on his fingers. It\'s right: "it showed it wanted to", a closed fact. He had 読みたがっていた in mind, "it was showing it" while you watched, but this is real Japanese too, and real words work.',
+                ),
+              ],
+            },
+          ],
+          mistakes: [
+            { answers: ['よみたかった', '読みたかった', 'よみたかったです', '読みたかったです'], then: onlyYourOwnWish },
+            {
+              answers: ['よみたたがる', '読みたたがる', 'よみたたがります', '読みたたがります', 'よみたたがっていた', '読みたたがっていた'],
+              then: [
+                narration('Il bambino conta sulle dita, piano: た… た…', 'The child counts on his fingers, slowly: た… た…'),
+                child('「た」がひとつ多い。', '「た」がひとつおおい。', 'C\'è una た di troppo.', 'One た too many.'),
+                narration(
+                  'たい lascia cadere la い, e la た che resta si attacca a がる: 読み＋た＋がる＝読みたがる.',
+                  'たい drops its い, and the た that remains joins がる: 読み + た + がる = 読みたがる.',
+                ),
+              ],
+            },
+            {
+              answers: ['よみたがる', '読みたがる', 'よみたがります', '読みたがります', 'よみたがっている', '読みたがっている'],
+              then: [
+                narration(
+                  'Il bambino sorride a metà. 読みたがる è giusto, ma è il presente: lui vuole sapere quello che hai visto prima, quella notte.',
+                  'The child half smiles. 読みたがる is right, but it\'s the present: he wants to know what you saw before, that night.',
+                ),
+              ],
+            },
+          ],
+          then: [narration('La candela sulla soglia si raddrizza, e per la prima volta la fiamma cresce.', 'The candle on the threshold straightens, and for the first time the flame grows.')],
+        },
+        {
+          id: 'i-wanted',
+          label: { it: 'Io. Ero io che volevo leggerlo.', en: 'Me. I was the one who wanted to read it.' },
+          frame: { kanji: 'わたしが＿。', kana: 'わたしが＿。' },
+          target: { verb: '読む', pieces: ['tai', 'past'] },
+          alsoAccepted: [{ answers: ['よみたかったです', '読みたかったです'], then: [] }],
+          mistakes: [
+            {
+              answers: ['よみたいでした', '読みたいでした', 'よみたいだった', '読みたいだった'],
+              then: [
+                child('ちがう。', 'ちがう。', 'No.', 'No.'),
+                narration('Le parole in い il passato se lo fanno da sole: 読みたい → 読みたかった.', 'Words in い make their own past: 読みたい → 読みたかった.'),
+              ],
+            },
+            {
+              answers: ['よみたがっていた', '読みたがっていた', 'よみたがった', '読みたがった'],
+              then: [
+                child('じぶんのこと？', 'じぶんのこと？', 'Parli di te?', 'Talking about yourself?'),
+                narration(
+                  'がる è per gli altri. Per quello che volevi tu basta たい: 読みたかった.',
+                  'がる is for other people. For what you wanted, たい is enough: 読みたかった.',
+                ),
+              ],
+            },
+          ],
+          then: [child('ほんとう？', 'ほんとう？', 'Davvero?', 'Really?')],
+        },
+      ],
+    },
+    child('でも、たぬきは本を読まない。', 'でも、たぬきはほんをよまない。', 'Ma il tanuki i libri non li legge.', "But the tanuki doesn't read books."),
+    narration(
+      'Si avvicina. Il libro tra le sue braccia ha i bordi delle pagine anneriti, come se qualcuno li avesse morsi.',
+      'He comes closer. The book in his arms has blackened page edges, as if someone had bitten them.',
+    ),
+    child('たぬきは、本を食べる。', 'たぬきは、ほんをたべる。', 'Il tanuki i libri li mangia.', 'The tanuki eats books.'),
+    narration('Ti mette にほんご 1 tra le mani. È più pesante di come sembrava.', 'He puts にほんご 1 in your hands. It is heavier than it looked.'),
+    child(
+      '子供の時、読みたかったでしょう？',
+      'こどものとき、よみたかったでしょう？',
+      'Quando avevi la mia età lo volevi leggere, vero?',
+      'When you were my age you wanted to read it, didn\'t you?',
+    ),
+    child('今度は、食べられないでね。', 'こんどは、たべられないでね。', 'Stavolta non fartelo mangiare, eh.', "Don't let it get eaten this time."),
+    { kind: 'candleOut' },
+    narration(
+      "La candela sulla soglia si spegne. Ti volti verso la porta. Il tanuki è lì: aveva detto che non era casa sua, ma è sulla soglia, e sta masticando qualcosa, lentamente. Dall'angolo della bocca gli pende un pezzetto di carta con sopra la tua calligrafia.",
+      "The candle on the threshold goes out. You turn to the door. The tanuki is there: it said this wasn't its house, but it's on the threshold, chewing something, slowly. From the corner of its mouth hangs a scrap of paper in your handwriting.",
+    ),
+    { kind: 'line', speaker: 'tanuki', ja: { kanji: 'お帰り。', kana: 'おかえり。' }, translation: { it: 'Eccoti di nuovo a casa.', en: 'Welcome home.' } },
+    narration(
+      "Dietro di te la stanzetta è vuota. Il tatami, lo scaffale, il bambino: non c'è più niente. Hai solo il libro.",
+      'Behind you the little room is empty. The tatami, the shelf, the child: nothing is left. You only have the book.',
+    ),
+  ],
+  foreign: [
+    narration(
+      'Il bambino inclina la testa, come se avessi parlato una lingua di grandi.',
+      'The child tilts his head, as if you had spoken a grown-up language.',
+    ),
+    child('にほんごで。', 'にほんごで。', 'In giapponese.', 'In Japanese.'),
+  ],
+  wrong: [
+    narration(
+      "Il bambino aspetta senza sbattere le palpebre. La candela sulla soglia si accorcia di colpo, come se fosse passata un'ora.",
+      'The child waits without blinking. The candle on the threshold suddenly shortens, as if an hour had passed.',
+    ),
+  ],
+};
+
+export const NIGHTS: readonly Night[] = [FIRST_NIGHT, SECOND_NIGHT, THIRD_NIGHT];

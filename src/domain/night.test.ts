@@ -103,6 +103,19 @@ describe('judge, con le risposte date davvero', () => {
     expect(judge('mirareta', option('watched')).kind).toBe('correct');
   });
 
+  it('la porta: le risposte date al bambino, una per una', () => {
+    // 子供の時、私は発明家をしたかった: si capisce, e il bambino corregge.
+    expect(judge('子供の時、私は発明家をしたかった', option('inventor')).kind).toBe('correct');
+    expect(judge('hatsumeika ni naritakatta', option('inventor')).kind).toBe('correct');
+    expect(judge('benkyou shitakatta', option('study')).kind).toBe('correct');
+    // たぬきが本をよみたかった: たい è solo per chi parla.
+    expect(judge('たぬきが本をよみたかった', option('tanuki-wanted')).kind).toBe('mistake');
+    expect(judge('よみたたがります', option('tanuki-wanted')).kind).toBe('mistake');
+    expect(judge('よみたがります', option('tanuki-wanted')).kind).toBe('mistake');
+    expect(judge('よみたがりました', option('tanuki-wanted')).kind).toBe('correct');
+    expect(judge('yomitagatteita', option('tanuki-wanted')).kind).toBe('correct');
+  });
+
   it('parole non giapponesi, sbagliate, vuote', () => {
     expect(judge('divertente', option('boring')).kind).toBe('foreign');
     expect(judge('たべたい', option('boring')).kind).toBe('wrong');

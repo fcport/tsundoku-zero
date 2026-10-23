@@ -106,7 +106,7 @@ export const en = {
     // posto del pulsante di sblocco, NESSUNA azione. Nessun conteggio da rivedere,
     // nessun `!`, nessuna emoji, nessun avverbio di lode; ASCII.
     dailyLimitReachedBody:
-      'The new lessons for today are all unlocked (limit: {{limit}}). The next one unlocks after midnight. The limit can be changed in Settings.',
+      'The new lessons for today are all unlocked (limit: {{limit}}). The next one unlocks after midnight. You can change the limit in Settings.',
     // Affordance di navigazione verso le statistiche (5.1): resa nel ramo contenuto
     // della dashboard. Verbale e concreta, mai "Continue"; nessun `!`, nessuna
     // emoji, nessun avverbio di lode; ASCII.
@@ -315,7 +315,7 @@ export const en = {
     kicker: 'Curriculum',
     title: 'Lessons',
     intro:
-      'Every lesson of the course, in order. A new lesson puts 8 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». Unlocked lessons can also be reviewed freely: free review does not change the pile. The others unlock one at a time from the dashboard, once the pile is empty.',
+      'Every lesson of the course, in order. A new lesson puts 8 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». You can also review unlocked lessons freely: free review does not change the pile. The others unlock one at a time from the dashboard, once the pile is empty.',
     lessonNumber: 'Lesson {{order}}',
     status: {
       current: 'In progress',
@@ -456,6 +456,7 @@ export const en = {
     // Nights of the pile: the story mode. The story itself is in the domain (nights.ts).
     nights: {
       label: 'Nights',
+      wip: 'Work in progress · {{value}} nights so far',
       played: 'Played: the candle is out and the stamp is yours.',
       notPlayed: 'Not played yet.',
       choose: 'What do you want to say?',
@@ -468,8 +469,9 @@ export const en = {
         tanuki: 'The tanuki',
         book: 'The book',
         diary: 'The diary',
+        child: 'The child',
       },
-      dictate: 'I will tell you this once. Next time it is your turn:',
+      dictate: "I'll tell you this once. Next time it's your turn:",
       end: 'End of {{title}}',
       saved: 'The stamp stays in the list of nights, on this device.',
       again: 'Play the night again',
@@ -575,7 +577,7 @@ export const en = {
     // L'audio della frase che parte da solo a risposta data (salvato su questo
     // dispositivo). Nessun `!`, nessuna emoji; ASCII.
     autoplayAudio: {
-      label: 'Autoplay audio on response',
+      label: 'Play the audio after you answer',
       off: 'Off',
       on: 'On',
     },
@@ -638,14 +640,14 @@ export const en = {
       title: 'Acknowledgements',
       linkLabel: 'Read the acknowledgements',
       method:
-        'The structural way of explaining Japanese grammar used here was made widely known by Cure Dolly, whose lessons brought this model to a broad audience. The source is the channel:',
+        'The structural way of explaining Japanese grammar used here was made widely known by the lessons of Cure Dolly, on this channel:',
       channelLabel: 'Organic Japanese with Cure Dolly',
       originalContent:
         'The exercises and their explanations are original to this project. They do not reproduce, copy, or adapt any material from that channel.',
       noAffiliation:
         'This project is independent. It is not affiliated with, endorsed by, or a continuation of that channel.',
       scholarship:
-        'The grammar taught here is established linguistics, not a private theory. This structural description of Japanese is documented in the academic literature, for example in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
+        'The grammar taught here is established linguistics: this structural description of Japanese is documented in the academic literature, for example in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
       voice:
         'The audio of the Japanese sentences is generated with VOICEVOX:No.7, a synthetic voice that is free for non-commercial use.',
       back: 'Back',
@@ -663,9 +665,9 @@ export const en = {
     guideLabel: '30 Day Japanese on TheMoeWay',
     whyKicker: 'Why this site',
     lessons:
-      'I find those lessons fantastic, but there are very few exercises to go with them. And as you move on, whatever you do not practise tends to be forgotten.',
+      'I find those lessons fantastic, but there are very few exercises to go with them. And as you move on, whatever you do not practise, you forget.',
     idea:
-      'So I built this platform. As I go through the lessons I add them here and write their exercises, so that anyone, now or in the future, can use it to practise what they learned with Cure Dolly.',
+      'So I built this site. As I go through the lessons I add them here and write their exercises, so that anyone, now or in the future, can use it to practise what they learned with Cure Dolly.',
     howKicker: 'How to use it',
     how:
       'Each lesson matches a video. When you unlock a lesson, 8 of its exercises go onto your pile; if you want more, add them with «Practise more». An exercise you get right comes back after a longer and longer gap; one you get wrong comes back sooner. Clear the pile every day, and when it is empty, unlock the next lesson.',

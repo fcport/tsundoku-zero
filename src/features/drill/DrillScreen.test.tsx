@@ -51,6 +51,7 @@ describe('DrillScreen', () => {
     expect(html).toContain('Una forma alla volta');
     expect(html).toContain('Costruttore di forme');
     expect(html).toContain('Le notti della pila');
+    expect(html).toContain(`In lavorazione · per ora ${NIGHTS.length} notti`);
     expect(html.match(/type="radio"/g)).toHaveLength(3);
   });
 

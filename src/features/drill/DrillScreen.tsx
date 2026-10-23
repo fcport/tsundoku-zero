@@ -208,6 +208,12 @@ function Chooser({
                   onChange={() => onMode(option)}
                 />
                 <span className="flex flex-col gap-1">
+                  {/* Le notti sono una prova: l'etichetta dice quante ce ne sono finora. */}
+                  {option === 'nights' ? (
+                    <span className="self-start border-[1.5px] border-current px-2 py-0.5 font-mono text-label-caps uppercase">
+                      {t('drill.nights.wip', { value: NIGHTS.length })}
+                    </span>
+                  ) : null}
                   <span className="text-[22px] font-extrabold uppercase leading-tight font-stretch-condensed">
                     {t(`drill.modes.${option}.name`)}
                   </span>

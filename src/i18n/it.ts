@@ -327,7 +327,7 @@ export const it = {
     kicker: 'Curriculum',
     title: 'Le lezioni',
     intro:
-      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 8 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate si possono anche ripassare liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
+      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 8 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate puoi anche ripassarle liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
     lessonNumber: 'Lezione {{order}}',
     status: {
       current: 'In corso',
@@ -470,6 +470,7 @@ export const it = {
     // Le notti della pila: la modalità a storia. Il racconto è nel dominio (nights.ts).
     nights: {
       label: 'Notti',
+      wip: 'In lavorazione · per ora {{value}} notti',
       played: 'Giocata: la candela è spenta e il timbro è tuo.',
       notPlayed: 'Da giocare.',
       choose: 'Cosa vuoi dire?',
@@ -482,6 +483,7 @@ export const it = {
         tanuki: 'Il tanuki',
         book: 'Il libro',
         diary: 'Il diario',
+        child: 'Il bambino',
       },
       dictate: 'Te la dico io. La prossima volta tocca a te:',
       end: 'Fine di {{title}}',
@@ -644,14 +646,14 @@ export const it = {
       title: 'Riconoscimenti',
       linkLabel: 'Leggi i riconoscimenti',
       method:
-        'Il modo strutturale di spiegare la grammatica giapponese usato qui è stato reso ampiamente noto da Cure Dolly, le cui lezioni hanno divulgato questo modello a un vasto pubblico. La fonte è il canale:',
+        'Il modo strutturale di spiegare la grammatica giapponese usato qui è stato reso ampiamente noto dalle lezioni di Cure Dolly, su questo canale:',
       channelLabel: 'Organic Japanese with Cure Dolly',
       originalContent:
         'Gli esercizi e le loro spiegazioni sono originali di questo progetto. Non riproducono, copiano o adattano alcun materiale di quel canale.',
       noAffiliation:
         'Questo progetto è indipendente. Non è affiliato, approvato, né una continuazione di quel canale.',
       scholarship:
-        'La grammatica insegnata qui è linguistica consolidata, non una teoria privata. Questa descrizione strutturale del giapponese è documentata nella letteratura accademica, per esempio in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
+        'La grammatica insegnata qui è linguistica consolidata: questa descrizione strutturale del giapponese è documentata nella letteratura accademica, per esempio in Susumu Kuno, The Structure of the Japanese Language (MIT Press, 1973).',
       voice:
         "L'audio delle frasi giapponesi è generato con VOICEVOX:No.7, una voce sintetica gratuita per usi non commerciali.",
       back: 'Indietro',
@@ -669,9 +671,9 @@ export const it = {
     guideLabel: '30 Day Japanese su TheMoeWay',
     whyKicker: 'Perché questo sito',
     lessons:
-      "Trovo quelle lezioni fantastiche, ma di esercizi per accompagnarle ce ne sono pochissimi. E andando avanti, quello che non si esercita tende a essere dimenticato.",
+      "Trovo quelle lezioni fantastiche, ma di esercizi per accompagnarle ce ne sono pochissimi. E andando avanti, quello che non eserciti lo dimentichi.",
     idea:
-      'Per questo ho creato questa piattaforma. Man mano che vado avanti con le lezioni le aggiungo qui e ne scrivo gli esercizi, così che chiunque, anche in futuro, possa usarla per esercitarsi su quello che ha imparato con Cure Dolly.',
+      'Per questo ho creato questo sito. Man mano che vado avanti con le lezioni le aggiungo qui e ne scrivo gli esercizi, così che chiunque, anche in futuro, possa usarla per esercitarsi su quello che ha imparato con Cure Dolly.',
     howKicker: 'Come si usa',
     how:
       "Ogni lezione corrisponde a un video. Quando sblocchi una lezione, 8 dei suoi esercizi entrano nella tua pila; se ne vuoi altri, li aggiungi con «Esercitati di più». Un esercizio a cui rispondi bene torna dopo un intervallo sempre più lungo; uno che sbagli torna prima. Ogni giorno svuoti la pila e, quando è vuota, sblocchi la lezione successiva.",

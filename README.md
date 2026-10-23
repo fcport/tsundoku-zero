@@ -2,16 +2,16 @@
 
 # Tsundoku Zero
 
-積ん読ゼロ — clear the pile.
+積ん読ゼロ: clear the pile.
 
-> **Live at [tsundokuzero.federicocasadei.dev](https://tsundokuzero.federicocasadei.dev)**
-> — free, sign up with an email and a password. Interface in English and Italian.
+> Live at **[tsundokuzero.federicocasadei.dev](https://tsundokuzero.federicocasadei.dev)**.
+> It is free: sign up with an email and a password. Interface in English and Italian.
 
 ![The dashboard: today's pile of exercises, the streak, the current lesson](docs/images/dashboard.png)
 
 ## What it is for
 
-Tsundoku Zero is a place to **practise Japanese grammar** right after watching a
+Tsundoku Zero is a place to practise Japanese grammar right after watching a
 lesson, and to keep practising it until it sticks.
 
 It follows the video lessons of
@@ -23,20 +23,20 @@ exercises to go with them, and whatever you do not practise you forget. So as I
 work through the lessons I add them here and write their exercises, so that
 anyone can use them.
 
-The idea in one line: **watch a lesson, then the app hands you its exercises and
-brings each one back just before you would forget it.** You do not choose what to
+In one line: you watch a lesson, then the app hands you its exercises and
+brings each one back just before you would forget it. You do not choose what to
 review; you open the app, clear the pile, and close it.
 
 *Tsundoku* (積ん読) is the Japanese word for the pile of books you bought and
 never read. Here the pile is the exercises waiting for review, and the daily
 goal is to bring it to zero.
 
-**Who it is for:** anyone learning Japanese with the Cure Dolly videos, or
-following the same grammar order, who already reads kana. Kanji come with
+It is for anyone who already reads kana and is learning Japanese with the Cure
+Dolly videos, or following the same grammar order. Kanji come with
 furigana, and every sentence has a translation you can switch on.
 
-**Where it stands (October 2026):** the first 15 lessons are in, with 295
-exercises; the playlist has 93 videos, and lessons are added as I study them.
+As of October 2026 the first 19 lessons are in, with 372 exercises. The
+playlist has 93 videos, and I add lessons as I study them.
 
 The project is independent: it is not affiliated with Cure Dolly or TheMoeWay,
 and the exercises are original.
@@ -45,7 +45,7 @@ and the exercises are original.
 
 ## How it works
 
-- **Lessons.** Each lesson matches a video and declares its grammar points.
+- **Lessons.** Each lesson matches a video and lists its grammar points.
   Exercises come in three kinds: pick the right answer (`single-select`), mark a
   part of the sentence (`select-span`), build a sentence from tiles
   (`assemble`). Every answer comes with its explanation.
@@ -59,16 +59,17 @@ and the exercises are original.
   | ------------ | --------- | ----- | ------ | ------ | ------- | ------- |
   | Comes back   | right away | 1 day | 3 days | 7 days | 16 days | 35 days |
 
-  A correct answer moves up one level. Correct but with the explanation open
-  stays at its level, with a shorter interval. A wrong answer goes back to zero
-  and is asked again in the same session. After a correct answer given without
-  the explanation there is also **Easy**, which moves up two levels: it is for
-  the things you know without thinking.
+  A correct answer moves up one level. A correct answer with the explanation
+  open stays at its level, with a shorter interval. A wrong answer goes back to
+  zero and comes up again in the same session. After a correct answer given
+  without the explanation there is also an Easy button, which moves up two
+  levels, for the things you know without thinking.
 - **At 2 a.m.** Due dates fall at the start of the study day, 2 a.m. local time:
   the whole pile fills up at once and does not grow during the day.
 - **Streak, with a day off.** A day counts when you answer at least once. You
   can skip one day in seven without losing the streak: the skipped day does not
-  count, but the streak goes on. Two days skipped in a row end it.
+  count, but the streak goes on. Two days skipped in a row, or less than a week
+  apart, end it.
 - **Lessons learned.** An exercise is *learned* once you have got it right enough
   times in a row that it comes back only after 16 days or more (level 4). A lesson
   is learned when all its exercises are; a mistake puts it back to learning. The
@@ -127,23 +128,22 @@ validated.
 
 ## The two licences
 
-The repository carries **two distinct licences**, in two separate files:
+The repository has two licences, in two separate files:
 
-- **`LICENSE`** — the application **code**, under the **MIT** licence.
-- **`LICENSE-CONTENT`** — the lesson **content** (the files under
-  `content/lessons/`), under **Creative Commons Attribution-ShareAlike 4.0
-  International** (`CC-BY-SA-4.0`).
+- `LICENSE`: the application code, under the MIT licence.
+- `LICENSE-CONTENT`: the lesson content (the files under `content/lessons/`),
+  under Creative Commons Attribution-ShareAlike 4.0 International
+  (`CC-BY-SA-4.0`).
 
-They are kept separate on purpose. MIT is written for software, and applying it
-to the lessons would be a category error: the lessons are teaching material, not
-code. CC BY-SA is written for creative works: it requires attribution and, with
-*share-alike*, keeps derivatives open. Two separate files let you reuse the code
-or the content independently, each on its own terms. It follows from the
-principle behind how exercises are written: **the content is open, the wording
-is closed** (see `docs/authoring-pipeline.md`).
+MIT is written for software, and the lessons are teaching material, not code.
+CC BY-SA is written for creative works: it requires attribution and, with
+*share-alike*, keeps derivatives open. With two files you can reuse the code or
+the content on its own, each on its own terms. This matches the rule the
+exercises are written by, "the content is open, the wording is closed" (see
+`docs/authoring-pipeline.md`).
 
 One exception to both: the sentence audio under `public/audio/` is generated
-with [VOICEVOX](https://voicevox.hiroshiba.jp/) using the voice **No.7**, and it
+with [VOICEVOX](https://voicevox.hiroshiba.jp/) using the voice No.7, and it
 follows that voice's terms, not MIT or CC BY-SA: non-commercial use, credited as
 «VOICEVOX:No.7». It is regenerated with `npm run generate-audio` (VOICEVOX open,
 `ffmpeg` on the PATH), which also checks every reading against the hand-written
@@ -157,27 +157,26 @@ shortening the interval. Due dates fall at 2 a.m. in the student's time zone,
 with a deterministic spread of a few days on long intervals, so reviews do not
 all pile up on the same day.
 
-It is **simpler than SM-2 and easier to defend**, and right for the scale of the
-project. SM-2 and FSRS optimise the forgetting curve over large volumes with
-statistically estimated parameters; here the value lies in an algorithm you can
-read, explain and test down to the edge cases, daylight saving changes
-included. The architectural boundary keeps the choice reversible: moving to
-SM-2 or FSRS would change **only** the domain module.
+It is simpler than SM-2, easier to defend, and enough for a project this size.
+SM-2 and FSRS optimise the forgetting curve over large volumes with
+statistically estimated parameters. Here I wanted an algorithm I can read,
+explain and test down to the edge cases, daylight saving changes included. The
+choice can be undone: moving to SM-2 or FSRS would change only the domain
+module.
 
 ## Why the domain does not depend on the framework
 
 `src/domain/` holds scheduling, the definition of "due", the study streak, the
 registry of exercise kinds and the outcome calculation. It knows nothing about
 React, the network or Supabase, and it never reads the clock: time and time zone
-**come in as parameters**. Everything else depends on the domain; the domain
+come in as parameters. Everything else depends on the domain; the domain
 depends on nothing.
 
-The rule is not left to discipline: it is **enforced by the linter**.
-`eslint-plugin-boundaries` declares the layers `domain → data → ui → features →
+The linter enforces this rule. `eslint-plugin-boundaries` declares the layers `domain → data → ui → features →
 app` and forbids every edge that is not allowed; the domain cannot import
 external packages or touch `fetch` or `localStorage`. A violation turns CI red,
-and `src/boundaries.test.ts` checks it. As a result the study logic is tested
-without mocks, and swapping the algorithm or the interface stays a local change.
+and `src/boundaries.test.ts` checks it. So the study logic is tested without
+mocks, and swapping the algorithm or the interface stays a local change.
 
 ## Why Supabase, and what would change at a larger scale
 
@@ -186,9 +185,9 @@ The app is a static frontend: the only server code is the Edge Function that
 deletes an account. Data isolation is enforced by Row Level Security on every
 per-user table, and a test checks it.
 
-There is **a single Supabase project, the real one**: development, CI and e2e all
-run against the same database. The upside is that tests exercise the real
-configuration. The cost is that real study data sits next to test data:
+There is a single Supabase project, the production one: development, CI and e2e
+all run against the same database. Tests exercise the real configuration, but
+real study data sits next to test data:
 migrations are applied only on merge to `main`, and every test run uses a user
 with a unique email that it deletes at the end. With more users it would need a
 staging environment and a separate test database, a plan that does not pause,
@@ -196,14 +195,14 @@ and a migration path that never touches production data from a branch.
 
 ## Why Vite and not Next
 
-Next was **considered and rejected**, for three reasons:
+I considered Next and chose against it, for three reasons:
 
 1. **There is nothing to render on the server.** Almost everything sits behind
    sign-in and shows personal data; the only public pages are sign-in, "How does
    this work?", privacy and acknowledgements.
 2. **It would add a second system of boundaries.** Server and client components
    would cut across the domain layers, with different tools to check them, in a
-   project whose point is to have **one** boundary, enforced by the linter.
+   project whose point is to have one boundary, enforced by the linter.
 3. **API routes would open a second door to the server**, where today there is
    only the account deletion Edge Function.
 
@@ -213,35 +212,35 @@ choice.
 
 ## What was left out, and why
 
-The project has a single purpose and does not try to compete with Anki,
-WaniKani or Bunpro. Deliberately left out: audio and text-to-speech, kanji
-stroke order, user-made decks and CSV import, social features and leaderboards,
-sign-in with external accounts, native apps, and **vocabulary** as the unit of
-study (the project started there and turned to grammar). If something became
-truly necessary, it comes in with a written justification, not quietly.
+The project does one thing and does not try to compete with Anki, WaniKani or
+Bunpro. Left out on purpose: text-to-speech while you study (the sentence audio
+is generated in advance), kanji stroke order, user-made decks and CSV import,
+social features and leaderboards, sign-in with external accounts, native apps,
+and vocabulary as the unit of study (the project started there and turned to
+grammar). Anything added later needs a written justification.
 
 ## How AI was used
 
-AI is used **to write the content, never at runtime**: the app serves static,
-already validated exercises and generates nothing on the fly. The **authoring
-pipeline** starts from a lesson transcript and ends with an exercise file that
-matches the schema. The line it follows is the one between **fact and
-wording**: the grammar fact is taken from the transcript and rewritten from
-scratch; the source's sentences, examples and metaphors do not cross over.
+AI helps write the content and is never used at runtime: the app serves
+static, already validated exercises and generates nothing on the fly. The
+authoring pipeline starts from a lesson transcript and ends with an exercise
+file that matches the schema. It separates fact from wording: the grammar fact
+is taken from the transcript and rewritten from scratch, and the source's
+sentences, examples and metaphors stay out.
 Details are in `docs/authoring-pipeline.md` and `docs/authoring-runbook.md`.
 
-- **Delegated:** extracting the facts from the transcript and drafting sentences
+- Delegated: extracting the facts from the transcript and drafting sentences
   and explanations from those facts.
-- **Refused:** reusing the source's wording (a paraphrase with synonyms is still
+- Refused: reusing the source's wording (a paraphrase with synonyms is still
   a derivative work) and its teaching metaphors, even as labels; and any language
   model inside the product.
-- **Where it costs more time than it saves:** the **mandatory human review**
-  before every commit and the **anti-contamination check**
+- Where it costs more time than it saves: the mandatory human review before
+  every commit and the anti-contamination check
   (`npm run check-contamination`), which flags literal overlaps between the
   exercises and the transcript (see `docs/contamination-check.md`).
 
-The stated limit of the anti-contamination check is that
-**it is not a CI gate**: the transcript stays out of the repository
+The limit of the anti-contamination check is that it is not a CI gate: the
+transcript stays out of the repository
 (`.gitignore`, `.authoring/`), so in CI there would be nothing to compare with,
 and a check there would be an empty green. It runs locally, as part of the human
 review. Every other check (content validation, boundaries, types, tests) blocks
@@ -249,5 +248,5 @@ the merge in CI; this one does not, by design.
 
 ## Author
 
-Federico Casadei — [federicocasadei.dev](https://federicocasadei.dev) ·
+Federico Casadei · [federicocasadei.dev](https://federicocasadei.dev) ·
 [GitHub](https://github.com/fcport)
