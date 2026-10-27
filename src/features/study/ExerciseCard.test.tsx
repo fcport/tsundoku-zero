@@ -288,3 +288,32 @@ describe('la domanda con parole giapponesi', () => {
     expect(html).toContain('Which part is the past ending of 出す?');
   });
 });
+
+// La forma base dei verbi coniugati (27-10-2026): «Quale verbo va nello spazio?» si
+// risolve con la regola delle coppie (める, a + る), che vale sulla forma base.
+describe('la forma base accanto alle opzioni della scelta singola', () => {
+  const warmSoup: Exercise = {
+    kind: 'single-select',
+    grammarPoint: 'transitive',
+    sentence: { kanji: 'スープを温めた', kana: 'スープをあたためた' },
+    answer: '温めた',
+    distractors: ['温まった', '温まる'],
+    glosses: [
+      { text: '温めた', reading: 'あたためた', base: { text: '温める', reading: 'あたためる' } },
+      { text: '温まった', reading: 'あたたまった', base: { text: '温まる', reading: 'あたたまる' } },
+      { text: '温まる', reading: 'あたたまる' },
+    ],
+    explanation: { en: '温める ends in める.' },
+  };
+
+  it('prima della risposta, con la lettura, solo per le opzioni coniugate', () => {
+    const html = render(warmSoup);
+    expect(html).toContain('<ruby>温<rp>(</rp><rt aria-hidden="true">あたた</rt><rp>)</rp></ruby>める');
+    expect(html).toContain('<ruby>温<rp>(</rp><rt aria-hidden="true">あたた</rt><rp>)</rp></ruby>まる');
+    expect(html.split(en.session.option.base).length - 1).toBe(2);
+  });
+
+  it('la forma base entra nel nome accessibile dell’opzione', () => {
+    expect(render(warmSoup)).toContain('<span lang="ja" class="sr-only">温める</span>');
+  });
+});

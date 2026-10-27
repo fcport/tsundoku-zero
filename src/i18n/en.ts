@@ -254,6 +254,7 @@ export const en = {
     option: {
       correct: 'Correct answer',
       yours: 'Your answer',
+      base: 'base form',
     },
     assembled: {
       label: 'Your sentence',

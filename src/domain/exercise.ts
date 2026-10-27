@@ -105,9 +105,13 @@ const translation = optional(bilingualText);
  * - `meaning`: il significato bilingue, mostrato con «Traduzioni». Ammesso solo
  *   per tessere (`assemble`) e segmenti (`select-span`): nella scelta singola il
  *   significato dei distrattori (冷たい / 冷たくだ, を / が) rivelerebbe la risposta.
- * Che ogni `text` sia un'opzione vera, che `reading` si allinei al testo e il
- * divieto di `meaning` nella scelta singola sono regole di `content-validation`.
- * Fuori dall'identità (AD-23).
+ * - `base` (27-10-2026): la forma base di un verbo coniugato (温まった → 温まる), con
+ *   la sua lettura. Solo nella scelta singola, accanto all'opzione: le regole delle
+ *   coppie di verbi (める, a + る, す) si leggono sulla forma base, e dal passato o
+ *   dalla forma in て non si vede. Non rivela la risposta: la regola resta da usare.
+ * Che ogni `text` sia un'opzione vera, che `reading` si allinei al testo, il
+ * divieto di `meaning` nella scelta singola e `base` solo lì sono regole di
+ * `content-validation`. Fuori dall'identità (AD-23).
  */
 const glosses = optional(
   nonEmptyArray(
@@ -115,6 +119,7 @@ const glosses = optional(
       text: nonEmptyString(),
       reading: optional(nonEmptyString()),
       meaning: optional(bilingualText),
+      base: optional(object({ text: nonEmptyString(), reading: nonEmptyString() })),
     }),
   ),
 );

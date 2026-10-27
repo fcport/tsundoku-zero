@@ -257,6 +257,7 @@ export const it = {
     option: {
       correct: 'Risposta corretta',
       yours: 'La tua risposta',
+      base: 'forma base',
     },
     // La frase che si compone toccando le tessere (assemble), al posto della frase
     // intera che prima rivelava la soluzione.

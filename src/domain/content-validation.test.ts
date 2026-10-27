@@ -346,6 +346,51 @@ describe('validateLessons — lo spazio vuoto (`gap`) della scelta singola', () 
   });
 });
 
+describe('validateLessons — la forma base dei verbi della scelta singola', () => {
+  const baseIssues = (base: { text: string; reading: string }, kind = 0, text = '読む') => {
+    const exercises = validLesson.exercises.map((e, i) =>
+      i === kind ? { ...e, glosses: [{ text, reading: 'よむ', base }] } : e,
+    );
+    return validateLessons([file('01.json', { ...validLesson, exercises })]).map(
+      (i) => `${i.path.join('.')}: ${i.message}`,
+    );
+  };
+
+  it('un verbo coniugato con la sua forma base e la lettura giusta ⇒ nessun issue', () => {
+    const lesson = {
+      ...validLesson,
+      exercises: [
+        {
+          ...validLesson.exercises[0],
+          sentence: { kanji: '本を読んだ', kana: 'ほんをよんだ' },
+          answer: '読んだ',
+          glosses: [{ text: '読んだ', reading: 'よんだ', base: { text: '読む', reading: 'よむ' } }],
+        },
+        ...validLesson.exercises.slice(1),
+      ],
+    };
+    expect(validateLessons([file('01.json', lesson)])).toEqual([]);
+  });
+
+  it('un’opzione già in forma base non la porta', () => {
+    expect(baseIssues({ text: '読む', reading: 'よむ' })).toEqual([
+      expect.stringContaining('exercises.0.glosses.0.base'),
+    ]);
+  });
+
+  it('la lettura della forma base è solo kana', () => {
+    expect(baseIssues({ text: '読める', reading: 'yomeru' })).toEqual([
+      expect.stringContaining('exercises.0.glosses.0.base.reading'),
+    ]);
+  });
+
+  it('fuori dalla scelta singola la forma base non si mostra ⇒ issue', () => {
+    expect(baseIssues({ text: '読める', reading: 'よめる' }, 2, '読む')).toContainEqual(
+      expect.stringContaining('exercises.2.glosses.0.base'),
+    );
+  });
+});
+
 describe('validateLessons — gli ordini alternativi del riordino (i)', () => {
   const alternativeIssues = (alsoAccepted: string[][]) =>
     validateLessons([

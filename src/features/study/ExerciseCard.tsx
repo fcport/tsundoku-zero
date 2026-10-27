@@ -34,7 +34,12 @@ import { furiganaVisible, resolveExplanation } from '../../domain/exercise';
 import type { Exercise } from '../../domain/exercise';
 import type { Locale } from '../../i18n';
 import { JapaneseText } from '../../ui/JapaneseText';
-import { knownReadings, optionFurigana, sentenceSegments } from '../../domain/option-furigana';
+import {
+  knownReadings,
+  optionFurigana,
+  readingSegments,
+  sentenceSegments,
+} from '../../domain/option-furigana';
 import { WORD_READINGS } from '../../domain/fixed-readings';
 import { FOCUS_RING } from '../../ui/magazine';
 import { Translation } from '../../ui/Translation';
@@ -131,6 +136,13 @@ export function ExerciseCard({
       : (exercise.glosses ?? [])
           .filter((g) => g.meaning !== undefined)
           .map((g) => [g.text, resolveExplanation(g.meaning!, locale)] as const),
+  );
+  // La forma base dei verbi coniugati della scelta singola (温まった → 温まる): le
+  // regole delle coppie di verbi si leggono lì. Sempre visibile, non è una traduzione.
+  const optionBases = new Map(
+    (exercise.glosses ?? [])
+      .filter((g) => g.base !== undefined)
+      .map((g) => [g.text, { text: g.base!.text, segments: readingSegments(g.base!.text, g.base!.reading) }] as const),
   );
   // Le letture per le parole giapponesi della domanda e della spiegazione: quelle
   // certe della frase dell'esercizio, più le poche parole a lettura unica della
@@ -316,6 +328,19 @@ export function ExerciseCard({
                     </span>
                   )}
                 </span>
+                {/* La forma base, a destra: l'opzione non diventa più alta. Il ruby
+                    è `aria-hidden` con una copia `sr-only`, come il testo dell'opzione. */}
+                {optionBases.get(option) && (
+                  <span className="flex shrink-0 flex-col items-end gap-0.5 text-right">
+                    <span className="font-sans text-caption opacity-70">{t('session.option.base')}</span>
+                    <span className="text-[18px] leading-snug">
+                      <span lang="ja" className="sr-only">{optionBases.get(option)!.text}</span>
+                      <span aria-hidden="true">
+                        <JapaneseText segments={optionBases.get(option)!.segments} showFurigana={showFurigana} />
+                      </span>
+                    </span>
+                  </span>
+                )}
               </button>
             </li>
           );

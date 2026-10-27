@@ -49,10 +49,10 @@
         "it": "Mio fratello maggiore ha chiuso la finestra."
       },
       "glosses": [
-        { "text": "閉めた", "reading": "しめた" },
-        { "text": "閉まった", "reading": "しまった" },
+        { "text": "閉めた", "reading": "しめた", "base": { "text": "閉める", "reading": "しめる" } },
+        { "text": "閉まった", "reading": "しまった", "base": { "text": "閉まる", "reading": "しまる" } },
         { "text": "閉まる", "reading": "しまる" },
-        { "text": "閉まらなかった", "reading": "しまらなかった" }
+        { "text": "閉まらなかった", "reading": "しまらなかった", "base": { "text": "閉まる", "reading": "しまる" } }
       ],
       "gap": {
         "kanji": "兄が窓を＿",
@@ -188,10 +188,10 @@
         "it": "Ho tirato fuori i soldi dal portafoglio."
       },
       "glosses": [
-        { "text": "出した", "reading": "だした" },
-        { "text": "出た", "reading": "でた" },
-        { "text": "出ていた", "reading": "でていた" },
-        { "text": "出られた", "reading": "でられた" }
+        { "text": "出した", "reading": "だした", "base": { "text": "出す", "reading": "だす" } },
+        { "text": "出た", "reading": "でた", "base": { "text": "出る", "reading": "でる" } },
+        { "text": "出ていた", "reading": "でていた", "base": { "text": "出る", "reading": "でる" } },
+        { "text": "出られた", "reading": "でられた", "base": { "text": "出る", "reading": "でる" } }
       ],
       "gap": {
         "kanji": "財布からお金を＿",
@@ -246,10 +246,10 @@
         "it": "Mio padre ha spento la candela."
       },
       "glosses": [
-        { "text": "消した", "reading": "けした" },
-        { "text": "消えた", "reading": "きえた" },
-        { "text": "消えない", "reading": "きえない" },
-        { "text": "消えて", "reading": "きえて" }
+        { "text": "消した", "reading": "けした", "base": { "text": "消す", "reading": "けす" } },
+        { "text": "消えた", "reading": "きえた", "base": { "text": "消える", "reading": "きえる" } },
+        { "text": "消えない", "reading": "きえない", "base": { "text": "消える", "reading": "きえる" } },
+        { "text": "消えて", "reading": "きえて", "base": { "text": "消える", "reading": "きえる" } }
       ],
       "gap": {
         "kanji": "父がろうそくの火を＿",
@@ -306,10 +306,10 @@
         "it": "Ho rimesso le forbici al loro posto."
       },
       "glosses": [
-        { "text": "戻した", "reading": "もどした" },
-        { "text": "戻った", "reading": "もどった" },
-        { "text": "戻って", "reading": "もどって" },
-        { "text": "戻れた", "reading": "もどれた" }
+        { "text": "戻した", "reading": "もどした", "base": { "text": "戻す", "reading": "もどす" } },
+        { "text": "戻った", "reading": "もどった", "base": { "text": "戻る", "reading": "もどる" } },
+        { "text": "戻って", "reading": "もどって", "base": { "text": "戻る", "reading": "もどる" } },
+        { "text": "戻れた", "reading": "もどれた", "base": { "text": "戻る", "reading": "もどる" } }
       ],
       "gap": {
         "kanji": "はさみを元の場所に＿",
@@ -338,10 +338,10 @@
         "it": "I prezzi sono saliti un po'."
       },
       "glosses": [
-        { "text": "上がった", "reading": "あがった" },
-        { "text": "上げた", "reading": "あげた" },
-        { "text": "上げて", "reading": "あげて" },
-        { "text": "上げられる", "reading": "あげられる" }
+        { "text": "上がった", "reading": "あがった", "base": { "text": "上がる", "reading": "あがる" } },
+        { "text": "上げた", "reading": "あげた", "base": { "text": "上げる", "reading": "あげる" } },
+        { "text": "上げて", "reading": "あげて", "base": { "text": "上げる", "reading": "あげる" } },
+        { "text": "上げられる", "reading": "あげられる", "base": { "text": "上げる", "reading": "あげる" } }
       ],
       "gap": {
         "kanji": "物の値段が少し＿",
@@ -448,10 +448,10 @@
         "it": "Il semaforo è diventato verde."
       },
       "glosses": [
-        { "text": "変わった", "reading": "かわった" },
-        { "text": "変えた", "reading": "かえた" },
-        { "text": "変えて", "reading": "かえて" },
-        { "text": "変えられた", "reading": "かえられた" }
+        { "text": "変わった", "reading": "かわった", "base": { "text": "変わる", "reading": "かわる" } },
+        { "text": "変えた", "reading": "かえた", "base": { "text": "変える", "reading": "かえる" } },
+        { "text": "変えて", "reading": "かえて", "base": { "text": "変える", "reading": "かえる" } },
+        { "text": "変えられた", "reading": "かえられた", "base": { "text": "変える", "reading": "かえる" } }
       ],
       "gap": {
         "kanji": "信号が青に＿",
@@ -480,10 +480,10 @@
         "it": "Davanti al negozio c'era tanta gente in fila."
       },
       "glosses": [
-        { "text": "並んでいた", "reading": "ならんでいた" },
-        { "text": "並べていた", "reading": "ならべていた" },
-        { "text": "並べた", "reading": "ならべた" },
-        { "text": "並べられる", "reading": "ならべられる" }
+        { "text": "並んでいた", "reading": "ならんでいた", "base": { "text": "並ぶ", "reading": "ならぶ" } },
+        { "text": "並べていた", "reading": "ならべていた", "base": { "text": "並べる", "reading": "ならべる" } },
+        { "text": "並べた", "reading": "ならべた", "base": { "text": "並べる", "reading": "ならべる" } },
+        { "text": "並べられる", "reading": "ならべられる", "base": { "text": "並べる", "reading": "ならべる" } }
       ],
       "gap": {
         "kanji": "店の前に人がたくさん＿",
@@ -540,9 +540,9 @@
         "it": "I pomodori dell'orto sono cresciuti bene."
       },
       "glosses": [
-        { "text": "育った", "reading": "そだった" },
-        { "text": "育てた", "reading": "そだてた" },
-        { "text": "育てて", "reading": "そだてて" },
+        { "text": "育った", "reading": "そだった", "base": { "text": "育つ", "reading": "そだつ" } },
+        { "text": "育てた", "reading": "そだてた", "base": { "text": "育てる", "reading": "そだてる" } },
+        { "text": "育てて", "reading": "そだてて", "base": { "text": "育てる", "reading": "そだてる" } },
         { "text": "育てる", "reading": "そだてる" }
       ],
       "gap": {
@@ -572,9 +572,9 @@
         "it": "Ho riscaldato la zuppa fredda."
       },
       "glosses": [
-        { "text": "温めた", "reading": "あたためた" },
-        { "text": "温まった", "reading": "あたたまった" },
-        { "text": "温まって", "reading": "あたたまって" },
+        { "text": "温めた", "reading": "あたためた", "base": { "text": "温める", "reading": "あたためる" } },
+        { "text": "温まった", "reading": "あたたまった", "base": { "text": "温まる", "reading": "あたたまる" } },
+        { "text": "温まって", "reading": "あたたまって", "base": { "text": "温まる", "reading": "あたたまる" } },
         { "text": "温まる", "reading": "あたたまる" }
       ],
       "gap": {

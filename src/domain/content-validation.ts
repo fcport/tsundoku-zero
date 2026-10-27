@@ -195,28 +195,33 @@ export function validateLessons(files: ReadonlyArray<LessonFile>): ContentIssue[
         if (!options.has(gloss.text)) {
           issues.push({ file, path: at('text'), message: `glossa per "${gloss.text}", che non è un'opzione dell'esercizio` });
         }
-        if (gloss.reading !== undefined) {
-          if (!/^[\p{Script=Hiragana}\p{Script=Katakana}ー・「」、。]+$/u.test(gloss.reading)) {
+        const checkReading = (text: string, reading: string, path: (string | number)[]) => {
+          if (!/^[\p{Script=Hiragana}\p{Script=Katakana}ー・「」、。]+$/u.test(reading)) {
             // Solo kana (e la punteggiatura giapponese): un kanji o una lettera latina
             // (がっcoう) passerebbe l'allineamento, perché la corsa di kanji prende
             // qualunque cosa stia fra due ancore.
-            issues.push({ file, path: at('reading'), message: `la lettura "${gloss.reading}" deve contenere solo kana` });
-          } else if (
-            readingSegments(gloss.text, gloss.reading).map((s) => s.ruby ?? s.text).join('') !== gloss.reading
-          ) {
-            issues.push({
-              file,
-              path: at('reading'),
-              message: `la lettura "${gloss.reading}" non si allinea con certezza a "${gloss.text}"`,
-            });
+            issues.push({ file, path, message: `la lettura "${reading}" deve contenere solo kana` });
+          } else if (readingSegments(text, reading).map((s) => s.ruby ?? s.text).join('') !== reading) {
+            issues.push({ file, path, message: `la lettura "${reading}" non si allinea con certezza a "${text}"` });
           }
-        }
+        };
+        if (gloss.reading !== undefined) checkReading(gloss.text, gloss.reading, at('reading'));
         if (exercise.kind === 'single-select' && gloss.meaning !== undefined) {
           issues.push({
             file,
             path: at('meaning'),
             message: 'niente meaning nella scelta singola: il significato rivelerebbe la risposta',
           });
+        }
+        // La forma base si mostra solo nella scelta singola, e solo se dice qualcosa
+        // di nuovo: un'opzione già in forma base non la porta.
+        if (gloss.base !== undefined) {
+          if (exercise.kind !== 'single-select') {
+            issues.push({ file, path: at('base'), message: 'la forma base si mostra solo nella scelta singola' });
+          } else if (gloss.base.text === gloss.text) {
+            issues.push({ file, path: at('base'), message: `"${gloss.text}" è già la forma base: togli base` });
+          }
+          checkReading(gloss.base.text, gloss.base.reading, [...at('base'), 'reading']);
         }
       });
     });
