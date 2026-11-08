@@ -12,6 +12,10 @@
 // no. Ogni lezione aperta dice quanti esercizi sai bene e, quando li sai bene tutti,
 // porta il timbro 習得 (`lessonMastery`).
 //
+// La lezione «La prossima» si sblocca anche da qui, con la pila ancora piena
+// (08-11-2026): la dashboard offre lo sblocco solo a pila vuota. Vale lo stesso tetto
+// giornaliero delle Impostazioni (`dailyUnlockLimitReached`).
+//
 // Legge le STESSE chiavi della dashboard (`['lessons']`, `['unlocked', userId]`), così
 // arriva da cache calda; lo stato di ciascuna lezione è DERIVATO (`lessonShelf`), mai
 // memorizzato. Le porte arrivano da `usePorts()`, la navigazione come callback (AD-1).
@@ -20,8 +24,10 @@ import { useQuery } from '@tanstack/react-query';
 import { resolveBilingual } from '../../domain/bilingual';
 import { lessonShelf, type LessonStatus } from '../../domain/curriculum';
 import { GRAMMAR_POINT_MEANINGS, grammarPointSegments } from '../../domain/fixed-readings';
-import { RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
+import { FIRST_EXERCISES_BATCH, RESERVED_ORDER_START, exerciseReserve } from '../../domain/lesson';
 import { lessonMastery } from '../../domain/library';
+import type { SettingsRepository } from '../../domain/ports/settingsRepository';
+import { DEFAULT_LESSONS_PER_DAY, dailyUnlockLimitReached } from '../../domain/unlockPace';
 import { weakLessons } from '../../domain/weakLessons';
 import { resolveLocale, useTranslation } from '../../i18n';
 import { Furigana } from '../../ui/Furigana';
@@ -37,11 +43,14 @@ import { useActiveExerciseCounts, useAddLessonExercises } from './useAddLessonEx
 import { Library } from './Library';
 import { READ_STAMP } from './stamps';
 import { useExerciseLessons } from './useExerciseLessons';
+import { useUnlockLesson } from './useUnlockLesson';
 import { WeakLessons } from './WeakLessons';
 
 export interface LessonsScreenProps {
   /** L'id dell'utente corrente, o `null` finché non è risolto (scheletro). */
   readonly userId: string | null;
+  /** Il tetto giornaliero di sblocco, la stessa porta della dashboard. */
+  readonly settings: SettingsRepository;
   /** Il ritorno alla dashboard, cablato dal livello app. */
   readonly onExit: () => void;
   /** Apre il ripasso libero della lezione indicata, cablato dal livello app. */
@@ -51,7 +60,7 @@ export interface LessonsScreenProps {
 // Le lezioni aperte: si ripassano e mostrano il video.
 const OPEN: ReadonlySet<LessonStatus> = new Set(['current', 'unlocked']);
 
-export function LessonsScreen({ userId, onExit, onPractice }: LessonsScreenProps) {
+export function LessonsScreen({ userId, settings, onExit, onPractice }: LessonsScreenProps) {
   const { t } = useTranslation();
   return (
     <MagazineFrame furiganaToggle>
@@ -67,15 +76,16 @@ export function LessonsScreen({ userId, onExit, onPractice }: LessonsScreenProps
           </button>
         }
       />
-      <LessonsContent userId={userId} onPractice={onPractice} />
+      <LessonsContent userId={userId} settings={settings} onPractice={onPractice} />
     </MagazineFrame>
   );
 }
 
 function LessonsContent({
   userId,
+  settings,
   onPractice,
-}: Pick<LessonsScreenProps, 'userId' | 'onPractice'>) {
+}: Pick<LessonsScreenProps, 'userId' | 'settings' | 'onPractice'>) {
   const { progress, content, review, clock } = usePorts();
   const { t, i18n } = useTranslation();
   const locale = resolveLocale(i18n.language);
@@ -99,6 +109,14 @@ function LessonsContent({
   // Non entra nello scheletro: finché manca, ogni lezione mostra il suo totale.
   const activeQ = useActiveExerciseCounts(userId);
   const more = useAddLessonExercises(userId);
+  const unlock = useUnlockLesson(userId);
+  // Il tetto giornaliero: la STESSA chiave della dashboard e delle Impostazioni. Non
+  // entra nello scheletro: finché manca vale il predefinito.
+  const lessonsPerDayQ = useQuery({
+    queryKey: ['lessonsPerDay', userId],
+    enabled: !!userId,
+    queryFn: () => settings.loadLessonsPerDay(),
+  });
   // La lezione di ogni esercizio, per la libreria (07-10-2026). Non entra nello
   // scheletro: finché manca, la libreria non ha ancora i conteggi.
   const exerciseLessonsQ = useExerciseLessons();
@@ -143,6 +161,14 @@ function LessonsContent({
     logQ.data === undefined || exerciseLessonsQ.data === undefined
       ? null
       : lessonMastery(logQ.data, curriculum, exerciseLessonsQ.data);
+  // Le lezioni sbloccate oggi hanno raggiunto il tetto: la prossima aspetta mezzanotte.
+  const cap = lessonsPerDayQ.data ?? DEFAULT_LESSONS_PER_DAY;
+  const capReached = dailyUnlockLimitReached(
+    unlockedQ.data.map((u) => u.unlockedAt),
+    cap,
+    clock.now(),
+    clock.timeZone(),
+  );
   // L'esito compare sotto il pulsante premuto: nel riquadro o nell'elenco.
   const addMore = (lessonId: string, where: 'weak' | 'list') =>
     more.mutate(lessonId, { onSuccess: (value) => setAdded({ lessonId, value, where }) });
@@ -271,8 +297,35 @@ function LessonsContent({
                     </div>
                   )
                 ) : null}
+                {/* La prossima si sblocca anche da qui, con la pila ancora piena: i
+                    suoi primi esercizi si aggiungono a quelli da ripassare. A tetto
+                    raggiunto, nessun pulsante: quando riapre. */}
                 {status === 'next' ? (
-                  <p className="text-label font-semibold text-ink-primary">{t('lessons.nextHint')}</p>
+                  capReached ? (
+                    <p className="text-label font-semibold text-ink-primary">
+                      {t('lessons.nextCapReached', { limit: cap })}
+                    </p>
+                  ) : (
+                    <div className="flex flex-col items-start gap-3">
+                      <p className="text-label text-ink-secondary">
+                        {lesson.exerciseCount === 0
+                          ? t('lessons.nextHintNoExercises')
+                          : t('lessons.nextHint', {
+                              value: Math.min(FIRST_EXERCISES_BATCH, lesson.exerciseCount),
+                            })}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => unlock.mutate(lesson.id)}
+                        disabled={unlock.isPending}
+                        aria-label={`${t('lessons.unlock')}: ${t('lessons.lessonNumber', { order: lesson.ordinal })}`}
+                        className={`group flex min-h-[44px] items-center gap-3 border-[1.5px] border-ink-primary bg-ink-primary px-4 text-[15px] font-extrabold uppercase font-stretch-condensed text-surface-base disabled:opacity-60 ${FOCUS_RING}`}
+                      >
+                        {t('lessons.unlock')}
+                        <ArrowIcon className="text-accent-on-ink transition-transform group-hover:translate-x-1" />
+                      </button>
+                    </div>
+                  )
                 ) : null}
 
                 {open ? (

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { i18n } from '../../i18n';
 import type { LessonSummary } from '../../domain/ports/contentRepository';
 import type { ReviewLogRecord } from '../../domain/streak';
+import type { SettingsRepository } from '../../domain/ports/settingsRepository';
 import { PortsProvider, type Ports } from '../ports/PortsContext';
 import { LessonsScreen } from './LessonsScreen';
 
@@ -26,6 +27,13 @@ const ports: Ports = {
   },
 };
 
+const settings: SettingsRepository = {
+  loadLocale: async () => null,
+  saveLocale: async () => {},
+  loadLessonsPerDay: async () => null,
+  saveLessonsPerDay: async () => {},
+};
+
 function lesson(ordinal: number, extra: Partial<LessonSummary> = {}): LessonSummary {
   return {
     id: `l${ordinal}`,
@@ -43,9 +51,11 @@ function render(
   unlocked: readonly string[],
   active?: ReadonlyMap<string, number>,
   log?: readonly ReviewLogRecord[],
+  lessonsPerDay = 10,
 ): string {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   qc.setQueryData(['lessons'], lessons);
+  qc.setQueryData(['lessonsPerDay', UID], lessonsPerDay);
   if (active !== undefined) qc.setQueryData(['activeExercises', UID], active);
   if (log !== undefined) qc.setQueryData(['streak', UID], log);
   qc.setQueryData(
@@ -55,7 +65,7 @@ function render(
   return renderToStaticMarkup(
     <QueryClientProvider client={qc}>
       <PortsProvider value={ports}>
-        <LessonsScreen userId={UID} onExit={() => {}} onPractice={() => {}} />
+        <LessonsScreen userId={UID} settings={settings} onExit={() => {}} onPractice={() => {}} />
       </PortsProvider>
     </QueryClientProvider>,
   );
@@ -86,8 +96,27 @@ describe('LessonsScreen', () => {
     expect(html).toContain('Ripassa gli esercizi: Lezione 2');
     expect(html).not.toContain('Ripassa gli esercizi: Lezione 3');
     expect(html.match(/youtube\.com/g)).toHaveLength(2);
-    // La prossima dice come si sblocca.
-    expect(html).toContain('Si sblocca dalla dashboard, quando la pila è vuota.');
+  });
+
+  it('la prossima si sblocca da qui anche con la pila piena, le bloccate no', () => {
+    const html = render([lesson(1), lesson(2, { exerciseCount: 12 }), lesson(3)], ['l1']);
+    expect(html.match(/Sblocca adesso: Lezione/g)).toHaveLength(1);
+    expect(html).toContain('Sblocca adesso: Lezione 2');
+    expect(html).toContain('i suoi primi 8 esercizi si aggiungono a quelli da ripassare');
+  });
+
+  it('la prossima con meno di 8 esercizi dice quanti ne aggiunge, solo da leggere nessuno', () => {
+    expect(render([lesson(1), lesson(2)], ['l1'])).toContain('i suoi primi 5 esercizi');
+    expect(render([lesson(1), lesson(2, { exerciseCount: 0 })], ['l1'])).toContain(
+      'è solo da leggere, non aggiunge esercizi',
+    );
+  });
+
+  it('a tetto giornaliero raggiunto la prossima non si sblocca: dice quando riapre', () => {
+    // Una lezione sbloccata oggi, massimo una al giorno.
+    const html = render([lesson(1), lesson(2)], ['l1'], undefined, undefined, 1);
+    expect(html).not.toContain('Sblocca adesso');
+    expect(html).toContain('Questa si sblocca da mezzanotte');
   });
 
   it('una lezione solo da leggere non offre il ripasso', () => {
@@ -154,7 +183,7 @@ describe('LessonsScreen', () => {
     const html = renderToStaticMarkup(
       <QueryClientProvider client={qc}>
         <PortsProvider value={ports}>
-          <LessonsScreen userId={null} onExit={() => {}} onPractice={() => {}} />
+          <LessonsScreen userId={null} settings={settings} onExit={() => {}} onPractice={() => {}} />
         </PortsProvider>
       </QueryClientProvider>,
     );
@@ -195,7 +224,7 @@ describe('LessonsScreen — la libreria', () => {
     return renderToStaticMarkup(
       <QueryClientProvider client={qc}>
         <PortsProvider value={ports}>
-          <LessonsScreen userId={UID} onExit={() => {}} onPractice={() => {}} />
+          <LessonsScreen userId={UID} settings={settings} onExit={() => {}} onPractice={() => {}} />
         </PortsProvider>
       </QueryClientProvider>,
     );

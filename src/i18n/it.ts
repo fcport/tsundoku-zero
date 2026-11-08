@@ -129,9 +129,9 @@ export const it = {
     // etichetta-valore per `{{value}}` (niente «1 esercizi»); `{{days}}` ≥ 2, per 1
     // c'è la variante «domani».
     backlogAheadBody:
-      'Arretrati in arrivo nei prossimi giorni, {{perDay}} al giorno: {{value}}. Le lezioni nuove si sbloccano quando li hai ripassati tutti, fra {{days}} giorni.',
+      'Arretrati in arrivo nei prossimi giorni, {{perDay}} al giorno: {{value}}. Le lezioni nuove si sbloccano qui quando li hai ripassati tutti, fra {{days}} giorni, oppure subito dalla pagina Lezioni.',
     backlogAheadTomorrowBody:
-      'Arretrati in arrivo domani: {{value}}. Le lezioni nuove si sbloccano quando li hai ripassati.',
+      'Arretrati in arrivo domani: {{value}}. Le lezioni nuove si sbloccano qui quando li hai ripassati, oppure subito dalla pagina Lezioni.',
     viewStats: 'Vedi le tue statistiche',
     currentLesson: 'Lezione {{order}}: {{title}}',
     openSettings: 'Impostazioni',
@@ -342,7 +342,7 @@ export const it = {
     kicker: 'Curriculum',
     title: 'Le lezioni',
     intro:
-      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 8 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate puoi anche ripassarle liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta dalla dashboard, quando la pila è vuota.',
+      'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 8 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate puoi anche ripassarle liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta, in ordine: dalla dashboard quando la pila è vuota, oppure da qui anche prima.',
     lessonNumber: 'Lezione {{order}}',
     status: {
       current: 'In corso',
@@ -350,7 +350,14 @@ export const it = {
       next: 'La prossima',
       locked: 'Bloccata',
     },
-    nextHint: 'Si sblocca dalla dashboard, quando la pila è vuota.',
+    // La prossima si sblocca anche da qui, con la pila ancora piena (08-11-2026).
+    nextHint:
+      'Puoi sbloccarla anche adesso, senza aspettare di svuotare la pila: i suoi primi {{value}} esercizi si aggiungono a quelli da ripassare.',
+    nextHintNoExercises:
+      'Puoi sbloccarla anche adesso, senza aspettare di svuotare la pila: è solo da leggere, non aggiunge esercizi.',
+    nextCapReached:
+      'Le lezioni nuove di oggi sono tutte sbloccate (massimo: {{limit}}). Questa si sblocca da mezzanotte. Il limite si cambia nelle Impostazioni.',
+    unlock: 'Sblocca adesso',
     exercises: 'Esercizi: {{value}}',
     exercisesInPile: 'Nella pila {{active}} esercizi su {{total}}',
     more: 'Esercitati di più',

@@ -10,9 +10,10 @@
 // svuota-pila, ora CABLATA all'avvio sessione (3.18) via la prop `onStartSession`
 // (una callback: la dashboard non conosce react-router né stringhe di path, AD-1 —
 // la shell la cabla con `useNavigate`); pila vuota con una lezione successiva ⇒ SOLO
-// l'azione di SBLOCCO, cablata a un `useMutation` che chiama `progress.unlockLesson`
-// e invalida pila+sblocco in `onSuccess`; pila vuota a curriculum esaurito ⇒
-// NESSUNA azione. Le due quest non compaiono MAI insieme.
+// l'azione di SBLOCCO, cablata a `useUnlockLesson` (chiama `progress.unlockLesson`
+// e invalida pila+sblocco in `onSuccess`); pila vuota a curriculum esaurito ⇒
+// NESSUNA azione. Le due quest non compaiono MAI insieme. Chi vuole la lezione
+// nuova prima di svuotare la pila la sblocca dalla pagina Lezioni (08-11-2026).
 //
 // Questa storia (3.16) fa CAMBIARE STATO al pile-counter a zero (nel ramo
 // `unlocked > 0`): a `count === 0` non rende «0» né `dueLabel`, ma DICHIARA il
@@ -48,7 +49,7 @@
 // primitivi ui (pile-counter, streak-badge, curriculum-progress, button-primary)
 // sono composti INLINE: l'estrazione nasce col secondo consumatore.
 import type { CSSProperties } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { resolveBilingual } from '../../domain/bilingual';
 import { lastUnlockedLesson, nextLessonToUnlock } from '../../domain/curriculum';
 import { BACKLOG_PER_DAY } from '../../domain/backlog';
@@ -73,10 +74,10 @@ import { Tanuki } from '../../ui/Tanuki';
 import { REPO_URL } from '../about/links';
 import { exercisesQueryKey } from '../study/exercisesQueryKey';
 import {
-  activeExercisesQueryKey,
   useActiveExerciseCounts,
   useAddLessonExercises,
 } from '../lessons/useAddLessonExercises';
+import { useUnlockLesson } from '../lessons/useUnlockLesson';
 import { useExerciseLessons } from '../lessons/useExerciseLessons';
 import { PileOfBooks } from './PileOfBooks';
 
@@ -213,7 +214,6 @@ export function DashboardScreen({
 }: DashboardScreenProps) {
   const { clock, review, progress, content } = usePorts();
   const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient();
 
   // Le cinque letture del read-model. La pila usa la chiave di DOMINIO verbatim
   // (AD-5); le altre chiavi sono per-utente (`['streak'|'unlocked'|'lessonsPerDay',
@@ -272,23 +272,11 @@ export function DashboardScreen({
   // cancello scheletro: finché manca, «Lezioni imparate» semplicemente non compare.
   const exerciseLessonsQ = useExerciseLessons();
 
-  // L'azione di SBLOCCO (3.13): materializza la lezione via porta
-  // (`progress.unlockLesson`, scrittura atomica/idempotente), MAI da `data`
-  // diretto (AD-1: features→domain/ports, non data). L'istante entra dal Clock. In
-  // `onSuccess` invalida la pila (`dueQueryKey`) e lo sblocco (`['unlocked']`), così
-  // il read-model è RI-DERIVATO, mai memorizzato (AC7/AD-5). Definito PRIMA del
+  // L'azione di SBLOCCO (3.13): la stessa della pagina Lezioni (`useUnlockLesson`),
+  // che dopo la scrittura ri-deriva il read-model (AC7/AD-5). Definita PRIMA del
   // ramo scheletro (i hook non sono condizionali); l'`id` da sbloccare è passato a
   // `mutate` dal cancello, il dominio ha già scelto la successiva.
-  const unlockMutation = useMutation({
-    mutationFn: (lessonId: string) =>
-      progress.unlockLesson(lessonId, clock.now()),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: dueQueryKey(userId ?? '') });
-      void queryClient.invalidateQueries({ queryKey: ['postponed', userId] });
-      void queryClient.invalidateQueries({ queryKey: ['unlocked', userId] });
-      void queryClient.invalidateQueries({ queryKey: activeExercisesQueryKey(userId) });
-    },
-  });
+  const unlockMutation = useUnlockLesson(userId);
 
   // Scheletro finché l'id non è risolto o una qualunque query è `pending`
   // (cache non ancora seminata). Stessa altezza del contenuto finale, nessuno

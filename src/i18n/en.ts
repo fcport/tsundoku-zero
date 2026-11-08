@@ -128,9 +128,9 @@ export const en = {
     // emoji, nessun avverbio di lode; ASCII.
     // Arretrati rinviati ancora in arrivo (22-10-2026): vedi `it`.
     backlogAheadBody:
-      'Overdue exercises coming over the next days, {{perDay}} a day: {{value}}. New lessons unlock once you have reviewed them all, in {{days}} days.',
+      'Overdue exercises coming over the next days, {{perDay}} a day: {{value}}. New lessons unlock here once you have reviewed them all, in {{days}} days, or right away from the Lessons page.',
     backlogAheadTomorrowBody:
-      'Overdue exercises coming tomorrow: {{value}}. New lessons unlock once you have reviewed them.',
+      'Overdue exercises coming tomorrow: {{value}}. New lessons unlock here once you have reviewed them, or right away from the Lessons page.',
     viewStats: 'See your statistics',
     currentLesson: 'Lesson {{order}}: {{title}}',
     openSettings: 'Settings',
@@ -332,7 +332,7 @@ export const en = {
     kicker: 'Curriculum',
     title: 'Lessons',
     intro:
-      'Every lesson of the course, in order. A new lesson puts 8 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». You can also review unlocked lessons freely: free review does not change the pile. The others unlock one at a time from the dashboard, once the pile is empty.',
+      'Every lesson of the course, in order. A new lesson puts 8 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». You can also review unlocked lessons freely: free review does not change the pile. The others unlock one at a time, in order: from the dashboard once the pile is empty, or from here even before.',
     lessonNumber: 'Lesson {{order}}',
     status: {
       current: 'In progress',
@@ -340,7 +340,13 @@ export const en = {
       next: 'Up next',
       locked: 'Locked',
     },
-    nextHint: 'Unlocks from the dashboard once the pile is empty.',
+    nextHint:
+      'You can unlock it now, without emptying the pile first: its first {{value}} exercises join the ones you have to review.',
+    nextHintNoExercises:
+      'You can unlock it now, without emptying the pile first: it is reading only and adds no exercises.',
+    nextCapReached:
+      'The new lessons for today are all unlocked (limit: {{limit}}). This one unlocks after midnight. You can change the limit in Settings.',
+    unlock: 'Unlock now',
     exercises: 'Exercises: {{value}}',
     exercisesInPile: '{{active}} of {{total}} exercises in your pile',
     more: 'Practise more',

@@ -205,6 +205,7 @@ export function AppRoutes({
             element={
               <LessonsScreen
                 userId={userId}
+                settings={settings}
                 onExit={() => navigate(ROOT_PATH)}
                 onPractice={(lessonId) => navigate(lessonPracticePath(lessonId))}
               />
