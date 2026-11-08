@@ -8,6 +8,9 @@
 // il resto è in RISERVA. Ogni lezione aperta con una riserva dice quanti esercizi ha
 // in pila su quanti, e offre «Esercitati di più» (`useAddLessonExercises`).
 //
+// Subito sotto il titolo l'INDICE (08-11-2026, `LessonIndex`): i numeri delle lezioni,
+// fermi in cima allo schermo mentre la pagina scorre, per saltare a una scheda.
+//
 // In testa la LIBRERIA (07-10-2026, `Library`): lo scaffale delle lezioni, imparate o
 // no. Ogni lezione aperta dice quanti esercizi sai bene e, quando li sai bene tutti,
 // porta il timbro 習得 (`lessonMastery`).
@@ -41,6 +44,7 @@ import { FOCUS_RING, KICKER, SCREEN_TITLE, SERVICE_LINK } from '../../ui/magazin
 import { usePorts } from '../ports/PortsContext';
 import { useActiveExerciseCounts, useAddLessonExercises } from './useAddLessonExercises';
 import { Library } from './Library';
+import { LessonIndex, lessonAnchorId } from './LessonIndex';
 import { READ_STAMP } from './stamps';
 import { useExerciseLessons } from './useExerciseLessons';
 import { useUnlockLesson } from './useUnlockLesson';
@@ -176,6 +180,7 @@ function LessonsContent({
   return (
     <main className="flex min-h-[24rem] flex-1 flex-col">
       {header}
+      <LessonIndex shelf={shelf} mastery={mastery} />
       <Library shelf={shelf} mastery={mastery} />
       <WeakLessons
         weak={weak}
@@ -195,8 +200,12 @@ function LessonsContent({
           return (
             <li
               key={lesson.id}
+              // Il bersaglio dell'indice: il salto ci porta il fuoco, e la scheda si
+              // ferma sotto l'indice, non dietro.
+              id={lessonAnchorId(lesson.ordinal)}
+              tabIndex={-1}
               aria-current={status === 'current' ? 'step' : undefined}
-              className={`grid grid-cols-[72px_minmax(0,1fr)] border-b-[1.5px] border-border-strong sm:grid-cols-[120px_minmax(0,1fr)] ${
+              className={`grid scroll-mt-[62px] grid-cols-[72px_minmax(0,1fr)] border-b-[1.5px] border-border-strong focus:outline-none sm:grid-cols-[120px_minmax(0,1fr)] ${
                 status === 'current' ? 'bg-surface-raised' : ''
               }`}
             >

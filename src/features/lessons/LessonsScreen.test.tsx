@@ -98,6 +98,19 @@ describe('LessonsScreen', () => {
     expect(html.match(/youtube\.com/g)).toHaveLength(2);
   });
 
+  it("l'indice porta a ogni lezione del curriculum e dice il suo stato", () => {
+    const html = render([lesson(1), lesson(2), lesson(3), lesson(900)], ['l1']);
+    expect(html).toContain('aria-label="Indice delle lezioni"');
+    for (const n of [1, 2, 3]) {
+      expect(html).toContain(`href="#lezione-${n}"`);
+      expect(html).toContain(`id="lezione-${n}"`);
+    }
+    expect(html).not.toContain('#lezione-900');
+    expect(html).toContain('aria-label="Lezione 1 · In corso"');
+    expect(html).toContain('aria-label="Lezione 2 · La prossima"');
+    expect(html).toContain('aria-label="Lezione 3 · Bloccata"');
+  });
+
   it('la prossima si sblocca da qui anche con la pila piena, le bloccate no', () => {
     const html = render([lesson(1), lesson(2, { exerciseCount: 12 }), lesson(3)], ['l1']);
     expect(html.match(/Sblocca adesso: Lezione/g)).toHaveLength(1);

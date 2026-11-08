@@ -333,6 +333,10 @@ export const en = {
     title: 'Lessons',
     intro:
       'Every lesson of the course, in order. A new lesson puts 8 exercises in your pile; you add the rest yourself, 6 at a time, with «Practise more». You can also review unlocked lessons freely: free review does not change the pile. The others unlock one at a time, in order: from the dashboard once the pile is empty, or from here even before.',
+    index: {
+      label: 'Lesson index',
+      kicker: 'Go to',
+    },
     lessonNumber: 'Lesson {{order}}',
     status: {
       current: 'In progress',

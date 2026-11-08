@@ -343,6 +343,11 @@ export const it = {
     title: 'Le lezioni',
     intro:
       'Tutte le lezioni del corso, in ordine. Una lezione nuova mette nella pila 8 esercizi; gli altri li aggiungi tu, 6 alla volta, con «Esercitati di più». Le lezioni sbloccate puoi anche ripassarle liberamente: il ripasso libero non cambia la pila. Le altre si sbloccano una alla volta, in ordine: dalla dashboard quando la pila è vuota, oppure da qui anche prima.',
+    // L'indice in cima alla pagina (08-11-2026): i numeri delle lezioni.
+    index: {
+      label: 'Indice delle lezioni',
+      kicker: 'Vai a',
+    },
     lessonNumber: 'Lezione {{order}}',
     status: {
       current: 'In corso',
