@@ -44,12 +44,18 @@ them with the real content. -->
 | 17 | `17-coppie-di-verbi.json` | `lezione-17` | 12 | 4 | 4 | 20 |
 | 18 | `18-temiru-ya-kara-sugiru.json` | `lezione-18` | 10 | 4 | 5 | 19 |
 | 19 | `19-parlare-in-modo-cortese.json` | `lezione-19` | 12 | 4 | 5 | 21 |
+| 20 | `20-tte-to-iu-e-to-suru.json` | `lezione-20` | 10 | 4 | 5 | 19 |
+| 21 | `21-il-causativo.json` | `lezione-21` | 10 | 5 | 5 | 20 |
+| 22 | `22-ko-so-a-do.json` | `lezione-22` | 12 | 4 | 5 | 21 |
+| 23 | `23-te-oku-e-te-aru.json` | `lezione-23` | 10 | 5 | 5 | 20 |
+| 24 | `24-te-wa-e-te-mo.json` | `lezione-24` | 11 | 4 | 5 | 20 |
+| 25 | `25-datte-dakara-sore-kara.json` | `lezione-25` | 9 | 5 | 5 | 19 |
 | 900 | `01-la-particella-wo.json` | — (test fixture) | 1 | 1 | 1 | 3 |
 
-<!-- inventory-total: 375 -->
+<!-- inventory-total: 494 -->
 
-**Total: 375 exercises** in 20 files — 155 `single-select`, 107 `select-span`,
-113 `assemble`. The `order: 900` lesson is the fixture from story 2.7, outside the
+**Total: 494 exercises** in 26 files — 217 `single-select`, 134 `select-span`,
+143 `assemble`. The `order: 900` lesson is the fixture from story 2.7, outside the
 curriculum (reserved range 900+, `docs/authoring-runbook.md`).
 
 ## Transcripts still to work through
@@ -57,7 +63,7 @@ curriculum (reserved range 900+, `docs/authoring-runbook.md`).
 `lezione-NN` is the video at position NN of the "Japanese From Scratch" playlist
 (`PLg9uYxuZf8x_A-vcqqyOFZu06WlhnypWj`); the position → id → title list is in
 `.authoring/playlist.txt`. The playlist has 93 videos: the transcripts from
-`lezione-20` to `lezione-93` are full (hand-written English subtitles, downloaded
+`lezione-26` to `lezione-93` are full (hand-written English subtitles, downloaded
 on 09-10-2026) and waiting to be authored; those from `lezione-94` to `lezione-99`
 are **empty** (0 bytes) because the playlist has no matching video. When a lesson
 is authored, it is added to the table above.

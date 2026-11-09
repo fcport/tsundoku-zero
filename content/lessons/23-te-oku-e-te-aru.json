@@ -1,0 +1,604 @@
+{
+  "order": 23,
+  "title": {
+    "en": "ておく and てある: doing it now for later, and something that has been done",
+    "it": "ておく e てある: fare ora una cosa per dopo, e una cosa già fatta"
+  },
+  "video": "cYrqFjPvwSI",
+  "grammarPoints": ["準備の「ておく」", "そのままにする「ておく」", "結果が残る「てある」", "「てある」と「ている」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "準備の「ておく」",
+      "prompt": {
+        "en": "Your friends are coming tonight. \"I'll put the beer in the fridge now, so it's cold when they arrive.\" What goes in the gap?",
+        "it": "Stasera vengono degli amici. «Metto subito la birra in fresco, così è fredda quando arrivano.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "今夜友達が来るから、今からビールを冷やしておきます",
+        "kana": "こんやともだちがくるから、いまからビールをひやしておきます"
+      },
+      "translation": {
+        "en": "My friends are coming tonight, so I'll chill the beer now.",
+        "it": "Stasera vengono degli amici, quindi metto subito la birra in fresco."
+      },
+      "glosses": [
+        { "text": "冷やしておきます", "reading": "ひやしておきます" },
+        { "text": "冷やすおきます", "reading": "ひやすおきます" },
+        { "text": "冷やしおきます", "reading": "ひやしおきます" },
+        { "text": "冷やしてあります", "reading": "ひやしてあります" }
+      ],
+      "gap": {
+        "kanji": "今夜友達が来るから、今からビールを＿",
+        "kana": "こんやともだちがくるから、いまからビールを＿"
+      },
+      "answer": "冷やしておきます",
+      "distractors": ["冷やすおきます", "冷やしおきます", "冷やしてあります"],
+      "explanation": {
+        "en": "て + おく: you do something now and leave the result in place for later. 冷やす → 冷やして + おきます: the beer stays cold until your friends arrive. おく goes after the て-form, like いる in 食べている: 冷やすおきます and 冷やしおきます skip the て. 冷やしてあります says the beer is already cold because someone chilled it earlier: it does not go with 今から, \"starting now\".",
+        "it": "て + おく: fai una cosa adesso e ne lasci il risultato lì, per dopo. 冷やす → 冷やして + おきます: la birra resta fredda fino all'arrivo degli amici. おく va dopo la forma in て, come いる in 食べている: 冷やすおきます e 冷やしおきます saltano la て. 冷やしてあります dice che la birra è già fredda perché qualcuno l'ha messa in fresco prima: non va con 今から, «da adesso»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "準備の「ておく」",
+      "prompt": {
+        "en": "\"I booked the hotel ahead of the trip.\" What goes in the gap?",
+        "it": "«Prima del viaggio ho prenotato l'albergo.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "旅行の前にホテルを予約しておいた",
+        "kana": "りょこうのまえにホテルをよやくしておいた"
+      },
+      "translation": {
+        "en": "I booked the hotel ahead of the trip.",
+        "it": "Prima del viaggio ho prenotato l'albergo."
+      },
+      "glosses": [
+        { "text": "予約しておいた", "reading": "よやくしておいた" },
+        { "text": "予約しておきた", "reading": "よやくしておきた" },
+        { "text": "予約しておくた", "reading": "よやくしておくた" },
+        { "text": "予約するおいた", "reading": "よやくするおいた" }
+      ],
+      "gap": {
+        "kanji": "旅行の前にホテルを＿",
+        "kana": "りょこうのまえにホテルを＿"
+      },
+      "answer": "予約しておいた",
+      "distractors": ["予約しておきた", "予約しておくた", "予約するおいた"],
+      "explanation": {
+        "en": "おく changes like 書く: 書いた → おいた. So the past of 予約しておく is 予約しておいた: \"I booked it beforehand, and the booking was there when I needed it\". おきた and おくた are not the past of おく. 予約するおいた is missing the て: おく always attaches to して.",
+        "it": "おく cambia come 書く: 書いた → おいた. Quindi il passato di 予約しておく è 予約しておいた: «l'ho prenotato prima, e la prenotazione c'era quando serviva». おきた e おくた non sono il passato di おく. 予約するおいた non ha la て: おく si attacca sempre a して."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "準備の「ておく」",
+      "prompt": {
+        "en": "\"Before going to bed I put out my clothes for tomorrow.\" Which part says you do it now so it is ready later?",
+        "it": "«Prima di andare a dormire tiro fuori i vestiti per domani.» Quale parte dice che lo fai adesso perché sia pronto dopo?"
+      },
+      "sentence": {
+        "kanji": "寝る前に明日の服を出しておく",
+        "kana": "ねるまえにあしたのふくをだしておく"
+      },
+      "translation": {
+        "en": "Before going to bed I put out my clothes for tomorrow.",
+        "it": "Prima di andare a dormire tiro fuori i vestiti per domani."
+      },
+      "glosses": [
+        { "text": "寝る前に", "reading": "ねるまえに", "meaning": { "en": "before going to bed", "it": "prima di andare a dormire" } },
+        { "text": "明日の服を", "reading": "あしたのふくを", "meaning": { "en": "tomorrow's clothes (を: the object)", "it": "i vestiti di domani (を: l'oggetto)" } },
+        { "text": "出して", "reading": "だして", "meaning": { "en": "take out (て-form)", "it": "tiro fuori (forma in て)" } },
+        { "text": "おく", "meaning": { "en": "(ready) for later", "it": "(pronto) per dopo" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select おく. 出して alone is just \"take out\". おく after the て-form adds that the clothes stay out, ready for the morning: you do it tonight for tomorrow. Said politely it becomes 出しておきます.",
+        "it": "Seleziona おく. 出して da solo è solo «tiro fuori». おく dopo la forma in て aggiunge che i vestiti restano lì, pronti per la mattina: lo fai stasera per domani. In modo cortese diventa 出しておきます."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "準備の「ておく」",
+      "prompt": {
+        "en": "Build, politely: \"I'll copy the documents for the meeting ahead of time.\"",
+        "it": "Componi, in modo cortese: «Fotocopio prima i documenti della riunione.»"
+      },
+      "sentence": {
+        "kanji": "先に会議の資料をコピーしておきます",
+        "kana": "さきにかいぎのしりょうをコピーしておきます"
+      },
+      "translation": {
+        "en": "I'll copy the documents for the meeting ahead of time.",
+        "it": "Fotocopio prima i documenti della riunione."
+      },
+      "glosses": [
+        { "text": "先に", "reading": "さきに", "meaning": { "en": "first, ahead of time", "it": "prima" } },
+        { "text": "会議の", "reading": "かいぎの", "meaning": { "en": "of the meeting", "it": "della riunione" } },
+        { "text": "資料を", "reading": "しりょうを", "meaning": { "en": "the documents (を: the object)", "it": "i documenti (を: l'oggetto)" } },
+        { "text": "コピーして", "meaning": { "en": "copy (て-form)", "it": "fotocopiare (forma in て)" } },
+        { "text": "おきます", "meaning": { "en": "(ready) for later, polite", "it": "(pronto) per dopo, cortese" } }
+      ],
+      "answer": ["先に", "会議の", "資料を", "コピーして", "おきます"],
+      "alsoAccepted": [["会議の", "資料を", "先に", "コピーして", "おきます"]],
+      "explanation": {
+        "en": "コピーする → コピーして + おきます: you copy them now so they are ready at the meeting. おきます goes at the very end, right after the て-form. 会議の describes 資料 and sits right before it: 会議の資料を. 先に (\"first\") can go before or after them: \"会議の資料を先にコピーしておきます\" is also correct.",
+        "it": "コピーする → コピーして + おきます: li fotocopi adesso perché siano pronti alla riunione. おきます va proprio in fondo, subito dopo la forma in て. 会議の descrive 資料 e sta subito prima: 会議の資料を. 先に («prima») può stare prima o dopo: va bene anche «会議の資料を先にコピーしておきます»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "準備の「ておく」",
+      "prompt": {
+        "en": "\"Please switch off the air conditioner before you go out.\" What goes in the gap?",
+        "it": "«Prima di uscire spegni il condizionatore, per favore.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "出かける前に、エアコンを消しておいてください",
+        "kana": "でかけるまえに、エアコンをけしておいてください"
+      },
+      "translation": {
+        "en": "Please switch off the air conditioner before you go out.",
+        "it": "Prima di uscire spegni il condizionatore, per favore."
+      },
+      "glosses": [
+        { "text": "消しておいて", "reading": "けしておいて", "base": { "text": "消す", "reading": "けす" } },
+        { "text": "消えておいて", "reading": "きえておいて", "base": { "text": "消える", "reading": "きえる" } },
+        { "text": "消してあって", "reading": "けしてあって", "base": { "text": "消す", "reading": "けす" } },
+        { "text": "消しおいて", "reading": "けしおいて", "base": { "text": "消す", "reading": "けす" } }
+      ],
+      "gap": {
+        "kanji": "出かける前に、エアコンを＿ください",
+        "kana": "でかけるまえに、エアコンを＿ください"
+      },
+      "answer": "消しておいて",
+      "distractors": ["消えておいて", "消してあって", "消しおいて"],
+      "explanation": {
+        "en": "消す → 消して + おいて + ください: \"switch it off (and leave it off)\". おく too takes the て-form before ください: おいて. 消える is the partner where the thing goes off by itself; with を you need the verb where someone does it, 消す. 消してあって cannot ask for anything: てある only describes something already done. 消しおいて is missing the て.",
+        "it": "消す → 消して + おいて + ください: «spegnilo (e lascialo spento)». Anche おく prende la forma in て prima di ください: おいて. 消える è il verbo della coppia dove la cosa si spegne da sé; con を serve quello dove qualcuno la spegne, 消す. 消してあって non può chiedere niente: てある descrive solo una cosa già fatta. 消しおいて non ha la て."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "そのままにする「ておく」",
+      "prompt": {
+        "en": "After dinner at your place, a friend is about to wash the dishes: \"Leave the plates there, I'll wash them later.\" What goes in the gap?",
+        "it": "Dopo cena a casa tua, un amico sta per lavare i piatti: «Lascia lì i piatti, li lavo dopo.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "お皿はそこに置いておいて、あとで洗うから",
+        "kana": "おさらはそこにおいておいて、あとであらうから"
+      },
+      "translation": {
+        "en": "Leave the plates there, I'll wash them later.",
+        "it": "Lascia lì i piatti, li lavo dopo."
+      },
+      "glosses": [
+        { "text": "置いておいて", "reading": "おいておいて" },
+        { "text": "置いてあって", "reading": "おいてあって" },
+        { "text": "置きおいて", "reading": "おきおいて" },
+        { "text": "置くおいて", "reading": "おくおいて" }
+      ],
+      "gap": {
+        "kanji": "お皿はそこに＿、あとで洗うから",
+        "kana": "おさらはそこに＿、あとであらうから"
+      },
+      "answer": "置いておいて",
+      "distractors": ["置いてあって", "置きおいて", "置くおいて"],
+      "explanation": {
+        "en": "置いておいて is \"put them there and leave them\": 置く (\"put\") + て + おいて. ておく does not always mean \"in advance\": often it just means do something and leave it as it is. 置いてあって describes plates someone has already put there: it cannot be a request. 置きおいて and 置くおいて are missing the て.",
+        "it": "置いておいて è «mettili lì e lasciali stare»: 置く («mettere») + て + おいて. ておく non vuol dire sempre «in anticipo»: spesso vuol dire solo fare una cosa e lasciarla com'è. 置いてあって descrive piatti che qualcuno ha già messo lì: non può essere una richiesta. 置きおいて e 置くおいて non hanno la て."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "そのままにする「ておく」",
+      "prompt": {
+        "en": "\"It's hot, so leave the door open.\" Which part says to leave it like that?",
+        "it": "«Fa caldo, quindi lascia la porta aperta.» Quale parte dice di lasciarla così?"
+      },
+      "sentence": {
+        "kanji": "暑いから、ドアは開けておいて",
+        "kana": "あついから、ドアはあけておいて"
+      },
+      "translation": {
+        "en": "It's hot, so leave the door open.",
+        "it": "Fa caldo, quindi lascia la porta aperta."
+      },
+      "glosses": [
+        { "text": "暑いから、", "reading": "あついから、", "meaning": { "en": "it's hot, so", "it": "fa caldo, quindi" } },
+        { "text": "ドアは", "meaning": { "en": "the door (は: the topic)", "it": "la porta (は: il tema)" } },
+        { "text": "開けて", "reading": "あけて", "meaning": { "en": "open (て-form)", "it": "aprire (forma in て)" } },
+        { "text": "おいて", "meaning": { "en": "and leave it", "it": "e lasciala così" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select おいて. 開けて alone would be \"open it\". With おいて the door is opened and stays open: if it is already open, it means \"leave it open\". It is a request between friends; politely, 開けておいてください.",
+        "it": "Seleziona おいて. 開けて da solo sarebbe «aprila». Con おいて la porta si apre e resta aperta: se è già aperta, vuol dire «lasciala aperta». È una richiesta fra amici; in modo cortese, 開けておいてください."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "そのままにする「ておく」",
+      "prompt": {
+        "en": "Build: \"The child gets scared, so I leave the light on.\"",
+        "it": "Componi: «Il bambino ha paura, quindi lascio la luce accesa.»"
+      },
+      "sentence": {
+        "kanji": "子供が怖がるから、電気をつけておく",
+        "kana": "こどもがこわがるから、でんきをつけておく"
+      },
+      "translation": {
+        "en": "The child gets scared, so I leave the light on.",
+        "it": "Il bambino ha paura, quindi lascio la luce accesa."
+      },
+      "glosses": [
+        { "text": "子供が", "reading": "こどもが", "meaning": { "en": "the child (が)", "it": "il bambino (が)" } },
+        { "text": "怖がるから、", "reading": "こわがるから、", "meaning": { "en": "gets scared, so", "it": "ha paura, quindi" } },
+        { "text": "電気を", "reading": "でんきを", "meaning": { "en": "the light (を: the object)", "it": "la luce (を: l'oggetto)" } },
+        { "text": "つけて", "meaning": { "en": "switch on (て-form)", "it": "accendere (forma in て)" } },
+        { "text": "おく", "meaning": { "en": "and leave it", "it": "e la lascio così" } }
+      ],
+      "answer": ["子供が", "怖がるから、", "電気を", "つけて", "おく"],
+      "explanation": {
+        "en": "つける → つけて + おく: switch the light on and leave it as it is, on. The reason with から comes first, what you do comes last. Each piece sits right before its own verb: 子供が before 怖がるから, 電気を before つけて. つける is the verb where someone switches the light on, so the light takes を.",
+        "it": "つける → つけて + おく: accendere la luce e lasciarla così, accesa. Il motivo con から va per primo, quello che fai in fondo. Ogni pezzo sta subito prima del suo verbo: 子供が prima di 怖がるから, 電気を prima di つけて. つける è il verbo dove qualcuno accende la luce, quindi la luce prende を."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "結果が残る「てある」",
+      "prompt": {
+        "en": "\"Tomorrow's schedule is written on the blackboard.\" What goes in the gap?",
+        "it": "«Sulla lavagna c'è scritto il programma di domani.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "黒板に明日の予定が書いてある",
+        "kana": "こくばんにあしたのよていがかいてある"
+      },
+      "translation": {
+        "en": "Tomorrow's schedule is written on the blackboard.",
+        "it": "Sulla lavagna c'è scritto il programma di domani."
+      },
+      "gap": {
+        "kanji": "黒板に明日の予定が書いて＿",
+        "kana": "こくばんにあしたのよていがかいて＿"
+      },
+      "answer": "ある",
+      "distractors": ["おく", "いる", "みる"],
+      "explanation": {
+        "en": "When something is written somewhere, Japanese says it \"is there, written\": 書いて + ある. Someone wrote it and the writing is still there; who did it does not matter. The thing written takes が: 予定が. 書いている with 予定が would make the schedule the one writing. おく needs someone who does it, with the thing on を: 予定を書いておく, \"I'll write the schedule up beforehand\". みる is \"try\".",
+        "it": "Quando una cosa è scritta da qualche parte, il giapponese dice che «c'è, scritta»: 書いて + ある. Qualcuno l'ha scritta e la scritta è ancora lì; chi sia stato non conta. La cosa scritta prende が: 予定が. 書いている con 予定が farebbe del programma quello che scrive. おく vuole qualcuno che fa la cosa, con la cosa su を: 予定を書いておく, «scrivo prima il programma». みる è «provare»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "結果が残る「てある」",
+      "prompt": {
+        "en": "Your mother, before going out: \"There's a cake in the fridge (I put it there).\" What goes in the gap?",
+        "it": "Tua madre, prima di uscire: «In frigo c'è una torta (l'ho messa io).» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "冷蔵庫にケーキが入れてあるよ",
+        "kana": "れいぞうこにケーキがいれてあるよ"
+      },
+      "translation": {
+        "en": "There's a cake in the fridge.",
+        "it": "In frigo c'è una torta."
+      },
+      "glosses": [
+        { "text": "入れてある", "reading": "いれてある", "base": { "text": "入れる", "reading": "いれる" } },
+        { "text": "入ってある", "reading": "はいってある", "base": { "text": "入る", "reading": "はいる" } },
+        { "text": "入れている", "reading": "いれている", "base": { "text": "入れる", "reading": "いれる" } },
+        { "text": "入れておく", "reading": "いれておく", "base": { "text": "入れる", "reading": "いれる" } }
+      ],
+      "gap": {
+        "kanji": "冷蔵庫にケーキが＿よ",
+        "kana": "れいぞうこにケーキが＿よ"
+      },
+      "answer": "入れてある",
+      "distractors": ["入ってある", "入れている", "入れておく"],
+      "explanation": {
+        "en": "入れる (\"put in\") + て + ある: someone put the cake in the fridge and it is still there. The cake takes が. てある goes only with the verb where someone does it: 入る, the partner where the thing goes in by itself, does not take ある. 入れている with ケーキが would make the cake the one putting something in. 入れておく needs を: ケーキを入れておく, \"I'll put the cake in\".",
+        "it": "入れる («mettere dentro») + て + ある: qualcuno ha messo la torta in frigo e la torta è ancora lì. La torta prende が. てある va solo col verbo dove qualcuno fa la cosa: 入る, quello della coppia dove la cosa entra da sé, non prende ある. 入れている con ケーキが farebbe della torta quella che mette dentro qualcosa. 入れておく vuole を: ケーキを入れておく, «metto in frigo la torta»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "結果が残る「てある」",
+      "prompt": {
+        "en": "\"The plates have been set out on the table.\" Which part is the thing someone set out?",
+        "it": "«Sul tavolo sono stati disposti i piatti.» Quale parte è la cosa che qualcuno ha disposto?"
+      },
+      "sentence": {
+        "kanji": "テーブルにお皿が並べてある",
+        "kana": "テーブルにおさらがならべてある"
+      },
+      "translation": {
+        "en": "The plates have been set out on the table.",
+        "it": "Sul tavolo sono stati disposti i piatti."
+      },
+      "glosses": [
+        { "text": "テーブルに", "meaning": { "en": "on the table (に: where)", "it": "sul tavolo (に: dove)" } },
+        { "text": "お皿が", "reading": "おさらが", "meaning": { "en": "the plates (が)", "it": "i piatti (が)" } },
+        { "text": "並べて", "reading": "ならべて", "meaning": { "en": "set out in a row (て-form)", "it": "disporre in fila (forma in て)" } },
+        { "text": "ある", "meaning": { "en": "are there", "it": "ci sono" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select お皿が. 並べる means someone sets things out in a row, so with a person you would say お皿を並べた. With てある the person disappears and the plates take が: they are on the table because someone put them there. If you mention the person, you go back to を: 母がお皿を並べておいた.",
+        "it": "Seleziona お皿が. 並べる vuol dire che qualcuno mette delle cose in fila, quindi con una persona diresti お皿を並べた. Con てある la persona sparisce e i piatti prendono が: sono sul tavolo perché qualcuno ce li ha messi. Se nomini la persona, torni a を: 母がお皿を並べておいた."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "結果が残る「てある」",
+      "prompt": {
+        "en": "Build: \"Flowers have been put out in the entrance.\"",
+        "it": "Componi: «All'ingresso sono stati messi dei fiori.»"
+      },
+      "sentence": {
+        "kanji": "玄関に花が飾ってある",
+        "kana": "げんかんにはながかざってある"
+      },
+      "translation": {
+        "en": "Flowers have been put out in the entrance.",
+        "it": "All'ingresso sono stati messi dei fiori."
+      },
+      "glosses": [
+        { "text": "玄関に", "reading": "げんかんに", "meaning": { "en": "in the entrance (に: where)", "it": "all'ingresso (に: dove)" } },
+        { "text": "花が", "reading": "はなが", "meaning": { "en": "flowers (が)", "it": "dei fiori (が)" } },
+        { "text": "飾って", "reading": "かざって", "meaning": { "en": "put out as decoration (て-form)", "it": "mettere per decorare (forma in て)" } },
+        { "text": "ある", "meaning": { "en": "are there", "it": "ci sono" } }
+      ],
+      "answer": ["玄関に", "花が", "飾って", "ある"],
+      "alsoAccepted": [["花が", "玄関に", "飾って", "ある"]],
+      "explanation": {
+        "en": "飾る (\"put out as decoration\") + て + ある: someone placed the flowers there and they are still there. ある goes last, right after 飾って. The flowers take が; 玄関に (\"in the entrance\") says where. Both sit before the verb and can swap places: \"花が玄関に飾ってある\" is also correct.",
+        "it": "飾る («mettere per decorare») + て + ある: qualcuno ha sistemato lì i fiori e i fiori sono ancora lì. ある va per ultima, subito dopo 飾って. I fiori prendono が; 玄関に («all'ingresso») dice dove. Stanno tutti e due prima del verbo e possono scambiarsi: va bene anche «花が玄関に飾ってある»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "結果が残る「てある」",
+      "prompt": {
+        "en": "You come home and find something on the desk: \"There was a note left on the desk.\" What goes in the gap?",
+        "it": "Torni a casa e trovi qualcosa sulla scrivania: «Sulla scrivania c'era un biglietto.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "机の上にメモが置いてあった",
+        "kana": "つくえのうえにメモがおいてあった"
+      },
+      "translation": {
+        "en": "There was a note left on the desk.",
+        "it": "Sulla scrivania c'era un biglietto."
+      },
+      "glosses": [
+        { "text": "置いてあった", "reading": "おいてあった" },
+        { "text": "置いていた", "reading": "おいていた" },
+        { "text": "置いておいた", "reading": "おいておいた" },
+        { "text": "置きてあった", "reading": "おきてあった" }
+      ],
+      "gap": {
+        "kanji": "机の上にメモが＿",
+        "kana": "つくえのうえにメモが＿"
+      },
+      "answer": "置いてあった",
+      "distractors": ["置いていた", "置いておいた", "置きてあった"],
+      "explanation": {
+        "en": "置いて + あった: someone left a note there and you found it in place. The past goes on ある: あった. With メモが, 置いていた would make the note the one putting something down, and 置いておいた needs a person and を: 母がメモを置いておいた. 置く makes its て-form like 書く: 置いて, not 置きて.",
+        "it": "置いて + あった: qualcuno ha lasciato lì un biglietto e tu l'hai trovato lì. Il passato va su ある: あった. Con メモが, 置いていた farebbe del biglietto quello che posa qualcosa, e 置いておいた vuole una persona e を: 母がメモを置いておいた. 置く fa la forma in て come 書く: 置いて, non 置きて."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "結果が残る「てある」",
+      "prompt": {
+        "en": "\"My homework is already done.\" Which part is the thing that has been done?",
+        "it": "«I compiti sono già fatti.» Quale parte è la cosa che è stata fatta?"
+      },
+      "sentence": {
+        "kanji": "宿題はもうやってある",
+        "kana": "しゅくだいはもうやってある"
+      },
+      "translation": {
+        "en": "My homework is already done.",
+        "it": "I compiti sono già fatti."
+      },
+      "glosses": [
+        { "text": "宿題は", "reading": "しゅくだいは", "meaning": { "en": "the homework (は: the topic)", "it": "i compiti (は: il tema)" } },
+        { "text": "もう", "meaning": { "en": "already", "it": "già" } },
+        { "text": "やって", "meaning": { "en": "do (て-form)", "it": "fare (forma in て)" } },
+        { "text": "ある", "meaning": { "en": "is there, done", "it": "sono lì, fatti" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 宿題は. With てある the thing that was done is the one the sentence is about: usually it takes が, and here it is the topic, with は. Who did it is not said, but it is clear: I did it, and now it is done and ready. Said from your side, as the one doing it: 宿題をやっておいた.",
+        "it": "Seleziona 宿題は. Con てある la frase parla della cosa che è stata fatta: di solito prende が, e qui è il tema, con は. Chi l'ha fatto non si dice, ma si capisce: li ho fatti io, e adesso sono fatti e pronti. Detto dalla tua parte, da chi li fa: 宿題をやっておいた."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "準備の「ておく」",
+      "prompt": {
+        "en": "Build, politely: \"I have an early start tomorrow, so I'll get my luggage ready tonight.\"",
+        "it": "Componi, in modo cortese: «Domattina mi alzo presto, quindi preparo i bagagli stasera.»"
+      },
+      "sentence": {
+        "kanji": "明日の朝は早いから、今夜荷物を準備しておきます",
+        "kana": "あしたのあさははやいから、こんやにもつをじゅんびしておきます"
+      },
+      "translation": {
+        "en": "I have an early start tomorrow, so I'll get my luggage ready tonight.",
+        "it": "Domattina mi alzo presto, quindi preparo i bagagli stasera."
+      },
+      "glosses": [
+        { "text": "明日の朝は", "reading": "あしたのあさは", "meaning": { "en": "tomorrow morning (は: the topic)", "it": "domattina (は: il tema)" } },
+        { "text": "早いから、", "reading": "はやいから、", "meaning": { "en": "is early, so", "it": "è presto, quindi" } },
+        { "text": "今夜", "reading": "こんや", "meaning": { "en": "tonight", "it": "stasera" } },
+        { "text": "荷物を", "reading": "にもつを", "meaning": { "en": "my luggage (を: the object)", "it": "i bagagli (を: l'oggetto)" } },
+        { "text": "準備して", "reading": "じゅんびして", "meaning": { "en": "get ready (て-form)", "it": "preparare (forma in て)" } },
+        { "text": "おきます", "meaning": { "en": "(ready) for later, polite", "it": "(pronto) per dopo, cortese" } }
+      ],
+      "answer": ["明日の朝は", "早いから、", "今夜", "荷物を", "準備して", "おきます"],
+      "alsoAccepted": [["明日の朝は", "早いから、", "荷物を", "今夜", "準備して", "おきます"]],
+      "explanation": {
+        "en": "準備する → 準備して + おきます: you get the luggage ready tonight so it is ready in the morning. The reason with から comes first: 明日の朝は早いから. Then what you do, with おきます at the end. 荷物を sits before 準備して; 今夜 (\"tonight\") can go before or after it: \"荷物を今夜準備しておきます\" is also correct.",
+        "it": "準備する → 準備して + おきます: prepari i bagagli stasera perché siano pronti la mattina. Il motivo con から va per primo: 明日の朝は早いから. Poi quello che fai, con おきます in fondo. 荷物を sta prima di 準備して; 今夜 («stasera») può stare prima o dopo: va bene anche «荷物を今夜準備しておきます»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「てある」と「ている」",
+      "prompt": {
+        "en": "You come home late: someone has switched on the light at the door for you. \"The light at the door has been left on.\" What goes in the gap?",
+        "it": "Torni a casa tardi: qualcuno ti ha acceso la luce all'ingresso. «La luce dell'ingresso è stata lasciata accesa.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "玄関の電気がつけてある",
+        "kana": "げんかんのでんきがつけてある"
+      },
+      "translation": {
+        "en": "The light at the door has been left on.",
+        "it": "La luce dell'ingresso è stata lasciata accesa."
+      },
+      "glosses": [
+        { "text": "つけてある", "base": { "text": "つける", "reading": "つける" } },
+        { "text": "ついてある", "base": { "text": "つく", "reading": "つく" } },
+        { "text": "つけている", "base": { "text": "つける", "reading": "つける" } },
+        { "text": "ついておく", "base": { "text": "つく", "reading": "つく" } }
+      ],
+      "gap": {
+        "kanji": "玄関の電気が＿",
+        "kana": "げんかんのでんきが＿"
+      },
+      "answer": "つけてある",
+      "distractors": ["ついてある", "つけている", "ついておく"],
+      "explanation": {
+        "en": "Someone switched the light on for you, and it is still on: the verb where someone does it, つける, + て + ある. The light takes が. ついている would also say the light is on, but only as a fact, with nobody behind it. ついてある mixes the two: ある never goes with the verb where things happen by themselves. つけている with 電気が would make the light the one switching something on, and ておく needs a person and を.",
+        "it": "Qualcuno ha acceso la luce per te, e la luce è ancora accesa: il verbo dove qualcuno fa la cosa, つける, + て + ある. La luce prende が. ついている direbbe anche che la luce è accesa, ma solo come un fatto, senza nessuno dietro. ついてある mescola le due cose: ある non va mai col verbo dove le cose succedono da sé. つけている con 電気が farebbe della luce quella che accende qualcosa, e ておく vuole una persona e を."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「てある」と「ている」",
+      "prompt": {
+        "en": "Late at night you notice the bathroom light. \"Huh, the bathroom light is on.\" What goes in the gap?",
+        "it": "A tarda notte noti la luce del bagno. «Ehi, la luce del bagno è accesa.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "あれ、トイレの電気がついている",
+        "kana": "あれ、トイレのでんきがついている"
+      },
+      "translation": {
+        "en": "Huh, the bathroom light is on.",
+        "it": "Ehi, la luce del bagno è accesa."
+      },
+      "glosses": [
+        { "text": "ついている", "base": { "text": "つく", "reading": "つく" } },
+        { "text": "ついてある", "base": { "text": "つく", "reading": "つく" } },
+        { "text": "つけている", "base": { "text": "つける", "reading": "つける" } },
+        { "text": "つけておく", "base": { "text": "つける", "reading": "つける" } }
+      ],
+      "gap": {
+        "kanji": "あれ、トイレの電気が＿",
+        "kana": "あれ、トイレのでんきが＿"
+      },
+      "answer": "ついている",
+      "distractors": ["ついてある", "つけている", "つけておく"],
+      "explanation": {
+        "en": "つく is the partner where the light comes on by itself: ついている just says it is on, a fact you can see. ついてある does not exist: ある goes only with the verb where someone does it. つけている with 電気が would make the light the one switching something on; つけておく needs someone and を: 電気をつけておく, \"I'll leave the light on\".",
+        "it": "つく è il verbo della coppia dove la luce si accende da sé: ついている dice solo che è accesa, un fatto che vedi. ついてある non esiste: ある va solo col verbo dove qualcuno fa la cosa. つけている con 電気が farebbe della luce quella che accende qualcosa; つけておく vuole qualcuno e を: 電気をつけておく, «lascio la luce accesa»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "「てある」と「ている」",
+      "prompt": {
+        "en": "\"My mother is closing the curtains right now.\" What goes in the gap?",
+        "it": "«La mamma sta chiudendo le tende proprio adesso.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "母が今カーテンを閉めている",
+        "kana": "ははがいまカーテンをしめている"
+      },
+      "translation": {
+        "en": "My mother is closing the curtains right now.",
+        "it": "La mamma sta chiudendo le tende proprio adesso."
+      },
+      "glosses": [
+        { "text": "閉めている", "reading": "しめている", "base": { "text": "閉める", "reading": "しめる" } },
+        { "text": "閉めてある", "reading": "しめてある", "base": { "text": "閉める", "reading": "しめる" } },
+        { "text": "閉まっている", "reading": "しまっている", "base": { "text": "閉まる", "reading": "しまる" } },
+        { "text": "閉まってある", "reading": "しまってある", "base": { "text": "閉まる", "reading": "しまる" } }
+      ],
+      "gap": {
+        "kanji": "母が今カーテンを＿",
+        "kana": "ははがいまカーテンを＿"
+      },
+      "answer": "閉めている",
+      "distractors": ["閉めてある", "閉まっている", "閉まってある"],
+      "explanation": {
+        "en": "With a person (母が) and a thing on を, ている says what she is doing right now: 閉めている, \"is closing\". てある never has the person who did it with が: you would say カーテンが閉めてある, \"the curtains have been closed\". 閉まる is the partner where the curtains close by themselves, so it cannot take を, and 閉まってある does not exist.",
+        "it": "Con una persona (母が) e una cosa su を, ている dice cosa sta facendo adesso: 閉めている, «sta chiudendo». てある non ha mai con が la persona che ha fatto la cosa: si direbbe カーテンが閉めてある, «le tende sono state chiuse». 閉まる è il verbo della coppia dove le tende si chiudono da sé, quindi non può avere を, e 閉まってある non esiste."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "「てある」と「ている」",
+      "prompt": {
+        "en": "\"The door is open, and the light has been switched on too.\" Which part tells you someone did it?",
+        "it": "«La porta è aperta, e anche la luce è stata accesa.» Quale parte ti dice che qualcuno l'ha fatto?"
+      },
+      "sentence": {
+        "kanji": "ドアが開いていて、電気もつけてある",
+        "kana": "ドアがあいていて、でんきもつけてある"
+      },
+      "translation": {
+        "en": "The door is open, and the light has been switched on too.",
+        "it": "La porta è aperta, e anche la luce è stata accesa."
+      },
+      "glosses": [
+        { "text": "ドアが", "meaning": { "en": "the door (が)", "it": "la porta (が)" } },
+        { "text": "開いていて、", "reading": "あいていて、", "meaning": { "en": "is open, and…", "it": "è aperta, e…" } },
+        { "text": "電気も", "reading": "でんきも", "meaning": { "en": "the light too", "it": "anche la luce" } },
+        { "text": "つけてある", "meaning": { "en": "has been switched on", "it": "è stata accesa" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select つけてある. つける is the verb where someone switches the light on, and ある says the result is still there: someone did it. 開いていて uses 開く, the partner where the door opens by itself: it only says the door is open, without saying how. も takes the place of が: 電気も, \"the light too\".",
+        "it": "Seleziona つけてある. つける è il verbo dove qualcuno accende la luce, e ある dice che il risultato è ancora lì: qualcuno l'ha fatto. 開いていて usa 開く, quello della coppia dove la porta si apre da sé: dice solo che la porta è aperta, senza dire come. も prende il posto di が: 電気も, «anche la luce»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "「てある」と「ている」",
+      "prompt": {
+        "en": "Build: \"The air conditioner has been switched on, so the room is cool.\"",
+        "it": "Componi: «Il condizionatore è stato acceso, quindi la stanza è fresca.»"
+      },
+      "sentence": {
+        "kanji": "エアコンがつけてあるから、部屋は涼しい",
+        "kana": "エアコンがつけてあるから、へやはすずしい"
+      },
+      "translation": {
+        "en": "The air conditioner has been switched on, so the room is cool.",
+        "it": "Il condizionatore è stato acceso, quindi la stanza è fresca."
+      },
+      "glosses": [
+        { "text": "エアコンが", "meaning": { "en": "the air conditioner (が)", "it": "il condizionatore (が)" } },
+        { "text": "つけて", "meaning": { "en": "switch on (て-form)", "it": "accendere (forma in て)" } },
+        { "text": "あるから、", "meaning": { "en": "has been, so", "it": "è stato, quindi" } },
+        { "text": "部屋は", "reading": "へやは", "meaning": { "en": "the room (は: the topic)", "it": "la stanza (は: il tema)" } },
+        { "text": "涼しい", "reading": "すずしい", "meaning": { "en": "is cool", "it": "è fresca" } }
+      ],
+      "answer": ["エアコンが", "つけて", "あるから、", "部屋は", "涼しい"],
+      "alsoAccepted": [["部屋は", "エアコンが", "つけて", "あるから、", "涼しい"]],
+      "explanation": {
+        "en": "つけて + ある: someone switched the air conditioner on and it is still on, so the air conditioner takes が. The reason with から comes before what follows from it, and 涼しい goes at the very end. 部屋は, the topic, can also open the sentence: \"部屋はエアコンがつけてあるから、涼しい\" is also correct.",
+        "it": "つけて + ある: qualcuno ha acceso il condizionatore e il condizionatore è ancora acceso, quindi prende が. Il motivo con から sta prima di quello che ne segue, e 涼しい va proprio in fondo. 部屋は, il tema, può anche aprire la frase: va bene anche «部屋はエアコンがつけてあるから、涼しい»."
+      }
+    }
+  ]
+}

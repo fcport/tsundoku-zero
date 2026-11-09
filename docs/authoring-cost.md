@@ -146,14 +146,14 @@ The Definition of Done in PRD §11 asks for **at least five** lessons authored,
 reviewed and playable; the **goal is eleven**, matching those the owner has already
 watched. This is the content epic's target.
 
-<!-- authored-lessons: 20 -->
+<!-- authored-lessons: 26 -->
 <!-- dod-status: met -->
 
-**Where things stand.** The repository currently holds **20** lesson files under
+**Where things stand.** The repository currently holds **26** lesson files under
 `content/lessons/`, all **valid** against the Epic 2 gate
 (`validateLessons` → `[]`):
 
-- **19 curriculum lessons**, `order` 1 to 19, one for each of the first nineteen
+- **25 curriculum lessons**, `order` 1 to 25, one for each of the first twenty-five
   transcripts in the working folder. The details — how many exercises each lesson
   has, by kind, and which transcript the facts were taken from — are in
   `docs/content-inventory.md`.

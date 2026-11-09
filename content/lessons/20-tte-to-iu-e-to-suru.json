@@ -1,0 +1,546 @@
+{
+  "order": 20,
+  "title": {
+    "en": "Trying to do something with (よ)うとする; とする, として, という and って",
+    "it": "Cercare di fare una cosa con (よ)うとする; とする, として, という e って"
+  },
+  "video": "40avkmkQR8M",
+  "grammarPoints": ["試みの「(よ)うとする」", "見なす「とする」", "資格の「として」", "名前を示す「という」", "口語の「って」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "試みの「(よ)うとする」",
+      "prompt": {
+        "en": "The baby keeps falling over and starting again: \"The baby is trying to stand up on its own.\" What goes in the gap?",
+        "it": "Il bimbo cade e ci riprova: «Il bimbo cerca di mettersi in piedi da solo.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "赤ちゃんが一人で立とうとしている",
+        "kana": "あかちゃんがひとりでたとうとしている"
+      },
+      "translation": {
+        "en": "The baby is trying to stand up on its own.",
+        "it": "Il bimbo cerca di mettersi in piedi da solo."
+      },
+      "glosses": [
+        { "text": "立とうとしている", "reading": "たとうとしている" },
+        { "text": "立ってみている", "reading": "たってみている" },
+        { "text": "立とうしている", "reading": "たとうしている" },
+        { "text": "立つとしている", "reading": "たつとしている" }
+      ],
+      "gap": {
+        "kanji": "赤ちゃんが一人で＿",
+        "kana": "あかちゃんがひとりで＿"
+      },
+      "answer": "立とうとしている",
+      "distractors": ["立ってみている", "立とうしている", "立つとしている"],
+      "explanation": {
+        "en": "立とう is 立つ in the volitional form: \"let me stand\", the will to do it. Add とする and the will becomes an attempt: 立とうとする, \"try to stand\", without knowing whether it will work. It is happening now, so とする becomes としている. 立ってみる means \"stand up to see how it goes\": it takes for granted that you can. 立とうしている is missing と; 立つとしている uses the plain form, which carries no will.",
+        "it": "立とう è 立つ nella forma volitiva: «stiamo in piedi», la volontà di farlo. Con とする la volontà diventa un tentativo: 立とうとする, «cercare di stare in piedi», senza sapere se riuscirà. Sta succedendo adesso, quindi とする diventa としている. 立ってみる vuol dire «alzarsi per vedere come va»: dà per scontato che ci riesci. A 立とうしている manca と; 立つとしている usa la forma semplice, che non dice nessuna volontà."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "試みの「(よ)うとする」",
+      "prompt": {
+        "en": "You wanted to know whether the new bakery is any good, so you bought a loaf and ate it: \"I tried the bread from the bakery in front of the station.\" What goes in the gap?",
+        "it": "Volevi sapere se la nuova panetteria è buona: hai comprato il pane e l'hai mangiato. «Ho provato il pane della panetteria davanti alla stazione.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "駅前のパン屋のパンを食べてみた",
+        "kana": "えきまえのパンやのパンをたべてみた"
+      },
+      "translation": {
+        "en": "I tried the bread from the bakery in front of the station.",
+        "it": "Ho provato il pane della panetteria davanti alla stazione."
+      },
+      "glosses": [
+        { "text": "食べてみた", "reading": "たべてみた" },
+        { "text": "食べようとした", "reading": "たべようとした" },
+        { "text": "食べようとみた", "reading": "たべようとみた" },
+        { "text": "食べてした", "reading": "たべてした" }
+      ],
+      "gap": {
+        "kanji": "駅前のパン屋のパンを＿",
+        "kana": "えきまえのパンやのパンを＿"
+      },
+      "answer": "食べてみた",
+      "distractors": ["食べようとした", "食べようとみた", "食べてした"],
+      "explanation": {
+        "en": "食べてみた: \"I ate it to see what it was like\". てみる is for something you can certainly do, when what you don't know is the result: is it good or not? 食べようとした is an attempt with an uncertain outcome: \"I tried to eat it\", as if something got in the way. 食べようとみた and 食べてした mix up the two forms.",
+        "it": "食べてみた: «l'ho mangiato per vedere com'era». てみる si usa per una cosa che sai di poter fare, quando non sai il risultato: è buono o no? 食べようとした è un tentativo dall'esito incerto: «ho cercato di mangiarlo», come se qualcosa te l'avesse impedito. 食べようとみた e 食べてした mescolano le due forme."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "試みの「(よ)うとする」",
+      "prompt": {
+        "en": "\"The cat is trying to get into the box.\" Which part means \"is trying\"?",
+        "it": "«Il gatto cerca di entrare nella scatola.» Quale parte vuol dire «cerca di»?"
+      },
+      "sentence": {
+        "kanji": "猫が箱に入ろうとしている",
+        "kana": "ねこがはこにはいろうとしている"
+      },
+      "translation": {
+        "en": "The cat is trying to get into the box.",
+        "it": "Il gatto cerca di entrare nella scatola."
+      },
+      "glosses": [
+        { "text": "猫が", "reading": "ねこが", "meaning": { "en": "the cat (が: the subject)", "it": "il gatto (が: il soggetto)" } },
+        { "text": "箱に", "reading": "はこに", "meaning": { "en": "into the box", "it": "nella scatola" } },
+        { "text": "入ろう", "reading": "はいろう", "meaning": { "en": "let me get in (入る, volitional)", "it": "entriamo (入る, volitiva)" } },
+        { "text": "としている", "meaning": { "en": "is trying", "it": "cerca di" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select としている. 入ろう (from 入る) says the will: \"let me get in\". と takes that will as a whole and している acts on it: \"is trying to get in\". Without it, 猫が箱に入っている would say the cat is already inside.",
+        "it": "Seleziona としている. 入ろう (da 入る) dice la volontà: «entriamo». と prende questa volontà tutta intera e している la mette in atto: «cerca di entrare». Senza, 猫が箱に入っている direbbe che il gatto è già dentro."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "試みの「(よ)うとする」",
+      "prompt": {
+        "en": "Build: \"Dad tried to carry the heavy desk on his own.\"",
+        "it": "Componi: «Papà ha cercato di portare da solo la scrivania pesante.»"
+      },
+      "sentence": {
+        "kanji": "父は重い机を一人で運ぼうとした",
+        "kana": "ちちはおもいつくえをひとりではこぼうとした"
+      },
+      "translation": {
+        "en": "Dad tried to carry the heavy desk on his own.",
+        "it": "Papà ha cercato di portare da solo la scrivania pesante."
+      },
+      "glosses": [
+        { "text": "父は", "reading": "ちちは", "meaning": { "en": "Dad (は: the topic)", "it": "papà (は: il tema)" } },
+        { "text": "重い", "reading": "おもい", "meaning": { "en": "heavy", "it": "pesante" } },
+        { "text": "机を", "reading": "つくえを", "meaning": { "en": "the desk (を: the object)", "it": "la scrivania (を: l'oggetto)" } },
+        { "text": "一人で", "reading": "ひとりで", "meaning": { "en": "on his own", "it": "da solo" } },
+        { "text": "運ぼう", "reading": "はこぼう", "meaning": { "en": "let me carry (運ぶ, volitional)", "it": "portiamo (運ぶ, volitiva)" } },
+        { "text": "とした", "meaning": { "en": "tried", "it": "ha cercato di" } }
+      ],
+      "answer": ["父は", "重い", "机を", "一人で", "運ぼう", "とした"],
+      "alsoAccepted": [["父は", "一人で", "重い", "机を", "運ぼう", "とした"]],
+      "explanation": {
+        "en": "運ぶ → 運ぼう, the will to carry, + とした: \"tried to carry\", and maybe he couldn't. 運ぼう and とした stay together at the end. 重い describes 机 and sits right before 机を. 父は, the topic, comes first. 一人で and 重い机を can swap places: \"父は一人で重い机を運ぼうとした\" is also correct.",
+        "it": "運ぶ → 運ぼう, la volontà di portare, + とした: «ha cercato di portare», e forse non ci è riuscito. 運ぼう e とした stanno insieme in fondo. 重い descrive 机 e sta subito prima di 机を. 父は, il tema, va per primo. 一人で e 重い机を possono scambiarsi: va bene anche «父は一人で重い机を運ぼうとした»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "試みの「(よ)うとする」",
+      "prompt": {
+        "en": "\"My little brother is trying to write his name in kanji.\" Which particle goes in the gap?",
+        "it": "«Il mio fratellino cerca di scrivere il suo nome in kanji.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "弟は自分の名前を漢字で書こうとしている",
+        "kana": "おとうとはじぶんのなまえをかんじでかこうとしている"
+      },
+      "translation": {
+        "en": "My little brother is trying to write his name in kanji.",
+        "it": "Il mio fratellino cerca di scrivere il suo nome in kanji."
+      },
+      "gap": {
+        "kanji": "弟は自分の名前を漢字で書こう＿している",
+        "kana": "おとうとはじぶんのなまえをかんじでかこう＿している"
+      },
+      "answer": "と",
+      "distractors": ["を", "に", "が"],
+      "explanation": {
+        "en": "Always と: 書こう + と + している. 書こう is a small sentence of its own, \"let me write it\", and と closes it the way it closes a quote, as in 「おいしい」と言った. を, に and が are never used here.",
+        "it": "Sempre と: 書こう + と + している. 書こう è una piccola frase intera, «scriviamolo», e と la chiude come chiude una citazione, come in 「おいしい」と言った. を, に e が qui non si usano mai."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "見なす「とする」",
+      "prompt": {
+        "en": "A rule: \"In this country, people aged 18 and over count as adults.\" Which particle goes in the gap?",
+        "it": "Una regola: «In questo paese chi ha 18 anni o più conta come adulto.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "この国では十八歳以上を大人とする",
+        "kana": "このくにではじゅうはっさいいじょうをおとなとする"
+      },
+      "translation": {
+        "en": "In this country, people aged 18 and over count as adults.",
+        "it": "In questo paese chi ha 18 anni o più conta come adulto."
+      },
+      "gap": {
+        "kanji": "この国では十八歳以上を大人＿する",
+        "kana": "このくにではじゅうはっさいいじょうをおとな＿する"
+      },
+      "answer": "と",
+      "distractors": ["に", "を", "で"],
+      "explanation": {
+        "en": "AをBとする: \"take A as B\", \"count A as B\". Nobody changes: the rule only decides what to call them. With に, 大人にする would be \"turn them into adults\", as if the rule made them grow up. を is already on 十八歳以上, and で does not go before する here.",
+        "it": "AをBとする: «prendere A come B», «considerare A come B». Nessuno cambia: la regola decide solo come chiamarli. Con に, 大人にする vorrebbe dire «farli diventare adulti», come se la regola li facesse crescere. を c'è già su 十八歳以上, e で qui davanti a する non va."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "見なす「とする」",
+      "prompt": {
+        "en": "You cut up an old T-shirt and now you clean the floor with it: \"I turned an old T-shirt into a rag.\" Which particle goes in the gap?",
+        "it": "Hai tagliato una vecchia maglietta e ora ci pulisci il pavimento: «Ho trasformato una vecchia maglietta in uno straccio.» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "古いシャツを雑巾にした",
+        "kana": "ふるいシャツをぞうきんにした"
+      },
+      "translation": {
+        "en": "I turned an old T-shirt into a rag.",
+        "it": "Ho trasformato una vecchia maglietta in uno straccio."
+      },
+      "gap": {
+        "kanji": "古いシャツを雑巾＿した",
+        "kana": "ふるいシャツをぞうきん＿した"
+      },
+      "answer": "に",
+      "distractors": ["と", "を", "が"],
+      "explanation": {
+        "en": "Here the T-shirt really changed: you cut it and now it is a rag. AをBにする, with に, is \"turn A into B\": it is になる (\"become\") with someone making it happen. With と, 雑巾とした would only mean \"I counted the T-shirt as a rag\", without touching it. を is already on シャツ, and が does not go before する here.",
+        "it": "Qui la maglietta è cambiata davvero: l'hai tagliata e ora è uno straccio. AをBにする, con に, è «trasformare A in B»: è になる («diventare») con qualcuno che lo fa succedere. Con と, 雑巾とした direbbe solo «ho considerato la maglietta uno straccio», senza toccarla. を c'è già su シャツ, e が qui davanti a する non va."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "見なす「とする」",
+      "prompt": {
+        "en": "Build: \"The teacher counted three late arrivals as one absence.\"",
+        "it": "Componi: «Il professore ha contato tre ritardi come un'assenza.»"
+      },
+      "sentence": {
+        "kanji": "先生は遅刻三回を欠席一回とした",
+        "kana": "せんせいはちこくさんかいをけっせきいっかいとした"
+      },
+      "translation": {
+        "en": "The teacher counted three late arrivals as one absence.",
+        "it": "Il professore ha contato tre ritardi come un'assenza."
+      },
+      "glosses": [
+        { "text": "先生は", "reading": "せんせいは", "meaning": { "en": "the teacher (は: the topic)", "it": "il professore (は: il tema)" } },
+        { "text": "遅刻三回を", "reading": "ちこくさんかいを", "meaning": { "en": "three late arrivals (を: the object)", "it": "tre ritardi (を: l'oggetto)" } },
+        { "text": "欠席一回と", "reading": "けっせきいっかいと", "meaning": { "en": "as one absence", "it": "come un'assenza" } },
+        { "text": "した", "meaning": { "en": "counted (lit. did)", "it": "ha contato (lett. ha fatto)" } }
+      ],
+      "answer": ["先生は", "遅刻三回を", "欠席一回と", "した"],
+      "explanation": {
+        "en": "AをBとする: \"count A as B\". 遅刻三回を is A, what gets counted; 欠席一回と is B, what it counts as. Both sit before した, the verb they belong to: first the piece with を, then the one with と, which stays right before した. 先生は, the topic, comes first.",
+        "it": "AをBとする: «contare A come B». 遅刻三回を è A, ciò che si conta; 欠席一回と è B, ciò come cui conta. Tutti e due stanno prima di した, il verbo a cui appartengono: prima il pezzo con を, poi quello con と, che sta subito prima di した. 先生は, il tema, va per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "資格の「として」",
+      "prompt": {
+        "en": "\"My older sister works as an interpreter.\" What goes in the gap?",
+        "it": "«Mia sorella maggiore lavora come interprete.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "姉は通訳として働いている",
+        "kana": "あねはつうやくとしてはたらいている"
+      },
+      "translation": {
+        "en": "My older sister works as an interpreter.",
+        "it": "Mia sorella maggiore lavora come interprete."
+      },
+      "glosses": [
+        { "text": "として" },
+        { "text": "とする" },
+        { "text": "にして" },
+        { "text": "と言って", "reading": "といって" }
+      ],
+      "gap": {
+        "kanji": "姉は通訳＿働いている",
+        "kana": "あねはつうやく＿はたらいている"
+      },
+      "answer": "として",
+      "distractors": ["とする", "にして", "と言って"],
+      "explanation": {
+        "en": "として means \"as\", \"in the role of\": 通訳として, \"as an interpreter\". It is とする in the て-form. とする cannot sit right before another verb; 通訳にして would be \"turning her into an interpreter\", and 通訳と言って \"saying 'interpreter'\".",
+        "it": "として vuol dire «come», «nel ruolo di»: 通訳として, «come interprete». È とする nella forma in て. とする non può stare subito prima di un altro verbo; 通訳にして sarebbe «trasformandola in interprete», e 通訳と言って «dicendo \"interprete\"»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "資格の「として」",
+      "prompt": {
+        "en": "\"I came to Japan as an exchange student.\" Which part means \"as\"?",
+        "it": "«Sono venuto in Giappone come studente di scambio.» Quale parte vuol dire «come»?"
+      },
+      "sentence": {
+        "kanji": "私は留学生として日本に来ました",
+        "kana": "わたしはりゅうがくせいとしてにほんにきました"
+      },
+      "translation": {
+        "en": "I came to Japan as an exchange student.",
+        "it": "Sono venuto in Giappone come studente di scambio."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (は: the topic)", "it": "io (は: il tema)" } },
+        { "text": "留学生", "reading": "りゅうがくせい", "meaning": { "en": "exchange student", "it": "studente di scambio" } },
+        { "text": "として", "meaning": { "en": "as", "it": "come" } },
+        { "text": "日本に", "reading": "にほんに", "meaning": { "en": "to Japan (に: where to)", "it": "in Giappone (に: dove)" } },
+        { "text": "来ました", "reading": "きました", "meaning": { "en": "came (polite)", "it": "sono venuto (cortese)" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select として. It says in what role you did something: 留学生として, \"as an exchange student\", not as a tourist or for work. It goes right after the noun it presents.",
+        "it": "Seleziona として. Dice in che ruolo hai fatto una cosa: 留学生として, «come studente di scambio», non come turista o per lavoro. Va subito dopo il nome che presenta."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "資格の「として」",
+      "prompt": {
+        "en": "Build: \"Yamada spoke as the team captain.\"",
+        "it": "Componi: «Yamada ha parlato come capitano della squadra.»"
+      },
+      "sentence": {
+        "kanji": "山田さんはチームのキャプテンとして話した",
+        "kana": "やまださんはチームのキャプテンとしてはなした"
+      },
+      "translation": {
+        "en": "Yamada spoke as the team captain.",
+        "it": "Yamada ha parlato come capitano della squadra."
+      },
+      "glosses": [
+        { "text": "山田さんは", "reading": "やまださんは", "meaning": { "en": "Yamada (は: the topic)", "it": "Yamada (は: il tema)" } },
+        { "text": "チームの", "meaning": { "en": "of the team", "it": "della squadra" } },
+        { "text": "キャプテン", "meaning": { "en": "captain", "it": "capitano" } },
+        { "text": "として", "meaning": { "en": "as", "it": "come" } },
+        { "text": "話した", "reading": "はなした", "meaning": { "en": "spoke", "it": "ha parlato" } }
+      ],
+      "answer": ["山田さんは", "チームの", "キャプテン", "として", "話した"],
+      "explanation": {
+        "en": "として goes right after the noun it presents: キャプテンとして, \"as captain\". チームの describes キャプテン and sits right before it. The whole チームのキャプテンとして sits before 話した, the verb it belongs to; 山田さんは, the topic, comes first.",
+        "it": "として va subito dopo il nome che presenta: キャプテンとして, «come capitano». チームの descrive キャプテン e sta subito prima. Tutto チームのキャプテンとして sta prima di 話した, il verbo a cui appartiene; 山田さんは, il tema, va per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名前を示す「という」",
+      "prompt": {
+        "en": "\"I went to a café called Himawari.\" What goes in the gap?",
+        "it": "«Sono andato in un bar che si chiama Himawari.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "「ひまわり」という喫茶店に行った",
+        "kana": "「ひまわり」というきっさてんにいった"
+      },
+      "translation": {
+        "en": "I went to a café called Himawari.",
+        "it": "Sono andato in un bar che si chiama Himawari."
+      },
+      "glosses": [
+        { "text": "という" },
+        { "text": "と言った", "reading": "といった" },
+        { "text": "が言う", "reading": "がいう" },
+        { "text": "を言う", "reading": "をいう" }
+      ],
+      "gap": {
+        "kanji": "「ひまわり」＿喫茶店に行った",
+        "kana": "「ひまわり」＿きっさてんにいった"
+      },
+      "answer": "という",
+      "distractors": ["と言った", "が言う", "を言う"],
+      "explanation": {
+        "en": "という after a name means \"called\": 「ひまわり」という喫茶店, \"a café called Himawari\". It is the と of quotes plus 言う, and it stays like this even when the sentence is in the past. 「ひまわり」と言った喫茶店 would be \"the café that said 'Himawari'\". が言う and を言う do not quote a name: quotes take と.",
+        "it": "という dopo un nome vuol dire «che si chiama»: 「ひまわり」という喫茶店, «un bar che si chiama Himawari». È il と delle citazioni più 言う, e resta così anche quando la frase è al passato. 「ひまわり」と言った喫茶店 sarebbe «il bar che ha detto \"Himawari\"». が言う e を言う non citano un nome: le citazioni vogliono と."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名前を示す「という」",
+      "prompt": {
+        "en": "You point at an object: \"What is this called in Japanese?\" Which particle goes in the gap?",
+        "it": "Indichi un oggetto: «Come si dice questo in giapponese?» Quale particella va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "これは日本語で何と言いますか",
+        "kana": "これはにほんごでなんといいますか"
+      },
+      "translation": {
+        "en": "What is this called in Japanese?",
+        "it": "Come si dice questo in giapponese?"
+      },
+      "gap": {
+        "kanji": "これは日本語で何＿言いますか",
+        "kana": "これはにほんごでなん＿いいますか"
+      },
+      "answer": "と",
+      "distractors": ["を", "が", "に"],
+      "explanation": {
+        "en": "To ask what something is called: 何と言いますか, literally \"say it as what?\". 何 is the word you are looking for, and と presents it like a quote, as in 「ありがとう」と言った. 何を言いますか would be \"what are you going to say?\", another question. が and に do not go here.",
+        "it": "Per chiedere come si chiama una cosa: 何と言いますか, alla lettera «la si dice come cosa?». 何 è la parola che cerchi, e と la presenta come una citazione, come in 「ありがとう」と言った. 何を言いますか sarebbe «cosa dirà?», un'altra domanda. が e に qui non vanno."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名前を示す「という」",
+      "prompt": {
+        "en": "\"There was a phone call from someone called Tanaka.\" Which part means \"called\"?",
+        "it": "«Ha telefonato una persona che si chiama Tanaka.» Quale parte vuol dire «che si chiama»?"
+      },
+      "sentence": {
+        "kanji": "田中という人から電話があった",
+        "kana": "たなかというひとからでんわがあった"
+      },
+      "translation": {
+        "en": "There was a phone call from someone called Tanaka.",
+        "it": "Ha telefonato una persona che si chiama Tanaka."
+      },
+      "glosses": [
+        { "text": "田中", "reading": "たなか", "meaning": { "en": "Tanaka", "it": "Tanaka" } },
+        { "text": "という", "meaning": { "en": "called", "it": "che si chiama" } },
+        { "text": "人から", "reading": "ひとから", "meaning": { "en": "from a person (から: the starting point)", "it": "da una persona (から: il punto di partenza)" } },
+        { "text": "電話が", "reading": "でんわが", "meaning": { "en": "a phone call (が: the subject)", "it": "una telefonata (が: il soggetto)" } },
+        { "text": "あった", "meaning": { "en": "there was", "it": "c'è stata" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select という. 田中という人 is \"a person called Tanaka\": you say it when you don't know them and only know the name. Of a friend you would simply say 田中さんから電話があった.",
+        "it": "Seleziona という. 田中という人 è «una persona che si chiama Tanaka»: si dice quando non la conosci e sai solo il nome. Di un amico diresti semplicemente 田中さんから電話があった."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名前を示す「という」",
+      "prompt": {
+        "en": "Build: \"Near the station there is a bakery called Midori.\"",
+        "it": "Componi: «Vicino alla stazione c'è una panetteria che si chiama Midori.»"
+      },
+      "sentence": {
+        "kanji": "駅の近くに「みどり」というパン屋がある",
+        "kana": "えきのちかくに「みどり」というパンやがある"
+      },
+      "translation": {
+        "en": "Near the station there is a bakery called Midori.",
+        "it": "Vicino alla stazione c'è una panetteria che si chiama Midori."
+      },
+      "glosses": [
+        { "text": "駅の近くに", "reading": "えきのちかくに", "meaning": { "en": "near the station (に: where it is)", "it": "vicino alla stazione (に: dove si trova)" } },
+        { "text": "「みどり」", "meaning": { "en": "Midori", "it": "Midori" } },
+        { "text": "という", "meaning": { "en": "called", "it": "che si chiama" } },
+        { "text": "パン屋が", "reading": "パンやが", "meaning": { "en": "a bakery (が: the subject)", "it": "una panetteria (が: il soggetto)" } },
+        { "text": "ある", "meaning": { "en": "there is", "it": "c'è" } }
+      ],
+      "answer": ["駅の近くに", "「みどり」", "という", "パン屋が", "ある"],
+      "alsoAccepted": [["「みどり」", "という", "パン屋が", "駅の近くに", "ある"]],
+      "explanation": {
+        "en": "という sits between the name and the thing that bears it: 「みどり」というパン屋, \"a bakery called Midori\". These three pieces stay together, in this order, before ある. 駅の近くに says where it is and also sits before ある: \"「みどり」というパン屋が駅の近くにある\" is also correct.",
+        "it": "という sta fra il nome e la cosa che lo porta: 「みどり」というパン屋, «una panetteria che si chiama Midori». Questi tre pezzi stanno insieme, in quest'ordine, prima di ある. Anche 駅の近くに, che dice dove si trova, sta prima di ある: va bene anche «「みどり」というパン屋が駅の近くにある»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "口語の「って」",
+      "prompt": {
+        "en": "You tell a friend: \"Yesterday I met a girl called Yuki.\" What goes in the gap?",
+        "it": "Lo racconti a un amico: «Ieri ho conosciuto una ragazza che si chiama Yuki.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "昨日、「ゆき」って子に会った",
+        "kana": "きのう、「ゆき」ってこにあった"
+      },
+      "translation": {
+        "en": "Yesterday I met a girl called Yuki.",
+        "it": "Ieri ho conosciuto una ragazza che si chiama Yuki."
+      },
+      "gap": {
+        "kanji": "昨日、「ゆき」＿子に会った",
+        "kana": "きのう、「ゆき」＿こにあった"
+      },
+      "answer": "って",
+      "distractors": ["を", "で", "に"],
+      "explanation": {
+        "en": "Among friends, という often shrinks to って: 「ゆき」って子 is 「ゆき」という子, \"a girl called Yuki\". It is the same quote, said quickly. を, で and に cannot join a name to a noun.",
+        "it": "Fra amici という spesso si accorcia in って: 「ゆき」って子 è 「ゆき」という子, «una ragazza che si chiama Yuki». È la stessa citazione, detta in fretta. を, で e に non possono legare un nome a un nome."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "口語の「って」",
+      "prompt": {
+        "en": "Among friends: \"Summer in Japan is really hot, isn't it.\" Which part does the job of は here?",
+        "it": "Fra amici: «L'estate in Giappone è proprio calda, eh.» Quale parte fa qui il lavoro di は?"
+      },
+      "sentence": {
+        "kanji": "日本の夏って本当に暑いね",
+        "kana": "にほんのなつってほんとうにあついね"
+      },
+      "translation": {
+        "en": "Summer in Japan is really hot, isn't it.",
+        "it": "L'estate in Giappone è proprio calda, eh."
+      },
+      "glosses": [
+        { "text": "日本の夏", "reading": "にほんのなつ", "meaning": { "en": "summer in Japan", "it": "l'estate in Giappone" } },
+        { "text": "って", "meaning": { "en": "(the topic, casual)", "it": "(il tema, colloquiale)" } },
+        { "text": "本当に", "reading": "ほんとうに", "meaning": { "en": "really", "it": "proprio" } },
+        { "text": "暑いね", "reading": "あついね", "meaning": { "en": "is hot, isn't it", "it": "è calda, eh" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select って. Among friends って can take the place of は: it names what you are about to talk about, \"summer in Japan, now…\", and then you say something about it. Only って works this way, and only in casual speech: と or という cannot replace は.",
+        "it": "Seleziona って. Fra amici って può prendere il posto di は: nomina la cosa di cui stai per parlare, «l'estate in Giappone, ecco…», e poi ne dici qualcosa. Così funziona solo って, e solo nel parlato fra amici: と o という non possono sostituire は."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "口語の「って」",
+      "prompt": {
+        "en": "Chatting with a friend: \"My brother said he can't come tomorrow.\" What goes in the gap?",
+        "it": "Chiacchierando con un amico: «Mio fratello ha detto che domani non può venire.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "兄は明日来られないって言っていた",
+        "kana": "あにはあしたこられないっていっていた"
+      },
+      "translation": {
+        "en": "My brother said he can't come tomorrow.",
+        "it": "Mio fratello ha detto che domani non può venire."
+      },
+      "gap": {
+        "kanji": "兄は明日来られない＿言っていた",
+        "kana": "あにはあしたこられない＿いっていた"
+      },
+      "answer": "って",
+      "distractors": ["を", "が", "に"],
+      "explanation": {
+        "en": "In casual speech the と of quotes often becomes って: 来られないって言っていた is 来られないと言っていた, \"he said he can't come\". を, が and に do not mark what someone said: what is said takes と, or って among friends.",
+        "it": "Nel parlato fra amici il と delle citazioni diventa spesso って: 来られないって言っていた è 来られないと言っていた, «ha detto che non può venire». を, が e に non indicano cosa ha detto qualcuno: quello che si dice prende と, o って fra amici."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "口語の「って」",
+      "prompt": {
+        "en": "Build, as you would say it to a friend: \"This book is really interesting, you know.\"",
+        "it": "Componi, come lo diresti a un amico: «Questo libro è davvero interessante, sai.»"
+      },
+      "sentence": {
+        "kanji": "この本ってすごくおもしろいよ",
+        "kana": "このほんってすごくおもしろいよ"
+      },
+      "translation": {
+        "en": "This book is really interesting, you know.",
+        "it": "Questo libro è davvero interessante, sai."
+      },
+      "glosses": [
+        { "text": "この本", "reading": "このほん", "meaning": { "en": "this book", "it": "questo libro" } },
+        { "text": "って", "meaning": { "en": "(the topic, casual)", "it": "(il tema, colloquiale)" } },
+        { "text": "すごく", "meaning": { "en": "really", "it": "davvero" } },
+        { "text": "おもしろいよ", "meaning": { "en": "is interesting, you know", "it": "è interessante, sai" } }
+      ],
+      "answer": ["この本", "って", "すごく", "おもしろいよ"],
+      "explanation": {
+        "en": "って takes the place of は and sits right after what you are talking about: この本って, \"this book, now…\". すごく describes おもしろい and sits right before it; よ at the end tells your friend something they may not know.",
+        "it": "って prende il posto di は e sta subito dopo la cosa di cui parli: この本って, «questo libro, ecco…». すごく descrive おもしろい e sta subito prima; よ in fondo dice all'amico una cosa che forse non sa."
+      }
+    }
+  ]
+}

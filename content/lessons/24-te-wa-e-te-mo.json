@@ -1,0 +1,594 @@
+{
+  "order": 24,
+  "title": {
+    "en": "Permission, prohibition and \"even if\": てもいい, てはいけない, ても, なくてもいい",
+    "it": "Permesso, divieto e «anche se»: てもいい, てはいけない, ても, なくてもいい"
+  },
+  "video": "qV-TZbsH1kI",
+  "grammarPoints": ["許可の「てもいい」", "禁止の「てはいけない」", "逆接の「ても」", "不要の「なくてもいい」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "許可の「てもいい」",
+      "prompt": {
+        "en": "At a friend's place it starts raining: \"May I borrow this umbrella?\" What goes in the gap?",
+        "it": "A casa di un amico comincia a piovere: «Posso prendere in prestito quest'ombrello?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "この傘を借りてもいいですか",
+        "kana": "このかさをかりてもいいですか"
+      },
+      "translation": {
+        "en": "May I borrow this umbrella?",
+        "it": "Posso prendere in prestito quest'ombrello?"
+      },
+      "glosses": [
+        { "text": "借りてもいい", "reading": "かりてもいい" },
+        { "text": "借りるもいい", "reading": "かりるもいい" },
+        { "text": "借りてはいい", "reading": "かりてはいい" },
+        { "text": "借りたもいい", "reading": "かりたもいい" }
+      ],
+      "gap": {
+        "kanji": "この傘を＿ですか",
+        "kana": "このかさを＿ですか"
+      },
+      "answer": "借りてもいい",
+      "distractors": ["借りるもいい", "借りてはいい", "借りたもいい"],
+      "explanation": {
+        "en": "To ask for permission: the verb in て + も + いい. 借りる → 借りて + もいい: \"is it fine even if I borrow it?\". This も is the same \"also\" from lesson 16. 借りるもいい and 借りたもいい attach も to the wrong form: it needs the て-form. 借りてはいい is not said: て + は is for forbidding (借りてはいけない), not for allowing.",
+        "it": "Per chiedere il permesso: il verbo in て + も + いい. 借りる → 借りて + もいい: «va bene anche se lo prendo in prestito?». も è la stessa «anche» della lezione 16. 借りるもいい e 借りたもいい attaccano も alla forma sbagliata: serve quella in て. 借りてはいい non si dice: て + は serve a vietare (借りてはいけない), non a permettere."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "許可の「てもいい」",
+      "prompt": {
+        "en": "On the train, to the person next to the empty seat: \"May I sit here?\" What goes in the gap?",
+        "it": "In treno, a chi è accanto al posto libero: «Posso sedermi qui?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "ここに座ってもいいですか",
+        "kana": "ここにすわってもいいですか"
+      },
+      "translation": {
+        "en": "May I sit here?",
+        "it": "Posso sedermi qui?"
+      },
+      "gap": {
+        "kanji": "ここに座って＿いいですか",
+        "kana": "ここにすわって＿いいですか"
+      },
+      "answer": "も",
+      "distractors": ["は", "を", "が"],
+      "explanation": {
+        "en": "て + も + いい is permission: 座ってもいい, \"it's fine if I sit\". With は you forbid instead (座ってはいけない), and は does not go with いい. を and が do not go after a て-form: they mark a noun as object or subject, and 座って is not a noun.",
+        "it": "て + も + いい è il permesso: 座ってもいい, «va bene se mi siedo». Con は invece si vieta (座ってはいけない), e は con いい non va. を e が dopo la forma in て non vanno: segnano un nome come oggetto o soggetto, e 座って non è un nome."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "許可の「てもいい」",
+      "prompt": {
+        "en": "\"You can use this computer.\" Which particle, after the て-form, gives the permission?",
+        "it": "«Puoi usare questo computer.» Quale particella, dopo la forma in て, dà il permesso?"
+      },
+      "sentence": {
+        "kanji": "このパソコンを使ってもいいです",
+        "kana": "このパソコンをつかってもいいです"
+      },
+      "translation": {
+        "en": "You can use this computer.",
+        "it": "Puoi usare questo computer."
+      },
+      "glosses": [
+        { "text": "このパソコンを", "meaning": { "en": "this computer (を: the object)", "it": "questo computer (を: l'oggetto)" } },
+        { "text": "使って", "reading": "つかって", "meaning": { "en": "use (て-form)", "it": "usare (forma in て)" } },
+        { "text": "も", "meaning": { "en": "also, even", "it": "anche" } },
+        { "text": "いいです", "meaning": { "en": "is fine", "it": "va bene" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select も. 使って + も + いい: \"it's fine even if you use it\", that is \"you can use it\". It is the も of \"also\": it puts the action among the things that are fine. With は in its place it would be a prohibition: 使ってはいけません.",
+        "it": "Seleziona も. 使って + も + いい: «va bene anche se lo usi», cioè «puoi usarlo». È la も di «anche»: mette l'azione fra le cose che vanno bene. Con は al suo posto sarebbe un divieto: 使ってはいけません."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "許可の「てもいい」",
+      "prompt": {
+        "en": "Build, at a museum: \"May I take photos here?\"",
+        "it": "Componi, in un museo: «Posso fare foto qui?»"
+      },
+      "sentence": {
+        "kanji": "ここで写真を撮ってもいいですか",
+        "kana": "ここでしゃしんをとってもいいですか"
+      },
+      "translation": {
+        "en": "May I take photos here?",
+        "it": "Posso fare foto qui?"
+      },
+      "glosses": [
+        { "text": "ここで", "meaning": { "en": "here (で: where it happens)", "it": "qui (で: dove si fa)" } },
+        { "text": "写真を", "reading": "しゃしんを", "meaning": { "en": "photos (を: the object)", "it": "le foto (を: l'oggetto)" } },
+        { "text": "撮っても", "reading": "とっても", "meaning": { "en": "even if (I) take", "it": "anche se faccio" } },
+        { "text": "いいですか", "meaning": { "en": "is it fine?", "it": "va bene?" } }
+      ],
+      "answer": ["ここで", "写真を", "撮っても", "いいですか"],
+      "alsoAccepted": [["写真を", "ここで", "撮っても", "いいですか"]],
+      "explanation": {
+        "en": "撮る → 撮って + も, then いいですか: \"may I take them?\". いいですか closes the question and goes at the end, with 撮っても right before it. ここで (\"here\", where the action happens) and 写真を (\"photos\") sit before 撮っても and can swap places: \"写真をここで撮ってもいいですか\" is also correct.",
+        "it": "撮る → 撮って + も, poi いいですか: «posso farle?». いいですか chiude la domanda e va in fondo, con 撮っても subito prima. ここで («qui», dove si fa l'azione) e 写真を («le foto») stanno prima di 撮っても e possono scambiarsi: va bene anche «写真をここで撮ってもいいですか»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "許可の「てもいい」",
+      "prompt": {
+        "en": "Build what your boss tells you: \"You can go home early today.\"",
+        "it": "Componi quello che ti dice il capo: «Oggi puoi andare a casa presto.»"
+      },
+      "sentence": {
+        "kanji": "今日は早く帰ってもいいです",
+        "kana": "きょうははやくかえってもいいです"
+      },
+      "translation": {
+        "en": "You can go home early today.",
+        "it": "Oggi puoi andare a casa presto."
+      },
+      "glosses": [
+        { "text": "今日は", "reading": "きょうは", "meaning": { "en": "today (は: the topic)", "it": "oggi (は: il tema)" } },
+        { "text": "早く", "reading": "はやく", "meaning": { "en": "early", "it": "presto" } },
+        { "text": "帰っても", "reading": "かえっても", "meaning": { "en": "even if (you) go home", "it": "anche se torni a casa" } },
+        { "text": "いいです", "meaning": { "en": "is fine", "it": "va bene" } }
+      ],
+      "answer": ["今日は", "早く", "帰っても", "いいです"],
+      "explanation": {
+        "en": "帰る → 帰って + もいいです: \"you can go home\". 早く describes 帰っても and sits right before it: \"go home early\". 今日は, the topic, comes first; いいです closes the sentence.",
+        "it": "帰る → 帰って + もいいです: «puoi tornare a casa». 早く descrive 帰っても e sta subito prima: «tornare presto». 今日は, il tema, va per primo; いいです chiude la frase."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "禁止の「てはいけない」",
+      "prompt": {
+        "en": "A sign at the station: \"Smoking is not allowed here.\" What goes in the gap?",
+        "it": "Un cartello in stazione: «Qui è vietato fumare.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "ここでたばこを吸ってはいけません",
+        "kana": "ここでたばこをすってはいけません"
+      },
+      "translation": {
+        "en": "Smoking is not allowed here.",
+        "it": "Qui è vietato fumare."
+      },
+      "glosses": [
+        { "text": "吸ってはいけません", "reading": "すってはいけません" },
+        { "text": "吸ってもいいです", "reading": "すってもいいです" },
+        { "text": "吸うはいけません", "reading": "すうはいけません" },
+        { "text": "吸ってはいけます", "reading": "すってはいけます" }
+      ],
+      "gap": {
+        "kanji": "ここでたばこを＿",
+        "kana": "ここでたばこを＿"
+      },
+      "answer": "吸ってはいけません",
+      "distractors": ["吸ってもいいです", "吸うはいけません", "吸ってはいけます"],
+      "explanation": {
+        "en": "To forbid: the verb in て + は + いけません (among friends いけない or だめ). 吸う → 吸って + はいけません: \"smoking, here, is not on\". 吸ってもいいです is the opposite, the permission. 吸うはいけません attaches は to the wrong form: it needs the て-form. A prohibition needs the \"not\": いけません, not いけます.",
+        "it": "Per vietare: il verbo in て + は + いけません (fra amici いけない o だめ). 吸う → 吸って + はいけません: «fumare, qui, non va». 吸ってもいいです è il contrario, il permesso. 吸うはいけません attacca は alla forma sbagliata: serve quella in て. Il divieto vuole il «non»: いけません, non いけます."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "禁止の「てはいけない」",
+      "prompt": {
+        "en": "\"You mustn't park here.\" Which particle, after the て-form, makes it a prohibition?",
+        "it": "«Qui non si può parcheggiare.» Quale particella, dopo la forma in て, fa il divieto?"
+      },
+      "sentence": {
+        "kanji": "ここに車を止めてはいけません",
+        "kana": "ここにくるまをとめてはいけません"
+      },
+      "translation": {
+        "en": "You mustn't park here.",
+        "it": "Qui non si può parcheggiare."
+      },
+      "glosses": [
+        { "text": "ここに", "meaning": { "en": "here (に: where it ends up)", "it": "qui (に: dove finisce)" } },
+        { "text": "車を", "reading": "くるまを", "meaning": { "en": "the car (を: the object)", "it": "la macchina (を: l'oggetto)" } },
+        { "text": "止めて", "reading": "とめて", "meaning": { "en": "park (て-form)", "it": "parcheggiare (forma in て)" } },
+        { "text": "は", "meaning": { "en": "(the topic)", "it": "(il tema)" } },
+        { "text": "いけません", "meaning": { "en": "is not allowed", "it": "non va" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select は. 止めて + は + いけません: \"parking here is not allowed\". It is the は of the topic (lesson 3): it singles out the action and says that it is not on. With も, 止めてもいいです, the same action becomes allowed.",
+        "it": "Seleziona は. 止めて + は + いけません: «parcheggiare qui non va». È la は del tema (lezione 3): prende l'azione da sola e ne dice che non va. Con も, 止めてもいいです, la stessa azione diventa permessa."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "禁止の「てはいけない」",
+      "prompt": {
+        "en": "Build: \"You mustn't use your phone during class.\"",
+        "it": "Componi: «Durante la lezione non si usa il telefono.»"
+      },
+      "sentence": {
+        "kanji": "授業中にスマホを使ってはいけません",
+        "kana": "じゅぎょうちゅうにスマホをつかってはいけません"
+      },
+      "translation": {
+        "en": "You mustn't use your phone during class.",
+        "it": "Durante la lezione non si usa il telefono."
+      },
+      "glosses": [
+        { "text": "授業中に", "reading": "じゅぎょうちゅうに", "meaning": { "en": "during class", "it": "durante la lezione" } },
+        { "text": "スマホを", "meaning": { "en": "the phone (を: the object)", "it": "il telefono (を: l'oggetto)" } },
+        { "text": "使っては", "reading": "つかっては", "meaning": { "en": "using (て + は)", "it": "usare (て + は)" } },
+        { "text": "いけません", "meaning": { "en": "is not allowed", "it": "non va" } }
+      ],
+      "answer": ["授業中に", "スマホを", "使っては", "いけません"],
+      "alsoAccepted": [["スマホを", "授業中に", "使っては", "いけません"]],
+      "explanation": {
+        "en": "使う → 使って + は + いけません: the prohibition closes the sentence, with 使っては right before いけません. 授業中に (\"during class\", the time) and スマホを (\"the phone\") sit before 使っては and can swap places: \"スマホを授業中に使ってはいけません\" is also correct.",
+        "it": "使う → 使って + は + いけません: il divieto chiude la frase, con 使っては subito prima di いけません. 授業中に («durante la lezione», il tempo) e スマホを («il telefono») stanno prima di 使っては e possono scambiarsi: va bene anche «スマホを授業中に使ってはいけません»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "禁止の「てはいけない」",
+      "prompt": {
+        "en": "At the museum a mother tells her child: \"Don't touch that painting!\" She speaks casually: which shortened form goes in the gap?",
+        "it": "Al museo una mamma dice al figlio: «Non toccare quel quadro!» Parla in modo familiare: quale forma accorciata va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "その絵に触っちゃだめ",
+        "kana": "そのえにさわっちゃだめ"
+      },
+      "translation": {
+        "en": "Don't touch that painting!",
+        "it": "Non toccare quel quadro!"
+      },
+      "glosses": [
+        { "text": "触っちゃ", "reading": "さわっちゃ", "base": { "text": "触る", "reading": "さわる" } },
+        { "text": "触っじゃ", "reading": "さわっじゃ", "base": { "text": "触る", "reading": "さわる" } },
+        { "text": "触ちゃ", "reading": "さわちゃ", "base": { "text": "触る", "reading": "さわる" } },
+        { "text": "触りちゃ", "reading": "さわりちゃ", "base": { "text": "触る", "reading": "さわる" } }
+      ],
+      "gap": {
+        "kanji": "その絵に＿だめ",
+        "kana": "そのえに＿だめ"
+      },
+      "answer": "触っちゃ",
+      "distractors": ["触っじゃ", "触ちゃ", "触りちゃ"],
+      "explanation": {
+        "en": "In speech ては is often shortened to ちゃ: 触っては → 触っちゃ. It starts from the て-form, 触る → 触って, and て + は becomes ちゃ. So 触っちゃだめ = 触ってはだめ, \"don't touch\". 触ちゃ drops the っ, and 触りちゃ starts from the wrong form. じゃ is only for verbs whose て-form ends in で.",
+        "it": "Parlando, ては si accorcia spesso in ちゃ: 触っては → 触っちゃ. Si parte dalla forma in て, 触る → 触って, e て + は diventa ちゃ. Quindi 触っちゃだめ = 触ってはだめ, «non toccare». 触ちゃ perde la っ, e 触りちゃ parte dalla forma sbagliata. じゃ è solo per i verbi la cui forma in て finisce in で."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "禁止の「てはいけない」",
+      "prompt": {
+        "en": "To a friend: \"It's still hot, don't drink it!\" Said casually, which shortened form goes in the gap?",
+        "it": "A un amico: «È ancora caldo, non berlo!» Detto in modo familiare, quale forma accorciata va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "まだ熱いから、飲んじゃだめ",
+        "kana": "まだあついから、のんじゃだめ"
+      },
+      "translation": {
+        "en": "It's still hot, don't drink it!",
+        "it": "È ancora caldo, non berlo!"
+      },
+      "glosses": [
+        { "text": "飲んじゃ", "reading": "のんじゃ", "base": { "text": "飲む", "reading": "のむ" } },
+        { "text": "飲んちゃ", "reading": "のんちゃ", "base": { "text": "飲む", "reading": "のむ" } },
+        { "text": "飲みちゃ", "reading": "のみちゃ", "base": { "text": "飲む", "reading": "のむ" } },
+        { "text": "飲んでじゃ", "reading": "のんでじゃ", "base": { "text": "飲む", "reading": "のむ" } }
+      ],
+      "gap": {
+        "kanji": "まだ熱いから、＿だめ",
+        "kana": "まだあついから、＿だめ"
+      },
+      "answer": "飲んじゃ",
+      "distractors": ["飲んちゃ", "飲みちゃ", "飲んでじゃ"],
+      "explanation": {
+        "en": "飲む → 飲んで: the て-form ends in で, and では is shortened to じゃ: 飲んでは → 飲んじゃ. 飲んちゃ uses ちゃ, which goes with て-forms ending in て (触って → 触っちゃ). 飲みちゃ starts from the wrong form. 飲んでじゃ keeps で and adds じゃ, but じゃ already takes the place of では.",
+        "it": "飲む → 飲んで: la forma in て finisce in で, e では si accorcia in じゃ: 飲んでは → 飲んじゃ. 飲んちゃ usa ちゃ, che va con le forme che finiscono in て (触って → 触っちゃ). 飲みちゃ parte dalla forma sbagliata. 飲んでじゃ tiene で e aggiunge じゃ, ma じゃ prende già il posto di では."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "\"Even if it rains, the match is on.\" Which form of 降る (\"fall\", of rain) goes in the gap?",
+        "it": "«Anche se piove, la partita si fa.» Quale forma di 降る («cadere», della pioggia) va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "雨が降っても、試合はあります",
+        "kana": "あめがふっても、しあいはあります"
+      },
+      "translation": {
+        "en": "Even if it rains, the match is on.",
+        "it": "Anche se piove, la partita si fa."
+      },
+      "glosses": [
+        { "text": "降っても", "reading": "ふっても" },
+        { "text": "降っては", "reading": "ふっては" },
+        { "text": "降るも", "reading": "ふるも" },
+        { "text": "降ったも", "reading": "ふったも" }
+      ],
+      "gap": {
+        "kanji": "雨が＿、試合はあります",
+        "kana": "あめが＿、しあいはあります"
+      },
+      "answer": "降っても",
+      "distractors": ["降っては", "降るも", "降ったも"],
+      "explanation": {
+        "en": "Verb in て + も = \"even if\": 降って + も, \"even if it rains\". What follows is something you might not expect: the match goes ahead anyway. 降っては, with は, is the form used to forbid (降ってはいけない): it does not say \"even if\". 降るも and 降ったも attach も to the wrong form.",
+        "it": "Verbo in て + も = «anche se»: 降って + も, «anche se piove». Quello che segue è una cosa che non ti aspetteresti: la partita si fa lo stesso. 降っては, con は, è la forma dei divieti (降ってはいけない): non dice «anche se». 降るも e 降ったも attaccano も alla forma sbagliata."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "\"Even if it's expensive, I'll buy this bag.\" What goes in the gap?",
+        "it": "«Anche se è cara, questa borsa la compro.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "高くても、このかばんを買います",
+        "kana": "たかくても、このかばんをかいます"
+      },
+      "translation": {
+        "en": "Even if it's expensive, I'll buy this bag.",
+        "it": "Anche se è cara, questa borsa la compro."
+      },
+      "glosses": [
+        { "text": "高くても", "reading": "たかくても" },
+        { "text": "高いでも", "reading": "たかいでも" },
+        { "text": "高いても", "reading": "たかいても" },
+        { "text": "高でも", "reading": "たかでも" }
+      ],
+      "gap": {
+        "kanji": "＿、このかばんを買います",
+        "kana": "＿、このかばんをかいます"
+      },
+      "answer": "高くても",
+      "distractors": ["高いでも", "高いても", "高でも"],
+      "explanation": {
+        "en": "With an い-adjective, い becomes く and you add ても: 高い → 高くても, \"even if it's expensive\". It is the same く as in 高くない (lesson 7). でも goes after a noun or a な-adjective; 高いても keeps the い, and 高でも drops it without putting く in its place.",
+        "it": "Con un aggettivo in い, la い diventa く e si aggiunge ても: 高い → 高くても, «anche se è cara». È la stessa く di 高くない (lezione 7). でも va dopo un nome o un aggettivo in な; 高いても tiene la い, e 高でも la perde senza mettere く al suo posto."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "\"Even on Sundays, the shop is open.\" What goes in the gap?",
+        "it": "«Anche di domenica il negozio è aperto.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "日曜日でも、店は開いています",
+        "kana": "にちようびでも、みせはあいています"
+      },
+      "translation": {
+        "en": "Even on Sundays, the shop is open.",
+        "it": "Anche di domenica il negozio è aperto."
+      },
+      "gap": {
+        "kanji": "日曜日＿、店は開いています",
+        "kana": "にちようび＿、みせはあいています"
+      },
+      "answer": "でも",
+      "distractors": ["ても", "くても", "だも"],
+      "explanation": {
+        "en": "After a noun you use でも: で is だ (\"is\") in its て-form, and も adds \"even\". 日曜日でも, \"even though it's Sunday\". ても goes only after a verb's て-form (降っても), くても after an い-adjective (高くても). だも does not exist: to take も, だ becomes で.",
+        "it": "Dopo un nome si usa でも: で è だ («è») nella forma in て, e も aggiunge «anche». 日曜日でも, «anche se è domenica». ても va solo dopo un verbo in て (降っても), くても dopo un aggettivo in い (高くても). だも non esiste: per prendere も, だ diventa で."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "\"I studied really hard. But I failed the exam.\" What goes in the gap?",
+        "it": "«Ho studiato tantissimo. Però l'esame non l'ho passato.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "一生懸命勉強した。でも、試験に落ちた",
+        "kana": "いっしょうけんめいべんきょうした。でも、しけんにおちた"
+      },
+      "translation": {
+        "en": "I studied really hard. But I failed the exam.",
+        "it": "Ho studiato tantissimo. Però l'esame non l'ho passato."
+      },
+      "gap": {
+        "kanji": "一生懸命勉強した。＿、試験に落ちた",
+        "kana": "いっしょうけんめいべんきょうした。＿、しけんにおちた"
+      },
+      "answer": "でも",
+      "distractors": ["では", "ても", "から"],
+      "explanation": {
+        "en": "At the start of a sentence でも means \"but\": で, that is だ in its て-form, takes up the whole sentence before (\"that's how it was\"), and も adds \"even so\". では at the start of a sentence means \"well then\". ても attaches to a verb and does not stand alone. から alone cannot open a sentence.",
+        "it": "A inizio frase でも vuol dire «però»: で, cioè だ nella forma in て, riprende tutta la frase prima («è andata così»), e も aggiunge «anche così». では a inizio frase vuol dire «allora». ても si attacca a un verbo e non sta da solo. から da solo non può aprire una frase."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "\"I took the medicine, but the fever isn't going down.\" Which part says the result is not the one you'd expect?",
+        "it": "«Ho preso la medicina, ma la febbre non scende.» Quale parte dice che il risultato non è quello che ti aspetteresti?"
+      },
+      "sentence": {
+        "kanji": "薬を飲んでも、熱が下がらない",
+        "kana": "くすりをのんでも、ねつがさがらない"
+      },
+      "translation": {
+        "en": "I took the medicine, but the fever isn't going down.",
+        "it": "Ho preso la medicina, ma la febbre non scende."
+      },
+      "glosses": [
+        { "text": "薬を", "reading": "くすりを", "meaning": { "en": "the medicine (を: the object)", "it": "la medicina (を: l'oggetto)" } },
+        { "text": "飲んで", "reading": "のんで", "meaning": { "en": "take (て-form)", "it": "prendere (forma in て)" } },
+        { "text": "も、", "meaning": { "en": "even though", "it": "anche se" } },
+        { "text": "熱が", "reading": "ねつが", "meaning": { "en": "the fever (が: the subject)", "it": "la febbre (が: il soggetto)" } },
+        { "text": "下がらない", "reading": "さがらない", "meaning": { "en": "doesn't go down", "it": "non scende" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select も. 飲んで on its own would simply join the two facts (lesson 13). With も, 飲んでも, \"even though I took it\": what follows goes against what you'd expect, the fever does not go down.",
+        "it": "Seleziona も. 飲んで da solo unirebbe semplicemente i due fatti (lezione 13). Con も, 飲んでも, «anche se l'ho presa»: quello che segue va contro le attese, la febbre non scende."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "\"Even a child can read this book.\" Which part means \"even\"?",
+        "it": "«Questo libro lo sa leggere anche un bambino.» Quale parte vuol dire «anche»?"
+      },
+      "sentence": {
+        "kanji": "子どもでもこの本は読めます",
+        "kana": "こどもでもこのほんはよめます"
+      },
+      "translation": {
+        "en": "Even a child can read this book.",
+        "it": "Questo libro lo sa leggere anche un bambino."
+      },
+      "glosses": [
+        { "text": "子ども", "reading": "こども", "meaning": { "en": "a child", "it": "un bambino" } },
+        { "text": "でも", "meaning": { "en": "even (if it is)", "it": "anche (se è)" } },
+        { "text": "この本は", "reading": "このほんは", "meaning": { "en": "this book (は: the topic)", "it": "questo libro (は: il tema)" } },
+        { "text": "読めます", "reading": "よめます", "meaning": { "en": "can read", "it": "sa leggere" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select でも. After a noun, でも = で (だ in its て-form) + も: \"even if it's a child\", that is \"even a child\". 読めます is the potential form (lesson 12): \"can read\".",
+        "it": "Seleziona でも. Dopo un nome, でも = で (だ nella forma in て) + も: «anche se è un bambino», cioè «perfino un bambino». 読めます è la forma potenziale (lezione 12): «sa leggere»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "逆接の「ても」",
+      "prompt": {
+        "en": "Build: \"Tomorrow I'm going out, even if it rains.\"",
+        "it": "Componi: «Domani esco, anche se piove.»"
+      },
+      "sentence": {
+        "kanji": "明日は雨が降っても出かけます",
+        "kana": "あしたはあめがふってもでかけます"
+      },
+      "translation": {
+        "en": "Tomorrow I'm going out, even if it rains.",
+        "it": "Domani esco, anche se piove."
+      },
+      "glosses": [
+        { "text": "明日は", "reading": "あしたは", "meaning": { "en": "tomorrow (は: the topic)", "it": "domani (は: il tema)" } },
+        { "text": "雨が", "reading": "あめが", "meaning": { "en": "rain (が: the subject)", "it": "la pioggia (が: il soggetto)" } },
+        { "text": "降っても", "reading": "ふっても", "meaning": { "en": "even if (it) falls", "it": "anche se cade" } },
+        { "text": "出かけます", "reading": "でかけます", "meaning": { "en": "(I) go out", "it": "esco" } }
+      ],
+      "answer": ["明日は", "雨が", "降っても", "出かけます"],
+      "alsoAccepted": [["雨が", "降っても", "明日は", "出かけます"]],
+      "explanation": {
+        "en": "雨が goes right before 降っても: it is its subject, and together they make \"even if it rains\". 出かけます closes the sentence. 明日は, the topic, usually opens the sentence; \"雨が降っても明日は出かけます\" is also correct, with the ても piece first.",
+        "it": "雨が va subito prima di 降っても: è il suo soggetto, e insieme fanno «anche se piove». 出かけます chiude la frase. 明日は, il tema, di solito apre la frase; va bene anche «雨が降っても明日は出かけます», con il pezzo in ても per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "不要の「なくてもいい」",
+      "prompt": {
+        "en": "Your boss tells you: \"You don't have to come tomorrow.\" Which form of 来る (\"come\") goes in the gap?",
+        "it": "Il capo ti dice: «Domani non c'è bisogno che tu venga.» Quale forma di 来る («venire») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "明日は来なくてもいいです",
+        "kana": "あしたはこなくてもいいです"
+      },
+      "translation": {
+        "en": "You don't have to come tomorrow.",
+        "it": "Domani non c'è bisogno che tu venga."
+      },
+      "glosses": [
+        { "text": "来なくても", "reading": "こなくても" },
+        { "text": "来なくては", "reading": "こなくては" },
+        { "text": "来ないても", "reading": "こないても" },
+        { "text": "来るなくても", "reading": "くるなくても" }
+      ],
+      "gap": {
+        "kanji": "明日は＿いいです",
+        "kana": "あしたは＿いいです"
+      },
+      "answer": "来なくても",
+      "distractors": ["来なくては", "来ないても", "来るなくても"],
+      "explanation": {
+        "en": "\"No need\": the ない-form, with ない turning into なく, + ても + いい. 来ない → 来なく + てもいい: \"it's fine even if you don't come\". ない behaves like an い-adjective: なく, like 高く. 来なくては does not go with いい; 来ないても keeps the い; 来るなくても attaches ない to the dictionary form, but the \"not\" of 来る is 来ない.",
+        "it": "«Non serve»: la forma in ない, con ない che diventa なく, + ても + いい. 来ない → 来なく + てもいい: «va bene anche se non vieni». ない si comporta come un aggettivo in い: なく, come 高く. 来なくては con いい non va; 来ないても tiene la い; 来るなくても attacca ない alla forma base, ma il «non» di 来る è 来ない."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "不要の「なくてもいい」",
+      "prompt": {
+        "en": "At a friend's house, the host says: \"You don't need to take your shoes off.\" What goes in the gap?",
+        "it": "A casa di un amico, il padrone di casa dice: «Non c'è bisogno di togliersi le scarpe.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "靴は脱がなくてもいいです",
+        "kana": "くつはぬがなくてもいいです"
+      },
+      "translation": {
+        "en": "You don't need to take your shoes off.",
+        "it": "Non c'è bisogno di togliersi le scarpe."
+      },
+      "glosses": [
+        { "text": "脱がなくても", "reading": "ぬがなくても", "base": { "text": "脱ぐ", "reading": "ぬぐ" } },
+        { "text": "脱いでも", "reading": "ぬいでも", "base": { "text": "脱ぐ", "reading": "ぬぐ" } },
+        { "text": "脱いでは", "reading": "ぬいでは", "base": { "text": "脱ぐ", "reading": "ぬぐ" } },
+        { "text": "脱がなくては", "reading": "ぬがなくては", "base": { "text": "脱ぐ", "reading": "ぬぐ" } }
+      ],
+      "gap": {
+        "kanji": "靴は＿いいです",
+        "kana": "くつは＿いいです"
+      },
+      "answer": "脱がなくても",
+      "distractors": ["脱いでも", "脱いでは", "脱がなくては"],
+      "explanation": {
+        "en": "脱ぐ → 脱がない → 脱がなく + てもいい: \"it's fine even if you don't take them off\", that is \"no need\". 脱いでもいい is a permission, \"you may take them off\", which is not what the host says. 脱いでは goes with いけない, to forbid, and 脱がなくては does not go with いい.",
+        "it": "脱ぐ → 脱がない → 脱がなく + てもいい: «va bene anche se non le togli», cioè «non serve». 脱いでもいい è un permesso, «puoi toglierle», che non è quello che dice il padrone di casa. 脱いでは va con いけない, per vietare, e 脱がなくては con いい non va."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "不要の「なくてもいい」",
+      "prompt": {
+        "en": "Build, at the library: \"You don't have to return this book today.\"",
+        "it": "Componi, in biblioteca: «Questo libro non serve restituirlo oggi.»"
+      },
+      "sentence": {
+        "kanji": "この本は今日返さなくてもいいです",
+        "kana": "このほんはきょうかえさなくてもいいです"
+      },
+      "translation": {
+        "en": "You don't have to return this book today.",
+        "it": "Questo libro non serve restituirlo oggi."
+      },
+      "glosses": [
+        { "text": "この本は", "reading": "このほんは", "meaning": { "en": "this book (は: the topic)", "it": "questo libro (は: il tema)" } },
+        { "text": "今日", "reading": "きょう", "meaning": { "en": "today", "it": "oggi" } },
+        { "text": "返さなくても", "reading": "かえさなくても", "meaning": { "en": "even if (you) don't return", "it": "anche se non restituisci" } },
+        { "text": "いいです", "meaning": { "en": "is fine", "it": "va bene" } }
+      ],
+      "answer": ["この本は", "今日", "返さなくても", "いいです"],
+      "alsoAccepted": [["今日", "この本は", "返さなくても", "いいです"]],
+      "explanation": {
+        "en": "返す → 返さない → 返さなくても + いいです: \"no need to return it\". いいです closes the sentence, with 返さなくても right before it. この本は (the topic) and 今日 (the time) sit before the verb and can swap places: \"今日この本は返さなくてもいいです\" is also correct.",
+        "it": "返す → 返さない → 返さなくても + いいです: «non serve restituirlo». いいです chiude la frase, con 返さなくても subito prima. この本は (il tema) e 今日 (il tempo) stanno prima del verbo e possono scambiarsi: va bene anche «今日この本は返さなくてもいいです»."
+      }
+    }
+  ]
+}

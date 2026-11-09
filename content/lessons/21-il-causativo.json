@@ -1,0 +1,593 @@
+{
+  "order": 21,
+  "title": {
+    "en": "Making and letting someone do: せる, させる and させられる",
+    "it": "Far fare e lasciar fare: せる, させる e させられる"
+  },
+  "video": "LCvGHWbhDKw",
+  "grammarPoints": ["使役の「せる」「させる」", "使役の相手を示す「に」「を」", "許可を求める「させてください」「させてもらう」", "使役受身「させられる」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "\"The teacher made the students write an essay.\" Which form of 書く (\"write\") goes in the gap?",
+        "it": "«Il professore ha fatto scrivere un tema agli studenti.» Quale forma di 書く («scrivere») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "先生は学生に作文を書かせた",
+        "kana": "せんせいはがくせいにさくぶんをかかせた"
+      },
+      "translation": {
+        "en": "The teacher made the students write an essay.",
+        "it": "Il professore ha fatto scrivere un tema agli studenti."
+      },
+      "glosses": [
+        { "text": "書かせた", "reading": "かかせた" },
+        { "text": "書きさせた", "reading": "かきさせた" },
+        { "text": "書くさせた", "reading": "かくさせた" },
+        { "text": "書かれた", "reading": "かかれた" }
+      ],
+      "gap": {
+        "kanji": "先生は学生に作文を＿",
+        "kana": "せんせいはがくせいにさくぶんを＿"
+      },
+      "answer": "書かせた",
+      "distractors": ["書きさせた", "書くさせた", "書かれた"],
+      "explanation": {
+        "en": "To say \"make someone do\" you add せる or させる to the verb. 書く takes the same piece it uses before ない (書かない): 書か + せる = 書かせる, \"make write\"; in the past, 書かせた. There are two actions and two people: the teacher makes it happen, the students write. 書きさせた and 書くさせた attach it to the wrong form. 書かれた is \"was written\": something done to someone, not \"make do\".",
+        "it": "Per dire «far fare» si aggiunge al verbo せる o させる. 書く prende lo stesso pezzo che usa davanti a ない (書かない): 書か + せる = 書かせる, «far scrivere»; al passato, 書かせた. Le azioni sono due, e le persone pure: il professore fa fare, gli studenti scrivono. 書きさせた e 書くさせた lo attaccano alla forma sbagliata. 書かれた è «è stato scritto»: una cosa fatta a qualcuno, non «far fare»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "\"My grandfather made me learn an old song by heart.\" Which form of 覚える (\"learn by heart\") goes in the gap?",
+        "it": "«Mio nonno mi ha fatto imparare a memoria una vecchia canzone.» Quale forma di 覚える («imparare a memoria») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "祖父は私に古い歌を覚えさせた",
+        "kana": "そふはわたしにふるいうたをおぼえさせた"
+      },
+      "translation": {
+        "en": "My grandfather made me learn an old song by heart.",
+        "it": "Mio nonno mi ha fatto imparare a memoria una vecchia canzone."
+      },
+      "glosses": [
+        { "text": "覚えさせた", "reading": "おぼえさせた" },
+        { "text": "覚えせた", "reading": "おぼえせた" },
+        { "text": "覚えらせた", "reading": "おぼえらせた" },
+        { "text": "覚えられた", "reading": "おぼえられた" }
+      ],
+      "gap": {
+        "kanji": "祖父は私に古い歌を＿",
+        "kana": "そふはわたしにふるいうたを＿"
+      },
+      "answer": "覚えさせた",
+      "distractors": ["覚えせた", "覚えらせた", "覚えられた"],
+      "explanation": {
+        "en": "覚える only drops る before ない (覚えない), and verbs like this take the longer piece, させる: 覚え + させる = 覚えさせる, \"make learn\"; in the past, 覚えさせた. The short せる is only for verbs that change their last kana, like 書く → 書かせる. 覚えらせた does not exist. 覚えられた is \"could learn\" (or \"was learnt\"): nobody makes anyone do anything.",
+        "it": "覚える davanti a ない perde solo る (覚えない), e i verbi così prendono il pezzo lungo, させる: 覚え + させる = 覚えさせる, «far imparare»; al passato, 覚えさせた. La forma corta せる è solo per i verbi che cambiano l'ultimo kana, come 書く → 書かせる. 覚えらせた non esiste. 覚えられた è «sono riuscito a imparare» (o «è stato imparato»): nessuno fa fare niente a nessuno."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "\"My mother made me clean my room.\" Which form of する goes in the gap?",
+        "it": "«Mia madre mi ha fatto pulire la stanza.» Quale forma di する va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "母は私に部屋の掃除をさせた",
+        "kana": "はははわたしにへやのそうじをさせた"
+      },
+      "translation": {
+        "en": "My mother made me clean my room.",
+        "it": "Mia madre mi ha fatto pulire la stanza."
+      },
+      "gap": {
+        "kanji": "母は私に部屋の掃除を＿",
+        "kana": "はははわたしにへやのそうじを＿"
+      },
+      "answer": "させた",
+      "distractors": ["しさせた", "しせた", "された"],
+      "explanation": {
+        "en": "する is irregular: \"make do\" is simply させる; in the past, させた. 来る is the other irregular one: 来させる, read こさせる. しさせた and しせた start from し, the piece used before ます (します), which is wrong here. された is \"was done\": something done to someone.",
+        "it": "する è irregolare: «far fare» è semplicemente させる; al passato, させた. L'altro irregolare è 来る: 来させる, che si legge こさせる. しさせた e しせた partono da し, il pezzo che si usa davanti a ます (します), e qui è sbagliato. された è «è stato fatto»: una cosa fatta a qualcuno."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "\"On Sunday I let the children play in the park.\" Which form of 遊ぶ (\"play\") goes in the gap?",
+        "it": "«Domenica ho lasciato giocare i bambini al parco.» Quale forma di 遊ぶ («giocare») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "日曜日は子供たちを公園で遊ばせた",
+        "kana": "にちようびはこどもたちをこうえんであそばせた"
+      },
+      "translation": {
+        "en": "On Sunday I let the children play in the park.",
+        "it": "Domenica ho lasciato giocare i bambini al parco."
+      },
+      "glosses": [
+        { "text": "遊ばせた", "reading": "あそばせた" },
+        { "text": "遊びさせた", "reading": "あそびさせた" },
+        { "text": "遊べた", "reading": "あそべた" },
+        { "text": "遊ばれた", "reading": "あそばれた" }
+      ],
+      "gap": {
+        "kanji": "日曜日は子供たちを公園で＿",
+        "kana": "にちようびはこどもたちをこうえんで＿"
+      },
+      "answer": "遊ばせた",
+      "distractors": ["遊びさせた", "遊べた", "遊ばれた"],
+      "explanation": {
+        "en": "遊ぶ → 遊ばない → 遊ば + せる = 遊ばせる; in the past, 遊ばせた. Nobody forces children to play: here the form means \"let\". The same form says \"make\" or \"let\": the situation tells you which. 遊びさせた attaches it to the wrong form. 遊べた is \"could play\", and 遊ばれた is the form for something done to someone.",
+        "it": "遊ぶ → 遊ばない → 遊ば + せる = 遊ばせる; al passato, 遊ばせた. Nessuno costringe i bambini a giocare: qui la forma vuol dire «lasciar fare». La stessa forma dice «far fare» o «lasciar fare»: lo capisci dalla situazione. 遊びさせた la attacca alla forma sbagliata. 遊べた è «sono riusciti a giocare», e 遊ばれた è la forma per una cosa fatta a qualcuno."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "You arrive late and tell your friend: \"Sorry I'm late and kept you waiting.\" What goes in the gap?",
+        "it": "Arrivi tardi e dici al tuo amico: «Scusa il ritardo, ti ho fatto aspettare.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "遅くなって、待たせてごめん",
+        "kana": "おそくなって、またせてごめん"
+      },
+      "translation": {
+        "en": "Sorry I'm late and kept you waiting.",
+        "it": "Scusa il ritardo, ti ho fatto aspettare."
+      },
+      "glosses": [
+        { "text": "待たせて", "reading": "またせて" },
+        { "text": "待って", "reading": "まって" },
+        { "text": "待たれて", "reading": "またれて" },
+        { "text": "待ちさせて", "reading": "まちさせて" }
+      ],
+      "gap": {
+        "kanji": "遅くなって、＿ごめん",
+        "kana": "おそくなって、＿ごめん"
+      },
+      "answer": "待たせて",
+      "distractors": ["待って", "待たれて", "待ちさせて"],
+      "explanation": {
+        "en": "待つ → 待たない → 待た + せる = 待たせる, \"make wait\"; in て + ごめん: \"sorry for making you wait\". The one who waited is your friend, the one who caused it is you. 待ってごめん would be \"sorry for waiting\", as if you had waited. 待たれて is the form for something done to someone; 待ちさせて attaches せる to the wrong form. In shops you hear the polite version: お待たせしました.",
+        "it": "待つ → 待たない → 待た + せる = 待たせる, «far aspettare»; in て + ごめん: «scusa se ti ho fatto aspettare». Ad aspettare è stato il tuo amico, a causarlo sei stato tu. 待ってごめん sarebbe «scusa se ho aspettato», come se avessi aspettato tu. 待たれて è la forma per una cosa fatta a qualcuno; 待ちさせて attacca せる alla forma sbagliata. Nei negozi si sente la versione cortese: お待たせしました."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "\"The mother gave the baby its milk.\" Which part says she got the baby to drink?",
+        "it": "«La mamma ha dato il latte al bambino.» Quale parte dice che ha fatto bere il bambino?"
+      },
+      "sentence": {
+        "kanji": "母は赤ちゃんにミルクを飲ませた",
+        "kana": "はははあかちゃんにミルクをのませた"
+      },
+      "translation": {
+        "en": "The mother gave the baby its milk.",
+        "it": "La mamma ha dato il latte al bambino."
+      },
+      "glosses": [
+        { "text": "母は", "reading": "ははは", "meaning": { "en": "the mother (は: the topic)", "it": "la mamma (は: il tema)" } },
+        { "text": "赤ちゃんに", "reading": "あかちゃんに", "meaning": { "en": "the baby (に: the one who drinks)", "it": "al bambino (に: chi beve)" } },
+        { "text": "ミルクを", "meaning": { "en": "the milk (を: the object)", "it": "il latte (を: l'oggetto)" } },
+        { "text": "飲ませた", "reading": "のませた", "meaning": { "en": "got (the baby) to drink", "it": "ha fatto bere" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select 飲ませた: 飲む → 飲まない → 飲ま + せる. Nobody forces the baby, and it is not a permission either: the mother does what is needed so that the baby drinks. The same form covers all of it: making someone do something, letting them, or setting things up so they do it.",
+        "it": "Seleziona 飲ませた: 飲む → 飲まない → 飲ま + せる. Nessuno costringe il bambino, e non è nemmeno un permesso: la mamma fa quello che serve perché il bambino beva. La stessa forma copre tutto: costringere qualcuno, lasciarlo fare, o fare in modo che lo faccia."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "Build: \"The teacher made me come to school.\"",
+        "it": "Componi: «Il professore mi ha fatto venire a scuola.»"
+      },
+      "sentence": {
+        "kanji": "先生は私を学校に来させた",
+        "kana": "せんせいはわたしをがっこうにこさせた"
+      },
+      "translation": {
+        "en": "The teacher made me come to school.",
+        "it": "Il professore mi ha fatto venire a scuola."
+      },
+      "glosses": [
+        { "text": "先生は", "reading": "せんせいは", "meaning": { "en": "the teacher (は: the topic)", "it": "il professore (は: il tema)" } },
+        { "text": "私を", "reading": "わたしを", "meaning": { "en": "me (を: the one who comes)", "it": "me (を: chi viene)" } },
+        { "text": "学校に", "reading": "がっこうに", "meaning": { "en": "to school (に: where to)", "it": "a scuola (に: dove)" } },
+        { "text": "来させた", "reading": "こさせた", "meaning": { "en": "made come", "it": "ha fatto venire" } }
+      ],
+      "answer": ["先生は", "私を", "学校に", "来させた"],
+      "alsoAccepted": [["先生は", "学校に", "私を", "来させた"]],
+      "explanation": {
+        "en": "来る is irregular: \"make come\" is 来させる, read こさせる, with the same こ as 来ない. 来させた goes at the end; 私を (the one who comes) and 学校に (where to) sit before it and can swap places. 先生は, the topic, comes first. \"先生は学校に私を来させた\" is also correct.",
+        "it": "来る è irregolare: «far venire» è 来させる, che si legge こさせる, con la stessa こ di 来ない. 来させた va in fondo; 私を (chi viene) e 学校に (dove) stanno prima di lui e possono scambiarsi. 先生は, il tema, va per primo. Va bene anche «先生は学校に私を来させた»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役の相手を示す「に」「を」",
+      "prompt": {
+        "en": "\"I had my younger brother wash the car.\" Which particle goes after 弟, the one who washes?",
+        "it": "«Ho fatto lavare la macchina a mio fratello minore.» Quale particella va dopo 弟, chi lava?"
+      },
+      "sentence": {
+        "kanji": "私は弟に車を洗わせた",
+        "kana": "わたしはおとうとにくるまをあらわせた"
+      },
+      "translation": {
+        "en": "I had my younger brother wash the car.",
+        "it": "Ho fatto lavare la macchina a mio fratello minore."
+      },
+      "gap": {
+        "kanji": "私は弟＿車を洗わせた",
+        "kana": "わたしはおとうと＿くるまをあらわせた"
+      },
+      "answer": "に",
+      "distractors": ["を", "で", "が"],
+      "explanation": {
+        "en": "Two actions: I make it happen, my brother washes. 車を already has を, because the car is what gets washed, and a \"make someone do\" sentence never has two を: so the one who does the washing takes に, 弟に. で would say where or with what. 弟が would make your brother the one who has someone else wash it.",
+        "it": "Le azioni sono due: io faccio fare, mio fratello lava. 車を ha già を, perché la macchina è ciò che si lava, e in una frase con «far fare» non ci sono mai due を: allora chi lava prende に, 弟に. で direbbe dove o con che cosa. 弟が farebbe di tuo fratello quello che fa lavare la macchina a qualcun altro."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "使役の相手を示す「に」「を」",
+      "prompt": {
+        "en": "\"The coach made the players run in the rain.\" Which part is the people who run?",
+        "it": "«L'allenatore ha fatto correre i giocatori sotto la pioggia.» Quale parte sono quelli che corrono?"
+      },
+      "sentence": {
+        "kanji": "コーチは選手を雨の中で走らせた",
+        "kana": "コーチはせんしゅをあめのなかではしらせた"
+      },
+      "translation": {
+        "en": "The coach made the players run in the rain.",
+        "it": "L'allenatore ha fatto correre i giocatori sotto la pioggia."
+      },
+      "glosses": [
+        { "text": "コーチは", "meaning": { "en": "the coach (は: the topic)", "it": "l'allenatore (は: il tema)" } },
+        { "text": "選手を", "reading": "せんしゅを", "meaning": { "en": "the players (を: the ones made to run)", "it": "i giocatori (を: quelli fatti correre)" } },
+        { "text": "雨の中で", "reading": "あめのなかで", "meaning": { "en": "in the rain", "it": "sotto la pioggia" } },
+        { "text": "走らせた", "reading": "はしらせた", "meaning": { "en": "made run", "it": "ha fatto correre" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select 選手を. The coach makes it happen, the players run. When there is no other を in the sentence, the one who does the action can take を or に. With を, as here, the players have no say: the coach decides. 選手に走らせた is also possible and sounds less like an order.",
+        "it": "Seleziona 選手を. L'allenatore fa fare, i giocatori corrono. Quando nella frase non c'è un altro を, chi fa l'azione può prendere を o に. Con を, come qui, i giocatori non hanno voce in capitolo: decide l'allenatore. Si può dire anche 選手に走らせた, che suona meno come un ordine."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "使役の相手を示す「に」「を」",
+      "prompt": {
+        "en": "Build: \"The manager had the new employee copy the documents.\"",
+        "it": "Componi: «Il capo ha fatto fotocopiare i documenti al nuovo assunto.»"
+      },
+      "sentence": {
+        "kanji": "部長は新人に書類をコピーさせた",
+        "kana": "ぶちょうはしんじんにしょるいをコピーさせた"
+      },
+      "translation": {
+        "en": "The manager had the new employee copy the documents.",
+        "it": "Il capo ha fatto fotocopiare i documenti al nuovo assunto."
+      },
+      "glosses": [
+        { "text": "部長は", "reading": "ぶちょうは", "meaning": { "en": "the manager (は: the topic)", "it": "il capo (は: il tema)" } },
+        { "text": "新人に", "reading": "しんじんに", "meaning": { "en": "the new employee (に: the one who copies)", "it": "al nuovo assunto (に: chi fotocopia)" } },
+        { "text": "書類を", "reading": "しょるいを", "meaning": { "en": "the documents (を: the object)", "it": "i documenti (を: l'oggetto)" } },
+        { "text": "コピーさせた", "meaning": { "en": "made copy", "it": "ha fatto fotocopiare" } }
+      ],
+      "answer": ["部長は", "新人に", "書類を", "コピーさせた"],
+      "alsoAccepted": [["部長は", "書類を", "新人に", "コピーさせた"]],
+      "explanation": {
+        "en": "コピーする → コピーさせる, like every verb in する. 書類を already has を, so the one who does the copying takes に: 新人に. Both sit before the verb, which goes at the end, and they can swap places; 部長は, the topic, comes first. \"部長は書類を新人にコピーさせた\" is also correct.",
+        "it": "コピーする → コピーさせる, come ogni verbo in する. 書類を ha già を, quindi chi fotocopia prende に: 新人に. Tutti e due stanno prima del verbo, che va in fondo, e possono scambiarsi; 部長は, il tema, va per primo. Va bene anche «部長は書類を新人にコピーさせた»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "許可を求める「させてください」「させてもらう」",
+      "prompt": {
+        "en": "You don't feel well and ask your boss: \"Please let me go home early today.\" What goes in the gap?",
+        "it": "Non ti senti bene e chiedi al capo: «Oggi mi lasci tornare a casa prima, per favore.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "今日は早く帰らせてください",
+        "kana": "きょうははやくかえらせてください"
+      },
+      "translation": {
+        "en": "Please let me go home early today.",
+        "it": "Oggi mi lasci tornare a casa prima, per favore."
+      },
+      "glosses": [
+        { "text": "帰らせてください", "reading": "かえらせてください" },
+        { "text": "帰ってください", "reading": "かえってください" },
+        { "text": "帰りさせてください", "reading": "かえりさせてください" },
+        { "text": "帰られてください", "reading": "かえられてください" }
+      ],
+      "gap": {
+        "kanji": "今日は早く＿",
+        "kana": "きょうははやく＿"
+      },
+      "answer": "帰らせてください",
+      "distractors": ["帰ってください", "帰りさせてください", "帰られてください"],
+      "explanation": {
+        "en": "帰る changes its last kana (帰らない), even though it ends in る: 帰ら + せる = 帰らせる, \"let go home\". In て + ください: \"please let me go home\". It is the polite way to ask permission for something you want to do yourself. 帰ってください is \"please go home\": you would be sending your boss home.",
+        "it": "帰る cambia l'ultimo kana (帰らない), anche se finisce in る: 帰ら + せる = 帰らせる, «lasciar tornare a casa». In て + ください: «mi lasci tornare a casa, per favore». È il modo cortese di chiedere il permesso per una cosa che vuoi fare tu. 帰ってください è «torni a casa, per favore»: manderesti a casa il capo."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "許可を求める「させてください」「させてもらう」",
+      "prompt": {
+        "en": "At the restaurant, to a colleague: \"Let me pay this time.\"",
+        "it": "Al ristorante, a una collega: «Stavolta lasci pagare me.»"
+      },
+      "sentence": {
+        "kanji": "ここは私に払わせてください",
+        "kana": "ここはわたしにはらわせてください"
+      },
+      "translation": {
+        "en": "Let me pay this time.",
+        "it": "Stavolta lasci pagare me."
+      },
+      "glosses": [
+        { "text": "ここは", "meaning": { "en": "this time (は: the topic)", "it": "stavolta (は: il tema)" } },
+        { "text": "私に", "reading": "わたしに", "meaning": { "en": "me (に: the one who pays)", "it": "a me (に: chi paga)" } },
+        { "text": "払わせて", "reading": "はらわせて", "meaning": { "en": "let pay", "it": "lasciar pagare" } },
+        { "text": "ください", "meaning": { "en": "please", "it": "per favore" } }
+      ],
+      "answer": ["ここは", "私に", "払わせて", "ください"],
+      "explanation": {
+        "en": "払う → 払わない → 払わ + せる = 払わせる, \"let pay\"; then て + ください, at the very end: \"please let me pay\". 私に, the one who pays, sits right before 払わせて. ここは (literally \"here\", meaning \"this time\") is the topic and comes first.",
+        "it": "払う → 払わない → 払わ + せる = 払わせる, «lasciar pagare»; poi て + ください, proprio in fondo: «lasci pagare me, per favore». 私に, chi paga, sta subito prima di 払わせて. ここは (alla lettera «qui», cioè «stavolta») è il tema e va per primo."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "許可を求める「させてください」「させてもらう」",
+      "prompt": {
+        "en": "\"My friend let me use their computer.\" What goes in the gap?",
+        "it": "«Un amico mi ha lasciato usare il suo computer.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "友達にパソコンを使わせてもらった",
+        "kana": "ともだちにパソコンをつかわせてもらった"
+      },
+      "translation": {
+        "en": "My friend let me use their computer.",
+        "it": "Un amico mi ha lasciato usare il suo computer."
+      },
+      "glosses": [
+        { "text": "使わせてもらった", "reading": "つかわせてもらった" },
+        { "text": "使ってもらった", "reading": "つかってもらった" },
+        { "text": "使わせてあげた", "reading": "つかわせてあげた" },
+        { "text": "使わされた", "reading": "つかわされた" }
+      ],
+      "gap": {
+        "kanji": "友達にパソコンを＿",
+        "kana": "ともだちにパソコンを＿"
+      },
+      "answer": "使わせてもらった",
+      "distractors": ["使ってもらった", "使わせてあげた", "使わされた"],
+      "explanation": {
+        "en": "もらう is \"receive\". 使わせて + もらった: \"I received being let to use it\", that is, the friend let me, and I'm grateful. The one who gives permission takes に: 友達に. 使ってもらった is \"I got my friend to use it\". 使わせてあげた turns it round: \"I let my friend use it\". 使わされた is \"I was made to use it\".",
+        "it": "もらう è «ricevere». 使わせて + もらった: «ho ricevuto il permesso di usarlo», cioè l'amico me l'ha lasciato usare, e gli sono grato. Chi dà il permesso prende に: 友達に. 使ってもらった è «l'ho fatto usare al mio amico», come favore per me. 使わせてあげた gira le parti: «l'ho lasciato usare io al mio amico». 使わされた è «sono stato costretto a usarlo»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "許可を求める「させてください」「させてもらう」",
+      "prompt": {
+        "en": "Build: \"Yesterday they let me take the day off work.\"",
+        "it": "Componi: «Ieri mi hanno lasciato prendere un giorno di riposo dal lavoro.»"
+      },
+      "sentence": {
+        "kanji": "昨日は会社を休ませてもらった",
+        "kana": "きのうはかいしゃをやすませてもらった"
+      },
+      "translation": {
+        "en": "Yesterday they let me take the day off work.",
+        "it": "Ieri mi hanno lasciato prendere un giorno di riposo dal lavoro."
+      },
+      "glosses": [
+        { "text": "昨日は", "reading": "きのうは", "meaning": { "en": "yesterday (は: the topic)", "it": "ieri (は: il tema)" } },
+        { "text": "会社を", "reading": "かいしゃを", "meaning": { "en": "work (を: what you stay away from)", "it": "il lavoro (を: da cosa resti a casa)" } },
+        { "text": "休ませて", "reading": "やすませて", "meaning": { "en": "let take time off", "it": "lasciar riposare" } },
+        { "text": "もらった", "meaning": { "en": "received (the favour)", "it": "ho ricevuto (il favore)" } }
+      ],
+      "answer": ["昨日は", "会社を", "休ませて", "もらった"],
+      "explanation": {
+        "en": "休む → 休まない → 休ま + せる = 休ませる, \"let take time off\"; with て + もらった: \"I was allowed to\", a favour I received. 会社を休む is \"stay away from work\": 会社を sits right before 休ませて. もらった goes at the end; 昨日は, the topic, comes first.",
+        "it": "休む → 休まない → 休ま + せる = 休ませる, «lasciar riposare»; con て + もらった: «mi è stato permesso», un favore ricevuto. 会社を休む è «non andare al lavoro»: 会社を sta subito prima di 休ませて. もらった va in fondo; 昨日は, il tema, va per primo."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "使役の「せる」「させる」",
+      "prompt": {
+        "en": "\"My father let me drive his car.\" Which part says \"let (me) drive\"?",
+        "it": "«Mio padre mi ha lasciato guidare la sua macchina.» Quale parte dice «lasciar guidare»?"
+      },
+      "sentence": {
+        "kanji": "父は私に車を運転させてくれた",
+        "kana": "ちちはわたしにくるまをうんてんさせてくれた"
+      },
+      "translation": {
+        "en": "My father let me drive his car.",
+        "it": "Mio padre mi ha lasciato guidare la sua macchina."
+      },
+      "glosses": [
+        { "text": "父は", "reading": "ちちは", "meaning": { "en": "my father (は: the topic)", "it": "mio padre (は: il tema)" } },
+        { "text": "私に", "reading": "わたしに", "meaning": { "en": "me (に: the one who drives)", "it": "a me (に: chi guida)" } },
+        { "text": "車を", "reading": "くるまを", "meaning": { "en": "the car (を: the object)", "it": "la macchina (を: l'oggetto)" } },
+        { "text": "運転させて", "reading": "うんてんさせて", "meaning": { "en": "let drive", "it": "lasciar guidare" } },
+        { "text": "くれた", "meaning": { "en": "did (for me)", "it": "ha fatto (per me)" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select 運転させて: 運転する → 運転させる. On its own it could be \"make drive\" or \"let drive\"; here くれた, a favour done for me, settles it: I wanted to drive, and my father let me. 私に is me, the one who drives: に, because 車を already has を.",
+        "it": "Seleziona 運転させて: 運転する → 運転させる. Da sola potrebbe essere «far guidare» o «lasciar guidare»; qui くれた, un favore fatto a me, scioglie il dubbio: volevo guidare, e mio padre me l'ha lasciato fare. 私に sono io, chi guida: に, perché 車を ha già を."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役受身「させられる」",
+      "prompt": {
+        "en": "\"When I was a child, I was made to eat fish, which I hated.\" Which form of 食べる goes in the gap?",
+        "it": "«Da bambino mi facevano mangiare il pesce, che odiavo.» Quale forma di 食べる va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "子供のころ、嫌いな魚を食べさせられた",
+        "kana": "こどものころ、きらいなさかなをたべさせられた"
+      },
+      "translation": {
+        "en": "When I was a child, I was made to eat fish, which I hated.",
+        "it": "Da bambino mi facevano mangiare il pesce, che odiavo."
+      },
+      "glosses": [
+        { "text": "食べさせられた", "reading": "たべさせられた" },
+        { "text": "食べられさせた", "reading": "たべられさせた" },
+        { "text": "食べさせた", "reading": "たべさせた" },
+        { "text": "食べられた", "reading": "たべられた" }
+      ],
+      "gap": {
+        "kanji": "子供のころ、嫌いな魚を＿",
+        "kana": "こどものころ、きらいなさかなを＿"
+      },
+      "answer": "食べさせられた",
+      "distractors": ["食べられさせた", "食べさせた", "食べられた"],
+      "explanation": {
+        "en": "To say \"I was made to do\" you chain two pieces: first させる (\"make eat\"), then られる, the piece for something done to you. させる drops る like 食べる: させ + られる. So 食べ + させ + られた: I ate, someone else made me. 食べられさせた has the pieces in the wrong order. 食べさせた is \"I made (someone) eat\"; 食べられた is \"could eat\" or \"got eaten\": nobody forces you.",
+        "it": "Per dire «mi hanno fatto fare» si mettono in fila due pezzi: prima させる («far mangiare»), poi られる, il pezzo per una cosa che ti viene fatta. させる perde る come 食べる: させ + られる. Quindi 食べ + させ + られた: ho mangiato io, qualcun altro me l'ha imposto. 食べられさせた ha i pezzi nell'ordine sbagliato. 食べさせた è «ho fatto mangiare (qualcuno)»; 食べられた è «sono riuscito a mangiare» o «è stato mangiato»: nessuno ti costringe."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "使役受身「させられる」",
+      "prompt": {
+        "en": "\"Yesterday the manager made me walk to the station.\" Which form of 歩く (\"walk\") goes in the gap?",
+        "it": "«Ieri il capo mi ha fatto andare a piedi fino alla stazione.» Quale forma di 歩く («camminare») va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "昨日は部長に駅まで歩かされた",
+        "kana": "きのうはぶちょうにえきまであるかされた"
+      },
+      "translation": {
+        "en": "Yesterday the manager made me walk to the station.",
+        "it": "Ieri il capo mi ha fatto andare a piedi fino alla stazione."
+      },
+      "glosses": [
+        { "text": "歩かされた", "reading": "あるかされた" },
+        { "text": "歩かせた", "reading": "あるかせた" },
+        { "text": "歩かれた", "reading": "あるかれた" },
+        { "text": "歩きされた", "reading": "あるきされた" }
+      ],
+      "gap": {
+        "kanji": "昨日は部長に駅まで＿",
+        "kana": "きのうはぶちょうにえきまで＿"
+      },
+      "answer": "歩かされた",
+      "distractors": ["歩かせた", "歩かれた", "歩きされた"],
+      "explanation": {
+        "en": "The full form is 歩か + せ + られた, and 歩かせられた is correct too. With verbs like 歩く, which change their last kana (歩かない), people usually shorten せら to さ: 歩かされた, \"I was made to walk\". Verbs ending in す (話させられた) and verbs like 食べる (食べさせられた) are not shortened. 歩かせた is \"I made (someone) walk\"; 歩かれた has no \"make\" in it.",
+        "it": "La forma intera è 歩か + せ + られた, e anche 歩かせられた è giusta. Con i verbi come 歩く, che cambiano l'ultimo kana (歩かない), di solito せら si accorcia in さ: 歩かされた, «mi hanno fatto camminare». I verbi in す (話させられた) e quelli come 食べる (食べさせられた) non si accorciano. 歩かせた è «ho fatto camminare (qualcuno)»; in 歩かれた manca il «far fare»."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "使役受身「させられる」",
+      "prompt": {
+        "en": "\"At karaoke my friends made me sing.\" Which part is the people who made me?",
+        "it": "«Al karaoke gli amici mi hanno fatto cantare.» Quale parte sono quelli che mi ci hanno costretto?"
+      },
+      "sentence": {
+        "kanji": "私はカラオケで友達に歌わされた",
+        "kana": "わたしはカラオケでともだちにうたわされた"
+      },
+      "translation": {
+        "en": "At karaoke my friends made me sing.",
+        "it": "Al karaoke gli amici mi hanno fatto cantare."
+      },
+      "glosses": [
+        { "text": "私は", "reading": "わたしは", "meaning": { "en": "I (は: the topic)", "it": "io (は: il tema)" } },
+        { "text": "カラオケで", "meaning": { "en": "at karaoke", "it": "al karaoke" } },
+        { "text": "友達に", "reading": "ともだちに", "meaning": { "en": "by my friends", "it": "dagli amici" } },
+        { "text": "歌わされた", "reading": "うたわされた", "meaning": { "en": "was made to sing", "it": "mi hanno fatto cantare" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select 友達に. 歌わされた is the short 歌わせられた: \"I was made to sing\". The one who forces takes に: 友達に. The one who sings is the same person who has it done to them: 私は. That is always the case: who does the action and who is made to are one person.",
+        "it": "Seleziona 友達に. 歌わされた è la forma corta di 歌わせられた: «mi hanno fatto cantare». Chi costringe prende に: 友達に. Chi canta è la stessa persona che lo subisce: 私は. È sempre così: chi fa l'azione e chi ci viene costretto sono la stessa persona."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "使役受身「させられる」",
+      "prompt": {
+        "en": "\"Our mother made my younger brother clean his room.\" Who did the cleaning?",
+        "it": "«La mamma ha fatto pulire la stanza a mio fratello minore.» Chi ha pulito?"
+      },
+      "sentence": {
+        "kanji": "弟は母に部屋を掃除させられた",
+        "kana": "おとうとはははにへやをそうじさせられた"
+      },
+      "translation": {
+        "en": "Our mother made my younger brother clean his room.",
+        "it": "La mamma ha fatto pulire la stanza a mio fratello minore."
+      },
+      "glosses": [
+        { "text": "弟は", "reading": "おとうとは", "meaning": { "en": "my younger brother (は: the topic)", "it": "mio fratello minore (は: il tema)" } },
+        { "text": "母に", "reading": "ははに", "meaning": { "en": "by our mother", "it": "dalla mamma" } },
+        { "text": "部屋を", "reading": "へやを", "meaning": { "en": "the room (を: the object)", "it": "la stanza (を: l'oggetto)" } },
+        { "text": "掃除させられた", "reading": "そうじさせられた", "meaning": { "en": "was made to clean", "it": "è stato costretto a pulire" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select 弟は. 掃除させられた has three pieces: 掃除する (clean), させる (make), られる (have it done to you). The first and the last belong to the same person, my brother: he is made to, and he cleans. The middle one belongs to 母に: she does only the making.",
+        "it": "Seleziona 弟は. 掃除させられた ha tre pezzi: 掃除する (pulire), させる (far fare), られる (subire). Il primo e l'ultimo sono della stessa persona, mio fratello: lo subisce e pulisce. Quello in mezzo è di 母に: lei si limita a farlo fare."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "使役受身「させられる」",
+      "prompt": {
+        "en": "Build: \"At the party I was made to drink a lot of beer.\"",
+        "it": "Componi: «Alla festa mi hanno fatto bere un sacco di birra.»"
+      },
+      "sentence": {
+        "kanji": "パーティーでビールをたくさん飲まされた",
+        "kana": "パーティーでビールをたくさんのまされた"
+      },
+      "translation": {
+        "en": "At the party I was made to drink a lot of beer.",
+        "it": "Alla festa mi hanno fatto bere un sacco di birra."
+      },
+      "glosses": [
+        { "text": "パーティーで", "meaning": { "en": "at the party", "it": "alla festa" } },
+        { "text": "ビールを", "meaning": { "en": "beer (を: the object)", "it": "la birra (を: l'oggetto)" } },
+        { "text": "たくさん", "meaning": { "en": "a lot", "it": "tanto" } },
+        { "text": "飲まされた", "reading": "のまされた", "meaning": { "en": "was made to drink", "it": "mi hanno fatto bere" } }
+      ],
+      "answer": ["パーティーで", "ビールを", "たくさん", "飲まされた"],
+      "alsoAccepted": [["パーティーで", "たくさん", "ビールを", "飲まされた"]],
+      "explanation": {
+        "en": "飲む → 飲ま + せ + られた, shortened to 飲まされた: \"I was made to drink\". The verb goes at the end; ビールを and たくさん both belong to it and sit before it, in either order. パーティーで, where it happened, comes first. \"パーティーでたくさんビールを飲まされた\" is also correct.",
+        "it": "飲む → 飲ま + せ + られた, accorciato in 飲まされた: «mi hanno fatto bere». Il verbo va in fondo; ビールを e たくさん sono tutti e due suoi e stanno prima di lui, in un ordine o nell'altro. パーティーで, dove è successo, va per primo. Va bene anche «パーティーでたくさんビールを飲まされた»."
+      }
+    }
+  ]
+}

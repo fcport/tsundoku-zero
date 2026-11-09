@@ -1,0 +1,524 @@
+{
+  "order": 25,
+  "title": {
+    "en": "だって: \"they say\", \"but\" and \"even\"; だから and それから",
+    "it": "だって: «dicono», «ma» e «persino»; だから e それから"
+  },
+  "video": "kO89HzRQygQ",
+  "grammarPoints": ["伝聞の「だって」", "反論の「だって」", "強調の「だって」", "接続詞「だから」「ですから」", "接続詞「それから」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "伝聞の「だって」",
+      "prompt": {
+        "en": "A friend tells you what they heard: \"They say that shop is closed today.\" What goes in the gap?",
+        "it": "Un amico ti dice una cosa che ha sentito: «Dicono che quel negozio oggi è chiuso.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "あの店は今日休みだって",
+        "kana": "あのみせはきょうやすみだって"
+      },
+      "translation": {
+        "en": "They say that shop is closed today.",
+        "it": "Dicono che quel negozio oggi è chiuso."
+      },
+      "gap": {
+        "kanji": "あの店は今日休み＿",
+        "kana": "あのみせはきょうやすみ＿"
+      },
+      "answer": "だって",
+      "distractors": ["だから", "だった", "だろう"],
+      "explanation": {
+        "en": "休みだ is already a complete sentence: 休み (\"day off\") + だ (\"is\"), \"it's closed\". って stands for と言う, \"(someone) says\": it takes the sentence and passes it on as something you heard. So だって at the end is だ + って: \"they say it's closed\". だから would be \"it's closed, so…\" and leaves the sentence hanging; だった is just \"it was closed\"; だろう is your own guess, \"it's probably closed\", not something you heard.",
+        "it": "休みだ è già una frase completa: 休み («giorno di riposo») + だ («è»), «è chiuso». って sta per と言う, «(qualcuno) dice»: prende la frase e la riferisce come una cosa sentita. Quindi だって in fondo è だ + って: «dicono che è chiuso». だから vorrebbe dire «è chiuso, quindi…» e lascia la frase a metà; だった è solo «era chiuso»; だろう è una tua ipotesi, «probabilmente è chiuso», non una cosa che hai sentito."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "伝聞の「だって」",
+      "prompt": {
+        "en": "Your sister went to the new café. You tell a friend: \"She says the new café is expensive.\" What goes in the gap?",
+        "it": "Tua sorella è stata al bar nuovo. Lo racconti a un amico: «Dice che il bar nuovo è caro.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "新しいカフェは高いって",
+        "kana": "あたらしいカフェはたかいって"
+      },
+      "translation": {
+        "en": "She says the new café is expensive.",
+        "it": "Dice che il bar nuovo è caro."
+      },
+      "glosses": [
+        { "text": "高いって", "reading": "たかいって" },
+        { "text": "高いだって", "reading": "たかいだって" },
+        { "text": "高だって", "reading": "たかだって" },
+        { "text": "高いだ", "reading": "たかいだ" }
+      ],
+      "gap": {
+        "kanji": "新しいカフェは＿",
+        "kana": "あたらしいカフェは＿"
+      },
+      "answer": "高いって",
+      "distractors": ["高いだって", "高だって", "高いだ"],
+      "explanation": {
+        "en": "An い-adjective already says \"is\": 高い = \"is expensive\". So nothing goes before って: 高いって, \"she says it's expensive\". The same with a verb: 来るって. だ goes only after a noun or a な-adjective (休みだって, 静かだって), never after an い-adjective: 高いだって is wrong. 高だって drops the い, which has to stay. 高いだ has the same mistake, and without って nothing says someone told you.",
+        "it": "Un aggettivo in い dice già «è»: 高い = «è caro». Quindi prima di って non va niente: 高いって, «dice che è caro». Lo stesso con un verbo: 来るって. だ va solo dopo un nome o un aggettivo in な (休みだって, 静かだって), mai dopo un aggettivo in い: 高いだって è sbagliato. 高だって perde la い, che invece resta. 高いだ ha lo stesso errore, e senza って niente dice che qualcuno te l'ha detto."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "伝聞の「だって」",
+      "prompt": {
+        "en": "\"Apparently Tanaka's birthday is on Friday.\" Which part says you heard it from someone?",
+        "it": "«A quanto pare il compleanno di Tanaka è venerdì.» Quale parte dice che l'hai sentito da qualcuno?"
+      },
+      "sentence": {
+        "kanji": "田中さんの誕生日は金曜日だって",
+        "kana": "たなかさんのたんじょうびはきんようびだって"
+      },
+      "translation": {
+        "en": "Apparently Tanaka's birthday is on Friday.",
+        "it": "A quanto pare il compleanno di Tanaka è venerdì."
+      },
+      "glosses": [
+        { "text": "田中さんの", "reading": "たなかさんの", "meaning": { "en": "Tanaka's", "it": "di Tanaka" } },
+        { "text": "誕生日は", "reading": "たんじょうびは", "meaning": { "en": "the birthday (は: the topic)", "it": "il compleanno (は: il tema)" } },
+        { "text": "金曜日だ", "reading": "きんようびだ", "meaning": { "en": "is Friday", "it": "è venerdì" } },
+        { "text": "って", "meaning": { "en": "(someone) says", "it": "(qualcuno) dice" } }
+      ],
+      "answer": { "start": 3, "end": 4 },
+      "explanation": {
+        "en": "Select って. 田中さんの誕生日は金曜日だ is a complete sentence: \"Tanaka's birthday is Friday\". って, short for と言う, \"says\", turns it into something you heard: \"they say…\". That is where a closing だって comes from: the だ of the sentence, then って.",
+        "it": "Seleziona って. 田中さんの誕生日は金曜日だ è una frase completa: «il compleanno di Tanaka è venerdì». って, abbreviazione di と言う, «dice», la trasforma in una cosa sentita: «dicono che…». Ecco da dove viene だって in fondo alla frase: la だ della frase, e poi って."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "伝聞の「だって」",
+      "prompt": {
+        "en": "Build: \"My sister says she's waiting at the station.\"",
+        "it": "Componi: «Mia sorella dice che sta aspettando alla stazione.»"
+      },
+      "sentence": {
+        "kanji": "姉は駅で待っているって",
+        "kana": "あねはえきでまっているって"
+      },
+      "translation": {
+        "en": "My sister says she's waiting at the station.",
+        "it": "Mia sorella dice che sta aspettando alla stazione."
+      },
+      "glosses": [
+        { "text": "姉は", "reading": "あねは", "meaning": { "en": "my older sister (は: the topic)", "it": "mia sorella (は: il tema)" } },
+        { "text": "駅で", "reading": "えきで", "meaning": { "en": "at the station", "it": "alla stazione" } },
+        { "text": "待っている", "reading": "まっている", "meaning": { "en": "is waiting", "it": "sta aspettando" } },
+        { "text": "って", "meaning": { "en": "(she) says", "it": "(lei) dice" } }
+      ],
+      "answer": ["姉は", "駅で", "待っている", "って"],
+      "alsoAccepted": [["駅で", "姉は", "待っている", "って"]],
+      "explanation": {
+        "en": "って goes at the very end: it takes the whole sentence 姉は駅で待っている and reports it, \"she says she's waiting\". After a verb there is no だ: 待っているって. 駅で (where) belongs to 待っている and sits before it; 姉は, the topic, comes first. \"駅で姉は待っているって\" is also correct.",
+        "it": "って va proprio in fondo: prende tutta la frase 姉は駅で待っている e la riferisce, «dice che sta aspettando». Dopo un verbo non c'è だ: 待っているって. 駅で (dove) appartiene a 待っている e sta prima di lui; 姉は, il tema, va per primo. Va bene anche «駅で姉は待っているって»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "反論の「だって」",
+      "prompt": {
+        "en": "Your mother tells you: 「部屋を片付けて」 (\"Tidy your room\"). You protest: \"But I don't have time!\" What goes in the gap?",
+        "it": "Tua madre ti dice: 「部屋を片付けて」 («Metti in ordine la camera»). Tu protesti: «Ma non ho tempo!» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "だって、時間がない",
+        "kana": "だって、じかんがない"
+      },
+      "translation": {
+        "en": "But I don't have time!",
+        "it": "Ma non ho tempo!"
+      },
+      "gap": {
+        "kanji": "＿、時間がない",
+        "kana": "＿、じかんがない"
+      },
+      "answer": "だって",
+      "distractors": ["だから", "ですから", "それから"],
+      "explanation": {
+        "en": "だって at the start of a reply picks up what the other person has just said (だ = \"is\": \"it's as you say\") and sets your objection against it: \"yes, but…\". It is casual and a bit childish: fine at home, not with your boss. だから and ですから mean \"so\": \"you tell me to tidy up, so I have no time\", which makes no sense. それから is \"after that\".",
+        "it": "だって all'inizio della risposta riprende quello che l'altro ha appena detto (だ = «è»: «sarà come dici») e ci mette contro la tua obiezione: «sì, ma…». È colloquiale e un po' infantile: va bene in famiglia, non con il capo. だから e ですから vogliono dire «quindi»: «mi dici di mettere in ordine, quindi non ho tempo», che non ha senso. それから è «dopo»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "反論の「だって」",
+      "prompt": {
+        "en": "A friend asks: 「どうして昨日来なかったの?」 (\"Why didn't you come yesterday?\") You answer, a bit hurt: \"Well, nobody invited me!\" What goes in the gap?",
+        "it": "Un amico ti chiede: 「どうして昨日来なかったの?」 («Perché ieri non sei venuto?») Rispondi, un po' offeso: «Be', nessuno mi ha invitato!» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "だって、誰も誘ってくれなかったから",
+        "kana": "だって、だれもさそってくれなかったから"
+      },
+      "translation": {
+        "en": "Well, nobody invited me!",
+        "it": "Be', nessuno mi ha invitato!"
+      },
+      "gap": {
+        "kanji": "＿、誰も誘ってくれなかったから",
+        "kana": "＿、だれもさそってくれなかったから"
+      },
+      "answer": "だって",
+      "distractors": ["だから", "それから", "だった"],
+      "explanation": {
+        "en": "Here だって gives the reason, but with an edge: \"you ask why? well…\", and what follows puts the blame back on the other side. It is the same だって as \"but\": you take what was said and add something against it. That's why it often comes with から at the end, \"because\". だから would make your absence the cause of nobody inviting you, backwards; それから is \"after that\"; だった (\"was\") cannot open a reply.",
+        "it": "Qui だって dà il motivo, ma con una punta polemica: «mi chiedi perché? be'…», e quello che segue rimanda la colpa all'altro. È lo stesso だって del «ma»: prendi quello che è stato detto e ci aggiungi qualcosa contro. Per questo va spesso con から in fondo, «perché». だから farebbe della tua assenza la causa del mancato invito, al contrario; それから è «dopo»; だった («era») non può aprire una risposta."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "反論の「だって」",
+      "prompt": {
+        "en": "A friend asks: 「どうして傘を持ってきたの?」 (\"Why did you bring an umbrella?\") You answer: \"Because they say it'll rain this afternoon.\" Which part answers the \"why?\"",
+        "it": "Un amico ti chiede: 「どうして傘を持ってきたの?」 («Perché hai portato l'ombrello?») Rispondi: «Perché dicono che nel pomeriggio piove.» Quale parte risponde al «perché?»"
+      },
+      "sentence": {
+        "kanji": "だって、午後は雨が降るって",
+        "kana": "だって、ごごはあめがふるって"
+      },
+      "translation": {
+        "en": "Because they say it'll rain this afternoon.",
+        "it": "Perché dicono che nel pomeriggio piove."
+      },
+      "glosses": [
+        { "text": "だって、", "meaning": { "en": "well, because…", "it": "be', perché…" } },
+        { "text": "午後は", "reading": "ごごは", "meaning": { "en": "in the afternoon (は: the topic)", "it": "nel pomeriggio (は: il tema)" } },
+        { "text": "雨が", "reading": "あめが", "meaning": { "en": "rain (が: the subject)", "it": "la pioggia (が: il soggetto)" } },
+        { "text": "降る", "reading": "ふる", "meaning": { "en": "falls", "it": "cade" } },
+        { "text": "って", "meaning": { "en": "(they) say", "it": "(si) dice" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select だって、. At the start of the reply it takes up the question and gives the reason: \"well, because…\". The って at the end is another one: it reports what you heard, \"they say it'll rain\". The sentence uses both: だって at the start answers, って at the end says where the news comes from.",
+        "it": "Seleziona だって、. All'inizio della risposta riprende la domanda e dà il motivo: «be', perché…». Il って in fondo è un altro: riferisce una cosa sentita, «dicono che piove». La frase li usa tutti e due: だって all'inizio risponde, って in fondo dice da dove viene la notizia."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "反論の「だって」",
+      "prompt": {
+        "en": "Your father asks: 「まだ寝ないの?」 (\"Aren't you going to bed yet?\") Build your answer: \"But I've got too much homework!\"",
+        "it": "Tuo padre ti chiede: 「まだ寝ないの?」 («Non vai ancora a letto?») Componi la tua risposta: «Ma ho troppi compiti!»"
+      },
+      "sentence": {
+        "kanji": "だって、宿題が多すぎる",
+        "kana": "だって、しゅくだいがおおすぎる"
+      },
+      "translation": {
+        "en": "But I've got too much homework!",
+        "it": "Ma ho troppi compiti!"
+      },
+      "glosses": [
+        { "text": "だって、", "meaning": { "en": "but…", "it": "ma…" } },
+        { "text": "宿題が", "reading": "しゅくだいが", "meaning": { "en": "homework (が: the subject)", "it": "i compiti (が: il soggetto)" } },
+        { "text": "多すぎる", "reading": "おおすぎる", "meaning": { "en": "is too much", "it": "sono troppi" } }
+      ],
+      "answer": ["だって、", "宿題が", "多すぎる"],
+      "explanation": {
+        "en": "だって、 goes first: it answers what has just been said and announces an objection. Then the complaint: 宿題が, the subject, sits right before 多すぎる, \"is too much\" (多い → 多 + すぎる).",
+        "it": "だって、 va per primo: risponde a quello che è appena stato detto e annuncia un'obiezione. Poi la lamentela: 宿題が, il soggetto, sta subito prima di 多すぎる, «sono troppi» (多い → 多 + すぎる)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "強調の「だって」",
+      "prompt": {
+        "en": "Your brother teases you: 「何も作れないだろう」 (\"You can't cook anything, can you?\") You reply, piqued: \"Even I can make pasta!\" What goes in the gap?",
+        "it": "Tuo fratello ti prende in giro: 「何も作れないだろう」 («Non sai cucinare niente, vero?») Rispondi, punto sul vivo: «Persino io so fare la pasta!» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "私だってパスタが作れる",
+        "kana": "わたしだってパスタがつくれる"
+      },
+      "translation": {
+        "en": "Even I can make pasta!",
+        "it": "Persino io so fare la pasta!"
+      },
+      "gap": {
+        "kanji": "私＿パスタが作れる",
+        "kana": "わたし＿パスタがつくれる"
+      },
+      "answer": "だって",
+      "distractors": ["を", "から", "で"],
+      "explanation": {
+        "en": "After a word, だって means \"even\": 私だって, \"even I\". It puts you forward as the least likely case, and it carries a touch of challenge: \"don't underestimate me\". を marks the thing you make, not the person who makes it (and with 作れる, \"can make\", the thing takes が: パスタが); から and で don't fit after 私.",
+        "it": "Dopo una parola, だって vuol dire «persino», «anche»: 私だって, «persino io». Ti mette avanti come il caso meno probabile, con una punta di sfida: «non sottovalutarmi». を segna la cosa che si fa, non chi la fa (e con 作れる, «saper fare», la cosa prende が: パスタが); から e で dopo 私 non vanno."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "強調の「だって」",
+      "prompt": {
+        "en": "\"Even a child can read this kanji.\" Which part means \"even\"?",
+        "it": "«Questo kanji lo sa leggere persino un bambino.» Quale parte vuol dire «persino»?"
+      },
+      "sentence": {
+        "kanji": "この漢字は子供だって読める",
+        "kana": "このかんじはこどもだってよめる"
+      },
+      "translation": {
+        "en": "Even a child can read this kanji.",
+        "it": "Questo kanji lo sa leggere persino un bambino."
+      },
+      "glosses": [
+        { "text": "この漢字は", "reading": "このかんじは", "meaning": { "en": "this kanji (は: the topic)", "it": "questo kanji (は: il tema)" } },
+        { "text": "子供", "reading": "こども", "meaning": { "en": "a child", "it": "un bambino" } },
+        { "text": "だって", "meaning": { "en": "even", "it": "persino" } },
+        { "text": "読める", "reading": "よめる", "meaning": { "en": "can read", "it": "sa leggere" } }
+      ],
+      "answer": { "start": 2, "end": 3 },
+      "explanation": {
+        "en": "Select だって. Attached to 子供, it says \"even a child\": the least likely reader can read it, so anyone can. 子供も would be a neutral \"children too\". This だって is casual; in careful speech you say 子供でも読める.",
+        "it": "Seleziona だって. Attaccato a 子供 dice «persino un bambino»: lo sa leggere anche chi meno te lo aspetti, quindi chiunque. 子供も sarebbe un «anche i bambini» neutro. Questo だって è colloquiale; parlando con più attenzione si dice 子供でも読める."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "強調の「だって」",
+      "prompt": {
+        "en": "Build: \"Even teachers get it wrong sometimes.\"",
+        "it": "Componi: «Persino i professori a volte sbagliano.»"
+      },
+      "sentence": {
+        "kanji": "先生だって時々間違える",
+        "kana": "せんせいだってときどきまちがえる"
+      },
+      "translation": {
+        "en": "Even teachers get it wrong sometimes.",
+        "it": "Persino i professori a volte sbagliano."
+      },
+      "glosses": [
+        { "text": "先生だって", "reading": "せんせいだって", "meaning": { "en": "even teachers", "it": "persino i professori" } },
+        { "text": "時々", "reading": "ときどき", "meaning": { "en": "sometimes", "it": "a volte" } },
+        { "text": "間違える", "reading": "まちがえる", "meaning": { "en": "get it wrong", "it": "sbagliano" } }
+      ],
+      "answer": ["先生だって", "時々", "間違える"],
+      "alsoAccepted": [["時々", "先生だって", "間違える"]],
+      "explanation": {
+        "en": "先生だって, \"even teachers\", says who gets it wrong, and 時々 says how often: both belong to 間違える, which goes at the end. The two can swap places: \"時々先生だって間違える\" is also correct.",
+        "it": "先生だって, «persino i professori», dice chi sbaglia, e 時々 dice quanto spesso: tutti e due appartengono a 間違える, che va in fondo. I due possono scambiarsi: va bene anche «時々先生だって間違える»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "接続詞「だから」「ですから」",
+      "prompt": {
+        "en": "\"I have an exam tomorrow. So tonight I'm going to bed early.\" What goes in the gap?",
+        "it": "«Domani ho un esame. Quindi stasera vado a letto presto.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "明日は試験だ。だから、今夜は早く寝る",
+        "kana": "あしたはしけんだ。だから、こんやははやくねる"
+      },
+      "translation": {
+        "en": "I have an exam tomorrow. So tonight I'm going to bed early.",
+        "it": "Domani ho un esame. Quindi stasera vado a letto presto."
+      },
+      "gap": {
+        "kanji": "明日は試験だ。＿、今夜は早く寝る",
+        "kana": "あしたはしけんだ。＿、こんやははやくねる"
+      },
+      "answer": "だから",
+      "distractors": ["だって", "それから", "だった"],
+      "explanation": {
+        "en": "だから at the start of a sentence means \"so\": だ (\"is\") picks up what you have just said, \"that's how it is\", and から (\"because\") draws the consequence: \"since that's so, …\". だって would set an objection against something someone said; それから is \"after that\", an order in time, not a reason; だった (\"was\") does not open a sentence.",
+        "it": "だから all'inizio della frase vuol dire «quindi»: だ («è») riprende quello che hai appena detto, «è così», e から («perché») ne tira la conseguenza: «visto che è così, …». だって metterebbe un'obiezione contro una cosa detta da qualcuno; それから è «dopo», un ordine nel tempo, non un motivo; だった («era») non apre una frase."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "接続詞「だから」「ですから」",
+      "prompt": {
+        "en": "A bank clerk explains politely: \"Tomorrow is a public holiday. So the bank is closed.\" What goes in the gap?",
+        "it": "Un impiegato della banca spiega in modo cortese: «Domani è festa. Quindi la banca è chiusa.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "明日は祝日です。ですから、銀行は休みです",
+        "kana": "あしたはしゅくじつです。ですから、ぎんこうはやすみです"
+      },
+      "translation": {
+        "en": "Tomorrow is a public holiday. So the bank is closed.",
+        "it": "Domani è festa. Quindi la banca è chiusa."
+      },
+      "gap": {
+        "kanji": "明日は祝日です。＿、銀行は休みです",
+        "kana": "あしたはしゅくじつです。＿、ぎんこうはやすみです"
+      },
+      "answer": "ですから",
+      "distractors": ["だって", "それから", "でした"],
+      "explanation": {
+        "en": "ですから is the polite だから: です takes the place of だ, as everywhere else in a polite sentence. A clerk speaking with です and ます says ですから; among friends you say だから. The meaning is the same: \"that's how it is, so…\". だって is an objection, and casual too; それから is \"after that\"; でした (\"was\") does not open a sentence.",
+        "it": "ですから è il だから cortese: です prende il posto di だ, come in tutto il resto di una frase cortese. Un impiegato che parla con です e ます dice ですから; fra amici si dice だから. Il senso è lo stesso: «è così, quindi…». だって è un'obiezione, e per di più colloquiale; それから è «dopo»; でした («era») non apre una frase."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "接続詞「だから」「ですから」",
+      "prompt": {
+        "en": "\"I forgot my wallet. So today I can't buy anything.\" Which part says that the second sentence follows from the first?",
+        "it": "«Ho dimenticato il portafoglio. Quindi oggi non posso comprare niente.» Quale parte dice che la seconda frase viene dalla prima?"
+      },
+      "sentence": {
+        "kanji": "財布を忘れた。だから、今日は何も買えない",
+        "kana": "さいふをわすれた。だから、きょうはなにもかえない"
+      },
+      "translation": {
+        "en": "I forgot my wallet. So today I can't buy anything.",
+        "it": "Ho dimenticato il portafoglio. Quindi oggi non posso comprare niente."
+      },
+      "glosses": [
+        { "text": "財布を忘れた。", "reading": "さいふをわすれた。", "meaning": { "en": "I forgot my wallet.", "it": "Ho dimenticato il portafoglio." } },
+        { "text": "だから、", "meaning": { "en": "so", "it": "quindi" } },
+        { "text": "今日は", "reading": "きょうは", "meaning": { "en": "today (は: the topic)", "it": "oggi (は: il tema)" } },
+        { "text": "何も", "reading": "なにも", "meaning": { "en": "(not) anything", "it": "(non) niente" } },
+        { "text": "買えない", "reading": "かえない", "meaning": { "en": "can't buy", "it": "non posso comprare" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select だから、. The first sentence is the fact; だから opens the second and says it comes from the first: \"since that's how it is\". Without it the two facts would just sit side by side.",
+        "it": "Seleziona だから、. La prima frase è il fatto; だから apre la seconda e dice che viene dalla prima: «visto che è così». Senza, i due fatti starebbero solo uno accanto all'altro."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "接続詞「だから」「ですから」",
+      "prompt": {
+        "en": "Build: \"It's already late. So I'm going home by taxi.\"",
+        "it": "Componi: «È già tardi. Quindi torno a casa in taxi.»"
+      },
+      "sentence": {
+        "kanji": "もう遅い。だから、タクシーで帰る",
+        "kana": "もうおそい。だから、タクシーでかえる"
+      },
+      "translation": {
+        "en": "It's already late. So I'm going home by taxi.",
+        "it": "È già tardi. Quindi torno a casa in taxi."
+      },
+      "glosses": [
+        { "text": "もう遅い。", "reading": "もうおそい。", "meaning": { "en": "It's already late.", "it": "È già tardi." } },
+        { "text": "だから、", "meaning": { "en": "so", "it": "quindi" } },
+        { "text": "タクシーで", "meaning": { "en": "by taxi", "it": "in taxi" } },
+        { "text": "帰る", "reading": "かえる", "meaning": { "en": "go home", "it": "torno a casa" } }
+      ],
+      "answer": ["もう遅い。", "だから、", "タクシーで", "帰る"],
+      "explanation": {
+        "en": "First the fact, もう遅い。 Then だから、 opens the next sentence: it refers back to what has just been said, so it can only come after it. タクシーで (how) belongs to 帰る and sits right before it.",
+        "it": "Prima il fatto, もう遅い。 Poi だから、 apre la frase dopo: riprende quello che è appena stato detto, quindi può venire solo dopo. タクシーで (come) appartiene a 帰る e sta subito prima."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "接続詞「それから」",
+      "prompt": {
+        "en": "You tell what you did last night: \"I had a shower. After that, I had dinner.\" What goes in the gap?",
+        "it": "Racconti cosa hai fatto ieri sera: «Ho fatto la doccia. Dopo, ho cenato.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "シャワーを浴びた。それから、晩ご飯を食べた",
+        "kana": "シャワーをあびた。それから、ばんごはんをたべた"
+      },
+      "translation": {
+        "en": "I had a shower. After that, I had dinner.",
+        "it": "Ho fatto la doccia. Dopo, ho cenato."
+      },
+      "gap": {
+        "kanji": "シャワーを浴びた。＿、晩ご飯を食べた",
+        "kana": "シャワーをあびた。＿、ばんごはんをたべた"
+      },
+      "answer": "それから",
+      "distractors": ["だから", "だって", "ですから"],
+      "explanation": {
+        "en": "それから is それ (\"that\") + から (\"from\"): \"from that point on\", \"after that\". It puts the two actions in order of time. It does not mean \"because of that\": for that you use だから. だから and ですから would make the shower the reason for dinner; だって would be an objection to something someone said.",
+        "it": "それから è それ («quello») + から («da»): «da lì in poi», «dopo». Mette le due azioni in ordine di tempo. Non vuol dire «per questo»: per quello si usa だから. だから e ですから farebbero della doccia il motivo della cena; だって sarebbe un'obiezione a una cosa detta da qualcuno."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "接続詞「それから」",
+      "prompt": {
+        "en": "\"I met a friend at the station. After that, we watched a film together.\" Which part means \"after that\"?",
+        "it": "«Alla stazione ho incontrato un amico. Dopo, abbiamo visto un film insieme.» Quale parte vuol dire «dopo»?"
+      },
+      "sentence": {
+        "kanji": "駅で友達に会った。それから、一緒に映画を見た",
+        "kana": "えきでともだちにあった。それから、いっしょにえいがをみた"
+      },
+      "translation": {
+        "en": "I met a friend at the station. After that, we watched a film together.",
+        "it": "Alla stazione ho incontrato un amico. Dopo, abbiamo visto un film insieme."
+      },
+      "glosses": [
+        { "text": "駅で友達に会った。", "reading": "えきでともだちにあった。", "meaning": { "en": "I met a friend at the station.", "it": "Alla stazione ho incontrato un amico." } },
+        { "text": "それから、", "meaning": { "en": "after that", "it": "dopo" } },
+        { "text": "一緒に", "reading": "いっしょに", "meaning": { "en": "together", "it": "insieme" } },
+        { "text": "映画を", "reading": "えいがを", "meaning": { "en": "a film (を: the object)", "it": "un film (を: l'oggetto)" } },
+        { "text": "見た", "reading": "みた", "meaning": { "en": "watched", "it": "abbiamo visto" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select それから、. It is not \"because of that\": here から keeps its first meaning, \"from\", so それから is \"from that moment on\". Meeting the friend did not cause the film; it only came first. For \"because of that\" you use だから.",
+        "it": "Seleziona それから、. Non vuol dire «per questo»: qui から tiene il suo primo significato, «da», quindi それから è «da quel momento in poi». L'incontro non è il motivo del film; è solo venuto prima. Per «per questo» si usa だから."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "接続詞「それから」",
+      "prompt": {
+        "en": "Build: \"I'll do my homework, and after that I'll watch TV.\"",
+        "it": "Componi: «Faccio i compiti, e dopo guardo la TV.»"
+      },
+      "sentence": {
+        "kanji": "宿題をして、それからテレビを見る",
+        "kana": "しゅくだいをして、それからテレビをみる"
+      },
+      "translation": {
+        "en": "I'll do my homework, and after that I'll watch TV.",
+        "it": "Faccio i compiti, e dopo guardo la TV."
+      },
+      "glosses": [
+        { "text": "宿題をして、", "reading": "しゅくだいをして、", "meaning": { "en": "do my homework, and", "it": "faccio i compiti, e" } },
+        { "text": "それから", "meaning": { "en": "after that", "it": "dopo" } },
+        { "text": "テレビを", "meaning": { "en": "TV (を: the object)", "it": "la TV (を: l'oggetto)" } },
+        { "text": "見る", "reading": "みる", "meaning": { "en": "watch", "it": "guardo" } }
+      ],
+      "answer": ["宿題をして、", "それから", "テレビを", "見る"],
+      "explanation": {
+        "en": "The first action ends in て (宿題をして、), and それから right after it stresses the order: first the homework, only then the TV. テレビを belongs to 見る and sits right before it.",
+        "it": "La prima azione finisce in て (宿題をして、), e それから subito dopo sottolinea l'ordine: prima i compiti, solo dopo la TV. テレビを appartiene a 見る e sta subito prima."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "接続詞「それから」",
+      "prompt": {
+        "en": "At a café you order: \"Two coffees. And one cake too, please.\" What goes in the gap?",
+        "it": "Al bar ordini: «Due caffè. E poi una fetta di torta, per favore.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "コーヒーを二つ。それから、ケーキを一つください",
+        "kana": "コーヒーをふたつ。それから、ケーキをひとつください"
+      },
+      "translation": {
+        "en": "Two coffees. And one cake too, please.",
+        "it": "Due caffè. E poi una fetta di torta, per favore."
+      },
+      "gap": {
+        "kanji": "コーヒーを二つ。＿、ケーキを一つください",
+        "kana": "コーヒーをふたつ。＿、ケーキをひとつください"
+      },
+      "answer": "それから",
+      "distractors": ["だから", "だって", "ですから"],
+      "explanation": {
+        "en": "それから, \"after that\", also adds one more thing to a list or an order: \"and then… also\". Here it lines up the items in the order you say them. だから and ですから mean \"so\": the cake as a consequence of the coffees; だって is an objection, said to answer someone.",
+        "it": "それから, «dopo», serve anche ad aggiungere un'altra cosa a un elenco o a un'ordinazione: «e poi… anche». Qui mette in fila le cose nell'ordine in cui le dici. だから e ですから vogliono dire «quindi»: la torta come conseguenza dei caffè; だって è un'obiezione, detta per rispondere a qualcuno."
+      }
+    }
+  ]
+}

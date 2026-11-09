@@ -1,0 +1,568 @@
+{
+  "order": 22,
+  "title": {
+    "en": "こ, そ, あ, ど: here, there, over there, where",
+    "it": "こ, そ, あ, ど: qui, lì, laggiù, dove"
+  },
+  "video": "xLkY6whr7T4",
+  "grammarPoints": ["場所の「ここ・そこ・あそこ・どこ」", "物の「これ・それ・あれ・どれ」", "名詞の前の「この・その・あの・どの」", "種類の「こんな・そんな・あんな・どんな」", "やり方の「こう・そう・ああ・どう」"],
+  "exercises": [
+    {
+      "kind": "single-select",
+      "grammarPoint": "場所の「ここ・そこ・あそこ・どこ」",
+      "prompt": {
+        "en": "You are on the phone with a friend who is in Osaka. Your friend says: \"It's raining here.\" What goes in the gap?",
+        "it": "Sei al telefono con un amico che si trova a Osaka. L'amico dice: «Qui piove.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "ここは雨が降っています",
+        "kana": "ここはあめがふっています"
+      },
+      "translation": {
+        "en": "It's raining here.",
+        "it": "Qui piove."
+      },
+      "gap": {
+        "kanji": "＿は雨が降っています",
+        "kana": "＿はあめがふっています"
+      },
+      "answer": "ここ",
+      "distractors": ["そこ", "あそこ", "どこ"],
+      "explanation": {
+        "en": "Your friend is talking about the place where they are, so it is ここ, \"here\": words starting with こ point to what is near the person speaking. For your friend Osaka is ここ; for you, listening from home, the same city is そこ. あそこ is a place far from both of you, and どこ asks \"where?\".",
+        "it": "L'amico parla del posto in cui si trova, quindi ここ, «qui»: le parole che cominciano con こ indicano ciò che è vicino a chi parla. Per l'amico Osaka è ここ; per te, che ascolti da casa, la stessa città è そこ. あそこ è un posto lontano da tutti e due, e どこ chiede «dove?»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "場所の「ここ・そこ・あそこ・どこ」",
+      "prompt": {
+        "en": "Still on the phone, you ask your friend in Osaka: \"Is it cold there?\" What goes in the gap?",
+        "it": "Sempre al telefono, chiedi all'amico che è a Osaka: «Lì fa freddo?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "そこは寒いですか",
+        "kana": "そこはさむいですか"
+      },
+      "translation": {
+        "en": "Is it cold there?",
+        "it": "Lì fa freddo?"
+      },
+      "gap": {
+        "kanji": "＿は寒いですか",
+        "kana": "＿はさむいですか"
+      },
+      "answer": "そこ",
+      "distractors": ["ここ", "あそこ", "どこ"],
+      "explanation": {
+        "en": "The place where the person you are talking to is: そこ, \"there, where you are\". Words starting with そ point to what is near the person listening. ここは寒いですか would ask about your own place. あそこ is for a place far from both of you, but your friend is right there. どこ never takes は: a question word goes with が (どこが寒いですか).",
+        "it": "Il posto dove si trova la persona con cui parli: そこ, «lì, dove sei tu». Le parole che cominciano con そ indicano ciò che è vicino a chi ascolta. ここは寒いですか chiederebbe del posto dove sei tu. あそこ è per un posto lontano da tutti e due, ma l'amico è proprio lì. どこ non prende mai は: una parola che fa una domanda va con が (どこが寒いですか)."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "場所の「ここ・そこ・あそこ・どこ」",
+      "prompt": {
+        "en": "At the entrance of a restaurant, the waiter shows you to your table: \"This way, please.\" What goes in the gap?",
+        "it": "All'ingresso di un ristorante il cameriere ti accompagna al tavolo: «Da questa parte, prego.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "こちらへどうぞ",
+        "kana": "こちらへどうぞ"
+      },
+      "translation": {
+        "en": "This way, please.",
+        "it": "Da questa parte, prego."
+      },
+      "gap": {
+        "kanji": "＿へどうぞ",
+        "kana": "＿へどうぞ"
+      },
+      "answer": "こちら",
+      "distractors": ["これ", "この", "こんな"],
+      "explanation": {
+        "en": "こちら means \"this way\", and it is also the polite ここ: shop and restaurant staff use it all the time. へ says which way to go. これ is a thing, not a direction, and この and こんな must have a noun after them. The same set exists for the others: そちら, あちら, どちら.",
+        "it": "こちら vuol dire «da questa parte», ed è anche il ここ cortese: nei negozi e nei ristoranti lo senti di continuo. へ dice in che direzione andare. これ è una cosa, non una direzione, e この e こんな vogliono un nome dopo. Esiste la serie completa: そちら, あちら, どちら."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "場所の「ここ・そこ・あそこ・どこ」",
+      "prompt": {
+        "en": "The car is parked far from you and from the person you are talking to. Build: \"The red car over there is my father's.\"",
+        "it": "La macchina è parcheggiata lontano da te e dalla persona con cui parli. Componi: «La macchina rossa laggiù è di mio padre.»"
+      },
+      "sentence": {
+        "kanji": "あそこにある赤い車は父のです",
+        "kana": "あそこにあるあかいくるまはちちのです"
+      },
+      "translation": {
+        "en": "The red car over there is my father's.",
+        "it": "La macchina rossa laggiù è di mio padre."
+      },
+      "glosses": [
+        { "text": "あそこに", "meaning": { "en": "over there (に: where it is)", "it": "laggiù (に: dove si trova)" } },
+        { "text": "ある", "meaning": { "en": "(that) is", "it": "(che) si trova" } },
+        { "text": "赤い", "reading": "あかい", "meaning": { "en": "red", "it": "rossa" } },
+        { "text": "車は", "reading": "くるまは", "meaning": { "en": "the car (は: the topic)", "it": "la macchina (は: il tema)" } },
+        { "text": "父のです", "reading": "ちちのです", "meaning": { "en": "is my father's", "it": "è di mio padre" } }
+      ],
+      "answer": ["あそこに", "ある", "赤い", "車は", "父のです"],
+      "explanation": {
+        "en": "あそこ is a place far from both people. あそこに goes right before ある, the verb it belongs to: あそこにある, \"that is over there\". Both あそこにある and 赤い describe 車, so they sit before it: あそこにある赤い車, \"the red car over there\". 父のです, \"is my father's\", closes the sentence.",
+        "it": "あそこ è un posto lontano da tutti e due. あそこに va subito prima di ある, il verbo a cui appartiene: あそこにある, «che si trova laggiù». Sia あそこにある sia 赤い descrivono 車, quindi stanno prima di lui: あそこにある赤い車, «la macchina rossa laggiù». 父のです, «è di mio padre», chiude la frase."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "物の「これ・それ・あれ・どれ」",
+      "prompt": {
+        "en": "In a café, the waiter is holding a small cup you don't recognise. You ask: \"What is that?\" What goes in the gap?",
+        "it": "In un bar il cameriere tiene in mano una tazzina che non conosci. Chiedi: «Che cos'è?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "それは何ですか",
+        "kana": "それはなんですか"
+      },
+      "translation": {
+        "en": "What is that?",
+        "it": "Che cos'è?"
+      },
+      "gap": {
+        "kanji": "＿は何ですか",
+        "kana": "＿はなんですか"
+      },
+      "answer": "それ",
+      "distractors": ["これ", "あれ", "その"],
+      "explanation": {
+        "en": "The cup is in the waiter's hand, near the person listening to you: それ, \"that (by you)\". これ would be a thing in your own hands, あれ a thing far from both of you. その also starts with そ, but it must have a noun after it: そのカップは何ですか.",
+        "it": "La tazzina è in mano al cameriere, vicino a chi ti ascolta: それ, «quello (lì da te)». これ sarebbe una cosa in mano tua, あれ una cosa lontana da tutti e due. Anche その comincia con そ, ma vuole un nome dopo: そのカップは何ですか."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "物の「これ・それ・あれ・どれ」",
+      "prompt": {
+        "en": "There are three cakes in the shop window. You ask your friend: \"Which one do you want to eat?\" What goes in the gap?",
+        "it": "Nella vetrina della pasticceria ci sono tre torte. Chiedi al tuo amico: «Quale vuoi mangiare?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "どれが食べたいですか",
+        "kana": "どれがたべたいですか"
+      },
+      "translation": {
+        "en": "Which one do you want to eat?",
+        "it": "Quale vuoi mangiare?"
+      },
+      "gap": {
+        "kanji": "＿が食べたいですか",
+        "kana": "＿がたべたいですか"
+      },
+      "answer": "どれ",
+      "distractors": ["どの", "どこ", "どんな"],
+      "explanation": {
+        "en": "どれ means \"which one\": it stands on its own, like a noun, and takes が. どの and どんな ask too, but they must sit before a noun: どのケーキ, \"which cake\"; どんなケーキ, \"what kind of cake\". どこ asks \"where?\".",
+        "it": "どれ vuol dire «quale»: sta da sola, come un nome, e prende が. Anche どの e どんな fanno una domanda, ma devono stare prima di un nome: どのケーキ, «quale torta»; どんなケーキ, «che tipo di torta». どこ chiede «dove?»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "You are holding a book and tell a friend: \"This book is interesting.\" What goes in the gap?",
+        "it": "Hai in mano un libro e dici a un amico: «Questo libro è interessante.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "この本はおもしろいです",
+        "kana": "このほんはおもしろいです"
+      },
+      "translation": {
+        "en": "This book is interesting.",
+        "it": "Questo libro è interessante."
+      },
+      "gap": {
+        "kanji": "＿本はおもしろいです",
+        "kana": "＿ほんはおもしろいです"
+      },
+      "answer": "この",
+      "distractors": ["これ", "ここ", "こう"],
+      "explanation": {
+        "en": "Before a noun you need この: この本, \"this book\". これ stands on its own, without a noun: これはおもしろいです, \"this is interesting\". Every series has the same pair: それ / その, あれ / あの, どれ / どの. ここ is \"here\", a place, and こう means \"like this\".",
+        "it": "Prima di un nome serve この: この本, «questo libro». これ sta da sola, senza nome: これはおもしろいです, «questo è interessante». Ogni serie ha la stessa coppia: それ / その, あれ / あの, どれ / どの. ここ è «qui», un posto, e こう vuol dire «così»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "Last year you and a friend went to a ramen shop together, and you both remember it. You say: \"That ramen shop we went to last year was good, wasn't it?\" What goes in the gap?",
+        "it": "L'anno scorso tu e un amico siete andati insieme in un ristorante di ramen, e ve lo ricordate tutti e due. Dici: «Quel ristorante di ramen dove siamo andati l'anno scorso era buono, eh?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "去年行ったあのラーメン屋はおいしかったね",
+        "kana": "きょねんいったあのラーメンやはおいしかったね"
+      },
+      "translation": {
+        "en": "That ramen shop we went to last year was good, wasn't it?",
+        "it": "Quel ristorante di ramen dove siamo andati l'anno scorso era buono, eh?"
+      },
+      "gap": {
+        "kanji": "去年行った＿ラーメン屋はおいしかったね",
+        "kana": "きょねんいった＿ラーメンやはおいしかったね"
+      },
+      "answer": "あの",
+      "distractors": ["その", "この", "どの"],
+      "explanation": {
+        "en": "A thing you both know, but that isn't here, takes あ: あのラーメン屋, \"that ramen shop (we both remember)\". その is for a thing that only one of you knows, or that has just been mentioned: here nobody had talked about the shop yet. この would be the shop you are sitting in now, and どの asks \"which?\".",
+        "it": "Una cosa che conoscete tutti e due, ma che non è lì, prende あ: あのラーメン屋, «quel ristorante (che ricordiamo tutti e due)». その è per una cosa che conosce solo uno dei due, o di cui si è appena parlato: qui nessuno aveva ancora nominato il ristorante. この sarebbe il ristorante in cui siete seduti adesso, e どの chiede «quale?»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "A friend tells you they have just bought a new book. You haven't seen it. You ask: \"Was that book expensive?\" What goes in the gap?",
+        "it": "Un'amica ti racconta di aver appena comprato un libro nuovo. Tu non l'hai visto. Le chiedi: «Quel libro era caro?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "その本は高かったですか",
+        "kana": "そのほんはたかかったですか"
+      },
+      "translation": {
+        "en": "Was that book expensive?",
+        "it": "Quel libro era caro?"
+      },
+      "gap": {
+        "kanji": "＿本は高かったですか",
+        "kana": "＿ほんはたかかったですか"
+      },
+      "answer": "その",
+      "distractors": ["あの", "この", "それ"],
+      "explanation": {
+        "en": "You know the book only from what your friend has just told you. Something the other person has just mentioned takes そ: その本, \"that book (you're talking about)\". あの本 would be a book you have both seen. この is for a book in your own hands, and それ cannot go before a noun.",
+        "it": "Il libro lo conosci solo da quello che l'amica ti ha appena detto. Una cosa appena nominata dall'altra persona prende そ: その本, «quel libro (di cui parli)». あの本 sarebbe un libro che avete visto tutte e due. この è per un libro che hai in mano tu, e それ non può stare prima di un nome."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "You are about to get on a bus and ask the driver: \"Does this bus go to the station?\" Which word says it is the bus right next to you?",
+        "it": "Stai per salire su un autobus e chiedi all'autista: «Questo autobus va alla stazione?» Quale parola dice che è l'autobus proprio lì accanto a te?"
+      },
+      "sentence": {
+        "kanji": "このバスは駅まで行きますか",
+        "kana": "このバスはえきまでいきますか"
+      },
+      "translation": {
+        "en": "Does this bus go to the station?",
+        "it": "Questo autobus va alla stazione?"
+      },
+      "glosses": [
+        { "text": "この", "meaning": { "en": "this", "it": "questo" } },
+        { "text": "バスは", "meaning": { "en": "bus (は: the topic)", "it": "autobus (は: il tema)" } },
+        { "text": "駅まで", "reading": "えきまで", "meaning": { "en": "as far as the station", "it": "fino alla stazione" } },
+        { "text": "行きますか", "reading": "いきますか", "meaning": { "en": "does it go?", "it": "va?" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select この. You are standing by the bus: what is near the person speaking takes こ. この needs a noun right after it, here バス. If you pointed at a bus parked far away, you would say あのバス.",
+        "it": "Seleziona この. Sei accanto all'autobus: ciò che è vicino a chi parla prende こ. この vuole un nome subito dopo, qui バス. Se indicassi un autobus fermo lontano, diresti あのバス."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "You are showing a visitor around the university and point at a building far from both of you: \"The library is that white building over there.\" Which word says the building is far from both of you?",
+        "it": "Fai visitare l'università a un ospite e indichi un edificio lontano da tutti e due: «La biblioteca è quell'edificio bianco laggiù.» Quale parola dice che l'edificio è lontano da tutti e due?"
+      },
+      "sentence": {
+        "kanji": "図書館はあの白い建物です",
+        "kana": "としょかんはあのしろいたてものです"
+      },
+      "translation": {
+        "en": "The library is that white building over there.",
+        "it": "La biblioteca è quell'edificio bianco laggiù."
+      },
+      "glosses": [
+        { "text": "図書館は", "reading": "としょかんは", "meaning": { "en": "the library (は: the topic)", "it": "la biblioteca (は: il tema)" } },
+        { "text": "あの", "meaning": { "en": "that (over there)", "it": "quel (laggiù)" } },
+        { "text": "白い", "reading": "しろい", "meaning": { "en": "white", "it": "bianco" } },
+        { "text": "建物です", "reading": "たてものです", "meaning": { "en": "is the building", "it": "è l'edificio" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select あの. The building is far from you and from the visitor: あ is for things far from both people. あの describes 建物, \"building\", with 白い in between: あの白い建物, \"that white building\". On its own, without a noun, you would use あれ: あれが図書館です, \"that is the library\".",
+        "it": "Seleziona あの. L'edificio è lontano da te e dall'ospite: あ è per le cose lontane da tutti e due. あの descrive 建物, «edificio», con 白い in mezzo: あの白い建物, «quell'edificio bianco». Da sola, senza nome, useresti あれ: あれが図書館です, «quella è la biblioteca»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "Build: \"Is there a post office near here?\"",
+        "it": "Componi: «C'è un ufficio postale qui vicino?»"
+      },
+      "sentence": {
+        "kanji": "この近くに郵便局はありますか",
+        "kana": "このちかくにゆうびんきょくはありますか"
+      },
+      "translation": {
+        "en": "Is there a post office near here?",
+        "it": "C'è un ufficio postale qui vicino?"
+      },
+      "glosses": [
+        { "text": "この", "meaning": { "en": "this", "it": "questo" } },
+        { "text": "近くに", "reading": "ちかくに", "meaning": { "en": "nearby (に: where it is)", "it": "vicino (に: dove si trova)" } },
+        { "text": "郵便局は", "reading": "ゆうびんきょくは", "meaning": { "en": "a post office (は: what you ask about)", "it": "un ufficio postale (は: ciò di cui chiedi)" } },
+        { "text": "ありますか", "meaning": { "en": "is there?", "it": "c'è?" } }
+      ],
+      "answer": ["この", "近くに", "郵便局は", "ありますか"],
+      "alsoAccepted": [["郵便局は", "この", "近くに", "ありますか"]],
+      "explanation": {
+        "en": "この近く is \"the area near here\": この describes 近く and sits right before it. この近くに says where, 郵便局は what you are looking for; the two can swap places, and ありますか always goes at the end. \"郵便局はこの近くにありますか\" is also correct.",
+        "it": "この近く è «la zona qui vicino»: この descrive 近く e sta subito prima. この近くに dice dove, 郵便局は che cosa cerchi; i due possono scambiarsi, e ありますか va sempre in fondo. Va bene anche «郵便局はこの近くにありますか»."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "名詞の前の「この・その・あの・どの」",
+      "prompt": {
+        "en": "At a big station several trains are waiting. Build: \"Which train goes to the airport?\"",
+        "it": "In una grande stazione ci sono diversi treni fermi. Componi: «Quale treno va all'aeroporto?»"
+      },
+      "sentence": {
+        "kanji": "どの電車が空港に行きますか",
+        "kana": "どのでんしゃがくうこうにいきますか"
+      },
+      "translation": {
+        "en": "Which train goes to the airport?",
+        "it": "Quale treno va all'aeroporto?"
+      },
+      "glosses": [
+        { "text": "どの", "meaning": { "en": "which", "it": "quale" } },
+        { "text": "電車が", "reading": "でんしゃが", "meaning": { "en": "train (が: the subject)", "it": "treno (が: il soggetto)" } },
+        { "text": "空港に", "reading": "くうこうに", "meaning": { "en": "to the airport (に: where it goes)", "it": "all'aeroporto (に: dove va)" } },
+        { "text": "行きますか", "reading": "いきますか", "meaning": { "en": "goes?", "it": "va?" } }
+      ],
+      "answer": ["どの", "電車が", "空港に", "行きますか"],
+      "alsoAccepted": [["空港に", "どの", "電車が", "行きますか"]],
+      "explanation": {
+        "en": "どの must have a noun right after it: どの電車, \"which train\", and the two move together. 空港に, where the train goes, sits before 行きますか; it can also come first. \"空港にどの電車が行きますか\" is also correct.",
+        "it": "どの vuole un nome subito dopo: どの電車, «quale treno», e i due si spostano insieme. 空港に, dove va il treno, sta prima di 行きますか; può anche andare per primo. Va bene anche «空港にどの電車が行きますか»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "種類の「こんな・そんな・あんな・どんな」",
+      "prompt": {
+        "en": "Looking at a photo of a house with a big garden, you say: \"I'd like to live in a house like this.\" Not that very house: one like it. What goes in the gap?",
+        "it": "Guardando la foto di una casa con un grande giardino dici: «Vorrei vivere in una casa così.» Non proprio quella casa: una come quella. Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "こんな家に住みたいです",
+        "kana": "こんないえにすみたいです"
+      },
+      "translation": {
+        "en": "I'd like to live in a house like this.",
+        "it": "Vorrei vivere in una casa così."
+      },
+      "gap": {
+        "kanji": "＿家に住みたいです",
+        "kana": "＿いえにすみたいです"
+      },
+      "answer": "こんな",
+      "distractors": ["この", "こう", "これ"],
+      "explanation": {
+        "en": "こんな means \"like this, of this kind\": こんな家, \"a house like this\". この家 would be that very house, the one in the photo. Both go before a noun; こう goes before a verb (こう書く, \"write it like this\") and これ stands alone. The series is こんな, そんな, あんな, どんな.",
+        "it": "こんな vuol dire «così, di questo tipo»: こんな家, «una casa così». この家 sarebbe proprio quella casa, quella della foto. Tutti e due vanno prima di un nome; こう va prima di un verbo (こう書く, «scrivere così») e これ sta da sola. La serie è こんな, そんな, あんな, どんな."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "種類の「こんな・そんな・あんな・どんな」",
+      "prompt": {
+        "en": "You have just met someone and want to know their taste: \"What kind of music do you listen to?\" What goes in the gap?",
+        "it": "Hai appena conosciuto una persona e vuoi sapere che gusti ha: «Che musica ascolti?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "どんな音楽を聞きますか",
+        "kana": "どんなおんがくをききますか"
+      },
+      "translation": {
+        "en": "What kind of music do you listen to?",
+        "it": "Che musica ascolti?"
+      },
+      "gap": {
+        "kanji": "＿音楽を聞きますか",
+        "kana": "＿おんがくをききますか"
+      },
+      "answer": "どんな",
+      "distractors": ["どう", "どれ", "どこ"],
+      "explanation": {
+        "en": "どんな means \"what kind of\" and always sits before a noun: どんな音楽, \"what kind of music\". どう asks \"how?\" and goes with a verb or on its own. どれ (\"which one\") and どこ (\"where\") stand alone and cannot describe 音楽.",
+        "it": "どんな vuol dire «che tipo di» e sta sempre prima di un nome: どんな音楽, «che tipo di musica». どう chiede «come?» e va con un verbo o da sola. どれ («quale») e どこ («dove») stanno da sole e non possono descrivere 音楽."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "種類の「こんな・そんな・あんな・どんな」",
+      "prompt": {
+        "en": "Your friend tells you their brother has climbed Everest twice. You say: \"I've never heard a story like that.\" Which word points back to what your friend said?",
+        "it": "Un amico ti racconta che suo fratello ha scalato l'Everest due volte. Dici: «Una storia così non l'ho mai sentita.» Quale parola rimanda a quello che ha detto l'amico?"
+      },
+      "sentence": {
+        "kanji": "そんな話は聞いたことがない",
+        "kana": "そんなはなしはきいたことがない"
+      },
+      "translation": {
+        "en": "I've never heard a story like that.",
+        "it": "Una storia così non l'ho mai sentita."
+      },
+      "glosses": [
+        { "text": "そんな", "meaning": { "en": "like that", "it": "così, di quel tipo" } },
+        { "text": "話は", "reading": "はなしは", "meaning": { "en": "story (は: the topic)", "it": "storia (は: il tema)" } },
+        { "text": "聞いたことがない", "reading": "きいたことがない", "meaning": { "en": "have never heard", "it": "non ho mai sentito" } }
+      ],
+      "answer": { "start": 0, "end": 1 },
+      "explanation": {
+        "en": "Select そんな. It describes 話 and points back to what your friend has just told you: words starting with そ also refer to words the other person has just said. こんな話 would be a story you are telling yourself, or are about to tell.",
+        "it": "Seleziona そんな. Descrive 話 e rimanda a quello che l'amico ti ha appena raccontato: le parole che cominciano con そ indicano anche le parole appena dette dall'altra persona. こんな話 sarebbe una storia che racconti tu, o che stai per raccontare."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "種類の「こんな・そんな・あんな・どんな」",
+      "prompt": {
+        "en": "A friend asks to borrow a million yen. Build: \"I don't have that kind of money.\"",
+        "it": "Un amico ti chiede in prestito un milione di yen. Componi: «Io non ce li ho, soldi così.»"
+      },
+      "sentence": {
+        "kanji": "私にはそんなお金はありません",
+        "kana": "わたしにはそんなおかねはありません"
+      },
+      "translation": {
+        "en": "I don't have that kind of money.",
+        "it": "Io non ce li ho, soldi così."
+      },
+      "glosses": [
+        { "text": "私には", "reading": "わたしには", "meaning": { "en": "for me (には: who has it)", "it": "io (には: chi ce l'ha)" } },
+        { "text": "そんな", "meaning": { "en": "like that", "it": "così, di quel tipo" } },
+        { "text": "お金は", "reading": "おかねは", "meaning": { "en": "money (は: the topic)", "it": "soldi (は: il tema)" } },
+        { "text": "ありません", "meaning": { "en": "there isn't", "it": "non ci sono" } }
+      ],
+      "answer": ["私には", "そんな", "お金は", "ありません"],
+      "alsoAccepted": [["そんな", "お金は", "私には", "ありません"]],
+      "explanation": {
+        "en": "そんな points back to what your friend asked for, a million yen: \"money like that\". It describes お金 and sits right before it, and the two move together. 私には says who doesn't have it; ありません goes at the end. \"そんなお金は私にはありません\" is also correct.",
+        "it": "そんな rimanda a ciò che l'amico ha chiesto, un milione di yen: «soldi così». Descrive お金 e sta subito prima, e i due si spostano insieme. 私には dice chi non li ha; ありません va in fondo. Va bene anche «そんなお金は私にはありません»."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "やり方の「こう・そう・ああ・どう」",
+      "prompt": {
+        "en": "A colleague has just come back from a trip. You ask: \"How was the trip?\" What goes in the gap?",
+        "it": "Una collega è appena tornata da un viaggio. Le chiedi: «Com'è andato il viaggio?» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "旅行はどうでしたか",
+        "kana": "りょこうはどうでしたか"
+      },
+      "translation": {
+        "en": "How was the trip?",
+        "it": "Com'è andato il viaggio?"
+      },
+      "gap": {
+        "kanji": "旅行は＿でしたか",
+        "kana": "りょこうは＿でしたか"
+      },
+      "answer": "どう",
+      "distractors": ["どんな", "どの", "どれ"],
+      "explanation": {
+        "en": "どう asks \"how?\", \"in what way?\": 旅行はどうでしたか, \"how was the trip?\". どんな and どの must have a noun after them (どんな旅行, \"what kind of trip\"). どれ asks \"which one?\" among several things.",
+        "it": "どう chiede «come?», «in che modo?»: 旅行はどうでしたか, «com'è andato il viaggio?». どんな e どの vogliono un nome dopo (どんな旅行, «che tipo di viaggio»). どれ chiede «quale?» fra più cose."
+      }
+    },
+    {
+      "kind": "single-select",
+      "grammarPoint": "やり方の「こう・そう・ああ・どう」",
+      "prompt": {
+        "en": "You are showing a friend, with your own hands, how to hold chopsticks: \"Hold them like this.\" What goes in the gap?",
+        "it": "Mostri a un amico, con le tue mani, come si tengono le bacchette: «Tienile così.» Cosa va nello spazio?"
+      },
+      "sentence": {
+        "kanji": "箸はこう持ってください",
+        "kana": "はしはこうもってください"
+      },
+      "translation": {
+        "en": "Hold the chopsticks like this.",
+        "it": "Le bacchette tienile così."
+      },
+      "gap": {
+        "kanji": "箸は＿持ってください",
+        "kana": "はしは＿もってください"
+      },
+      "answer": "こう",
+      "distractors": ["この", "こんな", "どう"],
+      "explanation": {
+        "en": "こう means \"like this, in this way\", and it goes right before the verb: こう持って. It points at what you are showing. この and こんな must have a noun after them (この箸, こんな箸). どう asks \"how?\". The series is こう, そう, ああ, どう.",
+        "it": "こう vuol dire «così, in questo modo», e va subito prima del verbo: こう持って. Indica quello che stai mostrando. この e こんな vogliono un nome dopo (この箸, こんな箸). どう chiede «come?». La serie è こう, そう, ああ, どう."
+      }
+    },
+    {
+      "kind": "select-span",
+      "grammarPoint": "やり方の「こう・そう・ああ・どう」",
+      "prompt": {
+        "en": "A colleague asks you: \"Will it rain tomorrow?\" You answer: \"Yes, I think so.\" Which word stands for \"it will rain tomorrow\"?",
+        "it": "Un collega ti chiede: «Domani pioverà?» Rispondi: «Sì, credo di sì.» Quale parola sta per «domani pioverà»?"
+      },
+      "sentence": {
+        "kanji": "はい、そう思います",
+        "kana": "はい、そうおもいます"
+      },
+      "translation": {
+        "en": "Yes, I think so.",
+        "it": "Sì, credo di sì."
+      },
+      "glosses": [
+        { "text": "はい、", "meaning": { "en": "yes", "it": "sì" } },
+        { "text": "そう", "meaning": { "en": "so, like that", "it": "così" } },
+        { "text": "思います", "reading": "おもいます", "meaning": { "en": "I think", "it": "penso" } }
+      ],
+      "answer": { "start": 1, "end": 2 },
+      "explanation": {
+        "en": "Select そう. It takes the place of what the other person has just said: そう思います, \"I think so\", that is \"I think it will rain\". Like こう, it goes right before the verb. To disagree you say そう思いません.",
+        "it": "Seleziona そう. Prende il posto di quello che l'altra persona ha appena detto: そう思います, «penso di sì», cioè «penso che pioverà». Come こう, va subito prima del verbo. Per non essere d'accordo si dice そう思いません."
+      }
+    },
+    {
+      "kind": "assemble",
+      "grammarPoint": "やり方の「こう・そう・ああ・どう」",
+      "prompt": {
+        "en": "You write your name on a sheet of paper to show a Japanese friend. Build: \"My name is written like this.\"",
+        "it": "Scrivi il tuo nome su un foglio per mostrarlo a un amico giapponese. Componi: «Il mio nome si scrive così.»"
+      },
+      "sentence": {
+        "kanji": "私の名前はこう書きます",
+        "kana": "わたしのなまえはこうかきます"
+      },
+      "translation": {
+        "en": "My name is written like this.",
+        "it": "Il mio nome si scrive così."
+      },
+      "glosses": [
+        { "text": "私の", "reading": "わたしの", "meaning": { "en": "my", "it": "mio" } },
+        { "text": "名前は", "reading": "なまえは", "meaning": { "en": "name (は: the topic)", "it": "nome (は: il tema)" } },
+        { "text": "こう", "meaning": { "en": "like this", "it": "così" } },
+        { "text": "書きます", "reading": "かきます", "meaning": { "en": "(I) write it", "it": "(lo) scrivo" } }
+      ],
+      "answer": ["私の", "名前は", "こう", "書きます"],
+      "explanation": {
+        "en": "こう, \"like this\", points at what you are showing, and it sits right before the verb it describes: こう書きます. 私の describes 名前 and goes right before it; 名前は, the topic, comes first.",
+        "it": "こう, «così», indica quello che stai mostrando, e sta subito prima del verbo che descrive: こう書きます. 私の descrive 名前 e va subito prima; 名前は, il tema, va per primo."
+      }
+    }
+  ]
+}
